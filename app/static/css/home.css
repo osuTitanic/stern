@@ -34,6 +34,11 @@
     margin-top: 10px;
 }
 
+.headers span {
+    font-size: 50%;
+    margin-left: 5px;
+}
+
 #about-header {
     font-size: 14pt;
     margin-bottom: 5px;
@@ -84,4 +89,46 @@
 
 .blurb-readmore {
     text-align: right;
+}
+
+.most-played {
+    justify-self: flex-start;
+    bottom: 0;
+}
+
+.styled-table {
+    border: solid 2px #9799cc;
+    border-radius: 4px;
+    text-align: left;
+    margin-left: 2px;
+    margin-right: 2px;
+    max-width: 356px;
+    font-weight: normal;
+    font-size: 8.5pt;
+    width: 100%;
+}
+
+.styled-table a {
+    color: #3843a6;
+    text-decoration: none;
+}
+
+.styled-table a:hover {
+    text-decoration: underline;
+}
+
+.styled-table img {
+    width: 80px;
+    height: 60px;
+    margin-right: 3px;
+    float: left;
+    border-radius: 5px;
+}
+
+.dark-row {
+    background-color: var(--table-row-dark);
+}
+
+.light-row {
+    background-color: var(--table-row-light);
 }
