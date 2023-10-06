@@ -61,6 +61,10 @@
     font-size: 10pt;
 }
 
+.blurb-readmore a:hover {
+    text-decoration: underline;
+}
+
 .blurb-readmore {
     text-align: right;
 }
