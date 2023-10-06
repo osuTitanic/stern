@@ -1,0 +1,31 @@
+{# templates/base.html #}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title or 'osuTitanic' }}</title>
+    <link rel="stylesheet" href="css/{{ css or 'main.css' }}">
+</head>
+<body>
+    <div class="main">
+        <div class="nav">
+            {% include "navigation.html" %}
+        </div>
+        <div class="content">
+            <div class="top">
+                <input class="nav-search" type="text" id="search-bar" name="search" placeholder="Search">
+                <div class="login">
+                    <p class="nav-login" id="welcome-text">Welcome, guest!</p>
+                    <a class="nav-login" id="login-text">Login</a>
+                    <a class="nav-login" id="register-text">I'm new!</a>
+                </div>
+            </div>
+            <div class="page">
+                {% block content %}
+                {% endblock content %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

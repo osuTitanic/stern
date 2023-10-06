@@ -1,0 +1,94 @@
+:root {
+    --background-gradiant: #686fc1;
+    --background-main: #a9a9ff;
+    --content-border-grey: #d2d4fa;
+    --content-border: #5c559c;
+    --content-main: #f0ecfa;
+    --text-shadow: #efcfe1;
+    --outlink-blue: #7284ff;
+    --outlink-pink: #ff64ba;
+    --font-color: #323232;
+    --header: #e15fac;
+    --search: #ffffff;
+    --nav: #ffd6f3;
+}
+
+* {
+    margin: 0;
+    font-family: "Arial Grande", Tahoma, Helvetica, Arial, sans-serif;
+}
+
+body {
+    background: linear-gradient(var(--background-gradiant), var(--background-main) 20%);
+    background-attachment: fixed;
+}
+
+.main {
+    margin: auto;
+    position: relative;
+    width: 865px;
+    margin-top: 10vh;
+    margin-bottom: 5vh;
+}
+
+.nav {
+    background-color: var(--nav);
+    border-radius: 5px 5px 0px 0px;
+    height: 2.5vh;
+    max-width: 75vh;
+    padding-left: 50px;
+}
+
+.content {
+    background-color: var(--content-main);
+    min-height: 100vh;
+    border-style: solid;
+    border-color: var(--content-border);
+    border-radius: 0px 5px 5px 5px;
+    border-width: 2px;
+}
+
+.top {
+    background-color: var(--search);
+    filter: drop-shadow(0px 1px 2px #d6d2df);
+    margin-bottom: 2vh;
+    padding: 0.5vh;
+    height: 1.6vh;
+    display: flex;
+    justify-content: space-between;
+}
+
+.login {
+    display: flex;
+    justify-content: flex-end;
+    text-align: right;
+    font-size: 90%;
+    gap: 5px;
+}
+
+.nav-search {
+    border-radius: 3px 3px 3px 3px;
+    margin-right: 5px;
+}
+
+.nav-login {
+    margin-right: 5px;
+}
+
+#welcome-text {
+    color: grey;
+}
+
+#login-text {
+    color: var(--outlink-blue);
+    font-weight: bold;
+}
+
+#register-text {
+    color: var(--outlink-pink);
+    font-weight: bold;
+}
+
+.page {
+    margin: 1vh;
+}
