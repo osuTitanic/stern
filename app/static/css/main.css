@@ -16,6 +16,7 @@
 * {
     margin: 0;
     font-family: "Arial Grande", Tahoma, Helvetica, Arial, sans-serif;
+    font-size: 99.5%;
 }
 
 body {
@@ -69,6 +70,7 @@ body {
 .nav-search {
     border-radius: 3px 3px 3px 3px;
     margin-right: 5px;
+    font-size: 85%;
 }
 
 .nav-login {
