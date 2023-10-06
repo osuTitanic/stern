@@ -35,14 +35,15 @@ body {
 .nav {
     background-color: var(--nav);
     border-radius: 5px 5px 0px 0px;
-    height: 2.5vh;
-    max-width: 75vh;
+    min-height: 22.5px;
+    max-width: 650px;
     padding-left: 50px;
 }
 
 .content {
     background-color: var(--content-main);
-    min-height: 100vh;
+    /* TODO: Lower min-height and add gradiant to lower part */
+    min-height: 900px;
     border-style: solid;
     border-color: var(--content-border);
     border-radius: 0px 5px 5px 5px;
@@ -54,7 +55,7 @@ body {
     filter: drop-shadow(0px 1px 2px #d6d2df);
     margin-bottom: 2vh;
     padding: 0.5vh;
-    height: 1.6vh;
+    max-height: 18px;
     display: flex;
     justify-content: space-between;
 }
@@ -100,5 +101,5 @@ body {
 }
 
 .page {
-    margin: 1vh;
+    margin: 10px;
 }
