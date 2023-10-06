@@ -15,11 +15,17 @@
 .left-side {
     grid-column: 1;
     justify-self: left;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
 }
 
 .right-side {
     grid-column: 2;
     justify-self: right;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
     margin-left: 5px;
 }
 
