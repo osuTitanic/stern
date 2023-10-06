@@ -12,6 +12,17 @@
     display: grid;
 }
 
+.left-side {
+    grid-column: 1;
+    justify-self: left;
+}
+
+.right-side {
+    grid-column: 2;
+    justify-self: right;
+    margin-left: 5px;
+}
+
 .headers {
     margin-bottom: 10px;
     margin-top: 10px;
