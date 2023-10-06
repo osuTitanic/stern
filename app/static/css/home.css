@@ -1,0 +1,53 @@
+
+@import url("main.css");
+
+.page h2 {
+    color: var(--header);
+    font-weight: normal;
+    font-size: 150%;
+    text-shadow: var(--text-shadow) 0px 0px 10px;
+}
+
+.content-wrapper {
+    display: grid;
+}
+
+.headers {
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.blurb-box {
+    padding: 10px;
+    margin-bottom: 5px;
+    background-color: white;
+    border-style: solid;
+    border-color: var(--content-border-grey);
+    border-radius: 5px 5px 5px 5px;
+    border-width: 0.5px;
+    filter: drop-shadow(0px 1px 1pt #e5e4e9);
+    color: var(--font-color);
+}
+
+.about-wrapper .blurb-box {
+    border-radius: 10px 10px 10px 10px;
+}
+
+.blurb-heading {
+    margin-left: 5px;
+    margin-bottom: 2.5px;
+}
+
+.blurb-heading a {
+    text-decoration: none;
+}
+
+.blurb-text {
+    font-size: 10pt;
+}
+
+#about-header {
+    font-size: 14pt;
+    margin-bottom: 5px;
+    text-align: center;
+}

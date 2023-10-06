@@ -1,0 +1,40 @@
+{# templates/home.html #}
+
+{% extends "base.html" %}
+
+{% block content %}
+<div class="content-wrapper">
+    <div class="about-wrapper">
+        <div class="blurb-box">
+            <div class="blurb-text" id="about-header">
+                <b>osu!</b> is a <b>free-to-play</b> online rhythm game
+            </div>
+            <div class="blurb-text">
+                osu! gameplay is based on a variety of popular commercial rhythm games. While keeping some authentic elements, osu! adds huge customisation via skins/beatmaps/storyboarding, online rankings, multiplayer and boasts a community with over 100,000 active users! Play the way you want to play, with your own music, and share your creations with others.
+            </div>
+        </div>
+    </div>
+
+    <div class="announcements-wrapper">
+        <h2 class="headers">Announcements</h2>
+        <div class="announcements">
+            <div class="blurb-heading">
+                13.04.23 <a href="/forum/p/2258963"><b>The end of the MAT</b></a> (Ephemeral)
+            </div>
+            <div class="blurb-box">
+                <div class="blurb-text">
+                    It has been a long road, and a hell of a journey. From the team's beginning as a measure to help address the slowing ranking cycle many years ago, the MAT have gone through a number of changes to become what they are today.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="stats-wrapper">
+        <h2 class="headers">Online Users</h2>
+    </div>
+
+    <div class="chat-wrapper">
+        <h2 class="headers">Chat</h2>
+    </div>
+</div>
+{% endblock content %}
