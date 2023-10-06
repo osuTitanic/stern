@@ -75,6 +75,14 @@ body {
     margin-right: 5px;
 }
 
+.login a {
+    text-decoration: none;
+}
+
+.login a:hover {
+    text-decoration: underline;
+}
+
 #welcome-text {
     color: grey;
 }
