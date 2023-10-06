@@ -8,7 +8,8 @@ from flask import Flask
 flask = Flask(
     __name__,
     static_url_path='',
-    static_folder='app/static'
+    static_folder='static',
+    template_folder='templates'
 )
 
 flask.register_blueprint(routes.router)
