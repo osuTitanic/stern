@@ -17,16 +17,21 @@
 
     <div class="announcements-wrapper">
         <h2 class="headers">Announcements</h2>
-        <div class="announcements">
-            <div class="blurb-heading">
-                13.04.23 <a href="/forum/p/2258963"><b>The end of the MAT</b></a> (Ephemeral)
-            </div>
-            <div class="blurb-box">
-                <div class="blurb-text">
-                    It has been a long road, and a hell of a journey. From the team's beginning as a measure to help address the slowing ranking cycle many years ago, the MAT have gone through a number of changes to become what they are today.
+        {% for announcement in announcements %}
+            <div class="announcements">
+                <div class="blurb-heading">
+                    {{ announcement['date'] }} <a href="{{ announcement['link'] }}"><b>{{ announcement['title'] }}</b></a> ({{ announcement['author'] }})
+                </div>
+                <div class="blurb-box">
+                    <div class="blurb-text">
+                        {{ announcement['text'] }}
+                    </div>
+                </div>
+                <div class="blurb-readmore">
+                    <a href="{{ announcement['link'] }}">Read More / Comment...</a>
                 </div>
             </div>
-        </div>
+        {% endfor %}
     </div>
 
     <div class="stats-wrapper">
