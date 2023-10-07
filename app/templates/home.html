@@ -100,11 +100,11 @@
                                 {{ set.full_name }}
                             </a>
                         </td>
-                        {% if set.server == 0 %}
-                            <td><a href="https://osu.ppy.sh/u/{{ set.creator }}">{{ set.creator }}</a></td>
-                        {% else %}
-                            <td><a href="/u/{{ set.creator }}">{{ set.creator }}</a></td>
-                        {% endif %}
+                    {% if set.server == 0 %}
+                        <td><a href="https://osu.ppy.sh/u/{{ set.creator }}">{{ set.creator }}</a></td>
+                    {% else %}
+                        <td><a href="/u/{{ set.creator }}">{{ set.creator }}</a></td>
+                    {% endif %}
                     </tr>
                 {% endfor %}
                 </tbody>
