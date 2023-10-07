@@ -1,4 +1,5 @@
 
+from app.common.database.repositories import plays
 from flask import Blueprint, render_template
 
 router = Blueprint("routes", __name__)
@@ -23,5 +24,8 @@ def root():
                 "author": "DeathxShinigami",
                 "text": "Hi everyone! DxS here as the new Chart Manager presenting the new April 2013 Chart."
             }
+        ],
+        beatmapsets=[
+            (p.count, p.beatmapset) for p in plays.fetch_most_played()
         ]
     )

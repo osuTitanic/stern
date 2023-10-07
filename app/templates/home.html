@@ -56,7 +56,11 @@
         </a>
         <iframe style="margin-top: 5px;" width="356" height="278" src="https://www.youtube.com/embed/UYNpkDrCWtA" title="Cookiezi | xi - Blue Zenith [FOUR DIMENSIONS] | HR 99.71% 727pp | Liveplay w/ Twitch Chat" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
         <div class="most-played">
-            <h2 class="headers">Most Played Beatmaps<span>Over the last 24 hours</span></h2>
+            <h2 class="headers">
+                Most Played Beatmaps
+                <!-- TODO: Last 24 hours lol -->
+                <!-- <span>Over the last 24 hours</span> -->
+            </h2>
             <table class="styled-table">
                 <thead>
                     <tr>
@@ -66,26 +70,22 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="light-row">
-                        <td>31,696</th>
-                            <td>
-                                <a href="/s/85361">
-                                    <img src="https://s.lekuru.xyz/mt/85361" alt="image"/>
-                                    Ogura Yui - Baby Sweet Berry Love (TV Size)
-                                </a>
-                            </td>
-                            <td><a href="/u/-1">Kawayi Rika</a></td>
-                    </tr>
-                    <tr class="dark-row">
-                        <td>31,696</th>
+                {% for count, set in beatmapsets %}
+                    {% if loop.index0 % 2 %}
+                        <tr class="light-row">
+                    {% else %}
+                        <tr class="dark-row">
+                    {% endif %}
+                        <td>{{ count }}</th>
                         <td>
-                            <a href="/s/85361">
-                                <img src="https://s.lekuru.xyz/mt/85361" alt="image"/>
-                                Ogura Yui - Baby Sweet Berry Love (TV Size)
+                            <a href="/s/{{ set.id }}">
+                                <img src="https://s.lekuru.xyz/mt/{{ set.id }}" alt="image"/>
+                                {{ set.full_name }}
                             </a>
                         </td>
-                        <td><a href="/u/-1">Kawayi Rika</a></td>
+                        <td><a href="/u/{{ set.creator }}">{{ set.creator }}</a></td>
                     </tr>
+                {% endfor %}
                 </tbody>
             </table>
         </div>
