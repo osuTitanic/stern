@@ -2,7 +2,10 @@
 from app.common.database.repositories import plays, messages
 from flask import Blueprint, render_template
 
+from . import stats
+
 router = Blueprint("routes", __name__)
+router.register_blueprint(stats.router, url_prefix='/stats')
 
 @router.route("/")
 def root():
