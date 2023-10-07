@@ -97,6 +97,10 @@
     top: calc( 100vh - 100px );
 }
 
+.stats-wrapper {
+    margin-top: 50px;
+}
+
 .most-played {
     width: 357px;
     position: sticky;
