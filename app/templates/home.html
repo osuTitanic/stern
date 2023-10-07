@@ -41,8 +41,25 @@
 
         <div class="chat-wrapper">
             <h2 class="headers">Chat</h2>
+            <table class="styled-table">
+                <tbody>
+                {% for message in messages %}
+                    {% if loop.index0 % 2 %}
+                        <tr class="light-row">
+                    {% else %}
+                        <tr class="dark-row">
+                    {% endif %}
+                        <td style="color: grey;">{{ message.time.strftime("%H:%M:%S") }}</th>
+                        <td>
+                            {{ message.sender }}: {{ message.message }}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
+
     <div class="right-side">
         <!-- Placeholder -->
         <a href="/p/download">

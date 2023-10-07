@@ -91,8 +91,16 @@
     text-align: right;
 }
 
+.chat-wrapper {
+    position: sticky;
+    bottom: 0;
+    top: calc( 100vh - 100px );
+}
+
 .most-played {
-    justify-self: flex-start;
+    width: 357px;
+    position: sticky;
+    top: calc( 100vh - 100px );
     bottom: 0;
 }
 
@@ -102,7 +110,6 @@
     text-align: left;
     margin-left: 2px;
     margin-right: 2px;
-    max-width: 356px;
     font-weight: normal;
     font-size: 8.5pt;
     width: 100%;

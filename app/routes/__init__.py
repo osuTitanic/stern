@@ -1,5 +1,5 @@
 
-from app.common.database.repositories import plays
+from app.common.database.repositories import plays, messages
 from flask import Blueprint, render_template
 
 router = Blueprint("routes", __name__)
@@ -27,5 +27,6 @@ def root():
         ],
         beatmapsets=[
             (p.count, p.beatmapset) for p in plays.fetch_most_played()
-        ]
+        ],
+        messages=messages.fetch_recent()
     )
