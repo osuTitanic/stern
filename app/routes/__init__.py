@@ -12,7 +12,7 @@ def root():
     return render_template(
         "home.html",
         css="home.css",
-        announcements=[
+        news=[
             {
                 "date": "13.04.23",
                 "link": "/forum/p/2258963",

@@ -18,20 +18,20 @@
             </div>
         </div>
 
-        <div class="announcements-wrapper">
-            <h2 class="headers">Announcements</h2>
-            {% for announcement in announcements %}
-                <div class="announcements">
+        <div class="news-wrapper">
+            <h2 class="headers">News</h2>
+            {% for message in news %}
+                <div class="news">
                     <div class="blurb-heading">
-                        {{ announcement['date'] }} <a href="{{ announcement['link'] }}"><b>{{ announcement['title'] }}</b></a> ({{ announcement['author'] }})
+                        {{ message['date'] }} <a href="{{ message['link'] }}"><b>{{ message['title'] }}</b></a> ({{ message['author'] }})
                     </div>
                     <div class="blurb-box">
                         <div class="blurb-text">
-                            {{ announcement['text'] }}
+                            {{ message['text'] }}
                         </div>
                     </div>
                     <div class="blurb-readmore">
-                        <a href="{{ announcement['link'] }}">Read More / Comment...</a>
+                        <a href="{{ message['link'] }}">Read More / Comment...</a>
                     </div>
                 </div>
             {% endfor %}

@@ -49,7 +49,11 @@
     border-radius: 10px 10px 10px 10px;
 }
 
-.announcements {
+.news-wrapper h2 {
+    margin-left: 3px;
+}
+
+.news {
     margin-bottom: 20px;
 }
 
