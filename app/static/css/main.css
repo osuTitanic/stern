@@ -54,6 +54,7 @@ body {
     list-style: none;
     position: absolute;
     left: -35px;
+    display: flex;
 }
 
 .nav-element a {
