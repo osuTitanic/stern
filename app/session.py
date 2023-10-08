@@ -2,6 +2,7 @@
 from .common.cache.events import EventQueue
 from .common.database import Postgres
 from .common.storage import Storage
+from .jobs import Jobs
 
 from requests import Session
 from redis import Redis
@@ -28,6 +29,7 @@ events = EventQueue(
 
 logger = logging.getLogger('bancho')
 
+jobs = Jobs()
 storage = Storage()
 requests = Session()
 requests.headers = {

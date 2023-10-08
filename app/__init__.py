@@ -4,6 +4,7 @@ from .logging import Console, File
 from . import session
 from . import common
 from . import routes
+from . import jobs
 
 from flask import Flask
 
