@@ -22,6 +22,7 @@ REDIS_PORT = int(os.environ.get('REDIS_PORT', 6379))
 FRONTEND_HOST = os.environ.get('FRONTEND_HOST')
 FRONTEND_PORT = int(os.environ.get('FRONTEND_PORT'))
 
+USERCOUNT_UPDATE_INTERVAL = int(os.environ.get('USERCOUNT_UPDATE_INTERVAL', 3600))
 DOMAIN_NAME = os.environ.get('DOMAIN_NAME')
 
 APPROVED_MAP_REWARDS = eval(os.environ.get('APPROVED_MAP_REWARDS', 'False').capitalize())
