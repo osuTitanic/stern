@@ -56,7 +56,7 @@ body {
     display: flex;
 }
 
-.nav-element a {
+.nav-element a, .nav-element a:visited {
     text-decoration: none;
     padding: 4.5px;
     padding-left: 15px;
@@ -66,13 +66,43 @@ body {
     color: #4e2151;
 }
 
-.nav-element a:visited {
-    color: #4e2151;
-}
-
 .nav-element a:hover {
     color: white;
     background: #f375c5;
+}
+
+.nav-element-dropdown ul {
+    display: none;
+    visibility: hidden;
+    position: absolute;
+    list-style: none;
+    width: 10em;
+    padding: 6px 8px 9px 0;
+    filter: drop-shadow(0 8px 0.55rem rgba(185, 185, 185, 0.5));
+}
+
+.nav-element-dropdown li {
+    background-color: #eca1dd;
+    position: relative;
+    display: grid;
+    width: 100%;
+    line-height: 16px;
+}
+
+.nav-element-dropdown a {
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.nav-element-dropdown:hover ul {
+    visibility: visible;
+    display: block;
+    z-index: 1;
+}
+
+.dropdown-indicator {
+    margin-left: 5px;
+    margin-bottom: 1px;
 }
 
 .content {
