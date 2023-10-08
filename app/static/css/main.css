@@ -35,9 +35,8 @@ body {
 }
 
 .logo {
-    z-index: -1;
     position: absolute;
-    top: -73px;
+    top: -73.5px;
     left: 10px;
     width: 200px;
 }
