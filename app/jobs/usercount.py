@@ -16,5 +16,15 @@ def sleep(seconds: int):
 
 def update():
     """Add entries of current usercount inside database"""
-    db_usercount.create(redis_usercount.get())
-    sleep(config.USERCOUNT_UPDATE_INTERVAL)
+    while True:
+        count = db_usercount.create(redis_usercount.get()).count
+        app.session.logger.debug(
+            f'Created usercount entry ({count} players).'
+        )
+
+        if rows := db_usercount.delete_old():
+            app.session.logger.debug(
+                f'Deleted old usercount entries ({rows} rows affected).'
+            )
+
+        sleep(config.USERCOUNT_UPDATE_INTERVAL)
