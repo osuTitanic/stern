@@ -4,16 +4,12 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg
 from datetime import datetime, timedelta
 from flask import Blueprint, send_file
 from io import BytesIO
-from copy import copy
 
 from app.common.database.repositories import usercount
 from app.common.database import DBUserCount
 
 import matplotlib.pyplot as plt
-import matplotlib as mpl
 import numpy as np
-
-mpl.use('agg')
 
 router = Blueprint("activity", __name__)
 
