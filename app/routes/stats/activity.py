@@ -10,10 +10,10 @@ from app.common.database.repositories import usercount
 from app.common.database import DBUserCount
 
 import matplotlib.pyplot as plt
+import matplotlib as mpl
 import numpy as np
-import matplotlib
 
-matplotlib.use('agg')
+mpl.use('agg')
 
 router = Blueprint("activity", __name__)
 
