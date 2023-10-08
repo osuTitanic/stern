@@ -34,12 +34,13 @@ body {
     margin-bottom: 5vh;
 }
 
-/* .logo {
+.logo {
+    z-index: -1;
     position: absolute;
-    z-index: 1;
-    top: -80px;
-    left: -90px;
-} */
+    top: -73px;
+    left: 10px;
+    width: 200px;
+}
 
 .nav {
     background-color: var(--nav);
