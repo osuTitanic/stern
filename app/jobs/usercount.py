@@ -11,9 +11,10 @@ import app
 
 logger = logging.getLogger('usercount-job')
 
-def sleep(seconds: int):
-    for _ in range(seconds):
+def sleep(seconds: float):
+    while seconds > 0:
         time.sleep(1)
+        seconds -= 1
 
         if app.session.jobs._shutdown:
             # Shutdown call
@@ -35,7 +36,7 @@ def update():
             sleep(next_entry_time)
 
     while True:
-        count = db_usercount.create(redis_usercount.get()).count
+        db_usercount.create(count := redis_usercount.get())
         logger.info(
             f'Created usercount entry ({count} players).'
         )
