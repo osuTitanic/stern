@@ -35,30 +35,32 @@
             {% endfor %}
         </div>
 
-        <div class="stats-wrapper">
-            <h2 class="headers">Online Users</h2>
-            <!-- Placeholder -->
-            <img src="https://web.archive.org/web/20130502101901im_/http://osu.ppy.sh/pages/include/home-useractivity.php" alt="useractivity">
-        </div>
+        <div class="bottom-stats">
+            <div class="stats-wrapper">
+                <h2 class="headers">Online Users</h2>
+                <!-- Placeholder -->
+                <img src="/stats/useractivity" alt="useractivity">
+            </div>
 
-        <div class="chat-wrapper">
-            <h2 class="headers">Chat</h2>
-            <table class="styled-table">
-                <tbody>
-                {% for message in messages %}
-                    {% if loop.index0 % 2 %}
-                        <tr class="light-row">
-                    {% else %}
-                        <tr class="dark-row">
-                    {% endif %}
-                        <td style="color: grey; width: 10%">{{ message.time.strftime("%H:%M:%S") }}</th>
-                        <td>
-                            {{ message.sender }}: {{ message.message }}
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+            <div class="chat-wrapper">
+                <h2 class="headers">Chat</h2>
+                <table class="styled-table">
+                    <tbody>
+                    {% for message in messages %}
+                        {% if loop.index0 % 2 %}
+                            <tr class="light-row">
+                        {% else %}
+                            <tr class="dark-row">
+                        {% endif %}
+                            <td style="color: grey; width: 10%">{{ message.time.strftime("%H:%M:%S") }}</th>
+                            <td>
+                                {{ message.sender }}: {{ message.message }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
