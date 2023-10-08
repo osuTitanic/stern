@@ -17,6 +17,7 @@ def sleep(seconds: int):
 
         if app.session.jobs._shutdown:
             # Shutdown call
+            logger.warning('Shutting down...')
             exit()
 
 def update():
@@ -35,12 +36,12 @@ def update():
 
     while True:
         count = db_usercount.create(redis_usercount.get()).count
-        logger.debug(
+        logger.info(
             f'Created usercount entry ({count} players).'
         )
 
         if rows := db_usercount.delete_old(timedelta(weeks=1)):
-            logger.debug(
+            logger.info(
                 f'Deleted old usercount entries ({rows} rows affected).'
             )
 
