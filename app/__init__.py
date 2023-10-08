@@ -9,10 +9,11 @@ from . import jobs
 from flask import Flask
 
 import logging
+import config
 
 logging.basicConfig(
     format='[%(asctime)s] - <%(name)s> %(levelname)s: %(message)s',
-    level=logging.INFO,
+    level=logging.DEBUG if config.DEBUG else logging.INFO,
     handlers=[Console, File]
 )
 
