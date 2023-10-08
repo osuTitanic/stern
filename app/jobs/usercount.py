@@ -30,19 +30,19 @@ def update():
 
         if time_since_last_entry <= config.USERCOUNT_UPDATE_INTERVAL:
             next_entry_time = abs(time_since_last_entry - config.USERCOUNT_UPDATE_INTERVAL)
-            logger.info(f'Next entry time: {round(next_entry_time, 2)} seconds')
+            logger.debug(f'Next entry time: {round(next_entry_time, 2)} seconds')
 
             # Sleep until next entry time
             sleep(next_entry_time)
 
     while True:
         db_usercount.create(count := redis_usercount.get())
-        logger.info(
+        logger.debug(
             f'Created usercount entry ({count} players).'
         )
 
         if rows := db_usercount.delete_old(timedelta(weeks=1)):
-            logger.info(
+            logger.debug(
                 f'Deleted old usercount entries ({rows} rows affected).'
             )
 
