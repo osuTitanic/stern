@@ -28,8 +28,7 @@ def root():
                 "text": "Hi everyone! DxS here as the new Chart Manager presenting the new April 2013 Chart."
             }
         ],
-        beatmapsets=[
-            (p.count, p.beatmapset) for p in plays.fetch_most_played()
-        ],
-        messages=messages.fetch_recent()
+        beatmapsets=[(p.count, p.beatmapset) for p in plays.fetch_most_played()],
+        messages=messages.fetch_recent(),
+        featured_video_id="PYesuQugFOM"
     )
