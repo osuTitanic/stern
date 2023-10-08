@@ -34,12 +34,39 @@ body {
     margin-bottom: 5vh;
 }
 
+.logo {
+    position: absolute;
+    z-index: 1;
+    top: -80px;
+    left: -90px;
+}
+
 .nav {
     background-color: var(--nav);
     border-radius: 5px 5px 0px 0px;
     min-height: 22.5px;
     max-width: 650px;
     padding-left: 50px;
+}
+
+.nav-list {
+    list-style: none;
+    position: absolute;
+    left: 35px;
+}
+
+.nav-element a {
+    text-decoration: none;
+    padding: 5px;
+    padding-left: 12px;
+    padding-right: 12px;
+    font-size: 11px;
+    font-weight: bolder;
+}
+
+.nav-element a:hover {
+    color: white;
+    background: #f375c5;
 }
 
 .content {
@@ -73,6 +100,7 @@ body {
 .nav-search {
     border-radius: 3px 3px 3px 3px;
     margin-right: 5px;
+    margin-left: 60px;
     font-size: 85%;
 }
 
