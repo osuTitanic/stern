@@ -45,7 +45,7 @@ def user_activity_chart(
     plt.tight_layout()
 
     # Define plot
-    plot = plt.plot(
+    plt.plot(
         [uc.time for uc in usercounts],
         [uc.count for uc in usercounts],
         linestyle='-',
@@ -60,10 +60,7 @@ def user_activity_chart(
     )
 
     # Increase y height
-    plt.ylim(
-        top=peak.count + (peak.count * 0.5),
-        bottom=0
-    )
+    plt.ylim(top=peak.count + (peak.count * 0.5))
 
     # Add peak text
     plt.annotate(
@@ -78,18 +75,23 @@ def user_activity_chart(
             ),
             # Y Offset
             peak.count - peak.count * 0.4
-        )
+        ),
+        zorder=3
     )
 
     # Add peak point
     plt.scatter(
         peak.time, peak.count,
         c='blue',
-        s=15
+        s=12,
+        zorder=2
     )
 
     # Enable grid layout
-    plt.grid(True, color='#ffd0f6')
+    plt.grid(
+        True,
+        color='#ffd0f6'
+    )
 
     # Render the figure to a PNG image
     canvas = FigureCanvasAgg(plt.gcf())
