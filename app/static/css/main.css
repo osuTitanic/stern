@@ -12,6 +12,9 @@
     --font-color: #323232;
     --header: #e15fac;
     --search: #ffffff;
+    --top-color: #d6d2df;
+    --nav-element: #4e2151;
+    --nav-dropdown: #f375c5;
     --nav: #ffd6f3;
 }
 
@@ -64,12 +67,12 @@ body {
     padding-right: 25px;
     font-size: 11px;
     font-weight: bold;
-    color: #4e2151;
+    color: var(--nav-element);
 }
 
 .nav-element a:hover {
     color: white;
-    background: #f375c5;
+    background: var(--nav-dropdown);
 }
 
 .nav-element-dropdown ul {
@@ -118,7 +121,7 @@ body {
 
 .top {
     background-color: var(--search);
-    filter: drop-shadow(0px 1px 2px #d6d2df);
+    filter: drop-shadow(0px 1px 2px var(--top-color));
     margin-bottom: 2vh;
     padding: 0.5vh;
     max-height: 18px;
