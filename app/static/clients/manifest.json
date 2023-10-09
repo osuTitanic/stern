@@ -29,7 +29,7 @@
     },
     {
         "version": "b1821",
-        "description": "A build from 2011",
+        "description": "The last build from 2011",
         "download": "https://raw.githubusercontent.com/osuTitanic/clients/main/b1821.zip",
         "screenshot": "/images/clients/b1821.jpg",
         "maxWidth": "265px"
