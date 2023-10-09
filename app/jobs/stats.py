@@ -1,6 +1,11 @@
 
-from app.common.database.repositories import usercount as db_usercount
 from app.common.cache import usercount as redis_usercount
+from app.common.database.repositories import usercount as db_usercount
+from app.common.database.repositories import (
+    beatmaps,
+    scores,
+    users
+)
 
 from datetime import timedelta, datetime
 
@@ -9,7 +14,7 @@ import config
 import time
 import app
 
-logger = logging.getLogger('usercount-job')
+logger = logging.getLogger('stats-job')
 
 def sleep(seconds: float):
     while seconds > 0:
@@ -21,7 +26,14 @@ def sleep(seconds: float):
             logger.warning('Shutting down...')
             exit()
 
-def update():
+def update_stats():
+    """Update the total users, beatmaps and scores to redis"""
+    app.session.redis.set('bancho:totalusers', users.fetch_count())
+    app.session.redis.set('bancho:totalbeatmaps', beatmaps.fetch_count())
+    app.session.redis.set('bancho:totalscores', scores.fetch_total_count())
+    sleep(config.USERCOUNT_UPDATE_INTERVAL)
+
+def update_usercount():
     """Add entries of current usercount inside database"""
     last_entry = db_usercount.fetch_last()
 

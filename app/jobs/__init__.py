@@ -3,7 +3,7 @@ from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures._base import Future
 from typing import Any, Callable, Tuple
 
-from . import usercount
+from . import stats
 
 class Jobs(ThreadPoolExecutor):
     def __init__(self, max_workers = None, thread_name_prefix: str = "job", initializer = None, initargs: Tuple[Any, ...] = ...) -> None:
