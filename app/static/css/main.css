@@ -139,6 +139,7 @@ body {
 
 .gradient {
     background: linear-gradient(var(--content-main), var(--background-gradient-lower));
+    border-radius: 5px;
     min-height: 15px;
     position: static;
     bottom: 0;
