@@ -112,7 +112,7 @@ body {
 
 .content {
     background-color: var(--content-main);
-    min-height: 600px;
+    min-height: 500px;
     border-style: solid;
     border-color: var(--content-border);
     border-radius: 0px 5px 5px 5px;
