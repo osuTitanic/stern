@@ -1,4 +1,5 @@
 :root {
+    --background-gradiant-lower: #e8d2ff;
     --background-gradiant: #686fc1;
     --background-main: #a9a9ff;
     --content-border-grey: #d2d4fa;
@@ -111,12 +112,16 @@ body {
 
 .content {
     background-color: var(--content-main);
-    /* TODO: Lower min-height and add gradiant to lower part */
     min-height: 900px;
     border-style: solid;
     border-color: var(--content-border);
     border-radius: 0px 5px 5px 5px;
     border-width: 2px;
+}
+
+.gradiant {
+    background: linear-gradient(var(--content-main), var(--background-gradiant-lower));
+    min-height: 15px;
 }
 
 .top {
