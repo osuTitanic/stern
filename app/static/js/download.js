@@ -27,7 +27,6 @@ function loadManifest() {
             description.classList.add('description')
 
             const screenshot = document.createElement('img');
-            screenshot.style.height = client.height;
             screenshot.src = client.screenshot;
 
             const downloadLink = document.createElement('a');
@@ -36,7 +35,7 @@ function loadManifest() {
             downloadLink.setAttribute('target', '_blank');
 
             const div = document.createElement('div');
-            div.style.maxWidth = client.width;
+            div.style.maxWidth = client.maxWidth;
             div.classList.add('client');
 
             div.appendChild(version);

@@ -4,47 +4,41 @@
         "description": "A build from 2013 with the new UI overhaul update",
         "download": "https://raw.githubusercontent.com/osuTitanic/clients/main/b20130606.1.zip",
         "screenshot": "/images/clients/b20130606.1.jpg",
-        "width": "355.55px",
-        "height": "200px"
+        "maxWidth": "356px"
     },
     {
         "version": "b20130303",
         "description": "The last build before 2013's UI overhaul update",
         "download": "https://raw.githubusercontent.com/osuTitanic/clients/main/b20130303.zip",
         "screenshot": "/images/clients/b20130303.jpg",
-        "width": "355.55px",
-        "height": "200px"
+        "maxWidth": "356px"
     },
     {
         "version": "b20121229-db2k",
         "description": "A special build modded by db2k, featuring 3-point sliders, background dim and more!",
         "download": "https://raw.githubusercontent.com/osuTitanic/clients/main/b20121229-db2k.zip",
         "screenshot": "/images/clients/b20121229-db2k.jpg",
-        "width": "355.55px",
-        "height": "200px"
+        "maxWidth": "356px"
     },
     {
         "version": "b20120522",
         "description": "Another build from 2012, with a more old-ish ui",
         "download": "https://raw.githubusercontent.com/osuTitanic/clients/main/b20120522.zip",
         "screenshot": "/images/clients/b20120522.jpg",
-        "width": "266.66px",
-        "height": "200px"
+        "maxWidth": "265px"
     },
     {
         "version": "b1821",
         "description": "A build from 2011",
         "download": "https://raw.githubusercontent.com/osuTitanic/clients/main/b1821.zip",
         "screenshot": "/images/clients/b1821.jpg",
-        "width": "266.66px",
-        "height": "200px"
+        "maxWidth": "265px"
     },
     {
         "version": "b1700",
         "description": "The last build from 2010",
         "download": "https://raw.githubusercontent.com/osuTitanic/clients/main/b1700.zip",
         "screenshot": "/images/clients/b1700.jpg",
-        "width": "266.66px",
-        "height": "200px"
+        "maxWidth": "265px"
     }
 ]
