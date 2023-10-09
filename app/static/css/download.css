@@ -4,6 +4,7 @@
 :root {
     --download-button-text: #ff5d93;
     --download-button-color: #e9cedf;
+    --client-container: #ffdef5;
     --client: #ffd6f3;
 }
 
@@ -21,9 +22,11 @@
 }
 
 #client-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, 50%);
-    justify-content: space-between;
+    overflow: auto;
+    white-space: nowrap;
+    background-color: var(--client-container);
+    padding: 5px;
+    margin: 5px;
 }
 
 #client-container b {
@@ -31,15 +34,19 @@
 }
 
 .client {
-    border-radius: 5px 5px 5px 5px;
+    display: inline-block;
+    border-radius: 5px;
     border-width: 2px;
     padding: 10px;
-    display: inline-block;
-    background-color: var(--client);
     margin: 10px;
+    overflow: hidden;
+    background-color: var(--client);
     filter: drop-shadow(1px 2px 1px #c6c6ca);
-    /* Looks kinda cool? */
-    /* text-align: center; */
+    vertical-align: top;
+}
+
+.client p {
+    white-space: pre-wrap;
 }
 
 .client img {
@@ -72,11 +79,6 @@
     font-size: large;
     filter: drop-shadow(2px 2px 1px #d6d6d6);
     margin-bottom: 5px;
-}
-
-.description {
-    overflow-wrap: break-word;
-    word-wrap: break-word;
 }
 
 .bottom-text {
