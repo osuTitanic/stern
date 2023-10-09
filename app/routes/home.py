@@ -1,14 +1,16 @@
 
 from app.common.database.repositories import plays, messages
 
-from flask import Blueprint, render_template, redirect
+from flask import Blueprint, redirect
 from typing import Optional
+
+import utils
 
 router = Blueprint("home", __name__)
 
 @router.get("/")
 def root():
-    return render_template(
+    return utils.render_template(
         "home.html",
         css="home.css",
         news=[
