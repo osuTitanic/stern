@@ -112,7 +112,7 @@ body {
 
 .content {
     background-color: var(--content-main);
-    min-height: 900px;
+    min-height: 600px;
     border-style: solid;
     border-color: var(--content-border);
     border-radius: 0px 5px 5px 5px;
@@ -122,6 +122,9 @@ body {
 .gradiant {
     background: linear-gradient(var(--content-main), var(--background-gradiant-lower));
     min-height: 15px;
+    position: sticky;
+    bottom: 0;
+    top: calc( 100vh - 100px );
 }
 
 .top {
