@@ -155,7 +155,19 @@ body {
     justify-content: space-between;
 }
 
-.login {
+.search-container {
+    display: flex;
+    max-height: 18px;
+}
+
+.nav-search {
+    border-radius: 3px 3px 3px 3px;
+    font-size: 85%;
+    margin-left: 2.5px;
+    margin-right: 2.5px;
+}
+
+.login-container {
     display: flex;
     justify-content: flex-end;
     text-align: right;
@@ -163,21 +175,15 @@ body {
     gap: 5px;
 }
 
-.nav-search {
-    border-radius: 3px 3px 3px 3px;
-    margin-right: 5px;
-    font-size: 85%;
-}
-
 .nav-login {
     margin-right: 5px;
 }
 
-.login a {
+.login-container a {
     text-decoration: none;
 }
 
-.login a:hover {
+.login-container a:hover {
     text-decoration: underline;
 }
 
