@@ -167,6 +167,10 @@ body {
     margin-right: 2.5px;
 }
 
+.search-form {
+    display: flex;
+}
+
 .login-container {
     display: flex;
     justify-content: flex-end;
