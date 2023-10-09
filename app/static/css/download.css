@@ -25,6 +25,12 @@
     margin-left: 10px;
 }
 
+#client-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 50%);
+    justify-content: space-between;
+}
+
 #client-container b {
     margin-left: 10px;
 }
@@ -44,6 +50,7 @@
 .client img {
     margin-top: 8px;
     border-radius: 2px;
+    height: 200px;
 }
 
 .client a {
