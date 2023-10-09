@@ -6,5 +6,6 @@ router = Blueprint('download', __name__)
 @router.get('/')
 def download():
     return render_template(
-        'download.html'
+        'download.html',
+        css='download.css'
     )

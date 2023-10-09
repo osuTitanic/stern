@@ -1,3 +1,18 @@
 {# templates/download.html #}
 
 {% extends "base.html" %}
+
+{% block content %}
+<div class="heading">
+    <h2>Let's get you started!</h2>
+    <p>Please choose a version that you want to play on!</p>
+</div>
+<div id="client-container"></div>
+<div class="bottom-text">
+    <p>
+        Want to play a specific version? Feel free to request one
+        <a href="https://github.com/osuTitanic/clients/issues/new/choose">here</a>.
+    </p>
+</div>
+<script src="/js/download.js"></script>
+{% endblock content %}
