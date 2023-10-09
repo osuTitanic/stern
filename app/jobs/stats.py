@@ -23,7 +23,6 @@ def sleep(seconds: float):
 
         if app.session.jobs._shutdown:
             # Shutdown call
-            logger.warning('Shutting down...')
             exit()
 
 def update_stats():
