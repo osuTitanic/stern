@@ -20,8 +20,12 @@
         <div class="content">
             <div class="top">
                 <div class="search-container">
-                    <input class="nav-search" type="text" id="beatmap-search" name="beatmaps" placeholder="Beatmap">
-                    <input class="nav-search" type="text" id="user-search" name="users" placeholder="User">
+                    <form class="search-form" onsubmit="return beatmapSearch()">
+                        <input class="nav-search" type="text" id="beatmap-search" name="beatmaps" placeholder="Beatmap" autocomplete="off">
+                    </form>
+                    <form class="search-form" onsubmit="return userSearch()">
+                        <input class="nav-search" type="text" id="user-search" name="users" placeholder="User" autocomplete="off">
+                    </form>
                 </div>
                 <div class="login-container">
                     <p class="nav-login" id="welcome-text">Welcome, guest!</p>
@@ -36,5 +40,6 @@
             <div class="gradiant"></div>
         </div>
     </div>
+    <script src="/js/main.js"></script>
 </body>
 </html>
