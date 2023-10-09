@@ -122,7 +122,7 @@ body {
 .gradiant {
     background: linear-gradient(var(--content-main), var(--background-gradiant-lower));
     min-height: 15px;
-    position: sticky;
+    position: static;
     bottom: 0;
     top: calc( 100vh - 100px );
 }
