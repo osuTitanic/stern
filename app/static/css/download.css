@@ -4,12 +4,7 @@
 :root {
     --download-button-text: #ff5d93;
     --download-button-color: #e9cedf;
-}
-
-.page {
-    display: flex;
-    justify-self: center;
-    flex-wrap: wrap;
+    --client: #ffd6f3;
 }
 
 .heading {
@@ -30,14 +25,17 @@
     margin-left: 10px;
 }
 
+#client-container b {
+    margin-left: 10px;
+}
+
 .client {
-    /* border-style: solid; */
     border-radius: 5px 5px 5px 5px;
     border-width: 2px;
     padding: 10px;
     display: inline-block;
     max-width: 355.55px;
-    background-color: #ece1e8;
+    background-color: var(--client);
     margin: 10px;
     filter: drop-shadow(1px 2px 1px #c6c6ca);
     /* Looks kinda cool? */
@@ -64,7 +62,7 @@
 }
 
 .client a:hover {
-    color: var(--download-button-color);
+    color: #ebebeb;
     background-color: var(--download-button-text);
     transition: all 0.1s ease;
 }
