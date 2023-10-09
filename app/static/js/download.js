@@ -1,5 +1,5 @@
 function loadManifest() {
-    const manifestUrl = 'https://raw.githubusercontent.com/osuTitanic/clients/main/.github/manifest.json';
+    const manifestUrl = '/images/clients/manifest.json';
     const container = document.getElementById('client-container');
   
     console.info('Loading clients...');
@@ -27,6 +27,7 @@ function loadManifest() {
             description.classList.add('description')
 
             const screenshot = document.createElement('img');
+            screenshot.style.height = client.height;
             screenshot.src = client.screenshot;
 
             const downloadLink = document.createElement('a');
@@ -35,7 +36,9 @@ function loadManifest() {
             downloadLink.setAttribute('target', '_blank');
 
             const div = document.createElement('div');
+            div.style.maxWidth = client.width;
             div.classList.add('client');
+
             div.appendChild(version);
             div.appendChild(description);
             div.appendChild(screenshot);
