@@ -65,8 +65,8 @@ body {
 .nav-element a, .nav-element a:visited {
     text-decoration: none;
     padding: 4.5px;
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-left: 17px;
+    padding-right: 17px;
     font-weight: bold;
     font-size: 11px;
     color: var(--nav-element);
@@ -114,7 +114,7 @@ body {
 .bancho-stats {
     position: absolute;
     background-color: var(--bancho-stats);
-    width: 240px;
+    min-width: 200px;
     height: 30px;
     margin-top: -38px;
     margin-right: 25px;
@@ -124,7 +124,8 @@ body {
     padding: 5px;
     padding-left: 10px;
     padding-top: 6px;
-    border-radius: 5px 5px 0px 0px
+    border-radius: 5px 5px 0px 0px;
+    letter-spacing: 0.4px;
 }
 
 .content {
