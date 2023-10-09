@@ -20,11 +20,6 @@
     margin-bottom: 2.5px;
 }
 
-.bottom-text {
-    margin-top: 20px;
-    margin-left: 10px;
-}
-
 #client-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, 50%);
@@ -82,4 +77,17 @@
 .description {
     overflow-wrap: break-word;
     word-wrap: break-word;
+}
+
+.bottom-text {
+    margin-top: 20px;
+    margin-left: 10px;
+}
+
+.bottom-text a {
+    text-decoration: none;
+}
+
+.bottom-text a:hover {
+    text-decoration: underline;
 }
