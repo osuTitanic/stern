@@ -1,6 +1,8 @@
 
 from app.common.database.repositories import plays, messages
-from flask import Blueprint, render_template
+
+from flask import Blueprint, render_template, redirect
+from typing import Optional
 
 router = Blueprint("home", __name__)
 
@@ -22,3 +24,9 @@ def root():
         messages=messages.fetch_recent(),
         featured_video_id="PYesuQugFOM"
     )
+
+# Redirect index.* to root
+@router.get('/index')
+@router.get('/index<extension>')
+def index(extension: Optional[str] = None):
+    return redirect('/')
