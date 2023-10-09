@@ -14,6 +14,7 @@
     --header: #e15fac;
     --search: #ffffff;
     --top-color: #d6d2df;
+    --bancho-stats: #5b5399;
     --nav-element: #4e2151;
     --nav-dropdown: #f375c5;
     --nav: #ffd6f3;
@@ -64,10 +65,10 @@ body {
 .nav-element a, .nav-element a:visited {
     text-decoration: none;
     padding: 4.5px;
-    padding-left: 25px;
-    padding-right: 25px;
-    font-size: 11px;
+    padding-left: 15px;
+    padding-right: 15px;
     font-weight: bold;
+    font-size: 11px;
     color: var(--nav-element);
 }
 
@@ -76,7 +77,7 @@ body {
     background: var(--nav-dropdown);
 }
 
-.nav-element-dropdown ul {
+.nav-dropdown {
     display: none;
     visibility: hidden;
     position: absolute;
@@ -86,7 +87,7 @@ body {
     filter: drop-shadow(0 8px 0.55rem rgba(185, 185, 185, 0.5));
 }
 
-.nav-element-dropdown li {
+.nav-dropdown li {
     background-color: #eca1dd;
     position: relative;
     display: grid;
@@ -108,6 +109,22 @@ body {
 .dropdown-indicator {
     margin-left: 5px;
     margin-bottom: 1px;
+}
+
+.bancho-stats {
+    position: absolute;
+    background-color: var(--bancho-stats);
+    width: 240px;
+    height: 30px;
+    margin-top: -38px;
+    margin-right: 25px;
+    right: 0;
+    color: white;
+    font-size: 11px;
+    padding: 5px;
+    padding-left: 10px;
+    padding-top: 6px;
+    border-radius: 5px 5px 0px 0px
 }
 
 .content {

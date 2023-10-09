@@ -13,6 +13,10 @@
         <div class="nav">
             {% include "navigation.html" %}
         </div>
+        <div class="bancho-stats">
+            <b>{{ total_users }}</b> users, <b>{{ online_users }}</b> online now.<br>
+            A total of <b>{{ total_scores }}</b> plays!
+        </div>
         <div class="content">
             <div class="top">
                 <input class="nav-search" type="text" id="search-bar" name="search" placeholder="Search">

@@ -21,11 +21,30 @@
             </li>
         </ul>
     </li>
-    <li class="nav-element">
-        <a href="/rankings/{{ user_preferred_mode or 'osu' }}/performance">Rankings</a>
+    <li class="nav-element nav-element-dropdown">
+        <a href="/rankings/{{ user_preferred_mode or 'osu' }}/performance">
+            Rankings
+            <img class="dropdown-indicator" src="/images/arrow-white-highlight.png" alt="»">
+        </a>
+        <ul class="nav-dropdown">
+            <li>
+                <a href="/rankings/{{ user_preferred_mode or 'osu' }}/performance">Performance</a>
+                <a href="/rankings/{{ user_preferred_mode or 'osu' }}/score">Score</a>
+                <a href="/rankings/{{ user_preferred_mode or 'osu' }}/country">Countries</a>
+            </li>
+        </ul>
     </li>
-    <li class="nav-element">
-        <a href="/forum">Community</a>
+    <li class="nav-element nav-element-dropdown">
+        <a href="/forum">
+            Community
+            <img class="dropdown-indicator" src="/images/arrow-white-highlight.png" alt="»">
+        </a>
+        <ul class="nav-dropdown">
+            <li>
+                <a href="/forums">Forums</a>
+                <a href="https://discord.gg/qupv72e7YH">Discord</a>
+            </li>
+        </ul>
     </li>
     <li class="nav-element">
         <a href="/faq">Help</a>
