@@ -28,7 +28,6 @@ function loadManifest() {
 
             const screenshot = document.createElement('img');
             screenshot.src = client.screenshot;
-            screenshot.alt = 'screenshot'
 
             const downloadLink = document.createElement('a');
             downloadLink.textContent = 'Download';
