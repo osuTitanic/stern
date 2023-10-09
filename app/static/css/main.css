@@ -1,6 +1,6 @@
 :root {
-    --background-gradiant-lower: #e8d2ff;
-    --background-gradiant: #686fc1;
+    --background-gradient-lower: #e8d2ff;
+    --background-gradient: #686fc1;
     --background-main: #a9a9ff;
     --content-border-grey: #d2d4fa;
     --content-border: #5c559c;
@@ -27,7 +27,7 @@
 }
 
 body {
-    background: linear-gradient(var(--background-gradiant), var(--background-main) 20%);
+    background: linear-gradient(var(--background-gradient), var(--background-main) 20%);
     background-attachment: fixed;
 }
 
@@ -137,8 +137,8 @@ body {
     border-width: 2px;
 }
 
-.gradiant {
-    background: linear-gradient(var(--content-main), var(--background-gradiant-lower));
+.gradient {
+    background: linear-gradient(var(--content-main), var(--background-gradient-lower));
     min-height: 15px;
     position: static;
     bottom: 0;
