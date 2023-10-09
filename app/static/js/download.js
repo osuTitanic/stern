@@ -1,5 +1,5 @@
 function loadManifest() {
-    const manifestUrl = '/images/clients/manifest.json';
+    const manifestUrl = '/clients/manifest.json';
     const container = document.getElementById('client-container');
   
     console.info('Loading clients...');
