@@ -23,7 +23,7 @@ def calculate_peak_x(
         smallest.time,
         min(
             # Add offset to time
-            n.time - timedelta(seconds=750),
+            n.time - timedelta(minutes=240),
             largest.time
         )
     )
@@ -74,9 +74,9 @@ def user_activity_chart(
                 usercounts[0]
             ),
             # Y Offset
-            peak.count - peak.count * 0.4
+            peak.count - peak.count * 0.35
         ),
-        zorder=3
+        zorder=2
     )
 
     # Add peak point
@@ -84,7 +84,7 @@ def user_activity_chart(
         peak.time, peak.count,
         c='blue',
         s=12,
-        zorder=2
+        zorder=4
     )
 
     # Enable grid layout
