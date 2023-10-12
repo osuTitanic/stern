@@ -47,21 +47,32 @@
     border: 0;
 }
 
+.beatmap-tab {
+    text-decoration: none;
+    font-size: 90%;
+    padding: 7px 8px 7px 8px;
+    line-height: 15px;
+    color: var(--difficulty-text);
+    background-color: var(--difficulty);
+    display: flex;
+}
+
+.beatmap-tab:hover {
+    background-color: white;
+}
+
+.beatmap-tab img {
+    height: 16px;
+    width: 16px;
+    margin: auto;
+    margin-right: 5px;
+}
+
 .difficulty {
     margin: 0;
     width: auto;
     float: left;
     display: block;
-}
-
-.beatmap-tab {
-    text-decoration: none;
-    font-size: 90%;
-    padding: 6.5px 8px 6.5px 8px;
-    background-color: var(--difficulty);
-    margin-right: 2.5px;
-    line-height: 30px;
-    color: var(--difficulty-text);
 }
 
 .beatmap-tab:visited {
