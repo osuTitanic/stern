@@ -1,11 +1,8 @@
 
 from app.common.database.repositories import beatmaps
-from flask import (
-    render_template,
-    Blueprint,
-    request,
-    abort
-)
+from flask import Blueprint, request, abort
+
+import utils
 
 router = Blueprint('beatmap', __name__)
 
@@ -21,7 +18,7 @@ def get_beatmap(id: int):
         key=lambda x: x.diff
     )
 
-    return render_template(
+    return utils.render_template(
         'beatmap.html',
         beatmap=beatmap,
         beatmapset=beatmap.beatmapset,
