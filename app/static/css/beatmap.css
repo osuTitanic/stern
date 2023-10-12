@@ -23,13 +23,8 @@
 }
 
 .header-text a {
-    text-decoration: none;
     color: var(--header-blue);
     text-shadow: var(--text-shadow) 0px 0px 10px;
-}
-
-.header-text a:hover {
-    text-decoration: underline;
 }
 
 .difficulties {
@@ -59,6 +54,7 @@
 
 .beatmap-tab:hover {
     background-color: white;
+    text-decoration: none;
 }
 
 .beatmap-tab img {
