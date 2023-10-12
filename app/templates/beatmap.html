@@ -9,4 +9,26 @@
     {{' - ' if beatmapset.artist and beatmapset.title}}
     {{beatmapset.title if beatmapset.title}}
 </h1>
+<div class="difficulties">
+    <ul>
+        {% for map in beatmapset.beatmaps %}
+        <li>
+            <a href="/b/{{map.id}}" class="beatmap-tab {{ 'active' if map.id == beatmap.id }}">
+                {% if map.version|lower in ['easy', 'normal', 'hard', 'insane'] %}
+                    <img
+                        src="/images/beatmap/{{map.version|lower}}-{{mode}}.png"
+                        alt=""
+                    >
+                {% else %}
+                    <img
+                        src="/images/beatmap/expert-{{mode}}.png"
+                        alt=""
+                    >
+                {% endif %}
+                <span>{{map.version}}</span>
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
 {% endblock content %}
