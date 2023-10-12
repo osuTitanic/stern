@@ -14,7 +14,7 @@ click==8.1.7
 colorama==0.4.6
 contourpy==1.1.1
 cycler==0.12.1
-Flask==3.0.0
+Flask==2.3.3
 fonttools==4.43.1
 frozenlist==1.4.0
 geoip2==4.7.0
