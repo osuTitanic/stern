@@ -26,6 +26,14 @@
     font-size: 99.5%;
 }
 
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
 body {
     background: linear-gradient(var(--background-gradient), var(--background-main) 20%);
     background-attachment: fixed;
@@ -75,6 +83,7 @@ body {
 .nav-element a:hover {
     color: white;
     background: var(--nav-dropdown);
+    text-decoration: none;
 }
 
 .nav-dropdown {
