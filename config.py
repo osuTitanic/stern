@@ -23,6 +23,7 @@ FRONTEND_HOST = os.environ.get('FRONTEND_HOST')
 FRONTEND_PORT = int(os.environ.get('FRONTEND_PORT'))
 
 USERCOUNT_UPDATE_INTERVAL = int(os.environ.get('USERCOUNT_UPDATE_INTERVAL', 60))
+SCORE_RESPONSE_LIMIT = int(os.environ.get('SCORE_RESPONSE_LIMIT', 50))
 DOMAIN_NAME = os.environ.get('DOMAIN_NAME')
 
 APPROVED_MAP_REWARDS = eval(os.environ.get('APPROVED_MAP_REWARDS', 'False').capitalize())
