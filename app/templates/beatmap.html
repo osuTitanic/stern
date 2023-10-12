@@ -16,27 +16,27 @@
             <a href="/b/{{map.id}}" class="beatmap-tab {{ 'active' if map.id == beatmap.id }}">
                 {% if map.diff < 2.7 %}
                     <img
-                        src="/images/beatmap/difficulties/easy-{{mode}}.png"
+                        src="/images/beatmap/difficulties/easy-{{map.mode}}.png"
                         alt=""
                     >
                 {% elif map.diff < 3.7 %}
                     <img
-                        src="/images/beatmap/difficulties/normal-{{mode}}.png"
+                        src="/images/beatmap/difficulties/normal-{{map.mode}}.png"
                         alt=""
                     >
                 {% elif map.diff < 4.5 %}
                     <img
-                        src="/images/beatmap/difficulties/hard-{{mode}}.png"
+                        src="/images/beatmap/difficulties/hard-{{map.mode}}.png"
                         alt=""
                     >
                 {% elif map.diff < 5.5 %}
                     <img
-                        src="/images/beatmap/difficulties/insane-{{mode}}.png"
+                        src="/images/beatmap/difficulties/insane-{{map.mode}}.png"
                         alt=""
                     >
                 {% else %}
                     <img
-                        src="/images/beatmap/difficulties/expert-{{mode}}.png"
+                        src="/images/beatmap/difficulties/expert-{{map.mode}}.png"
                         alt=""
                     >
                 {% endif %}
