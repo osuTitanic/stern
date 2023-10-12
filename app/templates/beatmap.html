@@ -1,0 +1,12 @@
+{# templates/beatmap.html #}
+
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="header-text">
+    <a href="/beatmapsets">Beatmap Listing</a> »
+    {{beatmapset.artist if beatmapset.artist}}
+    {{' - ' if beatmapset.artist and beatmapset.title}}
+    {{beatmapset.title if beatmapset.title}}
+</h1>
+{% endblock content %}

@@ -1,0 +1,22 @@
+
+@import url("main.css");
+
+:root {
+    --header-pink: #e15fac;
+    --header-blue: #3843a6;
+}
+
+.header-text {
+    font-size: 150%;
+    font-weight: 100;
+    color: var(--header-pink);
+}
+
+.header-text a {
+    text-decoration: none;
+    color: var(--header-blue);
+}
+
+.header-text a:hover {
+    text-decoration: underline;
+}
