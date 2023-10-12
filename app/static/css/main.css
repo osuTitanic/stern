@@ -137,14 +137,22 @@ body {
     border-width: 2px;
 }
 
-.gradient {
+/* .gradient {
+    kinda hard to make a gradient stick to the bottom of the page...
     background: linear-gradient(var(--content-main), var(--background-gradient-lower));
-    border-radius: 5px;
-    min-height: 15px;
-    position: static;
+    height: 15px;
+    left: 0;
     bottom: 0;
-    top: calc( 100vh - 100px );
-}
+    margin: 0;
+    clear: both;
+    width: 99.55%;
+    position: absolute;
+    border-bottom: var(--content-border) solid;
+    border-left: var(--content-border) solid;
+    border-right: var(--content-border) solid;
+    border-width: 2px;
+    border-radius: 0px 0px 5px 5px;
+} */
 
 .top {
     background-color: var(--search);
