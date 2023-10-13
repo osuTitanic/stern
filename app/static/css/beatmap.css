@@ -165,8 +165,11 @@ h2 {
 
 .score-header {
     width: 100%;
-    display: inline-block;
+    display: grid;
     text-align: left;
+    min-height: 100px;
+    justify-content: center;
+    align-items: center;
 }
 
 .leader {
