@@ -166,5 +166,29 @@
             </tr>
         </table>
     </div>
+    <div class="padding">
+        <div class="beatmap-download">
+            {% if user is defined %}
+                <a href="/beatmapsets/download/{{ beatmapset.id }}">
+                    <img src="/images/beatmap/osu-download-beatmap.png" alt="Download">
+                </a>
+                {% if beatmapset.has_video %}
+                <a href="/beatmapsets/download/{{ beatmapset.id }}?novideo=True">
+                    <img src="/images/beatmap/osu-download-beatmap-novid.png" alt="Download without Video">
+                </a>
+                {% endif %}
+            {% else %}
+                <a href="#" onclick='return showLoginForm();'>
+                    <img src="/images/beatmap/osu-download-login.png"/>
+                </a>
+            {% endif %}
+        </div>
+        <div class="beatmap-description">
+            <a href="#" onclick="/*TODO: Play music preview*/">
+                <img src="http://osu.{{ domain }}/mt/{{ beatmapset.id }}l" alt="Beatmap Image">
+            </a>
+            {{ beatmapset.description }}
+        </div>
+    </div>
 </div>
 {% endblock content %}

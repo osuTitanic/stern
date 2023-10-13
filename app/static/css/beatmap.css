@@ -121,3 +121,24 @@
     font-size: 8pt;
     overflow: hidden;
 }
+
+.padding {
+    padding-left: 8px;
+    padding-right: 8px;
+    margin-top: 5px;
+}
+
+.beatmap-description {
+    border: 1px solid #e1dfe7;
+    background-color: #f9f7fe;
+    overflow: auto;
+    padding: 7px;
+    margin: 5px;
+    height: 122.5px;
+}
+
+.beatmap-download {
+    float: right;
+    margin-left: 10px;
+    margin-top: 5px;
+}
