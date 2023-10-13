@@ -20,11 +20,11 @@ def calculate_peak_x(
 ) -> datetime:
     """Used to calculate the x position of peak text, so that it doesnt exit the chart box."""
     return max(
-        smallest.time,
+        smallest.time + timedelta(minutes=30),
         min(
             # Add offset to time
             n.time - timedelta(hours=1),
-            largest.time
+            largest.time - timedelta(hours=3)
         )
     )
 
