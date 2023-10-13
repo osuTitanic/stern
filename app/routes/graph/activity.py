@@ -62,6 +62,9 @@ def user_activity_chart(
     # Increase y height
     plt.ylim(top=peak.count + (peak.count * 0.5))
 
+    # Prevent text overflow
+    plt.autoscale(False)
+
     # Add peak text
     plt.annotate(
         text=f'Peak: {peak.count} {"users" if peak.count > 1 else "user"}',
