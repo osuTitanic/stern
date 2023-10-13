@@ -18,3 +18,5 @@ function userSearch() {
     }
     return true;
 }
+
+function showLoginForm() {} // TODO
