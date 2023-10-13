@@ -23,7 +23,7 @@ def calculate_peak_x(
         smallest.time,
         min(
             # Add offset to time
-            n.time - timedelta(minutes=240),
+            n.time - timedelta(hours=1),
             largest.time
         )
     )
