@@ -4,10 +4,12 @@
 :root {
     --header-pink: #e15fac;
     --header-blue: #3843a6;
-    --difficulty-background: #ece4fd;
+    --difficulty-background: #e1d6fb;
     --difficulty-active: #bfa8f8;
     --difficulty-text: #5e5e5e;
-    --difficulty: #dbd3f1;
+    --difficulty: #e7e2f3;
+    --border-light: #cfc1ef;
+    --border: #8462db;
 }
 
 .page {
@@ -25,6 +27,10 @@
 .header-text a {
     color: var(--header-blue);
     text-shadow: var(--text-shadow) 0px 0px 10px;
+}
+
+.beatmap {
+    display: grid;
 }
 
 .difficulties {
@@ -77,4 +83,41 @@
 
 .active {
     background-color: var(--difficulty-active);
+}
+
+.beatmap-stats {
+    clear: both;
+    background-color: var(--difficulty);
+    border-top: 1px solid var(--border-light);
+    border-bottom: 1px solid var(--border);
+    padding: 2px;
+    font-size: 9pt;
+}
+
+.beatmap-stats table {
+    width: 100%;
+}
+
+.beatmap-stats td {
+    border-bottom: 1px solid var(--border-light);
+    padding: 8px
+}
+
+.starfield {
+    height: 14px;
+    background: url('/images/beatmap/starn.png');
+    background-repeat: repeat-x;
+    overflow: hidden;
+}
+
+.starfield-selected {
+    height: 14px;
+    background: url('/images/beatmap/star.png');
+    background-repeat: repeat-x;
+    overflow: hidden;
+}
+
+#favourites {
+    font-size: 8pt;
+    overflow: hidden;
 }

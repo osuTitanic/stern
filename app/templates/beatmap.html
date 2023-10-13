@@ -9,41 +9,161 @@
     {{' - ' if beatmapset.artist and beatmapset.title}}
     {{beatmapset.title if beatmapset.title}}
 </h1>
-<div class="difficulties">
-    <ul>
-        {% for map in beatmapset.beatmaps %}
-        <li class="difficulty">
-            <a href="/b/{{map.id}}" class="beatmap-tab {{ 'active' if map.id == beatmap.id }}">
-                {% if map.diff < 2.7 %}
-                    <img
-                        src="/images/beatmap/difficulties/easy-{{map.mode}}.png"
-                        alt=""
-                    >
-                {% elif map.diff < 3.7 %}
-                    <img
-                        src="/images/beatmap/difficulties/normal-{{map.mode}}.png"
-                        alt=""
-                    >
-                {% elif map.diff < 4.5 %}
-                    <img
-                        src="/images/beatmap/difficulties/hard-{{map.mode}}.png"
-                        alt=""
-                    >
-                {% elif map.diff < 5.5 %}
-                    <img
-                        src="/images/beatmap/difficulties/insane-{{map.mode}}.png"
-                        alt=""
-                    >
+<div class="beatmap">
+    <div class="difficulties">
+        <ul>
+            {% for map in beatmapset.beatmaps %}
+            <li class="difficulty">
+                <a href="/b/{{map.id}}" class="beatmap-tab {{ 'active' if map.id == beatmap.id }}">
+                    {% if map.diff < 2.7 %}
+                        <img
+                            src="/images/beatmap/difficulties/easy-{{map.mode}}.png"
+                            alt=""
+                        >
+                    {% elif map.diff < 3.7 %}
+                        <img
+                            src="/images/beatmap/difficulties/normal-{{map.mode}}.png"
+                            alt=""
+                        >
+                    {% elif map.diff < 4.5 %}
+                        <img
+                            src="/images/beatmap/difficulties/hard-{{map.mode}}.png"
+                            alt=""
+                        >
+                    {% elif map.diff < 5.5 %}
+                        <img
+                            src="/images/beatmap/difficulties/insane-{{map.mode}}.png"
+                            alt=""
+                        >
+                    {% else %}
+                        <img
+                            src="/images/beatmap/difficulties/expert-{{map.mode}}.png"
+                            alt=""
+                        >
+                    {% endif %}
+                    <span>{{map.version}}</span>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="beatmap-stats">
+        {% set max_stars = 10 %}
+        <table>
+            <tr>
+                <td>Artist:</td>
+                <td>
+                <a href="/beatmapsets?q={{ beatmapset.artist }}">{{ beatmapset.artist }}</a>
+                </td>
+                <td>Circle Size:</td>
+                <td>
+                    <div class="starfield" style="width: {{ 14*max_stars }}px">
+                        <div class="starfield-selected" style="width: {{ 14*beatmap.cs }}px"></div>
+                    </div>
+                </td>
+                <td>Approach Rate</td>
+                <td>
+                    <div class="starfield" style="width: {{ 14*max_stars }}px">
+                        <div class="starfield-selected" style="width: {{ 14*beatmap.ar }}px"></div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>Title:</td>
+                <td>
+                <a href="/beatmapsets?q={{ beatmapset.title }}">{{ beatmapset.title }}</a>
+                </td>
+                <td>HP Drain:</td>
+                <td>
+                    <div class="starfield" style="width: {{ 14*max_stars }}px">
+                        <div class="starfield-selected" style="width: {{ 14*beatmap.hp }}px"></div>
+                    </div>
+                </td>
+                <td><strong>Star Difficulty:</strong></td>
+                <td>
+                    <div class="starfield" style="width: {{ 14*max_stars }}px">
+                        <div class="starfield-selected" style="width: {{ 14*beatmap.diff }}px"></div>
+                    </div>
+                    ({{ beatmap.diff }})
+                </td>
+            </tr>
+            <tr>
+                <td>Creator:</td>
+                <td>
+                {% if beatmapset.server == 0 %}
+                    <a href="https://osu.ppy.sh/u/{{ beatmapset.creator }}">{{ beatmapset.creator }}</a>
                 {% else %}
-                    <img
-                        src="/images/beatmap/difficulties/expert-{{map.mode}}.png"
-                        alt=""
-                    >
+                    <a href="/u/{{ beatmapset.creator }}">{{ beatmapset.creator }}</a>
                 {% endif %}
-                <span>{{map.version}}</span>
-            </a>
-        </li>
-        {% endfor %}
-    </ul>
+                </td>
+                <td>Accuracy:</td>
+                <td>
+                    <div class="starfield" style="width: {{ 14*max_stars }}px">
+                        <div class="starfield-selected" style="width: {{ 14*beatmap.od }}px"></div>
+                    </div>
+                </td>
+                <td><strong>Length:</strong></td>
+                <td>
+                    {% set minutes = beatmap.total_length // 60 %}
+                    {% set seconds = beatmap.total_length % 60 %}
+                    {{ minutes }}:{{ "%02d"|format(seconds) }}
+                </td>
+            </tr>
+            <tr>
+                <td>Source:</td>
+                <td>
+                    <a href="/beatmapsets?q={{ beatmapset.source }}">{{ beatmapset.source }}</a>
+                </td>
+                <td>Genre:</td>
+                <td>
+                    <a href="/beatmapsets?g={{ beatmapset.genre_id }}">{{ Genre(beatmapset.genre_id).name }}</a>
+                    {% if beatmapset.language_id > 1 %}
+                    <a href="/beatmapsets?l={{ beatmapset.language_id }}">({{ Language(beatmapset.language_id).name }})</a>
+                    {% endif %}
+                </td>
+                <td><strong>BPM:</strong></td>
+                <td>{{ beatmap.bpm|round|int }}</td>
+            </tr>
+            <tr>
+                <td>
+                    Submitted:
+                    {% if beatmapset.status > 0 %}
+                    <br>{{ Status(beatmapset.status).name }}:
+                    {% endif %}
+                </td>
+                <td>
+                    {{ beatmapset.created_at.strftime('%b %d, %Y') }}
+                    {% if beatmapset.status > 0 %}
+                    <br>{{ beatmapset.approved_at.strftime('%b %d, %Y') }}
+                    {% endif %}
+                </td>
+                <td>Average Rating:</td>
+                <td>
+                    <!-- TODO: Create rating graph -->
+                    {% if beatmapset.ratings %}
+                    {{ beatmapset.ratings | sum(attribute='rating') / beatmapset.ratings | count }}
+                    {% else %}
+                    Nobody has rated this map yet... ):
+                    {% endif %}
+                </td>
+                <td>
+                    <strong>Favourited {{ favourites_count }} times</strong> in total
+                </td>
+                <td id="favourites">
+                    {% if favourites_count > 0 %}
+                        Users that love this map:<br>
+                        {% for favourite in favourites %}
+                        <a href="/u/{{ favourite.user_id }}">
+                            {{ favourite.user.name}}{{', ' if favourite != favourites[-1]}}
+                        </a>
+                        {% endfor %}
+                        {% if favourites_count > 5 %}
+                        <strong>and many more!</strong>
+                        {% endif %}
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
+    </div>
 </div>
 {% endblock content %}

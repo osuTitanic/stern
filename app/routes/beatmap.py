@@ -1,7 +1,9 @@
 
-from app.common.database.repositories import beatmaps
+from app.common.constants import BeatmapLanguage, BeatmapGenre, DatabaseStatus
+from app.common.database.repositories import beatmaps, scores, favourites
 from flask import Blueprint, request, abort
 
+import config
 import utils
 
 router = Blueprint('beatmap', __name__)
@@ -20,8 +22,18 @@ def get_beatmap(id: int):
 
     return utils.render_template(
         'beatmap.html',
+        mode=int(mode),
         beatmap=beatmap,
         beatmapset=beatmap.beatmapset,
         css='beatmap.css',
-        mode=mode
+        Status=DatabaseStatus,
+        Language=BeatmapLanguage,
+        Genre=BeatmapGenre,
+        scores=scores.fetch_range_scores(
+            beatmap.id,
+            mode=int(mode),
+            limit=config.SCORE_RESPONSE_LIMIT
+        ),
+        favourites_count=favourites.fetch_count_by_set(beatmap.set_id),
+        favourites=favourites.fetch_many_by_set(beatmap.set_id)
     )
