@@ -6,8 +6,10 @@ from . import common
 from . import routes
 from . import jobs
 
+from datetime import datetime
 from flask import Flask
 
+import timeago
 import logging
 import config
 
@@ -25,3 +27,15 @@ flask = Flask(
 )
 
 flask.register_blueprint(routes.router)
+
+@flask.template_filter('timeago')
+def timeago_formatting(date: datetime):
+    return timeago.format(date.replace(tzinfo=None), datetime.now())
+
+@flask.template_filter('round')
+def get_rounded(num: float):
+    return round(num, 2)
+
+@flask.template_filter('short_mods')
+def get_short(mods):
+    return common.constants.Mods(mods).short
