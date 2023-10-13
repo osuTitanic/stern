@@ -16,10 +16,19 @@
     margin: 0;
 }
 
+h2 {
+    text-shadow: var(--text-shadow) 0px 0px 10px;
+    color: var(--dark-header);
+    font-weight: normal;
+    font-size: 110%;
+    margin: 5px;
+}
+
 .header-text {
     font-size: 150%;
     font-weight: 100;
     margin-left: 10px;
+    margin-bottom: 22px;
     color: var(--header-pink);
     text-shadow: var(--text-shadow) 0px 0px 10px;
 }
@@ -33,14 +42,14 @@
     display: grid;
 }
 
-.difficulties {
+.tab-list {
     background-color: var(--difficulty-background);
-    margin-top: 22px;
+    border-bottom: 1px solid var(--border-light);
     width: 100%;
     float: left;
 }
 
-.difficulties ul {
+.tab-list ul {
     display: block;
     list-style: none;
     margin: 0;
@@ -48,7 +57,7 @@
     border: 0;
 }
 
-.beatmap-tab {
+.tab-link {
     text-decoration: none;
     font-size: 90%;
     padding: 7px 8px 7px 8px;
@@ -58,26 +67,26 @@
     display: flex;
 }
 
-.beatmap-tab:hover {
+.tab-link:hover {
     background-color: white;
     text-decoration: none;
 }
 
-.beatmap-tab img {
+.tab-link img {
     height: 16px;
     width: 16px;
     margin: auto;
     margin-right: 5px;
 }
 
-.difficulty {
+.tab-item {
     margin: 0;
     width: auto;
     float: left;
     display: block;
 }
 
-.beatmap-tab:visited {
+.tab-link:visited {
     color: var(--difficulty-text);
 }
 
@@ -125,7 +134,8 @@
 .padding {
     padding-left: 8px;
     padding-right: 8px;
-    margin-top: 5px;
+    margin-bottom: 8px;
+    margin-top: 8px;
 }
 
 .beatmap-description {
@@ -134,11 +144,72 @@
     overflow: auto;
     padding: 7px;
     margin: 5px;
-    height: 122.5px;
+    height: 124px;
+}
+
+.beatmap-description img {
+    float: left;
+    margin-right: 5px;
+}
+
+.bbcode {
+    font-size: 70%;
+    text-align: left;
 }
 
 .beatmap-download {
     float: right;
     margin-left: 10px;
     margin-top: 5px;
+}
+
+.score-header {
+    width: 100%;
+    display: inline-block;
+    text-align: left;
+}
+
+.leader {
+    border: 1px solid black;
+    min-width: 380px;
+    font-size: 80%;
+    margin: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-spacing: 0;
+    padding: 0;
+}
+
+.leader a {
+    color: #fdbf2a;
+}
+
+.leader td {
+    padding: 3px;
+    font-size: 95%;
+}
+
+.leader .row-title {
+    font-size: 120%;
+    font-weight: bold;
+    background-color: black;
+    color: white;
+    text-align: left;
+}
+
+.row-light {
+    background-color: var(--table-row-light);
+}
+
+.row-dark {
+    background-color: var(--table-row-dark);
+}
+
+.row-grade {
+    text-align: center;
+    height: 100%;
+}
+
+.row-grade img {
+    border: 0;
 }

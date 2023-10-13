@@ -10,11 +10,11 @@
     {{beatmapset.title if beatmapset.title}}
 </h1>
 <div class="beatmap">
-    <div class="difficulties">
+    <div class="tab-list">
         <ul>
             {% for map in beatmapset.beatmaps %}
-            <li class="difficulty">
-                <a href="/b/{{map.id}}" class="beatmap-tab {{ 'active' if map.id == beatmap.id }}">
+            <li class="tab-item">
+                <a href="/b/{{map.id}}" class="tab-link {{ 'active' if map.id == beatmap.id }}">
                     {% if map.diff < 2.7 %}
                         <img
                             src="/images/beatmap/difficulties/easy-{{map.mode}}.png"
@@ -173,13 +173,13 @@
                     <img src="/images/beatmap/osu-download-beatmap.png" alt="Download">
                 </a>
                 {% if beatmapset.has_video %}
-                <a href="/beatmapsets/download/{{ beatmapset.id }}?novideo=True">
-                    <img src="/images/beatmap/osu-download-beatmap-novid.png" alt="Download without Video">
-                </a>
+                    <a href="/beatmapsets/download/{{ beatmapset.id }}?novideo=True">
+                        <img src="/images/beatmap/osu-download-beatmap-novid.png" alt="Download without Video">
+                    </a>
                 {% endif %}
             {% else %}
                 <a href="#" onclick='return showLoginForm();'>
-                    <img src="/images/beatmap/osu-download-login.png"/>
+                    <img src="/images/beatmap/osu-download-login.png" alt="Login to download Beatmaps"/>
                 </a>
             {% endif %}
         </div>
@@ -187,8 +187,102 @@
             <a href="#" onclick="/*TODO: Play music preview*/">
                 <img src="http://osu.{{ domain }}/mt/{{ beatmapset.id }}l" alt="Beatmap Image">
             </a>
-            {{ beatmapset.description }}
+            {{ beatmapset.description|safe }}
         </div>
     </div>
+    {% if beatmapset.status > 0 %}
+    <div class="tab-list">
+        <ul>
+            <li class="tab-item">
+                <a href="/b/{{beatmap.id}}?m=0" class="tab-link {{ 'active' if mode == 0 }}">
+                    osu! Standard
+                </a>
+            </li>
+            <li class="tab-item">
+                <a href="/b/{{beatmap.id}}?m=1" class="tab-link {{ 'active' if mode == 1 }}">
+                    Taiko
+                </a>
+            </li>
+            <li class="tab-item">
+                <a href="/b/{{beatmap.id}}?m=2" class="tab-link {{ 'active' if mode == 2 }}">
+                    Catch The Beat
+                </a>
+            </li>
+            <li class="tab-item">
+                <a href="/b/{{beatmap.id}}?m=3" class="tab-link {{ 'active' if mode == 3 }}">
+                    osu!mania
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="score-header">
+    {% if not scores %}
+        <b>No records have been set for this game mode yet!</b>
+    {% else %}
+        {% set leader_score = scores[0] %}
+        <table class="leader">
+            <tbody>
+                <tr>
+                    <td class="row-title" colspan="3">
+                        <img src="/images/flags/{{ leader_score.user.country|lower }}.gif" alt="" class="flag">
+                        <a href="/u/{{ leader_score.user.id }}">{{ leader_score.user.name }}</a> is in the lead!
+                        ({{ leader_score.submitted_at|timeago }})
+                    </td>
+                </tr>
+                <tr>
+                    <tr class="row-light">
+                        <td><strong>Score</strong></td>
+                        <td>{{ "{:,}".format(leader_score.total_score) }} ({{ leader_score.acc|round }}%)</td>
+                        <td class="row-grade" colspan="1" rowspan="13">
+                            <img src="/images/grades/{{ leader_score.grade|upper }}.png" alt="">
+                        </td>
+                    </tr>
+                </tr>
+                <tr>
+                    <tr class="row-dark">
+                        <td><strong>Max Combo</strong></td>
+                        <td>{{ leader_score.max_combo }}</td>
+                    </tr>
+                </tr>
+                <tr>
+                    <tr class="row-light">
+                        <td><strong>300 / 100 / 50</strong></td>
+                        <td>{{ leader_score.n300 }} / {{ leader_score.n100 }} / {{ leader_score.n50 }}</td>
+                    </tr>
+                </tr>
+                <tr>
+                    <tr class="row-dark">
+                        <td><strong>Misses</strong></td>
+                        <td>{{ leader_score.nMiss }}</td>
+                    </tr>
+                </tr>
+                <tr>
+                    <tr class="row-light">
+                        <td><strong>Geki (Elite Beat!)</strong></td>
+                        <td>{{ leader_score.nGeki }}</td>
+                    </tr>
+                </tr>
+                <tr>
+                    <tr class="row-dark">
+                        <td><strong>Katu (Beat!)</strong></td>
+                        <td>{{ leader_score.nKatu }}</td>
+                    </tr>
+                </tr>
+                <tr>
+                    <tr class="row-light">
+                        <td><strong>Mods</strong></td>
+                        <td>{{ leader_score.mods|short_mods }}</td>
+                    </tr>
+                </tr>
+            </tbody>
+        </table>
+    {% endif %}
+    </div>
+    {% if scores %}
+    <h2>Top 50 Scoreboard</h2>
+    <div class="scores">
+    </div>
+    {% endif %}
+    {% endif %}
 </div>
 {% endblock content %}
