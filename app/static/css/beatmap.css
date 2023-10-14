@@ -147,6 +147,10 @@ h2 {
     height: 124px;
 }
 
+.beatmap-description:hover {
+    cursor: pointer;
+}
+
 .beatmap-description img {
     float: left;
     margin-right: 5px;

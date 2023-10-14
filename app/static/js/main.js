@@ -1,5 +1,6 @@
 
-function beatmapSearch() {
+function beatmapSearch()
+{
     const inputValue = document.getElementById("beatmap-search").value.trim();
 
     if (inputValue !== '') {
@@ -9,7 +10,8 @@ function beatmapSearch() {
     return true;
 }
 
-function userSearch() {
+function userSearch()
+{
     const inputValue = document.getElementById("user-search").value.trim();
 
     if (inputValue !== '') {
@@ -19,4 +21,16 @@ function userSearch() {
     return true;
 }
 
-function showLoginForm() {} // TODO
+function resetOrPlayAudio(element) {
+    var audio = document.getElementById(element)
+
+    if (audio.paused) return audio.play();
+
+    audio.pause();
+    audio.currentTime = 0;
+}
+
+function showLoginForm()
+{
+    // TODO
+}
