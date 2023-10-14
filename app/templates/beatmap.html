@@ -244,6 +244,7 @@
                         <td>{{ leader_score.max_combo }}</td>
                     </tr>
                 </tr>
+                {% if mode != 3 %}
                 <tr>
                     <tr class="row-light">
                         <td><strong>300 / 100 / 50</strong></td>
@@ -264,10 +265,24 @@
                 </tr>
                 <tr>
                     <tr class="row-dark">
-                        <td><strong>Katu (Beat!)</strong></td>
+                        <td><strong>{% if mode == 2 %}Droplet misses{% else %}Katu (Beat!){%endif%}</strong></td>
                         <td>{{ leader_score.nKatu }}</td>
                     </tr>
                 </tr>
+                {% else %}
+                <tr>
+                    <tr class="row-light">
+                        <td><strong>MAX / 300 / 200</strong></td>
+                        <td>{{ leader_score.nGeki }} / {{ leader_score.n300 }} / {{ leader_score.nKatu }}</td>
+                    </tr>
+                </tr>
+                <tr>
+                    <tr class="dark-light">
+                        <td><strong>100 / 50 / Misses</strong></td>
+                        <td>{{ leader_score.n100 }} / {{ leader_score.n50 }} / {{ leader_score.nMiss }}</td>
+                    </tr>
+                </tr>
+                {% endif %}
                 <tr>
                     <tr class="row-light">
                         <td><strong>Mods</strong></td>
@@ -280,8 +295,75 @@
     </div>
     {% if scores %}
     <h2>Top 50 Scoreboard</h2>
-    <div class="scores">
-    </div>
+    <table class="scores">
+        <thead class="scores-header">
+            <tr>
+                <th></th>
+                <th><strong>Rank</strong></th>
+                <th><strong>Score</strong></th>
+                <th><strong>Accuracy</strong></th>
+                <th><strong>Player</strong></th>
+                <th><strong>Max Combo</strong></th>
+                <th><strong>PP</strong></th>
+                {% if mode != 3 %}
+                <th><strong>300 / 100 / 50</strong></th>
+                <th><strong>Geki</strong>
+                </th>
+                <th>
+                    <strong>
+                        {% if mode != 2 %}
+                        Katu
+                        {% else %}
+                        Droplet Miss
+                        {% endif %}
+                    </strong>
+                </th>
+                {% else %}
+                <th><strong>MAX</strong></th>
+                <th><strong>300</strong></th>
+                <th><strong>200</strong></th>
+                <th><strong>100</strong></th>
+                <th><strong>50</strong></th>
+                {% endif %}
+                <th><strong>Misses</strong></th>
+                <th><strong>Mods</strong></th>
+                <!-- TODO: Report button -->
+            </tr>
+        </thead>
+        <tbody>
+        {% for score in scores %}
+            {% if loop.index0 % 2 %}
+            <tr class="row-light" id="{{ loop.index0+1 }}">
+            {% else %}
+            <tr class="row-dark" id="{{ loop.index0+1 }}">
+            {% endif %}
+                <td><a href="#{{ loop.index0+1 }}">#{{ loop.index0+1 }}</a></td>
+                <td><img src="/images/grades/{{ score.grade|upper }}_small.png" alt="{{ score.grade|upper }}"></td>
+                <td>{{ "{:,}".format(score.total_score) }}</td>
+                <td>{{ (score.acc * 100)|round }}%</td>
+                <td>
+                    <img src="/images/flags/{{ score.user.country|lower }}.gif" alt="" class="flag">
+                    <a href="/u/{{ score.user.id }}">{{ score.user.name }}</a>
+                </td>
+                <td>{{ score.max_combo }}</td>
+                <td>{{ score.pp|round }}</td>
+                {% if mode != 3 %}
+                <td>{{ score.n300 }} / {{ score.n100 }} / {{ score.n50 }}</td>
+                <td>{{ score.nGeki }}</td>
+                <td>{{ score.nKatu }}</td>
+                {% else %}
+                <td>{{ score.nGeki }}</td>
+                <td>{{ score.n300 }}</td>
+                <td>{{ score.nKatu }}</td>
+                <td>{{ score.n100 }}</td>
+                <td>{{ score.n50 }}</td>
+                {% endif %}
+                <td>{{ score.nMiss }}</td>
+                <td>{{ score.mods|short_mods }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
     {% endif %}
     {% endif %}
 </div>

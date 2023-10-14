@@ -21,7 +21,7 @@ h2 {
     color: var(--dark-header);
     font-weight: normal;
     font-size: 110%;
-    margin: 5px;
+    margin: 10px;
 }
 
 .header-text {
@@ -214,5 +214,40 @@ h2 {
 }
 
 .row-grade img {
+    vertical-align: middle;
     border: 0;
+}
+
+.scores-header {
+    background-color: #d7d2fb;
+    text-align: center;
+}
+
+.scores {
+    font-size: 80%;
+    width: 100%;
+    margin-bottom: 35px;
+    text-align: left;
+    vertical-align: middle;
+    border-spacing: 0;
+}
+
+.scores th {
+    border-bottom: 1px solid #a79ef3;
+}
+
+.scores td {
+    height: 15px;
+    vertical-align: middle;
+    padding: 2px;
+    padding-top: 2.5px;
+}
+
+.scores img {
+    vertical-align: middle;
+}
+
+.scores .row-light:hover, .scores .row-dark:hover {
+    background-color: white;
+    cursor: pointer;
 }
