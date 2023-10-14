@@ -232,7 +232,7 @@
                 <tr>
                     <tr class="row-light">
                         <td><strong>Score</strong></td>
-                        <td>{{ "{:,}".format(leader_score.total_score) }} ({{ leader_score.acc|round }}%)</td>
+                        <td>{{ "{:,}".format(leader_score.total_score) }} ({{ (leader_score.acc * 100)|round }}%)</td>
                         <td class="row-grade" colspan="1" rowspan="13">
                             <img src="/images/grades/{{ leader_score.grade|upper }}.png" alt="">
                         </td>
