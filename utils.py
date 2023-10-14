@@ -1,7 +1,12 @@
 
 from flask import render_template as _render_template
-from app.common.database import DBScore
+
+from app.common.database import DBScore, DBStats
+from app.common.database.repositories import stats
+from app.common.cache import leaderboards
+
 from datetime import datetime
+from typing import List
 
 import hashlib
 import app
@@ -41,3 +46,21 @@ def render_template(name: str, **kwargs) -> str:
         name,
         **kwargs
     )
+
+def sync_ranks(user_stats: List[DBStats]) -> None:
+    """Sync cached rank with database"""
+    for mode in user_stats:
+        redis_rank = leaderboards.global_rank(
+            mode.user_id,
+            mode.mode
+        )
+
+        if redis_rank != mode.rank:
+            # Redis rank was updated
+            stats.update(
+                mode.user_id,
+                mode.mode,
+                {
+                    'rank': redis_rank
+                }
+            )
