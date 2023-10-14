@@ -1,4 +1,6 @@
-function loadManifest() {
+
+function loadManifest()
+{
   // Clients will be dynamically loaded from manifest.json
   const manifestUrl = '/clients/manifest.json';
   const container = document.getElementById('client-container');
