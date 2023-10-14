@@ -54,7 +54,9 @@
             <tr>
                 <td>Artist:</td>
                 <td>
-                <a href="/beatmapsets?q={{ beatmapset.artist }}">{{ beatmapset.artist }}</a>
+                {% if beatmapset.artist %}
+                    <a href="/beatmapsets?q={{ beatmapset.artist }}">{{ beatmapset.artist }}</a>
+                {% endif %}
                 </td>
                 <td>Circle Size:</td>
                 <td>
@@ -72,7 +74,9 @@
             <tr>
                 <td>Title:</td>
                 <td>
-                <a href="/beatmapsets?q={{ beatmapset.title }}">{{ beatmapset.title }}</a>
+                {% if beatmapset.title %}
+                    <a href="/beatmapsets?q={{ beatmapset.title }}">{{ beatmapset.title }}</a>
+                {% endif %}
                 </td>
                 <td>HP Drain:</td>
                 <td>
@@ -113,7 +117,9 @@
             <tr>
                 <td>Source:</td>
                 <td>
+                    {% if beatmapset.source %}
                     <a href="/beatmapsets?q={{ beatmapset.source }}">{{ beatmapset.source }}</a>
+                    {% endif %}
                 </td>
                 <td>Genre:</td>
                 <td>
