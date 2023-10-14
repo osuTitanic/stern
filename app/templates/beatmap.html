@@ -8,13 +8,16 @@
     {{beatmapset.artist if beatmapset.artist}}
     {{' - ' if beatmapset.artist and beatmapset.title}}
     {{beatmapset.title if beatmapset.title}}
+    {% if beatmapset.server == 0 %}
+    <p>View on <a href="https://osu.ppy.sh/b/{{ beatmap.id }}">osu.ppy.sh</a></p>
+    {% endif %}
 </h1>
 <div class="beatmap">
     <div class="tab-list">
         <ul>
             {% for map in beatmapset.beatmaps %}
             <li class="tab-item">
-                <a href="/b/{{map.id}}" class="tab-link {{ 'active' if map.id == beatmap.id }}">
+                <a href="/b/{{ map.id }}" class="tab-link {{ 'active' if map.id == beatmap.id }}">
                     {% if map.diff < 2.7 %}
                         <img
                             src="/images/beatmap/difficulties/easy-{{map.mode}}.png"

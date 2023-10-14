@@ -15,15 +15,6 @@
 .page {
     margin: 0;
 }
-
-h2 {
-    text-shadow: var(--text-shadow) 0px 0px 10px;
-    color: var(--dark-header);
-    font-weight: normal;
-    font-size: 110%;
-    margin: 10px;
-}
-
 .header-text {
     font-size: 150%;
     font-weight: 100;
@@ -33,9 +24,23 @@ h2 {
     text-shadow: var(--text-shadow) 0px 0px 10px;
 }
 
+.header-text p {
+    font-weight: lighter;
+    font-size: 8pt;
+    color: var(--dark-header);
+}
+
 .header-text a {
     color: var(--header-blue);
     text-shadow: var(--text-shadow) 0px 0px 10px;
+}
+
+h2 {
+    text-shadow: var(--text-shadow) 0px 0px 10px;
+    color: var(--dark-header);
+    font-weight: normal;
+    font-size: 110%;
+    margin: 10px;
 }
 
 .beatmap {
