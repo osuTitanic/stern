@@ -38,4 +38,7 @@ def get_rounded(num: float):
 
 @flask.template_filter('short_mods')
 def get_short(mods):
-    return common.constants.Mods(mods).short
+    return (
+        common.constants.Mods(mods).short
+        if mods else 'None'
+    )
