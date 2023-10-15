@@ -19,12 +19,13 @@ def calculate_peak_x(
     largest: DBUserCount
 ) -> datetime:
     """Used to calculate the x position of peak text, so that it doesnt exit the chart box."""
+    time_range = largest.time - smallest.time
     return max(
-        smallest.time + timedelta(minutes=30),
+        smallest.time,
         min(
             # Add offset to time
-            n.time + timedelta(minutes=30),
-            largest.time - timedelta(hours=3)
+            n.time,
+            largest.time - time_range * 0.15
         )
     )
 
@@ -81,7 +82,7 @@ def user_activity_chart(
                     usercounts[0]
                 ),
                 # Y Offset
-                peak.count - peak.count * 0.35
+                peak.count - peak.count * 0.4
             ),
             zorder=2
         )
