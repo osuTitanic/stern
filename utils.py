@@ -9,6 +9,7 @@ from datetime import datetime
 from typing import List
 
 import hashlib
+import config
 import app
 
 def compute_score_checksum(score: DBScore) -> str:
@@ -39,7 +40,8 @@ def render_template(name: str, **kwargs) -> str:
     kwargs.update(
         total_scores=int(app.session.redis.get('bancho:totalscores')),
         online_users=int(app.session.redis.get('bancho:users')),
-        total_users=int(app.session.redis.get('bancho:totalusers'))
+        total_users=int(app.session.redis.get('bancho:totalusers')),
+        config=config
     )
 
     return _render_template(

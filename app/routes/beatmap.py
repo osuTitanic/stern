@@ -45,6 +45,5 @@ def get_beatmap(id: int):
             limit=config.SCORE_RESPONSE_LIMIT
         ),
         favourites_count=favourites.fetch_count_by_set(beatmap.set_id),
-        favourites=favourites.fetch_many_by_set(beatmap.set_id),
-        domain=config.DOMAIN_NAME
+        favourites=favourites.fetch_many_by_set(beatmap.set_id)
     )
