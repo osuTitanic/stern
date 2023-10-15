@@ -1,17 +1,20 @@
 
 from .logging import Console, File
 
+from . import constants
 from . import session
 from . import common
 from . import routes
 from . import jobs
 
+from werkzeug.exceptions import NotFound
 from datetime import datetime
 from flask import Flask
 
 import timeago
 import logging
 import config
+import utils
 
 logging.basicConfig(
     format='[%(asctime)s] - <%(name)s> %(levelname)s: %(message)s',
@@ -41,4 +44,12 @@ def get_short(mods):
     return (
         common.constants.Mods(mods).short
         if mods else 'None'
+    )
+
+@flask.errorhandler(404)
+def not_found(error: NotFound) -> str:
+    return utils.render_template(
+        content=error.description,
+        name='404.html',
+        css='404.css'
     )
