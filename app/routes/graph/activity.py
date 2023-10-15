@@ -1,8 +1,8 @@
 
 
 from matplotlib.backends.backend_agg import FigureCanvasAgg
+from flask import Blueprint, send_file, abort
 from datetime import datetime, timedelta
-from flask import Blueprint, send_file
 from io import BytesIO
 
 from app.common.database.repositories import usercount
@@ -38,6 +38,9 @@ def user_activity_chart(
         datetime.now()
     )
 
+    if not usercounts:
+        return abort(500, 'User activity is empty. Please contact an administrator!')
+
     peak = max(usercounts, key=lambda x: x.count)
 
     # Define width & height
@@ -65,30 +68,31 @@ def user_activity_chart(
     # Prevent text overflow
     plt.autoscale(False)
 
-    # Add peak text
-    plt.annotate(
-        text=f'Peak: {peak.count} {"users" if peak.count > 1 else "user"}',
-        fontsize=8,
-        xy=(
-            # X Offset
-            calculate_peak_x(
-                peak,
-                usercounts[-1],
-                usercounts[0]
+    if peak.count > 0:
+        # Add peak text
+        plt.annotate(
+            text=f'Peak: {peak.count} {"users" if peak.count > 1 else "user"}',
+            fontsize=8,
+            xy=(
+                # X Offset
+                calculate_peak_x(
+                    peak,
+                    usercounts[-1],
+                    usercounts[0]
+                ),
+                # Y Offset
+                peak.count - peak.count * 0.35
             ),
-            # Y Offset
-            peak.count - peak.count * 0.35
-        ),
-        zorder=2
-    )
+            zorder=2
+        )
 
-    # Add peak point
-    plt.scatter(
-        peak.time, peak.count,
-        c='blue',
-        s=12,
-        zorder=4
-    )
+        # Add peak point
+        plt.scatter(
+            peak.time, peak.count,
+            c='blue',
+            s=12,
+            zorder=4
+        )
 
     # Enable grid layout
     plt.grid(
