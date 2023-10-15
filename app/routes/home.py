@@ -23,8 +23,7 @@ def root():
             }
         ],
         beatmapsets=[(p.count, p.beatmapset) for p in plays.fetch_most_played()],
-        messages=messages.fetch_recent(),
-        featured_video_id="PYesuQugFOM"
+        messages=messages.fetch_recent()
     )
 
 # Redirect index.* to root
