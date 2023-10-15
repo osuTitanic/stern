@@ -5,13 +5,23 @@ from flask import Blueprint, request, abort
 
 import config
 import utils
+import app
 
 router = Blueprint('beatmap', __name__)
 
 @router.get('/<id>')
 def get_beatmap(id: int):
+    if not id.isdigit():
+        return abort(
+            code=404,
+            description=app.constants.BEATMAP_NOT_FOUND
+        )
+
     if not (beatmap := beatmaps.fetch_by_id(id)):
-        return abort(404)
+        return abort(
+            code=404,
+            description=app.constants.BEATMAP_NOT_FOUND
+        )
 
     if not (mode := request.args.get('m')):
         mode = beatmap.mode
