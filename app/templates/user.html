@@ -3,5 +3,51 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>{{ user.name }}</h2>
+<div class="profile-left">
+    <div class="left-top">
+        <div class="avatar-box">
+            <img src="http://s.{{ config.DOMAIN_NAME }}/a/{{ user.id }}?h=120" alt="">
+        </div>
+        <h1>
+            <a href="/rankings/{{ constants.GameMode(mode).alias }}/performance?country={{ user.country|upper }}">
+                <img src="/images/flags/{{ user.country|lower }}.gif" alt="{{ user.country|upper }}">
+            </a>
+            {{ user.name }}
+        </h1>
+        <div class="user-badges">
+        {% for badge in user.badges %}
+            <div class="badge-container">
+                <a href="{{ badge.badge_url }}">
+                    <img src="{{ badge.badge_icon }}" alt="{{ badge.badge_description }}">
+                </a>
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+    <div class="left-bottom">
+        <div title="Arrived" class="activity">
+            <i class="fa-solid fa-right-to-bracket" style="color: #76777b;"></i>
+            <p>{{ user.created_at|timeago }}</p>
+        </div>
+        <div title="Last Active" class="activity">
+            <i class="fa-solid fa-right-from-bracket" style="color: #76777b;"></i>
+            <p>{{ user.latest_activity|timeago }}</p>
+        </div>
+        <div title="Last Active" class="activity">
+            <i class="fa-regular fa-pen-to-square" style="color: #76777b;"></i>
+            <!-- TODO -->
+            <p>0 posts</p>
+        </div>
+        {% if user.playstyle > 0 %}
+        <div class="playstyle-container">
+        {% set current_playstyle = user.playstyle|playstyle %}
+        {% for playstyle in constants.Playstyle %}
+            {% if playstyle in current_playstyle and playstyle > 0 %}
+            <div class="playstyle {{ playstyle.name|lower }}"></div>
+            {% endif %}
+        {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</div>
 {% endblock content %}

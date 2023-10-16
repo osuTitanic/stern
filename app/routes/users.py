@@ -1,6 +1,6 @@
 
+from flask import Blueprint, abort, redirect, request
 from app.common.database.repositories import users
-from flask import Blueprint, abort, redirect
 
 import utils
 
@@ -19,7 +19,12 @@ def userpage(query: str):
     if not (user := users.fetch_by_id(int(query))):
         raise abort(404)
 
+    if not (mode := request.args.get('m')):
+        mode = user.preferred_mode
+
     return utils.render_template(
-        'user.html',
-        user=user
+        name='user.html',
+        user=user,
+        css='user.css',
+        mode=mode
     )

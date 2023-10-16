@@ -1,0 +1,99 @@
+
+@import url('main.css');
+
+.profile-left {
+    width: 200px;
+}
+
+.left-top {
+    display: grid;
+    justify-content: center;
+    align-items: center;
+}
+
+.left-top h1 {
+    font-weight: normal;
+    font-size: 150%;
+    display: flex;
+    justify-content: center;
+}
+
+.left-top h1 a {
+    margin-right: 8px;
+}
+
+.avatar-box {
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+    background-color: white;
+    border: 1px solid #ddd;
+    margin-bottom: 5px;
+    padding: 2px;
+    display: inline;
+    justify-content: center;
+    align-items: center;
+    min-height: 120px;
+    min-width: 120px;
+}
+
+.avatar-box img {
+    vertical-align: middle;
+}
+
+.user-badges {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.badge-container {
+    margin-bottom: 10px;
+}
+
+.left-bottom {
+    margin: 10px;
+}
+
+.activity {
+    width: 100%;
+    margin-bottom: 5px;
+    font-size: 90%;
+}
+
+.activity i {
+    padding-top: 2px;
+    width: 23px;
+    margin-right: 4px;
+    text-align: center;
+    float: left;
+}
+
+.playstyle-container {
+    background-color: #e1ddfc;
+    text-align: center;
+    margin: 5px auto;
+    margin-top: 10px;
+    border-radius: 5px;
+    min-height: 32px;
+}
+
+.playstyle {
+    width: 32px;
+    height: 32px;
+    background-image: url('/images/playstyles.png');
+    display: inline-block;
+}
+
+.playstyle.mouse {
+    background-position: 0px 0px;
+}
+
+.playstyle.keyboard {
+    background-position: -64px 0px;
+}
+
+.playstyle.tablet {
+    background-position: -32px 0px;
+}
+
+.playstyle.touch {
+    background-position: -96px 0px;
+}
