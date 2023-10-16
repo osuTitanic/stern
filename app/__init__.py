@@ -40,6 +40,10 @@ def timeago_formatting(date: datetime):
 def get_rounded(num: float):
     return round(num, 2)
 
+@flask.template_filter('playstyle')
+def get_rounded(num: int):
+    return common.constants.Playstyle(num)
+
 @flask.template_filter('short_mods')
 def get_short(mods):
     return (
