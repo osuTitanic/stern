@@ -23,7 +23,7 @@ def get_beatmap(id: int):
             description=app.constants.BEATMAP_NOT_FOUND
         )
 
-    if not (mode := request.args.get('m')):
+    if not (mode := request.args.get('mode')):
         mode = beatmap.mode
 
     beatmap.beatmapset.beatmaps.sort(
