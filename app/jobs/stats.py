@@ -1,4 +1,5 @@
 
+from app.common.database import DBUser
 from app.common.cache import usercount as redis_usercount
 from app.common.database.repositories import usercount as db_usercount
 from app.common.database.repositories import (
@@ -11,6 +12,7 @@ from datetime import timedelta, datetime
 
 import logging
 import config
+import utils
 import time
 import app
 
@@ -58,3 +60,16 @@ def update_usercount():
             )
 
         sleep(config.USERCOUNT_UPDATE_INTERVAL)
+
+def update_ranks():
+    """Update the rank history for every user after one hour."""
+    while True:
+        active_users = users.fetch_active(
+            timedelta(days=30),
+            DBUser.stats
+        )
+
+        for user in active_users:
+            utils.sync_ranks(user)
+
+        sleep(3600)

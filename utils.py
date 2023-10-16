@@ -1,10 +1,9 @@
 
 from flask import render_template as _render_template
 
-from app.common.database import DBScore, DBStats
-from app.common.database.repositories import stats
+from app.common.database.repositories import stats, histories
+from app.common.database import DBScore, DBUser
 from app.common.cache import leaderboards
-
 from datetime import datetime
 from typing import List
 
@@ -49,20 +48,36 @@ def render_template(name: str, **kwargs) -> str:
         **kwargs
     )
 
-def sync_ranks(user_stats: List[DBStats]) -> None:
+def sync_ranks(user: DBUser) -> None:
     """Sync cached rank with database"""
-    for mode in user_stats:
-        redis_rank = leaderboards.global_rank(
-            mode.user_id,
-            mode.mode
-        )
+    try:
+        app.session.logger.debug(f'[{user.name}] Trying to update user rank from cache...')
 
-        if redis_rank != mode.rank:
-            # Redis rank was updated
-            stats.update(
-                mode.user_id,
-                mode.mode,
-                {
-                    'rank': redis_rank
-                }
-            )
+        for user_stats in user.stats:
+            if user_stats.playcount <= 0:
+                continue
+
+            global_rank = leaderboards.global_rank(user.id, user_stats.mode)
+
+            if user_stats.rank != global_rank:
+                # Database rank desynced from redis
+                stats.update(
+                    user.id,
+                    user_stats.mode,
+                    {
+                        'rank': global_rank
+                    }
+                )
+
+                # Update rank history
+                histories.update_rank(user_stats, user.country)
+
+                app.session.logger.debug(
+                    f'[{user.name}] Updated rank from {user_stats.rank} to {global_rank}'
+                )
+
+    except Exception as e:
+        app.session.logging.error(
+            f'[{user.name}] Failed to update user rank: {e}',
+            exc_info=e
+        )
