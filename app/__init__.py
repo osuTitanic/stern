@@ -9,6 +9,7 @@ from . import jobs
 
 from werkzeug.exceptions import NotFound
 from datetime import datetime
+from typing import Tuple
 from flask import Flask
 
 import timeago
@@ -47,9 +48,9 @@ def get_short(mods):
     )
 
 @flask.errorhandler(404)
-def not_found(error: NotFound) -> str:
+def not_found(error: NotFound) -> Tuple[str, int]:
     return utils.render_template(
         content=error.description,
         name='404.html',
         css='404.css'
-    )
+    ), 404
