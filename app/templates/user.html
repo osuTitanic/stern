@@ -9,10 +9,16 @@
             <img src="http://s.{{ config.DOMAIN_NAME }}/a/{{ user.id }}?h=120" alt="">
         </div>
         <h1>
-            <a href="/rankings/{{ constants.GameMode(mode).alias }}/performance?country={{ user.country|upper }}">
+            <a class="flag" href="/rankings/{{ constants.GameMode(mode).alias }}/performance?country={{ user.country|upper }}">
                 <img src="/images/flags/{{ user.country|lower }}.gif" alt="{{ user.country|upper }}">
             </a>
-            {{ user.name }}
+            <!-- TODO: Username color based on groups -->
+            {% if user.names %}
+            <div class="username" style="color: #888888" title="Previously known as {{ user.names[-1].name }}">{{ user.name }}</div>
+            {% else %}
+            <div class="username">{{ user.name }}</div>
+            {% endif %}
+            <!-- TODO: Title (e.g. Former osu! champion) -->
         </h1>
         <div class="user-badges">
         {% for badge in user.badges %}
