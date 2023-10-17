@@ -31,18 +31,58 @@
         </div>
     </div>
     <div class="left-bottom">
-        <div title="Arrived" class="activity">
-            <i class="fa-solid fa-right-to-bracket" style="color: #76777b;"></i>
-            <p>{{ user.created_at|timeago }}</p>
+        <!-- TODO: Edit button -->
+        <div class="userpage-social">
+            {% if user.userpage_location %}
+            <div title="Location" class="activity">
+                <i class="fa-sharp fa-solid fa-location-dot" style="color: #76777b;"></i>
+                <p>{{ user.userpage_location }}</p>
+            </div>
+            {% endif %}
+            {% if user.userpage_interests %}
+            <div title="Interests" class="activity">
+                <i class="fa-regular fa-heart" style="color: #76777b;"></i>
+                <p>{{ user.userpage_interests }}</p>
+            </div>
+            {% endif %}
+            {% if user.userpage_website %}
+            <div title="Website" class="activity">
+                <i class="fa-solid fa-earth-americas" style="color: #76777b;"></i>
+                <a href="{{ user.userpage_website }}">{{ user.userpage_website|domain }}</a>
+            </div>
+            {% endif %}
+            {% if user.userpage_discord %}
+            <div title="Discord" class="activity">
+                <i class="fa-brands fa-discord" style="color: #76777b;"></i>
+                <a href="{{ user.userpage_discord }}">Discord</a>
+            </div>
+            {% endif %}
+            {% if user.userpage_twitter %}
+            <div title="Twitter" class="activity">
+                <i class="fa-brands fa-twitter" style="color: #76777b;"></i>
+                <a href="{{ user.userpage_twitter }}">@{{ user.userpage_twitter|twitter_handle }}</a>
+            </div>
+            {% endif %}
         </div>
-        <div title="Last Active" class="activity">
-            <i class="fa-solid fa-right-from-bracket" style="color: #76777b;"></i>
-            <p>{{ user.latest_activity|timeago }}</p>
-        </div>
-        <div title="Last Active" class="activity">
-            <i class="fa-regular fa-pen-to-square" style="color: #76777b;"></i>
-            <!-- TODO -->
-            <p>0 posts</p>
+        <div class="userpage-stats">
+            <div title="Arrived" class="activity">
+                <i class="fa-solid fa-right-to-bracket" style="color: #76777b;"></i>
+                <p>{{ user.created_at|timeago }}</p>
+            </div>
+            <div title="Last Active" class="activity">
+                {% if is_online %}
+                <i class="fa-solid fa-right-from-bracket" style="color: #c966c9;"></i>
+                <p>Online</p>
+                {% else %}
+                <i class="fa-solid fa-right-from-bracket" style="color: #76777b;"></i>
+                <p>{{ user.latest_activity|timeago }}</p>
+                {% endif %}
+            </div>
+            <div title="Total Posts" class="activity">
+                <i class="fa-regular fa-pen-to-square" style="color: #76777b;"></i>
+                <!-- TODO -->
+                <p>0 posts</p>
+            </div>
         </div>
         {% if user.playstyle > 0 %}
         <div class="playstyle-container">
@@ -55,5 +95,7 @@
         </div>
         {% endif %}
     </div>
+    <!-- TODO: Add admin controls -->
+    <!-- TODO: Report user -->
 </div>
 {% endblock content %}

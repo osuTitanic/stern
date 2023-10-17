@@ -76,9 +76,19 @@
     background-color: #e1ddfc;
     text-align: center;
     margin: 5px auto;
-    margin-top: 10px;
+    margin-top: 15px;
+    margin-bottom: 15px;
     border-radius: 5px;
     min-height: 32px;
+}
+
+.userpage-social {
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.userpage-social p, .userpage-social a {
+    overflow: hidden;
 }
 
 .playstyle {
