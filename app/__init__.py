@@ -16,6 +16,7 @@ import timeago
 import logging
 import config
 import utils
+import re
 
 logging.basicConfig(
     format='[%(asctime)s] - <%(name)s> %(levelname)s: %(message)s',
@@ -43,6 +44,16 @@ def get_rounded(num: float):
 @flask.template_filter('playstyle')
 def get_rounded(num: int):
     return common.constants.Playstyle(num)
+
+@flask.template_filter('domain')
+def get_domain(url: str) -> str:
+    return re.search(r'https?://([A-Za-z_0-9.-]+).*', url) \
+             .group(1)
+
+@flask.template_filter('twitter_handle')
+def get_handle(url: str) -> str:
+    return re.search(r'https?://(www.)?(twitter|x)\.com/(@\w+|\w+)', url) \
+             .group(3)
 
 @flask.template_filter('short_mods')
 def get_short(mods):
