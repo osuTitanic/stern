@@ -1,6 +1,7 @@
 
 from flask import Blueprint, abort, redirect, request
 from app.common.database.repositories import users
+from app.common.cache import status
 
 import utils
 
@@ -26,5 +27,6 @@ def userpage(query: str):
         name='user.html',
         user=user,
         css='user.css',
-        mode=mode
+        mode=mode,
+        is_online=status.exists(user.id)
     )
