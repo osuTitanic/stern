@@ -23,7 +23,7 @@
         <div class="user-badges">
         {% for badge in user.badges %}
             <div class="badge-container">
-                <a href="{{ badge.badge_url }}">
+                <a href="{{ badge.badge_url }}" title="{{ badge.badge_description }}">
                     <img src="{{ badge.badge_icon }}" alt="{{ badge.badge_description }}">
                 </a>
             </div>
@@ -97,5 +97,8 @@
     </div>
     <!-- TODO: Add admin controls -->
     <!-- TODO: Report user -->
+</div>
+<div class="profile-right">
+
 </div>
 {% endblock content %}
