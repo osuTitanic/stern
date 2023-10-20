@@ -27,7 +27,7 @@ events = EventQueue(
     connection=redis
 )
 
-logger = logging.getLogger('bancho')
+logger = logging.getLogger('stern')
 
 jobs = Jobs()
 storage = Storage()
