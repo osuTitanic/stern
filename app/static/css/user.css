@@ -1,8 +1,26 @@
 
 @import url('main.css');
 
+.page {
+    display: flex;
+}
+
 .profile-left {
+    background-color: #f2e2fa;
     width: 200px;
+    height: 100%;
+    padding: 5px;
+    padding-top: 15px;
+    border-radius: 5px;
+    position: sticky;
+    top: 0;
+}
+
+.profile-right {
+    margin-left: 10px;
+    text-align: left;
+    float: right;
+    width: 620px;
 }
 
 .left-top {
@@ -54,6 +72,10 @@
     margin-bottom: 10px;
 }
 
+.badge-container img {
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+}
+
 .left-bottom {
     margin: 10px;
 }
@@ -73,7 +95,7 @@
 }
 
 .playstyle-container {
-    background-color: #e1ddfc;
+    background-color: #e8d2fc;
     text-align: center;
     margin: 5px auto;
     margin-top: 15px;
