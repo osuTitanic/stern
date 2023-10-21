@@ -25,8 +25,8 @@ def timeago_formatting(date: datetime):
     return timeago.format(date.replace(tzinfo=None), datetime.now())
 
 @flask.template_filter('round')
-def get_rounded(num: float):
-    return round(num, 2)
+def get_rounded(num: float, ndigits: int = 0):
+    return round(num, ndigits)
 
 @flask.template_filter('playstyle')
 def get_rounded(num: int):
