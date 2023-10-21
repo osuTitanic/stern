@@ -1,7 +1,7 @@
 
 from app.common.database.repositories import users, activities, stats
 from flask import Blueprint, abort, redirect, request
-from app.common.cache import status
+from app.common.cache import status, leaderboards
 
 import utils
 
@@ -29,6 +29,10 @@ def userpage(query: str):
         css='user.css',
         mode=int(mode),
         is_online=status.exists(user.id),
-        activity=activities.fetch_recent(user.id),
-        current_stats=stats.fetch_by_mode(user.id, int(mode))
+        activity=activities.fetch_recent(user.id, int(mode)),
+        current_stats=stats.fetch_by_mode(user.id, int(mode)),
+        pp_rank=leaderboards.global_rank(user.id, int(mode)),
+        pp_rank_country=leaderboards.country_rank(user.id, int(mode), user.country),
+        score_rank=leaderboards.score_rank(user.id, int(mode)),
+        score_rank_country=leaderboards.score_rank_country(user.id, int(mode), user.country)
     )
