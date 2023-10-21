@@ -181,3 +181,49 @@
 .active-mode:hover {
     text-shadow: rgb(215, 215, 215) 1px 1px 2.5px;
 }
+
+.profile-table {
+    width: 100%;
+}
+
+.profile-tabs {
+    width: 100%;
+    border-spacing: 7px 0;
+}
+
+.profile-tabs td {
+    background-color: #e7e4fc;
+    text-align: center;
+    font-weight: bold;
+    font-size: 90%;
+    border-top: solid 2px #dad7fb;
+    border-left: solid 2px #dad7fb;
+    border-right: solid 2px #dad7fb;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+    cursor: pointer;
+}
+
+.tab-heading {
+    border-bottom: 1px solid #4a4a4a;
+    border-top: 1px solid #4a4a4a;
+    background-color: #5f5f5f;
+    color: white;
+    cursor: pointer;
+    font-size: 100%;
+    padding-left: 2.5px;
+    z-index: 1;
+    margin-bottom: 5px;
+}
+
+.tab-content {
+    transition: all .5s ease;
+    background-color: white;
+    overflow: hidden;
+    z-index: 0;
+}
+
+.expanded {
+    transition: all .5s ease;
+    position: relative;
+}

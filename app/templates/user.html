@@ -105,11 +105,68 @@
     </div>
     {% endif %}
     <div class="gamemode-container">
-        <a id="gm-0" class="gamemode-button {{ 'active-mode' if mode == 0 }}" onclick="setGameMode(0)">osu!</a>
-        <a id="gm-1" class="gamemode-button {{ 'active-mode' if mode == 1 }}" onclick="setGameMode(1)">Taiko</a>
-        <a id="gm-2" class="gamemode-button {{ 'active-mode' if mode == 2 }}" onclick="setGameMode(2)">CatchTheBeat</a>
-        <a id="gm-3" class="gamemode-button {{ 'active-mode' if mode == 3 }}" onclick="setGameMode(3)">osu!mania</a>
+        <a id="gm-0" class="gamemode-button {{ 'active-mode' if mode == 0 }}" href="?mode=0">osu!</a>
+        <a id="gm-1" class="gamemode-button {{ 'active-mode' if mode == 1 }}" href="?mode=1">Taiko</a>
+        <a id="gm-2" class="gamemode-button {{ 'active-mode' if mode == 2 }}" href="?mode=2">CatchTheBeat</a>
+        <a id="gm-3" class="gamemode-button {{ 'active-mode' if mode == 3 }}" href="?mode=3">osu!mania</a>
     </div>
-    <script src="/js/user.js"></script>
+    <table class="profile-table">
+        <tbody>
+            <tr>
+                <td style="padding: 0;">
+                    <table class="profile-tabs">
+                        <tbody>
+                            <td onclick="expandProfileTab('general', true)">General</td>
+                            <td onclick="expandProfileTab('leader', true)">Top Plays</td>
+                            <td onclick="expandProfileTab('history', true)">Historical</td>
+                            <td onclick="expandProfileTab('beatmaps', true)">Beatmaps</td>
+                            <td onclick="expandProfileTab('achievements', true)">Achievements</td>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr onclick="expandProfileTab('general')">
+                <td id="tab-general" class="tab-heading">General</td>
+            </tr>
+            <td>
+                <div id="general" class="tab-content" style="opacity: 1; filter: none; display: none; height: 0px;">
+                    <!-- TODO -->
+                </div>
+            </td>
+            <tr onclick="expandProfileTab('leader')">
+                <td id="tab-leader" class="tab-heading">Top Plays</td>
+            </tr>
+            <td>
+                <div id="leader" class="tab-content" style="opacity: 1; filter: none; display: none; height: 0px;">
+                    <!-- TODO -->
+                </div>
+            </td>
+            <tr onclick="expandProfileTab('history')">
+                <td id="tab-history" class="tab-heading">Historical</td>
+            </tr>
+            <td>
+                <div id="history" class="tab-content" style="opacity: 1; filter: none; display: none; height: 0px;">
+                    <!-- TODO -->
+                </div>
+            </td>
+            <tr onclick="expandProfileTab('beatmaps')">
+                <td id="tab-beatmaps" class="tab-heading">Beatmaps</td>
+            </tr>
+            <td>
+                <div id="beatmaps" class="tab-content" style="opacity: 1; filter: none; display: none; height: 0px;">
+                    <!-- TODO -->
+                </div>
+            </td>
+            <tr onclick="expandProfileTab('achievements')">
+                <td id="tab-achievements" class="tab-heading">Achievements</td>
+            </tr>
+            <td>
+                <div id="achievements" class="tab-content" style="opacity: 1; filter: none; display: none; height: 0px;">
+                    <!-- TODO -->
+                </div>
+            </td>
+        </tbody>
+    </table>
 </div>
+<script src="/js/user.js"></script>
 {% endblock content %}
