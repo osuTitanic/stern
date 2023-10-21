@@ -1,4 +1,3 @@
-
 function beatmapSearch()
 {
     const inputValue = document.getElementById("beatmap-search").value.trim();

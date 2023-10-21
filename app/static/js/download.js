@@ -1,4 +1,3 @@
-
 function loadManifest()
 {
   // Clients will be dynamically loaded from manifest.json
