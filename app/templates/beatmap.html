@@ -243,7 +243,7 @@
                 <tr>
                     <tr class="row-light">
                         <td><strong>Score</strong></td>
-                        <td>{{ "{:,}".format(leader_score.total_score) }} ({{ (leader_score.acc * 100)|round }}%)</td>
+                        <td>{{ "{:,}".format(leader_score.total_score) }} ({{ (leader_score.acc * 100)|round(2) }}%)</td>
                         <td class="row-grade" colspan="1" rowspan="13">
                             <img src="/images/grades/{{ leader_score.grade|upper }}.png" alt="">
                         </td>
@@ -342,6 +342,7 @@
             </tr>
         </thead>
         <tbody>
+        <!-- TODO: Highlight row if user is friend -->
         {% for score in scores %}
             {% if loop.index0 % 2 %}
             <tr class="row-light" id="{{ loop.index0+1 }}">
@@ -350,14 +351,32 @@
             {% endif %}
                 <td><a href="#{{ loop.index0+1 }}">#{{ loop.index0+1 }}</a></td>
                 <td><img src="/images/grades/{{ score.grade|upper }}_small.png" alt="{{ score.grade|upper }}"></td>
-                <td>{{ "{:,}".format(score.total_score) }}</td>
-                <td>{{ (score.acc * 100)|round }}%</td>
+                <td>
+                    {% if loop.index0 == 0 %}
+                    <strong>{{ "{:,}".format(score.total_score) }}</strong>
+                    {% else %}
+                    {{ "{:,}".format(score.total_score) }}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if score.acc == 1 %}
+                    <strong>{{ (score.acc * 100)|round(2) }}%</strong>
+                    {% else %}
+                    {{ (score.acc * 100)|round(2) }}%
+                    {% endif %}
+                </td>
                 <td>
                     <img src="/images/flags/{{ score.user.country|lower }}.gif" alt="" class="flag">
                     <a href="/u/{{ score.user.id }}">{{ score.user.name }}</a>
                 </td>
-                <td>{{ score.max_combo }}</td>
-                <td>{{ score.pp|round }}</td>
+                <td>
+                    {% if score.max_combo == beatmap.max_combo %}
+                    <strong>{{ score.max_combo }}</strong>
+                    {% else %}
+                    {{ score.max_combo }}
+                    {% endif %}
+                </td>
+                <td>{{ score.pp|round|int }}</td>
                 {% if mode != 3 %}
                 <td>{{ score.n300 }} / {{ score.n100 }} / {{ score.n50 }}</td>
                 <td>{{ score.nGeki }}</td>
