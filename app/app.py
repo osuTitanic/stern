@@ -54,6 +54,33 @@ def get_short(mods):
         if mods else 'None'
     )
 
+@flask.template_filter('get_level')
+def get_user_level(total_score: int) -> int:
+    next_level = common.constants.level.NEXT_LEVEL
+
+    for level, threshold in enumerate(next_level):
+        if total_score < threshold:
+            return level
+
+    # Return the max level if total_score is higher than all levels
+    return len(next_level)
+
+@flask.template_filter('format_activity')
+def format_activity(activity_text: str, activity: common.database.DBActivity) -> str:
+    links = activity.activity_links.split('||')
+    args = activity.activity_args.split('||')
+    items = tuple(zip(links, args))
+
+    return activity_text \
+        .format(
+            *(
+                f'<b><a href="{link}">{text}</a></b>'
+                if '/u/' in link else
+                f'<a href="{link}">{text}</a>'
+                for link, text in items
+            )
+        )
+
 @flask.errorhandler(404)
 def not_found(error: NotFound) -> Tuple[str, int]:
     return utils.render_template(
