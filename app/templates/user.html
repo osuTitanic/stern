@@ -164,8 +164,11 @@
                                     {% endfor %}
                                     </tbody>
                                 </table>
+                                {% if activity|length > 4 %}
                                 <a href="#" onclick="expandRecentActivity()">Show me more...</a>
+                                {% endif %}
                             </div>
+                            {% if activity|length > 4 %}
                             <div id="profile-recent-full" style="display: none;">
                                 <table>
                                     <tbody>
@@ -178,6 +181,7 @@
                                     </tbody>
                                 </table>
                             </div>
+                            {% endif %}
                             {% else %}
                             This user hasn't done anything notable recently!
                             {% endif %}
