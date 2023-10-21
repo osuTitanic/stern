@@ -99,6 +99,17 @@
     <!-- TODO: Report user -->
 </div>
 <div class="profile-right">
-
+    {% if user.userpage_about %}
+    <div class="userpage">
+        {{ user.userpage_about|bbcode|safe }}
+    </div>
+    {% endif %}
+    <div class="gamemode-container">
+        <a id="gm-0" class="gamemode-button {{ 'active-mode' if mode == 0 }}" onclick="setGameMode(0)">osu!</a>
+        <a id="gm-1" class="gamemode-button {{ 'active-mode' if mode == 1 }}" onclick="setGameMode(1)">Taiko</a>
+        <a id="gm-2" class="gamemode-button {{ 'active-mode' if mode == 2 }}" onclick="setGameMode(2)">CatchTheBeat</a>
+        <a id="gm-3" class="gamemode-button {{ 'active-mode' if mode == 3 }}" onclick="setGameMode(3)">osu!mania</a>
+    </div>
+    <script src="/js/user.js"></script>
 </div>
 {% endblock content %}

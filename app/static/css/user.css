@@ -6,7 +6,7 @@
 }
 
 .profile-left {
-    background-color: #f2e2fa;
+    background-color: #e7e4fc;
     width: 200px;
     height: 100%;
     padding: 5px;
@@ -134,4 +134,50 @@
 
 .playstyle.touch {
     background-position: -96px 0px;
+}
+
+.userpage {
+    max-height: 505px;
+    min-height: 32px;
+    overflow-x: hidden;
+    overflow: auto;
+    position: relative;
+    background-color: #e7e4fc;
+    font-size: 85%;
+    font-weight: normal;
+}
+
+.gamemode-container {
+    height: 35px;
+    margin: 10px auto;
+    text-align: center;
+    display: flex;
+}
+
+.gamemode-button {
+    display: inline-block;
+    border: solid 2px #978cd0;
+    border-radius: 5px;
+    font-size: 110%;
+    width: 140px;
+    height: 30px;
+    line-height: 30px;
+    margin: 5px;
+    padding: 0;
+    color: #3843a6;
+}
+
+.gamemode-button:hover {
+    text-shadow: #e5c6db 1px 1px 2.5px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.active-mode {
+    background-color: #bea8f4;
+    color: white;
+}
+
+.active-mode:hover {
+    text-shadow: rgb(215, 215, 215) 1px 1px 2.5px;
 }

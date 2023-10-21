@@ -32,6 +32,11 @@ def get_rounded(num: float):
 def get_rounded(num: int):
     return common.constants.Playstyle(num)
 
+@flask.template_filter('bbcode')
+def get_html_from_bbcode(text: str):
+    # TODO
+    return text
+
 @flask.template_filter('domain')
 def get_domain(url: str) -> str:
     return re.search(r'https?://([A-Za-z_0-9.-]+).*', url) \
