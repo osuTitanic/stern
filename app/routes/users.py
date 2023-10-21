@@ -1,6 +1,6 @@
 
+from app.common.database.repositories import users, activities, stats
 from flask import Blueprint, abort, redirect, request
-from app.common.database.repositories import users, activities
 from app.common.cache import status
 
 import utils
@@ -29,5 +29,6 @@ def userpage(query: str):
         css='user.css',
         mode=int(mode),
         is_online=status.exists(user.id),
-        activity=activities.fetch_recent(user.id)
+        activity=activities.fetch_recent(user.id),
+        current_stats=stats.fetch_by_mode(user.id, int(mode))
     )
