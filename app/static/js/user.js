@@ -30,3 +30,10 @@ function expandProfileTab(id, forceExpand)
         }, { once: true })
     }
 }
+
+function expandRecentActivity()
+{
+    document.getElementById("profile-recent-preview").style.display = "none";
+    document.getElementById("profile-recent-full").style.display = "block";
+    slideDown(document.getElementById("general"));
+}

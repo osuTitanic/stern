@@ -130,7 +130,136 @@
             </tr>
             <td>
                 <div id="general" class="tab-content" style="opacity: 1; filter: none; display: none; height: 0px;">
-                    <!-- TODO -->
+                    <div class="tab-spacing">
+                    {% if current_stats and current_stats.playcount > 0 %}
+                        <div class="profile-performance">
+                            <h2>
+                                <strong>
+                                    <a href="https://osu.ppy.sh/help/wiki/Performance_Points">Performance</a>:
+                                    {{ "{:,}".format(current_stats.pp|round(0)|int) }}pp (#{{ pp_rank }})
+                                </strong>
+                            </h2>
+                            <a href="/rankings/{{ constants.GameMode(mode).alias }}/performance?country={{ user.country|upper }}">
+                                <img src="/images/flags/{{ user.country|lower }}.gif" alt="{{ user.country|upper }}">
+                            </a>
+                            #{{ pp_rank_country }}
+                        </div>
+                        <div class="profile-performance-graph">
+                            <!-- TODO -->
+                        </div>
+                        <div class="profile-recent">
+                            <h3 class="profile-stats-header">Recent Activity</h3>
+                            {% if activity %}
+                            <div id="profile-recent-preview">
+                                <table>
+                                    <tbody>
+                                    {% for item in activity[:4] %}
+                                        <tr>
+                                            <td style="width: 20%;">{{ item.time|timeago }}</td>
+                                            <td>{{ item.activity_text|format_activity(item)|safe }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                                <a href="#" onclick="expandRecentActivity()">Show me more...</a>
+                            </div>
+                            <div id="profile-recent-full" style="display: none;">
+                                <table>
+                                    <tbody>
+                                    {% for item in activity %}
+                                        <tr>
+                                            <td style="width: 20%;">{{ item.time|timeago }}</td>
+                                            <td>{{ item.activity_text|format_activity(item)|safe }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            {% else %}
+                            This user hasn't done anything notable recently!
+                            {% endif %}
+                        </div>
+                        <div class="profile-detailed-stats">
+                            <h3 class="profile-stats-header">Detailed Stats</h3>
+                            <h4 class="profile-stats-element" title="Ranked Score consists of all your highest passing scores you have achieved. If you beat a score, only the difference between them will be added.">
+                                <b>Ranked Score</b>: {{ "{:,}".format(current_stats.rscore) }}
+                            </h4>
+                            <br>
+                            <h4 class="profile-stats-element" title="Accuracy is calculated as a pp-weighted average of every beatmap you have achieved a passing score in, with each difficulty counting separately. Accuracy is calculated based on the hit score value - so a 50 is worth 1/6th of a 300 hit, and a miss is worth nothing.">
+                                <b>Hit Accuracy</b>: {{ (current_stats.acc * 100)|round(2) }}%
+                            </h4>
+                            <br>
+                            <h4 class="profile-stats-element" title="Total number of ranked beatmap plays. This includes both passes and fails.">
+                                <b>Play Count</b>: {{ "{:,}".format(current_stats.playcount) }}
+                            </h4>
+                            <br>
+                            <h4 class="profile-stats-element" title="Total time spent playing.">
+                                <b>Play Time</b>: {{ (current_stats.playtime / 60 / 60)|round(1) }} hours
+                            </h4>
+                            <br>
+                            <h4 class="profile-stats-element" title="Total points scored in all ranked beatmap plays. This includes both passes and fails.">
+                                <b>Total Score</b>: {{ "{:,}".format(current_stats.tscore) }}
+                            </h4>
+                            <br>
+                            {% set level = current_stats.tscore|get_level %}
+                            {% set max_score = constants.level.NEXT_LEVEL[level+1] %}
+                            {% set level_percent = ((current_stats.tscore / max_score) * 100)|round|int %}
+                            <h4 class="profile-stats-element" title="Your level is based on your total accumulated score. This includes any ranked score, be it a pass or fail. You will gradually increase your level just by playing osu!">
+                                <b>Current Level</b>: {{ level }}
+                            </h4>
+                            <br>
+                            <table class="level-bar">
+                                <tbody>
+                                    <tr>
+                                        <td class="level-bar-percent" style="width: {{ ([level_percent, 100]|sort)[0] * 3 }}px;">{{ level_percent }}%</td>
+                                        <td style="background-color: white;"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <br>
+                            <h4 class="profile-stats-element" title="Total notes hit.">
+                                <b>Total Hits</b>: {{ "{:,}".format(current_stats.total_hits) }}
+                            </h4>
+                            <br>
+                            <h4 class="profile-stats-element" title="Total notes hit.">
+                                <b>Maximum Combo</b>: {{ "{:,}".format(current_stats.max_combo) }}
+                            </h4>
+                            <br>
+                            <h4 class="profile-stats-element" title="The total number of times this user's replays have been watched.">
+                                <b>Replays Watched by Others</b>: {{ current_stats.replay_views }} times
+                            </h4>
+                            <br>
+                            <h4 class="profile-stats-element"><b>Ranks</b></h4>
+                            <table class="profile-ranks">
+                                <tbody>
+                                    <tr>
+                                        <td style="width: 42px;"><img src="/images/grades/XH.png" height="42" alt="XH"></td>
+                                        <td style="width: 50px;">{{ current_stats.xh_count }}</td>
+                                        <td style="width: 42px;"><img src="/images/grades/X.png" height="42" alt="X"></td>
+                                        <td style="width: 50px;">{{ current_stats.x_count }}</td>
+                                        <td style="width: 42px;"><img src="/images/grades/SH.png" height="42" alt="SH"></td>
+                                        <td style="width: 50px;">{{ current_stats.sh_count }}</td>
+                                        <td style="width: 42px;"><img src="/images/grades/S.png" height="42" alt="S"></td>
+                                        <td style="width: 50px;">{{ current_stats.s_count }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 42px;"><img src="/images/grades/A.png" height="42" alt="A"></td>
+                                        <td style="width: 50px;">{{ current_stats.a_count }}</td>
+                                        <td style="width: 42px;"><img src="/images/grades/B.png" height="42" alt="B"></td>
+                                        <td style="width: 50px;">{{ current_stats.b_count }}</td>
+                                        <td style="width: 42px;"><img src="/images/grades/C.png" height="42" alt="C"></td>
+                                        <td style="width: 50px;">{{ current_stats.c_count }}</td>
+                                        <td style="width: 42px;"><img src="/images/grades/D.png" height="50" alt="D"></td>
+                                        <td style="width: 50px;">{{ current_stats.d_count }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <h3 class="profile-stats-header">No information recorded</h3>
+                        This user has not yet played any ranked maps in {{ constants.GameMode(mode).formatted }}.
+                    {% endif %}
+                    </div>
                 </div>
             </td>
             <tr onclick="expandProfileTab('leader')">

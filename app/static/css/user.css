@@ -227,3 +227,73 @@
     transition: all .5s ease;
     position: relative;
 }
+
+.tab-spacing {
+    margin: 0px 0px 15px 0px;
+    font-size: 80%;
+}
+
+.profile-stats-header {
+    background-color: #f5f2fe;
+    border-bottom: 1px solid #a9a9ff;
+    color: #5a539a;
+    font-weight: bold;
+    font-size: 125%;
+    margin-bottom: 5px;
+    margin-top: 15px;
+}
+
+.profile-performance {
+    font-size: 120%;
+    font-weight: normal;
+    background-color: #f5f2fe;
+    border-bottom: 1px dashed #a9a9ff;
+    padding-bottom: 2.5px;
+    display: block ruby;
+}
+
+.profile-performance strong {
+    font-weight: bold;
+    font-size: 115%;
+}
+
+.profile-performance-graph {
+    min-height: 100px;
+    /* TODO */
+}
+
+.profile-stats-element {
+    border-bottom: 1px dashed #a9a9ff;
+    background-color: #f5f2fe;
+    font-weight: normal;
+    font-size: 115%;
+    padding: 1px;
+}
+
+.profile-stats-element b {
+    font-weight: bold;
+}
+
+.level-bar {
+    margin: 0 auto;
+    border: solid 2px #ffa10d;
+    border-spacing: 0;
+    border-radius: 2px;
+    width: 300px;
+    height: 20px;
+    padding: 0;
+}
+
+.level-bar-percent {
+    background-color: #eacd5b;
+    font-weight: bold;
+    box-shadow: 0 0 40px 5px #ffda00;
+    border-right: 2px solid #ffa10d;
+}
+
+.profile-ranks {
+    text-align: center;
+    margin: 0 auto;
+    width: 60%;
+    margin-top: 15px;
+}
