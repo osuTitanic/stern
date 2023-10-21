@@ -20,14 +20,14 @@ def userpage(query: str):
     if not (user := users.fetch_by_id(int(query))):
         raise abort(404)
 
-    if not (mode := request.args.get('m')):
+    if not (mode := request.args.get('mode')):
         mode = user.preferred_mode
 
     return utils.render_template(
         name='user.html',
         user=user,
         css='user.css',
-        mode=mode,
+        mode=int(mode),
         is_online=status.exists(user.id),
         activity=activities.fetch_recent(user.id)
     )
