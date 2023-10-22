@@ -115,6 +115,96 @@ function expandRecentActivity()
     slideDown(document.getElementById("general"));
 }
 
+function createScoreElement(score, index, type)
+{
+  const scoreDiv = document.createElement("div");
+  scoreDiv.id = `score-${type}-${index}`;
+  scoreDiv.classList.add("score");
+
+  const scoreTable = document.createElement("table");
+  const tableBody = document.createElement("tbody");
+  const tableRow = document.createElement("tr");
+
+  const leftColumn = document.createElement("td");
+  leftColumn.classList.add('score-left');
+
+  const scoreGrade = document.createElement("img");
+  scoreGrade.src = `/images/grades/${score.grade}_small.png`
+  scoreGrade.loading = "lazy";
+
+  const beatmapInfo = document.createElement("a");
+  beatmapInfo.href = `/b/${score.beatmap.id}?mode=${score.mode}`;
+  beatmapInfo.textContent = `${score.beatmap.beatmapset.artist} - ${score.beatmap.beatmapset.title} [${score.beatmap.version}]`;
+
+  const modsText = document.createElement("b");
+  modsText.textContent = `+${Mods.getString(score.mods)}`;
+
+  const scoreInfo = document.createElement("b");
+  scoreInfo.appendChild(beatmapInfo);
+  scoreInfo.appendChild(modsText);
+
+  const accuracyText = document.createTextNode(`(${(score.acc * 100).toFixed(2)}%)`);
+
+  // Parse date to a format that timeago can understand
+  const scoreDate = new Date(score.submitted_at);
+  const scoreDateString = scoreDate.toLocaleDateString(
+    "en-us", {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      second: "numeric",
+      timeZoneName: "short",
+    }
+  );
+
+  const dateText = document.createElement("time");
+  dateText.setAttribute("datetime", scoreDateString);
+  dateText.textContent = score.submitted_at;
+  dateText.classList.add("timeago");
+
+  const rightColumn = document.createElement("td");
+  rightColumn.classList.add('score-right');
+
+  const ppText = document.createElement("b");
+  ppText.textContent = `${score.pp.toFixed(0)}pp`;
+
+  const ppDisplay = document.createElement("div");
+  ppDisplay.classList.add("pp-display");
+  ppDisplay.appendChild(ppText);
+
+  const ppWeightPercent = document.createElement("b");
+  ppWeightPercent.textContent = `${((0.95**(index + topScoreOffset)) * 100).toFixed(0)}%`;
+
+  const ppWeight = document.createElement("div");
+  ppWeight.classList.add("pp-display-weight");
+  ppWeight.appendChild(document.createTextNode("weighted "));
+  ppWeight.appendChild(ppWeightPercent);
+  ppWeight.appendChild(document.createTextNode(` (${(score.pp * (0.95**(index + topScoreOffset))).toFixed(0)}pp)`));
+
+  const scoreInfoDiv = document.createElement("div");
+  scoreInfoDiv.appendChild(scoreGrade);
+  scoreInfoDiv.appendChild(scoreInfo);
+  scoreInfoDiv.appendChild(accuracyText);
+
+  const dateDiv = document.createElement("div");
+  dateDiv.appendChild(dateText);
+
+  // TODO: Create replay download button
+
+  leftColumn.appendChild(scoreInfoDiv);
+  leftColumn.appendChild(dateDiv);
+  rightColumn.appendChild(ppDisplay);
+  rightColumn.appendChild(ppWeight);
+  tableRow.appendChild(leftColumn);
+  tableRow.appendChild(rightColumn);
+  tableBody.appendChild(tableRow);
+  scoreTable.appendChild(tableBody);
+  scoreDiv.appendChild(scoreTable);
+  return scoreDiv;
+}
+
 function loadTopPlays(userId, mode, limit, offset)
 {
     var url = `/api/profile/${userId}/top/${mode}?limit=${limit}&offset=${offset}`;
@@ -140,91 +230,7 @@ function loadTopPlays(userId, mode, limit, offset)
         }
 
         for (const [index, score] of scores.entries()) {
-            const scoreDiv = document.createElement("div");
-            scoreDiv.classList.add("score");
-            scoreDiv.id = `score-${score.id}`;
-
-            const scoreTable = document.createElement("table");
-            const tableBody = document.createElement("tbody");
-            const tableRow = document.createElement("tr");
-
-            const leftColumn = document.createElement("td");
-            leftColumn.classList.add('score-left');
-
-            const scoreGrade = document.createElement("img");
-            scoreGrade.src = `/images/grades/${score.grade}_small.png`
-            scoreGrade.loading = "lazy";
-
-            const beatmapInfo = document.createElement("a");
-            beatmapInfo.href = `/b/${score.beatmap.id}?mode=${score.mode}`;
-            beatmapInfo.textContent = `${score.beatmap.beatmapset.artist} - ${score.beatmap.beatmapset.title} [${score.beatmap.version}]`;
-
-            const modsText = document.createElement("b");
-            modsText.textContent = `+${Mods.getString(score.mods)}`;
-
-            const scoreInfo = document.createElement("b");
-            scoreInfo.appendChild(beatmapInfo);
-            scoreInfo.appendChild(modsText);
-
-            const accuracyText = document.createTextNode(`(${(score.acc * 100).toFixed(2)}%)`);
-
-            // Parse date to a format that timeago can understand
-            const scoreDate = new Date(score.submitted_at);
-            const scoreDateString = scoreDate.toLocaleDateString(
-              "en-us", {
-                year: "numeric",
-                month: "numeric",
-                day: "numeric",
-                hour: "numeric",
-                minute: "numeric",
-                second: "numeric",
-                timeZoneName: "short",
-              }
-            );
-
-            const dateText = document.createElement("time");
-            dateText.setAttribute("datetime", scoreDateString);
-            dateText.textContent = score.submitted_at;
-            dateText.classList.add("timeago");
-
-            const rightColumn = document.createElement("td");
-            rightColumn.classList.add('score-right');
-
-            const ppText = document.createElement("b");
-            ppText.textContent = `${score.pp.toFixed(0)}pp`;
-
-            const ppDisplay = document.createElement("div");
-            ppDisplay.classList.add("pp-display");
-            ppDisplay.appendChild(ppText);
-
-            const ppWeightPercent = document.createElement("b");
-            ppWeightPercent.textContent = `${((0.95**(index + topScoreOffset)) * 100).toFixed(0)}%`;
-
-            const ppWeight = document.createElement("div");
-            ppWeight.classList.add("pp-display-weight");
-            ppWeight.appendChild(document.createTextNode("weighted "));
-            ppWeight.appendChild(ppWeightPercent);
-            ppWeight.appendChild(document.createTextNode(` (${(score.pp * (0.95**(index + topScoreOffset))).toFixed(0)}pp)`));
-
-            const scoreInfoDiv = document.createElement("div");
-            scoreInfoDiv.appendChild(scoreGrade);
-            scoreInfoDiv.appendChild(scoreInfo);
-            scoreInfoDiv.appendChild(accuracyText);
-
-            const dateDiv = document.createElement("div");
-            dateDiv.appendChild(dateText);
-
-            // TODO: Create replay download button
-
-            leftColumn.appendChild(scoreInfoDiv);
-            leftColumn.appendChild(dateDiv);
-            rightColumn.appendChild(ppDisplay);
-            rightColumn.appendChild(ppWeight);
-            tableRow.appendChild(leftColumn);
-            tableRow.appendChild(rightColumn);
-            tableBody.appendChild(tableRow);
-            scoreTable.appendChild(tableBody);
-            scoreDiv.appendChild(scoreTable);
+            const scoreDiv = createScoreElement(score, index, "top");
             scoreContainer.appendChild(scoreDiv);
         }
         topScoreOffset += scores.length;
@@ -232,7 +238,7 @@ function loadTopPlays(userId, mode, limit, offset)
         // Render timeago elements
         $(".timeago").timeago();
 
-        if (scores.length > offset)
+        if (scores.length >= limit)
         {
             // Create show more text
             const showMoreText = document.createElement("b");
@@ -240,15 +246,15 @@ function loadTopPlays(userId, mode, limit, offset)
 
             // Add onclick event
             const showMoreHref = document.createElement("a");
-            showMoreHref.href = `#score-${scores[scores.length-1].id}`;
-            showMoreHref.id = "show-more";
+            showMoreHref.href = `#score-top-${scores.length}`;
+            showMoreHref.id = "show-more-top";
             showMoreHref.appendChild(showMoreText);
             showMoreHref.onclick = () => {
                 const loadingText = document.createElement("p");
                 loadingText.textContent = "Loading...";
                 loadingText.id = "top-scores-loading";
 
-                const showMore = document.getElementById("show-more");
+                const showMore = document.getElementById("show-more-top");
                 showMore.parentElement.appendChild(loadingText);
                 showMore.remove();
 
@@ -276,8 +282,86 @@ function loadTopPlays(userId, mode, limit, offset)
     return false;
 }
 
+function loadLeaderScores(userId, mode, limit, offset)
+{
+  var url = `/api/profile/${userId}/first/${mode}?limit=${limit}&offset=${offset}`;
+  var scoreContainer = document.getElementById("leader-scores");
+
+  fetch(url)
+    .then(response => {
+      if (!response.ok) {
+          const errorText = document.createElement("p");
+          errorText.textContent = "Failed to load first place ranks.";
+          scoreContainer.appendChild(errorText);
+          throw new Error(`Error: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(scores => {
+      var loadingText = document.getElementById("leader-scores-loading");
+
+      if (loadingText)
+      {
+        loadingText.parentElement.classList.remove("score");
+        loadingText.remove();
+      }
+
+      for (const [index, score] of scores.entries()) {
+        const scoreDiv = createScoreElement(score, index, "leader");
+        scoreContainer.appendChild(scoreDiv);
+      }
+      topScoreOffset += scores.length;
+
+      // Render timeago elements
+      $(".timeago").timeago();
+
+      if (scores.length >= limit)
+      {
+          // Create show more text
+          const showMoreText = document.createElement("b");
+          showMoreText.textContent = "Show me more!";
+
+          // Add onclick event
+          const showMoreHref = document.createElement("a");
+          showMoreHref.href = `#score-leader-${scores.length}`;
+          showMoreHref.id = "show-more-leader";
+          showMoreHref.appendChild(showMoreText);
+          showMoreHref.onclick = () => {
+              const loadingText = document.createElement("p");
+              loadingText.textContent = "Loading...";
+              loadingText.id = "leader-scores-loading";
+
+              const showMore = document.getElementById("show-more-leader");
+              showMore.parentElement.appendChild(loadingText);
+              showMore.remove();
+
+              loadLeaderScores(userId, modeName, 50, topScoreOffset);
+          }
+
+          // Create wrapper that contains styling
+          const showMore = document.createElement("div");
+          showMore.classList.add("score", "show-more");
+          showMore.appendChild(showMoreHref);
+
+          // Append show more text to container
+          scoreContainer.appendChild(showMore);
+      }
+
+      slideDown(document.getElementById("leader"));
+    })
+    .catch(error => {
+      const errorText = document.createElement("p");
+      errorText.textContent = "Failed to first place ranks plays.";
+      scoreContainer.appendChild(errorText);
+      console.error("Error loading leader scores:", error);
+    });
+
+  return false;
+}
+
 function onLoad()
 {
     expandProfileTab(activeTab);
     loadTopPlays(userId, modeName, 5, 0);
+    loadLeaderScores(userId, modeName, 5, 0);
 }
