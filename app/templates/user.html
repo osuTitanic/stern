@@ -24,7 +24,7 @@
         {% for badge in user.badges %}
             <div class="badge-container">
                 <a href="{{ badge.badge_url }}" title="{{ badge.badge_description }}">
-                    <img src="{{ badge.badge_icon }}" alt="{{ badge.badge_description }}">
+                    <img src="{{ badge.badge_icon }}" alt="{{ badge.badge_description }}" loading="lazy">
                 </a>
             </div>
         {% endfor %}
@@ -240,23 +240,23 @@
                             <table class="profile-ranks">
                                 <tbody>
                                     <tr>
-                                        <td style="width: 42px;"><img src="/images/grades/XH.png" height="42" alt="XH"></td>
+                                        <td style="width: 42px;"><img loading="lazy" src="/images/grades/XH.png" height="42" alt="XH"></td>
                                         <td style="width: 50px;">{{ current_stats.xh_count }}</td>
-                                        <td style="width: 42px;"><img src="/images/grades/X.png" height="42" alt="X"></td>
+                                        <td style="width: 42px;"><img loading="lazy" src="/images/grades/X.png" height="42" alt="X"></td>
                                         <td style="width: 50px;">{{ current_stats.x_count }}</td>
-                                        <td style="width: 42px;"><img src="/images/grades/SH.png" height="42" alt="SH"></td>
+                                        <td style="width: 42px;"><img loading="lazy" src="/images/grades/SH.png" height="42" alt="SH"></td>
                                         <td style="width: 50px;">{{ current_stats.sh_count }}</td>
-                                        <td style="width: 42px;"><img src="/images/grades/S.png" height="42" alt="S"></td>
+                                        <td style="width: 42px;"><img loading="lazy" src="/images/grades/S.png" height="42" alt="S"></td>
                                         <td style="width: 50px;">{{ current_stats.s_count }}</td>
                                     </tr>
                                     <tr>
-                                        <td style="width: 42px;"><img src="/images/grades/A.png" height="42" alt="A"></td>
+                                        <td style="width: 42px;"><img loading="lazy" src="/images/grades/A.png" height="42" alt="A"></td>
                                         <td style="width: 50px;">{{ current_stats.a_count }}</td>
-                                        <td style="width: 42px;"><img src="/images/grades/B.png" height="42" alt="B"></td>
+                                        <td style="width: 42px;"><img loading="lazy" src="/images/grades/B.png" height="42" alt="B"></td>
                                         <td style="width: 50px;">{{ current_stats.b_count }}</td>
-                                        <td style="width: 42px;"><img src="/images/grades/C.png" height="42" alt="C"></td>
+                                        <td style="width: 42px;"><img loading="lazy" src="/images/grades/C.png" height="42" alt="C"></td>
                                         <td style="width: 50px;">{{ current_stats.c_count }}</td>
-                                        <td style="width: 42px;"><img src="/images/grades/D.png" height="50" alt="D"></td>
+                                        <td style="width: 42px;"><img loading="lazy" src="/images/grades/D.png" height="50" alt="D"></td>
                                         <td style="width: 50px;">{{ current_stats.d_count }}</td>
                                     </tr>
                                 </tbody>

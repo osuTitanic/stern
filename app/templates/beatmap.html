@@ -235,7 +235,7 @@
             <tbody>
                 <tr>
                     <td class="row-title" colspan="3">
-                        <img src="/images/flags/{{ leader_score.user.country|lower }}.gif" alt="" class="flag">
+                        <img src="/images/flags/{{ leader_score.user.country|lower }}.gif" loading="lazy" alt="" class="flag">
                         <a href="/u/{{ leader_score.user.id }}">{{ leader_score.user.name }}</a> is in the lead!
                         ({{ leader_score.submitted_at|timeago }})
                     </td>
@@ -245,7 +245,7 @@
                         <td><strong>Score</strong></td>
                         <td>{{ "{:,}".format(leader_score.total_score) }} ({{ (leader_score.acc * 100)|round(2) }}%)</td>
                         <td class="row-grade" colspan="1" rowspan="13">
-                            <img src="/images/grades/{{ leader_score.grade|upper }}.png" alt="">
+                            <img src="/images/grades/{{ leader_score.grade|upper }}.png" loading="lazy" alt="">
                         </td>
                     </tr>
                 </tr>
@@ -350,7 +350,7 @@
             <tr class="row-dark" id="{{ loop.index0+1 }}">
             {% endif %}
                 <td><a href="#{{ loop.index0+1 }}">#{{ loop.index0+1 }}</a></td>
-                <td><img src="/images/grades/{{ score.grade|upper }}_small.png" alt="{{ score.grade|upper }}"></td>
+                <td><img src="/images/grades/{{ score.grade|upper }}_small.png" loading="lazy" alt="{{ score.grade|upper }}"></td>
                 <td>
                     {% if loop.index0 == 0 %}
                     <strong>{{ "{:,}".format(score.total_score) }}</strong>
@@ -366,7 +366,7 @@
                     {% endif %}
                 </td>
                 <td>
-                    <img src="/images/flags/{{ score.user.country|lower }}.gif" alt="" class="flag">
+                    <img src="/images/flags/{{ score.user.country|lower }}.gif" loading="lazy" alt="" class="flag">
                     <a href="/u/{{ score.user.id }}">{{ score.user.name }}</a>
                 </td>
                 <td>
