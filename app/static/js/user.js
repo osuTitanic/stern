@@ -1,4 +1,5 @@
 var activeTab = window.location.hash != "" ? window.location.hash.replace("#","") : "general";
+var topScoreOffset = 0;
 
 const slideDown = elem => elem.style.height = `${elem.scrollHeight}px`;
 const slideUp = elem => elem.style.height = "0px";
@@ -82,7 +83,9 @@ function expandProfileTab(id, forceExpand)
     var tab = document.getElementById(id);
     activeTab = id;
 
-    console.log(tab.height);
+    if (!tab)
+      // Tab can be null sometimes?
+      return
 
     if (!tab.classList.contains("expanded") || forceExpand)
     {
@@ -110,4 +113,171 @@ function expandRecentActivity()
     document.getElementById("profile-recent-preview").style.display = "none";
     document.getElementById("profile-recent-full").style.display = "block";
     slideDown(document.getElementById("general"));
+}
+
+function loadTopPlays(userId, mode, limit, offset)
+{
+    var url = `/api/profile/${userId}/top/${mode}?limit=${limit}&offset=${offset}`;
+    var scoreContainer = document.getElementById("top-scores");
+
+    fetch(url)
+      .then(response => {
+        if (!response.ok) {
+            const errorText = document.createElement("p");
+            errorText.textContent = "Failed to load top plays.";
+            scoreContainer.appendChild(errorText);
+            throw new Error(`Error: ${response.status}`);
+          }
+          return response.json();
+      })
+      .then(scores => {
+        var loadingText = document.getElementById("top-scores-loading");
+
+        if (loadingText)
+        {
+          loadingText.parentElement.classList.remove("score");
+          loadingText.remove();
+        }
+
+        for (const [index, score] of scores.entries()) {
+            const scoreDiv = document.createElement("div");
+            scoreDiv.classList.add("score");
+            scoreDiv.id = `score-${score.id}`;
+
+            const scoreTable = document.createElement("table");
+            const tableBody = document.createElement("tbody");
+            const tableRow = document.createElement("tr");
+
+            const leftColumn = document.createElement("td");
+            leftColumn.classList.add('score-left');
+
+            const scoreGrade = document.createElement("img");
+            scoreGrade.src = `/images/grades/${score.grade}_small.png`
+            scoreGrade.loading = "lazy";
+
+            const beatmapInfo = document.createElement("a");
+            beatmapInfo.href = `/b/${score.beatmap.id}?mode=${score.mode}`;
+            beatmapInfo.textContent = `${score.beatmap.beatmapset.artist} - ${score.beatmap.beatmapset.title} [${score.beatmap.version}]`;
+
+            const modsText = document.createElement("b");
+            modsText.textContent = `+${Mods.getString(score.mods)}`;
+
+            const scoreInfo = document.createElement("b");
+            scoreInfo.appendChild(beatmapInfo);
+            scoreInfo.appendChild(modsText);
+
+            const accuracyText = document.createTextNode(`(${(score.acc * 100).toFixed(2)}%)`);
+
+            // Parse date to a format that timeago can understand
+            const scoreDate = new Date(score.submitted_at);
+            const scoreDateString = scoreDate.toLocaleDateString(
+              "en-us", {
+                year: "numeric",
+                month: "numeric",
+                day: "numeric",
+                hour: "numeric",
+                minute: "numeric",
+                second: "numeric",
+                timeZoneName: "short",
+              }
+            );
+
+            const dateText = document.createElement("time");
+            dateText.setAttribute("datetime", scoreDateString);
+            dateText.textContent = score.submitted_at;
+            dateText.classList.add("timeago");
+
+            const rightColumn = document.createElement("td");
+            rightColumn.classList.add('score-right');
+
+            const ppText = document.createElement("b");
+            ppText.textContent = `${score.pp.toFixed(0)}pp`;
+
+            const ppDisplay = document.createElement("div");
+            ppDisplay.classList.add("pp-display");
+            ppDisplay.appendChild(ppText);
+
+            const ppWeightPercent = document.createElement("b");
+            ppWeightPercent.textContent = `${((0.95**(index + topScoreOffset)) * 100).toFixed(0)}%`;
+
+            const ppWeight = document.createElement("div");
+            ppWeight.classList.add("pp-display-weight");
+            ppWeight.appendChild(document.createTextNode("weighted "));
+            ppWeight.appendChild(ppWeightPercent);
+            ppWeight.appendChild(document.createTextNode(` (${(score.pp * (0.95**(index + topScoreOffset))).toFixed(0)}pp)`));
+
+            const scoreInfoDiv = document.createElement("div");
+            scoreInfoDiv.appendChild(scoreGrade);
+            scoreInfoDiv.appendChild(scoreInfo);
+            scoreInfoDiv.appendChild(accuracyText);
+
+            const dateDiv = document.createElement("div");
+            dateDiv.appendChild(dateText);
+
+            // TODO: Create replay download button
+
+            leftColumn.appendChild(scoreInfoDiv);
+            leftColumn.appendChild(dateDiv);
+            rightColumn.appendChild(ppDisplay);
+            rightColumn.appendChild(ppWeight);
+            tableRow.appendChild(leftColumn);
+            tableRow.appendChild(rightColumn);
+            tableBody.appendChild(tableRow);
+            scoreTable.appendChild(tableBody);
+            scoreDiv.appendChild(scoreTable);
+            scoreContainer.appendChild(scoreDiv);
+        }
+        topScoreOffset += scores.length;
+
+        // Render timeago elements
+        $(".timeago").timeago();
+
+        if (scores.length > offset)
+        {
+            // Create show more text
+            const showMoreText = document.createElement("b");
+            showMoreText.textContent = "Show me more!";
+
+            // Add onclick event
+            const showMoreHref = document.createElement("a");
+            showMoreHref.href = `#score-${scores[scores.length-1].id}`;
+            showMoreHref.id = "show-more";
+            showMoreHref.appendChild(showMoreText);
+            showMoreHref.onclick = () => {
+                const loadingText = document.createElement("p");
+                loadingText.textContent = "Loading...";
+                loadingText.id = "top-scores-loading";
+
+                const showMore = document.getElementById("show-more");
+                showMore.parentElement.appendChild(loadingText);
+                showMore.remove();
+
+                loadTopPlays(userId, modeName, 50, topScoreOffset);
+            }
+
+            // Create wrapper that contains styling
+            const showMore = document.createElement("div");
+            showMore.classList.add("score", "show-more");
+            showMore.appendChild(showMoreHref);
+
+            // Append show more text to container
+            scoreContainer.appendChild(showMore);
+        }
+
+        slideDown(document.getElementById("leader"));
+      })
+      .catch(error => {
+        const errorText = document.createElement("p");
+        errorText.textContent = "Failed to load top plays.";
+        scoreContainer.appendChild(errorText);
+        console.error("Error loading top scores:", error);
+      });
+
+    return false;
+}
+
+function onLoad()
+{
+    expandProfileTab(activeTab);
+    loadTopPlays(userId, modeName, 5, 0);
 }

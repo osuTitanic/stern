@@ -297,3 +297,72 @@
     width: 60%;
     margin-top: 15px;
 }
+
+#top-scores {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+#top-scores h2 {
+    text-shadow: #efcfe1 0px 0px 10px;
+    font-weight: normal;
+    font-size: 110%;
+    color: #cc2e8a;
+    overflow: visible;
+    margin-bottom: 10px;
+}
+
+.score {
+    background-color: #e7e4fc;
+    border: 1px solid #dad7fb;
+    margin: 3px;
+    padding: 2.5px;
+}
+
+.score table {
+    border-spacing: 0px;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.score table td {
+    padding: 0px;
+}
+
+.score-right {
+    float: right;
+    text-align: right;
+    font-size: 75%;
+}
+
+.score-left {
+    font-size: 75%;
+    float: left;
+    text-align: left;
+    overflow: hidden;
+    max-width: 80%;
+    border-spacing: 0px;
+    border-collapse: collapse;
+}
+
+.score-left img {
+    width: 12px;
+    height: 15px;
+    vertical-align: middle;
+}
+
+.score-left * {
+    margin: 1.5px;
+}
+
+.pp-display {
+    font-weight: bold;
+    font-size: 160%;
+    color: #9492dc;
+    text-shadow: #b5c6cb 2px 0px 3px;
+    padding-right: 5px;
+}
+
+.show-more {
+    font-size: 90%;
+}

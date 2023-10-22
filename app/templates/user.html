@@ -274,7 +274,10 @@
             </tr>
             <td>
                 <div id="leader" class="tab-content" style="opacity: 1; filter: none; display: none; height: 0px;">
-                    <!-- TODO -->
+                    <div id="top-scores">
+                        <h2>Best Performance</h2>
+                        <p id="top-scores-loading">Loading...</p>
+                    </div>
                 </div>
             </td>
             <tr onclick="expandProfileTab('history')">
@@ -304,5 +307,10 @@
         </tbody>
     </table>
 </div>
-<script src="/js/user.js" onload="expandProfileTab(activeTab)"></script>
+<script>
+    const userId = {{ user.id }};
+    const mode = {{ mode }};
+    const modeName = '{{ constants.GameMode(mode).alias }}';
+</script>
+<script src="/js/user.js" onload="onLoad()"></script>
 {% endblock content %}
