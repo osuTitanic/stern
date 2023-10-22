@@ -235,6 +235,15 @@ function loadTopPlays(userId, mode, limit, offset)
           loadingText.remove();
         }
 
+        if (scores.length <= 0)
+        {
+          var noScoresText = document.createElement("p")
+          noScoresText.textContent = "No awesome performance records yet :(. ";
+          noScoresText.style.fontSize = "80%";
+          scoreContainer.appendChild(noScoresText);
+          return;
+        }
+
         for (const [index, score] of scores.entries()) {
             const scoreDiv = createScoreElement(score, index, "top");
             scoreContainer.appendChild(scoreDiv);
@@ -318,6 +327,15 @@ function loadLeaderScores(userId, mode, limit, offset)
       {
         loadingText.parentElement.classList.remove("score");
         loadingText.remove();
+      }
+
+      if (scores.length <= 0)
+      {
+        var noScoresText = document.createElement("p")
+        noScoresText.textContent = "No first place records currently :(. ";
+        noScoresText.style.fontSize = "80%";
+        scoreContainer.appendChild(noScoresText);
+        return;
       }
 
       for (const [index, score] of scores.entries()) {
