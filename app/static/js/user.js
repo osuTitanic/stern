@@ -216,7 +216,13 @@ function loadTopPlays(userId, mode, limit, offset)
             const errorText = document.createElement("p");
             errorText.textContent = "Failed to load top plays.";
             scoreContainer.appendChild(errorText);
-            throw new Error(`Error: ${response.status}`);
+
+            var loadingText = document.getElementById("top-scores-loading");
+
+            if (loadingText)
+              loadingText.remove();
+
+            throw new Error(`${response.status}`);
           }
           return response.json();
       })
@@ -273,10 +279,12 @@ function loadTopPlays(userId, mode, limit, offset)
         slideDown(document.getElementById("leader"));
       })
       .catch(error => {
-        const errorText = document.createElement("p");
-        errorText.textContent = "Failed to load top plays.";
-        scoreContainer.appendChild(errorText);
         console.error("Error loading top scores:", error);
+
+        var loadingText = document.getElementById("top-scores-loading");
+
+        if (loadingText)
+          loadingText.remove();
       });
 
     return false;
@@ -293,7 +301,13 @@ function loadLeaderScores(userId, mode, limit, offset)
           const errorText = document.createElement("p");
           errorText.textContent = "Failed to load first place ranks.";
           scoreContainer.appendChild(errorText);
-          throw new Error(`Error: ${response.status}`);
+
+          var loadingText = document.getElementById("leader-scores-loading");
+
+          if (loadingText)
+            loadingText.remove();
+
+          throw new Error(`${response.status}`);
         }
         return response.json();
     })
@@ -350,10 +364,12 @@ function loadLeaderScores(userId, mode, limit, offset)
       slideDown(document.getElementById("leader"));
     })
     .catch(error => {
-      const errorText = document.createElement("p");
-      errorText.textContent = "Failed to first place ranks plays.";
-      scoreContainer.appendChild(errorText);
       console.error("Error loading leader scores:", error);
+
+      var loadingText = document.getElementById("leader-scores-loading");
+
+      if (loadingText)
+        loadingText.remove();
     });
 
   return false;
