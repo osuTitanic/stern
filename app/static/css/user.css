@@ -298,12 +298,12 @@
     margin-top: 15px;
 }
 
-#top-scores {
+#top-scores, #leader-scores {
     padding-top: 10px;
     padding-bottom: 10px;
 }
 
-#top-scores h2 {
+#leader h2 {
     text-shadow: #efcfe1 0px 0px 10px;
     font-weight: normal;
     font-size: 110%;
