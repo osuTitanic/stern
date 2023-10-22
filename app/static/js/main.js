@@ -29,7 +29,8 @@ function resetOrPlayAudio(element) {
     audio.currentTime = 0;
 }
 
-function showLoginForm()
-{
-    // TODO
-}
+function showLoginForm() {} // TODO
+
+document.addEventListener("DOMContentLoaded", () => {
+    $(".timeago").timeago();
+});
