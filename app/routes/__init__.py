@@ -8,6 +8,7 @@ from . import beatmap
 from . import users
 from . import graph
 from . import home
+from . import api
 
 router = Blueprint("routes", __name__)
 router.register_blueprint(download.router, url_prefix='/download')
@@ -16,3 +17,4 @@ router.register_blueprint(redirects.router, url_prefix='/')
 router.register_blueprint(beatmap.router, url_prefix='/b')
 router.register_blueprint(users.router, url_prefix='/u')
 router.register_blueprint(home.router, url_prefix='/')
+router.register_blueprint(api.router, url_prefix='/api')
