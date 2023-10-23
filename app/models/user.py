@@ -8,6 +8,13 @@ class RelationshipModel(BaseModel):
     target_id: int
     status: int
 
+class AchievementModel(BaseModel):
+    user_id: int
+    name: str
+    category: str
+    filename: str
+    unlocked_at: time
+
 class FavouritesModel(BaseModel):
     user_id: int
     set_id: int
@@ -69,6 +76,7 @@ class UserModel(BaseModel):
     userpage_interests: Optional[str]
 
     relationships: List[RelationshipModel]
+    achievements: List[AchievementModel]
     names: List[NameHistoryModel]
     badges: List[BadgeModel]
     stats: List[StatsModel]
