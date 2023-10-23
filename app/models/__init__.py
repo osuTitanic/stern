@@ -1,6 +1,6 @@
 
 from .beatmapset import BeatmapsetModel
 from .activity import ActivityModel
-from .beatmap import BaseModel
+from .beatmap import BeatmapModel
 from .score import ScoreModel
 from .user import UserModel
