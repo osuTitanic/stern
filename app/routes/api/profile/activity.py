@@ -1,4 +1,5 @@
 
+from flask_pydantic import validate
 from flask import Blueprint, abort
 from typing import List
 
@@ -9,6 +10,7 @@ from app.models import ActivityModel
 router = Blueprint("activity", __name__)
 
 @router.get('/<user_id>/activity/<mode>')
+@validate()
 def recent_activity(
     user_id: int,
     mode: str

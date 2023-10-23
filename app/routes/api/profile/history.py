@@ -1,5 +1,6 @@
 
 from flask import Blueprint, request
+from flask_pydantic import validate
 from typing import List
 
 from app.common.database.repositories import plays
@@ -8,6 +9,7 @@ from app.models import BeatmapModel
 router = Blueprint("history", __name__)
 
 @router.get('/<user_id>/history/plays')
+@validate()
 def most_played(user_id: int) -> List[dict]:
     offset = request.args.get('offset', default=0, type=int)
     limit = max(1, min(50, request.args.get('limit', default=15, type=int)))

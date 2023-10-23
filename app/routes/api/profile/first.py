@@ -1,5 +1,6 @@
 
 from flask import Blueprint, abort, request
+from flask_pydantic import validate
 from typing import List
 
 from app.common.database.repositories import scores
@@ -9,6 +10,7 @@ from app.models import ScoreModel
 router = Blueprint("first", __name__)
 
 @router.get('/<user_id>/first/<mode>')
+@validate()
 def leader_scores(
     user_id: int,
     mode: str
