@@ -1,6 +1,6 @@
 
-from datetime import datetime, time
 from typing import Optional, List
+from datetime import datetime
 from pydantic import BaseModel
 
 class RelationshipModel(BaseModel):
@@ -13,7 +13,7 @@ class AchievementModel(BaseModel):
     name: str
     category: str
     filename: str
-    unlocked_at: time
+    unlocked_at: datetime
 
 class FavouritesModel(BaseModel):
     user_id: int
