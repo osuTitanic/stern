@@ -35,7 +35,7 @@ def rankings(
         offset,
         limit,
         type=order_type,
-        country=country.upper()
+        country=country.lower()
              if country else None
     )
 
