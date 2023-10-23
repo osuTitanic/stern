@@ -12,7 +12,13 @@ class RankHistoryModel(BaseModel):
     score_rank: int
 
 class PlaysHistoryModel(BaseModel):
+    mode: int
     year: int
     month: int
-    mode: int
     plays: int
+
+class ReplayHistoryModel(BaseModel):
+    mode: int
+    year: int
+    month: int
+    replay_views: int

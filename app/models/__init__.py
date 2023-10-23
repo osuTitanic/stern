@@ -1,5 +1,5 @@
 
-from .history import RankHistoryModel, PlaysHistoryModel
+from .history import RankHistoryModel, PlaysHistoryModel, ReplayHistoryModel
 from .beatmapset import BeatmapsetModel
 from .activity import ActivityModel
 from .beatmap import BeatmapModel
