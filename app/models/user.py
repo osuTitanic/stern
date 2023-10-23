@@ -1,7 +1,52 @@
 
+from datetime import datetime, time
+from typing import Optional, List
 from pydantic import BaseModel
-from datetime import datetime
-from typing import Optional
+
+class RelationshipModel(BaseModel):
+    user_id: int
+    target_id: int
+    status: int
+
+class FavouritesModel(BaseModel):
+    user_id: int
+    set_id: int
+    created_at: datetime
+
+class BadgeModel(BaseModel):
+    id: int
+    user_id: int
+    created: datetime
+    badge_icon: str
+    badge_url: Optional[str]
+    badge_description: Optional[str]
+
+class NameHistoryModel(BaseModel):
+    id: int
+    user_id: int
+    changed_at: datetime
+    name: str
+
+class StatsModel(BaseModel):
+    mode: int
+    rank: int
+    tscore: int
+    rscore: int
+    pp: float
+    playcount: int
+    playtime: int
+    acc: float
+    max_combo: int
+    total_hits: int
+    replay_views: int
+    xh_count: int
+    x_count: int
+    sh_count: int
+    s_count: int
+    a_count: int
+    b_count: int
+    c_count: int
+    d_count: int
 
 class UserModel(BaseModel):
     id: int
@@ -23,6 +68,7 @@ class UserModel(BaseModel):
     userpage_location: Optional[str]
     userpage_interests: Optional[str]
 
-    # TODO: Stats
-    # TODO: Friends
-    # TODO: ...
+    relationships: List[RelationshipModel]
+    names: List[NameHistoryModel]
+    badges: List[BadgeModel]
+    stats: List[StatsModel]
