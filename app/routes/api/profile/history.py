@@ -18,7 +18,7 @@ def most_played(user_id: int) -> List[dict]:
 
     return [
         {
-            'plays': plays.count,
+            'count': plays.count,
             'beatmap': BeatmapModel.model_validate(
                 plays.beatmap,
                 from_attributes=True
