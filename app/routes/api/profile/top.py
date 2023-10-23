@@ -27,8 +27,7 @@ def top_plays(
         user_id,
         mode.value,
         offset=offset,
-        limit=limit,
-        exclude_approved=True if config.APPROVED_MAP_REWARDS else False
+        limit=limit
     )
 
     return [
