@@ -10,7 +10,7 @@ boto3==1.28.69
 boto3-type-annotations-with-docs==0.3.1
 botocore==1.31.69
 certifi==2023.7.22
-charset-normalizer==3.3.0
+charset-normalizer==3.3.1
 click==8.1.7
 colorama==0.4.6
 contourpy==1.1.1
