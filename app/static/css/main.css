@@ -35,6 +35,10 @@ a:hover {
     text-decoration: underline;
 }
 
+a:visited {
+    color: rgb(0, 102, 204);
+}
+
 body {
     background: linear-gradient(var(--background-gradient), var(--background-main) 20%);
     background-attachment: fixed;
