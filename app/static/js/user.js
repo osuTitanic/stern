@@ -434,10 +434,91 @@ function loadMostPlayed(userId, limit, offset)
   loadingText.remove();
 }
 
+function loadRecentPlays(userId, mode)
+{
+  const loadingText = document.getElementById("recent-loading")
+
+  if (!loadingText)
+    return;
+
+  var url = `/api/profile/${userId}/recent/${mode}`;
+  var playsContainer = document.getElementById("recent-container");
+
+  fetch(url)
+    .then(response => {
+      if (!response.ok)
+        throw new Error(`${response.status}`);
+      return response.json();
+    })
+    .then(scores => {
+      if (scores.length <= 0)
+      {
+        playsContainer.appendChild(
+          document.createTextNode("No recent scores set by this player :(")
+        );
+        return;
+      }
+
+      // TODO: I would like to refactor this in the future...
+
+      scores.forEach((score) =>
+      {
+        // Parse date to a format that timeago can understand
+        const scoreDate = new Date(score.submitted_at);
+        const scoreDateString = scoreDate.toLocaleDateString(
+          "en-us", {
+            year: "numeric",
+            month: "numeric",
+            day: "numeric",
+            hour: "numeric",
+            minute: "numeric",
+            second: "numeric",
+            timeZoneName: "short",
+          }
+        );
+
+        const dateText = document.createElement("time");
+        dateText.setAttribute("datetime", scoreDateString);
+        dateText.textContent = score.submitted_at;
+        dateText.classList.add("timeago");
+
+        const beatmapLink = document.createElement("a");
+        beatmapLink.textContent = `${score.beatmap.beatmapset.artist} - ${score.beatmap.beatmapset.title} [${score.beatmap.version}]`;
+        beatmapLink.href = `/b/${score.beatmap.id}`;
+
+        var modsText = "";
+
+        if (score.mods > 0)
+          modsText = `+${Mods.getString(score.mods)}`;
+
+        const scoreDiv = document.createElement("div");
+        scoreDiv.appendChild(dateText);
+        scoreDiv.appendChild(document.createTextNode(" - "));
+        scoreDiv.appendChild(beatmapLink);
+        scoreDiv.appendChild(document.createTextNode(` ${score.total_score} (${score.grade}) ${modsText}`));
+        scoreDiv.style.margin = "2.5px";
+
+        playsContainer.appendChild(scoreDiv);
+      });
+
+      // Render timeago elements
+      $(".timeago").timeago();
+
+      // Slide down tab
+      slideDown(document.getElementById("history"));
+    })
+    .catch(error => {
+      console.error(error);
+    });
+
+  loadingText.remove();
+}
+
 function onLoad()
 {
     expandProfileTab(activeTab);
     loadTopPlays(userId, modeName, 5, 0);
     loadLeaderScores(userId, modeName, 5, 0);
+    loadRecentPlays(userId, modeName);
     loadMostPlayed(userId, 15, 0);
 }
