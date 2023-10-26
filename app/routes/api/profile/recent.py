@@ -37,7 +37,8 @@ def recent_scores(
     recent_plays = scores.fetch_recent_until(
         user_id,
         mode,
-        until
+        until,
+        min_status=3
     )
 
     return [
