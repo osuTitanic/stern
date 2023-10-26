@@ -137,7 +137,9 @@ function createScoreElement(score, index, type)
   beatmapInfo.textContent = `${score.beatmap.beatmapset.artist} - ${score.beatmap.beatmapset.title} [${score.beatmap.version}]`;
 
   const modsText = document.createElement("b");
-  modsText.textContent = `+${Mods.getString(score.mods)}`;
+
+  if (score.mods > 0)
+    modsText.textContent = `+${Mods.getString(score.mods)}`;
 
   const scoreInfo = document.createElement("b");
   scoreInfo.appendChild(beatmapInfo);
