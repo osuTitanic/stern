@@ -221,6 +221,7 @@
     transition: all .5s ease;
     background-color: white;
     overflow: hidden;
+    font-size: 80%;
     z-index: 0;
 }
 
@@ -231,7 +232,6 @@
 
 .tab-spacing {
     margin: 0px 0px 15px 0px;
-    font-size: 80%;
 }
 
 .profile-stats-header {
@@ -307,7 +307,7 @@
 #leader h2 {
     text-shadow: #efcfe1 0px 0px 10px;
     font-weight: normal;
-    font-size: 110%;
+    font-size: 130%;
     color: #cc2e8a;
     overflow: visible;
     margin-bottom: 10px;
@@ -333,11 +333,11 @@
 .score-right {
     float: right;
     text-align: right;
-    font-size: 75%;
+    font-size: 95%;
 }
 
 .score-left {
-    font-size: 75%;
+    font-size: 95%;
     float: left;
     text-align: left;
     overflow: hidden;
