@@ -391,9 +391,53 @@ function loadLeaderScores(userId, mode, limit, offset)
   return false;
 }
 
+function loadMostPlayed(userId, limit, offset)
+{
+  const loadingText = document.getElementById("plays-loading")
+
+  if (!loadingText)
+    return;
+
+  var url = `/api/profile/${userId}/plays?limit=${limit}&offset=${offset}`;
+  var playsContainer = document.getElementById("plays-container");
+
+  fetch(url)
+    .then(response => {
+      if (!response.ok)
+        throw new Error(`${response.status}`);
+      return response.json();
+    })
+    .then(plays => {
+      for (const [index, item] of plays.entries())
+      {
+        const beatmapLink = document.createElement("a");
+        beatmapLink.textContent = `${item.beatmap.beatmapset.artist} - ${item.beatmap.beatmapset.title} [${item.beatmap.version}]`;
+        beatmapLink.href = `/b/${item.beatmap.id}`;
+
+        const playsDiv = document.createElement("div");
+        playsDiv.style.fontSize = `${180 * 0.95**index+1}%`;
+        playsDiv.style.margin = "2.5px";
+        playsDiv.appendChild(
+          document.createTextNode(`${item.count} plays - `)
+        );
+        playsDiv.appendChild(beatmapLink);
+
+        playsContainer.appendChild(playsDiv);
+      }
+
+      slideDown(document.getElementById("history"));
+    })
+    .catch(error => {
+      console.error(error);
+    });
+
+  loadingText.remove();
+}
+
 function onLoad()
 {
     expandProfileTab(activeTab);
     loadTopPlays(userId, modeName, 5, 0);
     loadLeaderScores(userId, modeName, 5, 0);
+    loadMostPlayed(userId, 15, 0);
 }
