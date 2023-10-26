@@ -214,19 +214,9 @@ function loadTopPlays(userId, mode, limit, offset)
 
     fetch(url)
       .then(response => {
-        if (!response.ok) {
-            const errorText = document.createElement("p");
-            errorText.textContent = "Failed to load top plays.";
-            scoreContainer.appendChild(errorText);
-
-            var loadingText = document.getElementById("top-scores-loading");
-
-            if (loadingText)
-              loadingText.remove();
-
-            throw new Error(`${response.status}`);
-          }
-          return response.json();
+        if (!response.ok)
+          throw new Error(`${response.status}`);
+        return response.json();
       })
       .then(scores => {
         var loadingText = document.getElementById("top-scores-loading");
@@ -292,10 +282,18 @@ function loadTopPlays(userId, mode, limit, offset)
       .catch(error => {
         console.error("Error loading top scores:", error);
 
+        const errorText = document.createElement("p");
+        errorText.textContent = "Failed to load top plays.";
+        errorText.classList.add("score");
+        scoreContainer.appendChild(errorText);
+
         var loadingText = document.getElementById("top-scores-loading");
 
         if (loadingText)
+        {
+          loadingText.parentElement.classList.remove("score");
           loadingText.remove();
+        }
       });
 
     return false;
@@ -308,19 +306,9 @@ function loadLeaderScores(userId, mode, limit, offset)
 
   fetch(url)
     .then(response => {
-      if (!response.ok) {
-          const errorText = document.createElement("p");
-          errorText.textContent = "Failed to load first place ranks.";
-          scoreContainer.appendChild(errorText);
-
-          var loadingText = document.getElementById("leader-scores-loading");
-
-          if (loadingText)
-            loadingText.remove();
-
-          throw new Error(`${response.status}`);
-        }
-        return response.json();
+      if (!response.ok)
+        throw new Error(`${response.status}`);
+      return response.json();
     })
     .then(scores => {
       var loadingText = document.getElementById("leader-scores-loading");
@@ -386,10 +374,18 @@ function loadLeaderScores(userId, mode, limit, offset)
     .catch(error => {
       console.error("Error loading leader scores:", error);
 
+      const errorText = document.createElement("p");
+      errorText.textContent = "Failed to load first place ranks.";
+      errorText.classList.add("score");
+      scoreContainer.appendChild(errorText);
+
       var loadingText = document.getElementById("leader-scores-loading");
 
       if (loadingText)
+      {
+        loadingText.parentElement.classList.remove("score");
         loadingText.remove();
+      }
     });
 
   return false;
