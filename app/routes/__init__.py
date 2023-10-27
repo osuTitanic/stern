@@ -2,6 +2,7 @@
 
 from flask import Blueprint
 
+from . import beatmapset
 from . import redirects
 from . import download
 from . import beatmap
@@ -12,6 +13,7 @@ from . import api
 
 router = Blueprint("routes", __name__)
 router.register_blueprint(download.router, url_prefix='/download')
+router.register_blueprint(beatmapset.router, url_prefix='/s')
 router.register_blueprint(graph.router, url_prefix='/graph')
 router.register_blueprint(redirects.router, url_prefix='/')
 router.register_blueprint(beatmap.router, url_prefix='/b')
