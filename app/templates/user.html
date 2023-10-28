@@ -320,7 +320,37 @@
             </tr>
             <td>
                 <div id="beatmaps" class="tab-content" style="opacity: 1; filter: none; display: none; height: 0px;">
-                    <!-- TODO -->
+                    <div class="favourites">
+                        <h2 class="profile-stats-header">Favourite Beatmaps</h2>
+                        {% if not user.favourites %}
+                            <p style="margin: 5px;">This player has no favourite beatmaps :(</p>
+                        {% else %}
+                        <div class="profile-beatmaps-container">
+                            {% for fav in user.favourites %}
+                            <table class="profile-beatmap">
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <a href="/s/{{ fav.set_id }}" class="profile-beatmap-description">
+                                                <b>{{ fav.beatmapset.artist }} - {{ fav.beatmapset.title }}</b>
+                                            </a>
+                                            <br>
+                                            {% if fav.beatmapset.server == 0 %}
+                                                <a href="https://osu.ppy.sh/u/{{ fav.beatmapset.creator }}">mapped by {{ fav.beatmapset.creator }}</a>
+                                            {% else %}
+                                                <a href="/u/{{ set.creator }}">mapped by {{ fav.beatmapset.creator }}</a>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <img src="http://s.{{ config.DOMAIN_NAME }}/mt/{{ fav.set_id }}" alt="Beatmap Image" loading="lazy">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
                 </div>
             </td>
             <tr onclick="expandProfileTab('achievements')">
