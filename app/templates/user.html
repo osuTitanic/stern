@@ -366,7 +366,12 @@
                         {% for achievement in achievement_categories['beatmap-packs'] %}
                         <div class="achievement">
                             {% if achievement in achievements %}
-                            <img src="/images/achievements/{{ achievements[achievement].filename }}" alt="" loading="lazy">
+                            <img
+                                src="/images/achievements/{{ achievements[achievement].filename }}"
+                                title="Unlocked {{ achievements[achievement].unlocked_at|timeago }}"
+                                loading="lazy"
+                                alt=""
+                            >
                             {% else %}
                             <img src="/images/achievements/unknown.png" alt="" loading="lazy">
                             {% endif %}
@@ -380,7 +385,12 @@
                         {% for achievement in achievement_categories['skill'] %}
                         <div class="achievement">
                             {% if achievement in achievements %}
-                            <img src="/images/achievements/{{ achievements[achievement].filename }}" alt="" loading="lazy">
+                            <img
+                                src="/images/achievements/{{ achievements[achievement].filename }}"
+                                title="Unlocked {{ achievements[achievement].unlocked_at|timeago }}"
+                                loading="lazy"
+                                alt=""
+                            >
                             {% else %}
                             <img src="/images/achievements/unknown.png" alt="" loading="lazy">
                             {% endif %}
@@ -394,7 +404,12 @@
                         {% for achievement in achievement_categories['dedication'] %}
                         <div class="achievement">
                             {% if achievement in achievements %}
-                            <img src="/images/achievements/{{ achievements[achievement].filename }}" alt="" loading="lazy">
+                            <img
+                                src="/images/achievements/{{ achievements[achievement].filename }}"
+                                title="Unlocked {{ achievements[achievement].unlocked_at|timeago }}"
+                                loading="lazy"
+                                alt=""
+                            >
                             {% else %}
                             <img src="/images/achievements/unknown.png" alt="" loading="lazy">
                             {% endif %}
@@ -408,7 +423,12 @@
                         {% for achievement in achievement_categories['hush-hush'] %}
                         <div class="achievement">
                             {% if achievement in achievements %}
-                            <img src="/images/achievements/{{ achievements[achievement].filename }}" alt="" loading="lazy">
+                            <img
+                                src="/images/achievements/{{ achievements[achievement].filename }}"
+                                title="Unlocked {{ achievements[achievement].unlocked_at|timeago }}"
+                                loading="lazy"
+                                alt=""
+                            >
                             {% else %}
                             <img src="/images/achievements/unknown.png" alt="" loading="lazy">
                             {% endif %}
