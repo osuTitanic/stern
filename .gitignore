@@ -15,3 +15,6 @@ venv.bak/
 *.vsix
 .VSCodeCounter
 logs/
+
+app/static/dist/
+app/static/.webassets-cache/
