@@ -1,0 +1,11 @@
+{# templates/search.html #}
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="beatmap-search-container">
+    <h1>Beatmap Listing</h1>
+    <input id="search-input" type="search" placeholder="Search for a beatmap..." value="{{ query }}">
+</div>
+<script src="/js/search.js"></script>
+{% endblock content %}

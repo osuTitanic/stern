@@ -1,0 +1,28 @@
+
+@import url("main.css");
+
+.beatmap-search-container h1 {
+    font-size: 150%;
+    font-weight: 100;
+    margin-left: 10px;
+    margin-bottom: 22px;
+    color: #3843a6;
+    text-shadow: var(--text-shadow) 0px 0px 10px;
+    float: left;
+}
+
+.beatmap-search-container {
+    vertical-align: middle;
+    display: inline;
+    max-height: 25px;
+}
+
+#search-input {
+    width: 75%;
+    padding: 5px;
+    margin: 0 auto;
+    border-radius: 5px;
+    border-style: ridge;
+    border-width: 1.5px;
+    margin-left: 15px;
+}
