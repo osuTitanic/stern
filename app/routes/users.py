@@ -4,6 +4,7 @@ from flask import Blueprint, abort, redirect, request
 from app.common.cache import status, leaderboards
 
 import utils
+import app
 
 router = Blueprint('users', __name__)
 
@@ -29,6 +30,8 @@ def userpage(query: str):
         css='user.css',
         mode=int(mode),
         is_online=status.exists(user.id),
+        achievement_categories=app.constants.ACHIEVEMENTS,
+        achievements={a.name:a for a in user.achievements},
         activity=activities.fetch_recent(user.id, int(mode)),
         current_stats=stats.fetch_by_mode(user.id, int(mode)),
         pp_rank=leaderboards.global_rank(user.id, int(mode)),

@@ -358,7 +358,66 @@
             </tr>
             <td>
                 <div id="achievements" class="tab-content" style="opacity: 1; filter: none; display: none; height: 0px;">
-                    <!-- TODO -->
+                {% if not achievements %}
+                    This user has not achieved anything yet.
+                {% else %}
+                    <h2 class="profile-achievement-header">Beatmap Packs</h2>
+                    <div class="achievement-category">
+                        {% for achievement in achievement_categories['beatmap-packs'] %}
+                        <div class="achievement">
+                            {% if achievement in achievements %}
+                            <img src="/images/achievements/{{ achievements[achievement].filename }}" alt="" loading="lazy">
+                            {% else %}
+                            <img src="/images/achievements/unknown.png" alt="" loading="lazy">
+                            {% endif %}
+                            <br>
+                            <b>{{ achievement }}</b>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <h2 class="profile-achievement-header">Skill</h2>
+                    <div class="achievement-category">
+                        {% for achievement in achievement_categories['skill'] %}
+                        <div class="achievement">
+                            {% if achievement in achievements %}
+                            <img src="/images/achievements/{{ achievements[achievement].filename }}" alt="" loading="lazy">
+                            {% else %}
+                            <img src="/images/achievements/unknown.png" alt="" loading="lazy">
+                            {% endif %}
+                            <br>
+                            <b>{{ achievement }}</b>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <h2 class="profile-achievement-header">Dedication</h2>
+                    <div class="achievement-category">
+                        {% for achievement in achievement_categories['dedication'] %}
+                        <div class="achievement">
+                            {% if achievement in achievements %}
+                            <img src="/images/achievements/{{ achievements[achievement].filename }}" alt="" loading="lazy">
+                            {% else %}
+                            <img src="/images/achievements/unknown.png" alt="" loading="lazy">
+                            {% endif %}
+                            <br>
+                            <b>{{ achievement }}</b>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <h2 class="profile-achievement-header">Hush-Hush</h2>
+                    <div class="achievement-category">
+                        {% for achievement in achievement_categories['hush-hush'] %}
+                        <div class="achievement">
+                            {% if achievement in achievements %}
+                            <img src="/images/achievements/{{ achievements[achievement].filename }}" alt="" loading="lazy">
+                            {% else %}
+                            <img src="/images/achievements/unknown.png" alt="" loading="lazy">
+                            {% endif %}
+                            <br>
+                            <b>{{ achievement }}</b>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
                 </div>
             </td>
         </tbody>

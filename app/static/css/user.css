@@ -244,6 +244,15 @@
     margin-top: 15px;
 }
 
+.profile-achievement-header {
+    border-bottom: solid 1px #eacd5b;
+    font-weight: bold;
+    font-size: 120%;
+    clear: both;
+    margin-bottom: 5px;
+    margin-top: 15px;
+}
+
 .profile-performance {
     font-size: 120%;
     font-weight: normal;
@@ -384,4 +393,22 @@
 .profile-beatmap img {
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
     float: right;
+}
+
+.achievement-category {
+    padding-bottom: 10px;
+    display: grid;
+    grid-template-columns: repeat(4, 150px);
+    justify-content: space-between;
+    text-align: center;
+}
+
+.achievement {
+    margin: 5px;
+    float: left;
+    text-align: center;
+    width: 135px;
+    height: 120px;
+    margin-bottom: 15px;
+    font-size: 95%;
 }
