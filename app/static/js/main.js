@@ -3,7 +3,7 @@ function beatmapSearch()
     const inputValue = document.getElementById("beatmap-search").value.trim();
 
     if (inputValue !== '') {
-        window.location.href = `/beatmapsets?q=${encodeURIComponent(inputValue)}`;
+        window.location.href = `/beatmapsets?query=${encodeURIComponent(inputValue)}`;
         return false;
     }
     return true;
