@@ -230,7 +230,7 @@ function loadTopPlays(userId, mode, limit, offset)
         if (scores.length <= 0)
         {
           var noScoresText = document.createElement("p")
-          noScoresText.textContent = "No awesome performance records yet :(. ";
+          noScoresText.textContent = "No awesome performance records yet :(";
           scoreContainer.appendChild(noScoresText);
           return;
         }
@@ -321,7 +321,7 @@ function loadLeaderScores(userId, mode, limit, offset)
       if (scores.length <= 0)
       {
         var noScoresText = document.createElement("p")
-        noScoresText.textContent = "No first place records currently :(. ";
+        noScoresText.textContent = "No first place records currently :(";
         scoreContainer.appendChild(noScoresText);
         return;
       }
