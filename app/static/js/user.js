@@ -406,6 +406,14 @@ function loadMostPlayed(userId, limit, offset)
       return response.json();
     })
     .then(plays => {
+      if (plays.length <= 0)
+      {
+        playsContainer.appendChild(
+          document.createTextNode("This player has not played anything yet :(")
+        );
+        return;
+      }
+
       for (const [index, item] of plays.entries())
       {
         const beatmapLink = document.createElement("a");
