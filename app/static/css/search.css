@@ -26,3 +26,50 @@
     border-width: 1.5px;
     margin-left: 15px;
 }
+
+#beatmap-list {
+    margin-top: 25px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.beatmapset {
+    border-radius: 5px;
+    margin: 2.5px auto;
+    font-size: 85%;
+    background-color: #e7e4fc;
+    border: solid 1px #dad7fb;
+    width: 415px;
+}
+
+.beatmapset:hover {
+    background-color: #eae7ff;
+}
+
+.beatmap-image {
+    background-repeat: no-repeat;
+    float: left;
+    height: 60px;
+    width: 80px;
+    margin-right: 5px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.beatmap-image i {
+    display: none;
+}
+
+.beatmap-info i {
+    margin-right: 2.5px;
+    font-size: 95%;
+}
+
+.beatmap-link, .beatmap-link:visited {
+    color: #0c0c0c;
+}
+
+.beatmap-link:hover {
+    color: #696969;
+    text-decoration: none;
+}
