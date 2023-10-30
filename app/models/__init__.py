@@ -4,4 +4,5 @@ from .history import RankHistoryModel, PlaysHistoryModel, ReplayHistoryModel
 from .beatmapset import BeatmapsetModel
 from .activity import ActivityModel
 from .beatmap import BeatmapModel
+from .search import SearchRequest
 from .score import ScoreModel
