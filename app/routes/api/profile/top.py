@@ -9,8 +9,6 @@ from app.models import ScoreModel
 
 router = Blueprint("top", __name__)
 
-import config
-
 @router.get('/<user_id>/top/<mode>')
 @validate()
 def top_plays(
