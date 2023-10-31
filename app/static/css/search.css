@@ -1,6 +1,10 @@
 
 @import url("main.css");
 
+.page {
+    margin: 0;
+}
+
 .beatmap-search-container h1 {
     font-size: 150%;
     font-weight: 100;
@@ -35,7 +39,8 @@
 
 .beatmapset {
     border-radius: 5px;
-    margin: 2.5px auto;
+    /* margin: 2.5px auto; -> Center */
+    margin: 2.5px 8px 2.5px 5.5px;
     font-size: 85%;
     background-color: #e7e4fc;
     border: solid 1px #dad7fb;
@@ -61,8 +66,8 @@
 }
 
 .beatmap-info i {
-    margin-right: 2.5px;
-    font-size: 95%;
+    margin-right: 4px;
+    font-size: 90%;
 }
 
 .beatmap-link, .beatmap-link:visited {
