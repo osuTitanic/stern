@@ -15,7 +15,7 @@ class SearchRequest(BaseModel):
     mode: Optional[GameMode] = None
     played: Optional[bool] = None
     query: Optional[str] = None
-    sort: BeatmapSortBy = BeatmapSortBy.Plays
+    sort: BeatmapSortBy = BeatmapSortBy.RankedDesc
     status: Optional[int] = None
     has_storyboard: bool = False
     has_video: bool = False
