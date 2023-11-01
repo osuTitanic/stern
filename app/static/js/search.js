@@ -116,4 +116,19 @@ function setInput()
     getBeatmapsets();
 }
 
+var input = document.getElementById("search-input");
+var timeout = null;
+
+input.addEventListener("keyup", (e) => {
+    var input = document.getElementById("search-input");
+    var query = new URLSearchParams(location.search);
+
+    clearTimeout(timeout);
+
+    timeout = setTimeout(() => {
+        query.set("query", input.value);
+        location.search = query.toString();
+    }, 500);
+});
+
 window.addEventListener('load', setInput);
