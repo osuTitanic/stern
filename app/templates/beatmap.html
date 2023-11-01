@@ -58,7 +58,7 @@
                 <td>Artist:</td>
                 <td>
                 {% if beatmapset.artist %}
-                    <a href="/beatmapsets?q={{ beatmapset.artist }}">{{ beatmapset.artist }}</a>
+                    <a href="/beatmapsets?query={{ beatmapset.artist }}">{{ beatmapset.artist }}</a>
                 {% endif %}
                 </td>
                 <td>Circle Size:</td>
@@ -78,7 +78,7 @@
                 <td>Title:</td>
                 <td>
                 {% if beatmapset.title %}
-                    <a href="/beatmapsets?q={{ beatmapset.title }}">{{ beatmapset.title }}</a>
+                    <a href="/beatmapsets?query={{ beatmapset.title }}">{{ beatmapset.title }}</a>
                 {% endif %}
                 </td>
                 <td>HP Drain:</td>
@@ -121,14 +121,14 @@
                 <td>Source:</td>
                 <td>
                     {% if beatmapset.source %}
-                    <a href="/beatmapsets?q={{ beatmapset.source }}">{{ beatmapset.source }}</a>
+                    <a href="/beatmapsets?query={{ beatmapset.source }}">{{ beatmapset.source }}</a>
                     {% endif %}
                 </td>
                 <td>Genre:</td>
                 <td>
-                    <a href="/beatmapsets?g={{ beatmapset.genre_id }}">{{ Genre(beatmapset.genre_id).name }}</a>
+                    <a href="/beatmapsets?genre={{ beatmapset.genre_id }}">{{ Genre(beatmapset.genre_id).name }}</a>
                     {% if beatmapset.language_id > 1 %}
-                    <a href="/beatmapsets?l={{ beatmapset.language_id }}">({{ Language(beatmapset.language_id).name }})</a>
+                    <a href="/beatmapsets?language={{ beatmapset.language_id }}">({{ Language(beatmapset.language_id).name }})</a>
                     {% endif %}
                 </td>
                 <td><strong>BPM:</strong></td>
