@@ -27,10 +27,11 @@ def search_api():
         query.played,
         None, # TODO: user_id
         query.mode,
-        query.status,
+        query.order,
+        query.category,
         query.sort,
-        query.has_storyboard,
-        query.has_video,
+        query.storyboard,
+        query.video,
         query.offset,
         query.limit
     )

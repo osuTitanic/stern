@@ -3,9 +3,11 @@ from pydantic import BaseModel
 from typing import Optional
 
 from app.common.constants import (
+    BeatmapCategory,
     BeatmapLanguage,
     BeatmapSortBy,
     BeatmapGenre,
+    BeatmapOrder,
     GameMode
 )
 
@@ -15,9 +17,10 @@ class SearchRequest(BaseModel):
     mode: Optional[GameMode] = None
     played: Optional[bool] = None
     query: Optional[str] = None
-    sort: BeatmapSortBy = BeatmapSortBy.RankedDesc
-    status: Optional[int] = None
-    has_storyboard: bool = False
-    has_video: bool = False
+    category: BeatmapCategory = BeatmapCategory.Leaderboard
+    order: BeatmapOrder = BeatmapOrder.Descending
+    sort: BeatmapSortBy = BeatmapSortBy.Ranked
+    storyboard: bool = False
+    video: bool = False
     offset: int = 0
     limit: int = 40

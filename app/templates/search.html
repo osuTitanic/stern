@@ -6,6 +6,36 @@
 <div class="beatmap-search-container">
     <h1>Beatmap Listing</h1>
     <input id="search-input" type="search" placeholder="Search for a beatmap..." value="{{ query }}">
+    <div class="beatmap-options">
+        <div>
+            <label for="mode">Mode</label>
+            <select name="mode" id="mode" autocomplete="off" onchange="reloadInput()">
+                <option value="-1">Any</option>
+                <option value="0">osu!</option>
+                <option value="1">osu!taiko</option>
+                <option value="2">osu!catch</option>
+                <option value="3">osu!mania</option>
+            </select>
+        </div>
+        <div>
+            <label for="category">Category</label>
+            <select name="category" id="category" autocomplete="off" onchange="reloadInput()">
+                <option value="0">Any</option>
+                <option value="1" selected>Has Leaderboard</option>
+                <option value="2">Ranked</option>
+                <option value="3">Qualified</option>
+                <option value="4">Loved</option>
+                <option value="5">Approved</option>
+                <option value="6">Pending</option>
+            </select>
+        </div>
+        <div>
+            <input type="checkbox" name="video" id="video" onchange="reloadInput()">
+            <label for="video">Has Video</label>
+            <input type="checkbox" name="storyboard" id="storyboard" onchange="reloadInput()">
+            <label for="storyboard">Has Storyboard</label>
+        </div>
+    </div>
     <div id="beatmap-list">
         <h3 id="loading-text">Loading...</h3>
     </div>

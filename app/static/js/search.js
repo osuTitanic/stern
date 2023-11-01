@@ -15,6 +15,8 @@ function getBeatmapsets()
             if (loadingText)
                 loadingText.remove();
 
+            beatmapContainer.innerHTML = ""; // Remove child elements
+
             if (beatmapsets.length <= 0)
             {
                 var noMapsText = document.createElement("h3");
@@ -37,7 +39,7 @@ function getBeatmapsets()
 
                 beatmapImage.appendChild(playIcon);
                 beatmapsetDiv.appendChild(beatmapImage);
-                
+
                 var beatmapInfo = document.createElement("div");
                 beatmapInfo.classList.add("beatmap-info");
 
@@ -71,4 +73,47 @@ function getBeatmapsets()
         });
 }
 
-window.addEventListener('load', getBeatmapsets);
+function reloadInput()
+{
+    var query = new URLSearchParams(location.search);
+    var category = document.getElementById("category").value;
+    var mode = document.getElementById("mode").value;
+
+    var storyboard = document.getElementById("storyboard").checked;
+    var video = document.getElementById("video").checked;
+
+    query.delete("category");
+    query.delete("mode");
+    query.delete("storyboard");
+    query.delete("video");
+
+    if (category != 1) query.set("category", category);
+    if (mode != -1) query.set("mode", mode);
+
+    if (storyboard == true) query.set("storyboard", true);
+    if (video == true) query.set("video", true);
+
+    // Browser will reload
+    location.search = query.toString();
+}
+
+function setInput()
+{
+    var query = new URLSearchParams(location.search);
+
+    var storyboard = document.getElementById("storyboard");
+    var video = document.getElementById("video");
+
+    if (query.get("storyboard")) storyboard.checked = true;
+    if (query.get("video")) video.checked = true;
+
+    var category = document.getElementById("category");
+    var mode = document.getElementById("mode");
+
+    if (query.get("category")) category.value = query.get("category");
+    if (query.get("mode")) mode.value = query.get("mode");
+
+    getBeatmapsets();
+}
+
+window.addEventListener('load', setInput);
