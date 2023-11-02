@@ -138,7 +138,6 @@ function getBeatmapsets()
                 beatmapCreatorDiv.classList.add("beatmap-creator");
 
                 beatmapInfoLeft.appendChild(beatmapLink);
-                beatmapInfoLeft.appendChild(beatmapCreatorDiv);
 
                 var beatmapInfoRight = document.createElement("div");
                 beatmapInfoRight.classList.add("beatmap-info-right");
@@ -167,8 +166,8 @@ function getBeatmapsets()
                 }
 
                 beatmapInfoRight.appendChild(beatmapTagsDiv);
-
                 beatmapsetDiv.appendChild(beatmapInfoLeft);
+                beatmapsetDiv.appendChild(beatmapCreatorDiv);
                 beatmapsetDiv.appendChild(beatmapInfoRight);
                 beatmapContainer.appendChild(beatmapsetDiv);
             });

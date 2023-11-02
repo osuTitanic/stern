@@ -100,6 +100,7 @@
 .beatmap-info-left i {
     margin-right: 4px;
     font-size: 90%;
+    white-space: nowrap;
 }
 
 .beatmap-link, .beatmap-link:visited {
@@ -113,6 +114,9 @@
 
 .beatmap-creator {
     font-size: 80%;
+    float: left;
+    white-space: nowrap;
+    max-width: 10px;
 }
 
 .beatmap-creator span {
