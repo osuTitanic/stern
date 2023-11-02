@@ -92,7 +92,11 @@
     font-size: 480%;
 }
 
-.beatmap-info i {
+.beatmap-info-left {
+    float: left;
+}
+
+.beatmap-info-left i {
     margin-right: 4px;
     font-size: 90%;
 }
@@ -112,4 +116,10 @@
 
 .beatmap-creator span {
     color: grey;
+}
+
+.beatmap-info-right {
+    text-align: right;
+    float: right;
+    padding: 5px;
 }

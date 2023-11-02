@@ -64,8 +64,8 @@ function getBeatmapsets()
                 beatmapsetDiv.appendChild(beatmapImage);
                 beatmapsetDiv.appendChild(beatmapAudio);
 
-                var beatmapInfo = document.createElement("div");
-                beatmapInfo.classList.add("beatmap-info");
+                var beatmapInfoLeft = document.createElement("div");
+                beatmapInfoLeft.classList.add("beatmap-info-left");
 
                 var beatmapLink = document.createElement("a");
                 beatmapLink.classList.add("beatmap-link");
@@ -79,10 +79,10 @@ function getBeatmapsets()
                 imageIcon.classList.add("fa-regular", "fa-image");
 
                 if (beatmapset.has_video)
-                    beatmapInfo.appendChild(videoIcon);
+                    beatmapInfoLeft.appendChild(videoIcon);
 
                 if (beatmapset.has_storyboard)
-                    beatmapInfo.appendChild(imageIcon);
+                    beatmapInfoLeft.appendChild(imageIcon);
 
                 beatmapCreator = document.createElement("span");
                 beatmapCreator.textContent = "mapped by ";
@@ -97,9 +97,13 @@ function getBeatmapsets()
                 beatmapCreatorDiv.appendChild(beatmapCreatorLink);
                 beatmapCreatorDiv.classList.add("beatmap-creator");
 
-                beatmapInfo.appendChild(beatmapLink);
-                beatmapInfo.appendChild(beatmapCreatorDiv);
-                beatmapsetDiv.appendChild(beatmapInfo);
+                beatmapInfoLeft.appendChild(beatmapLink);
+                beatmapInfoLeft.appendChild(beatmapCreatorDiv);
+
+                var beatmapInfoRight = document.createElement("div");
+                beatmapInfoRight.classList.add("beatmap-info-right");
+
+                beatmapsetDiv.appendChild(beatmapInfoLeft);
                 beatmapContainer.appendChild(beatmapsetDiv);
             });
         })
