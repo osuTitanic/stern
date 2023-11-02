@@ -93,7 +93,7 @@
 }
 
 .beatmap-info-left {
-    float: left;
+    overflow: hidden;
 }
 
 .beatmap-info-left i {
@@ -122,4 +122,5 @@
     text-align: right;
     float: right;
     padding: 5px;
+    overflow: hidden;
 }
