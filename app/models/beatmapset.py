@@ -1,7 +1,9 @@
 
+from pydantic import BaseModel, validator
 from typing import Optional, List
-from pydantic import BaseModel
 from datetime import datetime
+
+from app.common.database import DBRating, DBFavourite
 
 class _BeatmapModel(BaseModel):
     id: int
@@ -43,4 +45,19 @@ class BeatmapsetModel(BaseModel):
     osz_filesize_novideo: int
     language_id: int
     genre_id: int
+    ratings: list
+    favourites: list
     beatmaps: List[_BeatmapModel]
+
+    @validator('ratings')
+    def avg_rating(cls, ratings: List[DBRating]) -> float:
+        if not ratings:
+            return 0.0
+
+        ratings = [r.rating for r in ratings]
+
+        return sum(ratings) / len(ratings)
+
+    @validator('favourites')
+    def sum_favourites(cls, favourites: List[DBFavourite]) -> int:
+        return len(favourites)
