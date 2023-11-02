@@ -84,9 +84,21 @@ function getBeatmapsets()
                 if (beatmapset.has_storyboard)
                     beatmapInfo.appendChild(imageIcon);
 
-                // TODO: More stuff lol
+                beatmapCreator = document.createElement("span");
+                beatmapCreator.textContent = "mapped by ";
+
+                beatmapCreatorLink = document.createElement("a");
+                beatmapCreatorLink.textContent = beatmapset.creator;
+                if (beatmapset.server == 0) beatmapCreatorLink.href = `https://osu.ppy.sh/u/${beatmapset.creator}`
+                else beatmapCreatorLink.href = `/u/${set.creator}` // TODO: CreatorId
+
+                beatmapCreatorDiv = document.createElement("div");
+                beatmapCreatorDiv.appendChild(beatmapCreator);
+                beatmapCreatorDiv.appendChild(beatmapCreatorLink);
+                beatmapCreatorDiv.classList.add("beatmap-creator");
 
                 beatmapInfo.appendChild(beatmapLink);
+                beatmapInfo.appendChild(beatmapCreatorDiv);
                 beatmapsetDiv.appendChild(beatmapInfo);
                 beatmapContainer.appendChild(beatmapsetDiv);
             });

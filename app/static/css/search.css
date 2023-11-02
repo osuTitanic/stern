@@ -105,3 +105,11 @@
     color: #696969;
     text-decoration: none;
 }
+
+.beatmap-creator {
+    font-size: 81%;
+}
+
+.beatmap-creator span {
+    color: grey;
+}
