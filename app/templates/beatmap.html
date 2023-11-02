@@ -195,7 +195,7 @@
         </div>
         <div class="beatmap-description" title="Play Song">
             <a onclick="resetOrPlayAudio('beatmap-preview')">
-                <img src="http://s.{{ config.DOMAIN_NAME }}/mt/{{ beatmapset.id }}l" alt="Beatmap Image">
+                <img src="http://s.{{ config.DOMAIN_NAME }}/mt/{{ beatmapset.id }}l" alt="">
                 <audio id="beatmap-preview" src="http://s.{{ config.DOMAIN_NAME }}/mp3/preview/{{ beatmapset.id }}.mp3" preload="auto"></audio>
             </a>
             {{ beatmapset.description|safe }}
