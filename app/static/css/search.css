@@ -79,10 +79,17 @@
 .beatmap-image:hover i {
     display: inline-block;
     color: rgba(255, 255, 255, 0.9);
-    font-size: 400%;
     line-height: 60px;
     text-shadow: 0px 0px 5px #000000;
     text-decoration: none;
+}
+
+.fa-play {
+    font-size: 400%;
+}
+
+.fa-pause {
+    font-size: 480%;
 }
 
 .beatmap-info i {

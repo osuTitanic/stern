@@ -39,8 +39,22 @@ function getBeatmapsets()
 
                 var playIcon = document.createElement("i");
                 playIcon.classList.add("fa-solid", "fa-play");
+
                 playIcon.onclick = (e) => {
                     resetOrPlayAudio(`beatmap-preview-${beatmapset.id}`);
+
+                    var audio = document.getElementById(`beatmap-preview-${beatmapset.id}`);
+
+                    if (audio.paused)
+                    {
+                        playIcon.classList.remove("fa-pause");
+                        playIcon.classList.add("fa-play");
+                    }
+                    else
+                    {
+                        playIcon.classList.remove("fa-play");
+                        playIcon.classList.add("fa-pause");
+                    }
                 };
 
                 beatmapImage.appendChild(playIcon);
