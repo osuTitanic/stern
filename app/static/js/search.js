@@ -30,12 +30,12 @@ function getBeatmapsets()
                 beatmapsetDiv.classList.add("beatmapset");
 
                 var beatmapAudio = document.createElement("audio");
-                beatmapAudio.src = `http://s.localhost/mp3/preview/${beatmapset.id}` // TODO: Domain Name
+                beatmapAudio.src = `http://s.${domainName}/mp3/preview/${beatmapset.id}`
                 beatmapAudio.id = `beatmap-preview-${beatmapset.id}`;
 
                 var beatmapImage = document.createElement("div");
                 beatmapImage.classList.add("beatmap-image");
-                beatmapImage.style.backgroundImage = `url("http://s.localhost/mt/${beatmapset.id}")`; // TODO: Domain Name
+                beatmapImage.style.backgroundImage = `url("http://s.${domainName}/mt/${beatmapset.id}")`;
 
                 var playIcon = document.createElement("i");
                 playIcon.classList.add("fa-solid", "fa-play");
