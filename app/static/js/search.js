@@ -39,6 +39,9 @@ function getBeatmapsets()
 
                 var playIcon = document.createElement("i");
                 playIcon.classList.add("fa-solid", "fa-play");
+                playIcon.onclick = (e) => {
+                    resetOrPlayAudio(`beatmap-preview-${beatmapset.id}`);
+                };
 
                 beatmapImage.appendChild(playIcon);
                 beatmapsetDiv.appendChild(beatmapImage);
