@@ -125,3 +125,13 @@
     padding: 5px;
     overflow: hidden;
 }
+
+.beatmap-tags a {
+    font-size: 80%;
+    display: inline-block;
+    background-color: #dad7fb;
+    border: solid 1px #cac7eb;
+    border-radius: 2px;
+    padding: 1px;
+    margin-left: 2.5px;
+}

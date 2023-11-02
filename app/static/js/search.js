@@ -143,7 +143,33 @@ function getBeatmapsets()
                 var beatmapInfoRight = document.createElement("div");
                 beatmapInfoRight.classList.add("beatmap-info-right");
 
+                var beatmapTagsDiv = document.createElement("div");
+                beatmapTagsDiv.classList.add("beatmap-tags");
+
+                if (beatmapset.language_id > 1)
+                {
+                    var query = new URLSearchParams(location.search);
+                    query.set("language", beatmapset.language_id);
+                    var languageTag = document.createElement("a");
+                    languageTag.textContent = Languages.get(beatmapset.language_id).toString();
+                    languageTag.href = `?${query.toString()}`
+                    beatmapTagsDiv.appendChild(languageTag);
+                }
+
+                if (beatmapset.genre_id > 1)
+                {
+                    var query = new URLSearchParams(location.search);
+                    query.set("genre", beatmapset.genre_id);
+                    var genreTag = document.createElement("a");
+                    genreTag.textContent = Genres.get(beatmapset.genre_id).toString().replace("_", " ");
+                    genreTag.href = `?${query.toString()}`
+                    beatmapTagsDiv.appendChild(genreTag);
+                }
+
+                beatmapInfoRight.appendChild(beatmapTagsDiv);
+
                 beatmapsetDiv.appendChild(beatmapInfoLeft);
+                beatmapsetDiv.appendChild(beatmapInfoRight);
                 beatmapContainer.appendChild(beatmapsetDiv);
             });
         })
