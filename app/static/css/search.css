@@ -50,10 +50,11 @@
     border-radius: 5px;
     /* margin: 2.5px auto; -> Center */
     margin: 2.5px 8px 2.5px 5.5px;
-    font-size: 85%;
+    font-size: 80%;
     background-color: #e7e4fc;
     border: solid 1px #dad7fb;
     width: 415px;
+    height: 65;
 }
 
 .beatmapset:hover {
@@ -63,9 +64,10 @@
 .beatmap-image {
     background-color: rgb(100, 100, 100);
     background-repeat: no-repeat;
+    background-size: cover;
     float: left;
-    height: 60px;
-    width: 80px;
+    height: 70px;
+    width: 90px;
     margin-right: 5px;
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
@@ -80,7 +82,7 @@
 .beatmap-image:hover i {
     display: inline-block;
     color: rgba(255, 255, 255, 0.9);
-    line-height: 60px;
+    line-height: 70px;
     text-shadow: 0px 0px 5px #000000;
     text-decoration: none;
 }
@@ -94,6 +96,7 @@
 }
 
 .beatmap-info {
+    white-space: nowrap;
     overflow: hidden;
 }
 
@@ -105,6 +108,7 @@
 
 .beatmap-link, .beatmap-link:visited {
     color: #0c0c0c;
+    width: 100%;
 }
 
 .beatmap-link:hover {
@@ -124,10 +128,9 @@
 }
 
 .beatmap-stats {
+    padding: 5px;
     text-align: right;
     float: right;
-    padding: 5px;
-    overflow: hidden;
 }
 
 .beatmap-tags a {
@@ -144,7 +147,6 @@
     display: inline-block;
     width: 100px;
     height: 5px;
-    margin: 2px 0px 2px 0px;
     background-color: rgb(158,203,22);
     border: solid 1px #dad7fb;
     border-radius: 4px;
@@ -153,5 +155,15 @@
 .beatmap-rating-bar {
     height: 100%;
     border-radius: 4px;
-    background-color: rgb(237,28,36);
+    background-color: rgb(237, 28, 36);
+}
+
+.beatmap-details {
+    font-size: 75%;
+}
+
+.beatmap-details i {
+    font-size: 100% !important;
+    padding-left: 4px;
+    padding-right: 2.5px;
 }

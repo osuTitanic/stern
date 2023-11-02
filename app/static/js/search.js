@@ -145,7 +145,7 @@ function getBeatmapsets()
                 var beatmapTagsDiv = document.createElement("div");
                 beatmapTagsDiv.classList.add("beatmap-tags");
 
-                if (beatmapset.language_id > 1)
+                if (beatmapset.language_id > 0)
                 {
                     var query = new URLSearchParams(location.search);
                     query.set("language", beatmapset.language_id);
@@ -155,7 +155,7 @@ function getBeatmapsets()
                     beatmapTagsDiv.appendChild(languageTag);
                 }
 
-                if (beatmapset.genre_id > 1)
+                if (beatmapset.genre_id > 0)
                 {
                     var query = new URLSearchParams(location.search);
                     query.set("genre", beatmapset.genre_id);
@@ -173,8 +173,26 @@ function getBeatmapsets()
                 beatmapRating.classList.add("beatmap-rating");
                 beatmapRating.appendChild(ratingBar);
 
+                var heartIcon = document.createElement("i");
+                heartIcon.classList.add("fa-solid", "fa-heart");
+
+                var playsIcon = document.createElement("i");
+                playsIcon.classList.add("fa-solid", "fa-play");
+
+                var totalPlays = beatmapset.beatmaps
+                            .map((item) => item.playcount)
+                            .reduce((prev, next) => prev + next);
+
+                var detailsDiv = document.createElement("div");
+                detailsDiv.classList.add("beatmap-details")
+                detailsDiv.appendChild(heartIcon);
+                detailsDiv.appendChild(document.createTextNode(beatmapset.favourites));
+                detailsDiv.appendChild(playsIcon);
+                detailsDiv.appendChild(document.createTextNode(totalPlays));
+
                 beatmapInfoRight.appendChild(beatmapTagsDiv);
                 beatmapInfoRight.appendChild(beatmapRating);
+                beatmapInfoRight.appendChild(detailsDiv);
 
                 beatmapsetDiv.appendChild(beatmapInfoLeft);
                 beatmapsetDiv.appendChild(beatmapCreatorDiv);
