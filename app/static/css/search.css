@@ -54,7 +54,6 @@
     background-color: #e7e4fc;
     border: solid 1px #dad7fb;
     width: 415px;
-    height: 60px;
 }
 
 .beatmapset:hover {
@@ -62,6 +61,7 @@
 }
 
 .beatmap-image {
+    background-color: rgb(100, 100, 100);
     background-repeat: no-repeat;
     float: left;
     height: 60px;
@@ -138,4 +138,20 @@
     border-radius: 2px;
     padding: 1px;
     margin-left: 2.5px;
+}
+
+.beatmap-rating {
+    display: inline-block;
+    width: 100px;
+    height: 5px;
+    margin: 2px 0px 2px 0px;
+    background-color: rgb(158,203,22);
+    border: solid 1px #dad7fb;
+    border-radius: 4px;
+}
+
+.beatmap-rating-bar {
+    height: 100%;
+    border-radius: 4px;
+    background-color: rgb(237,28,36);
 }

@@ -165,7 +165,17 @@ function getBeatmapsets()
                     beatmapTagsDiv.appendChild(genreTag);
                 }
 
+                var ratingBar = document.createElement("div");
+                ratingBar.style.width = `${100 - ((beatmapset.ratings / 10) * 100)}%`;
+                ratingBar.classList.add("beatmap-rating-bar");
+
+                var beatmapRating = document.createElement("div");
+                beatmapRating.classList.add("beatmap-rating");
+                beatmapRating.appendChild(ratingBar);
+
                 beatmapInfoRight.appendChild(beatmapTagsDiv);
+                beatmapInfoRight.appendChild(beatmapRating);
+
                 beatmapsetDiv.appendChild(beatmapInfoLeft);
                 beatmapsetDiv.appendChild(beatmapCreatorDiv);
                 beatmapsetDiv.appendChild(beatmapInfoRight);
