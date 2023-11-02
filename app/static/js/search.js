@@ -105,7 +105,7 @@ function getBeatmapsets()
                 beatmapsetDiv.appendChild(beatmapAudio);
 
                 var beatmapInfoLeft = document.createElement("div");
-                beatmapInfoLeft.classList.add("beatmap-info-left");
+                beatmapInfoLeft.classList.add("beatmap-info");
 
                 var beatmapLink = document.createElement("a");
                 beatmapLink.classList.add("beatmap-link");
@@ -140,7 +140,7 @@ function getBeatmapsets()
                 beatmapInfoLeft.appendChild(beatmapLink);
 
                 var beatmapInfoRight = document.createElement("div");
-                beatmapInfoRight.classList.add("beatmap-info-right");
+                beatmapInfoRight.classList.add("beatmap-stats");
 
                 var beatmapTagsDiv = document.createElement("div");
                 beatmapTagsDiv.classList.add("beatmap-tags");

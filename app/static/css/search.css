@@ -93,11 +93,11 @@
     font-size: 480%;
 }
 
-.beatmap-info-left {
+.beatmap-info {
     overflow: hidden;
 }
 
-.beatmap-info-left i {
+.beatmap-info i {
     margin-right: 4px;
     font-size: 90%;
     white-space: nowrap;
@@ -123,7 +123,7 @@
     color: grey;
 }
 
-.beatmap-info-right {
+.beatmap-stats {
     text-align: right;
     float: right;
     padding: 5px;
