@@ -42,6 +42,10 @@
     flex-wrap: wrap;
 }
 
+#loading-text {
+    margin: 0 auto;
+}
+
 .beatmapset {
     border-radius: 5px;
     /* margin: 2.5px auto; -> Center */
