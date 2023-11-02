@@ -60,6 +60,7 @@ function getBeatmapsets()
             {
                 var noMapsText = document.createElement("h3");
                 noMapsText.textContent = "Nothing found... :("
+                noMapsText.style.margin = "0 auto";
                 beatmapContainer.appendChild(noMapsText);
                 return;
             }
