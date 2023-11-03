@@ -7,34 +7,72 @@
     <h1>Beatmap Listing</h1>
     <input id="search-input" type="search" placeholder="Search for a beatmap..." value="{{ query }}">
     <div class="beatmap-options">
-        <div>
-            <label for="mode">Mode</label>
-            <select name="mode" id="mode" autocomplete="off" onchange="reloadInput()">
-                <option value="-1">Any</option>
-                <option value="0">osu!</option>
-                <option value="1">osu!taiko</option>
-                <option value="2">osu!catch</option>
-                <option value="3">osu!mania</option>
-            </select>
-        </div>
-        <div>
-            <label for="category">Category</label>
-            <select name="category" id="category" autocomplete="off" onchange="reloadInput()">
-                <option value="0">Any</option>
-                <option value="1" selected>Has Leaderboard</option>
-                <option value="2">Ranked</option>
-                <option value="3">Qualified</option>
-                <option value="4">Loved</option>
-                <option value="5">Approved</option>
-                <option value="6">Pending</option>
-            </select>
-        </div>
-        <div>
-            <input type="checkbox" name="video" id="video" onchange="reloadInput()">
-            <label for="video">Has Video</label>
-            <input type="checkbox" name="storyboard" id="storyboard" onchange="reloadInput()">
-            <label for="storyboard">Has Storyboard</label>
-        </div>
+        <dl data-name="mode">
+            <dt>Mode:</dt>
+            <dd>
+                <a class="selected" data-id="">Any</a>
+                <a data-id="0">osu!</a>
+                <a data-id="1">osu!taiko</a>
+                <a data-id="2">osu!catch</a>
+                <a data-id="3">osu!mania</a>
+            </dd>
+        </dl>
+        <dl data-name="category">
+            <dt>Category:</dt>
+            <dd>
+                <a data-id="" class="selected">Has Leaderboard</a>
+                <a data-id="2">Ranked</a>
+                <a data-id="3">Qualified</a>
+                <a data-id="4">Loved</a>
+                <a data-id="5">Approved</a>
+                <a data-id="6">Pending</a>
+                <a data-id="0">All</a>
+            </dd>
+        </dl>
+        <dl data-name="genre">
+            <dt>Genre:</dt>
+            <dd>
+                <a data-id="" class="selected">Any</a>
+                <a data-id="1">Unspecified</a>
+                <a data-id="2">Video Game</a>
+                <a data-id="3">Anime</a>
+                <a data-id="4">Rock</a>
+                <a data-id="5">Pop</a>
+                <a data-id="6">Other</a>
+                <a data-id="7">Novelty</a>
+                <a data-id="9">Hip Hop</a>
+                <a data-id="10">Electronic</a>
+                <a data-id="11">Metal</a>
+                <a data-id="12">Classical</a>
+                <a data-id="13">Folk</a>
+                <a data-id="14">Jazz</a>
+            </dd>
+        </dl>
+        <dl data-name="language">
+            <dt>Language:</dt>
+            <dd>
+                <a data-id="" class="selected">Any</a>
+                <a data-id="2">English</a>
+                <a data-id="3">Japanese</a>
+                <a data-id="4">Chinese</a>
+                <a data-id="5">Instrumental</a>
+                <a data-id="6">Korean</a>
+                <a data-id="7">French</a>
+                <a data-id="8">German</a>
+                <a data-id="9">Swedish</a>
+                <a data-id="10">Spanish</a>
+                <a data-id="11">Italian</a>
+                <a data-id="12">Russian</a>
+                <a data-id="13">Polish</a>
+            </dd>
+        </dl>
+        <dl>
+            <dt>Extra:</dt>
+            <dd>
+                <a data-name="video">Has Video</a>
+                <a data-name="storyboard">Has Storyboard</a>
+            </dd>
+        </dl>
     </div>
     <div id="beatmap-list">
         <h3 id="loading-text">Loading...</h3>
