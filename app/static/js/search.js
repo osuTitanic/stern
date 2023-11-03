@@ -7,7 +7,7 @@ const Genres = {
     Pop: 5,
     Other: 6,
     Novelty: 7,
-    HipHop: 9,
+    Hip_Hop: 9,
     Electronic: 10,
     Metal: 11,
     Classical: 12,
@@ -208,50 +208,119 @@ function getBeatmapsets()
 
 function reloadInput()
 {
-    var query = new URLSearchParams(location.search);
-    var category = document.getElementById("category").value;
-    var mode = document.getElementById("mode").value;
+    const dataElements = document.querySelectorAll(".beatmap-options dl");
+    var query = new URLSearchParams();
 
-    var storyboard = document.getElementById("storyboard").checked;
-    var video = document.getElementById("video").checked;
+    dataElements.forEach(item => {
+        var dataName = item.getAttribute("data-name");
 
-    query.delete("category");
-    query.delete("mode");
-    query.delete("storyboard");
-    query.delete("video");
+        // Element has no "data-name"
+        // Multiple selections can be made
+        if (!dataName)
+        {
+            item.querySelectorAll(".selected")
+                .forEach(selectedElement => {
+                    query.set(selectedElement.getAttribute("data-name"), "true");
+                });
+            return;
+        }
 
-    if (category != 1) query.set("category", category);
-    if (mode != -1) query.set("mode", mode);
+        var selectedElement = item.querySelector(".selected");
+        var dataValue = selectedElement.getAttribute("data-id");
 
-    if (storyboard == true) query.set("storyboard", true);
-    if (video == true) query.set("video", true);
+        // Don't set parameter if "data-id" is empty
+        if (dataValue.length > 0)
+            query.set(dataName, dataValue);
+    });
+
+    // Keep search input from previous request
+    var search = new URLSearchParams(location.search).get("query");
+    if (search.length) query.set("query", search);
 
     // Browser will reload
     location.search = query.toString();
 }
 
-function setInput()
+function setElement(element)
 {
-    var query = new URLSearchParams(location.search);
+    const dataName = element.closest("[data-name]")?.getAttribute("data-name");
+    const elements = element.parentNode.querySelectorAll("a");
 
-    var storyboard = document.getElementById("storyboard");
-    var video = document.getElementById("video");
+    if (!dataName)
+    {
+        element.classList.toggle("selected");
+        reloadInput();
+        return;
+    }
 
-    if (query.get("storyboard")) storyboard.checked = true;
-    if (query.get("video")) video.checked = true;
+    elements.forEach(dataElement => {
+        if (dataElement !== element)
+            dataElement.classList.remove("selected");
+    });
 
-    var category = document.getElementById("category");
-    var mode = document.getElementById("mode");
+    element.classList.toggle("selected");
 
-    if (query.get("category")) category.value = query.get("category");
-    if (query.get("mode")) mode.value = query.get("mode");
+    // Select default/first element if no element was selected
+    if (!element.parentNode.querySelector(".selected"))
+        elements[0].classList.add("selected");
 
-    getBeatmapsets();
+    reloadInput();
 }
+
+document.querySelectorAll(".beatmap-options a")
+        .forEach(selectableElement => {
+            selectableElement.addEventListener("click", (event) => {
+                event.preventDefault();
+                setElement(event.target);
+            })
+        });
+
+window.addEventListener('load', () => {
+    const dataElements = document.querySelectorAll(".beatmap-options dl");
+    const query = new URLSearchParams(location.search);
+
+    // Reset "selected" class based on query
+    dataElements.forEach(item => {
+        var dataName = item.getAttribute("data-name");
+
+        if (!dataName)
+        {
+            // Element has no "data-name"
+            // Multiple selections can be made
+            item.querySelectorAll("a").forEach(element => {
+                const elementDataName = element.getAttribute("data-name");
+
+                if (elementDataName) {
+                    const queryValue = query.get(elementDataName);
+                    element.classList.toggle("selected", queryValue === "true");
+                }
+            })
+            return;
+        }
+
+        const queryValue = query.get(dataName);
+
+        if (queryValue)
+        {
+            item.querySelectorAll(".selected").forEach(selectedElement => {
+                selectedElement.classList.remove("selected");
+            });
+
+            const selectedItem = item.querySelector(`a[data-id="${queryValue}"]`);
+            if (selectedItem) {
+                selectedItem.classList.add("selected");
+            }
+        }
+    });
+
+    // Load beatmapsets
+    getBeatmapsets();
+});
 
 var input = document.getElementById("search-input");
 var timeout = null;
 
+// Event listener for search query input
 input.addEventListener("keyup", (e) => {
     var input = document.getElementById("search-input");
     var query = new URLSearchParams(location.search);
@@ -263,5 +332,3 @@ input.addEventListener("keyup", (e) => {
         location.search = query.toString();
     }, 500);
 });
-
-window.addEventListener('load', setInput);
