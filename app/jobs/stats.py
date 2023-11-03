@@ -39,7 +39,8 @@ def update_usercount():
     last_entry = db_usercount.fetch_last()
 
     if last_entry:
-        time_since_last_entry = (datetime.now() - last_entry.time).total_seconds()
+        last_entry_time = last_entry.time.replace(tzinfo=None)
+        time_since_last_entry = (datetime.now() - last_entry_time).total_seconds()
 
         if time_since_last_entry <= config.USERCOUNT_UPDATE_INTERVAL:
             next_entry_time = abs(time_since_last_entry - config.USERCOUNT_UPDATE_INTERVAL)
