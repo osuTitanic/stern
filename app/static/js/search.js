@@ -243,7 +243,7 @@ function reloadInput()
 
 function setElement(element)
 {
-    const dataName = element.closest("[data-name]")?.getAttribute("data-name");
+    const dataName = element.parentNode.parentNode.getAttribute("data-name");
     const elements = element.parentNode.querySelectorAll("a");
 
     if (!dataName)
