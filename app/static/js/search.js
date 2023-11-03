@@ -235,7 +235,7 @@ function reloadInput()
 
     // Keep search input from previous request
     var search = new URLSearchParams(location.search).get("query");
-    if (search.length) query.set("query", search);
+    if (search) query.set("query", search);
 
     // Browser will reload
     location.search = query.toString();
