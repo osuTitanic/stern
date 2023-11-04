@@ -6,6 +6,7 @@ from typing import Any, Callable, Tuple
 from . import stats
 
 import logging
+import time
 
 class Jobs(ThreadPoolExecutor):
     def __init__(self, max_workers = None, thread_name_prefix: str = "job", initializer = None, initargs: Tuple[Any, ...] = ...) -> None:
@@ -17,6 +18,15 @@ class Jobs(ThreadPoolExecutor):
         future.add_done_callback(self.__future_callback)
         self.logger.info(f'Started job: "{fn.__name__}"')
         return future
+
+    def sleep(self, seconds: float):
+        while seconds > 0:
+            time.sleep(1)
+            seconds -= 1
+
+            if self._shutdown:
+                # Exit thread
+                exit()
 
     def __future_callback(self, future: Future):
         if e := future.exception():

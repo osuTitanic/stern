@@ -13,26 +13,16 @@ from datetime import timedelta, datetime
 import logging
 import config
 import utils
-import time
 import app
 
 logger = logging.getLogger('stats-job')
-
-def sleep(seconds: float):
-    while seconds > 0:
-        time.sleep(1)
-        seconds -= 1
-
-        if app.session.jobs._shutdown:
-            # Shutdown call
-            exit()
 
 def update_stats():
     """Update the total users, beatmaps and scores to redis"""
     app.session.redis.set('bancho:totalusers', users.fetch_count())
     app.session.redis.set('bancho:totalbeatmaps', beatmaps.fetch_count())
     app.session.redis.set('bancho:totalscores', scores.fetch_total_count())
-    sleep(config.USERCOUNT_UPDATE_INTERVAL)
+    app.session.jobs.sleep(config.USERCOUNT_UPDATE_INTERVAL)
 
 def update_usercount():
     """Add entries of current usercount inside database"""
@@ -47,7 +37,7 @@ def update_usercount():
             logger.debug(f'Next entry time: {round(next_entry_time, 2)} seconds')
 
             # Sleep until next entry time
-            sleep(next_entry_time)
+            app.session.jobs.sleep(next_entry_time)
 
     while True:
         db_usercount.create(count := redis_usercount.get())
@@ -60,7 +50,7 @@ def update_usercount():
                 f'Deleted old usercount entries ({rows} rows affected).'
             )
 
-        sleep(config.USERCOUNT_UPDATE_INTERVAL)
+        app.session.jobs.sleep(config.USERCOUNT_UPDATE_INTERVAL)
 
 def update_ranks():
     """Update the rank history for every user after one hour."""
@@ -73,4 +63,4 @@ def update_ranks():
         for user in active_users:
             utils.sync_ranks(user)
 
-        sleep(3600)
+        app.session.jobs.sleep(3600)
