@@ -15,8 +15,8 @@ def search_beatmap():
         'search.html',
         css='search.css',
         query=request.args.get('query', default=''),
-        sort=request.args.get('sort', default=BeatmapSortBy.Ranked, type=BeatmapSortBy),
-        order=request.args.get('order', default=BeatmapOrder.Descending, type=int)
+        sort=request.args.get('sort', default=BeatmapSortBy.Ranked.value, type=int),
+        order=request.args.get('order', default=BeatmapOrder.Descending.value, type=int)
     )
 
 @router.get('/<id>')
