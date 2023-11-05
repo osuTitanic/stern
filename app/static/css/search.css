@@ -200,7 +200,7 @@
     padding-right: 2.5px;
 }
 
-#beatmap-order-select {
+.beatmap-order-select {
     width: 100%;
     border-radius: 5px;
     padding-bottom: 5px;
@@ -209,19 +209,19 @@
     margin: 20px auto 0 auto;
 }
 
-#beatmap-order-select th {
+.beatmap-order-select th {
     padding-left: 10px;
     padding-right: 10px;
     background-color: #d7d2fb;
     border-bottom: 1px solid #a79ef3;
 }
 
-#beatmap-order-select a {
+.beatmap-order-select a {
     cursor: pointer;
     color: #3843a6;
 }
 
-#beatmap-order-select img {
+.beatmap-order-select img {
     display: inline;
     vertical-align: top;
     padding-top: 1.5px;

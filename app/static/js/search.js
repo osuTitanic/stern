@@ -267,6 +267,23 @@ function setElement(element)
     reloadInput();
 }
 
+function setOrder(element)
+{
+    const query = new URLSearchParams(location.search);
+    query.set("sort", element.getAttribute("data-id"));
+
+    if (element.classList.contains("selected"))
+    {
+        // 0 - Descending
+        // 1 - Ascending
+        const currentOrder = query.get("order") || 0;
+        query.set("order", (currentOrder == 0 ? 1 : 0));
+    }
+
+    // Browser will reload
+    location.search = query.toString();
+}
+
 document.querySelectorAll(".beatmap-options a")
         .forEach(selectableElement => {
             selectableElement.addEventListener("click", (event) => {
@@ -275,9 +292,23 @@ document.querySelectorAll(".beatmap-options a")
             })
         });
 
+document.querySelectorAll(".beatmap-order-select a")
+        .forEach(selectableElement => {
+            selectableElement.addEventListener("click", (event) => {
+                event.preventDefault();
+                setOrder(event.target);
+            })
+        });
+
 window.addEventListener('load', () => {
     const dataElements = document.querySelectorAll(".beatmap-options dl");
     const query = new URLSearchParams(location.search);
+
+    const beatmapOrder = query.get("order") || 0;
+    const beatmapSort = query.get("sort") || 0;
+
+    const orderElement = document.querySelector(`.beatmap-order-select a[data-id="${beatmapSort}"]`);
+    orderElement.classList.add("selected");
 
     // Reset "selected" class based on query
     dataElements.forEach(item => {
