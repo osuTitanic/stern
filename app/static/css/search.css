@@ -69,7 +69,7 @@
 }
 
 #beatmap-list {
-    margin-top: 5px;
+    margin-bottom: 5px;
     display: flex;
     flex-wrap: wrap;
 }
@@ -201,7 +201,7 @@
 }
 
 .beatmap-order-select {
-    width: 75%;
+    width: 100%;
     border-radius: 5px;
     padding-bottom: 5px;
     border-spacing: 0;
