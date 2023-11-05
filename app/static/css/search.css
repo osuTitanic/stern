@@ -69,7 +69,7 @@
 }
 
 #beatmap-list {
-    margin-top: 25px;
+    margin-top: 5px;
     display: flex;
     flex-wrap: wrap;
 }
@@ -198,4 +198,25 @@
     font-size: 100% !important;
     padding-left: 4px;
     padding-right: 2.5px;
+}
+
+.beatmap-order-select {
+    width: 75%;
+    border-radius: 5px;
+    padding-bottom: 5px;
+    border-spacing: 0;
+    font-size: 80%;
+    margin: 20px auto 0 auto;
+}
+
+.beatmap-order-select th {
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: #d7d2fb;
+    border-bottom: 1px solid #a79ef3;
+}
+
+.beatmap-order-select a {
+    cursor: pointer;
+    color: #3843a6;
 }
