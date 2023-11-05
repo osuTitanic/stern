@@ -80,27 +80,51 @@
                 <th>
                     {# TODO: If order is == title -> Show arrow #}
                     <a data-id="0">Title</a>
+                    {% if sort == 0 %}
+                        <img src="/images/{{ 'down' if order == 0 else 'up' }}.gif" alt="">
+                    {% endif %}
                 </th>
                 <th>
                     <a data-id="1">Artist</a>
+                    {% if sort == 1 %}
+                        <img src="/images/{{ 'down' if order == 0 else 'up' }}.gif" alt="">
+                    {% endif %}
                 </th>
                 <th>
                     <a data-id="2">Creator</a>
+                    {% if sort == 2 %}
+                        <img src="/images/{{ 'down' if order == 0 else 'up' }}.gif" alt="">
+                    {% endif %}
                 </th>
                 <th>
                     <a data-id="3">Difficulty</a>
+                    {% if sort == 3 %}
+                        <img src="/images/{{ 'down' if order == 0 else 'up' }}.gif" alt="">
+                    {% endif %}
                 </th>
                 <th>
                     <a data-id="4">Ranked</a>
+                    {% if sort == 4 %}
+                        <img src="/images/{{ 'down' if order == 0 else 'up' }}.gif" alt="">
+                    {% endif %}
                 </th>
                 <th>
                     <a data-id="7">Created</a>
+                    {% if sort == 7 %}
+                        <img src="/images/{{ 'down' if order == 0 else 'up' }}.gif" alt="">
+                    {% endif %}
                 </th>
                 <th>
                     <a data-id="5">Rating</a>
+                    {% if sort == 5 %}
+                        <img src="/images/{{ 'down' if order == 0 else 'up' }}.gif" alt="">
+                    {% endif %}
                 </th>
                 <th>
                     <a data-id="6">Plays</a>
+                    {% if sort == 6 %}
+                        <img src="/images/{{ 'down' if order == 0 else 'up' }}.gif" alt="">
+                    {% endif %}
                 </th>
             </tr>
         </thead>

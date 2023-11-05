@@ -1,4 +1,5 @@
 
+from app.common.constants import BeatmapSortBy, BeatmapOrder
 from app.common.database.repositories import beatmapsets
 from flask import Blueprint, request, redirect
 
@@ -13,7 +14,9 @@ def search_beatmap():
     return utils.render_template(
         'search.html',
         css='search.css',
-        query=request.args.get('query', default='')
+        query=request.args.get('query', default=''),
+        sort=request.args.get('sort', default=BeatmapSortBy.Ranked, type=BeatmapSortBy),
+        order=request.args.get('order', default=BeatmapOrder.Descending, type=int)
     )
 
 @router.get('/<id>')
