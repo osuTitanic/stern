@@ -54,6 +54,30 @@
         {% endfor %}
         <a href="./country">...</a>
     </div>
-    {# TODO: Rankings... #}
+    {% set country_string = ("?country=" + country) if country else '' %}
+</div>
+<div class="tab-list">
+    <ul>
+        <li class="tab-item">
+            <a href="/rankings/osu/{{ order_type }}{{ country_string }}" class="tab-link {{ 'active' if mode == 0 }}">
+                osu! Standard
+            </a>
+        </li>
+        <li class="tab-item">
+            <a href="/rankings/taiko/{{ order_type }}{{ country_string }}" class="tab-link {{ 'active' if mode == 1 }}">
+                Taiko
+            </a>
+        </li>
+        <li class="tab-item">
+            <a href="/rankings/fruits/{{ order_type }}{{ country_string }}" class="tab-link {{ 'active' if mode == 2 }}">
+                Catch The Beat
+            </a>
+        </li>
+        <li class="tab-item">
+            <a href="/rankings/mania/{{ order_type }}{{ country_string }}" class="tab-link {{ 'active' if mode == 3 }}">
+                osu!mania
+            </a>
+        </li>
+    </ul>
 </div>
 {% endblock content %}
