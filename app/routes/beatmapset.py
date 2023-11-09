@@ -20,7 +20,18 @@ def get_beatmapset(id: int):
             description=app.constants.BEATMAP_NOT_FOUND
         )
 
-    if mode := request.args.get('mode', ''):
+    if mode := request.args.get('mode', None):
         mode = f'?mode={mode}'
 
-    return redirect(f'/b/{set.beatmaps[0].id}{mode}')
+    beatmap = set.beatmaps[0]
+
+    # Redirect to beatmap based on mode
+    available_beatmaps = [
+        map for map in set.beatmaps
+        if map.mode == request.args.get('mode', 0, type=int)
+    ]
+
+    if available_beatmaps:
+       beatmap = available_beatmaps[0]
+
+    return redirect(f'/b/{beatmap.id}{mode}')
