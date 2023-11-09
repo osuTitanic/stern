@@ -9,5 +9,6 @@ router = Blueprint('download', __name__)
 def download():
     return utils.render_template(
         'download.html',
-        css='download.css'
+        css='download.css',
+        title="Download - osu!Titanic"
     )

@@ -36,6 +36,7 @@ def get_beatmap(id: int):
         beatmap=beatmap,
         beatmapset=beatmap.beatmapset,
         css='beatmap.css',
+        title=f"{beatmap.beatmapset.artist} - {beatmap.beatmapset.title}",
         Status=DatabaseStatus,
         Language=BeatmapLanguage,
         Genre=BeatmapGenre,
