@@ -19,7 +19,7 @@ def rankings(mode: str, order_type: str):
         return abort(404)
 
     page = max(1, min(10000, request.args.get('page', default=1, type=int)))
-    items_per_page = 10
+    items_per_page = 49
 
     # Any two letter country code
     country = request.args.get('country', default=None, type=str)
