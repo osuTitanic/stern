@@ -80,4 +80,114 @@
         </li>
     </ul>
 </div>
+<table class="player-listing">
+    <thead>
+        <tr>
+            <th>Rank</th>
+            <th>Player Name</th>
+            <th>Accuracy</th>
+            <th>Play Count</th>
+            <th>
+                {% if order_type == 'performance' %}
+                Performance Points
+                {% elif order_type == 'rscore' %}
+                Ranked Score
+                {% else %}
+                Total Score
+                {% endif %}
+            </th>
+            <th>
+                <img src="/images/grades/X_small.png" alt="">
+                <img src="/images/grades/XH_small.png" alt="">
+            </th>
+            <th>
+                <img src="/images/grades/S_small.png" alt="">
+                <img src="/images/grades/SH_small.png" alt="">
+            </th>
+            <th>
+                <img src="/images/grades/A_small.png" alt="">
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for player in leaderboard %}
+        {% if loop.index0 % 2 %}
+        <tr style="background-color: #e7e4fc;">
+        {% else %}
+        <tr style="background-color: #dad7fb;">
+        {% endif %}
+            <td>
+                <b>#{{ loop.index0 + 1 }}</b>
+            </td>
+            <td>
+                <img src="/images/flags/{{ player.country|lower }}.gif" class="flag" alt="">
+                <a href="/u/{{ player.id }}">{{ player.name }}</a>
+            </td>
+            <td>
+                {{ (player.stats[mode].acc * 100)|round(2) }}%
+            </td>
+            <td>
+                <span>{{ "{:,}".format(player.stats[mode].playcount) }} (lv.{{ player.stats[mode].tscore|get_level }})</span>
+            </td>
+            <td>
+                <span style="font-weight: bold;">
+                    {% if order_type == 'performance' %}
+                    {{ "{:,}".format(player.stats[mode].pp|round|int) }}pp
+                    {% elif order_type == 'rscore' %}
+                    {{ "{:,}".format(player.stats[mode].rscore|int) }}
+                    {% else %}
+                    {{ "{:,}".format(player.stats[mode].tscore|int) }}
+                    {% endif %}
+                </span>
+            </td>
+            <td style="text-align: center;">
+                {{ "{:,}".format(player.stats[mode].x_count + player.stats[mode].xh_count) }}
+            </td>
+            <td style="text-align: center;">
+                {{ "{:,}".format(player.stats[mode].s_count + player.stats[mode].sh_count) }}
+            </td>
+            <td style="text-align: center;">
+                {{ "{:,}".format(player.stats[mode].a_count) }}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% if total_pages > 1 %}
+<div class="centered" style="margin: 25px !important;">
+    <div class="pagination">
+        Displaying {{ page }} of {{ total_pages }} results.
+        <br>
+        {% set country_string = ("country=" + country + "&") if country else '' %}
+        {% if total_pages > 1 %}
+            {# "Previous" Button #}
+            {% if page > 1 %}
+                <a href="?{{ country_string }}page={{ page - 1 }}">
+                    Prev
+                </a>
+                {% if min_page_display != 1 %}...{% endif %}
+            {% endif %}
+            {# Page Numbers (max. 10) #}
+            {% for _page in range(min_page_display, max_page_display+1) %}
+                {% if _page == page %}
+                    <b>
+                        {{ _page }}
+                    </b>
+                {% else %}
+                    <a href="?{{ country_string }}page={{ _page }}">
+                        {{ _page }}
+                    </a>
+                {% endif %}
+            {% endfor %}
+            {# "Next" Button #}
+            {% if page < total_pages %}
+                {% if max_page_display != total_pages %}...{% endif %}
+                <a href="?{{ country_string }}page={{ page + 1 }}">
+                    Next
+                </a>
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
+{% endif %}
 {% endblock content %}
