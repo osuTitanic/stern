@@ -1,0 +1,92 @@
+
+from app.common.database.repositories import users, stats, histories
+from app.common.constants import GameMode, COUNTRIES as Countries
+from app.common.cache import leaderboards
+from app.common.database import DBUser
+
+from flask import Blueprint, abort, request
+
+import utils
+
+router = Blueprint('rankings', __name__)
+
+@router.get('/<mode>/<order_type>')
+def rankings(mode: str, order_type: str):
+    if (mode := GameMode.from_alias(mode)) == None:
+        return abort(404)
+
+    if order_type not in ('performance', 'rscore', 'tscore', 'country'):
+        return abort(404)
+
+    page = max(1, min(10000, request.args.get('page', default=1, type=int)))
+    items_per_page = 10
+
+    # Any two letter country code
+    country = request.args.get('country', default=None, type=str)
+
+    if order_type != 'country':
+        leaderboard = leaderboards.top_players(
+            mode.value,
+            offset=(page - 1) * items_per_page,
+            range=items_per_page,
+            type=order_type,
+            country=country.lower()
+                if country else None
+        )
+
+        # Fetch all users from leaderboard
+        users_db = users.fetch_many(
+            [user[0] for user in leaderboard],
+            DBUser.stats
+        )
+
+        # Sort users based on redis leaderboard
+        sorted_users = [
+            next(filter(lambda user: id == user.id, users_db))
+            for id, score in leaderboard
+            if score > 0
+        ]
+
+        for index, user in enumerate(sorted_users):
+            user.stats.sort(key=lambda x: x.mode)
+
+            # Check if rank in redis has changed
+            if (index + 1) != user.stats[mode].rank:
+                user.stats[mode].rank = index + 1
+
+                stats.update(
+                    user.id,
+                    mode,
+                    {'rank': user.stats[mode].rank}
+                )
+
+                histories.update_rank(user.stats[mode], user.country)
+
+        player_count = leaderboards.player_count(mode.value, order_type)
+        total_pages = max(1, min(10000, round(player_count / items_per_page)))
+
+        # Get min/max pages to display for pagination
+        max_page_display = max(page, min(total_pages, page + 8))
+        min_page_display = max(1, min(total_pages, max_page_display - 9))
+
+        # Fetch top countries for country selection
+        top_countries = leaderboards.top_countries(
+            mode,
+            order_type
+        )
+
+        return utils.render_template(
+            'rankings.html',
+            css='rankings.css',
+            mode=mode,
+            page=page,
+            country=country,
+            order_type=order_type,
+            total_pages=total_pages,
+            leaderboard=sorted_users,
+            top_countries=top_countries,
+            max_page_display=max_page_display,
+            min_page_display=min_page_display
+        )
+
+    return abort(404) # TODO: Country Rankings

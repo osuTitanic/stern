@@ -1,0 +1,44 @@
+
+@import url("main.css");
+
+h1 {
+    font-weight: normal;
+    font-size: 160%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding-left: 6px;
+    padding-right: 6px;
+    color: #cc2e8a;
+    text-shadow: #efcfe1 0px 0px 10px;
+}
+
+.centered {
+    margin: 0 auto;
+    text-align: center;
+    font-size: 85%;
+    margin: 25px;
+}
+
+.country .flag-large {
+    margin-top: 25px;
+    margin-bottom: 8px;
+    box-shadow: #e6c6d9 0px 1px 15px;
+    border: 0;
+}
+
+.country a {
+    width: 100%;
+    text-align: center;
+    float: left;
+}
+
+.country-select {
+    display: inline-block;
+    text-align: center;
+    width: 100%;
+    margin-top: 15px;
+}
+
+.country-select a {
+    margin: 1px;
+}

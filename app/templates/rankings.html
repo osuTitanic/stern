@@ -1,0 +1,59 @@
+{# templates/rankings.html #}
+
+{% extends "base.html" %}
+
+{% block content %}
+<h1>
+    {{ order_type|capitalize }} Ranking for {% if country %}{{ constants.COUNTRIES[country|upper] }}{% else %}All Locations{% endif %} ({{ constants.GameMode(mode).formatted }})
+</h1>
+<div class="centered">
+    <div class="pagination">
+        Displaying {{ page }} of {{ total_pages }} results.
+        <br>
+        {% set country_string = ("country=" + country + "&") if country else '' %}
+        {% if total_pages > 1 %}
+            {# "Previous" Button #}
+            {% if page > 1 %}
+                <a href="?{{ country_string }}page={{ page - 1 }}">
+                    Prev
+                </a>
+                {% if min_page_display != 1 %}...{% endif %}
+            {% endif %}
+            {# Page Numbers (max. 10) #}
+            {% for _page in range(min_page_display, max_page_display+1) %}
+                {% if _page == page %}
+                    <b>
+                        {{ _page }}
+                    </b>
+                {% else %}
+                    <a href="?{{ country_string }}page={{ _page }}">
+                        {{ _page }}
+                    </a>
+                {% endif %}
+            {% endfor %}
+            {# "Next" Button #}
+            {% if page < total_pages %}
+                {% if max_page_display != total_pages %}...{% endif %}
+                <a href="?{{ country_string }}page={{ page + 1 }}">
+                    Next
+                </a>
+            {% endif %}
+        {% endif %}
+    </div>
+    {% if country %}
+    <div class="country">
+        <img class="flag-large" src="/images/flags/large/{{ country|lower }}.png" alt="" height="80px">
+        <a href="?">Reset country filter</a>
+    </div>
+    {% endif %}
+    <div class="country-select">
+        {% for country, score in top_countries[:20] %}
+            <a href="?country={{ country|lower }}">
+                <img src="/images/flags/{{ country|lower }}.gif" alt="">
+            </a>
+        {% endfor %}
+        <a href="./country">...</a>
+    </div>
+    {# TODO: Rankings... #}
+</div>
+{% endblock content %}
