@@ -9,8 +9,8 @@
             <img src="http://s.{{ config.DOMAIN_NAME }}/a/{{ user.id }}?h=120" alt="">
         </div>
         <h1>
-            <a class="flag" href="/rankings/{{ constants.GameMode(mode).alias }}/performance?country={{ user.country|upper }}">
-                <img src="/images/flags/{{ user.country|lower }}.gif" alt="{{ user.country|upper }}">
+            <a class="flag" href="/rankings/{{ constants.GameMode(mode).alias }}/performance?country={{ user.country|lower }}">
+                <img src="/images/flags/{{ user.country|lower }}.gif" alt="{{ user.country|capitalize }}">
             </a>
             <!-- TODO: Username color based on groups -->
             {% if user.names %}
