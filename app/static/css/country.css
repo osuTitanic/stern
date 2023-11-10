@@ -1,0 +1,94 @@
+
+@import url("main.css");
+
+.page {
+    margin: 0;
+}
+
+h1 {
+    font-weight: normal;
+    font-size: 160%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding-left: 6px;
+    padding-right: 6px;
+    color: #cc2e8a;
+    text-shadow: #efcfe1 0px 0px 10px;
+}
+
+.centered {
+    margin: 0 auto;
+    text-align: center;
+    font-size: 80%;
+    margin-top: 25px;
+    margin-bottom: 15px;
+}
+
+.tab-list {
+    background-color: #ece4fd;
+    border-bottom: 1px solid #cfc1ef;
+    width: 100%;
+    float: left;
+}
+
+.tab-list ul {
+    display: block;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.tab-link {
+    text-decoration: none;
+    font-size: 90%;
+    padding: 7px 8px 7px 8px;
+    line-height: 15px;
+    color: #716d72;
+    display: flex;
+}
+
+.tab-link:hover {
+    background-color: white;
+    text-decoration: none;
+}
+
+.tab-link img {
+    height: 16px;
+    width: 16px;
+    margin: auto;
+    margin-right: 5px;
+}
+
+.tab-item {
+    margin: 0;
+    width: auto;
+    float: left;
+    display: block;
+}
+
+.tab-link:visited {
+    color: #5e5e5e;
+}
+
+.active {
+    background-color: #bfa8f8;
+}
+
+.country-listing {
+    margin: auto;
+    width: 100%;
+    border-spacing: 0;
+    font-size: 73%;
+    margin-bottom: 5px;
+}
+
+.country-listing th {
+    background-color: #d7d2fb;
+    border-bottom: 1px solid #a79ef3;
+}
+
+.country-listing td {
+    padding-left: 5px;
+    padding-right: 5px;
+}

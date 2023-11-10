@@ -70,10 +70,7 @@ def rankings(mode: str, order_type: str):
         min_page_display = max(1, min(total_pages, max_page_display - 9))
 
         # Fetch top countries for country selection
-        top_countries = leaderboards.top_countries(
-            mode,
-            order_type
-        )
+        top_countries = leaderboards.top_countries(mode)
 
         return utils.render_template(
             'rankings.html',
@@ -89,4 +86,23 @@ def rankings(mode: str, order_type: str):
             min_page_display=min_page_display
         )
 
-    return abort(404) # TODO: Country Rankings
+    leaderboard = leaderboards.top_countries(mode)
+    leaderboard = leaderboard[(page - 1)*items_per_page:(page - 1)*items_per_page + items_per_page]
+
+    country_count = len(leaderboard)
+    total_pages = max(1, min(10000, round(country_count / items_per_page)))
+
+    # Get min/max pages to display for pagination
+    max_page_display = max(page, min(total_pages, page + 8))
+    min_page_display = max(1, min(total_pages, max_page_display - 9))
+
+    return utils.render_template(
+        'country.html',
+        css='country.css',
+        mode=mode,
+        page=page,
+        total_pages=total_pages,
+        leaderboard=leaderboard,
+        max_page_display=max_page_display,
+        min_page_display=min_page_display,
+    )

@@ -1,0 +1,151 @@
+{# templates/country.html #}
+
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Country Ranking ({{ constants.GameMode(mode).formatted }})</h1>
+<p style="margin: 6px; font-size: 80%;">
+    Country rankings combine the score of all players in each country group. Click a specific country's name to get a breakdown of all players from that location.
+</p>
+<div class="centered">
+    <div class="pagination">
+        Displaying {{ page }} of {{ total_pages }} results.
+        <br>
+        {% if total_pages > 1 %}
+            {# "Previous" Button #}
+            {% if page > 1 %}
+                <a href="?page={{ page - 1 }}">
+                    Prev
+                </a>
+                {% if min_page_display != 1 %}...{% endif %}
+            {% endif %}
+            {# Page Numbers (max. 10) #}
+            {% for _page in range(min_page_display, max_page_display+1) %}
+                {% if _page == page %}
+                    <b>
+                        {{ _page }}
+                    </b>
+                {% else %}
+                    <a href="?page={{ _page }}">
+                        {{ _page }}
+                    </a>
+                {% endif %}
+            {% endfor %}
+            {# "Next" Button #}
+            {% if page < total_pages %}
+                {% if max_page_display != total_pages %}...{% endif %}
+                <a href="?page={{ page + 1 }}">
+                    Next
+                </a>
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
+<div class="tab-list">
+    <ul>
+        <li class="tab-item">
+            <a href="/rankings/osu/country" class="tab-link {{ 'active' if mode == 0 }}">
+                osu! Standard
+            </a>
+        </li>
+        <li class="tab-item">
+            <a href="/rankings/taiko/country" class="tab-link {{ 'active' if mode == 1 }}">
+                Taiko
+            </a>
+        </li>
+        <li class="tab-item">
+            <a href="/rankings/fruits/country" class="tab-link {{ 'active' if mode == 2 }}">
+                Catch The Beat
+            </a>
+        </li>
+        <li class="tab-item">
+            <a href="/rankings/mania/country" class="tab-link {{ 'active' if mode == 3 }}">
+                osu!mania
+            </a>
+        </li>
+    </ul>
+</div>
+<table class="country-listing">
+    <thead>
+        <tr>
+            <th>Rank</th>
+            <th>Country</th>
+            <th>Active Users</th>
+            <th>Ranked Score</th>
+            <th>Total Score</th>
+            <th>Performance Points</th>
+            <th>Average Performance</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for country in leaderboard %}
+        {% if loop.index0 % 2 %}
+        <tr style="background-color: #e7e4fc;">
+        {% else %}
+        <tr style="background-color: #dad7fb;">
+        {% endif %}
+            <td>
+                <b>#{{ loop.index0 + 1 }}</b>
+            </td>
+            <td>
+                <img src="/images/flags/{{ country['name']|lower }}.gif" class="flag" alt="">
+                <a href="/rankings/{{ constants.GameMode(mode).alias }}/performance?country={{ country['name'] }}">
+                    {{ constants.COUNTRIES[country['name']|upper] }}
+                </a>
+            </td>
+            <td>
+                {{ "{:,}".format(country['total_users']|int) }}
+            </td>
+            <td>
+                {{ "{:,}".format(country['total_rscore']|int) }}
+            </td>
+            <td>
+                {{ "{:,}".format(country['total_tscore']|int) }}
+            </td>
+            <td>
+                <b>{{ "{:,}".format(country['total_performance']|round|int) }}pp</b>
+            </td>
+            <td>
+                {{ "{:,}".format(country['average_pp']|round|int) }}pp
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% if total_pages > 1 %}
+<div class="centered" style="margin: 25px !important;">
+    <div class="pagination">
+        Displaying {{ page }} of {{ total_pages }} results.
+        <br>
+        {% if total_pages > 1 %}
+            {# "Previous" Button #}
+            {% if page > 1 %}
+                <a href="?page={{ page - 1 }}">
+                    Prev
+                </a>
+                {% if min_page_display != 1 %}...{% endif %}
+            {% endif %}
+            {# Page Numbers (max. 10) #}
+            {% for _page in range(min_page_display, max_page_display+1) %}
+                {% if _page == page %}
+                    <b>
+                        {{ _page }}
+                    </b>
+                {% else %}
+                    <a href="?page={{ _page }}">
+                        {{ _page }}
+                    </a>
+                {% endif %}
+            {% endfor %}
+            {# "Next" Button #}
+            {% if page < total_pages %}
+                {% if max_page_display != total_pages %}...{% endif %}
+                <a href="?page={{ page + 1 }}">
+                    Next
+                </a>
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+{% endblock content %}
