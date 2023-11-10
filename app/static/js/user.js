@@ -520,11 +520,10 @@ function loadRecentPlays(userId, mode)
   loadingText.remove();
 }
 
-function onLoad()
-{
+window.addEventListener('load', () => {
     expandProfileTab(activeTab);
     loadTopPlays(userId, modeName, 5, 0);
     loadLeaderScores(userId, modeName, 5, 0);
     loadRecentPlays(userId, modeName);
     loadMostPlayed(userId, 15, 0);
-}
+});
