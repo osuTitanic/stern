@@ -268,8 +268,8 @@
 }
 
 .profile-graph {
-    min-height: 100px;
-    /* TODO */
+    min-height: 80px;
+    font-size: 95%;
 }
 
 .profile-stats-element {

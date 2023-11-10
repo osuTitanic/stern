@@ -520,10 +520,135 @@ function loadRecentPlays(userId, mode)
   loadingText.remove();
 }
 
+function processRankHistory(entries)
+{
+  entries.filter(e => e.country_rank != 0)
+  entries.filter(e => e.global_rank != 0)
+  entries.filter(e => e.score_rank != 0)
+
+  var globalRankValues = entries.map((entry) => {
+    var difference = (Date.now() - Date.parse(entry.time));
+    var elapsedDays = Math.ceil(difference / (1000 * 3600 * 24));
+    return {x: elapsedDays, y: -entry.global_rank}
+  });
+
+  var scoreRankValues = entries.map((entry) => {
+    var difference = (Date.now() - Date.parse(entry.time));
+    var elapsedDays = Math.ceil(difference / (1000 * 3600 * 24));
+    return {x: elapsedDays, y: -entry.score_rank}
+  });
+
+  var countryRankValues = entries.map((entry) => {
+    var difference = (Date.now() - Date.parse(entry.time));
+    var elapsedDays = Math.ceil(difference / (1000 * 3600 * 24));
+    return {x: elapsedDays, y: -entry.country_rank}
+  });
+
+  countryRankValues.unshift({x: 0, y: countryRankValues[0].y})
+  globalRankValues.unshift({x: 0, y: globalRankValues[0].y})
+  scoreRankValues.unshift({x: 0, y: scoreRankValues[0].y})
+
+  return [
+    {
+      values: globalRankValues,
+      key: 'Global Rank',
+      color: '#ff7f0e'
+    },
+    {
+      values: countryRankValues,
+      key: 'Country Rank',
+      color: '#0ec7ff',
+      disabled: true
+    },
+    {
+      values: scoreRankValues,
+      key: 'Score Rank',
+      color: '#d30eff',
+      disabled: true
+    }
+  ]
+}
+
+function loadUserPerformanceGraph(userId, mode)
+{
+    const url = `/api/profile/${userId}/history/rank/${mode}`;
+
+    fetch(url)
+      .then(response => {
+        if (!response.ok)
+          throw new Error(`${response.status}`);
+        return response.json();
+      })
+      .then(entries => {
+        var rankData = processRankHistory(entries);
+
+        nv.addGraph(() => {
+          const chart = nv.models.lineChart()
+              .margin({left: 80, bottom: 20, right: 50})
+              .useInteractiveGuideline(true)
+              .transitionDuration(250)
+              .showLegend(true)
+              .showYAxis(true)
+              .showXAxis(true)
+
+          chart.xAxis
+            .axisLabel("Days")
+            .tickFormat((days) => {
+              if (days <= 0) return "now";
+              return `${days} days ago`;
+            });
+
+          chart.yAxis
+            .axisLabel("Rank")
+            .tickFormat((rank) => {
+              rank = Math.round(rank);
+              if ((rank) >= 0) return "-";
+              return `#${-rank}`;
+            });
+
+          var ranks = [];
+
+          rankData.forEach((axis) => {
+            axis.values.forEach(
+              (value) => ranks.push(-value.y)
+            )
+          })
+
+          var minRank = Math.min(...ranks);
+          var maxRank = Math.max(...ranks);
+
+          var userDigits = (maxRank.toString().length - 1);
+
+          var minRankDigits = '1' + ((userDigits > 0) ? (userDigits) * '0' : '');
+          var relativeMinRank = Math.round(minRank / (minRankDigits)) * minRankDigits;
+
+          var maxRankDigits = '1' + (userDigits * '0');
+          var relativeMaxRank = Math.round(maxRank / (maxRankDigits)) * maxRankDigits;
+
+          var betweenRank = (relativeMaxRank - relativeMaxRank / 2);
+
+          chart.xAxis.tickValues([90, 60, 30, 0]);
+          chart.yAxis.tickValues([-relativeMaxRank, -betweenRank, -relativeMinRank]);
+          chart.forceY([-relativeMinRank - 1, -relativeMaxRank]);
+
+          d3.select(".profile-graph svg")
+            .datum(rankData)
+            .call(chart);
+
+          nv.utils.windowResize(() => { chart.update() });
+          return chart;
+        })
+      })
+      .catch(error => {
+        console.error(error);
+      });
+}
+
 window.addEventListener('load', () => {
     expandProfileTab(activeTab);
     loadTopPlays(userId, modeName, 5, 0);
     loadLeaderScores(userId, modeName, 5, 0);
     loadRecentPlays(userId, modeName);
     loadMostPlayed(userId, 15, 0);
+    loadUserPerformanceGraph(userId, modeName);
 });
