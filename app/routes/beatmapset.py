@@ -20,7 +20,7 @@ def get_beatmapset(id: int):
             description=app.constants.BEATMAP_NOT_FOUND
         )
 
-    if mode := request.args.get('mode', None):
+    if mode := request.args.get('mode', ''):
         mode = f'?mode={mode}'
 
     beatmap = set.beatmaps[0]
