@@ -47,9 +47,9 @@
     </div>
     {% endif %}
     <div class="country-select">
-        {% for country, score in top_countries[:20] %}
-            <a href="?country={{ country|lower }}">
-                <img src="/images/flags/{{ country|lower }}.gif" alt="">
+        {% for country in top_countries[:20] %}
+            <a href="?country={{ country['name'] }}">
+                <img src="/images/flags/{{ country['name'] }}.gif" alt="">
             </a>
         {% endfor %}
         <a href="./country">...</a>
