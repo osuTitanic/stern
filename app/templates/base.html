@@ -5,13 +5,15 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ title or 'osu!Titanic' }}</title>
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.timeago.js"></script>
+    <script src="/js/d3.v3.js"></script>
+    <script src="/js/nv.d3.js"></script>
     <link rel="stylesheet" href="/css/{{ css or 'main.css' }}">
+    <link rel="stylesheet" href="/css/nv.d3.min.css">
     <link rel="stylesheet" href="/css/fontawesome.min.css">
     <link rel="stylesheet" href="/css/fontawesome.solid.min.css">
     <link rel="stylesheet" href="/css/fontawesome.brands.min.css">
-    <script src="/js/nv.d3.min.js"></script>
-    <script src="/js/jquery.min.js"></script>
-    <script src="/js/jquery.timeago.js"></script>
     <script>const domainName = "{{ config.DOMAIN_NAME }}";</script>
 </head>
 <body>
