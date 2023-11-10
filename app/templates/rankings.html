@@ -6,13 +6,13 @@
 <h1>
     {{ order_type|capitalize }} Ranking for {% if country %}{{ constants.COUNTRIES[country|upper] }}{% else %}All Locations{% endif %} ({{ constants.GameMode(mode).formatted }})
 </h1>
+{% if order_type == 'performance' %}
 <p style="margin: 6px; font-size: 80%;">
-    {% if order_type == 'performance' %}
     The pp system used by osu!Titanic is a modified ppv2 system, developed by
     <a href="https://github.com/osuAkatsuki/akatsuki-pp-py">akatsuki</a>.
     This adaptation introduces changes to the behaviour of the relax/autopilot mod.
-    {% endif %}
 </p>
+{% endif %}
 <div class="centered">
     <div class="pagination">
         Displaying {{ page }} of {{ total_pages }} results.
