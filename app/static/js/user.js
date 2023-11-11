@@ -529,24 +529,28 @@ function processRankHistory(entries)
   var globalRankValues = entries.map((entry) => {
     var difference = (Date.now() - Date.parse(entry.time));
     var elapsedDays = Math.ceil(difference / (1000 * 3600 * 24));
-    return {x: elapsedDays, y: -entry.global_rank}
+    return {x: -elapsedDays, y: -entry.global_rank}
   });
 
   var scoreRankValues = entries.map((entry) => {
     var difference = (Date.now() - Date.parse(entry.time));
     var elapsedDays = Math.ceil(difference / (1000 * 3600 * 24));
-    return {x: elapsedDays, y: -entry.score_rank}
+    return {x: -elapsedDays, y: -entry.score_rank}
   });
 
   var countryRankValues = entries.map((entry) => {
     var difference = (Date.now() - Date.parse(entry.time));
     var elapsedDays = Math.ceil(difference / (1000 * 3600 * 24));
-    return {x: elapsedDays, y: -entry.country_rank}
+    return {x: -elapsedDays, y: -entry.country_rank}
   });
 
   countryRankValues.unshift({x: 0, y: countryRankValues[0].y})
   globalRankValues.unshift({x: 0, y: globalRankValues[0].y})
   scoreRankValues.unshift({x: 0, y: scoreRankValues[0].y})
+
+  scoreRankValues = scoreRankValues.reverse();
+  globalRankValues = globalRankValues.reverse();
+  countryRankValues = countryRankValues.reverse();
 
   return [
     {
@@ -587,6 +591,7 @@ function loadUserPerformanceGraph(userId, mode)
               .margin({left: 80, bottom: 20, right: 50})
               .useInteractiveGuideline(true)
               .transitionDuration(250)
+              .interpolate("step")
               .showLegend(true)
               .showYAxis(true)
               .showXAxis(true)
@@ -594,17 +599,19 @@ function loadUserPerformanceGraph(userId, mode)
           chart.xAxis
             .axisLabel("Days")
             .tickFormat((days) => {
-              if (days <= 0) return "now";
-              return `${days} days ago`;
+              if (days >= 0) return "now";
+              return `${-days} days ago`;
             });
 
           chart.yAxis
             .axisLabel("Rank")
             .tickFormat((rank) => {
               rank = Math.round(rank);
-              if ((rank) >= 0) return "-";
+              if (rank >= 0) return "-";
               return `#${-rank}`;
             });
+
+          // Calculate the relative min/max user rank to display on y axis
 
           var ranks = [];
 
@@ -612,11 +619,10 @@ function loadUserPerformanceGraph(userId, mode)
             axis.values.forEach(
               (value) => ranks.push(-value.y)
             )
-          })
+          });
 
           var minRank = Math.min(...ranks);
           var maxRank = Math.max(...ranks);
-
           var userDigits = (maxRank.toString().length - 1);
 
           var minRankDigits = '1' + ((userDigits > 0) ? (userDigits) * '0' : '');
@@ -627,9 +633,16 @@ function loadUserPerformanceGraph(userId, mode)
 
           var betweenRank = (relativeMaxRank - relativeMaxRank / 2);
 
-          chart.xAxis.tickValues([90, 60, 30, 0]);
-          chart.yAxis.tickValues([-relativeMaxRank, -betweenRank, -relativeMinRank]);
+          chart.yScale(d3.scale.linear().domain([-relativeMinRank - 1, -relativeMaxRank]));
+          chart.xScale(d3.scale.linear().domain([-90, 0]));
+
+          // Force chart to show range of x, y values
           chart.forceY([-relativeMinRank - 1, -relativeMaxRank]);
+          chart.forceX([-90, 0]);
+
+          // Only display certain tick values
+          chart.xAxis.tickValues([-90, -60, -30, 0]);
+          chart.yAxis.tickValues([-relativeMaxRank, -betweenRank, -relativeMinRank]);
 
           d3.select(".profile-graph svg")
             .datum(rankData)
