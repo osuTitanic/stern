@@ -137,10 +137,10 @@
                                 <strong>
                                     <a href="https://osu.ppy.sh/help/wiki/Performance_Points">Performance</a>:
                                     {{ "{:,}".format(current_stats.pp|round(0)|int) }}pp
-                                    {% if current_stats.pp > 0 %}
-                                        (#{{ pp_rank }})
-                                    {% else %}
+                                    {% if current_stats.pp <= 1 %}
                                         (#-)
+                                    {% else %}
+                                        (#{{ pp_rank }})
                                     {% endif %}
                                 </strong>
                             </h2>
