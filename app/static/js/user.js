@@ -112,6 +112,7 @@ function expandProfileTab(id, forceExpand)
       loadUserPerformanceGraph(userId, modeName);
     } else {
       loadUserPlaysGraph(userId, modeName);
+      loadUserViewsGraph(userId, modeName);
     }
 }
 
@@ -742,6 +743,90 @@ function loadUserPlaysGraph(userId, mode)
 
           d3.select("#play-graph svg")
             .datum(playData)
+            .call(chart);
+
+          nv.utils.windowResize(() => { chart.update() });
+
+          // Reset "dy" value
+          document.querySelectorAll('.nv-noData')
+            .forEach((textElement => {
+              textElement.setAttribute('dy', 0)
+            }));
+
+          return chart;
+        })
+      })
+      .catch(error => {
+        console.error(error);
+      });
+}
+
+function processViewsHistory(entries)
+{
+  var values = entries.map((entry) => {
+    var start = new Date();
+    var end = new Date();
+    end.setFullYear(entry.year, entry.month-1);
+
+    var years = start.getFullYear() - end.getFullYear();
+    var months = start.getMonth() - end.getMonth();
+
+    var elapsedMonths = years * 12 + months;
+    return {x: -elapsedMonths, y: entry.replay_views}
+  });
+
+  values = values.reverse();
+
+  return [
+    {
+      values: values,
+      key: 'Replay Views',
+      color: '#f78e25',
+      area: true
+    }
+  ]
+}
+
+function loadUserViewsGraph(userId, mode)
+{
+    const url = `/api/profile/${userId}/history/views/${mode}`;
+
+    fetch(url)
+      .then(response => {
+        if (!response.ok)
+          throw new Error(`${response.status}`);
+        return response.json();
+      })
+      .then(entries => {
+        var viewsData = processViewsHistory(entries);
+
+        nv.addGraph(() => {
+          const chart = nv.models.lineChart()
+              .margin({left: 80, bottom: 20, right: 50})
+              .useInteractiveGuideline(true)
+              .transitionDuration(250)
+              .interpolate("linear")
+              .showLegend(false)
+              .showYAxis(true)
+              .showXAxis(true)
+
+          chart.xAxis
+            .axisLabel("Months")
+            .tickFormat((month) => {
+              if (month % 1 !== 0) return "";
+              if (month == 0) return "This Month";
+              if (month > 0) return (month != 1) ? `In ${month} months` : `In ${month} month`
+              return (month != -1) ? `${-month} months ago` : `${-month} month ago`;
+            });
+
+          chart.yAxis
+            .axisLabel("Views")
+            .tickFormat((views) => {
+              return `${Math.round(views)}`;
+            });
+
+          d3.select("#replay-graph svg")
+            .datum(viewsData)
             .call(chart);
 
           nv.utils.windowResize(() => { chart.update() });
