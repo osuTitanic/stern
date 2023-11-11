@@ -522,9 +522,9 @@ function loadRecentPlays(userId, mode)
 
 function processRankHistory(entries)
 {
-  entries.filter(e => e.country_rank != 0)
-  entries.filter(e => e.global_rank != 0)
-  entries.filter(e => e.score_rank != 0)
+  entries = entries.filter(e => e.country_rank != 0)
+                   .filter(e => e.global_rank != 0)
+                   .filter(e => e.score_rank != 0);
 
   var globalRankValues = entries.map((entry) => {
     var difference = (Date.now() - Date.parse(entry.time));
