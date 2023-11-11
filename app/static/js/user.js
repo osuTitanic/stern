@@ -611,7 +611,7 @@ function loadUserPerformanceGraph(userId, mode)
             .axisLabel("Rank")
             .tickFormat((rank) => {
               rank = Math.round(rank);
-              if (rank >= 0) return "-";
+              if (rank >= 0) return "";
               return `#${-rank}`;
             });
 
