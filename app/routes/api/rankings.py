@@ -3,7 +3,7 @@ from flask import Blueprint, abort, request
 from flask_pydantic import validate
 from typing import List
 
-from app.common.database.repositories import users
+from app.common.database.repositories import histories, users, stats
 from app.common.cache import leaderboards
 from app.common.constants import GameMode
 from app.common.database import DBUser
@@ -41,9 +41,31 @@ def rankings(
 
     # Fetch user info from database
     users_db = users.fetch_many(
-        [user[0] for user in users_top],
+        tuple([user[0] for user in users_top]),
         DBUser.stats
     )
+
+    # Sort users based on redis leaderboard
+    sorted_users = [
+        next(filter(lambda db: db.id == id, users_db))
+        for id, score in users_top
+    ]
+
+    for index, user in enumerate(sorted_users):
+        user.stats.sort(key=lambda x: x.mode)
+
+        # Check if rank in redis has changed
+        if (index + 1) != user.stats[mode].rank:
+            user.stats[mode].rank = index + 1
+
+            stats.update(
+                user.id,
+                mode,
+                {'rank': user.stats[mode].rank}
+            )
+
+            histories.update_rank(user.stats[mode], user.country)
+            users.fetch_many.cache_clear()
 
     return [
         {
@@ -51,8 +73,7 @@ def rankings(
             'pp': user[1],
             'rank': index + offset + 1,
             'user': UserModel.model_validate(
-                # Find a match between cached and db user
-                next(filter(lambda db: db.id == user[0], users_db)),
+                sorted_users[index],
                 from_attributes=True
             ).model_dump()
         }
