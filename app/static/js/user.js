@@ -227,7 +227,7 @@ function loadTopPlays(userId, mode, limit, offset)
           loadingText.remove();
         }
 
-        if (scores.length <= 0)
+        if (scores.length <= 0 && offset <= 0)
         {
           var noScoresText = document.createElement("p")
           noScoresText.textContent = "No awesome performance records yet :(";
