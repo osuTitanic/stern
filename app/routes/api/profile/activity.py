@@ -1,6 +1,6 @@
 
+from flask import Blueprint, Response
 from flask_pydantic import validate
-from flask import Blueprint, abort
 from typing import List
 
 from app.common.database.repositories import activities
@@ -16,7 +16,11 @@ def recent_activity(
     mode: str
 ) -> List[dict]:
     if (mode := GameMode.from_alias(mode)) is None:
-        return abort(400)
+        return Response(
+            response={},
+            status=404,
+            mimetype='application/json'
+        )
 
     recent_activity = [
         (

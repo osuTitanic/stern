@@ -1,5 +1,5 @@
 
-from flask import Blueprint, abort, request
+from flask import Blueprint, Response, request
 from flask_pydantic import validate
 from typing import List
 
@@ -18,10 +18,18 @@ def rankings(
     mode: str
 ) -> List[dict]:
     if (mode := GameMode.from_alias(mode)) is None:
-        return abort(400)
+        return Response(
+            response={},
+            status=400,
+            mimetype='application/json'
+        )
 
     if order_type not in ('performance', 'rscore', 'tscore', 'country'):
-        return abort(400)
+        return Response(
+            response={},
+            status=400,
+            mimetype='application/json'
+        )
 
     limit = max(1, min(50, request.args.get('limit', default=50, type=int)))
     offset = request.args.get('offset', default=0, type=int)

@@ -1,6 +1,6 @@
 
+from flask import Blueprint, Response
 from flask_pydantic import validate
-from flask import Blueprint, abort
 from typing import List
 
 from app.common.database.repositories import achievements
@@ -12,7 +12,11 @@ router = Blueprint("achievements", __name__)
 @validate()
 def user_achievements(user_id: int) -> List[dict]:
     if not (user_achievements := achievements.fetch_many(user_id)):
-        return abort(404)
+        return Response(
+            response={},
+            status=404,
+            mimetype='application/json'
+        )
 
     return [
         AchievementModel.model_validate(achievement, from_attributes=True) \

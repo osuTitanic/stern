@@ -1,5 +1,5 @@
 
-from flask import Blueprint, request, abort
+from flask import Blueprint, request, Response
 from datetime import datetime, timedelta
 from flask_pydantic import validate
 from typing import List
@@ -17,7 +17,11 @@ def rank_history(
     mode: str
 ) -> List[dict]:
     if (mode := GameMode.from_alias(mode)) is None:
-        return abort(400)
+        return Response(
+            response={},
+            status=400,
+            mimetype='application/json'
+        )
 
     if date_string := request.args.get('until'):
         until = datetime.fromisoformat(date_string)
@@ -43,7 +47,11 @@ def plays_history(
     mode: str
 ) -> List[dict]:
     if (mode := GameMode.from_alias(mode)) is None:
-        return abort(400)
+        return Response(
+            response={},
+            status=400,
+            mimetype='application/json'
+        )
 
     if date_string := request.args.get('until'):
         until = datetime.fromisoformat(date_string)
@@ -69,7 +77,11 @@ def replay_views_history(
     mode: str
 ) -> List[dict]:
     if (mode := GameMode.from_alias(mode)) is None:
-        return abort(400)
+        return Response(
+            response={},
+            status=400,
+            mimetype='application/json'
+        )
 
     if date_string := request.args.get('until'):
         until = datetime.fromisoformat(date_string)

@@ -1,5 +1,5 @@
 
-from flask import Blueprint, abort, request
+from flask import Blueprint, Response, request
 from datetime import datetime, timedelta
 from flask_pydantic import validate
 from typing import List
@@ -17,7 +17,11 @@ def recent_scores(
     mode: str
 ) -> List[dict]:
     if (mode := GameMode.from_alias(mode)) is None:
-        return abort(400)
+        return Response(
+            response={},
+            status=400,
+            mimetype='application/json'
+        )
 
     try:
         if date_string := request.args.get('until'):
@@ -25,7 +29,11 @@ def recent_scores(
         else:
             until = datetime.now() - timedelta(hours=24)
     except ValueError:
-        return abort(400)
+        return Response(
+            response={},
+            status=400,
+            mimetype='application/json'
+        )
 
     # Limit time
     until = sorted((
