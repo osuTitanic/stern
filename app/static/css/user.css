@@ -50,13 +50,14 @@
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
     background-color: white;
     border: 1px solid #ddd;
+    margin: auto;
     margin-bottom: 5px;
     padding: 2px;
     display: inline;
     justify-content: center;
     align-items: center;
-    min-height: 120px;
-    min-width: 120px;
+    height: 120px;
+    width: 120px;
 }
 
 .avatar-box img {
@@ -270,6 +271,7 @@
 .profile-graph {
     min-height: 80px;
     font-size: 95%;
+    margin: 10px;
 }
 
 .profile-stats-element {
