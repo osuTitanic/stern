@@ -36,7 +36,7 @@ def rankings(mode: str, order_type: str):
 
         # Fetch all users from leaderboard
         users_db = users.fetch_many(
-            [user[0] for user in leaderboard],
+            tuple([user[0] for user in leaderboard]),
             DBUser.stats
         )
 
