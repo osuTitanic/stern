@@ -544,11 +544,12 @@ function processRankHistory(entries)
     return {x: -elapsedDays, y: -entry.country_rank}
   });
 
-  try {
-    countryRankValues.unshift({x: 0, y: countryRankValues[0].y})
-    globalRankValues.unshift({x: 0, y: globalRankValues[0].y})
-    scoreRankValues.unshift({x: 0, y: scoreRankValues[0].y})
-  } catch {}
+  if (entries.length > 0)
+  {
+    countryRankValues.unshift({x: 0, y: -countryRank});
+    globalRankValues.unshift({x: 0, y: -globalRank});
+    scoreRankValues.unshift({x: 0, y: -scoreRank});
+  }
 
   scoreRankValues = scoreRankValues.reverse();
   globalRankValues = globalRankValues.reverse();

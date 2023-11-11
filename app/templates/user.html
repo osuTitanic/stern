@@ -453,6 +453,9 @@
     const userId = {{ user.id }};
     const mode = {{ mode }};
     const modeName = '{{ constants.GameMode(mode).alias }}';
+    const scoreRank = {{ score_rank }};
+    const globalRank = {{ pp_rank }};
+    const countryRank = {{ pp_rank_country }};
 </script>
 <script src="/js/user.js"></script>
 {% endblock content %}
