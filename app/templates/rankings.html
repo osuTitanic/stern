@@ -4,7 +4,7 @@
 
 {% block content %}
 <h1>
-    {{ order_type|capitalize }} Ranking for {% if country %}{{ constants.COUNTRIES[country|upper] }}{% else %}All Locations{% endif %} ({{ constants.GameMode(mode).formatted }})
+    {{ order_name }} Ranking for {% if country %}{{ constants.COUNTRIES[country|upper] }}{% else %}All Locations{% endif %} ({{ constants.GameMode(mode).formatted }})
 </h1>
 {% if order_type == 'performance' %}
 <p style="margin: 6px; font-size: 80%;">

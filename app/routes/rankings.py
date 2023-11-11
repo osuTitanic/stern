@@ -84,7 +84,12 @@ def rankings(mode: str, order_type: str):
             leaderboard=sorted_users,
             top_countries=top_countries,
             max_page_display=max_page_display,
-            min_page_display=min_page_display
+            min_page_display=min_page_display,
+            order_name={
+                'rscore': 'Ranked Score',
+                'tscore': 'Total Score',
+                'performance': 'Performance'
+            }[order_type.lower()]
         )
 
     leaderboard = leaderboards.top_countries(mode)
