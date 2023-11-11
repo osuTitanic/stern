@@ -544,9 +544,11 @@ function processRankHistory(entries)
     return {x: -elapsedDays, y: -entry.country_rank}
   });
 
-  countryRankValues.unshift({x: 0, y: countryRankValues[0].y})
-  globalRankValues.unshift({x: 0, y: globalRankValues[0].y})
-  scoreRankValues.unshift({x: 0, y: scoreRankValues[0].y})
+  try {
+    countryRankValues.unshift({x: 0, y: countryRankValues[0].y})
+    globalRankValues.unshift({x: 0, y: globalRankValues[0].y})
+    scoreRankValues.unshift({x: 0, y: scoreRankValues[0].y})
+  } catch {}
 
   scoreRankValues = scoreRankValues.reverse();
   globalRankValues = globalRankValues.reverse();
@@ -649,6 +651,13 @@ function loadUserPerformanceGraph(userId, mode)
             .call(chart);
 
           nv.utils.windowResize(() => { chart.update() });
+
+          // Reset "dy" value
+          document.querySelectorAll('.nv-noData')
+                  .forEach((textElement => {
+                    textElement.setAttribute('dy', 0)
+                  }));
+
           return chart;
         })
       })
