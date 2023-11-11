@@ -5,7 +5,7 @@ from flask_pydantic import validate
 from typing import List
 
 from app.models import RankHistoryModel, PlaysHistoryModel, ReplayHistoryModel
-from app.common.database.repositories import histories
+from app.common.database.repositories import histories, users
 from app.common.constants import GameMode
 
 router = Blueprint("history", __name__)
@@ -53,10 +53,17 @@ def plays_history(
             mimetype='application/json'
         )
 
+    if not (user := users.fetch_by_id(user_id)):
+        return Response(
+            response=(),
+            status=404,
+            mimetype='application/json'
+        )
+
     if date_string := request.args.get('until'):
         until = datetime.fromisoformat(date_string)
     else:
-        until = datetime.now() - timedelta(days=90)
+        until = user.created_at
 
     plays_history = histories.fetch_plays_history(
         user_id,
@@ -83,10 +90,17 @@ def replay_views_history(
             mimetype='application/json'
         )
 
+    if not (user := users.fetch_by_id(user_id)):
+        return Response(
+            response=(),
+            status=404,
+            mimetype='application/json'
+        )
+
     if date_string := request.args.get('until'):
         until = datetime.fromisoformat(date_string)
     else:
-        until = datetime.now() - timedelta(days=90)
+        until = user.created_at
 
     replay_history = histories.fetch_replay_history(
         user_id,
