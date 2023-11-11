@@ -1,6 +1,6 @@
 
 from app.common.database.repositories import users, stats, histories
-from app.common.constants import GameMode, COUNTRIES as Countries
+from app.common.constants import GameMode
 from app.common.cache import leaderboards
 from app.common.database import DBUser
 
