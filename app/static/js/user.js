@@ -654,9 +654,9 @@ function loadUserPerformanceGraph(userId, mode)
 
           // Reset "dy" value
           document.querySelectorAll('.nv-noData')
-                  .forEach((textElement => {
-                    textElement.setAttribute('dy', 0)
-                  }));
+            .forEach((textElement => {
+              textElement.setAttribute('dy', 0)
+            }));
 
           return chart;
         })
