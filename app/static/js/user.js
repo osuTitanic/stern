@@ -106,6 +106,13 @@ function expandProfileTab(id, forceExpand)
             tab.style.display = "none";
         }, { once: true })
     }
+
+    if (activeTab == 'general')
+    {
+      loadUserPerformanceGraph(userId, modeName);
+    } else {
+      loadUserPlaysGraph(userId, modeName);
+    }
 }
 
 function expandRecentActivity()
@@ -648,8 +655,93 @@ function loadUserPerformanceGraph(userId, mode)
           chart.xAxis.tickValues([-90, -60, -30, 0]);
           chart.yAxis.tickValues([-relativeMaxRank, -betweenRank, -relativeMinRank]);
 
-          d3.select(".profile-graph svg")
+          d3.select("#rank-graph svg")
             .datum(rankData)
+            .call(chart);
+
+          nv.utils.windowResize(() => { chart.update() });
+
+          // Reset "dy" value
+          document.querySelectorAll('.nv-noData')
+            .forEach((textElement => {
+              textElement.setAttribute('dy', 0)
+            }));
+
+          return chart;
+        });
+      })
+      .catch(error => {
+        console.error(error);
+      });
+}
+
+function processPlayHistory(entries)
+{
+  var values = entries.map((entry) => {
+    var start = new Date();
+    var end = new Date();
+    end.setFullYear(entry.year, entry.month-1);
+
+    var years = start.getFullYear() - end.getFullYear();
+    var months = start.getMonth() - end.getMonth();
+
+    var elapsedMonths = years * 12 + months;
+    return {x: -elapsedMonths, y: entry.plays}
+  });
+
+  values = values.reverse();
+
+  return [
+    {
+      values: values,
+      key: 'Plays',
+      color: '#f5f242',
+      area: true
+    }
+  ]
+}
+
+function loadUserPlaysGraph(userId, mode)
+{
+    const url = `/api/profile/${userId}/history/plays/${mode}`;
+
+    fetch(url)
+      .then(response => {
+        if (!response.ok)
+          throw new Error(`${response.status}`);
+        return response.json();
+      })
+      .then(entries => {
+        var playData = processPlayHistory(entries);
+
+        nv.addGraph(() => {
+          const chart = nv.models.lineChart()
+              .margin({left: 80, bottom: 20, right: 50})
+              .useInteractiveGuideline(true)
+              .transitionDuration(250)
+              .interpolate("linear")
+              .showLegend(false)
+              .showYAxis(true)
+              .showXAxis(true)
+
+          chart.xAxis
+            .axisLabel("Months")
+            .tickFormat((month) => {
+              if (month % 1 !== 0) return "";
+              if (month == 0) return "This Month";
+              if (month > 0) return (month != 1) ? `In ${month} months` : `In ${month} month`
+              return (month != -1) ? `${-month} months ago` : `${-month} month ago`;
+            });
+
+          chart.yAxis
+            .axisLabel("Plays")
+            .tickFormat((plays) => {
+              plays = Math.round(plays);
+              return `${plays}`;
+            });
+
+          d3.select("#play-graph svg")
+            .datum(playData)
             .call(chart);
 
           nv.utils.windowResize(() => { chart.update() });
@@ -674,5 +766,4 @@ window.addEventListener('load', () => {
     loadLeaderScores(userId, modeName, 5, 0);
     loadRecentPlays(userId, modeName);
     loadMostPlayed(userId, 15, 0);
-    loadUserPerformanceGraph(userId, modeName);
 });
