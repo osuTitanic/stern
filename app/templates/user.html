@@ -147,10 +147,14 @@
                                 </strong>
                             </h2>
                             {% if pp_rank_country > 0 %}
-                            <a href="/rankings/{{ constants.GameMode(mode).alias }}/performance?country={{ user.country|upper }}">
-                                <img src="/images/flags/{{ user.country|lower }}.gif" alt="{{ user.country|upper }}">
-                            </a>
-                            #{{ pp_rank_country }}
+                                <a href="/rankings/{{ constants.GameMode(mode).alias }}/performance?country={{ user.country|upper }}">
+                                    <img src="/images/flags/{{ user.country|lower }}.gif" alt="{{ user.country|upper }}">
+                                </a>
+                                {% if current_stats.pp > 0 %}
+                                    #{{ pp_rank_country }}
+                                {% else %}
+                                    #-
+                                {% endif %}
                             {% endif %}
                         </div>
                         <div class="profile-graph">
