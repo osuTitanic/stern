@@ -602,8 +602,9 @@ function loadUserPerformanceGraph(userId, mode)
           chart.xAxis
             .axisLabel("Days")
             .tickFormat((days) => {
-              if (days >= 0) return "now";
-              return `${-days} days ago`;
+              if (days == 0) return "now";
+              if (days > 0) return (days != 1) ? `In ${days} days` : `In ${days} day`
+              return (days != -1) ? `${-days} days ago` : `${-days} day ago`;
             });
 
           chart.yAxis
@@ -640,8 +641,8 @@ function loadUserPerformanceGraph(userId, mode)
           chart.xScale(d3.scale.linear().domain([-90, 0]));
 
           // Force chart to show range of x, y values
+          // chart.forceX([-90, 0]);
           chart.forceY([-relativeMinRank - 1, -relativeMaxRank]);
-          chart.forceX([-90, 0]);
 
           // Only display certain tick values
           chart.xAxis.tickValues([-90, -60, -30, 0]);
