@@ -388,6 +388,7 @@
 .profile-beatmaps-container {
     display: flex;
     margin-bottom: 10px;
+    flex-wrap: wrap;
 }
 
 .profile-beatmap {
@@ -396,6 +397,7 @@
     margin: 3px;
     padding: 2.5px;
     display: grid;
+    width: 49%;
 }
 
 .profile-beatmap img {
