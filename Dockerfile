@@ -24,11 +24,14 @@ RUN pip install pyuwsgi
 COPY . .
 
 # Get config for deployment
+ARG FRONTEND_WORKERS=4
+ENV FRONTEND_WORKERS $FRONTEND_WORKERS
 ENV FRONTEND_HOST $FRONTEND_HOST
 ENV FRONTEND_PORT $FRONTEND_PORT
 
 EXPOSE $FRONTEND_PORT
 
 CMD uwsgi --http 0.0.0.0:80 \
+          -p ${FRONTEND_WORKERS} \
           -w app:flask \
           --master
