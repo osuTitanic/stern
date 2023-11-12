@@ -48,7 +48,7 @@
                 {# TODO: Format chat links #}
                 <table class="styled-table">
                     <tbody>
-                    {% for message in messages %}
+                    {% for message in messages|reverse %}
                         {% if loop.index0 % 2 %}
                             <tr class="light-row">
                         {% else %}
