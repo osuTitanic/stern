@@ -18,6 +18,13 @@ logging.basicConfig(
     handlers=[Console, File]
 )
 
-session.jobs.submit(jobs.stats.update_usercount)
-session.jobs.submit(jobs.stats.update_stats)
-session.jobs.submit(jobs.stats.update_ranks)
+try:
+    import uwsgidecorators
+
+    uwsgidecorators.postfork(uwsgidecorators.thread(jobs.stats.update_ranks))
+    uwsgidecorators.postfork(uwsgidecorators.thread(jobs.stats.update_stats))
+    uwsgidecorators.postfork(uwsgidecorators.thread(jobs.stats.update_usercount))
+except ImportError:
+    session.jobs.submit(jobs.stats.update_usercount)
+    session.jobs.submit(jobs.stats.update_stats)
+    session.jobs.submit(jobs.stats.update_ranks)
