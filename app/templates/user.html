@@ -6,7 +6,7 @@
 <div class="profile-left">
     <div class="left-top">
         <div class="avatar-box">
-            <img src="http://s.{{ config.DOMAIN_NAME }}/a/{{ user.id }}?h=120" alt="">
+            <img src="/a/{{ user.id }}?h=120" alt="">
         </div>
         <h1>
             <a class="flag" href="/rankings/{{ constants.GameMode(mode).alias }}/performance?country={{ user.country|lower }}">
@@ -352,7 +352,7 @@
                                             {% endif %}
                                         </td>
                                         <td>
-                                            <img src="http://s.{{ config.DOMAIN_NAME }}/mt/{{ fav.set_id }}" alt="" loading="lazy">
+                                            <img src="http{{ 's' if config.ENABLE_SSL else '' }}://s.{{ config.DOMAIN_NAME }}/mt/{{ fav.set_id }}" alt="" loading="lazy">
                                         </td>
                                     </tr>
                                 </tbody>

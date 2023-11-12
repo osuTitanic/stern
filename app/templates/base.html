@@ -14,7 +14,10 @@
     <link rel="stylesheet" href="/css/fontawesome.min.css">
     <link rel="stylesheet" href="/css/fontawesome.solid.min.css">
     <link rel="stylesheet" href="/css/fontawesome.brands.min.css">
-    <script>const domainName = "{{ config.DOMAIN_NAME }}";</script>
+    <script>
+        const domainName = "{{ config.DOMAIN_NAME }}";
+        const enableSSL = {{ config.ENABLE_SSL|lower }};
+    </script>
 </head>
 <body>
     <div class="main">
