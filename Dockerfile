@@ -34,4 +34,5 @@ EXPOSE $FRONTEND_PORT
 CMD uwsgi --http 0.0.0.0:80 \
           -p ${FRONTEND_WORKERS} \
           -w app:flask \
+          --enable-threads \
           --master
