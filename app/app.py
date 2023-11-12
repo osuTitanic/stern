@@ -4,10 +4,8 @@ from datetime import datetime
 from typing import Tuple
 from flask import Flask
 
-from . import session
 from . import common
 from . import routes
-from . import jobs
 
 import timeago
 import utils
@@ -21,10 +19,6 @@ flask = Flask(
 )
 
 flask.register_blueprint(routes.router)
-
-session.jobs.submit(jobs.stats.update_usercount)
-session.jobs.submit(jobs.stats.update_stats)
-session.jobs.submit(jobs.stats.update_ranks)
 
 @flask.template_filter('timeago')
 def timeago_formatting(date: datetime):
