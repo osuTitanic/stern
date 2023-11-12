@@ -509,7 +509,7 @@ function loadRecentPlays(userId, mode)
         scoreDiv.appendChild(dateText);
         scoreDiv.appendChild(document.createTextNode(" - "));
         scoreDiv.appendChild(beatmapLink);
-        scoreDiv.appendChild(document.createTextNode(` ${score.total_score} (${score.grade}) ${modsText}`));
+        scoreDiv.appendChild(document.createTextNode(` ${Math.round(score.pp).toLocaleString('en-US')}pp (${score.grade}) ${modsText}`));
         scoreDiv.style.margin = "2.5px";
 
         playsContainer.appendChild(scoreDiv);
