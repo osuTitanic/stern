@@ -12,9 +12,9 @@ import app
 def render_template(name: str, **kwargs) -> str:
     """This will automatically fetch all the required data for bancho-stats"""
     kwargs.update(
-        total_scores=int(app.session.redis.get('bancho:totalscores')) or 0,
-        online_users=int(app.session.redis.get('bancho:users')) or 0,
-        total_users=int(app.session.redis.get('bancho:totalusers')) or 0,
+        total_scores=int(app.session.redis.get('bancho:totalscores') or 0),
+        online_users=int(app.session.redis.get('bancho:users') or 0),
+        total_users=int(app.session.redis.get('bancho:totalusers') or 0),
         constants=constants,
         config=config,
     )
