@@ -56,7 +56,7 @@ def update_ranks():
     """Update the rank history for every user after one hour."""
     while True:
         active_users = users.fetch_active(
-            timedelta(days=30),
+            timedelta(days=90),
             DBUser.stats
         )
 
