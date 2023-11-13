@@ -89,7 +89,7 @@ def rankings(mode: str, order_type: str):
                 'rscore': 'Ranked Score',
                 'tscore': 'Total Score',
                 'performance': 'Performance',
-                'ppv1': 'ppv1'
+                'ppv1': 'PPv1'
             }[order_type.lower()]
         )
 
