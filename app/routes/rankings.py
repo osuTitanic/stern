@@ -15,7 +15,7 @@ def rankings(mode: str, order_type: str):
     if (mode := GameMode.from_alias(mode)) == None:
         return abort(404)
 
-    if order_type not in ('performance', 'rscore', 'tscore', 'country'):
+    if order_type not in ('performance', 'rscore', 'tscore', 'ppv1', 'country'):
         return abort(404)
 
     page = max(1, min(10000, request.args.get('page', default=1, type=int)))
@@ -88,7 +88,8 @@ def rankings(mode: str, order_type: str):
             order_name={
                 'rscore': 'Ranked Score',
                 'tscore': 'Total Score',
-                'performance': 'Performance'
+                'performance': 'Performance',
+                'ppv1': 'ppv1'
             }[order_type.lower()]
         )
 

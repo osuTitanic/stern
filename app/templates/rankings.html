@@ -6,13 +6,17 @@
 <h1>
     {{ order_name }} Ranking for {% if country %}{{ constants.COUNTRIES[country|upper] }}{% else %}All Locations{% endif %} ({{ constants.GameMode(mode).formatted }})
 </h1>
-{% if order_type == 'performance' %}
 <p style="margin: 6px; font-size: 80%;">
+    {% if order_type == 'performance' %}
     osu!Titanic uses a customized <a href="https://osu.ppy.sh/wiki/en/Performance_points/ppv2">ppv2</a>
     system developed by <a href="https://akatsuki.gg">Akatsuki</a>,
     featuring some adjustments to the relax/autopilot mod behavior.
+    {% elif order_type == 'ppv1' %}
+    This is an attempt at recreating the original ppv1 system from back in the day.
+    This is in no means accurate to the original, since not a lot is known about it.
+    You can find an explanation of the old system <a href="https://raw.githubusercontent.com/willyosu/ClassicPerformance/master/ppv1.png">here</a>.
+    {% endif %}
 </p>
-{% endif %}
 <div class="centered">
     <div class="pagination">
         Displaying {{ page }} of {{ total_pages }} results.
@@ -99,6 +103,8 @@
                 Performance Points
                 {% elif order_type == 'rscore' %}
                 Ranked Score
+                {% elif order_type == 'ppv1' %}
+                Performance Points
                 {% else %}
                 Total Score
                 {% endif %}
@@ -144,6 +150,8 @@
                     {{ "{:,}".format(player.stats[mode].pp|round|int) }}pp
                     {% elif order_type == 'rscore' %}
                     {{ "{:,}".format(player.stats[mode].rscore|int) }}
+                    {% elif order_type == 'ppv1' %}
+                    {{ "{:,}".format(player.stats[mode].ppv1|int) }}pp
                     {% else %}
                     {{ "{:,}".format(player.stats[mode].tscore|int) }}
                     {% endif %}
