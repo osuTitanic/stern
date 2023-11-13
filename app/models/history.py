@@ -7,9 +7,11 @@ class RankHistoryModel(BaseModel):
     mode: int
     rscore: int
     pp: int
+    ppv1: int
     global_rank: int
     country_rank: int
     score_rank: int
+    ppv1_rank: int
 
 class PlaysHistoryModel(BaseModel):
     mode: int
