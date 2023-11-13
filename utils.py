@@ -46,15 +46,12 @@ def sync_ranks(user: DBUser) -> None:
                     }
                 )
 
-                # Updated in `update_ppv1`
-                # histories.update_rank(user_stats, user.country)
+                # Update rank history
+                histories.update_rank(user_stats, user.country)
 
                 app.session.logger.debug(
                     f'[{user.name}] Updated rank from {user_stats.rank} to {global_rank}'
                 )
-
-        # Update ppv1
-        update_ppv1(user)
     except Exception as e:
         app.session.logging.error(
             f'[{user.name}] Failed to update user rank: {e}',

@@ -21,3 +21,4 @@ logging.basicConfig(
 session.jobs.submit(jobs.stats.update_usercount)
 session.jobs.submit(jobs.stats.update_stats)
 session.jobs.submit(jobs.stats.update_ranks)
+session.jobs.submit(jobs.stats.update_ppv1)

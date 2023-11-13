@@ -34,7 +34,7 @@ def update_usercount():
 
         if time_since_last_entry <= config.USERCOUNT_UPDATE_INTERVAL:
             next_entry_time = abs(time_since_last_entry - config.USERCOUNT_UPDATE_INTERVAL)
-            logger.debug(f'Next entry time: {round(next_entry_time, 2)} seconds')
+            logger.debug(f'[usercount] -> Next entry time: {round(next_entry_time, 2)} seconds')
 
             # Sleep until next entry time
             app.session.jobs.sleep(next_entry_time)
@@ -42,12 +42,12 @@ def update_usercount():
     while True:
         db_usercount.create(count := redis_usercount.get())
         logger.debug(
-            f'Created usercount entry ({count} players).'
+            f'[usercount] -> Created usercount entry ({count} players).'
         )
 
         if rows := db_usercount.delete_old(timedelta(weeks=1)):
             logger.debug(
-                f'Deleted old usercount entries ({rows} rows affected).'
+                f'[usercount] -> Deleted old usercount entries ({rows} rows affected).'
             )
 
         app.session.jobs.sleep(config.USERCOUNT_UPDATE_INTERVAL)
@@ -64,3 +64,32 @@ def update_ranks():
             utils.sync_ranks(user)
 
         app.session.jobs.sleep(3600)
+
+def update_ranks():
+    """Update the rank history for every user, every 15 minutes."""
+    while True:
+        app.session.jobs.logger.info('[ranks] -> Updating rank history...')
+
+        active_users = users.fetch_active(
+            timedelta(days=90),
+            DBUser.stats
+        )
+
+        for user in active_users:
+            utils.sync_ranks(user)
+            app.session.jobs.logger.info(f'[ranks] -> Updated {user.name}')
+
+        app.session.jobs.logger.info('[ranks] -> Done.')
+        app.session.jobs.sleep(900)
+
+def update_ppv1():
+    """Update the ppv1 calculations for each user, every day."""
+    while True:
+        app.session.jobs.logger.info('[ppv1] -> Updating ppv1 calculations...')
+
+        for user in users.fetch_all():
+            utils.update_ppv1(user)
+            app.session.jobs.logger.info(f'[ppv1] -> Updated {user.name}')
+
+        app.session.jobs.logger.info('[ppv1] -> Done.')
+        app.session.jobs.sleep(3600 * 24)
