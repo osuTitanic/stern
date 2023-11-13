@@ -1,7 +1,8 @@
 
 from flask import render_template as _render_template
 
-from app.common.database.repositories import stats, histories
+from app.common.database.repositories import stats, histories, scores
+from app.common.helpers import performance
 from app.common.cache import leaderboards
 from app.common.database import DBUser
 from app.common import constants
@@ -25,9 +26,9 @@ def render_template(name: str, **kwargs) -> str:
     )
 
 def sync_ranks(user: DBUser) -> None:
-    """Sync cached rank with database"""
+    """Sync cached rank with database and update ppv1 calculations"""
     try:
-        app.session.logger.debug(f'[{user.name}] Trying to update user rank from cache...')
+        app.session.logger.debug(f'[{user.name}] Trying to update rank from cache...')
 
         for user_stats in user.stats:
             if user_stats.playcount <= 0:
@@ -45,15 +46,49 @@ def sync_ranks(user: DBUser) -> None:
                     }
                 )
 
-                # Update rank history
-                histories.update_rank(user_stats, user.country)
+                # Updated in `update_ppv1`
+                # histories.update_rank(user_stats, user.country)
 
                 app.session.logger.debug(
                     f'[{user.name}] Updated rank from {user_stats.rank} to {global_rank}'
                 )
 
+        # Update ppv1
+        update_ppv1(user)
     except Exception as e:
         app.session.logging.error(
             f'[{user.name}] Failed to update user rank: {e}',
+            exc_info=e
+        )
+
+def update_ppv1(user: DBUser):
+    """Update ppv1 calculations for a player"""
+    try:
+        app.session.logger.debug(f'[{user.name}] Trying to update ppv1 calculations...')
+
+        for user_stats in user.stats:
+            if user_stats.playcount <= 0:
+                continue
+
+            best_scores = scores.fetch_best(user.id, user_stats.mode, not config.APPROVED_MAP_REWARDS)
+            user_stats.ppv1 = performance.calculate_weighted_ppv1(best_scores)
+
+            leaderboards.update(
+                user_stats.user_id,
+                user_stats.mode,
+                user_stats.pp,
+                user_stats.rscore,
+                user.country,
+                user_stats.tscore,
+                user_stats.ppv1
+            )
+
+            histories.update_rank(
+                user_stats,
+                user.country
+            )
+    except Exception as e:
+        app.session.logging.error(
+            f'[{user.name}] Failed to update ppv1 calculations: {e}',
             exc_info=e
         )
