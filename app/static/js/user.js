@@ -530,10 +530,6 @@ function loadRecentPlays(userId, mode)
 
 function processRankHistory(entries)
 {
-  entries = entries.filter(e => e.country_rank != 0)
-                   .filter(e => e.global_rank != 0)
-                   .filter(e => e.score_rank != 0);
-
   var globalRankValues = entries.map((entry) => {
     var difference = (Date.now() - Date.parse(entry.time));
     var elapsedDays = Math.ceil(difference / (1000 * 3600 * 24));
@@ -566,6 +562,11 @@ function processRankHistory(entries)
     ppv1RankValues.unshift({x: 0, y: -ppv1Rank});
   }
 
+  ppv1RankValues = ppv1RankValues.filter(e => e.y != 0);
+  scoreRankValues = scoreRankValues.filter(e => e.y != 0);
+  globalRankValues = globalRankValues.filter(e => e.y != 0);
+  countryRankValues = countryRankValues.filter(e => e.y != 0);
+
   ppv1RankValues = ppv1RankValues.reverse();
   scoreRankValues = scoreRankValues.reverse();
   globalRankValues = globalRankValues.reverse();
@@ -589,13 +590,12 @@ function processRankHistory(entries)
       color: '#d30eff',
       disabled: true
     },
-    // Disable ppv1 ranks for now
-    // {
-    //   values: ppv1RankValues,
-    //   key: 'PPV1 Rank',
-    //   color: '#51f542',
-    //   disabled: true
-    // }
+    {
+      values: ppv1RankValues,
+      key: 'PPV1 Rank',
+      color: '#51f542',
+      disabled: true
+    }
   ]
 }
 
