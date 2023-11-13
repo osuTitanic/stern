@@ -592,7 +592,7 @@ function processRankHistory(entries)
     },
     {
       values: ppv1RankValues,
-      key: 'PPV1 Rank',
+      key: 'ppv1 Rank',
       color: '#51f542',
       disabled: true
     }
