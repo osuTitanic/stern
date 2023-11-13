@@ -40,6 +40,7 @@ class StatsModel(BaseModel):
     tscore: int
     rscore: int
     pp: float
+    ppv1: float
     playcount: int
     playtime: int
     acc: float

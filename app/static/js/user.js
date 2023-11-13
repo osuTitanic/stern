@@ -552,13 +552,21 @@ function processRankHistory(entries)
     return {x: -elapsedDays, y: -entry.country_rank}
   });
 
+  var ppv1RankValues = entries.map((entry) => {
+    var difference = (Date.now() - Date.parse(entry.time));
+    var elapsedDays = Math.ceil(difference / (1000 * 3600 * 24));
+    return {x: -elapsedDays, y: -entry.ppv1_rank}
+  });
+
   if (entries.length > 0)
   {
     countryRankValues.unshift({x: 0, y: -countryRank});
     globalRankValues.unshift({x: 0, y: -globalRank});
     scoreRankValues.unshift({x: 0, y: -scoreRank});
+    ppv1RankValues.unshift({x: 0, y: -ppv1Rank});
   }
 
+  ppv1RankValues = ppv1RankValues.reverse();
   scoreRankValues = scoreRankValues.reverse();
   globalRankValues = globalRankValues.reverse();
   countryRankValues = countryRankValues.reverse();
@@ -580,7 +588,14 @@ function processRankHistory(entries)
       key: 'Score Rank',
       color: '#d30eff',
       disabled: true
-    }
+    },
+    // Disable ppv1 ranks for now
+    // {
+    //   values: ppv1RankValues,
+    //   key: 'PPV1 Rank',
+    //   color: '#51f542',
+    //   disabled: true
+    // }
   ]
 }
 
