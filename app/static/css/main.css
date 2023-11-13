@@ -29,10 +29,12 @@
 
 a {
     text-decoration: none;
+    color: rgb(0, 102, 204);
 }
 
 a:hover {
     text-decoration: underline;
+    color: rgb(0, 102, 204);
 }
 
 a:visited {
@@ -192,6 +194,7 @@ input:focus {
     font-size: 85%;
     margin-left: 2.5px;
     margin-right: 2.5px;
+    border-color: beige;
 }
 
 .search-form {
