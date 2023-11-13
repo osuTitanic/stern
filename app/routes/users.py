@@ -38,5 +38,6 @@ def userpage(query: str):
         pp_rank=leaderboards.global_rank(user.id, int(mode)),
         pp_rank_country=leaderboards.country_rank(user.id, int(mode), user.country),
         score_rank=leaderboards.score_rank(user.id, int(mode)),
-        score_rank_country=leaderboards.score_rank_country(user.id, int(mode), user.country)
+        score_rank_country=leaderboards.score_rank_country(user.id, int(mode), user.country),
+        ppv1_rank=leaderboards.ppv1_rank(user.id, int(mode))
     )
