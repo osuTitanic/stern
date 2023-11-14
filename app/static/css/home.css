@@ -14,11 +14,13 @@
 
 .left-side {
     float: left;
+    height: 880px;
 }
 
 .right-side {
     margin-left: 15px;
     float: right;
+    height: 880px;
 }
 
 .headers {
@@ -88,9 +90,8 @@
 }
 
 .bottom-stats {
-    position: sticky;
-    bottom: 0;
-    top: calc( 100vh - 100px );
+    bottom: 20px;
+    position: absolute;
 }
 
 .stats-wrapper img {
@@ -98,10 +99,8 @@
 }
 
 .most-played {
-    width: 357px;
-    position: sticky;
-    top: calc( 100vh - 100px );
-    bottom: 0;
+    bottom: 20px;
+    position: absolute;
 }
 
 .styled-table {
