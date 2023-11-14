@@ -86,7 +86,7 @@ def update_ranks():
         app.session.jobs.sleep(900)
 
 def update_ppv1():
-    """Update the ppv1 calculations for each user, every day."""
+    """Update the ppv1 calculations for each user, every 2.5 hours."""
     while True:
         app.session.jobs.logger.info('[ppv1] -> Updating ppv1 calculations...')
 
@@ -98,4 +98,4 @@ def update_ppv1():
                 exit()
 
         app.session.jobs.logger.info('[ppv1] -> Done.')
-        app.session.jobs.sleep(3600 * 24)
+        app.session.jobs.sleep(3600 * 2.5)
