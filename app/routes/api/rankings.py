@@ -24,7 +24,7 @@ def rankings(
             mimetype='application/json'
         )
 
-    if order_type not in ('performance', 'rscore', 'tscore', 'country'):
+    if order_type not in ('performance', 'rscore', 'tscore', 'country', 'ppv1'):
         return Response(
             response={},
             status=400,
