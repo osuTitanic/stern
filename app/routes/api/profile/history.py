@@ -1,7 +1,6 @@
 
-from flask import Blueprint, request, Response
+from flask import Blueprint, Response, request
 from datetime import datetime, timedelta
-from flask_pydantic import validate
 from typing import List
 
 from app.models import RankHistoryModel, PlaysHistoryModel, ReplayHistoryModel
@@ -11,11 +10,21 @@ from app.common.constants import GameMode
 router = Blueprint("history", __name__)
 
 @router.get('/<user_id>/history/rank/<mode>')
-@validate()
 def rank_history(
-    user_id: int,
+    user_id: str,
     mode: str
 ) -> List[dict]:
+    if not user_id.isdigit():
+        # Lookup user by username
+        if not (user := users.fetch_by_name_extended(user_id)):
+            return Response(
+                response=(),
+                status=404,
+                mimetype='application/json'
+            )
+
+        user_id = user.id
+
     if (mode := GameMode.from_alias(mode)) is None:
         return Response(
             response={},
@@ -41,9 +50,8 @@ def rank_history(
     ]
 
 @router.get('/<user_id>/history/plays/<mode>')
-@validate()
 def plays_history(
-    user_id: int,
+    user_id: str,
     mode: str
 ) -> List[dict]:
     if (mode := GameMode.from_alias(mode)) is None:
@@ -53,12 +61,22 @@ def plays_history(
             mimetype='application/json'
         )
 
-    if not (user := users.fetch_by_id(user_id)):
-        return Response(
-            response=(),
-            status=404,
-            mimetype='application/json'
-        )
+    if not user_id.isdigit():
+        # Lookup user by username
+        if not (user := users.fetch_by_name_extended(user_id)):
+            return Response(
+                response=(),
+                status=404,
+                mimetype='application/json'
+            )
+
+    else:
+        if not (user := users.fetch_by_id(user_id)):
+            return Response(
+                response=(),
+                status=404,
+                mimetype='application/json'
+            )
 
     if date_string := request.args.get('until'):
         until = datetime.fromisoformat(date_string)
@@ -66,7 +84,7 @@ def plays_history(
         until = user.created_at
 
     plays_history = histories.fetch_plays_history(
-        user_id,
+        user.id,
         mode.value,
         until
     )
@@ -78,9 +96,8 @@ def plays_history(
     ]
 
 @router.get('/<user_id>/history/views/<mode>')
-@validate()
 def replay_views_history(
-    user_id: int,
+    user_id: str,
     mode: str
 ) -> List[dict]:
     if (mode := GameMode.from_alias(mode)) is None:
@@ -90,12 +107,22 @@ def replay_views_history(
             mimetype='application/json'
         )
 
-    if not (user := users.fetch_by_id(user_id)):
-        return Response(
-            response=(),
-            status=404,
-            mimetype='application/json'
-        )
+    if not user_id.isdigit():
+        # Lookup user by username
+        if not (user := users.fetch_by_name_extended(user_id)):
+            return Response(
+                response=(),
+                status=404,
+                mimetype='application/json'
+            )
+
+    else:
+        if not (user := users.fetch_by_id(user_id)):
+            return Response(
+                response=(),
+                status=404,
+                mimetype='application/json'
+            )
 
     if date_string := request.args.get('until'):
         until = datetime.fromisoformat(date_string)
@@ -103,7 +130,7 @@ def replay_views_history(
         until = user.created_at
 
     replay_history = histories.fetch_replay_history(
-        user_id,
+        user.id,
         mode.value,
         until
     )
