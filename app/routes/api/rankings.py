@@ -85,7 +85,7 @@ def rankings(
                 'total_score_rank': leaderboards.total_score_rank(user[0], mode),
                 'ppv1_rank': leaderboards.ppv1_rank(user[0], mode),
                 'user_id': user[0],
-                'pp': user[1],
+                'score': user[1],
                 'user': UserModel.model_validate(
                     sorted_users[index],
                     from_attributes=True
