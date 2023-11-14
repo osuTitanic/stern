@@ -79,6 +79,9 @@ def update_ranks():
             utils.sync_ranks(user)
             app.session.jobs.logger.info(f'[ranks] -> Updated {user.name}')
 
+            if app.session.jobs._shutdown:
+                exit()
+
         app.session.jobs.logger.info('[ranks] -> Done.')
         app.session.jobs.sleep(900)
 
@@ -90,6 +93,9 @@ def update_ppv1():
         for user in users.fetch_all():
             utils.update_ppv1(user)
             app.session.jobs.logger.info(f'[ppv1] -> Updated {user.name}')
+
+            if app.session.jobs._shutdown:
+                exit()
 
         app.session.jobs.logger.info('[ppv1] -> Done.')
         app.session.jobs.sleep(3600 * 24)
