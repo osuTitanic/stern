@@ -70,6 +70,14 @@ def update_ppv1(user: DBUser):
             best_scores = scores.fetch_best(user.id, user_stats.mode, not config.APPROVED_MAP_REWARDS)
             user_stats.ppv1 = performance.calculate_weighted_ppv1(best_scores)
 
+            stats.update(
+                user.id,
+                user_stats.mode,
+                {
+                    'ppv1': user_stats.ppv1
+                }
+            )
+
             leaderboards.update(
                 user_stats.user_id,
                 user_stats.mode,
