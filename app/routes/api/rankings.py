@@ -82,8 +82,11 @@ def rankings(
                 'global_rank': leaderboards.global_rank(user[0], mode),
                 'country_rank': leaderboards.country_rank(user[0], mode, sorted_users[index].country),
                 'score_rank': leaderboards.score_rank(user[0], mode),
+                'score_rank': leaderboards.score_rank_country(user[0], mode, sorted_users[index].country),
                 'total_score_rank': leaderboards.total_score_rank(user[0], mode),
+                'total_score_rank_country': leaderboards.total_score_rank_country(user[0], mode, sorted_users[index].country),
                 'ppv1_rank': leaderboards.ppv1_rank(user[0], mode),
+                'ppv1_rank_country': leaderboards.ppv1_country_rank(user[0], mode, sorted_users[index].country),
                 'user_id': user[0],
                 'score': user[1],
                 'user': UserModel.model_validate(
