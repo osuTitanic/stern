@@ -19,7 +19,10 @@ def userpage(query: str):
         return redirect(f'/u/{user.id}')
 
     if not (user := users.fetch_by_id(int(query))):
-        raise abort(404)
+        return abort(404)
+
+    if user.restricted or not user.activated:
+        return abort(404)
 
     if not (mode := request.args.get('mode')):
         mode = user.preferred_mode
