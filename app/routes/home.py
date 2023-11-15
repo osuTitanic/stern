@@ -13,6 +13,8 @@ def root():
     return utils.render_template(
         "home.html",
         css="home.css",
+        title="Welcome - osu!Titanic",
+        description="osu!Titanic » A private server for osu! that lets you experience the early days of the game.",
         news=[
             {
                 "date": "08.10.2023",
