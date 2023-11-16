@@ -1,13 +1,18 @@
 
+from app.common.database.repositories import users
+from app.common.database.objects import DBUser
+
 from werkzeug.exceptions import NotFound
+from flask_login import LoginManager
+from typing import Tuple, Optional
+from flask import Flask, Request
 from datetime import datetime
-from typing import Tuple
-from flask import Flask
 
 from . import common
 from . import routes
 
 import timeago
+import config
 import utils
 import re
 
@@ -19,6 +24,20 @@ flask = Flask(
 )
 
 flask.register_blueprint(routes.router)
+flask.secret_key = config.FRONTEND_SECRET_KEY
+
+login_manager = LoginManager()
+login_manager.init_app(flask)
+
+@login_manager.user_loader
+def user_loader(user_id: int) -> Optional[DBUser]:
+    if user := users.fetch_by_id(user_id):
+        return user
+
+@login_manager.request_loader
+def request_loader(request: Request):
+    user_id = request.form.get('id')
+    return user_loader(user_id)
 
 @flask.template_filter('timeago')
 def timeago_formatting(date: datetime):
