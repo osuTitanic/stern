@@ -203,10 +203,21 @@ input:focus {
 
 .login-container {
     display: flex;
-    justify-content: flex-end;
     text-align: right;
+    justify-content: center;
+    align-items: center;
     font-size: 90%;
-    gap: 5px;
+    padding-right: 5px;
+}
+
+.login-container i {
+    font-size: 90%;
+    margin-left: 8px;
+}
+
+.small-avatar {
+    margin-top: 4px;
+    margin-left: 3px;
 }
 
 .nav-login {
@@ -222,7 +233,7 @@ input:focus {
 }
 
 #welcome-text {
-    color: grey;
+    color: rgb(80, 80, 80);
 }
 
 #login-text {
