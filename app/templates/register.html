@@ -1,0 +1,35 @@
+{# templates/register.html #}
+
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Let's create a new account!</h1>
+<form class="register-form" method="post">
+    <div>
+        <input type="text" name="username" autocomplete="off" autocapitalize="none" placeholder="Username" class="validate">
+        <div class="input-description">
+            Others will recognise you by this name. Make sure you are happy with it!
+        </div>
+    </div>
+    <div>
+        <input type="email" name="email" autocomplete="off" autocapitalize="none" placeholder="Email Address" class="validate">
+        <div class="input-description">
+            Will be used for notifications, account verification and in the case you forget your password. No spam, ever.
+        </div>
+    </div>
+    <div>
+        <input type="password" name="password" autocomplete="off" autocapitalize="none" placeholder="Password">
+        <div class="input-description">
+            At least 8 characters long. Choose something long but also something you will remember, like a line from your favourite song.
+        </div>
+    </div>
+    <div class="register-submit" style="justify-content: center;">
+        <input class="register-button" type="submit" name="login" value="Register">
+    </div>
+    <div style="display: block;">
+        Need further assistance? Contact us on our <a href="https://discord.gg/qupv72e7YH">discord</a> or via <a href="mailto:contact@lekuru.xyz">email</a>.
+    </div>
+    <input type="hidden" name="redirect" value="/account/verification">
+</form>
+<script src="/js/register.js"></script>
+{% endblock content %}
