@@ -19,8 +19,9 @@ S3_BASEURL    = os.environ.get('S3_BASEURL')
 REDIS_HOST = os.environ.get('REDIS_HOST')
 REDIS_PORT = int(os.environ.get('REDIS_PORT', 6379))
 
-FRONTEND_HOST = os.environ.get('FRONTEND_HOST')
+FRONTEND_SECRET_KEY = os.environ.get('FRONTEND_SECRET_KEY')
 FRONTEND_PORT = int(os.environ.get('FRONTEND_PORT'))
+FRONTEND_HOST = os.environ.get('FRONTEND_HOST')
 
 USERCOUNT_UPDATE_INTERVAL = int(os.environ.get('USERCOUNT_UPDATE_INTERVAL', 60))
 SCORE_RESPONSE_LIMIT = int(os.environ.get('SCORE_RESPONSE_LIMIT', 50))
