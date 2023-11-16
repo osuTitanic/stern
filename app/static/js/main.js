@@ -30,6 +30,7 @@ function resetOrPlayAudio(element) {
 }
 
 function showLoginForm() {
+    // TODO: Dropdown animation
     const dropdown = document.querySelector(".login-dropdown");
 
     if (dropdown.style.display !== "block")
