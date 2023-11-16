@@ -59,13 +59,12 @@
                     </a>
                 {% else %}
                     <p class="nav-login" id="welcome-text">Welcome, guest!</p>
-                    <a href="#" class="nav-login" id="login-text">Login</a>
-                    <a href="#" class="nav-login" id="register-text">I'm new!</a>
+                    <a onclick="showLoginForm()" class="nav-login" id="login-text">Login</a>
+                    <a href="/account/register" class="nav-login" id="register-text">I'm new!</a>
                 {% endif %}
                 </div>
             </div>
-            {# This will only be for testing #}
-            <div class="login-dropdown">
+            <div class="login-dropdown" style="display: none;">
                 <form action="/account/login" method="post">
                     <input type="hidden" name="redirect" value="{{ url_for(request.endpoint, **request.view_args) }}">
                     Please enter your credentials:
@@ -73,9 +72,17 @@
                     <input id="username-field" class="post" type="text" name="username" placeholder="Username" maxlength="30" value="" tabindex="0" autocomplete="off">
                     <br>
                     <input id="password-field" class="post" type="password" name="password" placeholder="Password" tabindex="0" autocomplete="off">
-                    <input id="remember" class="radio" type="checkbox" name="remember">
-                    <label for="remember">Remember Me</label>
-                    <input class="login-button" type="submit" name="login" value="login" tabindex="5">
+                    <br>
+                    <div>
+                        <input id="remember" class="radio" type="checkbox" name="remember">
+                        <label for="remember">Remember Me</label>
+                        <input class="login-button" type="submit" name="login" value="Login" tabindex="5">
+                    </div>
+                    <div class="login-bottom-text">
+                        <a id="register-text" href="/account/register">
+                            Create new account!
+                        </a>
+                    </div>
                 </form>
             </div>
             <div class="page">

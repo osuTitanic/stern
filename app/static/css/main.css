@@ -35,6 +35,7 @@ a {
 a:hover {
     text-decoration: underline;
     color: rgb(0, 102, 204);
+    cursor: pointer;
 }
 
 a:visited {
@@ -244,6 +245,60 @@ input:focus {
 #register-text {
     color: var(--outlink-pink);
     font-weight: bold;
+}
+
+.login-dropdown {
+    position: absolute;
+    right: 2px;
+    top: 48.5px;
+    background-color: white;
+    z-index: 0;
+    padding: 10px;
+    border-bottom-left-radius: 5px;
+    border-left: solid 2px #d7d4df;
+    border-bottom: solid 2px #d7d4df;
+    font-size: 105%;
+    overflow: hidden;
+}
+
+.login-dropdown input[type="checkbox"] {
+    margin: 4px;
+}
+
+.login-dropdown input[type="submit"] {
+    background-color: #5b5399;
+    border-radius: 2px;
+    font-size: 15px;
+    color: white;
+    margin: 5px;
+    max-width: 100px;
+    border: none;
+    text-align: center;
+    padding: 5px 10px 5px 10px;
+    display: inline-block;
+    user-select: none;
+    font-weight: bold;
+    width: 35%;
+    margin-left: 25px;
+}
+
+.login-bottom-text {
+    font-size: 88%;
+    line-height: 150%;
+}
+
+.login-bottom-text a:hover {
+    text-shadow: 0px 0px 10px #f7cfff;
+    text-decoration: none;
+}
+
+.post {
+    width: 240px;
+    margin: 5px;
+    background-color: white;
+    border: 1px solid #90ace7;
+    font-size: 100%;
+    border-radius: 3px;
 }
 
 .page {

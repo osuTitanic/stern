@@ -29,7 +29,14 @@ function resetOrPlayAudio(element) {
     audio.currentTime = 0;
 }
 
-function showLoginForm() {} // TODO
+function showLoginForm() {
+    const dropdown = document.querySelector(".login-dropdown");
+
+    if (dropdown.style.display !== "block")
+        dropdown.style.display = "block";
+    else
+        dropdown.style.display = "none";
+}
 
 document.addEventListener("DOMContentLoaded", () => {
     $(".timeago").timeago();
