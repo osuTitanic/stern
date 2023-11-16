@@ -252,7 +252,7 @@ input:focus {
     right: 2px;
     top: 48.5px;
     background-color: white;
-    z-index: 0;
+    z-index: 2;
     padding: 10px;
     border-bottom-left-radius: 5px;
     border-left: solid 2px #d7d4df;
