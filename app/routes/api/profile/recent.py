@@ -40,7 +40,7 @@ def recent_scores(
         else:
             until = datetime.now() - timedelta(hours=24)
     
-        min_status = max(0, int(requuest.args.get("min_status", 3)))
+        min_status = max(0, int(request.args.get("min_status", 3)))
     except ValueError:
         return Response(
             response={},
