@@ -18,7 +18,8 @@ def return_to_register_page(error: Optional[str] = None) -> str:
     return utils.render_template(
         'register.html',
         css='register.css',
-        error=error # TODO: Error feedback
+        error=error, # TODO: Error feedback
+        title='Register - osu!Titanic'
     )
 
 def get_hashed_password(password: str) -> str:
@@ -58,7 +59,8 @@ def register():
 
     return utils.render_template(
         'register.html',
-        css='register.css'
+        css='register.css',
+        title='Register - osu!Titanic'
     )
 
 @router.post('/register')
