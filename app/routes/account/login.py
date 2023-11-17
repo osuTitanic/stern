@@ -22,6 +22,9 @@ def login():
         if not bcrypt.checkpw(md5_password.encode(), user.bcrypt.encode()):
             return redirect(redirect_url or '/')
 
+        if not user.activated:
+            return redirect('/account/verification')
+
         flask_login.login_user(user, remember)
         return redirect(redirect_url or f'/u/{user.id}')
 
