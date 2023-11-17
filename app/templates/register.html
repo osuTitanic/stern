@@ -4,7 +4,7 @@
 
 {% block content %}
 <h1>Let's create a new account!</h1>
-<form class="register-form" method="post">
+<form class="register-form" method="post" onsubmit="return validateAll(event)">
     <div>
         <input type="text" name="username" autocomplete="off" autocapitalize="none" placeholder="Username" class="validate">
         <div class="input-description">
