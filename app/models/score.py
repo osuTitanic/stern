@@ -10,6 +10,7 @@ class ScoreModel(BaseModel):
     user_id: int
     submitted_at: datetime
     mode: int
+    status: int
     pp: float
     acc: float
     total_score: int
