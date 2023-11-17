@@ -6,9 +6,28 @@ from flask import Blueprint, request, redirect
 from typing import Optional
 
 import flask_login
+import hashlib
+import config
+import bcrypt
 import utils
+import app
 
 router = Blueprint('register', __name__)
+
+def return_to_register_page(error: Optional[str] = None) -> str:
+    return utils.render_template(
+        'register.html',
+        css='register.css',
+        error=error # TODO: Error feedback
+    )
+
+def get_hashed_password(password: str) -> str:
+    return bcrypt.hashpw(
+        password=hashlib.md5(password.encode()) \
+                        .hexdigest() \
+                        .encode(),
+        salt=bcrypt.gensalt()
+    ).decode()
 
 def validate_username(username: str) -> Optional[str]:
     if len(username) < 3:
@@ -45,7 +64,50 @@ def register():
 @router.post('/register')
 def registration_request():
     redirect_url = request.form.get('redirect', '/')
-    ... # TODO
+
+    try:
+        if validate_email(email := request.form.get('email')):
+            return return_to_register_page('email')
+
+        if validate_username(username := request.form.get('username')):
+            return return_to_register_page('username')
+
+        if not (password := request.form.get('password')):
+            return return_to_register_page('password')
+    except Exception as e:
+        app.session.logger.error(
+            f'Failed to verify registration request: {e}',
+            exc_info=e
+        )
+        return return_to_register_page('validation')
+
+    # TODO: Check for ip bans
+
+    app.session.logger.info(
+        f'Starting registration process for "{username}" ({email})...'
+    )
+
+    hashed_password = get_hashed_password(password)
+    safe_name = username.lower() \
+                        .replace(' ', '_')
+
+    user = users.create(
+        username=username,
+        safe_name=safe_name,
+        email=email,
+        pw_bcrypt=hashed_password,
+        country='XX', # TODO: Get country via. IP
+        activated=False,
+        permissions=1 if not config.FREE_SUPPORTER else 5
+    )
+
+    if not user:
+        app.session.logger.warning(f'Failed to register user "{username}".')
+        return return_to_register_page('server')
+
+    app.session.logger.info(f'User "{username}" with id "{user.id}" was created.')
+    app.session.logger.info('Registration finished.')
+
     return redirect(redirect_url)
 
 @router.get('/register/check')
