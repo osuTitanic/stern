@@ -21,7 +21,8 @@ def userpage(query: str):
     if not (user := users.fetch_by_id(int(query))):
         return abort(404)
 
-    if user.restricted or not user.activated:
+    if user.restricted:
+        # TODO: Display "BANNED" image, instead of 404
         return abort(404)
 
     if not (mode := request.args.get('mode')):
