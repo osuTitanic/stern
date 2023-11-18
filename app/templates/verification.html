@@ -8,11 +8,22 @@
 </div>
 <div class="right">
 {% if success %}
+    {% if verification.type == 0 %}
     <h1>Account Verified</h1>
     <div>
         You can now download one of the available clients <a href="/download">here</a>, and log in.
         Have fun playing on this server!
     </div>
+    {% else %}
+        <h1>Password Reset</h1>
+        <div>
+            Your password has been successfully reset. Please log in, using your new credentials!
+        </div>
+        <div>
+            Feel free to contact our support on the <a href="https://discord.gg/qupv72e7YH">discord server</a>
+            or via. <a href="mailto:{{ config.SENDGRID_EMAIL }}">email</a>, if you have any issues.
+        </div>
+    {% endif %}
 {% else %}
     {% if verification.type == 0 %}
         <h1>Account Verification</h1>
