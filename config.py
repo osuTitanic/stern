@@ -25,6 +25,8 @@ FRONTEND_HOST = os.environ.get('FRONTEND_HOST')
 
 USERCOUNT_UPDATE_INTERVAL = int(os.environ.get('USERCOUNT_UPDATE_INTERVAL', 60))
 SCORE_RESPONSE_LIMIT = int(os.environ.get('SCORE_RESPONSE_LIMIT', 50))
+SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY')
+SENDGRID_EMAIL = os.environ.get('SENDGRID_EMAIL')
 DOMAIN_NAME = os.environ.get('DOMAIN_NAME')
 
 APPROVED_MAP_REWARDS = eval(os.environ.get('APPROVED_MAP_REWARDS', 'False').capitalize())
