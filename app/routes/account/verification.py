@@ -53,14 +53,11 @@ def verification():
         )
 
     else:
-        verification.user.password = bcrypt.hashpw(
-            verification.value.encode(),
-            bcrypt.gensalt()
-        )
-
-        users.update(
-            verification.user_id,
-            {'pw': verification.user.bcrypt}
+        # Let user choose the password
+        return utils.render_template(
+            'verification.html',
+            css='verification.css',
+            verification=verification
         )
 
     verifications.delete(verification.token)
@@ -95,7 +92,7 @@ def resend_verification():
                 'verification.html',
                 css='verification.css',
                 verification=verification,
-                error='wait'
+                error='Please wait a few minutes, until you resend the email!'
             )
     except ValueError:
         return abort(404)

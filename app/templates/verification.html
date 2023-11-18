@@ -42,9 +42,9 @@
             If you can't access your email or have forgotten what you used, please send an email to
             <a href="mailto:{{ config.SENDGRID_EMAIL }}">{{ config.SENDGRID_EMAIL }}</a> to recover your account.
         </div>
-        {% if error == 'wait' %}
+        {% if error %}
         <div style="background-color: #eab9d6;">
-            Please wait a few minutes, until you can resend the email!
+            {{ error }}
         </div>
         {% endif %}
         <a href="/account/verification/resend?id={{verification.id}}">Resend Verification Email</a>
