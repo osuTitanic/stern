@@ -1,0 +1,26 @@
+{# templates/reset.html #}
+
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Forgot your password?</h1>
+<form class="reset-form" method="post">
+    <div>
+        <input type="email" name="email" autocomplete="off" autocapitalize="none" placeholder="Email Address" class="validate">
+        <div class="input-description">
+            Enter any details you remember about your account. We will do our best to track it down for you!
+        </div>
+    </div>
+    <div class="reset-submit" style="justify-content: center;">
+        <input class="reset-button" type="submit" name="login" value="Continue">
+    </div>
+    {% if error %}
+        <div style="background-color: #eab9d6;">
+            {{ error }}
+        </div>
+    {% endif %}
+    <div style="display: block;">
+        Need further assistance? Contact us on our <a href="https://discord.gg/qupv72e7YH">discord</a> or via <a href="mailto:{{ config.SENDGRID_EMAIL }}">email</a>.
+    </div>
+</form>
+{% endblock content %}

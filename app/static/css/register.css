@@ -9,11 +9,11 @@ h1, h2 {
     font-size: 120%;
 }
 
-.register-form {
+.register-form, .reset-form {
     padding: 10px;
 }
 
-.register-form > div {
+.register-form > div, .reset-form > div {
     background-color: #efeafc;
     box-shadow: 0px 0px 50px #ffffff;
     border-radius: 5px;
@@ -35,6 +35,18 @@ h1, h2 {
     float: left;
 }
 
+.reset-form input[type="submit"],
+.reset-form input[type="text"],
+.reset-form input[type="password"],
+.reset-form input[type="email"] {
+    border: 1px solid #90ace7;
+    vertical-align: middle;
+    border-radius: 3px;
+    width: 300px;
+    height: 30px;
+    float: left;
+}
+
 .input-description {
     display: inline-block;
     line-height: 18px;
@@ -44,14 +56,14 @@ h1, h2 {
     font-size: 95%;
 }
 
-.register-button:hover {
+.register-button:hover, .reset-button:hover {
     text-decoration: none;
     text-shadow: 0px 0px 5px #ffffff;
     color: white;
     cursor: pointer;
 }
 
-.register-button {
+.register-button, .reset-button {
     background-color: rgb(138,138,138);
     transition: all 200ms ease-in-out;
     border-radius: 5px !important;

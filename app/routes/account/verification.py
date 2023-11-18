@@ -5,10 +5,14 @@ from datetime import datetime
 from app.common import mail
 
 import flask_login
-import bcrypt
 import utils
 
 router = Blueprint('verification', __name__)
+
+VerificationType = {
+    'activation': 0,
+    'password': 1
+}
 
 @router.get('/verification')
 def verification():
@@ -23,7 +27,7 @@ def verification():
     except ValueError:
         return abort(404)
 
-    if type not in ('activation', 'password'):
+    if type not in VerificationType.keys():
         return abort(404)
 
     if verification_id is None:
@@ -35,6 +39,7 @@ def verification():
         return abort(404)
 
     if not verification_token:
+        # Let user know, that they have received an email
         return utils.render_template(
             'verification.html',
             css='verification.css',
@@ -45,7 +50,11 @@ def verification():
     if verification_token != verification.token:
         return abort(404)
 
+    if VerificationType[type] != verification.type:
+        return abort(404)
+
     if type == 'activation':
+        # Activate user
         verification.user.activated = True
 
         users.update(
@@ -53,14 +62,19 @@ def verification():
             {'activated': True}
         )
 
-    else:
+    elif type == 'password':
         # Let user choose the password
         return utils.render_template(
             'verification.html',
             css='verification.css',
             verification=verification,
-            title="Verification - osu!Titanic"
+            title="Verification - osu!Titanic",
+            reset=True
         )
+
+    else:
+        # How did they get here?
+        return abort(404)
 
     verifications.delete(verification.token)
 
@@ -106,7 +120,6 @@ def resend_verification():
     verification = verifications.create(
         verification.user_id,
         type=verification.type,
-        value=verification.value,
         token_size=32,
     )
 

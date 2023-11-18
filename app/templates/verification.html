@@ -33,21 +33,44 @@
         </div>
     {% else %}
         <h1>Password Reset</h1>
+        {% if reset %}
+        <form action="/account/reset" method="post" class="password-reset-form">
+            <div>
+                <input type="password" name="password" autocomplete="off" autocapitalize="none" placeholder="Password">
+            </div>
+            <div>
+                <input type="password" name="password_match" autocomplete="off" autocapitalize="none" placeholder="Repeat Password">
+            </div>
+            <div>
+                <input class="reset-button" type="submit" name="login" value="Reset">
+            </div>
+            <input name="token" type="hidden" value="{{ verification.token }}">
+            <div style="display: block;">
+                Need further assistance? Contact us on our <a href="https://discord.gg/qupv72e7YH">discord</a> or via <a href="mailto:{{ config.SENDGRID_EMAIL }}">email</a>.
+                Please don't forget your password this time!
+            </div>
+        </form>
+        {% else %}
         <div>
             We have sent you an email with a verification link, to reset your password. Please check your inbox and follow the instructions!
             Make sure to check your spam folder, if you can't find the email!
         </div>
-    {% endif %}
-        <div>
-            If you can't access your email or have forgotten what you used, please send an email to
-            <a href="mailto:{{ config.SENDGRID_EMAIL }}">{{ config.SENDGRID_EMAIL }}</a> to recover your account.
-        </div>
-        {% if error %}
-        <div style="background-color: #eab9d6;">
-            {{ error }}
-        </div>
         {% endif %}
+    {% endif %}
+        {% if not reset %}
+            <div>
+                If you can't access your email or have forgotten what you used, please send an email to
+                <a href="mailto:{{ config.SENDGRID_EMAIL }}">{{ config.SENDGRID_EMAIL }}</a> to recover your account.
+            </div>
+        {% endif %}
+        {% if error %}
+            <div style="background-color: #eab9d6;">
+                {{ error }}
+            </div>
+        {% endif %}
+        {% if not reset %}
         <a href="/account/verification/resend?id={{verification.id}}">Resend Verification Email</a>
+        {% endif %}
     </div>
 {% endif %}
 {% endblock content %}
