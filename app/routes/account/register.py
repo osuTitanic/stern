@@ -68,19 +68,19 @@ def register():
 def registration_request():
     try:
         if validate_email(email := request.form.get('email')):
-            return return_to_register_page('email')
+            return return_to_register_page('Please enter a valid email!')
 
         if validate_username(username := request.form.get('username')):
-            return return_to_register_page('username')
+            return return_to_register_page('Please enter a valid username!')
 
         if not (password := request.form.get('password')):
-            return return_to_register_page('password')
+            return return_to_register_page('Please enter a valid password!')
     except Exception as e:
         app.session.logger.error(
             f'Failed to verify registration request: {e}',
             exc_info=e
         )
-        return return_to_register_page('validation')
+        return return_to_register_page('Failed to process your request. Please try again!')
 
     # TODO: Check for ip bans
 
@@ -104,7 +104,7 @@ def registration_request():
 
     if not user:
         app.session.logger.warning(f'Failed to register user "{username}".')
-        return return_to_register_page('server')
+        return return_to_register_page('An error occured on the server side. Please try again!')
 
     app.session.logger.info(f'User "{username}" with id "{user.id}" was created.')
 
