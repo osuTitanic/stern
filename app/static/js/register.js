@@ -99,6 +99,9 @@ document.querySelectorAll(".validate").forEach((element) => {
 
         timeout = setTimeout(() => {
             validateField(element);
-        }, 800);
+        }, 500);
     });
+    element.addEventListener("blur", (e) => {
+        validateField(element);
+    })
 })
