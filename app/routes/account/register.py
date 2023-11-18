@@ -19,7 +19,7 @@ def return_to_register_page(error: Optional[str] = None) -> str:
     return utils.render_template(
         'register.html',
         css='register.css',
-        error=error, # TODO: Error feedback
+        error=error,
         title='Register - osu!Titanic'
     )
 
