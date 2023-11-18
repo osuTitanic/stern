@@ -1,6 +1,7 @@
 
+from app.common.database.repositories import users, verifications
 from app.common.constants.regexes import USERNAME, EMAIL
-from app.common.database.repositories import users
+from app.common import mail
 
 from flask import Blueprint, request, redirect
 from typing import Optional
@@ -65,8 +66,6 @@ def register():
 
 @router.post('/register')
 def registration_request():
-    redirect_url = request.form.get('redirect', '/')
-
     try:
         if validate_email(email := request.form.get('email')):
             return return_to_register_page('email')
@@ -99,7 +98,7 @@ def registration_request():
         email=email,
         pw_bcrypt=hashed_password,
         country='XX', # TODO: Get country via. IP
-        activated=False,
+        activated=False if config.SENDGRID_API_KEY else True,
         permissions=1 if not config.FREE_SUPPORTER else 5
     )
 
@@ -108,9 +107,29 @@ def registration_request():
         return return_to_register_page('server')
 
     app.session.logger.info(f'User "{username}" with id "{user.id}" was created.')
+
+    if not config.SENDGRID_API_KEY:
+        # Verification is disabled
+        flask_login.login_user(user)
+        app.session.logger.info('Registration finished.')
+        return redirect(f'/u/{user.id}')
+
+    app.session.logger.info('Sending verification email...')
+
+    verification = verifications.create(
+        user.id,
+        type=0,
+        token_size=32
+    )
+
+    mail.send_welcome_email(
+        verification,
+        user
+    )
+
     app.session.logger.info('Registration finished.')
 
-    return redirect(redirect_url)
+    return redirect(f'/account/verification?id={verification.id}')
 
 @router.get('/register/check')
 def input_validation():

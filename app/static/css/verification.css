@@ -1,0 +1,30 @@
+
+@import url('main.css');
+
+.left {
+    float: left;
+    margin-right: 15px;
+}
+
+.right {
+    text-align: left;
+    margin: 15px;
+}
+
+.right div {
+    background-color: #efeafc;
+    box-shadow: 0px 0px 50px #ffffff;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 15px;
+    display: -webkit-box;
+    display: flow-root;
+}
+
+h1, h2 {
+    color: #cc2e8a;
+    text-shadow: #efcfe1 0px 0px 10px;
+    overflow: visible;
+    font-weight: normal;
+    font-size: 160%;
+}

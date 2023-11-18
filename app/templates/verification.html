@@ -1,0 +1,42 @@
+{# templates/verification.html #}
+
+{% extends "base.html" %}
+
+{% block content %}
+<div class="left">
+    <img src="/images/art/awp.png" alt="" height="400px">
+</div>
+<div class="right">
+{% if success %}
+    <h1>Account Verified</h1>
+    <div>
+        You can now download one of the available clients <a href="/download">here</a>, and log in.
+        Have fun playing on this server!
+    </div>
+{% else %}
+    {% if verification.type == 0 %}
+        <h1>Account Verification</h1>
+        <div>
+            <span>We have sent you an email with a verification link. Please check your inbox and follow the instructions!</span>
+            <span>Make sure to check your spam folder, if you can't find the email!</span>
+        </div>
+    {% else %}
+        <h1>Password Reset</h1>
+        <div>
+            We have sent you an email with a verification link, to reset your password. Please check your inbox and follow the instructions!
+            Make sure to check your spam folder, if you can't find the email!
+        </div>
+    {% endif %}
+        <div>
+            If you can't access your email or have forgotten what you used, please send an email to
+            <a href="mailto:{{ config.SENDGRID_EMAIL }}">{{ config.SENDGRID_EMAIL }}</a> to recover your account.
+        </div>
+        {% if error == 'wait' %}
+        <div style="background-color: #eab9d6;">
+            Please wait a few minutes, until you can resend the email!
+        </div>
+        {% endif %}
+        <a href="/account/verification/resend?id={{verification.id}}">Resend Verification Email</a>
+    </div>
+{% endif %}
+{% endblock content %}

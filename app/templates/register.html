@@ -26,10 +26,14 @@
     <div class="register-submit" style="justify-content: center;">
         <input class="register-button" type="submit" name="login" value="Register">
     </div>
+    {% if error %}
+        <div style="color: #eab9d6;">
+
+        </div>
+    {% endif %}
     <div style="display: block;">
         Need further assistance? Contact us on our <a href="https://discord.gg/qupv72e7YH">discord</a> or via <a href="mailto:contact@lekuru.xyz">email</a>.
     </div>
-    <input type="hidden" name="redirect" value="/account/verification">
 </form>
 <script src="/js/register.js"></script>
 {% endblock content %}
