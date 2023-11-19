@@ -6,7 +6,13 @@
 <div class="profile-left">
     <div class="left-top">
         <div class="avatar-box">
+            {% if current_user.id == user.id %}
+            <a href="/account/settings/profile#picture">
+                <img src="/a/{{ user.id }}?h=120" alt="">
+            </a>
+            {% else %}
             <img src="/a/{{ user.id }}?h=120" alt="">
+            {% endif %}
         </div>
         <h1>
             <a class="flag" href="/rankings/{{ constants.GameMode(mode).alias }}/performance?country={{ user.country|lower }}">
@@ -31,7 +37,6 @@
         </div>
     </div>
     <div class="left-bottom">
-        {# TODO: Edit button #}
         <div class="userpage-social">
             {% if user.userpage_location %}
             <div title="Location" class="activity">
@@ -99,10 +104,20 @@
     {# TODO: Report user #}
 </div>
 <div class="profile-right">
-    {% if user.userpage_about %}
-    <div class="userpage">
-        {{ user.userpage_about|bbcode|safe }}
-    </div>
+    {% if current_user.id == user.id %}
+        <a class="edit-button" href="/account/settings/userpage">Edit</a>
+        <br>
+        <div class="userpage">
+            {% if user.userpage_about %}
+            {{ user.userpage_about|bbcode|safe }}
+            {% endif %}
+        </div>
+    {% else %}
+        {% if user.userpage_about %}
+        <div class="userpage">
+            {{ user.userpage_about|bbcode|safe }}
+        </div>
+        {% endif %}
     {% endif %}
     <div class="gamemode-container">
         <a id="gm-0" class="gamemode-button {{ 'active-mode' if mode == 0 }}" href="?mode=0">osu!</a>

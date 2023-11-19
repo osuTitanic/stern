@@ -143,6 +143,12 @@
     background-position: -96px 0px;
 }
 
+.edit-button {
+    float: right;
+    text-align: right;
+    margin-left: 10px;
+}
+
 .userpage {
     max-height: 300px;
     min-height: 32px;
