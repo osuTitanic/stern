@@ -105,13 +105,16 @@
 </div>
 <div class="profile-right">
     {% if current_user.id == user.id %}
-        <a class="edit-button" href="/account/settings/userpage">Edit</a>
-        <br>
-        <div class="userpage">
-            {% if user.userpage_about %}
-            {{ user.userpage_about|bbcode|safe }}
-            {% endif %}
-        </div>
+        {% if user.userpage_about %}
+            <a class="edit-button" href="/account/settings/userpage">Edit</a>
+            <br>
+            <div class="userpage">
+                {{ user.userpage_about|bbcode|safe }}
+            </div>
+        {% else %}
+            <a href="/account/settings/userpage">Click to make your user page!</a>
+            <br>
+        {% endif %}
     {% else %}
         {% if user.userpage_about %}
         <div class="userpage">
