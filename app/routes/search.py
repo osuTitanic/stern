@@ -34,7 +34,7 @@ def download_beatmapset(id: int):
     no_video = request.args.get('novideo', False, type=bool)
 
     # Redirect to osu.direct, to reduce server impact
-    return redirect(f"https://osu.direct/d/{set.id}{'?noVideo' if no_video else ''}")
+    return redirect(f"https://osu.direct/d/{set.id}{'?noVideo=' if no_video else ''}")
 
 @router.get('/<id>')
 def redirect_to_set(id: int):
