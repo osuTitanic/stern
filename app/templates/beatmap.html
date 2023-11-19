@@ -178,7 +178,7 @@
     {# TODO: BAT/Creator Controls #}
     <div class="padding">
         <div class="beatmap-download">
-            {% if user is defined %}
+            {% if current_user.id %}
                 <a href="/beatmapsets/download/{{ beatmapset.id }}">
                     <img src="/images/beatmap/osu-download-beatmap.png" alt="Download">
                 </a>
