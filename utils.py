@@ -1,5 +1,6 @@
 
 from flask import render_template as _render_template
+from flask import request
 
 from app.common.database.repositories import stats, histories, scores
 from app.common.helpers import performance
@@ -16,6 +17,7 @@ def render_template(name: str, **kwargs) -> str:
         total_scores=int(app.session.redis.get('bancho:totalscores') or 0),
         online_users=int(app.session.redis.get('bancho:users') or 0),
         total_users=int(app.session.redis.get('bancho:totalusers') or 0),
+        show_login=request.args.get('login', False, type=bool),
         constants=constants,
         config=config,
     )

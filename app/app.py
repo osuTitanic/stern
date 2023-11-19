@@ -2,10 +2,10 @@
 from app.common.database.repositories import users
 from app.common.database.objects import DBUser
 
+from flask import Flask, Request, redirect
 from werkzeug.exceptions import NotFound
 from flask_login import LoginManager
 from typing import Tuple, Optional
-from flask import Flask, Request
 from datetime import datetime
 
 from . import common
@@ -38,6 +38,10 @@ def user_loader(user_id: int) -> Optional[DBUser]:
 def request_loader(request: Request):
     user_id = request.form.get('id')
     return user_loader(user_id)
+
+@login_manager.unauthorized_handler
+def unauthorized_user():
+    return redirect('/?login=True')
 
 @flask.template_filter('timeago')
 def timeago_formatting(date: datetime):
