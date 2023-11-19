@@ -138,3 +138,7 @@
 .light-row {
     background-color: var(--table-row-light);
 }
+
+.chat-wrapper {
+    width: 470px;
+}
