@@ -81,6 +81,23 @@ def format_activity(activity_text: str, activity: common.database.DBActivity) ->
             )
         )
 
+@flask.template_filter('format_chat')
+def format_chat(text: str) -> str:
+    # Sanitize input text
+    text = text.replace("<","&lt") \
+               .replace(">", "&gt;")
+
+    # Replace chat links with html links
+    pattern = r'\[(.*?) (.*?)\]'
+    replacement = r'<a href="\1">\2</a>'
+    result = re.sub(pattern, replacement, text)
+
+    # Remove action text
+    result = result.replace('\x01ACTION', '') \
+                   .replace('\x01', '')
+
+    return result
+
 @flask.errorhandler(404)
 def not_found(error: NotFound) -> Tuple[str, int]:
     return utils.render_template(
