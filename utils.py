@@ -85,7 +85,8 @@ def update_ppv1(user: DBUser):
                 user_stats.rscore,
                 user.country,
                 user_stats.tscore,
-                user_stats.ppv1
+                user_stats.ppv1,
+                user_stats.playcount
             )
 
             histories.update_rank(
