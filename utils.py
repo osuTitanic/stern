@@ -79,14 +79,8 @@ def update_ppv1(user: DBUser):
             )
 
             leaderboards.update(
-                user_stats.user_id,
-                user_stats.mode,
-                user_stats.pp,
-                user_stats.rscore,
-                user.country,
-                user_stats.tscore,
-                user_stats.ppv1,
-                user_stats.playcount
+                user_stats,
+                user.country
             )
 
             histories.update_rank(
