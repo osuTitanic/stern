@@ -144,7 +144,7 @@
 }
 
 .userpage {
-    max-height: 505px;
+    max-height: 300px;
     min-height: 32px;
     overflow-x: hidden;
     overflow: auto;
