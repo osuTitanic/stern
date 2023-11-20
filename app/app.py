@@ -88,6 +88,11 @@ def get_user_level(total_score: int) -> int:
     # Return the max level if total_score is higher than all levels
     return len(next_level)
 
+@flask.template_filter('strftime')
+def jinja2_strftime(date: datetime, format='%m/%d/%Y, %H:%M:%S'):
+    native = date.replace(tzinfo=None)
+    return native.strftime(format)
+
 @flask.template_filter('format_activity')
 def format_activity(activity_text: str, activity: common.database.DBActivity) -> str:
     links = activity.activity_links.split('||')
