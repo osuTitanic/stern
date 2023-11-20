@@ -1,0 +1,21 @@
+{# templates/settings/sidebar.html #}
+
+{% set current_endpoint = url_for(request.endpoint, **request.view_args) %}
+
+<div class="sidebar">
+    <div class="sidebar-section selected-sidebar">
+        <a href="/account/settings/">Overview</a>
+    </div>
+    <div class="sidebar-section">
+        <a href="/account/settings/profile">Profile</a>
+    </div>
+    <div class="sidebar-section">
+        <a href="/account/settings/pms">Private Messages</a>
+    </div>
+    <div class="sidebar-section">
+        <a href="/account/settings/groups">Groups</a>
+    </div>
+    <div class="sidebar-section">
+        <a href="/account/settings/friends">Friends</a>
+    </div>
+</div>

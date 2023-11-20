@@ -1,0 +1,25 @@
+
+@import url('main.css');
+
+.page {
+    font-size: 90%;
+    margin: 0;
+}
+
+h1, h2 {
+    font-size: 120%;
+    color: black;
+    text-align: center;
+}
+
+.sidebar {
+    float: left;
+    width: 20%;
+    margin-right: 5px;
+}
+
+.sidebar-section {
+    padding: 5px;
+    margin: 2px;
+    background-color: #e3e1fa;
+}
