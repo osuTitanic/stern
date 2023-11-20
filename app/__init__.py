@@ -18,7 +18,8 @@ logging.basicConfig(
     handlers=[Console, File]
 )
 
-session.jobs.submit(jobs.stats.update_usercount)
-session.jobs.submit(jobs.stats.update_stats)
-session.jobs.submit(jobs.stats.update_ranks)
-session.jobs.submit(jobs.stats.update_ppv1)
+if not config.DEBUG:
+    session.jobs.submit(jobs.stats.update_usercount)
+    session.jobs.submit(jobs.stats.update_stats)
+    session.jobs.submit(jobs.stats.update_ranks)
+    session.jobs.submit(jobs.stats.update_ppv1)
