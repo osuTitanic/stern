@@ -3,6 +3,7 @@ from flask import render_template as _render_template
 from flask import request
 
 from app.common.database.repositories import stats, histories, scores
+from app.common.helpers.external import location
 from app.common.helpers import performance
 from app.common.cache import leaderboards
 from app.common.database import DBUser
@@ -10,6 +11,16 @@ from app.common import constants
 
 import config
 import app
+import os
+
+def setup():
+    os.makedirs(config.DATA_PATH, exist_ok=True)
+
+    if config.SKIP_IP_DATABASE:
+        return
+
+    if not os.path.isfile(f'{config.DATA_PATH}/geolite.mmdb'):
+        location.download_database()
 
 def render_template(name: str, **kwargs) -> str:
     """This will automatically fetch all the required data for bancho-stats"""
@@ -19,6 +30,7 @@ def render_template(name: str, **kwargs) -> str:
         total_users=int(app.session.redis.get('bancho:totalusers') or 0),
         show_login=request.args.get('login', False, type=bool),
         constants=constants,
+        location=location,
         config=config,
     )
 

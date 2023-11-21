@@ -10,6 +10,7 @@ ENV/
 env.bak/
 venv.bak/
 
+.data
 .vscode
 .history
 *.vsix
