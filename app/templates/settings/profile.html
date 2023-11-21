@@ -1,0 +1,34 @@
+{# templates/overview/profile.html #}
+
+{% extends "base.html" %}
+
+{% block content %}
+{% include "settings/sidebar.html" %}
+<div class="main-settings">
+    <h1>Profile</h1>
+    <div id="edit">
+        <h2>Edit Profile</h2>
+        <form class="section" action="/account/profile/edit" method="post">
+
+        </form>
+    </div>
+    <div id="signature">
+        <h2>Edit Signature</h2>
+        <form class="section" action="/account/profile/signature" method="post">
+
+        </form>
+    </div>
+    <div id="avatar">
+        <h2>Edit Avatar</h2>
+        <form class="section" action="/account/profile/avatar" method="post">
+
+        </form>
+    </div>
+    <div id="account">
+        <h2>Edit Account Settings</h2>
+        <form class="section" action="/account/profile/settings" method="post">
+
+        </form>
+    </div>
+</div>
+{% endblock content %}
