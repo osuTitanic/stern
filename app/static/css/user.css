@@ -67,6 +67,8 @@
 
 .avatar-box img {
     vertical-align: middle;
+    display: flex;
+    margin: 0 auto;
 }
 
 .user-badges {
