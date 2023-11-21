@@ -25,5 +25,19 @@
         </div>
         {# TODO #}
     </div>
+    <div id="logins">
+        <h2>Previous Logins</h2>
+        <dl class="login-details section">
+            {% if logins %}
+                {% for login in logins %}
+                <dt>{{ login.time|strftime }}</dt>
+                <dd>Login from {{ location.fetch_geolocation(login.ip).country_name }} ({{ login.ip }}) with {{ login.version }}</dd>
+                {% endfor %}
+            {% else %}
+                You have not logged in yet
+            {% endif %}
+        </dl>
+        {# TODO #}
+    </div>
 </div>
 {% endblock content %}

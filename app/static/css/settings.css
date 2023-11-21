@@ -65,3 +65,14 @@ h2 {
     clear: left;
     width: 15%;
 }
+
+.login-details dd {
+    color: #536482;
+    margin-bottom: 5px;
+}
+
+.login-details dt {
+    float: left;
+    clear: left;
+    width: 25%;
+}
