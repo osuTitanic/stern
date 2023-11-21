@@ -21,6 +21,7 @@ h2 {
 .sidebar {
     float: left;
     width: 20%;
+    display: block;
 }
 
 .sidebar-section {
@@ -53,6 +54,12 @@ h2 {
     background-color: #e3e1fa;
     border-radius: 5px;
     padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.section input {
+    margin: 2px;
 }
 
 .activity-details dd {
@@ -75,4 +82,37 @@ h2 {
     float: left;
     clear: left;
     width: 25%;
+}
+
+.profile-section label {
+    font-weight: bold;
+}
+
+.profile-section dd {
+    color: #536482;
+    margin-bottom: 5px;
+    line-height: 25px;
+}
+
+.profile-section dt {
+    float: left;
+    clear: left;
+    width: 30%;
+}
+
+.avatar-box {
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+    background-color: white;
+    border: 1px solid #ddd;
+    margin: auto;
+    margin-bottom: 10px;
+    padding: 2px;
+    height: 120px;
+    width: 120px;
+}
+
+.avatar-box img {
+    vertical-align: middle;
+    display: flex;
+    margin: 0 auto;
 }
