@@ -14,7 +14,7 @@ import app
 import os
 
 def setup():
-    os.makedirs(config.DATA_PATH, exist_ok=True)
+    os.makedirs(f'{config.DATA_PATH}/avatars', exist_ok=True)
 
     if config.SKIP_IP_DATABASE:
         return
