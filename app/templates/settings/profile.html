@@ -8,11 +8,11 @@
     <h1>Profile</h1>
     <div id="edit">
         <h2>Edit Profile</h2>
-        <form class="section" action="/account/profile/avatar" method="post">
+        <form class="section" action="/account/settings/profile/avatar" method="post" enctype="multipart/form-data">
             <div class="avatar-box">
                 <img src="/a/{{ current_user.id }}?h=120" alt="">
             </div>
-            <input type="file" id="avatar" name="avatar" accept="image/png, image/jpeg" /><br>
+            <input type="file" id="avatar" name="avatar" /><br>
             <input class="submit-button" type="submit" name="submit" value="Upload">
         </form>
         <form class="profile-section section" action="/account/profile/edit" method="post">
