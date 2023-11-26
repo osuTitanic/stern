@@ -247,6 +247,15 @@ input:focus {
     font-weight: bold;
 }
 
+input[type="submit"] {
+    background-color: white;
+    border-width: 1px;
+    border-color: #5b5399;
+    border-radius: 4px;
+    padding: 2px 5px 2px 5px;
+    color: black;
+}
+
 .login-dropdown {
     position: absolute;
     right: 2px;
