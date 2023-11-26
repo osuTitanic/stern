@@ -6,6 +6,20 @@
 {% include "settings/sidebar.html" %}
 <div class="main-settings">
     <h1>Profile</h1>
+    {% if error %}
+    <div>
+        <div id="error" class="section">
+            {{ error }}
+        </div>
+    </div>
+    {% endif %}
+    {% if info %}
+    <div>
+        <div id="info" class="section">
+            {{ info }}
+        </div>
+    </div>
+    {% endif %}
     <div id="edit">
         <h2>Edit Profile</h2>
         <form class="section" action="/account/settings/profile/avatar" method="post" enctype="multipart/form-data">
