@@ -10,5 +10,5 @@ def download():
     return utils.render_template(
         'download.html',
         css='download.css',
-        title="Download - osu!Titanic"
+        title="Download - Titanic"
     )

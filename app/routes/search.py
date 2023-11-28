@@ -13,7 +13,7 @@ def search_beatmap():
     return utils.render_template(
         'search.html',
         css='search.css',
-        title="Beatmap Listing - osu!Titanic",
+        title="Beatmap Listing - Titanic",
         query=request.args.get('query', default=''),
         sort=request.args.get('sort', default=BeatmapSortBy.Ranked.value, type=int),
         order=request.args.get('order', default=BeatmapOrder.Descending.value, type=int)
