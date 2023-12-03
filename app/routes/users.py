@@ -33,7 +33,7 @@ def userpage(query: str):
         user=user,
         css='user.css',
         mode=int(mode),
-        title=f"{user.name} - osu!Titanic",
+        title=f"{user.name} - Titanic",
         is_online=status.exists(user.id),
         achievement_categories=app.constants.ACHIEVEMENTS,
         achievements={a.name:a for a in user.achievements},
