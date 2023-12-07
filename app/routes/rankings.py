@@ -47,20 +47,8 @@ def rankings(mode: str, order_type: str):
             if score > 0
         ]
 
-        for index, user in enumerate(sorted_users):
-            user.stats.sort(key=lambda x: x.mode)
-
-            # Check if rank in redis has changed
-            if (index + 1) != user.stats[mode].rank:
-                user.stats[mode].rank = index + 1
-
-                stats.update(
-                    user.id,
-                    mode,
-                    {'rank': user.stats[mode].rank}
-                )
-
-                histories.update_rank(user.stats[mode], user.country)
+        for user in sorted_users:
+            utils.sync_ranks(user)
 
         player_count = leaderboards.player_count(mode.value, order_type)
         total_pages = max(1, min(10000, round(player_count / items_per_page)))
@@ -92,6 +80,7 @@ def rankings(mode: str, order_type: str):
             }[order_type.lower()]
         )
 
+    # Get country ranking
     leaderboard = leaderboards.top_countries(mode)
     leaderboard = leaderboard[(page - 1)*items_per_page:(page - 1)*items_per_page + items_per_page]
 
