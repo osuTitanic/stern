@@ -143,7 +143,7 @@
                 </td>
                 <td>
                     {{ beatmapset.created_at.strftime('%b %d, %Y') }}
-                    {% if beatmapset.status > 0 %}
+                    {% if beatmapset.status > 0 and beatmapset.approved_at %}
                     <br>{{ beatmapset.approved_at.strftime('%b %d, %Y') }}
                     {% endif %}
                 </td>

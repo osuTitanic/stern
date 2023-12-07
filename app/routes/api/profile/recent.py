@@ -39,6 +39,8 @@ def recent_scores(
             until = datetime.fromisoformat(date_string)
         else:
             until = datetime.now() - timedelta(hours=24)
+    
+        min_status = max(0, int(request.args.get("min_status", 3)))
     except ValueError:
         return Response(
             response={},
@@ -57,7 +59,7 @@ def recent_scores(
         int(user_id),
         mode,
         until,
-        min_status=3
+        min_status=min_status
     )
 
     return [

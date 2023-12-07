@@ -22,6 +22,9 @@ REDIS_PORT = int(os.environ.get('REDIS_PORT', 6379))
 FRONTEND_HOST = os.environ.get('FRONTEND_HOST')
 FRONTEND_PORT = int(os.environ.get('FRONTEND_PORT'))
 
+SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY')
+SENDGRID_EMAIL = os.environ.get('SENDGRID_EMAIL')
+
 USERCOUNT_UPDATE_INTERVAL = int(os.environ.get('USERCOUNT_UPDATE_INTERVAL', 60))
 SCORE_RESPONSE_LIMIT = int(os.environ.get('SCORE_RESPONSE_LIMIT', 50))
 DOMAIN_NAME = os.environ.get('DOMAIN_NAME')

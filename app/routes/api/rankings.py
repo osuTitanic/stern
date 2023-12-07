@@ -9,6 +9,8 @@ from app.common.cache import leaderboards
 from app.common.database import DBUser
 from app.models import UserModel
 
+import utils
+
 router = Blueprint("rankings", __name__)
 
 @router.get('/<order_type>/<mode>')
@@ -38,7 +40,6 @@ def rankings(
     country = request.args.get('country', default=None, type=str)
 
     if order_type != 'country':
-        # Get current rankings according to redis
         users_top = leaderboards.top_players(
             mode.value,
             offset,
@@ -60,38 +61,41 @@ def rankings(
             for id, score in users_top
         ]
 
-        for index, user in enumerate(sorted_users):
-            user.stats.sort(key=lambda x: x.mode)
-
-            # Check if rank in redis has changed
-            if (index + 1) != user.stats[mode].rank:
-                user.stats[mode].rank = index + 1
-
-                stats.update(
-                    user.id,
-                    mode,
-                    {'rank': user.stats[mode].rank}
-                )
-
-                histories.update_rank(user.stats[mode], user.country)
-                users.fetch_many.cache_clear()
+        for user in sorted_users:
+            user.stats.sort(key=lambda s:s.mode)
+            utils.sync_ranks(user)
 
         return [
             {
+                'index': index + offset + 1,
+                'global_rank': leaderboards.global_rank(user[0], mode),
+                'country_rank': leaderboards.country_rank(user[0], mode, sorted_users[index].country),
+                'score_rank': leaderboards.score_rank(user[0], mode),
+                'score_rank_country': leaderboards.score_rank_country(user[0], mode, sorted_users[index].country),
+                'total_score_rank': leaderboards.total_score_rank(user[0], mode),
+                'total_score_rank_country': leaderboards.total_score_rank_country(user[0], mode, sorted_users[index].country),
+                'ppv1_rank': leaderboards.ppv1_rank(user[0], mode),
+                'ppv1_rank_country': leaderboards.ppv1_country_rank(user[0], mode, sorted_users[index].country),
                 'user_id': user[0],
-                'pp': user[1],
-                'rank': index + offset + 1,
+                'score': user[1],
                 'user': UserModel.model_validate(
                     sorted_users[index],
                     from_attributes=True
-                ).model_dump()
+                ).model_dump(
+                    exclude=[
+                        'relationships',
+                        'achievements',
+                        'names',
+                        'badges'
+                    ]
+                )
             }
             for index, user in enumerate(users_top)
         ]
 
+    # Get country rankings
     top_countries = leaderboards.top_countries(mode)
 
-    # Get top countries
     return [
         {
             'rank': index + 1,

@@ -26,7 +26,7 @@ def render_template(name: str, **kwargs) -> str:
     )
 
 def sync_ranks(user: DBUser) -> None:
-    """Sync cached rank with database and update ppv1 calculations"""
+    """Sync cached rank with database"""
     try:
         app.session.logger.debug(f'[{user.name}] Trying to update rank from cache...')
 
@@ -79,13 +79,8 @@ def update_ppv1(user: DBUser):
             )
 
             leaderboards.update(
-                user_stats.user_id,
-                user_stats.mode,
-                user_stats.pp,
-                user_stats.rscore,
-                user.country,
-                user_stats.tscore,
-                user_stats.ppv1
+                user_stats,
+                user.country
             )
 
             histories.update_rank(

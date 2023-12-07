@@ -57,6 +57,7 @@ def get_short(mods):
 @flask.template_filter('get_level')
 def get_user_level(total_score: int) -> int:
     next_level = common.constants.level.NEXT_LEVEL
+    total_score = min(total_score, next_level[-1])
 
     for level, threshold in enumerate(next_level):
         if total_score < threshold:
@@ -80,6 +81,23 @@ def format_activity(activity_text: str, activity: common.database.DBActivity) ->
                 for link, text in items
             )
         )
+
+@flask.template_filter('format_chat')
+def format_chat(text: str) -> str:
+    # Sanitize input text
+    text = text.replace("<","&lt") \
+               .replace(">", "&gt;")
+
+    # Replace chat links with html links
+    pattern = r'\[(.*?) (.*?)\]'
+    replacement = r'<a href="\1">\2</a>'
+    result = re.sub(pattern, replacement, text)
+
+    # Remove action text
+    result = result.replace('\x01ACTION', '') \
+                   .replace('\x01', '')
+
+    return result
 
 @flask.errorhandler(404)
 def not_found(error: NotFound) -> Tuple[str, int]:
