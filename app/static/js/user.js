@@ -1,4 +1,5 @@
 var activeTab = window.location.hash != "" ? window.location.hash.replace("#","") : "general";
+var topLeaderOffset = 0;
 var topScoreOffset = 0;
 
 const slideDown = elem => elem.style.height = `${elem.scrollHeight}px`;
@@ -338,7 +339,7 @@ function loadLeaderScores(userId, mode, limit, offset)
         const scoreDiv = createScoreElement(score, index, "leader");
         scoreContainer.appendChild(scoreDiv);
       }
-      topScoreOffset += scores.length;
+      topLeaderOffset += scores.length;
 
       // Render timeago elements
       $(".timeago").timeago();
@@ -363,7 +364,7 @@ function loadLeaderScores(userId, mode, limit, offset)
               showMore.parentElement.appendChild(loadingText);
               showMore.remove();
 
-              loadLeaderScores(userId, modeName, 50, topScoreOffset);
+              loadLeaderScores(userId, modeName, 50, topLeaderOffset);
           }
 
           // Create wrapper that contains styling

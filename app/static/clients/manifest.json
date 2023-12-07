@@ -1,44 +1,60 @@
-[
-    {
-        "version": "b20130606.1",
-        "description": "A build from 2013 with the new UI overhaul update",
-        "download": "https://raw.githubusercontent.com/osuTitanic/clients/main/b20130606.1.zip",
-        "screenshot": "/images/clients/b20130606.1.jpg",
-        "maxWidth": "356px"
-    },
-    {
-        "version": "b20130303",
-        "description": "The last build before 2013's UI overhaul update",
-        "download": "https://raw.githubusercontent.com/osuTitanic/clients/main/b20130303.zip",
-        "screenshot": "/images/clients/b20130303.jpg",
-        "maxWidth": "356px"
-    },
-    {
-        "version": "b20121229-db2k",
-        "description": "A special build modded by db2k, featuring 3-point sliders, background dim and more!",
-        "download": "https://raw.githubusercontent.com/osuTitanic/clients/main/b20121229-db2k.zip",
-        "screenshot": "/images/clients/b20121229-db2k.jpg",
-        "maxWidth": "356px"
-    },
-    {
-        "version": "b20120522",
-        "description": "Another build from 2012, with a more old-ish ui",
-        "download": "https://raw.githubusercontent.com/osuTitanic/clients/main/b20120522.zip",
-        "screenshot": "/images/clients/b20120522.jpg",
-        "maxWidth": "265px"
-    },
-    {
-        "version": "b1821",
-        "description": "The last build from 2011",
-        "download": "https://raw.githubusercontent.com/osuTitanic/clients/main/b1821.zip",
-        "screenshot": "/images/clients/b1821.jpg",
-        "maxWidth": "265px"
-    },
-    {
-        "version": "b1700",
-        "description": "The last build from 2010",
-        "download": "https://raw.githubusercontent.com/osuTitanic/clients/main/b1700.zip",
-        "screenshot": "/images/clients/b1700.jpg",
-        "maxWidth": "265px"
-    }
-]
+{
+    "downloads": [
+        {
+            "version": "b20130606.1",
+            "description": "A build from 2013 with the new UI overhaul update",
+            "download": "https://raw.githubusercontent.com/osuTitanic/clients/main/b20130606.1.zip",
+            "screenshot": "/images/clients/b20130606.1.jpg",
+            "maxWidth": "356px"
+        },
+        {
+            "version": "b20130303",
+            "description": "The last build before 2013's UI overhaul update",
+            "download": "https://raw.githubusercontent.com/osuTitanic/clients/main/b20130303.zip",
+            "screenshot": "/images/clients/b20130303.jpg",
+            "maxWidth": "356px"
+        },
+        {
+            "version": "b20121229-db2k",
+            "description": "A special build modded by db2k, featuring 3-point sliders, background dim and more!",
+            "download": "https://raw.githubusercontent.com/osuTitanic/clients/main/b20121229-db2k.zip",
+            "screenshot": "/images/clients/b20121229-db2k.jpg",
+            "maxWidth": "356px"
+        },
+        {
+            "version": "b20120522",
+            "description": "Another build from 2012, with a more old-ish ui",
+            "download": "https://raw.githubusercontent.com/osuTitanic/clients/main/b20120522.zip",
+            "screenshot": "/images/clients/b20120522.jpg",
+            "maxWidth": "265px"
+        },
+        {
+            "version": "b1821",
+            "description": "The last build from 2011",
+            "download": "https://raw.githubusercontent.com/osuTitanic/clients/main/b1821.zip",
+            "screenshot": "/images/clients/b1821.jpg",
+            "maxWidth": "265px"
+        },
+        {
+            "version": "b1700",
+            "description": "The last build from 2010",
+            "download": "https://raw.githubusercontent.com/osuTitanic/clients/main/b1700.zip",
+            "screenshot": "/images/clients/b1700.jpg",
+            "maxWidth": "265px"
+        }
+    ],
+    "hashes": [
+        "8f14a97b6d11c1795fc42dcb784a3b7b",
+        "5f26f2538731881cc70333495d00cef2",
+        "2561cbb5dae2c450aae88b68a9a44ab3",
+        "0f4ccbd268b90ca29631533a16a98f77",
+        "b4d96f63909061bfa4f541f9cf77529d",
+        "97520f952bc80c9372ce73a23cd1a0fb",
+        "e61522a3e4a9a1ec18f2e066180dd5d1",
+        "dddffef60c07ec83843d769074212ad3",
+        "8ec0f9b6481198580ec1f5a4b47ab571",
+        "b4fb4221684329e3778254bd3ddece21",
+        "2b8af4273c61f8d0c1ec78e73de85cdb",
+        "a068740bea8aac3db148e44f5f0754ae"
+    ]
+}

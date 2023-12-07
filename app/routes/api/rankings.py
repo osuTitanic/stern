@@ -9,6 +9,8 @@ from app.common.cache import leaderboards
 from app.common.database import DBUser
 from app.models import UserModel
 
+import utils
+
 router = Blueprint("rankings", __name__)
 
 @router.get('/<order_type>/<mode>')
@@ -38,7 +40,6 @@ def rankings(
     country = request.args.get('country', default=None, type=str)
 
     if order_type != 'country':
-        # Get current rankings according to redis
         users_top = leaderboards.top_players(
             mode.value,
             offset,
@@ -60,21 +61,9 @@ def rankings(
             for id, score in users_top
         ]
 
-        for index, user in enumerate(sorted_users):
-            user.stats.sort(key=lambda x: x.mode)
-
-            # Check if rank in redis has changed
-            if (index + 1) != user.stats[mode].rank:
-                user.stats[mode].rank = index + 1
-
-                stats.update(
-                    user.id,
-                    mode,
-                    {'rank': user.stats[mode].rank}
-                )
-
-                histories.update_rank(user.stats[mode], user.country)
-                users.fetch_many.cache_clear()
+        for user in sorted_users:
+            user.stats.sort(key=lambda s:s.mode)
+            utils.sync_ranks(user)
 
         return [
             {
@@ -104,9 +93,9 @@ def rankings(
             for index, user in enumerate(users_top)
         ]
 
+    # Get country rankings
     top_countries = leaderboards.top_countries(mode)
 
-    # Get top countries
     return [
         {
             'rank': index + 1,

@@ -40,7 +40,7 @@ def render_template(name: str, **kwargs) -> str:
     )
 
 def sync_ranks(user: DBUser) -> None:
-    """Sync cached rank with database and update ppv1 calculations"""
+    """Sync cached rank with database"""
     try:
         app.session.logger.debug(f'[{user.name}] Trying to update rank from cache...')
 

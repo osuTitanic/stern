@@ -17,9 +17,9 @@ function loadManifest()
       }
       return response.json();
     })
-    .then(clients => {
+    .then(manifest => {
       // Create client div's for each entry in manifest
-      clients.forEach(client => {
+      manifest['downloads'].forEach(client => {
           const version = document.createElement('p');
           version.textContent = client.version;
           version.classList.add('version')
