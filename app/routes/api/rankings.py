@@ -62,6 +62,7 @@ def rankings(
         ]
 
         for user in sorted_users:
+            user.stats.sort(key=lambda s:s.mode)
             utils.sync_ranks(user)
 
         return [

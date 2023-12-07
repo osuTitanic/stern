@@ -48,6 +48,7 @@ def rankings(mode: str, order_type: str):
         ]
 
         for user in sorted_users:
+            user.stats.sort(key=lambda s:s.mode)
             utils.sync_ranks(user)
 
         player_count = leaderboards.player_count(mode.value, order_type)
