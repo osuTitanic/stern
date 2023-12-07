@@ -74,7 +74,6 @@ def rankings(
                 )
 
                 histories.update_rank(user.stats[mode], user.country)
-                users.fetch_many.cache_clear()
 
         return [
             {

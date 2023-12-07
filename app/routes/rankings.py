@@ -61,7 +61,6 @@ def rankings(mode: str, order_type: str):
                 )
 
                 histories.update_rank(user.stats[mode], user.country)
-                users.fetch_many.cache_clear()
 
         player_count = leaderboards.player_count(mode.value, order_type)
         total_pages = max(1, min(10000, round(player_count / items_per_page)))
