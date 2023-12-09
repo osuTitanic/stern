@@ -130,7 +130,7 @@ def format_chat(text: str) -> str:
 
 @flask.template_filter('bbcode')
 def render_bbcode(text: str) -> str:
-    return bbcode.formatter.format(text)
+    return f'<div class="bbcode">{bbcode.formatter.format(text)}</div>'
 
 @flask.errorhandler(404)
 def not_found(error: NotFound) -> Tuple[str, int]:
