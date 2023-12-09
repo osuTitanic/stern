@@ -315,6 +315,10 @@ input[type="submit"] {
     padding-bottom: 10px;
 }
 
+.bbcode h2 {
+    font-size: 180%;
+}
+
 .spoiler {
     margin: 5px;
 }
