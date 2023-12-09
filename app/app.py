@@ -10,6 +10,7 @@ from datetime import datetime
 
 from . import common
 from . import routes
+from . import bbcode
 
 import timeago
 import config
@@ -126,6 +127,10 @@ def format_chat(text: str) -> str:
                    .replace('\x01', '')
 
     return result
+
+@flask.template_filter('bbcode')
+def render_bbcode(text: str) -> str:
+    return bbcode.formatter.format(text)
 
 @flask.errorhandler(404)
 def not_found(error: NotFound) -> Tuple[str, int]:
