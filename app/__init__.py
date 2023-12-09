@@ -3,6 +3,7 @@ from .common.logging import Console, File
 
 from . import constants
 from . import session
+from . import bbcode
 from . import common
 from . import routes
 from . import jobs
