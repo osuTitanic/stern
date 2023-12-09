@@ -314,3 +314,21 @@ input[type="submit"] {
     margin: 10px;
     padding-bottom: 10px;
 }
+
+.spoiler {
+    margin: 5px;
+}
+
+.spoiler-head {
+    border-bottom: solid 1px #b7c9ff;
+    padding: 3px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 95%;
+}
+
+.spoiler-body {
+    background-color: #eef;
+    padding: 5px;
+    display: none;
+}

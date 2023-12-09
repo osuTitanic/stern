@@ -42,3 +42,10 @@ function showLoginForm() {
 document.addEventListener("DOMContentLoaded", () => {
     $(".timeago").timeago();
 });
+
+function toggleSpoiler(root) {
+    var spoiler = $(root).parents(".spoiler");
+	spoiler.children(".spoiler-body").slideToggle("fast");
+	spoiler.find('img').trigger('unveil');
+	return false;
+}

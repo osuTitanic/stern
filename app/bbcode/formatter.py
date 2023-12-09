@@ -34,7 +34,6 @@ parser.add_simple_formatter(
     same_tag_closes=True
 )
 
-# TODO: Add css & js for this
 parser.add_simple_formatter(
     'spoilerbox',
     '<div class="spoiler">'
