@@ -78,19 +78,20 @@ def render_size(tag_name, value, options, parent, context):
         size = '100'
 
     if (size := options['size']).isdigit():
+        size = max(10, min(800, int(size)))
         return '<span style="font-size:%s%%;">%s</span>' % (size, value)
 
     size_strings = {
         'tiny': 50,
         'small': 85,
         'normal': 100,
-        'large': 150
+        'large': 180
     }
 
     if size not in size_strings:
         return value
 
-    return '<span style="font-size:%s;">%s</span>' % (size_strings[size], value)
+    return '<span style="font-size:%s%%;">%s</span>' % (size_strings[size], value)
 
 @parser.formatter('list')
 def render_list(tag_name, value, options, parent, context):
