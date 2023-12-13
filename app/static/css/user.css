@@ -129,6 +129,17 @@
     display: inline-block;
 }
 
+.playstyle-hidden {
+    width: 32px;
+    height: 32px;
+    background-image: url('/images/playstyles.png');
+    display: inline-block;
+}
+
+.playstyle-selectable {
+    cursor: pointer;
+}
+
 .playstyle.mouse {
     background-position: 0px 0px;
 }
@@ -143,6 +154,22 @@
 
 .playstyle.touch {
     background-position: -96px 0px;
+}
+
+.playstyle-hidden.mouse {
+    background-position: 0px 32px;
+}
+
+.playstyle-hidden.keyboard {
+    background-position: -64px 32px;
+}
+
+.playstyle-hidden.tablet {
+    background-position: -32px 32px;
+}
+
+.playstyle-hidden.touch {
+    background-position: -96px 32px;
 }
 
 .edit-button {

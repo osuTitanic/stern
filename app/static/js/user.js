@@ -861,6 +861,21 @@ function loadUserViewsGraph(userId, mode)
       });
 }
 
+function updatePlaystyleElement(element)
+{
+  var selected = element.classList.contains('playstyle');
+
+  if (selected) {
+    element.classList.remove('playstyle');
+    element.classList.add('playstyle-hidden');
+  } else {
+    element.classList.add('playstyle');
+    element.classList.remove('playstyle-hidden');
+  }
+
+  // TODO
+}
+
 window.addEventListener('load', () => {
     expandProfileTab(activeTab);
     loadTopPlays(userId, modeName, 5, 0);

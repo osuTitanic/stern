@@ -92,11 +92,21 @@
         {% if user.playstyle > 0 %}
         <div class="playstyle-container">
         {% set current_playstyle = user.playstyle|playstyle %}
-        {% for playstyle in constants.Playstyle %}
-            {% if playstyle in current_playstyle and playstyle > 0 %}
-            <div class="playstyle {{ playstyle.name|lower }}"></div>
-            {% endif %}
-        {% endfor %}
+        {% if current_user.id == user.id %}
+            {% for playstyle in constants.Playstyle %}
+                {% if playstyle in current_playstyle and playstyle > 0 %}
+                <div class="playstyle {{ playstyle.name|lower }} playstyle-selectable" onclick="updatePlaystyleElement(this)"></div>
+                {% else %}
+                <div class="playstyle-hidden {{ playstyle.name|lower }} playstyle-selectable" onclick="updatePlaystyleElement(this)"></div>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            {% for playstyle in constants.Playstyle %}
+                {% if playstyle in current_playstyle and playstyle > 0 %}
+                <div class="playstyle {{ playstyle.name|lower }}"></div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
         </div>
         {% endif %}
     </div>
@@ -106,13 +116,13 @@
 <div class="profile-right">
     {% if current_user.id == user.id %}
         {% if user.userpage_about %}
-            <a class="edit-button" href="/account/settings/userpage">Edit</a>
+            <a class="edit-button" href="/account/settings/profile#userpage">Edit</a>
             <br>
             <div class="userpage">
                 {{ user.userpage_about|bbcode|safe }}
             </div>
         {% else %}
-            <a href="/account/settings/userpage">Click to make your user page!</a>
+            <a href="/account/settings/profile#userpage">Click to make your user page!</a>
             <br>
         {% endif %}
     {% else %}
