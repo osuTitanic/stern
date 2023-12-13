@@ -336,3 +336,11 @@ input[type="submit"] {
     padding: 5px;
     display: none;
 }
+
+.bbcode-editor {
+    white-space: pre-line;
+    height: auto;
+    margin: 2.5px;
+    padding: 2.5px;
+    width: 98%;
+}
