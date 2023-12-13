@@ -66,17 +66,23 @@
             </dl>
         </form>
     </div>
-    <div id="signature">
-        <h2>Edit Signature</h2>
-        <form class="section" action="/account/profile/signature" method="post">
-
+    <div id="userpage">
+        <h2>Edit Userpage</h2>
+        <form class="section" action="/account/settings/profile/userpage" method="post">
+            {% with context = {
+                "current": current_user.userpage_about,
+                "submit-text": "Update",
+                "min-height": "140px"
+            } %}
+                {% include "editor.html" %}
+            {% endwith %}
         </form>
     </div>
-    <div id="account">
-        <h2>Edit Account Settings</h2>
-        <form class="section" action="/account/profile/settings" method="post">
-
-        </form>
-    </div>
+    {#
+        <div id="signature">
+            <h2>Edit Signature</h2>
+            <form class="section" action="/account/profile/signature" method="post"></form>
+        </div>
+    #}
 </div>
 {% endblock content %}
