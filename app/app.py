@@ -56,11 +56,6 @@ def get_rounded(num: float, ndigits: int = 0):
 def get_rounded(num: int):
     return common.constants.Playstyle(num)
 
-@flask.template_filter('bbcode')
-def get_html_from_bbcode(text: str):
-    # TODO
-    return text
-
 @flask.template_filter('domain')
 def get_domain(url: str) -> str:
     return re.search(r'https?://([A-Za-z_0-9.-]+).*', url) \
@@ -68,8 +63,15 @@ def get_domain(url: str) -> str:
 
 @flask.template_filter('twitter_handle')
 def get_handle(url: str) -> str:
-    return re.search(r'https?://(www.)?(twitter|x)\.com/(@\w+|\w+)', url) \
-             .group(3)
+    url_match = re.search(r'https?://(www.)?(twitter|x)\.com/(@\w+|\w+)', url)
+
+    if url_match:
+        return url_match.group(3)
+
+    if not url.startswith('@'):
+        url = f'@{url}'
+
+    return url
 
 @flask.template_filter('short_mods')
 def get_short(mods):
