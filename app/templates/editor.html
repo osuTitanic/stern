@@ -1,0 +1,9 @@
+{# templates/editor.html #}
+
+<textarea class="bbcode-editor" name="bbcode" style="resize: none; min-height: {{ context['min-height'] }};">
+    {{ context['current'] | replace('\\r\\n', '\n') | replace('\\n', '\\n') }}
+</textarea>
+<br>
+<input type="submit" value="{{ context['submit-text'] }}">
+
+{# TODO: Preview #}
