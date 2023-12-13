@@ -65,6 +65,36 @@
                 <dd><input class="submit-button" type="submit" name="submit" value="Save"></dd>
             </dl>
         </form>
+        <form class="profile-section section" action="/account/settings/profile" method="post">
+            <dl>
+                <div class="inner-section">
+                    <dt><label for="website">Website:</label></dt>
+                    <dd><input name="website" type="url" value="{{ current_user.userpage_website or '' }}"></dd>
+                </div>
+
+                <div class="inner-section">
+                    <dt><label for="discord">Discord:</label></dt>
+                    <dd><input name="discord" type="text" value="{{ current_user.userpage_discord or '' }}"></dd>
+                </div>
+
+                <div class="inner-section">
+                    <dt><label for="twitter">Twitter:</label></dt>
+                    <dd><input name="twitter" type="text" value="{{ current_user.userpage_twitter or '' }}"></dd>
+                </div>
+
+                <div class="inner-section">
+                    <dt><label for="location">Location:</label></dt>
+                    <dd><input name="location" type="text" value="{{ current_user.userpage_location or '' }}"></dd>
+                </div>
+
+                <div class="inner-section">
+                    <dt><label for="interests">Interests:</label></dt>
+                    <dd><input name="interests" type="text" value="{{ current_user.userpage_interests or '' }}"></dd>
+                </div>
+
+                <dd><input class="submit-button" type="submit" name="submit" value="Save"></dd>
+            </dl>
+        </form>
     </div>
     <div id="userpage">
         <h2>Edit Userpage</h2>

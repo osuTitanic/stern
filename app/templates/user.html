@@ -56,16 +56,16 @@
                 <a href="{{ user.userpage_website }}">{{ user.userpage_website|domain }}</a>
             </div>
             {% endif %}
-            {% if user.userpage_discord %}
-            <div title="Discord" class="activity">
-                <i class="fa-brands fa-discord" style="color: #76777b;"></i>
-                <a href="{{ user.userpage_discord }}">Discord</a>
-            </div>
-            {% endif %}
             {% if user.userpage_twitter %}
             <div title="Twitter" class="activity">
                 <i class="fa-brands fa-twitter" style="color: #76777b;"></i>
-                <a href="{{ user.userpage_twitter }}">@{{ user.userpage_twitter|twitter_handle }}</a>
+                <a href="{{ user.userpage_twitter }}">{{ user.userpage_twitter|twitter_handle }}</a>
+            </div>
+            {% endif %}
+            {% if user.userpage_discord %}
+            <div title="Discord" class="activity">
+                <i class="fa-brands fa-discord" style="color: #76777b;"></i>
+                <p>{{ user.userpage_discord }}</p>
             </div>
             {% endif %}
         </div>
