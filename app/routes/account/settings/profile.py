@@ -23,27 +23,42 @@ def profile_settings():
         css='settings.css'
     )
 
+@router.post('/profile')
+@login_required
+def update_profile_settings():
+    interests = request.form.get('interests') or None
+    location = request.form.get('location') or None
+    website = request.form.get('website') or None
+    discord = request.form.get('discord') or None
+    twitter = request.form.get('twitter') or None
+
+    users.update(
+        flask_login.current_user.id,
+        {
+            'userpage_interests': interests,
+            'userpage_location': location,
+            'userpage_website': website,
+            'userpage_discord': discord,
+            'userpage_twitter': f'https://twitter.com/{app.get_handle(twitter)}'
+        }
+    )
+
+    return utils.render_template(
+        'settings/profile.html',
+        css='settings.css',
+        info='Successfully updated profile.'
+    )
+
 @router.post('/profile/userpage')
 @login_required
 def update_userpage():
     if not (bbcode := request.form.get('bbcode')):
         return redirect('/account/settings/profile')
 
-    try:
-        users.update(
-            flask_login.current_user.id,
-            {'userpage_about': bbcode}
-        )
-    except Exception as e:
-        app.session.logger.error(
-            f'Failed to update userpage: {e}',
-            exc_info=e
-        )
-        return utils.render_template(
-            'settings/profile.html',
-            css='settings.css',
-            error="Failed to update userpage!"
-        )
+    users.update(
+        flask_login.current_user.id,
+        {'userpage_about': bbcode}
+    )
 
     return utils.render_template(
         'settings/profile.html',

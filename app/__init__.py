@@ -8,7 +8,7 @@ from . import common
 from . import routes
 from . import jobs
 
-from .app import flask
+from .app import flask, get_handle
 
 import logging
 import config
