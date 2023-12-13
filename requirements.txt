@@ -18,7 +18,7 @@ cycler==0.12.1
 Flask==3.0.0
 Flask-Assets==2.1.0
 Flask-Pydantic==0.11.0
-fonttools==4.44.0
+fonttools==4.46.0
 frozenlist==1.4.0
 geoip2==4.7.0
 greenlet==3.0.1
