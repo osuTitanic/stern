@@ -39,7 +39,8 @@ def update_profile_settings():
             'userpage_location': location,
             'userpage_website': website,
             'userpage_discord': discord,
-            'userpage_twitter': f'https://twitter.com/{app.get_handle(twitter)}'
+            'userpage_twitter': f'https://twitter.com/{app.get_handle(twitter)}' \
+                if twitter else None
         }
     )
 
