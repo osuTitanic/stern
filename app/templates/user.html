@@ -89,7 +89,7 @@
                 <p>0 posts</p>
             </div>
         </div>
-        {% if user.playstyle > 0 %}
+        {% if user.playstyle > 0 or current_user.id == user.id %}
         <div class="playstyle-container">
         {% set current_playstyle = user.playstyle|playstyle %}
         {% if current_user.id == user.id %}
