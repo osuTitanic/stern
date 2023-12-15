@@ -93,11 +93,12 @@
         <div class="playstyle-container">
         {% set current_playstyle = user.playstyle|playstyle %}
         {% if current_user.id == user.id %}
+            {# Let user edit the playstyle #}
             {% for playstyle in constants.Playstyle %}
                 {% if playstyle in current_playstyle and playstyle > 0 %}
-                <div class="playstyle {{ playstyle.name|lower }} playstyle-selectable" onclick="updatePlaystyleElement(this)"></div>
+                <div id="{{ playstyle.name }}" class="playstyle {{ playstyle.name|lower }} playstyle-selectable" onclick="updatePlaystyleElement(this)"></div>
                 {% else %}
-                <div class="playstyle-hidden {{ playstyle.name|lower }} playstyle-selectable" onclick="updatePlaystyleElement(this)"></div>
+                <div id="{{ playstyle.name }}" class="playstyle-hidden {{ playstyle.name|lower }} playstyle-selectable" onclick="updatePlaystyleElement(this)"></div>
                 {% endif %}
             {% endfor %}
         {% else %}
