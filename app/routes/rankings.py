@@ -7,6 +7,7 @@ from app.common.database import DBUser
 from flask import Blueprint, abort, request
 
 import utils
+import math
 
 router = Blueprint('rankings', __name__)
 
@@ -19,7 +20,7 @@ def rankings(mode: str, order_type: str):
         return abort(404)
 
     page = max(1, min(10000, request.args.get('page', default=1, type=int)))
-    items_per_page = 49
+    items_per_page = 50
 
     # Any two letter country code
     country = request.args.get('country', default=None, type=str)
@@ -52,7 +53,7 @@ def rankings(mode: str, order_type: str):
             utils.sync_ranks(user)
 
         player_count = leaderboards.player_count(mode.value, order_type)
-        total_pages = max(1, min(10000, round(player_count / items_per_page)))
+        total_pages = max(1, min(10000, math.ceil(player_count / items_per_page)))
 
         # Get min/max pages to display for pagination
         max_page_display = max(page, min(total_pages, page + 8))
@@ -73,6 +74,7 @@ def rankings(mode: str, order_type: str):
             top_countries=top_countries,
             max_page_display=max_page_display,
             min_page_display=min_page_display,
+            items_per_page=items_per_page,
             order_name={
                 'rscore': 'Ranked Score',
                 'tscore': 'Total Score',
@@ -86,7 +88,7 @@ def rankings(mode: str, order_type: str):
     leaderboard = leaderboard[(page - 1)*items_per_page:(page - 1)*items_per_page + items_per_page]
 
     country_count = len(leaderboard)
-    total_pages = max(1, min(10000, round(country_count / items_per_page)))
+    total_pages = max(1, min(10000, math.ceil(country_count / items_per_page)))
 
     # Get min/max pages to display for pagination
     max_page_display = max(page, min(total_pages, page + 8))
@@ -101,4 +103,5 @@ def rankings(mode: str, order_type: str):
         leaderboard=leaderboard,
         max_page_display=max_page_display,
         min_page_display=min_page_display,
+        items_per_page=items_per_page
     )
