@@ -66,25 +66,6 @@ def update_usercount():
             )
 
 def update_ranks():
-    """Update the rank history for every user after one hour."""
-    while True:
-        try:
-            active_users = users.fetch_active(
-                timedelta(days=90),
-                DBUser.stats
-            )
-
-            for user in active_users:
-                utils.sync_ranks(user)
-
-            app.session.jobs.sleep(3600)
-        except Exception as e:
-            app.session.logger.error(
-                f"Failed to update ranks: {e}",
-                exc_info=e
-            )
-
-def update_ranks():
     """Update the rank history for every user, every 15 minutes."""
     while True:
         try:
