@@ -62,6 +62,7 @@ function getBeatmapsets()
                 noMapsText.textContent = "Nothing found... :("
                 noMapsText.style.margin = "0 auto";
                 beatmapContainer.appendChild(noMapsText);
+                $(".pagination").remove();
                 return;
             }
 
