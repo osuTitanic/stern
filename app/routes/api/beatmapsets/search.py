@@ -32,8 +32,8 @@ def search_api():
         query.sort,
         query.storyboard,
         query.video,
-        query.offset,
-        query.limit
+        offset=query.page * 50,
+        limit=50
     )
 
     return [

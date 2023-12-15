@@ -74,6 +74,34 @@
             </dd>
         </dl>
     </div>
+    <div class="pagination" style="display: none;">
+        {# "Previous" Button #}
+        {% if page > 1 %}
+        <a href="?page={{ page - 1 }}&{{ arguments }}">
+            Prev
+        </a>
+        {% if min_page_display != 1 %}...{% endif %}
+        {% endif %}
+        {# Page Numbers (max. 10) #}
+        {% for _page in range(min_page_display, max_page_display+1) %}
+            {% if _page == page %}
+                <b>
+                    {{ _page }}
+                </b>
+            {% else %}
+                <a href="?page={{ _page }}&{{ arguments }}">
+                    {{ _page }}
+                </a>
+            {% endif %}
+        {% endfor %}
+        {# "Next" Button #}
+        {% if (page + 1) <= 1000 %}
+        ...
+        <a href="?page={{ page + 1 }}&{{ arguments }}">
+            Next
+        </a>
+        {% endif %}
+    </div>
     <table class="beatmap-order-select">
         <thead>
             <tr>
@@ -130,9 +158,36 @@
     </table>
     <div id="beatmap-list">
         <h3 id="loading-text">Loading...</h3>
-        {# TODO - Add beatmap pagination #}
         {# TODO - Add beatmap download sidebar #}
         {# TODO - Show more beatmap information #}
+    </div>
+    <div class="pagination" style="display: none;">
+        {# "Previous" Button #}
+        {% if page > 1 %}
+        <a href="?page={{ page - 1 }}&{{ arguments }}">
+            Prev
+        </a>
+        {% if min_page_display != 1 %}...{% endif %}
+        {% endif %}
+        {# Page Numbers (max. 10) #}
+        {% for _page in range(min_page_display, max_page_display+1) %}
+            {% if _page == page %}
+                <b>
+                    {{ _page }}
+                </b>
+            {% else %}
+                <a href="?page={{ _page }}&{{ arguments }}">
+                    {{ _page }}
+                </a>
+            {% endif %}
+        {% endfor %}
+        {# "Next" Button #}
+        {% if (page + 1) <= 1000 %}
+        ...
+        <a href="?page={{ page + 1 }}&{{ arguments }}">
+            Next
+        </a>
+        {% endif %}
     </div>
 </div>
 <script src="/js/search.js"></script>

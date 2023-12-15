@@ -151,6 +151,7 @@ h2 {
     padding: 7px;
     margin: 5px;
     height: 124px;
+    max-width: 650px;
 }
 
 .beatmap-description:hover {
