@@ -868,12 +868,12 @@ function updatePlaystyleElement(element)
   if (selected) {
     element.classList.remove('playstyle');
     element.classList.add('playstyle-hidden');
+    fetch(`/api/profile/playstyle/remove?type=${element.id}`);
   } else {
     element.classList.add('playstyle');
     element.classList.remove('playstyle-hidden');
+    fetch(`/api/profile/playstyle/add?type=${element.id}`);
   }
-
-  // TODO
 }
 
 window.addEventListener('load', () => {
