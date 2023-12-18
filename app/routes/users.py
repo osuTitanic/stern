@@ -22,7 +22,7 @@ def userpage(query: str):
         if not (user := users.fetch_by_id(int(query), session)):
             return abort(404)
 
-        if user.restricted or not user.activated:
+        if not user.activated:
             return abort(404)
 
         if not (mode := request.args.get('mode')):

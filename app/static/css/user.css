@@ -6,7 +6,7 @@
 }
 
 .profile-left {
-    background-color: #e7e4fc;
+    background-color: #dad7fb;
     width: 200px;
     height: 100%;
     padding: 5px;
@@ -14,6 +14,11 @@
     border-radius: 5px;
     position: sticky;
     top: 0;
+}
+
+#banned-image {
+    display: flex;
+    margin: 15px auto 0 auto;
 }
 
 .profile-right {
@@ -28,6 +33,7 @@
     justify-content: center;
     align-items: center;
     overflow-wrap: anywhere;
+    font-size: 95%;
 }
 
 .left-top h1 {
