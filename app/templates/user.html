@@ -453,6 +453,58 @@
                 {% endif %}
                 </div>
             </td>
+            <tr onclick="expandProfileTab('account')">
+                <td id="tab-general" class="tab-heading">Account Standing</td>
+            </tr>
+            <td>
+                <div id="account" class="tab-content" style="opacity: 1; filter: none; display: none; height: 0px;">
+                    <div>
+                        {% if infringements %}
+                        <p style="color: red">
+                            {{ user.name }}'s account is not in good standing :(
+                            {# TODO #}
+                        </p>
+                        {% else %}
+                        <p>
+                            This account is in good standing :)
+                        </p>
+                        {% endif %}
+                        {% if infringements %}
+                        <h3 class="profile-stats-header" style="text-align: left">
+                            Recent Infringements
+                        </h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <td>Date</td>
+                                    <td>Action</td>
+                                    <td>Length</td>
+                                    <td>Description</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for inf in infringements %}
+                                <tr>
+                                    <td>{{ inf.time|timeago }}</td>
+                                    {% if inf.action == 0 %}
+                                    <td style="background-color: red">BAN</td>
+                                    {% else %}
+                                    <td style="background-color: yellow">SILENCE</td>
+                                    {% endif %}
+                                    {% if inf.is_permanent %}
+                                    <td>Permanent</td>
+                                    {% else %}
+                                    <td>{{ (inf.length|round_time - inf.time|round_time) }}</td>
+                                    {% endif %}
+                                    <td>{{ inf.description }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        {% endif %}
+                    </div>
+                </div>
+            </td>
         </tbody>
     </table>
 </div>

@@ -429,3 +429,21 @@
     margin-bottom: 15px;
     font-size: 95%;
 }
+
+#account {
+    display: flex;
+}
+
+#account div {
+    margin: 15px; text-align: center;
+}
+
+#account table {
+    width: 100%;
+}
+
+#account thead td {
+    font-weight: bold;
+    border-bottom: 1px solid #9492dc;
+    background-color: #e7e5fc;
+}

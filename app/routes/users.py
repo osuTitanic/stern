@@ -1,5 +1,5 @@
 
-from app.common.database.repositories import users, activities, stats
+from app.common.database.repositories import users, activities, stats, infringements
 from flask import Blueprint, abort, redirect, request
 from app.common.cache import status, leaderboards
 
@@ -28,6 +28,18 @@ def userpage(query: str):
         if not (mode := request.args.get('mode')):
             mode = user.preferred_mode
 
+        if user.restricted:
+            infs = infringements.fetch_all(
+                user.id,
+                session=session
+            )
+
+        else:
+            infs = infringements.fetch_recent_until(
+                user.id,
+                session=session
+            )
+
         return utils.render_template(
             name='user.html',
             user=user,
@@ -43,5 +55,6 @@ def userpage(query: str):
             pp_rank_country=leaderboards.country_rank(user.id, int(mode), user.country),
             score_rank=leaderboards.score_rank(user.id, int(mode)),
             score_rank_country=leaderboards.score_rank_country(user.id, int(mode), user.country),
-            ppv1_rank=leaderboards.ppv1_rank(user.id, int(mode))
+            ppv1_rank=leaderboards.ppv1_rank(user.id, int(mode)),
+            infringements=infs
         )
