@@ -76,6 +76,18 @@ function getBeatmapsets()
                 var playIcon = document.createElement("i");
                 playIcon.classList.add("fa-solid", "fa-play");
                 playIcon.onclick = (e) => {
+                    document.querySelectorAll('[id^="beatmap-preview-"]').forEach(element => {
+                        // Disable other active audios
+                        if (!element.paused && element.id != `beatmap-preview-${beatmapset.id}`)
+                        {
+                            element.pause();
+
+                            var audioPlayIcon = element.parentElement.querySelector('.beatmap-image i');
+                            audioPlayIcon.classList.remove("fa-pause");
+                            audioPlayIcon.classList.add("fa-play");
+                        }
+                    });
+
                     resetOrPlayAudio(`beatmap-preview-${beatmapset.id}`);
 
                     var audio = document.getElementById(`beatmap-preview-${beatmapset.id}`);
