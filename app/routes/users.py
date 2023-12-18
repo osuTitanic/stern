@@ -11,7 +11,7 @@ router = Blueprint('users', __name__)
 @router.get('/<query>')
 def userpage(query: str):
     if not query.isdigit():
-        user = users.fetch_by_name_extended(query, session)
+        user = users.fetch_by_name_extended(query)
 
         if not user:
             abort(404)
