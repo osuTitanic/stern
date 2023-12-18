@@ -81,6 +81,7 @@ function getBeatmapsets()
                         if (!element.paused && element.id != `beatmap-preview-${beatmapset.id}`)
                         {
                             element.pause();
+                            element.currentTime = 0;
 
                             var audioPlayIcon = element.parentElement.querySelector('.beatmap-image i');
                             audioPlayIcon.classList.remove("fa-pause");
