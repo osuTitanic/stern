@@ -1,6 +1,6 @@
 
 from werkzeug.exceptions import NotFound
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Tuple
 from flask import Flask
 
@@ -98,6 +98,13 @@ def format_chat(text: str) -> str:
                    .replace('\x01', '')
 
     return result
+
+@flask.template_filter('round_time')
+def round_time(dt: datetime, round_to = 60):
+    if dt == None : dt = datetime.now()
+    seconds = (dt.replace(tzinfo=None) - dt.min).seconds
+    rounding = (seconds+round_to/2) // round_to * round_to
+    return dt + timedelta(0,rounding-seconds,-dt.microsecond)
 
 @flask.errorhandler(404)
 def not_found(error: NotFound) -> Tuple[str, int]:
