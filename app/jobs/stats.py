@@ -71,10 +71,7 @@ def update_ranks():
         try:
             app.session.jobs.logger.info('[ranks] -> Updating rank history...')
 
-            active_users = users.fetch_active(
-                timedelta(days=90),
-                DBUser.stats
-            )
+            active_users = users.fetch_active(timedelta(days=90))
 
             for user in active_users:
                 utils.sync_ranks(user)
