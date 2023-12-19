@@ -12,7 +12,7 @@ router = Blueprint('beatmapsets', __name__)
 def search_beatmap():
     page = request.args.get('page', default=0, type=int)
     max_page_display = max(page, min(page, page + 8))
-    min_page_display = max(1, min(page, max_page_display - 9))
+    min_page_display = max(0, min(page, max_page_display - 9))
 
     arguments = '&'.join([
         f'{key}={value}'
