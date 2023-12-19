@@ -76,6 +76,19 @@ function getBeatmapsets()
                 var playIcon = document.createElement("i");
                 playIcon.classList.add("fa-solid", "fa-play");
                 playIcon.onclick = (e) => {
+                    document.querySelectorAll('[id^="beatmap-preview-"]').forEach(element => {
+                        // Disable other active audios
+                        if (!element.paused && element.id != `beatmap-preview-${beatmapset.id}`)
+                        {
+                            element.pause();
+                            element.currentTime = 0;
+
+                            var audioPlayIcon = element.parentElement.querySelector('.beatmap-image i');
+                            audioPlayIcon.classList.remove("fa-pause");
+                            audioPlayIcon.classList.add("fa-play");
+                        }
+                    });
+
                     resetOrPlayAudio(`beatmap-preview-${beatmapset.id}`);
 
                     var audio = document.getElementById(`beatmap-preview-${beatmapset.id}`);
@@ -237,9 +250,7 @@ function reloadInput()
 
     // Keep search input from previous request
     var search = new URLSearchParams(location.search).get("query");
-    var page = new URLSearchParams(location.search).get("page");
     if (search) query.set("query", search);
-    if (page) query.set("page", page);
 
     // Browser will reload
     location.search = query.toString();
@@ -275,6 +286,7 @@ function setOrder(element)
 {
     const query = new URLSearchParams(location.search);
     query.set("sort", element.getAttribute("data-id"));
+    query.delete("page");
 
     if (element.classList.contains("selected"))
     {

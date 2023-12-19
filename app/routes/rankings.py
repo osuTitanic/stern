@@ -62,10 +62,17 @@ def rankings(mode: str, order_type: str):
         # Fetch top countries for country selection
         top_countries = leaderboards.top_countries(mode)
 
+        order_name = {
+            'rscore': 'Ranked Score',
+            'tscore': 'Total Score',
+            'performance': 'Performance',
+            'ppv1': 'PPv1'
+        }[order_type.lower()]
+
         return utils.render_template(
             'rankings.html',
             css='rankings.css',
-            title='Rankings - osu!Titanic',
+            title=f'{order_name} Rankings - Titanic',
             mode=mode,
             page=page,
             country=country,
@@ -76,12 +83,7 @@ def rankings(mode: str, order_type: str):
             max_page_display=max_page_display,
             min_page_display=min_page_display,
             items_per_page=items_per_page,
-            order_name={
-                'rscore': 'Ranked Score',
-                'tscore': 'Total Score',
-                'performance': 'Performance',
-                'ppv1': 'PPv1'
-            }[order_type.lower()]
+            order_name=order_name
         )
 
     # Get country ranking

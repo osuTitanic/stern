@@ -6,7 +6,7 @@
 }
 
 .profile-left {
-    background-color: #e7e4fc;
+    background-color: #dad7fb;
     width: 200px;
     height: 100%;
     padding: 5px;
@@ -14,6 +14,11 @@
     border-radius: 5px;
     position: sticky;
     top: 0;
+}
+
+#banned-image {
+    display: flex;
+    margin: 15px auto 0 auto;
 }
 
 .profile-right {
@@ -32,10 +37,11 @@
 
 .left-top h1 {
     font-weight: normal;
-    font-size: 150%;
+    font-size: 145%;
     display: flex;
     justify-content: center;
     align-items: center;
+    padding-top: 5px;
 }
 
 .flag {
@@ -455,4 +461,22 @@
     height: 120px;
     margin-bottom: 15px;
     font-size: 95%;
+}
+
+#account {
+    display: flex;
+}
+
+#account div {
+    margin: 15px; text-align: center;
+}
+
+#account table {
+    width: 100%;
+}
+
+#account thead td {
+    font-weight: bold;
+    border-bottom: 1px solid #9492dc;
+    background-color: #e7e5fc;
 }

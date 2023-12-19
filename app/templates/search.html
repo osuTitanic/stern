@@ -76,21 +76,21 @@
     </div>
     <div class="pagination" style="display: none;">
         {# "Previous" Button #}
-        {% if page > 1 %}
+        {% if page > 0 %}
         <a href="?page={{ page - 1 }}&{{ arguments }}">
             Prev
         </a>
-        {% if min_page_display != 1 %}...{% endif %}
+        {% if min_page_display != 0 %}...{% endif %}
         {% endif %}
         {# Page Numbers (max. 10) #}
         {% for _page in range(min_page_display, max_page_display+1) %}
             {% if _page == page %}
                 <b>
-                    {{ _page }}
+                    {{ _page + 1 }}
                 </b>
             {% else %}
                 <a href="?page={{ _page }}&{{ arguments }}">
-                    {{ _page }}
+                    {{ _page + 1 }}
                 </a>
             {% endif %}
         {% endfor %}
@@ -163,21 +163,21 @@
     </div>
     <div class="pagination" style="display: none;">
         {# "Previous" Button #}
-        {% if page > 1 %}
+        {% if page > 0 %}
         <a href="?page={{ page - 1 }}&{{ arguments }}">
             Prev
         </a>
-        {% if min_page_display != 1 %}...{% endif %}
+        {% if min_page_display != 0 %}...{% endif %}
         {% endif %}
         {# Page Numbers (max. 10) #}
         {% for _page in range(min_page_display, max_page_display+1) %}
             {% if _page == page %}
                 <b>
-                    {{ _page }}
+                    {{ _page + 1 }}
                 </b>
             {% else %}
                 <a href="?page={{ _page }}&{{ arguments }}">
-                    {{ _page }}
+                    {{ _page + 1 }}
                 </a>
             {% endif %}
         {% endfor %}

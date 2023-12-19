@@ -4,9 +4,9 @@ from app.common.database.objects import DBUser
 
 from flask import Flask, Request, redirect
 from werkzeug.exceptions import NotFound
+from datetime import datetime, timedelta
 from flask_login import LoginManager
 from typing import Tuple, Optional
-from datetime import datetime
 
 from . import common
 from . import routes
@@ -129,6 +129,13 @@ def format_chat(text: str) -> str:
                    .replace('\x01', '')
 
     return result
+
+@flask.template_filter('round_time')
+def round_time(dt: datetime, round_to = 60):
+    if dt == None : dt = datetime.now()
+    seconds = (dt.replace(tzinfo=None) - dt.min).seconds
+    rounding = (seconds+round_to/2) // round_to * round_to
+    return dt + timedelta(0,rounding-seconds,-dt.microsecond)
 
 @flask.template_filter('bbcode')
 def render_bbcode(text: str) -> str:
