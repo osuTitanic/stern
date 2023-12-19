@@ -100,6 +100,7 @@ def rankings(mode: str, order_type: str):
     return utils.render_template(
         'country.html',
         css='country.css',
+        title='Country Rankings - Titanic',
         mode=mode,
         page=page,
         total_pages=total_pages,
