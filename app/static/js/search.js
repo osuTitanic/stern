@@ -286,6 +286,7 @@ function setOrder(element)
 {
     const query = new URLSearchParams(location.search);
     query.set("sort", element.getAttribute("data-id"));
+    query.delete("page");
 
     if (element.classList.contains("selected"))
     {
