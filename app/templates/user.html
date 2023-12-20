@@ -28,6 +28,18 @@
         {% if user.restricted %}
         <img src="/images/banned.png" id="banned-image" alt="">
         {% endif %}
+        {% if groups %}
+        <div class="groups">
+            {% for group in groups %}
+            <div class="group">
+                <a href="/g/{{ group.id }}" style="color: {{ group.color }}">
+                    {{ group.short_name|upper }}
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% if user.badges %}
         <div class="user-badges">
         {% for badge in user.badges %}
             <div class="badge-container">
@@ -37,6 +49,7 @@
             </div>
         {% endfor %}
         </div>
+        {% endif %}
     </div>
     <div class="left-bottom">
         {# TODO: Edit button #}

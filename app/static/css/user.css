@@ -16,11 +16,6 @@
     top: 0;
 }
 
-#banned-image {
-    display: flex;
-    margin: 15px auto 0 auto;
-}
-
 .profile-right {
     margin-left: 10px;
     text-align: left;
@@ -58,8 +53,36 @@
 }
 
 .user-title {
-    margin: 0 auto;
+    margin: 0px auto 5px auto;
     font-size: 80%;
+}
+
+#banned-image {
+    display: flex;
+    margin: 10px auto 15px auto;
+}
+
+.groups {
+    display: flex;
+    justify-content: center;
+    overflow-wrap: break-word;
+    flex-wrap: wrap;
+}
+
+.group {
+    margin: 8px;
+    background-color: #c9c7e4;
+    border-radius: 2.5px;
+    padding: 2px;
+    padding-left: 5px;
+    padding-right: 5px;
+    line-height: 18px;
+    display: inline;
+    text-align: center;
+}
+
+.group a:hover {
+    text-decoration: none;
 }
 
 .avatar-box {
@@ -83,8 +106,8 @@
 }
 
 .user-badges {
-    margin-top: 10px;
     text-align: center;
+    margin: 5px auto;
 }
 
 .badge-container {
@@ -97,7 +120,7 @@
 }
 
 .left-bottom {
-    margin: 10px;
+    margin: 0px 10px 10px 10px;
 }
 
 .activity {
