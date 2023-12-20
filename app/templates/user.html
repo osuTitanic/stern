@@ -20,6 +20,11 @@
             {% endif %}
             {# TODO: Title (e.g. Former osu! champion) #}
         </h1>
+        <div class="user-title">
+            {% if user.userpage_title %}
+            {{ user.userpage_title }}
+            {% endif %}
+        </div>
         {% if user.restricted %}
         <img src="/images/banned.png" id="banned-image" alt="">
         {% endif %}
