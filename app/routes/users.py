@@ -1,5 +1,12 @@
 
-from app.common.database.repositories import users, activities, stats, infringements
+from app.common.database.repositories import (
+    infringements,
+    activities,
+    groups,
+    users,
+    stats
+)
+
 from flask import Blueprint, abort, redirect, request
 from app.common.cache import status, leaderboards
 
@@ -56,5 +63,6 @@ def userpage(query: str):
             score_rank=leaderboards.score_rank(user.id, int(mode)),
             score_rank_country=leaderboards.score_rank_country(user.id, int(mode), user.country),
             ppv1_rank=leaderboards.ppv1_rank(user.id, int(mode)),
+            groups=groups.fetch_user_groups(user.id, session=session),
             infringements=infs
         )
