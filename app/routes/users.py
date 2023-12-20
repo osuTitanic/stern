@@ -3,6 +3,7 @@ from app.common.database.repositories import (
     infringements,
     activities,
     groups,
+    names,
     users,
     stats
 )
@@ -21,7 +22,10 @@ def userpage(query: str):
         user = users.fetch_by_name_extended(query)
 
         if not user:
-            abort(404)
+            if not (name := names.fetch_by_name_extended(query)):
+                return abort(404)
+
+            return redirect(f'/u/{name.user_id}')
 
         return redirect(f'/u/{user.id}')
 
