@@ -3,6 +3,8 @@ from typing import Optional, List
 from datetime import datetime
 from pydantic import BaseModel
 
+from .groups import GroupEntryModel
+
 class RelationshipModel(BaseModel):
     user_id: int
     target_id: int
@@ -81,3 +83,4 @@ class UserModel(BaseModel):
     names: List[NameHistoryModel]
     badges: List[BadgeModel]
     stats: List[StatsModel]
+    groups: List[GroupEntryModel]
