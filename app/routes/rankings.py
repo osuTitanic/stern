@@ -32,7 +32,7 @@ def rankings(mode: str, order_type: str):
             range=items_per_page,
             type=order_type,
             country=country.lower()
-                if country else None
+                 if country else None
         )
 
         # Fetch all users from leaderboard
@@ -52,7 +52,7 @@ def rankings(mode: str, order_type: str):
             user.stats.sort(key=lambda s:s.mode)
             utils.sync_ranks(user)
 
-        player_count = leaderboards.player_count(mode.value, order_type)
+        player_count = leaderboards.player_count(mode.value, order_type, country)
         total_pages = max(1, min(10000, math.ceil(player_count / items_per_page)))
 
         # Get min/max pages to display for pagination
