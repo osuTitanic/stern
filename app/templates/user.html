@@ -10,7 +10,7 @@
         </div>
         <h1>
             <a class="flag" href="/rankings/{{ constants.GameMode(mode).alias }}/performance?country={{ user.country|lower }}">
-                <img src="/images/flags/{{ user.country|lower }}.gif" alt="{{ user.country|capitalize }}">
+                <img src="/images/flags/{{ user.country|lower }}.gif" alt="{{ user.country|upper }}">
             </a>
             {# TODO: Username color based on groups #}
             {% if user.names %}
