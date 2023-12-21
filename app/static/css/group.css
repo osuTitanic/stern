@@ -1,0 +1,93 @@
+
+@import url("main.css");
+
+.page {
+    height: 100%;
+}
+
+.group-head {
+    text-align: center;
+}
+
+.group-header {
+    font-size: 180%;
+    font-weight: normal;
+}
+
+.group-description {
+    margin: 5px;
+    font-size: 85%;
+}
+
+.group-users {
+    height: 100%;
+    margin-top: 35px;
+    display: flex;
+}
+
+.user {
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+    background-color: #f9f7ff;
+    border: 1px solid #ddd;
+    margin: 0 auto;
+    min-width: 140px;
+    min-height: 130px;
+    display: grid;
+    padding: 8px;
+}
+
+.user a {
+    margin: 0 auto;
+    min-width: 140px;
+    min-height: 130px;
+    display: grid;
+    padding: 8px;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+.user:hover {
+    cursor: pointer;
+    background-color: #cee2ff;
+    border: solid 2px #4bb9ff;
+    text-decoration: none;
+}
+
+.username-wrapper {
+    margin: 0 auto;
+    line-height: 22px;
+}
+
+.username {
+    float: left;
+    font-size: 130%;
+    text-shadow: 0px 0px 10px #bf92d49a;
+    text-align: center;
+}
+
+.flag {
+    float: right;
+    line-height: 23px;
+    margin-left: 6px;
+}
+
+.avatar {
+    height: 120px;
+    width: 120px;
+    margin: 5px auto;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.10);
+}
+
+.avatar img {
+    vertical-align: middle;
+    display: flex;
+    margin: 0 auto;
+}
+
+.user-title {
+    font-size: 80%;
+    margin: 10px auto 0;
+    color: black;
+}
