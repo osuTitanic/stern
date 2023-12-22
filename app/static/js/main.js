@@ -49,3 +49,38 @@ function toggleSpoiler(root) {
 	spoiler.find('img').trigger('unveil');
 	return false;
 }
+
+function loadBBCodePreview(element) {
+    const bbcodeWrapper = element.parentElement;
+    const bbcodeEditor = bbcodeWrapper.querySelector('textarea');
+    const form = new FormData();
+    form.set('bbcode', bbcodeEditor.value);
+
+    fetch('/api/bbcode/preview', {
+        method: "POST",
+        cache: "no-cache",
+        body: form
+    })
+    .then(response => {
+        if (!response.ok)
+            throw new Error(response.status);
+        return response.text();
+    })
+    .then(htmlPreview => {
+        // Remove old previews
+        document.querySelectorAll('.bbcode-preview').forEach(element => {
+            element.remove();
+        });
+
+        const previewContainer = document.createElement('div');
+        previewContainer.classList.add('bbcode-preview', 'bbcode')
+        previewContainer.innerHTML = htmlPreview
+
+        bbcodeWrapper.appendChild(previewContainer);
+    })
+    .catch(error => {
+        console.error(error);
+    })
+
+    return false;
+}
