@@ -137,6 +137,14 @@ def round_time(dt: datetime, round_to = 60):
     rounding = (seconds+round_to/2) // round_to * round_to
     return dt + timedelta(0,rounding-seconds,-dt.microsecond)
 
+@flask.template_filter('get_attributes')
+def get_attributes(objects: list, name: str) -> list:
+    return [getattr(o, name) for o in objects]
+
+@flask.template_filter('clamp')
+def clamp_value(value: int, minimum: int, maximum: int):
+    return max(minimum, min(value, maximum))
+
 @flask.template_filter('bbcode')
 def render_bbcode(text: str) -> str:
     return f'<div class="bbcode">{bbcode.formatter.format(text)}</div>'
@@ -144,10 +152,6 @@ def render_bbcode(text: str) -> str:
 @flask.template_filter('bbcode_nowrap')
 def render_bbcode_nowrapper(text: str) -> str:
     return bbcode.formatter.format(text)
-
-@flask.template_filter('get_attributes')
-def get_attributes(objects: list, name: str) -> list:
-    return [getattr(o, name) for o in objects]
 
 @flask.errorhandler(404)
 def not_found(error: NotFound) -> Tuple[str, int]:
