@@ -6,7 +6,7 @@ router = Blueprint('bbcode', __name__)
 
 @router.post('/preview')
 def render_bbcode():
-    if not (input := request.form.get('bbcode')):
+    if (input := request.form.get('bbcode')) is None:
         return Response('', 400)
 
     return Response(

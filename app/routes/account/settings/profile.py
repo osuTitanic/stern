@@ -53,7 +53,7 @@ def update_profile_settings():
 @router.post('/profile/userpage')
 @login_required
 def update_userpage():
-    if not (bbcode := request.form.get('bbcode')):
+    if (bbcode := request.form.get('bbcode')) is None:
         return redirect('/account/settings/profile')
 
     users.update(
