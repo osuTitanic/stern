@@ -49,9 +49,8 @@
                     <p class="nav-login" id="welcome-text">
                         Welcome, <a href="/u/{{ current_user.id }}">{{ current_user.name }}</a>
                     </p>
-                    <a href="/account/settings#avatar">
-                        <!-- Placeholder avatar -->
-                        <img class="small-avatar" src="http://localhost/a/{{ current_user.id }}?h=25" alt="" height="25px">
+                    <a href="/account/settings/profile#avatar">
+                        <img class="small-avatar" src="/a/{{ current_user.id }}?h=25" alt="" height="25px">
                     </a>
                     <a href="/account/settings"><i class="fa-solid fa-gear" style="color: #808080;"></i> Settings</a>
                     <a href="/account/logout?redirect={{ url_for(request.endpoint, **request.view_args) }}">
