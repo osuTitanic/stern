@@ -106,6 +106,10 @@ def round_time(dt: datetime, round_to = 60):
     rounding = (seconds+round_to/2) // round_to * round_to
     return dt + timedelta(0,rounding-seconds,-dt.microsecond)
 
+@flask.template_filter('get_attributes')
+def get_attributes(objects: list, name: str) -> list:
+    return [getattr(o, name) for o in objects]
+
 @flask.template_filter('clamp')
 def clamp_value(value: int, minimum: int, maximum: int):
     return max(minimum, min(value, maximum))
