@@ -13,10 +13,16 @@
                 <img src="/images/flags/{{ user.country|lower }}.gif" alt="{{ user.country|upper }}">
             </a>
             {# TODO: Username color based on groups #}
+            {% set name_length = user.name|length %}
+            {% set name_size = (21 - (name_length - 14) * 1.5)|clamp(12, 25) %}
             {% if user.names %}
-            <div class="username" style="color: #888888" title="Previously known as {{ user.names[-1].name }}">{{ user.name }}</div>
+            <div class="username" style="color: #888888; font-size: {{ name_size }}px;" title="Previously known as {{ user.names[-1].name }}">
+                {{ user.name }}
+            </div>
             {% else %}
-            <div class="username">{{ user.name }}</div>
+            <div class="username" style="font-size: {{ name_size }}px;">
+                {{ user.name }}
+            </div>
             {% endif %}
         </h1>
         <div class="user-title">
