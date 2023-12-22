@@ -71,14 +71,15 @@
 
 .group {
     margin: 8px;
-    background-color: #c9c7e4;
+    background-color: #e3e0f1;
     border-radius: 2.5px;
-    padding: 2px;
+    padding: 2.5px;
     padding-left: 5px;
     padding-right: 5px;
     line-height: 18px;
     display: inline;
     text-align: center;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
 }
 
 .group a:hover {
