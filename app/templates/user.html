@@ -12,8 +12,8 @@
             <a class="flag" href="/rankings/{{ constants.GameMode(mode).alias }}/performance?country={{ user.country|lower }}">
                 <img src="/images/flags/{{ user.country|lower }}.gif" alt="{{ user.country|upper }}">
             </a>
-            {% set primary_group_id = groups|get_attributes('id')|min %}
-            {% set primary_group = groups|selectattr("id", "eq", primary_group_id)|first %}
+            {% set primary_group_id = user.groups|get_attributes('group_id')|min %}
+            {% set primary_group = (user.groups|selectattr("group_id", "eq", primary_group_id)|first).group %}
             {% set color = primary_group.color %}
             {% set name_length = user.name|length %}
             {% set name_size = (21 - (name_length - 14) * 1.5)|clamp(12, 25) %}
