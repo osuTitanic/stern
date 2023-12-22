@@ -141,6 +141,10 @@ def round_time(dt: datetime, round_to = 60):
 def render_bbcode(text: str) -> str:
     return f'<div class="bbcode">{bbcode.formatter.format(text)}</div>'
 
+@flask.template_filter('get_attributes')
+def get_attributes(objects: list, name: str) -> list:
+    return [getattr(o, name) for o in objects]
+
 @flask.errorhandler(404)
 def not_found(error: NotFound) -> Tuple[str, int]:
     return utils.render_template(
