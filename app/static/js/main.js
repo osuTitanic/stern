@@ -30,13 +30,8 @@ function resetOrPlayAudio(element) {
 }
 
 function showLoginForm() {
-    // TODO: Dropdown animation
-    const dropdown = document.querySelector(".login-dropdown");
-
-    if (dropdown.style.display !== "block")
-        dropdown.style.display = "block";
-    else
-        dropdown.style.display = "none";
+    $(".login-dropdown").slideToggle(100);
+    $("#username-field").select();
 }
 
 document.addEventListener("DOMContentLoaded", () => {
