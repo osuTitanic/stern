@@ -56,6 +56,11 @@ function loadBBCodePreview(element) {
     const form = new FormData();
     form.set('bbcode', bbcodeEditor.value);
 
+    // Remove old previews
+    document.querySelectorAll('.bbcode-preview').forEach(element => {
+        element.remove();
+    });
+
     fetch('/api/bbcode/preview', {
         method: "POST",
         cache: "no-cache",
@@ -63,24 +68,28 @@ function loadBBCodePreview(element) {
     })
     .then(response => {
         if (!response.ok)
-            throw new Error(response.status);
+            throw new Error(`${response.status}: "${response.statusText}"`);
         return response.text();
     })
     .then(htmlPreview => {
-        // Remove old previews
-        document.querySelectorAll('.bbcode-preview').forEach(element => {
-            element.remove();
-        });
-
         const previewContainer = document.createElement('div');
-        previewContainer.classList.add('bbcode-preview', 'bbcode')
-        previewContainer.innerHTML = htmlPreview
+        previewContainer.classList.add('bbcode-preview', 'bbcode');
+        previewContainer.innerHTML = htmlPreview;
 
         bbcodeWrapper.appendChild(previewContainer);
     })
     .catch(error => {
+        const previewContainer = document.createElement('div');
+        previewContainer.classList.add('bbcode-preview', 'bbcode');
+        previewContainer.appendChild(
+            document.createTextNode('Failed to load bbcode preview :(')
+        );
+        bbcodeWrapper.appendChild(previewContainer);
         console.error(error);
     })
 
     return false;
 }
+
+function cookieExists(name) { return document.cookie.indexOf(`${name}=`); }
+function isLoggedIn() { return cookieExists('session'); }
