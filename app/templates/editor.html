@@ -11,3 +11,6 @@
 <br>
 <input type="submit" value="{{ context['submit-text'] }}">
 <button class="bbcode-preview-button" onclick="return loadBBCodePreview(this)">Preview</button>
+<div class="bbcode-preview bbcode">
+{{ context['current']|bbcode_nowrap|safe }}
+</div>
