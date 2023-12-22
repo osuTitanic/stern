@@ -61,8 +61,4 @@ def update_userpage():
         {'userpage_about': bbcode}
     )
 
-    return utils.render_template(
-        'settings/profile.html',
-        css='settings.css',
-        info="Successfully updated userpage."
-    )
+    return redirect('/account/settings/profile#userpage')
