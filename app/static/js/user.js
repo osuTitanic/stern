@@ -897,6 +897,9 @@ function addFriend()
         friendStatus.innerText = 'Remove Mutual Friend';
       else
         friendStatus.innerText = 'Remove Friend';
+    })
+    .catch(error => {
+      console.error(error);
     });
 
   return false;
@@ -923,6 +926,9 @@ function removeFriend()
         friendStatus.innerText = 'Add Mutual Friend';
       else
         friendStatus.innerText = 'Add Friend';
+    })
+    .catch(error => {
+      console.error(error);
     });
 
   return false;
