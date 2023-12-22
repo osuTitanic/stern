@@ -41,7 +41,9 @@ def validate_username(username: str) -> Optional[str]:
     if not USERNAME.match(username):
         return "Your username contains invalid characters."
 
-    if users.fetch_by_safe_name(username.lower()):
+    safe_name = username.lower().replace(' ', '_')
+
+    if users.fetch_by_safe_name(safe_name):
         return "This username is already in use!"
 
 def validate_email(email: str) -> Optional[str]:
