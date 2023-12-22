@@ -24,6 +24,10 @@ def rankings(mode: str, order_type: str):
 
     # Any two letter country code
     country = request.args.get('country', default=None, type=str)
+    country = country.lower() if country else None
+
+    if country == 'xx':
+        return abort(404)
 
     if order_type != 'country':
         leaderboard = leaderboards.top_players(
@@ -31,8 +35,7 @@ def rankings(mode: str, order_type: str):
             offset=(page - 1) * items_per_page,
             range=items_per_page,
             type=order_type,
-            country=country.lower()
-                 if country else None
+            country=country
         )
 
         # Fetch all users from leaderboard
@@ -87,7 +90,7 @@ def rankings(mode: str, order_type: str):
         )
 
     # Get country ranking
-    leaderboard = leaderboards.top_countries(mode)
+    leaderboard = [country for country in leaderboards.top_countries(mode) if country['name'] != 'xx']
     leaderboard = leaderboard[(page - 1)*items_per_page:(page - 1)*items_per_page + items_per_page]
 
     country_count = len(leaderboard)
