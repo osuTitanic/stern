@@ -344,3 +344,7 @@ input[type="submit"] {
     padding: 2.5px;
     width: 98%;
 }
+
+.bbcode-help {
+    font-size: 80%
+}
