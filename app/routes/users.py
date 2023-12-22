@@ -1,5 +1,13 @@
 
-from app.common.database.repositories import users, activities, stats, infringements
+from app.common.database.repositories import (
+    infringements,
+    activities,
+    groups,
+    names,
+    users,
+    stats
+)
+
 from flask import Blueprint, abort, redirect, request
 from app.common.cache import status, leaderboards
 
@@ -10,13 +18,18 @@ router = Blueprint('users', __name__)
 
 @router.get('/<query>')
 def userpage(query: str):
+    query = query.strip()
+
     if not query.isdigit():
-        user = users.fetch_by_name_extended(query)
+        # Searching for username based on user query
+        if user := users.fetch_by_name_extended(query):
+            return redirect(f'/u/{user.id}')
 
-        if not user:
-            abort(404)
+        # Search name history as a backup
+        if name := names.fetch_by_name_extended(query):
+            return redirect(f'/u/{name.user_id}')
 
-        return redirect(f'/u/{user.id}')
+        return abort(404)
 
     with app.session.database.managed_session() as session:
         if not (user := users.fetch_by_id(int(query), session)):
@@ -56,5 +69,6 @@ def userpage(query: str):
             score_rank=leaderboards.score_rank(user.id, int(mode)),
             score_rank_country=leaderboards.score_rank_country(user.id, int(mode), user.country),
             ppv1_rank=leaderboards.ppv1_rank(user.id, int(mode)),
+            groups=groups.fetch_user_groups(user.id, session=session),
             infringements=infs
         )

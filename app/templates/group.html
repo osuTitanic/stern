@@ -1,0 +1,36 @@
+{# templates/group.html #}
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="group-head">
+    <h1 class="group-header">{{ group.name }}</h1>
+    {% if group.description %}
+    <div class="group-description">{{ group.description }}</div>
+    {% endif %}
+</div>
+{% if users %}
+    <div class="group-users">
+        {% for user in users %}
+        <div class="user">
+            <a href="/u/{{ user.id }}">
+                <div class="username-wrapper">
+                    <div class="username">{{ user.name }}</div>
+                    <div class="flag">
+                        <img src="/images/flags/{{ user.country|lower }}.gif" loading="lazy" alt="">
+                    </div>
+                </div>
+                <div class="avatar">
+                    <img src="/a/{{ user.id }}?h=120" alt="">
+                </div>
+                {% if user.userpage_title %}
+                <div class="user-title">{{ user.userpage_title }}</div>
+                {% endif %}
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div>nobody seems to be in this group :(</div>
+{% endif %}
+{% endblock content %}

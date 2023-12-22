@@ -34,7 +34,6 @@ DOMAIN_NAME = os.environ.get('DOMAIN_NAME')
 
 APPROVED_MAP_REWARDS = eval(os.environ.get('APPROVED_MAP_REWARDS', 'False').capitalize())
 SKIP_IP_DATABASE = eval(os.environ.get('SKIP_IP_DATABASE', 'False').capitalize())
-FREE_SUPPORTER = eval(os.environ.get('FREE_SUPPORTER', 'True').capitalize())
 ENABLE_SSL = eval(os.environ.get('ENABLE_SSL', 'False').capitalize())
 S3_ENABLED = eval(os.environ.get('ENABLE_S3', 'True').capitalize())
 DEBUG = eval(os.environ.get('DEBUG', 'False').capitalize())

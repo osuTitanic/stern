@@ -16,7 +16,7 @@
         </div>
         <h1>
             <a class="flag" href="/rankings/{{ constants.GameMode(mode).alias }}/performance?country={{ user.country|lower }}">
-                <img src="/images/flags/{{ user.country|lower }}.gif" alt="{{ user.country|capitalize }}">
+                <img src="/images/flags/{{ user.country|lower }}.gif" alt="{{ user.country|upper }}">
             </a>
             {# TODO: Username color based on groups #}
             {% if user.names %}
@@ -26,9 +26,26 @@
             {% endif %}
             {# TODO: Title (e.g. Former osu! champion) #}
         </h1>
+        <div class="user-title">
+            {% if user.userpage_title %}
+            {{ user.userpage_title }}
+            {% endif %}
+        </div>
         {% if user.restricted %}
         <img src="/images/banned.png" id="banned-image" alt="">
         {% endif %}
+        {% if groups %}
+        <div class="groups">
+            {% for group in groups %}
+            <div class="group">
+                <a href="/g/{{ group.id }}" style="color: {{ group.color }}">
+                    {{ group.short_name|upper }}
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% if user.badges %}
         <div class="user-badges">
         {% for badge in user.badges %}
             <div class="badge-container">
@@ -38,6 +55,7 @@
             </div>
         {% endfor %}
         </div>
+        {% endif %}
     </div>
     <div class="left-bottom">
         <div class="userpage-social">
