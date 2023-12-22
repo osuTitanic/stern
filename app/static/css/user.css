@@ -508,3 +508,27 @@
     border-bottom: 1px solid #9492dc;
     background-color: #e7e5fc;
 }
+
+.userpage-stats {
+    margin-bottom: 10px;
+}
+
+.userpage-actions {
+    display: grid;
+    width: 100%;
+}
+
+.friend-add {
+    color: green;
+}
+
+.friend-remove {
+    color: red;
+}
+
+#friend-status {
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+    margin: 5px;
+}

@@ -131,6 +131,38 @@
         {% endif %}
         </div>
         {% endif %}
+        {% if current_user.id %}
+        <div class="userpage-actions">
+            {% if current_user.id != user.id %}
+            <div class="friend-actions">
+                {% set current_friends = current_user.relationships|get_attributes('target_id') %}
+                {% set target_friends = user.relationships|get_attributes('target_id') %}
+                {# Determine friend status #}
+                {% if user.id in current_friends %}
+                    {% if current_user.id in target_friends %}
+                    <a href="#" class="friend-remove" id="friend-status" onclick="return removeFriend()">
+                        Remove Mutual Friend
+                    </a>
+                    {% else %}
+                    <a href="#" class="friend-remove" id="friend-status" onclick="return removeFriend()">
+                        Remove Friend
+                    </a>
+                    {% endif %}
+                {% else %}
+                    {% if current_user.id in target_friends %}
+                    <a href="#" class="friend-add" id="friend-status" onclick="return addFriend()">
+                        Add Mutual Friend
+                    </a>
+                    {% else %}
+                    <a href="#" class="friend-add" id="friend-status" onclick="return addFriend()">
+                        Add Friend
+                    </a>
+                    {% endif %}
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
     </div>
     {# TODO: Add admin controls #}
     {# TODO: Report user #}

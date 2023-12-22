@@ -876,6 +876,58 @@ function updatePlaystyleElement(element)
   }
 }
 
+function addFriend()
+{
+  if (!isLoggedIn())
+    return;
+
+  fetch(`/api/profile/friends/add?id=${userId}`)
+    .then(response => {
+      if (!response.ok)
+            throw new Error(`${response.status}: "${response.statusText}"`);
+        return response.json();
+    })
+    .then(data => {
+      const friendStatus = document.getElementById('friend-status');
+      friendStatus.classList.remove('friend-add');
+      friendStatus.classList.add('friend-remove');
+      friendStatus.onclick = () => { return removeFriend() };
+
+      if (data.status == 'mutual')
+        friendStatus.innerText = 'Remove Mutual Friend';
+      else
+        friendStatus.innerText = 'Remove Friend';
+    });
+
+  return false;
+}
+
+function removeFriend()
+{
+  if (!isLoggedIn())
+    return;
+
+  fetch(`/api/profile/friends/remove?id=${userId}`)
+    .then(response => {
+      if (!response.ok)
+            throw new Error(`${response.status}: "${response.statusText}"`);
+        return response.json();
+    })
+    .then(data => {
+      const friendStatus = document.getElementById('friend-status');
+      friendStatus.classList.remove('friend-remove');
+      friendStatus.classList.add('friend-add');
+      friendStatus.onclick = () => { return addFriend() };
+
+      if (data.status == 'mutual')
+        friendStatus.innerText = 'Add Mutual Friend';
+      else
+        friendStatus.innerText = 'Add Friend';
+    });
+
+  return false;
+}
+
 window.addEventListener('load', () => {
     expandProfileTab(activeTab);
     loadTopPlays(userId, modeName, 5, 0);
