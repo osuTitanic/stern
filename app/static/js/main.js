@@ -72,6 +72,9 @@ function loadBBCodePreview(element) {
         return response.text();
     })
     .then(htmlPreview => {
+        if (!htmlPreview)
+            return;
+
         const previewContainer = document.createElement('div');
         previewContainer.classList.add('bbcode-preview', 'bbcode');
         previewContainer.innerHTML = htmlPreview;
