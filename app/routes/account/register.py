@@ -69,6 +69,8 @@ def register():
 
 @router.post('/register')
 def registration_request():
+    ip = utils.resolve_ip_address(request)
+
     try:
         if validate_email(email := request.form.get('email')):
             return return_to_register_page('Please enter a valid email!')
@@ -85,10 +87,16 @@ def registration_request():
         )
         return return_to_register_page('Failed to process your request. Please try again!')
 
-    # TODO: Check for ip bans
+    registration_count = app.session.redis.get(f'registrations:{ip}') or 0
+
+    if int(registration_count) > 2:
+        app.session.logger.error(
+            f'Failed to register: Too many registrations from IP ({ip})'
+        )
+        return return_to_register_page('There have been too many registrations from this ip. Please try again later!')
 
     app.session.logger.info(
-        f'Starting registration process for "{username}" ({email})...'
+        f'Starting registration process for "{username}" ({email}) ({ip})...'
     )
 
     hashed_password = get_hashed_password(password)
@@ -124,6 +132,10 @@ def registration_request():
     # Add user to players & supporters group
     groups.create_entry(user.id, 999)
     groups.create_entry(user.id, 1000)
+
+    # Increment registration count
+    app.session.redis.incr(f'registrations:{ip}')
+    app.session.redis.expire(f'registrations:{ip}', 3600 * 24)
 
     if not config.SENDGRID_API_KEY:
         # Verification is disabled
