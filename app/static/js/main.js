@@ -89,5 +89,15 @@ function loadBBCodePreview(element) {
     return false;
 }
 
+async function confirmNotification(element)
+{
+    await fetch(`/api/notifications/confirm?id=${element.id}`);
+
+    if (element.getAttribute("href"))
+        window.location.href = element.getAttribute("href");
+
+    element.classList.remove('new');
+}
+
 function cookieExists(name) { return document.cookie.indexOf(`${name}=`); }
 function isLoggedIn() { return cookieExists('session'); }

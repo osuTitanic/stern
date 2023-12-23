@@ -21,9 +21,28 @@
     <div id="notifications">
         <h2>Notifications</h2>
         <div class="section">
-            You have no notifications
+            {% if not notifications %}
+            You have no new notifications
+            {% else %}
+            <div class="notifications">
+                {% for notification in notifications %}
+                    {% if notification.link %}
+                    <div class="notification {{ 'new' if not notification.read else '' }}" onclick="return confirmNotification(this)" id="{{ notification.id }}" href="{{ notification.link }}">
+                        <h2>{{ notification.header }}</h2>
+                        <p>{{ notification.content|markdown_urls|safe }}</p>
+                        <p class="time">{{ notification.time|strftime }}</p>
+                    </div>
+                    {% else %}
+                    <div class="notification {{ 'new' if not notification.read else '' }}" onclick="return confirmNotification(this)" id="{{ notification.id }}">
+                        <h2>{{ notification.header }}</h2>
+                        <p>{{ notification.content|markdown_urls|safe }}</p>
+                        <p class="time">{{ notification.time|strftime }}</p>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            {% endif %}
         </div>
-        {# TODO #}
     </div>
     <div id="logins">
         <h2>Previous Logins</h2>

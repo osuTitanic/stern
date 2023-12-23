@@ -126,3 +126,41 @@ h2 {
     background-color: #e1f1fa;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
+
+.notifications {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.notifications h2 {
+    margin: 0;
+    margin-bottom: 2.5px;
+    font-size: 140%;
+    font-weight: bold;
+}
+
+.notifications .new {
+    color: rgb(80, 92, 255);
+}
+
+.notification {
+    width: 45%;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    background-color: #eceaf8;
+    padding: 10px;
+    border-radius: 5px;
+    height: 100%;
+    margin: 5px auto;
+}
+
+.notification:hover {
+    background-color: white;
+}
+
+.notifications .time {
+    font-weight: normal;
+    float: right;
+    margin-top: 5px;
+    color: black;
+}
