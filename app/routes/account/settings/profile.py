@@ -108,9 +108,13 @@ def update_userpage():
     if (bbcode := request.form.get('bbcode')) is None:
         return redirect('/account/settings/profile')
 
+    # Update database
     users.update(
         flask_login.current_user.id,
         {'userpage_about': bbcode}
     )
+
+    # Update user object
+    flask_login.current_user.userpage_about = bbcode
 
     return redirect('/account/settings/profile#userpage')
