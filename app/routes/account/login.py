@@ -27,7 +27,7 @@ def login():
 
         if not user.activated:
             # Get pending verifications
-            pending_verifications = verifications.fetch_all_by_type(user.id, type=0)
+            pending_verifications = verifications.fetch_all_by_type(user.id, verification_type=0)
             pending_verifications.sort(key=lambda x: x.sent_at, reverse=True)
 
             if pending_verifications:
