@@ -1,5 +1,5 @@
 
-from app.common.constants.regexes import DISCORD_USERNAME
+from app.common.constants.regexes import DISCORD_USERNAME, URL
 from app.common.database.repositories import users
 
 from flask import Blueprint, request, redirect
@@ -43,6 +43,42 @@ def update_profile_settings():
                 error='Invalid discord username. Please try again!'
             )
 
+    if interests != None and len(interests) > 30:
+        return utils.render_template(
+            'settings/profile.html',
+            css='settings.css',
+            error='Please keep your interests short!'
+        )
+
+    if location != None and len(location) > 30:
+        return utils.render_template(
+            'settings/profile.html',
+            css='settings.css',
+            error='Please keep your location short!'
+        )
+
+    if twitter != None and len(twitter) > 64:
+        return utils.render_template(
+            'settings/profile.html',
+            css='settings.css',
+            error='Please type in a valid twitter handle or url!'
+        )
+
+    if website != None and len(website) > 64:
+        return utils.render_template(
+            'settings/profile.html',
+            css='settings.css',
+            error='Please keep your website url short!'
+        )
+
+    if website != None and not URL.match(website):
+        return utils.render_template(
+            'settings/profile.html',
+            css='settings.css',
+            error='Please enter in a valid url!'
+        )
+
+    # Update database
     users.update(
         flask_login.current_user.id,
         {
