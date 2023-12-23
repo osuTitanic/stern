@@ -1,5 +1,5 @@
 
-from app.common.database.repositories import users, verifications, notifications
+from app.common.database.repositories import users, verifications, notifications, groups
 from app.common.constants.regexes import USERNAME, EMAIL
 from app.common.constants import NotificationType
 from app.common import mail
@@ -120,6 +120,10 @@ def registration_request():
         f'Get started by downloading one of our builds [here](https://osu.{config.DOMAIN_NAME}/downloads). '
         'Enjoy your journey!'
     )
+
+    # Add user to players & supporters group
+    groups.create_entry(user.id, 999)
+    groups.create_entry(user.id, 1000)
 
     if not config.SENDGRID_API_KEY:
         # Verification is disabled
