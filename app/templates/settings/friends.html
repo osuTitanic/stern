@@ -3,6 +3,7 @@
 {% extends "base.html" %}
 
 {% block content %}
+{% include "settings/sidebar.html" %}
 <div class="friends-heading">
     <h1>Friends</h1>
     <p>Here you can view and manage your friends. You currently have a total of {{ friends|length }} friends.</p>
