@@ -170,6 +170,11 @@ h2 {
     margin-bottom: 15px;
 }
 
+.friends .avatar {
+    min-height: 128px;
+    min-width: 128px;
+}
+
 .friends {
     display: flex;
     flex-wrap: wrap;
