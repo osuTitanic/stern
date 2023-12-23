@@ -2,6 +2,7 @@
 from app.common.database.repositories import users, verifications, notifications, groups
 from app.common.constants.regexes import USERNAME, EMAIL
 from app.common.constants import NotificationType
+from app.common.helpers.external import location
 from app.common import mail
 
 from flask import Blueprint, request, redirect
@@ -80,6 +81,9 @@ def registration_request():
 
         if not (password := request.form.get('password')):
             return return_to_register_page('Please enter a valid password!')
+
+        if len(password) <= 7:
+            return return_to_register_page('Please enter a password with at least 8 characters!')
     except Exception as e:
         app.session.logger.error(
             f'Failed to verify registration request: {e}',
