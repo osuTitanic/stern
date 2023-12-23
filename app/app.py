@@ -153,6 +153,20 @@ def render_bbcode(text: str) -> str:
 def render_bbcode_nowrapper(text: str) -> str:
     return bbcode.formatter.format(text)
 
+@flask.template_filter('markdown_urls')
+def format_markdown_urls(value: str) -> str:
+    links = list(
+        re.compile(r'\[([^\]]+)\]\(([^)]+)\)').findall(value)
+    )
+
+    for link in links:
+        value = value.replace(
+            f'[{link[0]}]({link[1]})',
+            f'<a href="{link[1]}">{link[0]}</a>'
+        )
+
+    return value
+
 @flask.errorhandler(404)
 def not_found(error: NotFound) -> Tuple[str, int]:
     return utils.render_template(
