@@ -1,6 +1,6 @@
 
 from flask import render_template as _render_template
-from flask import request
+from flask import Request, request
 
 from app.common.database.repositories import stats, histories, scores
 from app.common.helpers.external import location
@@ -110,3 +110,19 @@ def update_ppv1(user: DBUser):
             f'[{user.name}] Failed to update ppv1 calculations: {e}',
             exc_info=e
         )
+
+def resolve_ip_address(request: Request):
+    ip = request.headers.get("CF-Connecting-IP")
+
+    if ip is None:
+        forwards = request.headers.get("X-Forwarded-For")
+
+    if forwards:
+        ip = forwards.split(",")[0]
+    else:
+        ip = request.headers.get("X-Real-IP")
+
+    if ip is None:
+        ip = request.environ['REMOTE_ADDR']
+
+    return ip.strip()
