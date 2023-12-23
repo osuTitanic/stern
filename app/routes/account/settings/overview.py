@@ -1,5 +1,5 @@
 
-from app.common.database.repositories import logins
+from app.common.database.repositories import logins, notifications
 
 from flask_login import login_required
 from flask import Blueprint
@@ -18,5 +18,9 @@ def settings_overview():
         logins=logins.fetch_many(
            flask_login.current_user.id,
            limit=5
+        ),
+        notifications=notifications.fetch_all(
+            flask_login.current_user.id,
+            read=False
         )
     )
