@@ -1,4 +1,5 @@
 
+from app.common.constants.regexes import DISCORD_USERNAME
 from app.common.database.repositories import users
 
 from flask import Blueprint, request, redirect
@@ -31,6 +32,16 @@ def update_profile_settings():
     website = request.form.get('website') or None
     discord = request.form.get('discord') or None
     twitter = request.form.get('twitter') or None
+
+    if discord != None:
+        discord = discord.removeprefix('@')
+
+        if not DISCORD_USERNAME.match(discord):
+            return utils.render_template(
+                'settings/profile.html',
+                css='settings.css',
+                error='Invalid discord username. Please try again!'
+            )
 
     users.update(
         flask_login.current_user.id,
