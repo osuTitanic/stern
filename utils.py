@@ -2,13 +2,20 @@
 from flask import render_template as _render_template
 from flask import Request, request
 
-from app.common.database.repositories import stats, histories, scores
 from app.common.helpers.external import location
 from app.common.helpers import performance
 from app.common.cache import leaderboards
 from app.common.database import DBUser
 from app.common import constants
 
+from app.common.database.repositories import (
+    notifications,
+    histories,
+    scores,
+    stats
+)
+
+import flask_login
 import config
 import app
 import os
@@ -33,6 +40,14 @@ def render_template(name: str, **kwargs) -> str:
         location=location,
         config=config,
     )
+
+    if flask_login.current_user.id:
+        kwargs.update({
+            'notification_count': notifications.fetch_count(
+                flask_login.current_user.id,
+                read=False
+            )
+        })
 
     return _render_template(
         name,
