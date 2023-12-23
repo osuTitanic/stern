@@ -1,6 +1,7 @@
 
-from app.common.database.repositories import users, verifications
+from app.common.database.repositories import users, verifications, notifications
 from app.common.constants.regexes import USERNAME, EMAIL
+from app.common.constants import NotificationType
 from app.common import mail
 
 from flask import Blueprint, request, redirect
@@ -109,6 +110,16 @@ def registration_request():
         return return_to_register_page('An error occured on the server side. Please try again!')
 
     app.session.logger.info(f'User "{username}" with id "{user.id}" was created.')
+
+    # Send welcome notification
+    notifications.create(
+        user.id,
+        NotificationType.Welcome.value,
+        'Welcome!',
+        'Welcome aboard! '
+        f'Get started by downloading one of our builds [here](https://osu.{config.DOMAIN_NAME}/downloads). '
+        'Enjoy your journey!'
+    )
 
     if not config.SENDGRID_API_KEY:
         # Verification is disabled
