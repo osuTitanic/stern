@@ -78,17 +78,22 @@ def update_profile_settings():
             error='Please enter in a valid url!'
         )
 
+    updates = {
+        'userpage_interests': interests,
+        'userpage_location': location,
+        'userpage_website': website,
+        'userpage_discord': discord,
+        'userpage_twitter': f'https://twitter.com/{app.get_handle(twitter)}' \
+            if twitter else None
+    }
+
+    # Update user object
+    flask_login.current_user.__dict__.update(updates)
+
     # Update database
     users.update(
         flask_login.current_user.id,
-        {
-            'userpage_interests': interests,
-            'userpage_location': location,
-            'userpage_website': website,
-            'userpage_discord': discord,
-            'userpage_twitter': f'https://twitter.com/{app.get_handle(twitter)}' \
-                if twitter else None
-        }
+        updates
     )
 
     return utils.render_template(
