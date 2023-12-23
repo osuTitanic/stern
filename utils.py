@@ -41,7 +41,7 @@ def render_template(name: str, **kwargs) -> str:
         config=config,
     )
 
-    if flask_login.current_user.id:
+    if not flask_login.current_user.is_anonymous:
         kwargs.update({
             'notification_count': notifications.fetch_count(
                 flask_login.current_user.id,
