@@ -18,7 +18,7 @@ VerificationType = {
 def verification():
     if not flask_login.current_user.is_anonymous:
         # User is logged in
-        return abort(404)
+        return redirect('/')
 
     try:
         verification_token = request.args.get('token', type=str)
