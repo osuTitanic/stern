@@ -53,6 +53,14 @@
                         <img class="small-avatar" src="/a/{{ current_user.id }}?h=25" alt="" height="25px">
                     </a>
                     <a href="/account/settings"><i class="fa-solid fa-gear" style="color: #808080;"></i> Settings</a>
+                    <a href="/account/settings#notifications">
+                        <i class="fa-solid fa-bell" style="color: #808080;"></i>
+                        {% if notification_count > 0 %}
+                        {{ notification_count }} {{ 'notification' if notification_count == 1 else 'notifications' }}
+                        {% else %}
+                        No notifications
+                        {% endif %}
+                    </a>
                     <a href="/account/logout?redirect={{ url_for(request.endpoint, **request.view_args) }}">
                         <i class="fa-solid fa-power-off" style="color: #808080;"></i> Logout
                     </a>
