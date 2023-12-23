@@ -102,7 +102,7 @@ def registration_request():
         pw_bcrypt=hashed_password,
         country='XX', # TODO: Get country via. IP
         activated=False if config.SENDGRID_API_KEY else True,
-        permissions=1 if not config.FREE_SUPPORTER else 5
+        permissions=5
     )
 
     if not user:
