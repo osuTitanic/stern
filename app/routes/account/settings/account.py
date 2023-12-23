@@ -40,12 +40,19 @@ def edit_account_info():
     if not bcrypt.checkpw(md5_password.encode(), flask_login.current_user.bcrypt.encode()):
         return get_profile_page(error='Your password was incorrect. Please try again!')
 
-    new_email = request.form.get('new-email')
-    email_confirm = request.form.get('email-confirm')
+    new_email = request.form.get('new-email').lower()
+    email_confirm = request.form.get('email-confirm').lower()
 
     if new_email and email_confirm:
         if new_email != email_confirm:
-            return get_profile_page(error="The emails don't match. Please try again!")
+            return get_profile_page(
+                error="The emails don't match. Please try again!"
+            )
+
+        if users.fetch_by_email(new_email):
+            return get_profile_page(
+                error="There already is a user with that email. Please choose another one, or reset your password!"
+            )
 
         mail.send_email_changed(flask_login.current_user)
 
