@@ -48,7 +48,10 @@ def sync_ranks(user: DBUser) -> None:
             if user_stats.playcount <= 0:
                 continue
 
-            global_rank = leaderboards.global_rank(user.id, user_stats.mode)
+            global_rank = leaderboards.global_rank(
+                user.id,
+                user_stats.mode
+            )
 
             if user_stats.rank != global_rank:
                 # Database rank desynced from redis
@@ -59,12 +62,13 @@ def sync_ranks(user: DBUser) -> None:
                         'rank': global_rank
                     }
                 )
+                user_stats.rank = global_rank
 
                 # Update rank history
                 histories.update_rank(user_stats, user.country)
 
                 app.session.logger.debug(
-                    f'[{user.name}] Updated rank from {user_stats.rank} to {global_rank}'
+                    f'[{user.name}] Updated rank to {global_rank}'
                 )
     except Exception as e:
         app.session.logging.error(
