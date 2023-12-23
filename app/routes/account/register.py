@@ -97,7 +97,7 @@ def registration_request():
     user = users.create(
         username=username,
         safe_name=safe_name,
-        email=email,
+        email=email.lower(),
         pw_bcrypt=hashed_password,
         country='XX', # TODO: Get country via. IP
         activated=False if config.SENDGRID_API_KEY else True,
