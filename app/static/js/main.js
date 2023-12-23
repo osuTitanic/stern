@@ -97,6 +97,7 @@ async function confirmNotification(element)
         window.location.href = element.getAttribute("href");
 
     element.classList.remove('new');
+    element.onclick = () => {};
 }
 
 function cookieExists(name) { return document.cookie.indexOf(`${name}=`); }
