@@ -103,6 +103,9 @@ def registration_request():
         f'Starting registration process for "{username}" ({email}) ({ip})...'
     )
 
+    geolocation = location.fetch_geolocation(ip)
+    country = geolocation.country_code.upper()
+
     hashed_password = get_hashed_password(password)
     safe_name = username.lower() \
                         .replace(' ', '_')
@@ -112,7 +115,7 @@ def registration_request():
         safe_name=safe_name,
         email=email.lower(),
         pw_bcrypt=hashed_password,
-        country='XX', # TODO: Get country via. IP
+        country=country,
         activated=False if config.SENDGRID_API_KEY else True,
         permissions=5
     )
