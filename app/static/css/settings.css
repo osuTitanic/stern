@@ -7,7 +7,7 @@
 }
 
 h1 {
-    font-size: 145%;
+    font-size: 180%;
     text-align: center;
 }
 
@@ -168,10 +168,6 @@ h2 {
 .friends-heading {
     text-align: center;
     margin-bottom: 15px;
-}
-
-.friends-heading h1 {
-    font-size: 180%;
 }
 
 .friends {
