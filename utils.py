@@ -20,14 +20,10 @@ import config
 import app
 import os
 
-def setup():
-    os.makedirs(f'{config.DATA_PATH}/avatars', exist_ok=True)
+os.makedirs(f'{config.DATA_PATH}/avatars', exist_ok=True)
 
-    if config.SKIP_IP_DATABASE:
-        return
-
-    if not os.path.isfile(f'{config.DATA_PATH}/geolite.mmdb'):
-        location.download_database()
+if not os.path.isfile(f'{config.DATA_PATH}/geolite.mmdb'):
+    location.download_database()
 
 def render_template(name: str, **kwargs) -> str:
     """This will automatically fetch all the required data for bancho-stats"""
