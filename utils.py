@@ -118,6 +118,7 @@ def update_ppv1(user: DBUser):
 
 def resolve_ip_address(request: Request):
     ip = request.headers.get("CF-Connecting-IP")
+    forwards = None
 
     if ip is None:
         forwards = request.headers.get("X-Forwarded-For")
