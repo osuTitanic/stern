@@ -17,6 +17,14 @@ def root():
         description="Titanic » A private server for osu! that lets you experience the early days of the game.",
         news=[
             {
+                "date": "24.12.2023",
+                "link": "#",
+                "title": "Accounts Update",
+                "author": "Lekuru",
+                "text": "Merry Christmas, everyone! After a long period of development, the accounts update is finally here! "
+                        "We hope to speed up development in the future. Enjoy customizing your user profile!"
+            },
+            {
                 "date": "08.10.2023",
                 "link": "#",
                 "title": "Welcome!",
