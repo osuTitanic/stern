@@ -7,6 +7,7 @@ from . import changelog
 from . import redirects
 from . import download
 from . import rankings
+from . import account
 from . import beatmap
 from . import groups
 from . import search
@@ -20,6 +21,7 @@ router.register_blueprint(beatmapset.router, url_prefix='/s')
 router.register_blueprint(changelog.router, url_prefix='/')
 router.register_blueprint(redirects.router, url_prefix='/')
 router.register_blueprint(rankings.router, url_prefix='/rankings')
+router.register_blueprint(account.router, url_prefix='/account')
 router.register_blueprint(beatmap.router, url_prefix='/b')
 router.register_blueprint(search.router, url_prefix='/beatmapsets')
 router.register_blueprint(groups.router, url_prefix='/g')

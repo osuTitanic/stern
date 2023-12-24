@@ -1,0 +1,203 @@
+
+@import url('main.css');
+
+.page {
+    font-size: 90%;
+    margin: 0;
+}
+
+h1 {
+    font-size: 180%;
+    text-align: center;
+}
+
+h2 {
+    font-size: 125%;
+    margin-bottom: 10px;
+    text-shadow: var(--text-shadow) 0px 0px 10px;
+    font-weight: normal;
+}
+
+.sidebar {
+    float: left;
+    width: 20%;
+    display: block;
+}
+
+.sidebar-section {
+    padding: 5px;
+    margin: 2px;
+    background-color: #e3e1fa;
+}
+
+.selected-sidebar {
+    background-color: #f0ecfa;
+}
+
+.selected-sidebar a {
+    color: black;
+    font-weight: bold;
+}
+
+.main-settings {
+    width: 80%;
+    margin-right: 5px;
+    display: flex;
+    flex-direction: column;
+}
+
+.main-settings > div {
+    margin: 10px;
+}
+
+.section {
+    background-color: #e3e1fa;
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.section input {
+    margin: 2px;
+}
+
+.activity-details dd {
+    color: #536482;
+    margin-bottom: 5px;
+}
+
+.activity-details dt {
+    float: left;
+    clear: left;
+    width: 15%;
+}
+
+.login-details dd {
+    color: #536482;
+    margin-bottom: 5px;
+}
+
+.login-details dt {
+    float: left;
+    clear: left;
+    width: 25%;
+}
+
+.profile-section label {
+    font-weight: bold;
+}
+
+.profile-section dd {
+    color: #536482;
+    margin-bottom: 5px;
+    line-height: 25px;
+}
+
+.profile-section dt {
+    float: left;
+    clear: left;
+    width: 30%;
+}
+
+.avatar-box {
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+    background-color: white;
+    border: 1px solid #ddd;
+    margin: auto;
+    margin-bottom: 10px;
+    padding: 2px;
+    height: 120px;
+    width: 120px;
+}
+
+.avatar-box img {
+    vertical-align: middle;
+    display: flex;
+    margin: 0 auto;
+}
+
+#error {
+    background-color: #f0fae1;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+#info {
+    background-color: #e1f1fa;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.notifications {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.notifications h2 {
+    margin: 0;
+    margin-bottom: 2.5px;
+    font-size: 140%;
+    font-weight: bold;
+}
+
+.notifications .new {
+    color: rgb(80, 92, 255);
+}
+
+.notification {
+    width: 45%;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    background-color: #eceaf8;
+    padding: 10px;
+    border-radius: 5px;
+    height: 100%;
+    margin: 5px auto;
+}
+
+.notification:hover {
+    background-color: white;
+}
+
+.notifications .time {
+    font-weight: normal;
+    float: right;
+    margin-top: 5px;
+    color: black;
+}
+
+.friends-heading {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.friends .avatar {
+    min-height: 128px;
+    min-width: 128px;
+}
+
+.friends {
+    display: flex;
+    flex-wrap: wrap;
+    text-align: center;
+    justify-content: space-evenly;
+}
+
+.friend {
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+    background-color: #f9f7ff;
+    border: 1px solid #ddd;
+    margin: 5px auto;
+    padding: 8px;
+    border-radius: 4px;
+    opacity: 100;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.friend-description {
+    margin: 0 auto;
+    font-size: 130%;
+}
+
+.friend-description a {
+    font-size: 75%;
+}

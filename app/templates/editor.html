@@ -1,0 +1,18 @@
+{# templates/editor.html #}
+
+<p class="bbcode-help">
+    This section is formatted in bbcode. Learn more about it <a href="https://osu.ppy.sh/wiki/en/BBCode">here</a>!
+</p>
+<textarea class="bbcode-editor" name="bbcode" style="resize: none; min-height: {{ context['min-height'] }};">
+{%- if context['current'] -%}
+{{ context['current'] | replace('\\r\\n', '\n') | replace('\\n', '\\n') }}
+{%- endif -%}
+</textarea>
+<br>
+<input type="submit" value="{{ context['submit-text'] }}">
+<button class="bbcode-preview-button" onclick="return loadBBCodePreview(this)">Preview</button>
+{% if context['current'] %}
+<div class="bbcode-preview bbcode">
+{{ context['current']|bbcode_nowrap|safe }}
+</div>
+{% endif %}

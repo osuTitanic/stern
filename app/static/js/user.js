@@ -861,6 +861,79 @@ function loadUserViewsGraph(userId, mode)
       });
 }
 
+function updatePlaystyleElement(element)
+{
+  var selected = element.classList.contains('playstyle');
+
+  if (selected) {
+    element.classList.remove('playstyle');
+    element.classList.add('playstyle-hidden');
+    fetch(`/api/profile/playstyle/remove?type=${element.id}`);
+  } else {
+    element.classList.add('playstyle');
+    element.classList.remove('playstyle-hidden');
+    fetch(`/api/profile/playstyle/add?type=${element.id}`);
+  }
+}
+
+function addFriend()
+{
+  if (!isLoggedIn())
+    return;
+
+  fetch(`/api/profile/friends/add?id=${userId}`)
+    .then(response => {
+      if (!response.ok)
+            throw new Error(`${response.status}: "${response.statusText}"`);
+        return response.json();
+    })
+    .then(data => {
+      const friendStatus = document.getElementById('friend-status');
+      friendStatus.classList.remove('friend-add');
+      friendStatus.classList.add('friend-remove');
+      friendStatus.onclick = () => { return removeFriend() };
+
+      if (data.status == 'mutual')
+        friendStatus.innerText = 'Remove Mutual Friend';
+      else
+        friendStatus.innerText = 'Remove Friend';
+    })
+    .catch(error => {
+      console.error(error);
+    });
+
+  return false;
+}
+
+function removeFriend()
+{
+  if (!isLoggedIn())
+    return;
+
+  fetch(`/api/profile/friends/remove?id=${userId}`)
+    .then(response => {
+      if (!response.ok)
+            throw new Error(`${response.status}: "${response.statusText}"`);
+        return response.json();
+    })
+    .then(data => {
+      const friendStatus = document.getElementById('friend-status');
+      friendStatus.classList.remove('friend-remove');
+      friendStatus.classList.add('friend-add');
+      friendStatus.onclick = () => { return addFriend() };
+
+      if (data.status == 'mutual')
+        friendStatus.innerText = 'Add Mutual Friend';
+      else
+        friendStatus.innerText = 'Add Friend';
+    })
+    .catch(error => {
+      console.error(error);
+    });
+
+  return false;
+}
+
 window.addEventListener('load', () => {
     expandProfileTab(activeTab);
     loadTopPlays(userId, modeName, 5, 0);

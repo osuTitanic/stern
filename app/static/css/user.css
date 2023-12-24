@@ -139,7 +139,7 @@
 }
 
 .playstyle-container {
-    background-color: #e8d2fc;
+    background-color: #dbcaea;
     text-align: center;
     margin: 5px auto;
     margin-top: 15px;
@@ -164,6 +164,17 @@
     display: inline-block;
 }
 
+.playstyle-hidden {
+    width: 32px;
+    height: 32px;
+    background-image: url('/images/playstyles.png');
+    display: inline-block;
+}
+
+.playstyle-selectable {
+    cursor: pointer;
+}
+
 .playstyle.mouse {
     background-position: 0px 0px;
 }
@@ -180,8 +191,30 @@
     background-position: -96px 0px;
 }
 
+.playstyle-hidden.mouse {
+    background-position: 0px 32px;
+}
+
+.playstyle-hidden.keyboard {
+    background-position: -64px 32px;
+}
+
+.playstyle-hidden.tablet {
+    background-position: -32px 32px;
+}
+
+.playstyle-hidden.touch {
+    background-position: -96px 32px;
+}
+
+.edit-button {
+    float: right;
+    text-align: right;
+    margin-left: 10px;
+}
+
 .userpage {
-    max-height: 505px;
+    max-height: 300px;
     min-height: 32px;
     overflow-x: hidden;
     overflow: auto;
@@ -475,4 +508,28 @@
     font-weight: bold;
     border-bottom: 1px solid #9492dc;
     background-color: #e7e5fc;
+}
+
+.userpage-stats {
+    margin-bottom: 10px;
+}
+
+.userpage-actions {
+    display: grid;
+    width: 100%;
+}
+
+.friend-add {
+    color: green;
+}
+
+.friend-remove {
+    color: red;
+}
+
+#friend-status {
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+    margin: 5px;
 }

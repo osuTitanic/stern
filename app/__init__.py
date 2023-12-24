@@ -3,11 +3,12 @@ from .common.logging import Console, File
 
 from . import constants
 from . import session
+from . import bbcode
 from . import common
 from . import routes
 from . import jobs
 
-from .app import flask
+from .app import flask, get_handle
 
 import logging
 import config

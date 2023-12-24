@@ -1,6 +1,7 @@
 
 import signal
 import config
+import utils
 import app
 
 def on_exit(signal, frame):

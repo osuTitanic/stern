@@ -101,14 +101,13 @@
 .most-played {
     bottom: 20px;
     position: absolute;
+    width: 41.4%;
 }
 
 .styled-table {
     border: solid 2px #9799cc;
     border-radius: 4px;
     text-align: left;
-    margin-left: 2px;
-    margin-right: 2px;
     font-weight: normal;
     font-size: 8.5pt;
     width: 100%;

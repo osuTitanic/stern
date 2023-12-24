@@ -1,0 +1,51 @@
+{# templates/overview/friends.html #}
+
+{% extends "base.html" %}
+
+{% block content %}
+{% include "settings/sidebar.html" %}
+<div class="friends-heading">
+    <h1>Friends</h1>
+    <p>Here you can view and manage your friends. You currently have a total of {{ friends|length }} friends.</p>
+</div>
+<div class="friends">
+    {% for user in friends %}
+    <div class="friend">
+        <div class="avatar">
+            <a href="/u/{{ user.id }}">
+                <img src="http://localhost/a/{{ user.id }}" alt="">
+            </a>
+        </div>
+        <div class="friend-description">
+            <p>{{ user.name }}</p>
+            <a id="{{ user.id }}" style="color: red;" onclick="return removeFriend(this);">Remove</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<script>
+    function removeFriend(element)
+    {
+    if (!isLoggedIn())
+        return;
+
+    fetch(`/api/profile/friends/remove?id=${element.id}`)
+        .then(response => {
+        if (!response.ok)
+                throw new Error(`${response.status}: "${response.statusText}"`);
+            return response.json();
+        })
+        .then(data => {
+            var friendContainer = element.parentElement.parentElement;
+            friendContainer.style.opacity = 0;
+
+            setTimeout(() => {
+                friendContainer.remove();
+            }, 350)
+        })
+        .catch(error => { console.error(error); });
+
+    return false;
+    }
+</script>
+{% endblock content %}
