@@ -18,11 +18,20 @@
             <a class="flag" href="/rankings/{{ constants.GameMode(mode).alias }}/performance?country={{ user.country|lower }}">
                 <img src="/images/flags/{{ user.country|lower }}.gif" alt="{{ user.country|upper }}">
             </a>
-            {% set primary_group_id = user.groups|get_attributes('group_id')|min %}
-            {% set primary_group = (user.groups|selectattr("group_id", "eq", primary_group_id)|first).group %}
-            {% set color = primary_group.color %}
+
+            {# Username Color #}
+            {% if user.groups %}
+                {% set primary_group_id = user.groups|get_attributes('group_id')|min %}
+                {% set primary_group = (user.groups|selectattr("group_id", "eq", primary_group_id)|first).group %}
+                {% set color = primary_group.color %}
+            {% else %}
+                {% set color = '#000000' %}
+            {% endif %}
+
+            {# Username Size #}
             {% set name_length = user.name|length %}
             {% set name_size = (21 - (name_length - 14) * 1.5)|clamp(12, 25) %}
+
             {% if user.names %}
             <div class="username" style="color: {{ color }}; font-size: {{ name_size }}px;" title="Previously known as {{ user.names[-1].name }}">
                 {{ user.name }}
