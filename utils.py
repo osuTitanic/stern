@@ -2,7 +2,6 @@
 from flask import render_template as _render_template
 from flask import Request, request
 
-from app.common.helpers.external import location
 from app.common.helpers import performance
 from app.common.cache import leaderboards
 from app.common.database import DBUser
@@ -23,6 +22,7 @@ import os
 os.makedirs(f'{config.DATA_PATH}/avatars', exist_ok=True)
 
 if not os.path.isfile(f'{config.DATA_PATH}/geolite.mmdb'):
+    from app.common.helpers.external import location
     location.download_database()
 
 def render_template(name: str, **kwargs) -> str:
