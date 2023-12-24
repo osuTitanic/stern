@@ -1,6 +1,7 @@
 
 from app.common.database.repositories import users
 from app.common.database.objects import DBUser
+from app.common.helpers.external import location
 
 from flask import Flask, Request, redirect
 from werkzeug.exceptions import NotFound
@@ -16,6 +17,10 @@ import timeago
 import config
 import utils
 import re
+import os
+
+if not os.path.isfile(f'{config.DATA_PATH}/geolite.mmdb'):
+    location.download_database()
 
 flask = Flask(
     __name__,
