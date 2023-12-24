@@ -102,3 +102,10 @@ async function confirmNotification(element)
 
 function cookieExists(name) { return document.cookie.indexOf(`${name}=`); }
 function isLoggedIn() { return cookieExists('session'); }
+
+const params = new URLSearchParams(location.search);
+
+if (params.get('wait') && location.pathname == '/')
+{
+    alert('Too many login attempts. Please wait a minute and try again!');
+}

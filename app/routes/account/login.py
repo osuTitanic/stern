@@ -8,6 +8,8 @@ from datetime import datetime
 import flask_login
 import hashlib
 import bcrypt
+import utils
+import app
 
 router = Blueprint('login', __name__)
 
@@ -18,6 +20,16 @@ def login():
     password = form.get('password')
     redirect_url = form.get('redirect')
     remember = bool(form.get('remember'))
+
+    ip = utils.resolve_ip_address(request)
+    login_attempts = app.session.redis.get(f'logins:{ip}') or 0
+
+    if int(login_attempts) > 15:
+        # Tell user to slow down
+        return redirect('/?wait=true')
+
+    app.session.redis.incr(f'logins:{ip}')
+    app.session.redis.expire(f'logins:{ip}', time=30)
 
     if user := users.fetch_by_name(username):
         md5_password = hashlib.md5(password.encode()).hexdigest()
