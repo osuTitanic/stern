@@ -17,10 +17,6 @@ import timeago
 import config
 import utils
 import re
-import os
-
-if not os.path.isfile(f'{config.DATA_PATH}/geolite.mmdb'):
-    location.download_database()
 
 flask = Flask(
     __name__,
