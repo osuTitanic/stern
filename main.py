@@ -14,7 +14,6 @@ def on_exit(signal, frame):
 signal.signal(signal.SIGINT, on_exit)
 
 if __name__ == "__main__":
-    utils.setup()
     app.flask.run(
         host=config.FRONTEND_HOST,
         port=config.FRONTEND_PORT,

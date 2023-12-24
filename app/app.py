@@ -17,6 +17,8 @@ import config
 import utils
 import re
 
+utils.setup()
+
 flask = Flask(
     __name__,
     static_url_path='',
