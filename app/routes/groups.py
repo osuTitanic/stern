@@ -22,5 +22,7 @@ def get_group(id: int):
             'group.html',
             css='group.css',
             group=group,
-            users=users
+            users=users,
+            site_title=group.name,
+            site_description=group.description,
         )

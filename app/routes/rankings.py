@@ -88,8 +88,7 @@ def rankings(mode: str, order_type: str):
             items_per_page=items_per_page,
             order_name=order_name,
             site_title=f'{order_name} Rankings ' \
-                       f'for {COUNTRIES[country.upper()]} » Titanic' \
-                        if country else '» Titanic'
+                       f'for {COUNTRIES[country.upper()]}' if country else ''
         )
 
     # Get country ranking
