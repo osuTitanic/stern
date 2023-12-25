@@ -87,8 +87,8 @@ def rankings(mode: str, order_type: str):
             min_page_display=min_page_display,
             items_per_page=items_per_page,
             order_name=order_name,
-            site_title=f'{order_name} Rankings ' \
-                       f'for {COUNTRIES[country.upper()]}' if country else ''
+            site_title=f'{order_name} Rankings' \
+                       f' for {COUNTRIES[country.upper()]}' if country else ''
         )
 
     # Get country ranking
@@ -113,5 +113,5 @@ def rankings(mode: str, order_type: str):
         max_page_display=max_page_display,
         min_page_display=min_page_display,
         items_per_page=items_per_page,
-        site_title='Country Rankings » Titanic'
+        site_title='Country Rankings'
     )
