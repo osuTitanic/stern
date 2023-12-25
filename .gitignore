@@ -11,6 +11,8 @@ ENV/
 env.bak/
 venv.bak/
 
+.data
+.idea
 .vscode
 .history
 *.vsix

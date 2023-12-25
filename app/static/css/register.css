@@ -1,0 +1,71 @@
+
+@import url("main.css");
+
+h1, h2 {
+    color: #cc2e8a;
+    text-shadow: #efcfe1 0px 0px 10px;
+    overflow: visible;
+    font-weight: normal;
+    font-size: 120%;
+}
+
+.register-form, .reset-form {
+    padding: 10px;
+}
+
+.register-form > div, .reset-form > div {
+    background-color: #efeafc;
+    box-shadow: 0px 0px 50px #ffffff;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 15px;
+    line-height: 30px;
+    display: flex;
+}
+
+.register-form input[type="submit"],
+.register-form input[type="text"],
+.register-form input[type="password"],
+.register-form input[type="email"] {
+    border: 1px solid #90ace7;
+    vertical-align: middle;
+    border-radius: 3px;
+    width: 300px;
+    height: 30px;
+    float: left;
+}
+
+.reset-form input[type="submit"],
+.reset-form input[type="text"],
+.reset-form input[type="password"],
+.reset-form input[type="email"] {
+    border: 1px solid #90ace7;
+    vertical-align: middle;
+    border-radius: 3px;
+    width: 300px;
+    height: 30px;
+    float: left;
+}
+
+.input-description {
+    display: inline-block;
+    line-height: 18px;
+    margin-left: 30px;
+    width: 440px;
+    vertical-align: middle;
+    font-size: 95%;
+}
+
+.register-button:hover, .reset-button:hover {
+    text-decoration: none;
+    text-shadow: 0px 0px 5px #ffffff;
+    color: white;
+    cursor: pointer;
+}
+
+.register-button, .reset-button {
+    background-color: rgb(138,138,138);
+    transition: all 200ms ease-in-out;
+    border-radius: 5px !important;
+    color: white;
+}

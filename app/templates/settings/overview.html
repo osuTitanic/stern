@@ -1,0 +1,62 @@
+{# templates/settings/overview.html #}
+
+{% extends "base.html" %}
+
+{% block content %}
+{% include "settings/sidebar.html" %}
+<div class="main-settings">
+    <h1>Overview</h1>
+    <div>Welcome to the user settings page. From here you can monitor, view and update your profile. {# You can also send messages to other users (if permitted). #}</div>
+    <div id="activity">
+        <h2>Your Activity</h2>
+        <dl class="activity-details section">
+            <dt>Joined:</dt>
+            <dd>{{ current_user.created_at|strftime }}</dd>
+            <dt>Last active:</dt>
+            <dd>{{ current_user.latest_activity|strftime }}</dd>
+            <dt>Total posts:</dt>
+            <dd>0</dd> {# TODO #}
+        </dl>
+    </div>
+    <div id="notifications">
+        <h2>Notifications</h2>
+        <div class="section">
+            {% if not notifications %}
+            You have no new notifications
+            {% else %}
+            <div class="notifications">
+                {% for notification in notifications %}
+                    {% if notification.link %}
+                    <div class="notification {{ 'new' if not notification.read else '' }}" onclick="return confirmNotification(this)" id="{{ notification.id }}" href="{{ notification.link }}">
+                        <h2>{{ notification.header }}</h2>
+                        <p>{{ notification.content|markdown_urls|safe }}</p>
+                        <p class="time">{{ notification.time|strftime }}</p>
+                    </div>
+                    {% else %}
+                    <div class="notification {{ 'new' if not notification.read else '' }}" onclick="return confirmNotification(this)" id="{{ notification.id }}">
+                        <h2>{{ notification.header }}</h2>
+                        <p>{{ notification.content|markdown_urls|safe }}</p>
+                        <p class="time">{{ notification.time|strftime }}</p>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    <div id="logins">
+        <h2>Previous Logins</h2>
+        <dl class="login-details section">
+            {% if logins %}
+                {% for login in logins %}
+                <dt>{{ login.time|strftime }}</dt>
+                <dd>Login from {{ location.fetch_geolocation(login.ip).country_name }} ({{ login.ip }}) with {{ login.version }}</dd>
+                {% endfor %}
+            {% else %}
+                You have not logged in yet
+            {% endif %}
+        </dl>
+        {# TODO #}
+    </div>
+</div>
+{% endblock content %}

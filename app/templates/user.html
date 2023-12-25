@@ -6,20 +6,62 @@
 <div class="profile-left">
     <div class="left-top">
         <div class="avatar-box">
+            {% if current_user.id == user.id %}
+            <a href="/account/settings/profile#picture">
+                <img src="/a/{{ user.id }}?h=120" alt="">
+            </a>
+            {% else %}
             <img src="/a/{{ user.id }}?h=120" alt="">
+            {% endif %}
         </div>
         <h1>
             <a class="flag" href="/rankings/{{ constants.GameMode(mode).alias }}/performance?country={{ user.country|lower }}">
-                <img src="/images/flags/{{ user.country|lower }}.gif" alt="{{ user.country|capitalize }}">
+                <img src="/images/flags/{{ user.country|lower }}.gif" alt="{{ user.country|upper }}">
             </a>
-            {# TODO: Username color based on groups #}
-            {% if user.names %}
-            <div class="username" style="color: #888888" title="Previously known as {{ user.names[-1].name }}">{{ user.name }}</div>
+
+            {# Username Color #}
+            {% if user.groups %}
+                {% set primary_group_id = user.groups|get_attributes('group_id')|min %}
+                {% set primary_group = (user.groups|selectattr("group_id", "eq", primary_group_id)|first).group %}
+                {% set color = primary_group.color %}
             {% else %}
-            <div class="username">{{ user.name }}</div>
+                {% set color = '#000000' %}
             {% endif %}
-            {# TODO: Title (e.g. Former osu! champion) #}
+
+            {# Username Size #}
+            {% set name_length = user.name|length %}
+            {% set name_size = (21 - (name_length - 14) * 1.5)|clamp(12, 25) %}
+
+            {% if user.names %}
+            <div class="username" style="color: {{ color }}; font-size: {{ name_size }}px;" title="Previously known as {{ user.names[-1].name }}">
+                {{ user.name }}
+            </div>
+            {% else %}
+            <div class="username" style="color: {{ color }}; font-size: {{ name_size }}px;">
+                {{ user.name }}
+            </div>
+            {% endif %}
         </h1>
+        <div class="user-title">
+            {% if user.userpage_title %}
+            {{ user.userpage_title }}
+            {% endif %}
+        </div>
+        {% if user.restricted %}
+        <img src="/images/banned.png" id="banned-image" alt="">
+        {% endif %}
+        {% if groups %}
+        <div class="groups">
+            {% for group in groups %}
+            <div class="group">
+                <a href="/g/{{ group.id }}" style="color: {{ group.color }}">
+                    {{ group.short_name|upper }}
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% if user.badges %}
         <div class="user-badges">
         {% for badge in user.badges %}
             <div class="badge-container">
@@ -29,9 +71,9 @@
             </div>
         {% endfor %}
         </div>
+        {% endif %}
     </div>
     <div class="left-bottom">
-        {# TODO: Edit button #}
         <div class="userpage-social">
             {% if user.userpage_location %}
             <div title="Location" class="activity">
@@ -51,16 +93,16 @@
                 <a href="{{ user.userpage_website }}">{{ user.userpage_website|domain }}</a>
             </div>
             {% endif %}
-            {% if user.userpage_discord %}
-            <div title="Discord" class="activity">
-                <i class="fa-brands fa-discord" style="color: #76777b;"></i>
-                <a href="{{ user.userpage_discord }}">Discord</a>
-            </div>
-            {% endif %}
             {% if user.userpage_twitter %}
             <div title="Twitter" class="activity">
                 <i class="fa-brands fa-twitter" style="color: #76777b;"></i>
-                <a href="{{ user.userpage_twitter }}">@{{ user.userpage_twitter|twitter_handle }}</a>
+                <a href="{{ user.userpage_twitter }}">{{ user.userpage_twitter|twitter_handle }}</a>
+            </div>
+            {% endif %}
+            {% if user.userpage_discord %}
+            <div title="Discord" class="activity">
+                <i class="fa-brands fa-discord" style="color: #76777b;"></i>
+                <p>{{ user.userpage_discord }}</p>
             </div>
             {% endif %}
         </div>
@@ -84,14 +126,57 @@
                 <p>0 posts</p>
             </div>
         </div>
-        {% if user.playstyle > 0 %}
+        {% if user.playstyle > 0 or current_user.id == user.id %}
         <div class="playstyle-container">
         {% set current_playstyle = user.playstyle|playstyle %}
-        {% for playstyle in constants.Playstyle %}
-            {% if playstyle in current_playstyle and playstyle > 0 %}
-            <div class="playstyle {{ playstyle.name|lower }}"></div>
+        {% if current_user.id == user.id %}
+            {# Let user edit the playstyle #}
+            {% for playstyle in constants.Playstyle %}
+                {% if playstyle in current_playstyle and playstyle > 0 %}
+                <div id="{{ playstyle.name }}" class="playstyle {{ playstyle.name|lower }} playstyle-selectable" onclick="updatePlaystyleElement(this)"></div>
+                {% else %}
+                <div id="{{ playstyle.name }}" class="playstyle-hidden {{ playstyle.name|lower }} playstyle-selectable" onclick="updatePlaystyleElement(this)"></div>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            {% for playstyle in constants.Playstyle %}
+                {% if playstyle in current_playstyle and playstyle > 0 %}
+                <div class="playstyle {{ playstyle.name|lower }}"></div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        </div>
+        {% endif %}
+        {% if current_user.id %}
+        <div class="userpage-actions">
+            {% if current_user.id != user.id %}
+            <div class="friend-actions">
+                {% set current_friends = current_user.relationships|get_attributes('target_id') %}
+                {% set target_friends = user.relationships|get_attributes('target_id') %}
+                {# Determine friend status #}
+                {% if user.id in current_friends %}
+                    {% if current_user.id in target_friends %}
+                    <a href="#" class="friend-remove" id="friend-status" onclick="return removeFriend()">
+                        Remove Mutual Friend
+                    </a>
+                    {% else %}
+                    <a href="#" class="friend-remove" id="friend-status" onclick="return removeFriend()">
+                        Remove Friend
+                    </a>
+                    {% endif %}
+                {% else %}
+                    {% if current_user.id in target_friends %}
+                    <a href="#" class="friend-add" id="friend-status" onclick="return addFriend()">
+                        Add Mutual Friend
+                    </a>
+                    {% else %}
+                    <a href="#" class="friend-add" id="friend-status" onclick="return addFriend()">
+                        Add Friend
+                    </a>
+                    {% endif %}
+                {% endif %}
+            </div>
             {% endif %}
-        {% endfor %}
         </div>
         {% endif %}
     </div>
@@ -99,10 +184,23 @@
     {# TODO: Report user #}
 </div>
 <div class="profile-right">
-    {% if user.userpage_about %}
-    <div class="userpage">
-        {{ user.userpage_about|bbcode|safe }}
-    </div>
+    {% if current_user.id == user.id %}
+        {% if user.userpage_about %}
+            <a class="edit-button" href="/account/settings/profile#userpage">Edit</a>
+            <br>
+            <div class="userpage">
+                {{ user.userpage_about|bbcode|safe }}
+            </div>
+        {% else %}
+            <a href="/account/settings/profile#userpage">Click to make your user page!</a>
+            <br>
+        {% endif %}
+    {% else %}
+        {% if user.userpage_about %}
+        <div class="userpage">
+            {{ user.userpage_about|bbcode|safe }}
+        </div>
+        {% endif %}
     {% endif %}
     <div class="gamemode-container">
         <a id="gm-0" class="gamemode-button {{ 'active-mode' if mode == 0 }}" href="?mode=0">osu!</a>
@@ -448,6 +546,58 @@
                         {% endfor %}
                     </div>
                 {% endif %}
+                </div>
+            </td>
+            <tr onclick="expandProfileTab('account')">
+                <td id="tab-general" class="tab-heading">Account Standing</td>
+            </tr>
+            <td>
+                <div id="account" class="tab-content" style="opacity: 1; filter: none; display: none; height: 0px;">
+                    <div>
+                        {% if infringements %}
+                        <p style="color: red">
+                            {{ user.name }}'s account is not in good standing :(
+                            {# TODO #}
+                        </p>
+                        {% else %}
+                        <p>
+                            This account is in good standing :)
+                        </p>
+                        {% endif %}
+                        {% if infringements %}
+                        <h3 class="profile-stats-header" style="text-align: left">
+                            Recent Infringements
+                        </h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <td>Date</td>
+                                    <td>Action</td>
+                                    <td>Length</td>
+                                    <td>Description</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for inf in infringements %}
+                                <tr>
+                                    <td>{{ inf.time|timeago }}</td>
+                                    {% if inf.action == 0 %}
+                                    <td style="background-color: red">BAN</td>
+                                    {% else %}
+                                    <td style="background-color: yellow">SILENCE</td>
+                                    {% endif %}
+                                    {% if inf.is_permanent %}
+                                    <td>Permanent</td>
+                                    {% else %}
+                                    <td>{{ (inf.length|round_time - inf.time|round_time) }}</td>
+                                    {% endif %}
+                                    <td>{{ inf.description }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        {% endif %}
+                    </div>
                 </div>
             </td>
         </tbody>

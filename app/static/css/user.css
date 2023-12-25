@@ -6,7 +6,7 @@
 }
 
 .profile-left {
-    background-color: #e7e4fc;
+    background-color: #dad7fb;
     width: 200px;
     height: 100%;
     padding: 5px;
@@ -32,10 +32,11 @@
 
 .left-top h1 {
     font-weight: normal;
-    font-size: 150%;
+    font-size: 145%;
     display: flex;
     justify-content: center;
     align-items: center;
+    padding-top: 5px;
 }
 
 .flag {
@@ -49,6 +50,40 @@
 
 .username {
     padding-left: 1px;
+}
+
+.user-title {
+    margin: 0px auto 5px auto;
+    font-size: 80%;
+}
+
+#banned-image {
+    display: flex;
+    margin: 10px auto 15px auto;
+}
+
+.groups {
+    display: flex;
+    justify-content: center;
+    overflow-wrap: break-word;
+    flex-wrap: wrap;
+}
+
+.group {
+    margin: 8px;
+    background-color: #e3e0f1;
+    border-radius: 2.5px;
+    padding: 2.5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    line-height: 18px;
+    display: inline;
+    text-align: center;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+.group a:hover {
+    text-decoration: none;
 }
 
 .avatar-box {
@@ -72,12 +107,12 @@
 }
 
 .user-badges {
-    margin-top: 10px;
     text-align: center;
+    margin: 5px auto;
 }
 
 .badge-container {
-    margin-bottom: 10px;
+    margin-top: 10px;
 }
 
 .badge-container img {
@@ -86,7 +121,7 @@
 }
 
 .left-bottom {
-    margin: 10px;
+    margin: 0px 10px 10px 10px;
 }
 
 .activity {
@@ -104,7 +139,7 @@
 }
 
 .playstyle-container {
-    background-color: #e8d2fc;
+    background-color: #dbcaea;
     text-align: center;
     margin: 5px auto;
     margin-top: 15px;
@@ -129,6 +164,17 @@
     display: inline-block;
 }
 
+.playstyle-hidden {
+    width: 32px;
+    height: 32px;
+    background-image: url('/images/playstyles.png');
+    display: inline-block;
+}
+
+.playstyle-selectable {
+    cursor: pointer;
+}
+
 .playstyle.mouse {
     background-position: 0px 0px;
 }
@@ -145,8 +191,30 @@
     background-position: -96px 0px;
 }
 
+.playstyle-hidden.mouse {
+    background-position: 0px 32px;
+}
+
+.playstyle-hidden.keyboard {
+    background-position: -64px 32px;
+}
+
+.playstyle-hidden.tablet {
+    background-position: -32px 32px;
+}
+
+.playstyle-hidden.touch {
+    background-position: -96px 32px;
+}
+
+.edit-button {
+    float: right;
+    text-align: right;
+    margin-left: 10px;
+}
+
 .userpage {
-    max-height: 505px;
+    max-height: 300px;
     min-height: 32px;
     overflow-x: hidden;
     overflow: auto;
@@ -422,4 +490,46 @@
     height: 120px;
     margin-bottom: 15px;
     font-size: 95%;
+}
+
+#account {
+    display: flex;
+}
+
+#account div {
+    margin: 15px; text-align: center;
+}
+
+#account table {
+    width: 100%;
+}
+
+#account thead td {
+    font-weight: bold;
+    border-bottom: 1px solid #9492dc;
+    background-color: #e7e5fc;
+}
+
+.userpage-stats {
+    margin-bottom: 10px;
+}
+
+.userpage-actions {
+    display: grid;
+    width: 100%;
+}
+
+.friend-add {
+    color: green;
+}
+
+.friend-remove {
+    color: red;
+}
+
+#friend-status {
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+    margin: 5px;
 }

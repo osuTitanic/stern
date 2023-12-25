@@ -1,0 +1,118 @@
+{# templates/overview/profile.html #}
+
+{% extends "base.html" %}
+
+{% block content %}
+{% include "settings/sidebar.html" %}
+<div class="main-settings">
+    <h1>Profile</h1>
+    {% if error %}
+    <div>
+        <div id="error" class="section">
+            {{ error }}
+        </div>
+    </div>
+    {% endif %}
+    {% if info %}
+    <div>
+        <div id="info" class="section">
+            {{ info }}
+        </div>
+    </div>
+    {% endif %}
+    <div id="edit">
+        <h2>Edit Profile</h2>
+        <form class="section" action="/account/settings/profile/avatar" method="post" enctype="multipart/form-data">
+            <div class="avatar-box">
+                <img src="/a/{{ current_user.id }}?h=120" alt="">
+            </div>
+            <input type="file" id="avatar" name="avatar" /><br>
+            <input class="submit-button" type="submit" name="submit" value="Upload">
+        </form>
+        <form class="profile-section section" action="/account/settings/profile/edit" method="post">
+            <dl>
+                <div class="inner-section">
+                    <dt><b>Username:</b></dt>
+                    <dd>{{ current_user.name }}</dd>
+                    {# TODO: Request a name change #}
+                </div>
+
+                <div class="inner-section">
+                    <dt><label for="new-email">E-Mail Address:</label></dt>
+                    <dd><input name="new-email" type="email" value="{{ current_user.email }}"></dd>
+                </div>
+
+                <div class="inner-section">
+                    <dt><label for="email-confirm">Confirm E-Mail Address:</label></dt>
+                    <dd><input name="email-confirm" type="email"></dd>
+                </div>
+
+                <div class="inner-section">
+                    <dt><label for="new-password">New Password:</label></dt>
+                    <dd><input name="new-password" type="password" value="{{ current_user.email }}"></dd>
+                </div>
+
+                <div class="inner-section">
+                    <dt><label for="password-confirm">Confirm Password:</label></dt>
+                    <dd><input name="password-confirm" type="password"></dd>
+                </div>
+
+                <div class="inner-section">
+                    <dt><label for="current-password">Current Password:</label></dt>
+                    <dd><input name="current-password" type="password" required></dd>
+                </div>
+
+                <dd><input class="submit-button" type="submit" name="submit" value="Save"></dd>
+            </dl>
+        </form>
+        <form class="profile-section section" action="/account/settings/profile" method="post">
+            <dl>
+                <div class="inner-section">
+                    <dt><label for="website">Website:</label></dt>
+                    <dd><input name="website" type="url" value="{{ current_user.userpage_website or '' }}"></dd>
+                </div>
+
+                <div class="inner-section">
+                    <dt><label for="discord">Discord:</label></dt>
+                    <dd><input name="discord" type="text" value="{{ current_user.userpage_discord or '' }}"></dd>
+                </div>
+
+                <div class="inner-section">
+                    <dt><label for="twitter">Twitter:</label></dt>
+                    <dd><input name="twitter" type="text" value="{{ current_user.userpage_twitter or '' }}"></dd>
+                </div>
+
+                <div class="inner-section">
+                    <dt><label for="location">Location:</label></dt>
+                    <dd><input name="location" type="text" value="{{ current_user.userpage_location or '' }}"></dd>
+                </div>
+
+                <div class="inner-section">
+                    <dt><label for="interests">Interests:</label></dt>
+                    <dd><input name="interests" type="text" value="{{ current_user.userpage_interests or '' }}"></dd>
+                </div>
+
+                <dd><input class="submit-button" type="submit" name="submit" value="Save"></dd>
+            </dl>
+        </form>
+    </div>
+    <div id="userpage">
+        <h2>Edit Userpage</h2>
+        <form class="section" action="/account/settings/profile/userpage" method="post">
+            {% with context = {
+                "current": current_user.userpage_about,
+                "submit-text": "Update",
+                "min-height": "140px"
+            } %}
+                {% include "editor.html" %}
+            {% endwith %}
+        </form>
+    </div>
+    {#
+        <div id="signature">
+            <h2>Edit Signature</h2>
+            <form class="section" action="/account/profile/signature" method="post"></form>
+        </div>
+    #}
+</div>
+{% endblock content %}

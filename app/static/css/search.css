@@ -206,7 +206,7 @@
     padding-bottom: 5px;
     border-spacing: 0;
     font-size: 80%;
-    margin: 20px auto 0 auto;
+    margin: 10px auto 0 auto;
 }
 
 .beatmap-order-select th {
@@ -226,4 +226,9 @@
     vertical-align: top;
     padding-top: 1.5px;
     opacity: 70%;
+}
+
+.pagination {
+    text-align: center;
+    margin-top: 10px;
 }

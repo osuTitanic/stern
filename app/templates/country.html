@@ -78,6 +78,7 @@
         </tr>
     </thead>
     <tbody>
+    {% set rank_offset = (page - 1) * items_per_page %}
     {% for country in leaderboard %}
         {% if loop.index0 % 2 %}
         <tr style="background-color: #e7e4fc;">
@@ -85,7 +86,7 @@
         <tr style="background-color: #dad7fb;">
         {% endif %}
             <td>
-                <b>#{{ loop.index0 + 1 }}</b>
+                <b>#{{ rank_offset + loop.index0 + 1 }}</b>
             </td>
             <td>
                 <img src="/images/flags/{{ country['name']|lower }}.gif" class="flag" alt="">

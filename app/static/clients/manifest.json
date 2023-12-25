@@ -2,8 +2,8 @@
     "downloads": [
         {
             "version": "b20130606.1",
-            "description": "A build from 2013 with the new UI overhaul update",
-            "download": "https://raw.githubusercontent.com/osuTitanic/clients/main/b20130606.1.zip",
+            "description": "A build from 2013 with the new UI overhaul update and some extra patches for relax",
+            "download": "https://raw.githubusercontent.com/osuTitanic/clients/main/b20130606.1-relax.zip",
             "screenshot": "/images/clients/b20130606.1.jpg",
             "maxWidth": "356px"
         },
@@ -55,6 +55,7 @@
         "8ec0f9b6481198580ec1f5a4b47ab571",
         "b4fb4221684329e3778254bd3ddece21",
         "2b8af4273c61f8d0c1ec78e73de85cdb",
-        "a068740bea8aac3db148e44f5f0754ae"
+        "a068740bea8aac3db148e44f5f0754ae",
+        "6ff88ed9281528ad20eb58da34e1b8cb"
     ]
 }

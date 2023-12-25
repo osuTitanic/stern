@@ -7,6 +7,7 @@ from app.common.database import DBUser
 from flask import Blueprint, abort, request
 
 import utils
+import math
 
 router = Blueprint('rankings', __name__)
 
@@ -19,10 +20,14 @@ def rankings(mode: str, order_type: str):
         return abort(404)
 
     page = max(1, min(10000, request.args.get('page', default=1, type=int)))
-    items_per_page = 49
+    items_per_page = 50
 
     # Any two letter country code
     country = request.args.get('country', default=None, type=str)
+    country = country.lower() if country else None
+
+    if country == 'xx':
+        return abort(404)
 
     if order_type != 'country':
         leaderboard = leaderboards.top_players(
@@ -30,8 +35,7 @@ def rankings(mode: str, order_type: str):
             offset=(page - 1) * items_per_page,
             range=items_per_page,
             type=order_type,
-            country=country.lower()
-                if country else None
+            country=country
         )
 
         # Fetch all users from leaderboard
@@ -51,8 +55,8 @@ def rankings(mode: str, order_type: str):
             user.stats.sort(key=lambda s:s.mode)
             utils.sync_ranks(user)
 
-        player_count = leaderboards.player_count(mode.value, order_type)
-        total_pages = max(1, min(10000, round(player_count / items_per_page)))
+        player_count = leaderboards.player_count(mode.value, order_type, country)
+        total_pages = max(1, min(10000, math.ceil(player_count / items_per_page)))
 
         # Get min/max pages to display for pagination
         max_page_display = max(page, min(total_pages, page + 8))
@@ -61,9 +65,17 @@ def rankings(mode: str, order_type: str):
         # Fetch top countries for country selection
         top_countries = leaderboards.top_countries(mode)
 
+        order_name = {
+            'rscore': 'Ranked Score',
+            'tscore': 'Total Score',
+            'performance': 'Performance',
+            'ppv1': 'PPv1'
+        }[order_type.lower()]
+
         return utils.render_template(
             'rankings.html',
             css='rankings.css',
+            title=f'{order_name} Rankings - Titanic',
             mode=mode,
             page=page,
             country=country,
@@ -73,20 +85,16 @@ def rankings(mode: str, order_type: str):
             top_countries=top_countries,
             max_page_display=max_page_display,
             min_page_display=min_page_display,
-            order_name={
-                'rscore': 'Ranked Score',
-                'tscore': 'Total Score',
-                'performance': 'Performance',
-                'ppv1': 'PPv1'
-            }[order_type.lower()]
+            items_per_page=items_per_page,
+            order_name=order_name
         )
 
     # Get country ranking
-    leaderboard = leaderboards.top_countries(mode)
+    leaderboard = [country for country in leaderboards.top_countries(mode) if country['name'] != 'xx']
     leaderboard = leaderboard[(page - 1)*items_per_page:(page - 1)*items_per_page + items_per_page]
 
     country_count = len(leaderboard)
-    total_pages = max(1, min(10000, round(country_count / items_per_page)))
+    total_pages = max(1, min(10000, math.ceil(country_count / items_per_page)))
 
     # Get min/max pages to display for pagination
     max_page_display = max(page, min(total_pages, page + 8))
@@ -95,10 +103,12 @@ def rankings(mode: str, order_type: str):
     return utils.render_template(
         'country.html',
         css='country.css',
+        title='Country Rankings - Titanic',
         mode=mode,
         page=page,
         total_pages=total_pages,
         leaderboard=leaderboard,
         max_page_display=max_page_display,
         min_page_display=min_page_display,
+        items_per_page=items_per_page
     )

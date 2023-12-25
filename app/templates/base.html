@@ -45,13 +45,57 @@
                     </form>
                 </div>
                 <div class="login-container">
-                    <p class="nav-login" id="welcome-text" style="font-size: 90%;">
-                        This website is currently in read-only mode. Login functionality is coming soon!
+                {% if current_user.id %}
+                    <p class="nav-login" id="welcome-text">
+                        Welcome, <a href="/u/{{ current_user.id }}">{{ current_user.name }}</a>
                     </p>
-                    <!-- <p class="nav-login" id="welcome-text">Welcome, guest!</p> -->
-                    <!-- <a href="#" class="nav-login" id="login-text">Login</a> -->
-                    <!-- <a href="#" class="nav-login" id="register-text">I'm new!</a> -->
+                    <a href="/account/settings/profile#avatar">
+                        <img class="small-avatar" src="/a/{{ current_user.id }}?h=25" alt="" height="25px">
+                    </a>
+                    <a href="/account/settings"><i class="fa-solid fa-gear" style="color: #808080;"></i> Settings</a>
+                    <a href="/account/settings#notifications">
+                        <i class="fa-solid fa-bell" style="color: #808080;"></i>
+                        {% if notification_count > 0 %}
+                        {{ notification_count }} {{ 'notification' if notification_count == 1 else 'notifications' }}
+                        {% else %}
+                        No notifications
+                        {% endif %}
+                    </a>
+                    <a href="/account/logout?redirect={{ url_for(request.endpoint, **request.view_args) }}">
+                        <i class="fa-solid fa-power-off" style="color: #808080;"></i> Logout
+                    </a>
+                {% else %}
+                    <p class="nav-login" id="welcome-text">Welcome, guest!</p>
+                    <a onclick="showLoginForm()" class="nav-login" id="login-text">Login</a>
+                    <a href="/account/register" class="nav-login" id="register-text">I'm new!</a>
+                {% endif %}
                 </div>
+            </div>
+            <div class="login-dropdown" style="display: none;">
+                <form action="/account/login" method="post">
+                    <input type="hidden" name="redirect" value="{{ url_for(request.endpoint, **request.view_args) }}">
+                    Please enter your credentials:
+                    <br>
+                    <input id="username-field" class="post" type="text" name="username" placeholder="Username" maxlength="30" value="" tabindex="0" autocomplete="off">
+                    <br>
+                    <input id="password-field" class="post" type="password" name="password" placeholder="Password" tabindex="0" autocomplete="off">
+                    <br>
+                    <div>
+                        <input id="remember" class="radio" type="checkbox" name="remember">
+                        <label for="remember">Remember Me</label>
+                        <input class="login-button" type="submit" name="login" value="Login" tabindex="5">
+                    </div>
+                    <div class="login-bottom-text">
+                        <a id="forgot-password-text" href="/account/reset">
+                            Forgot your password?
+                        </a>
+                    </div>
+                    <div class="login-bottom-text">
+                        <a id="register-text" href="/account/register">
+                            Create new account!
+                        </a>
+                    </div>
+                </form>
             </div>
             <div class="page">
                 {% block content %}
@@ -61,5 +105,8 @@
         </div>
     </div>
     <script src="/js/main.js"></script>
+    {% if show_login %}
+    <script>showLoginForm();</script>
+    {% endif %}
 </body>
 </html>

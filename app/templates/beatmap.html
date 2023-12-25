@@ -178,7 +178,7 @@
     {# TODO: BAT/Creator Controls #}
     <div class="padding">
         <div class="beatmap-download">
-            {% if user is defined %}
+            {% if current_user.id %}
                 <a href="/beatmapsets/download/{{ beatmapset.id }}">
                     <img src="/images/beatmap/osu-download-beatmap.png" alt="Download">
                 </a>
@@ -235,7 +235,9 @@
             <tbody>
                 <tr>
                     <td class="row-title" colspan="3">
-                        <img src="/images/flags/{{ leader_score.user.country|lower }}.gif" loading="lazy" alt="" class="flag">
+                        <a href="/rankings/{{ constants.GameMode(beatmap.mode).alias }}/performance?country={{ leader_score.user.country }}">
+                            <img src="/images/flags/{{ leader_score.user.country|lower }}.gif" loading="lazy" alt="" class="flag">
+                        </a>
                         <a href="/u/{{ leader_score.user.id }}">{{ leader_score.user.name }}</a> is in the lead!
                         ({{ leader_score.submitted_at|timeago }})
                     </td>
@@ -366,7 +368,9 @@
                     {% endif %}
                 </td>
                 <td>
-                    <img src="/images/flags/{{ score.user.country|lower }}.gif" loading="lazy" alt="" class="flag">
+                    <a href="/rankings/{{ constants.GameMode(beatmap.mode).alias }}/performance?country={{ score.user.country }}">
+                        <img src="/images/flags/{{ score.user.country|lower }}.gif" loading="lazy" alt="" class="flag">
+                    </a>
                     <a href="/u/{{ score.user.id }}">{{ score.user.name }}</a>
                 </td>
                 <td>

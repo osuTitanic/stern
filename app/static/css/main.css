@@ -35,6 +35,7 @@ a {
 a:hover {
     text-decoration: underline;
     color: rgb(0, 102, 204);
+    cursor: pointer;
 }
 
 a:visited {
@@ -47,7 +48,7 @@ body {
 }
 
 input:focus {
-    box-shadow: inset 0 1px 3px rgba(0,0,0,.05),0 0 8px rgba(82,168,236,.6);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, .05), 0 0 8px rgba(82, 168, 236, .6);
     border-color: #56b4ef;
     color: #333;
     outline: 0;
@@ -84,7 +85,8 @@ input:focus {
     margin-left: 30px;
 }
 
-.nav-element a, .nav-element a:visited {
+.nav-element a,
+.nav-element a:visited {
     text-decoration: none;
     padding: 4.5px;
     padding-left: 17px;
@@ -203,10 +205,21 @@ input:focus {
 
 .login-container {
     display: flex;
-    justify-content: flex-end;
     text-align: right;
+    justify-content: center;
+    align-items: center;
     font-size: 90%;
-    gap: 5px;
+    padding-right: 5px;
+}
+
+.login-container i {
+    font-size: 90%;
+    margin-left: 8px;
+}
+
+.small-avatar {
+    margin-top: 4px;
+    margin-left: 3px;
 }
 
 .nav-login {
@@ -222,7 +235,7 @@ input:focus {
 }
 
 #welcome-text {
-    color: grey;
+    color: rgb(80, 80, 80);
 }
 
 #login-text {
@@ -235,7 +248,135 @@ input:focus {
     font-weight: bold;
 }
 
+input[type="submit"] {
+    background-color: white;
+    border: 1.5px solid #8f8f9d;
+    border-radius: 4px;
+    padding: 2px 5px 2px 5px;
+    color: black;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover {
+    background-color: rgb(205, 205, 240);
+}
+
+.login-dropdown {
+    position: absolute;
+    right: 2px;
+    top: 48.5px;
+    background-color: white;
+    z-index: 2;
+    padding: 10px;
+    border-bottom-left-radius: 5px;
+    border-left: solid 2px #d7d4df;
+    border-bottom: solid 2px #d7d4df;
+    font-size: 105%;
+    overflow: hidden;
+}
+
+.login-dropdown input[type="checkbox"] {
+    margin: 4px;
+}
+
+.login-dropdown input[type="submit"] {
+    background-color: #5b5399;
+    border-radius: 2px;
+    font-size: 15px;
+    color: white;
+    margin: 5px;
+    max-width: 100px;
+    border: none;
+    text-align: center;
+    padding: 5px 10px 5px 10px;
+    display: inline-block;
+    user-select: none;
+    font-weight: bold;
+    width: 35%;
+    margin-left: 25px;
+}
+
+.login-bottom-text {
+    font-size: 88%;
+    line-height: 150%;
+}
+
+.login-bottom-text a:hover {
+    text-shadow: 0px 0px 10px #f7cfff;
+    text-decoration: none;
+}
+
+.post {
+    width: 240px;
+    margin: 5px;
+    background-color: white;
+    border: 1px solid #90ace7;
+    font-size: 100%;
+    border-radius: 3px;
+}
+
 .page {
     margin: 10px;
     padding-bottom: 10px;
+}
+
+.spoiler {
+    margin: 5px;
+}
+
+.spoiler-head {
+    border-bottom: solid 1px #b7c9ff;
+    padding: 3px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 95%;
+}
+
+.spoiler-body {
+    background-color: #eef;
+    padding: 5px;
+    display: none;
+}
+
+.bbcode {
+    padding: 8px;
+    border-radius: 2.5px;
+}
+
+.bbcode h2 {
+    font-size: 180%;
+    font-weight: bold;
+}
+
+.bbcode-editor {
+    white-space: pre-line;
+    height: auto;
+    margin: 3px;
+    padding: 3px;
+    width: 98%;
+    border-radius: 2.5px;
+    border: 1.5px solid rgb(50, 50, 50, 0.45);
+}
+
+.bbcode-help {
+    font-size: 80%
+}
+
+.bbcode-preview-button {
+    background-color: white;
+    border: 1.5px solid #8f8f9d;
+    border-radius: 4px;
+    padding: 2px 5px 2px 5px;
+    color: black;
+    cursor: pointer;
+}
+
+.bbcode-preview-button:hover {
+    background-color: rgb(205, 205, 240);
+}
+
+.bbcode-preview {
+    margin: 5px 5px 1.5px 5px;
+    background-color: #dbd8fd;
+    border-radius: 2.5px;
 }
