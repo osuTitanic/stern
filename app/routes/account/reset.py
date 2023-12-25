@@ -79,7 +79,7 @@ def password_reset_request():
             title="Verification - osu!Titanic"
         )
 
-    if not config.SENDGRID_API_KEY:
+    if not config.EMAILS_ENABLED:
         return return_to_reset_page('Password resets are not enabled at the moment. Please contact an administrator!')
 
     if not (email := request.form.get('email')):

@@ -116,7 +116,7 @@ def registration_request():
         email=email.lower(),
         pw_bcrypt=hashed_password,
         country=country,
-        activated=False if config.SENDGRID_API_KEY else True,
+        activated=False if config.EMAILS_ENABLED else True,
         permissions=5
     )
 

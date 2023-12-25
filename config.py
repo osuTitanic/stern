@@ -23,9 +23,6 @@ FRONTEND_SECRET_KEY = os.environ.get('FRONTEND_SECRET_KEY')
 FRONTEND_PORT = int(os.environ.get('FRONTEND_PORT'))
 FRONTEND_HOST = os.environ.get('FRONTEND_HOST')
 
-SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY')
-SENDGRID_EMAIL = os.environ.get('SENDGRID_EMAIL')
-
 USERCOUNT_UPDATE_INTERVAL = int(os.environ.get('USERCOUNT_UPDATE_INTERVAL', 60))
 SCORE_RESPONSE_LIMIT = int(os.environ.get('SCORE_RESPONSE_LIMIT', 50))
 SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY')
@@ -33,10 +30,19 @@ SENDGRID_EMAIL = os.environ.get('SENDGRID_EMAIL')
 DOMAIN_NAME = os.environ.get('DOMAIN_NAME')
 
 APPROVED_MAP_REWARDS = eval(os.environ.get('APPROVED_MAP_REWARDS', 'False').capitalize())
-SKIP_IP_DATABASE = eval(os.environ.get('SKIP_IP_DATABASE', 'False').capitalize())
 ENABLE_SSL = eval(os.environ.get('ENABLE_SSL', 'False').capitalize())
 S3_ENABLED = eval(os.environ.get('ENABLE_S3', 'True').capitalize())
 DEBUG = eval(os.environ.get('DEBUG', 'False').capitalize())
+
+SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY')
+SENDGRID_EMAIL = os.environ.get('SENDGRID_EMAIL')
+
+MAILGUN_API_KEY = os.environ.get('MAILGUN_API_KEY')
+MAILGUN_EMAIL = os.environ.get('MAILGUN_EMAIL')
+MAILGUN_DOMAIN = MAILGUN_EMAIL.split('@')[-1]
+
+EMAILS_ENABLED = MAILGUN_API_KEY is not None or SENDGRID_API_KEY is not None
+EMAIL = MAILGUN_EMAIL or SENDGRID_EMAIL
 
 IP_DATABASE_URL = "https://github.com/P3TERX/GeoLite.mmdb/raw/download/GeoLite2-City.mmdb"
 DATA_PATH = os.path.abspath('.data')
