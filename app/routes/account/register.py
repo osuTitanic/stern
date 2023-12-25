@@ -144,7 +144,7 @@ def registration_request():
     app.session.redis.incr(f'registrations:{ip}')
     app.session.redis.expire(f'registrations:{ip}', 3600 * 24)
 
-    if not config.SENDGRID_API_KEY:
+    if not config.EMAILS_ENABLED:
         # Verification is disabled
         flask_login.login_user(user)
         app.session.logger.info('Registration finished.')
