@@ -46,5 +46,8 @@ def get_beatmap(id: int):
             limit=config.SCORE_RESPONSE_LIMIT
         ),
         favourites_count=favourites.fetch_count_by_set(beatmap.set_id),
-        favourites=favourites.fetch_many_by_set(beatmap.set_id)
+        favourites=favourites.fetch_many_by_set(beatmap.set_id),
+        site_image=f"https://assets.ppy.sh/beatmaps/{beatmap.set_id}/covers/list.jpg",
+        site_description=f"Titanic » beatmaps » {beatmap.full_name}",
+        site_title=f"{beatmap.full_name} - Beatmap Info",
     )
