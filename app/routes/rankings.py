@@ -1,6 +1,6 @@
 
-from app.common.database.repositories import users, stats, histories
-from app.common.constants import GameMode
+from app.common.constants import GameMode, COUNTRIES
+from app.common.database.repositories import users
 from app.common.cache import leaderboards
 from app.common.database import DBUser
 
@@ -86,7 +86,10 @@ def rankings(mode: str, order_type: str):
             max_page_display=max_page_display,
             min_page_display=min_page_display,
             items_per_page=items_per_page,
-            order_name=order_name
+            order_name=order_name,
+            site_title=f'{order_name} Rankings ' \
+                       f'for {COUNTRIES[country.upper()]} » Titanic' \
+                        if country else '» Titanic'
         )
 
     # Get country ranking
@@ -110,5 +113,6 @@ def rankings(mode: str, order_type: str):
         leaderboard=leaderboard,
         max_page_display=max_page_display,
         min_page_display=min_page_display,
-        items_per_page=items_per_page
+        items_per_page=items_per_page,
+        site_title='Country Rankings » Titanic'
     )
