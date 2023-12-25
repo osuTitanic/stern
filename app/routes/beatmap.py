@@ -17,37 +17,39 @@ def get_beatmap(id: int):
             description=app.constants.BEATMAP_NOT_FOUND
         )
 
-    if not (beatmap := beatmaps.fetch_by_id(id)):
-        return abort(
-            code=404,
-            description=app.constants.BEATMAP_NOT_FOUND
+    with app.session.database.managed_session() as session:
+        if not (beatmap := beatmaps.fetch_by_id(id, session)):
+            return abort(
+                code=404,
+                description=app.constants.BEATMAP_NOT_FOUND
+            )
+
+        if not (mode := request.args.get('mode')):
+            mode = beatmap.mode
+
+        beatmap.beatmapset.beatmaps.sort(
+            key=lambda x: x.diff
         )
 
-    if not (mode := request.args.get('mode')):
-        mode = beatmap.mode
-
-    beatmap.beatmapset.beatmaps.sort(
-        key=lambda x: x.diff
-    )
-
-    return utils.render_template(
-        'beatmap.html',
-        mode=int(mode),
-        beatmap=beatmap,
-        beatmapset=beatmap.beatmapset,
-        css='beatmap.css',
-        title=f"{beatmap.beatmapset.artist} - {beatmap.beatmapset.title}",
-        Status=DatabaseStatus,
-        Language=BeatmapLanguage,
-        Genre=BeatmapGenre,
-        scores=scores.fetch_range_scores(
-            beatmap.id,
+        return utils.render_template(
+            'beatmap.html',
             mode=int(mode),
-            limit=config.SCORE_RESPONSE_LIMIT
-        ),
-        favourites_count=favourites.fetch_count_by_set(beatmap.set_id),
-        favourites=favourites.fetch_many_by_set(beatmap.set_id),
-        site_image=f"https://assets.ppy.sh/beatmaps/{beatmap.set_id}/covers/list.jpg",
-        site_description=f"Titanic » beatmaps » {beatmap.full_name}",
-        site_title=f"{beatmap.full_name} - Beatmap Info",
-    )
+            beatmap=beatmap,
+            beatmapset=beatmap.beatmapset,
+            css='beatmap.css',
+            title=f"{beatmap.beatmapset.artist} - {beatmap.beatmapset.title}",
+            Status=DatabaseStatus,
+            Language=BeatmapLanguage,
+            Genre=BeatmapGenre,
+            scores=scores.fetch_range_scores(
+                beatmap.id,
+                mode=int(mode),
+                limit=config.SCORE_RESPONSE_LIMIT,
+                session=session
+            ),
+            favourites_count=favourites.fetch_count_by_set(beatmap.set_id, session=session),
+            favourites=favourites.fetch_many_by_set(beatmap.set_id, session=session),
+            site_image=f"https://assets.ppy.sh/beatmaps/{beatmap.set_id}/covers/list.jpg",
+            site_description=f"Titanic » beatmaps » {beatmap.full_name}",
+            site_title=f"{beatmap.full_name} - Beatmap Info",
+        )
