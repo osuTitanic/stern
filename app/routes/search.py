@@ -32,6 +32,7 @@ def search_beatmap():
         query=request.args.get('query', default=''),
         sort=request.args.get('sort', default=BeatmapSortBy.Ranked.value, type=int),
         order=request.args.get('order', default=BeatmapOrder.Descending.value, type=int),
+        site_title="Beatmaps Listing",
         max_page_display=max_page_display,
         min_page_display=min_page_display,
         arguments=arguments,
