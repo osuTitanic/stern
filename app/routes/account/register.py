@@ -65,7 +65,9 @@ def register():
     return utils.render_template(
         'register.html',
         css='register.css',
-        title='Register - osu!Titanic'
+        title='Register - osu!Titanic',
+        site_title='Register',
+        site_description='Create your account and start playing today!'
     )
 
 @router.post('/register')
