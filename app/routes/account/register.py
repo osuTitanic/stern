@@ -3,7 +3,7 @@ from app.common.database.repositories import users, verifications, notifications
 from app.common.constants.regexes import USERNAME, EMAIL
 from app.common.constants import NotificationType
 from app.common.helpers.external import location
-from app.common import mail
+from app.common import mail, officer
 
 from flask import Blueprint, request, redirect
 from typing import Optional
@@ -96,7 +96,7 @@ def registration_request():
     registration_count = app.session.redis.get(f'registrations:{ip}') or 0
 
     if int(registration_count) > 2:
-        app.session.logger.error(
+        officer.call(
             f'Failed to register: Too many registrations from IP ({ip})'
         )
         return return_to_register_page('There have been too many registrations from this ip. Please try again later!')
@@ -123,7 +123,7 @@ def registration_request():
     )
 
     if not user:
-        app.session.logger.warning(f'Failed to register user "{username}".')
+        officer.call(f'Failed to register user "{username}".')
         return return_to_register_page('An error occured on the server side. Please try again!')
 
     app.session.logger.info(f'User "{username}" with id "{user.id}" was created.')
