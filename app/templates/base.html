@@ -9,6 +9,13 @@
     <meta name="viewport" content="width=864, user-scalable=yes"/>
     <meta name="msapplication-TileColor" content="#603cba">
     <meta name="theme-color" content="#ffffff">
+    <meta property="og:site_name" content="Titanic">
+    <meta property="og:type" content="website">
+    <meta name="theme-color" content="#603cba">
+    {% if site_description %}<meta property="og:description" content="{{ site_description }}">{% endif %}
+    {% if site_title %}<meta property="og:title" content="{{ site_title }}">{% endif %}
+    {% if site_image %}<meta property="og:image" content="{{ site_image }}">{% endif %}
+    {% if site_url %}<meta property="og:url" content="{{ site_url }}">{% endif %}
     <title>{{ title or 'Titanic' }}</title>
     <script src="/js/jquery.min.js"></script>
     <script src="/js/jquery.timeago.js"></script>

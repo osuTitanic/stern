@@ -10,7 +10,9 @@ from app.common.database.repositories import (
 
 from flask import Blueprint, abort, redirect, request
 from app.common.cache import status, leaderboards
+from app.common.constants import GameMode
 
+import config
 import utils
 import app
 
@@ -53,6 +55,12 @@ def userpage(query: str):
                 session=session
             )
 
+        pp_rank = leaderboards.global_rank(user.id, int(mode))
+        pp_rank_country = leaderboards.country_rank(user.id, int(mode), user.country)
+        score_rank = leaderboards.score_rank(user.id, int(mode))
+        score_rank_country = leaderboards.score_rank_country(user.id, int(mode), user.country)
+        ppv1_rank = leaderboards.ppv1_rank(user.id, int(mode))
+
         return utils.render_template(
             name='user.html',
             user=user,
@@ -64,11 +72,15 @@ def userpage(query: str):
             achievements={a.name:a for a in user.achievements},
             activity=activities.fetch_recent(user.id, int(mode), session=session),
             current_stats=stats.fetch_by_mode(user.id, int(mode), session=session),
-            pp_rank=leaderboards.global_rank(user.id, int(mode)),
-            pp_rank_country=leaderboards.country_rank(user.id, int(mode), user.country),
-            score_rank=leaderboards.score_rank(user.id, int(mode)),
-            score_rank_country=leaderboards.score_rank_country(user.id, int(mode), user.country),
-            ppv1_rank=leaderboards.ppv1_rank(user.id, int(mode)),
             groups=groups.fetch_user_groups(user.id, session=session),
+            site_title=f"{user.name} - Player Info",
+            site_description=f"Rank ({GameMode(mode).formatted}): Global: #{pp_rank} | Country: #{pp_rank_country}",
+            site_image=f"https//osu.{config.DOMAIN_NAME}/a/{user.id}_000.png",
+            site_url=f"https://osu.{config.DOMAIN_NAME}/u/{user.id}",
+            pp_rank=pp_rank,
+            pp_rank_country=pp_rank_country,
+            score_rank=score_rank,
+            score_rank_country=score_rank_country,
+            ppv1_rank=ppv1_rank,
             infringements=infs
         )

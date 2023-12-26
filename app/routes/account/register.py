@@ -65,7 +65,9 @@ def register():
     return utils.render_template(
         'register.html',
         css='register.css',
-        title='Register - osu!Titanic'
+        title='Register - osu!Titanic',
+        site_title='Register',
+        site_description='Create your account and start playing today!'
     )
 
 @router.post('/register')
@@ -144,7 +146,7 @@ def registration_request():
     app.session.redis.incr(f'registrations:{ip}')
     app.session.redis.expire(f'registrations:{ip}', 3600 * 24)
 
-    if not config.SENDGRID_API_KEY:
+    if not config.EMAILS_ENABLED:
         # Verification is disabled
         flask_login.login_user(user)
         app.session.logger.info('Registration finished.')
