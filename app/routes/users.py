@@ -74,7 +74,7 @@ def userpage(query: str):
             current_stats=stats.fetch_by_mode(user.id, int(mode), session=session),
             groups=groups.fetch_user_groups(user.id, session=session),
             site_title=f"{user.name} - Player Info",
-            site_description=f"Rank ({GameMode(mode).formatted}): Global: #{pp_rank} | Country: #{pp_rank_country}",
+            site_description=f"Rank ({GameMode(int(mode)).formatted}): Global: #{pp_rank} | Country: #{pp_rank_country}",
             site_image=f"https//osu.{config.DOMAIN_NAME}/a/{user.id}_000.png",
             site_url=f"https://osu.{config.DOMAIN_NAME}/u/{user.id}",
             pp_rank=pp_rank,

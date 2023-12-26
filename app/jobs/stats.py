@@ -69,18 +69,18 @@ def update_ranks():
     """Update the rank history for every user, every 15 minutes."""
     while True:
         try:
-            app.session.jobs.logger.info('[ranks] -> Updating rank history...')
+            app.session.jobs.logger.debug('[ranks] -> Updating rank history...')
 
             active_users = users.fetch_active(timedelta(days=90))
 
             for user in active_users:
                 utils.sync_ranks(user)
-                app.session.jobs.logger.info(f'[ranks] -> Updated {user.name}')
+                app.session.jobs.logger.debug(f'[ranks] -> Updated {user.name}')
 
                 if app.session.jobs._shutdown:
                     exit()
 
-            app.session.jobs.logger.info('[ranks] -> Done.')
+            app.session.jobs.logger.debug('[ranks] -> Done.')
             app.session.jobs.sleep(900)
         except Exception as e:
             app.session.logger.error(
@@ -92,16 +92,16 @@ def update_ppv1():
     """Update the ppv1 calculations for each user, every 2.5 hours."""
     while True:
         try:
-            app.session.jobs.logger.info('[ppv1] -> Updating ppv1 calculations...')
+            app.session.jobs.logger.debug('[ppv1] -> Updating ppv1 calculations...')
 
             for user in users.fetch_all():
                 utils.update_ppv1(user)
-                app.session.jobs.logger.info(f'[ppv1] -> Updated {user.name}')
+                app.session.jobs.logger.debug(f'[ppv1] -> Updated {user.name}')
 
                 if app.session.jobs._shutdown:
                     exit()
 
-            app.session.jobs.logger.info('[ppv1] -> Done.')
+            app.session.jobs.logger.debug('[ppv1] -> Done.')
             app.session.jobs.sleep(3600 * 2.5)
         except Exception as e:
             app.session.logger.error(
