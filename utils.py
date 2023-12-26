@@ -47,8 +47,6 @@ def render_template(name: str, **kwargs) -> str:
 def sync_ranks(user: DBUser) -> None:
     """Sync cached rank with database"""
     try:
-        app.session.logger.debug(f'[{user.name}] Trying to update rank from cache...')
-
         for user_stats in user.stats:
             if user_stats.playcount <= 0:
                 continue
@@ -71,12 +69,8 @@ def sync_ranks(user: DBUser) -> None:
 
                 # Update rank history
                 histories.update_rank(user_stats, user.country)
-
-                app.session.logger.debug(
-                    f'[{user.name}] Updated rank to {global_rank}'
-                )
     except Exception as e:
-        app.session.logging.error(
+        app.session.logger.error(
             f'[{user.name}] Failed to update user rank: {e}',
             exc_info=e
         )
@@ -84,8 +78,6 @@ def sync_ranks(user: DBUser) -> None:
 def update_ppv1(user: DBUser):
     """Update ppv1 calculations for a player"""
     try:
-        app.session.logger.debug(f'[{user.name}] Trying to update ppv1 calculations...')
-
         for user_stats in user.stats:
             if user_stats.playcount <= 0:
                 continue
@@ -111,7 +103,7 @@ def update_ppv1(user: DBUser):
                 user.country
             )
     except Exception as e:
-        app.session.logging.error(
+        app.session.logger.error(
             f'[{user.name}] Failed to update ppv1 calculations: {e}',
             exc_info=e
         )
