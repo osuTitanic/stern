@@ -46,7 +46,7 @@
             "version": "b904",
             "description": "A build from 2009 that is used in the oldsu server",
             "download": "https://raw.githubusercontent.com/osuTitanic/clients/main/b904.zip",
-            "screenshot": "/images/clients/b904.jpg",
+            "screenshot": "/images/clients/b904.png",
             "maxWidth": "265px"
         }
     ],
