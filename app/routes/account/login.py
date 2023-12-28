@@ -1,6 +1,6 @@
 
 from app.common.database.repositories import users, verifications
-from app.common import mail
+from app.common import mail, officer
 
 from flask import Blueprint, request, redirect
 from datetime import datetime
@@ -26,6 +26,7 @@ def login():
 
     if int(login_attempts) > 15:
         # Tell user to slow down
+        officer.call(f'Too many login requests from ip! ({ip})')
         return redirect('/?wait=true')
 
     app.session.redis.incr(f'logins:{ip}')

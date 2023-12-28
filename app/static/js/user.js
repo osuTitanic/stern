@@ -79,42 +79,41 @@ const Mods = {
     }
 };
 
-function expandProfileTab(id, forceExpand)
-{
-    var tab = document.getElementById(id);
-    activeTab = id;
+function expandProfileTab(id, forceExpand) {
+  var tab = document.getElementById(id);
+  activeTab = id;
 
-    if (!tab)
-      // Tab can be null sometimes?
-      return
+  if (!tab) {
+    // Tab can be null sometimes?
+    return;
+  }
 
-    if (!tab.classList.contains("expanded") || forceExpand)
-    {
-        tab.classList.add("expanded");
-        tab.style.display = "block";
+  if (!tab.classList.contains("expanded") || forceExpand) {
+    tab.classList.add("expanded");
+    tab.style.display = "block";
 
-        if (tab.style.height == "0px")
-            slideDown(tab);
-
-        if (forceExpand)
-            window.location.hash = "#" + activeTab;
-    }
-    else
-    {
-        slideUp(tab);
-        tab.classList.remove("expanded");
-        tab.addEventListener("transitionend", () => {
-            tab.style.display = "none";
-        }, { once: true })
+    if (tab.style.height == "0px") {
+      slideDown(tab);
     }
 
-    if (activeTab == 'general')
-    {
-      loadUserPerformanceGraph(userId, modeName);
-    } else {
-      loadUserPlaysGraph(userId, modeName);
-      loadUserViewsGraph(userId, modeName);
+    if (forceExpand) {
+      window.location.hash = "#" + activeTab;
     }
+  } else {
+    slideUp(tab);
+    tab.classList.remove("expanded");
+    // This can cause issues
+    // tab.addEventListener("transitionend", () => {
+    //   tab.style.display = "none";
+    // }, { once: true });
+  }
+
+  if (activeTab == 'general') {
+    loadUserPerformanceGraph(userId, modeName);
+  } else {
+    loadUserPlaysGraph(userId, modeName);
+    loadUserViewsGraph(userId, modeName);
+  }
 }
 
 function expandRecentActivity()

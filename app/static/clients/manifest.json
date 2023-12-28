@@ -41,6 +41,13 @@
             "download": "https://raw.githubusercontent.com/osuTitanic/clients/main/b1700.zip",
             "screenshot": "/images/clients/b1700.jpg",
             "maxWidth": "265px"
+        },
+        {
+            "version": "b904",
+            "description": "A build from 2009 that is used in the oldsu server",
+            "download": "https://raw.githubusercontent.com/osuTitanic/clients/main/b904.zip",
+            "screenshot": "/images/clients/b904.png",
+            "maxWidth": "265px"
         }
     ],
     "hashes": [
@@ -60,6 +67,7 @@
         "0c43143d964fd2ecf5c50417fbeba05f",
         "9f610d458cb69b9ea373d3dd6df1666c",
         "5361cff8bad587ea8f54bd886b91bcc4",
-        "791ece08ba9dea2ef3ac45da654ee9f7"
+        "791ece08ba9dea2ef3ac45da654ee9f7",
+        "7123631119a5be05be03be7b166b7372"
     ]
 }
