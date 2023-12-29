@@ -21,6 +21,41 @@
     --nav: #ffd6f3;
 }
 
+:root {
+    --darkreader-bg--nav: #863c86 !important;
+    --darkreader-bg--search: #353232 !important;
+}
+
+html[data-darkreader-mode="dynamic"] .nav-element a,
+html[data-darkreader-mode="dynamic"] .nav-element a:visited {
+    color: #f7ddfd !important;
+}
+
+html[data-darkreader-mode="dynamic"] .nav-search {
+    border-color: #50113c !important;
+}
+
+html[data-darkreader-mode="dynamic"] .top {
+    filter: drop-shadow(0px 1px 2px #000000) !important;
+}
+
+html[data-darkreader-mode="dynamic"] .blurb-box {
+    filter: drop-shadow(0px 1px 2px #242424) !important;
+    border-color: #690c56 !important;
+}
+
+html[data-darkreader-mode="dynamic"] .page h2 {
+    text-shadow: #000000 0px 0px 10px !important;
+}
+
+html[data-darkreader-mode="dynamic"] .nav-dropdown {
+    filter: drop-shadow(0px 1px 2px #000000) !important;
+}
+
+html[data-darkreader-mode="dynamic"] body {
+    background: linear-gradient(#395f94, #3b4a85 20%) !important
+}
+
 html {
     background-color: inherit !important;
 }
