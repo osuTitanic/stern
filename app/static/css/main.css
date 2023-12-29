@@ -21,6 +21,10 @@
     --nav: #ffd6f3;
 }
 
+html {
+    background-color: inherit !important;
+}
+
 * {
     margin: 0;
     font-family: "Arial Grande", Tahoma, Helvetica, Arial, sans-serif;
