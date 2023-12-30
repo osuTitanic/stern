@@ -65,7 +65,7 @@
         <div class="user-badges">
         {% for badge in user.badges %}
             <div class="badge-container">
-                <a href="{{ badge.badge_url }}" title="{{ badge.badge_description }}">
+                <a href="{{ badge.badge_url if badge.badge_url else '#' }}" title="{{ badge.badge_description }}">
                     <img src="{{ badge.badge_icon }}" alt="{{ badge.badge_description }}" loading="lazy">
                 </a>
             </div>
