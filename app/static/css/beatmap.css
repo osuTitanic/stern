@@ -176,7 +176,7 @@ h2 {
 
 .score-header {
     width: 100%;
-    display: grid;
+    display: flex;
     text-align: left;
     min-height: 100px;
     justify-content: center;
@@ -187,9 +187,9 @@ h2 {
     border: 1px solid black;
     min-width: 380px;
     font-size: 80%;
-    margin: auto;
-    margin-top: 20px;
-    margin-bottom: 20px;
+    margin: auto 5px;
+    margin-top: 25px;
+    margin-bottom: 25px;
     border-spacing: 0;
     padding: 0;
 }
