@@ -419,3 +419,19 @@ input[type="submit"]:hover {
     background-color: #dbd8fd;
     border-radius: 2.5px;
 }
+
+.popup {
+    display: none;
+    position: fixed;
+    padding: 20px;
+    border-radius: 2.5px;
+    background: #f0ecfa;
+    z-index: 20;
+}
+
+.popup-close {
+    float: right;
+    text-align: right;
+    cursor: pointer;
+    font-size: 150%;
+}
