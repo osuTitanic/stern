@@ -9,6 +9,7 @@
 {%- endif -%}
 </textarea>
 <br>
+<input type="hidden" name="user_id" value="{{ context['user-id'] }}">
 <input type="submit" value="{{ context['submit-text'] }}">
 <button class="bbcode-preview-button" onclick="return loadBBCodePreview(this)">Preview</button>
 {% if context['current'] %}
