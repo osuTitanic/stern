@@ -3,6 +3,7 @@ from app.common.constants import BeatmapLanguage, BeatmapGenre, DatabaseStatus
 from app.common.database.repositories import beatmaps, scores, favourites
 from flask import Blueprint, request, abort
 
+import flask_login
 import config
 import utils
 import app
@@ -26,6 +27,24 @@ def get_beatmap(id: int):
 
         if not (mode := request.args.get('mode')):
             mode = beatmap.mode
+
+        personal_best = None
+        personal_best_rank = None
+
+        if not flask_login.current_user.is_anonymous:
+            personal_best = scores.fetch_personal_best(
+                beatmap.id,
+                flask_login.current_user.id,
+                int(mode),
+                session=session
+            )
+
+            personal_best_rank = scores.fetch_score_index(
+                flask_login.current_user.id,
+                beatmap.id,
+                int(mode),
+                session=session
+            )
 
         beatmap.beatmapset.beatmaps.sort(
             key=lambda x: x.diff
@@ -52,4 +71,6 @@ def get_beatmap(id: int):
             site_image=f"https://assets.ppy.sh/beatmaps/{beatmap.set_id}/covers/list.jpg",
             site_description=f"Titanic » beatmaps » {beatmap.full_name}",
             site_title=f"{beatmap.full_name} - Beatmap Info",
+            personal_best=personal_best,
+            personal_best_rank=personal_best_rank
         )

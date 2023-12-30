@@ -304,6 +304,77 @@
                 </tr>
             </tbody>
         </table>
+        {% if personal_best %}
+        <table class="leader">
+            <tbody>
+                <tr>
+                    <td class="row-title" colspan="3">
+                        Personal Best (#{{ personal_best_rank }} achieved {{ leader_score.submitted_at|timeago }})
+                    </td>
+                </tr>
+                <tr>
+                    <tr class="row-light">
+                        <td><strong>Score</strong></td>
+                        <td>{{ "{:,}".format(personal_best.total_score) }} ({{ (personal_best.acc * 100)|round(2) }}%)</td>
+                        <td class="row-grade" colspan="1" rowspan="13">
+                            <img src="/images/grades/{{ personal_best.grade|upper }}.png" loading="lazy" alt="">
+                        </td>
+                    </tr>
+                </tr>
+                <tr>
+                    <tr class="row-dark">
+                        <td><strong>Max Combo</strong></td>
+                        <td>{{ personal_best.max_combo }}</td>
+                    </tr>
+                </tr>
+                {% if mode != 3 %}
+                <tr>
+                    <tr class="row-light">
+                        <td><strong>300 / 100 / 50</strong></td>
+                        <td>{{ personal_best.n300 }} / {{ personal_best.n100 }} / {{ personal_best.n50 }}</td>
+                    </tr>
+                </tr>
+                <tr>
+                    <tr class="row-dark">
+                        <td><strong>Misses</strong></td>
+                        <td>{{ personal_best.nMiss }}</td>
+                    </tr>
+                </tr>
+                <tr>
+                    <tr class="row-light">
+                        <td><strong>Geki (Elite Beat!)</strong></td>
+                        <td>{{ personal_best.nGeki }}</td>
+                    </tr>
+                </tr>
+                <tr>
+                    <tr class="row-dark">
+                        <td><strong>{% if mode == 2 %}Droplet misses{% else %}Katu (Beat!){%endif%}</strong></td>
+                        <td>{{ personal_best.nKatu }}</td>
+                    </tr>
+                </tr>
+                {% else %}
+                <tr>
+                    <tr class="row-light">
+                        <td><strong>MAX / 300 / 200</strong></td>
+                        <td>{{ personal_best.nGeki }} / {{ personal_best.n300 }} / {{ personal_best.nKatu }}</td>
+                    </tr>
+                </tr>
+                <tr>
+                    <tr class="dark-light">
+                        <td><strong>100 / 50 / Misses</strong></td>
+                        <td>{{ personal_best.n100 }} / {{ personal_best.n50 }} / {{ personal_best.nMiss }}</td>
+                    </tr>
+                </tr>
+                {% endif %}
+                <tr>
+                    <tr class="row-light">
+                        <td><strong>Mods</strong></td>
+                        <td>{{ personal_best.mods|short_mods }}</td>
+                    </tr>
+                </tr>
+            </tbody>
+        </table>
+        {% endif %}
     {% endif %}
     </div>
     {% if scores %}
