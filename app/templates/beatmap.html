@@ -411,16 +411,21 @@
                 {% endif %}
                 <th><strong>Misses</strong></th>
                 <th><strong>Mods</strong></th>
+                {% if not current_user.is_anonymous %}
                 {# TODO: Report button #}
+                <th>
+                    {# Replay Downloads #}
+                </th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
         {# TODO: Highlight row if user is friend #}
         {% for score in scores %}
             {% if loop.index0 % 2 %}
-            <tr class="row-light" id="{{ loop.index0+1 }}">
+            <tr class="row-light" id="{{ score.id }}">
             {% else %}
-            <tr class="row-dark" id="{{ loop.index0+1 }}">
+            <tr class="row-dark" id="{{ score.id }}">
             {% endif %}
                 <td><a href="#{{ loop.index0+1 }}">#{{ loop.index0+1 }}</a></td>
                 <td><img src="/images/grades/{{ score.grade|upper }}_small.png" loading="lazy" alt="{{ score.grade|upper }}"></td>
@@ -465,6 +470,12 @@
                 {% endif %}
                 <td>{{ score.nMiss }}</td>
                 <td>{{ score.mods|short_mods }}</td>
+                {% if not current_user.is_anonymous %}
+                {# Replay Downloads #}
+                <td style="text-align: center;">
+                    <a href="/scores/{{ score.id }}/download" target="_blank">Replay</a>
+                </td>
+                {% endif %}
             </tr>
         {% endfor %}
         </tbody>
