@@ -1,9 +1,15 @@
 
-from app.common.database.repositories import users, verifications, notifications, groups
 from app.common.constants.regexes import USERNAME, EMAIL
 from app.common.constants import NotificationType
 from app.common.helpers.external import location
 from app.common import mail, officer
+from app.common.database.repositories import (
+    verifications,
+    notifications,
+    groups,
+    names,
+    users
+)
 
 from flask import Blueprint, request, redirect
 from typing import Optional
@@ -48,6 +54,9 @@ def validate_username(username: str) -> Optional[str]:
     safe_name = username.lower().replace(' ', '_')
 
     if users.fetch_by_safe_name(safe_name):
+        return "This username is already in use!"
+
+    if names.fetch_by_name_extended(username):
         return "This username is already in use!"
 
 def validate_email(email: str) -> Optional[str]:
