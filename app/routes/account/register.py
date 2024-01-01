@@ -134,7 +134,7 @@ def registration_request():
         NotificationType.Welcome.value,
         'Welcome!',
         'Welcome aboard! '
-        f'Get started by downloading one of our builds [here](https://osu.{config.DOMAIN_NAME}/downloads). '
+        f'Get started by downloading one of our builds [here](https://osu.{config.DOMAIN_NAME}/download). '
         'Enjoy your journey!'
     )
 
