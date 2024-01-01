@@ -34,6 +34,8 @@ def get_hashed_password(password: str) -> str:
     ).decode()
 
 def validate_username(username: str) -> Optional[str]:
+    username = username.strip()
+
     if len(username) < 3:
         return "Your username is too short."
 
@@ -109,8 +111,8 @@ def registration_request():
     country = geolocation.country_code.upper()
 
     hashed_password = get_hashed_password(password)
-    safe_name = username.lower() \
-                        .replace(' ', '_')
+    username = username.strip()
+    safe_name = username.lower().replace(' ', '_')
 
     user = users.create(
         username=username,
