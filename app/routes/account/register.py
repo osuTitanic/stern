@@ -183,10 +183,10 @@ def registration_request():
 @router.get('/register/check')
 def input_validation():
     if not (type := request.args.get('type')):
-        return
+        return ''
 
     if not (value := request.args.get('value')):
-        return
+        return ''
 
     return {
         'username': validate_username,
