@@ -116,8 +116,8 @@ def registration_request():
         f'Starting registration process for "{username}" ({email}) ({ip})...'
     )
 
-    geolocation = location.fetch_geolocation(ip)
-    country = geolocation.country_code.upper()
+    geolocation = location.fetch_web(ip)
+    country = geolocation.country_code.upper() if geolocation else 'XX'
 
     hashed_password = get_hashed_password(password)
     username = username.strip()
