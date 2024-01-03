@@ -102,6 +102,10 @@ def registration_request():
             f'Failed to verify registration request: {e}',
             exc_info=e
         )
+        officer.call(
+            f'Failed to verify registration request from IP ({ip}): {e}',
+            exc_info=e
+        )
         return return_to_register_page('Failed to process your request. Please try again!')
 
     registration_count = app.session.redis.get(f'registrations:{ip}') or 0
