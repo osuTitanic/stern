@@ -79,6 +79,22 @@ const Mods = {
     }
 };
 
+function pinScore(scoreId, userId)
+{
+  fetch(`/api/profile/${userId}/pinned/add/${scoreId}`)
+    .then(response => {
+      loadPinnedScores(userId, modeName);
+    });
+}
+
+function unpinScore(scoreId, userId)
+{
+  fetch(`/api/profile/${userId}/pinned/remove/${scoreId}`)
+    .then(response => {
+      loadPinnedScores(userId, modeName);
+    });
+}
+
 function expandProfileTab(id, forceExpand) {
   var tab = document.getElementById(id);
   activeTab = id;
@@ -201,8 +217,6 @@ function createScoreElement(score, index, type)
   const dateDiv = document.createElement("div");
   dateDiv.appendChild(dateText);
 
-  // TODO: Create replay download button
-
   leftColumn.appendChild(scoreInfoDiv);
   leftColumn.appendChild(dateDiv);
   rightColumn.appendChild(ppDisplay);
@@ -212,6 +226,47 @@ function createScoreElement(score, index, type)
   tableBody.appendChild(tableRow);
   scoreTable.appendChild(tableBody);
   scoreDiv.appendChild(scoreTable);
+
+  if (currentUser == userId)
+  {
+    const pinIcon = document.createElement("i");
+    pinIcon.classList.add("fa-regular", "fa-star");
+    if (!score.pinned)
+    {
+      pinIcon.classList.add("score-pin-icon");
+      pinIcon.title = "Pin Score";
+      pinIcon.onclick = () => {
+        pinScore(score.id, userId);
+        pinIcon.classList.remove("score-pin-icon");
+        pinIcon.classList.add("score-pinned-icon");
+        pinIcon.title = "Unpin Score";
+        pinIcon.onclick = () => {
+          unpinScore(score.id, userId);
+          pinIcon.classList.remove("score-pinned-icon");
+          pinIcon.classList.add("score-pin-icon");
+          pinIcon.title = "Pin Score";
+        }
+      }
+    }
+    else {
+      pinIcon.classList.add("score-pinned-icon");
+      pinIcon.title = "Unpin Score";
+      pinIcon.onclick = () => {
+        unpinScore(score.id, userId);
+        pinIcon.classList.remove("score-pinned-icon");
+        pinIcon.classList.add("score-pin-icon");
+        pinIcon.title = "Pin Score";
+        pinIcon.onclick = () => {
+          pinScore(score.id, userId);
+          pinIcon.classList.remove("score-pin-icon");
+          pinIcon.classList.add("score-pinned-icon");
+          pinIcon.title = "Unpin Score";
+        }
+      }
+    }
+    rightColumn.appendChild(pinIcon);
+  }
+
   return scoreDiv;
 }
 
@@ -234,6 +289,9 @@ function loadPinnedScores(userId, mode)
         loadingText.parentElement.classList.remove("score");
         loadingText.remove();
       }
+
+      // Reset container
+      scoreContainer.innerHTML = "<h2>Pinned Scores</h2>";
 
       if (scores.length <= 0)
       {
