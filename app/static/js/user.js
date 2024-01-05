@@ -79,6 +79,22 @@ const Mods = {
     }
 };
 
+function pinScore(scoreId, userId)
+{
+  fetch(`/api/profile/${userId}/pinned/add/${scoreId}`)
+    .then(response => {
+      loadPinnedScores(userId, modeName);
+    });
+}
+
+function unpinScore(scoreId, userId)
+{
+  fetch(`/api/profile/${userId}/pinned/remove/${scoreId}`)
+    .then(response => {
+      loadPinnedScores(userId, modeName);
+    });
+}
+
 function expandProfileTab(id, forceExpand) {
   var tab = document.getElementById(id);
   activeTab = id;
@@ -193,6 +209,9 @@ function createScoreElement(score, index, type)
   ppWeight.appendChild(ppWeightPercent);
   ppWeight.appendChild(document.createTextNode(` (${(score.pp * (0.95**(index + topScoreOffset))).toFixed(0)}pp)`));
 
+  const iconContainer = document.createElement("div");
+  iconContainer.classList.add("score-icon-container");
+
   const scoreInfoDiv = document.createElement("div");
   scoreInfoDiv.appendChild(scoreGrade);
   scoreInfoDiv.appendChild(scoreInfo);
@@ -201,8 +220,55 @@ function createScoreElement(score, index, type)
   const dateDiv = document.createElement("div");
   dateDiv.appendChild(dateText);
 
-  // TODO: Create replay download button
+  if (currentUser == userId)
+  {
+    const pinIcon = document.createElement("i");
+    pinIcon.classList.add("fa-regular", "fa-star");
+    pinIcon.classList.add(`score-pin-${score.id}`);
+    if (!score.pinned)
+    {
+      pinIcon.classList.add("score-pin-icon");
+      pinIcon.title = "Pin Score";
+      pinIcon.onclick = () => {
+        document.querySelectorAll(`.score-pin-${score.id}`)
+          .forEach((icon) => {
+            icon.classList.remove("score-pin-icon");
+            icon.classList.add("score-pinned-icon");
+            icon.title = "Unpin Score";
+          });
+        pinScore(score.id, userId);
+        pinIcon.onclick = () => {
+          unpinScore(score.id, userId);
+          pinIcon.classList.remove("score-pinned-icon");
+          pinIcon.classList.add("score-pin-icon");
+          pinIcon.title = "Pin Score";
+        }
+      }
+    }
+    else {
+      pinIcon.classList.add("score-pinned-icon");
+      pinIcon.title = "Unpin Score";
+      pinIcon.onclick = () => {
+        document.querySelectorAll(`.score-pin-${score.id}`)
+          .forEach((icon) => {
+            icon.classList.remove("score-pinned-icon");
+            icon.classList.add("score-pin-icon");
+            icon.title = "Pin Score";
+          });
+        unpinScore(score.id, userId);
+        pinIcon.onclick = () => {
+          pinScore(score.id, userId);
+          pinIcon.classList.remove("score-pin-icon");
+          pinIcon.classList.add("score-pinned-icon");
+          pinIcon.title = "Unpin Score";
+        }
+      }
+    }
 
+    iconContainer.appendChild(pinIcon);
+  }
+
+  ppWeight.appendChild(iconContainer);
   leftColumn.appendChild(scoreInfoDiv);
   leftColumn.appendChild(dateDiv);
   rightColumn.appendChild(ppDisplay);
@@ -212,7 +278,67 @@ function createScoreElement(score, index, type)
   tableBody.appendChild(tableRow);
   scoreTable.appendChild(tableBody);
   scoreDiv.appendChild(scoreTable);
+
   return scoreDiv;
+}
+
+function loadPinnedScores(userId, mode)
+{
+  var url = `/api/profile/${userId}/pinned/${mode}`;
+  var scoreContainer = document.getElementById("pinned-scores");
+
+  fetch(url)
+    .then(response => {
+      if (!response.ok)
+        throw new Error(`${response.status}`);
+      return response.json();
+    })
+    .then(scores => {
+      var loadingText = document.getElementById("pinned-scores-loading");
+
+      if (loadingText)
+      {
+        loadingText.parentElement.classList.remove("score");
+        loadingText.remove();
+      }
+
+      // Reset container
+      scoreContainer.innerHTML = "<h2>Pinned Scores</h2>";
+
+      if (scores.length <= 0)
+      {
+        scoreContainer.appendChild(
+          document.createTextNode("This player has not pinned any scores yet :(")
+        );
+        return;
+      }
+
+      for (const [index, score] of scores.entries()) {
+        const scoreDiv = createScoreElement(score, index, "pinned");
+        scoreContainer.appendChild(scoreDiv);
+      }
+
+      // Render timeago elements
+      $(".timeago").timeago();
+
+      slideDown(document.getElementById("leader"));
+    })
+    .catch(error => {
+      console.error("Error loading pinned scores:", error);
+
+      const errorText = document.createElement("p");
+      errorText.textContent = "Failed to load pinned scores.";
+      errorText.classList.add("score");
+      scoreContainer.appendChild(errorText);
+
+      var loadingText = document.getElementById("pinned-scores-loading");
+
+      if (loadingText)
+      {
+        loadingText.parentElement.classList.remove("score");
+        loadingText.remove();
+      }
+    });
 }
 
 function loadTopPlays(userId, mode, limit, offset)
@@ -935,6 +1061,7 @@ function removeFriend()
 
 window.addEventListener('load', () => {
     expandProfileTab(activeTab);
+    loadPinnedScores(userId, modeName);
     loadTopPlays(userId, modeName, 5, 0);
     loadLeaderScores(userId, modeName, 5, 0);
     loadRecentPlays(userId, modeName);

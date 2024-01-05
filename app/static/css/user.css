@@ -386,7 +386,7 @@
     margin-top: 15px;
 }
 
-#top-scores, #leader-scores {
+#top-scores, #leader-scores, #pinned-scores {
     padding-top: 10px;
     padding-bottom: 10px;
 }
@@ -449,6 +449,33 @@
     color: #9492dc;
     text-shadow: #b5c6cb 2px 0px 3px;
     padding-right: 5px;
+}
+
+.score-icon-container {
+    float: right;
+    margin-left: 2.5px;
+}
+
+.score-pin-icon,
+.score-pinned-icon {
+    cursor: pointer;
+    font-size: 95%;
+}
+
+.score-pin-icon {
+    color: #8684c9;
+}
+
+.score-pin-icon:hover {
+    color: #3843a6;
+}
+
+.score-pinned-icon {
+    color: #3843a6;
+}
+
+.score-pinned-icon:hover {
+    color: #8684c9;
 }
 
 .show-more {

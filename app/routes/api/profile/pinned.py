@@ -121,6 +121,9 @@ def get_pinned(
     user_id: int,
     mode_alias: str
 ):
+    limit = request.args.get('limit', 10, int)
+    offset = request.args.get('offset', 0, int)
+
     with app.session.database.managed_session() as session:
         if not (user := users.fetch_by_id(user_id, session)):
             return Response(
@@ -136,7 +139,15 @@ def get_pinned(
                 mimetype='application/json'
             )
 
-        pinned = scores.fetch_pinned(user.id, mode.value, session)
+        limit = max(1, min(50, limit))
+
+        pinned = scores.fetch_pinned(
+            user.id,
+            mode.value,
+            limit,
+            offset,
+            session=session
+        )
 
         return [
             ScoreModel.model_validate(score, from_attributes=True) \
