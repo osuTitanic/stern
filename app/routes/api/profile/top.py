@@ -43,13 +43,6 @@ def top_plays(
         limit=limit
     )
 
-    if not top_plays:
-        return Response(
-            response=[],
-            status=200,
-            mimetype='application/json'
-        )
-
     return [
         ScoreModel.model_validate(score, from_attributes=True) \
                   .model_dump(exclude=['user'])
