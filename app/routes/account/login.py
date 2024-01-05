@@ -1,6 +1,6 @@
 
 from app.common.database.repositories import users, verifications
-from app.common import mail, officer
+from app.common import mail, officer, helpers
 
 from flask import Blueprint, request, redirect
 from datetime import datetime
@@ -8,7 +8,6 @@ from datetime import datetime
 import flask_login
 import hashlib
 import bcrypt
-import utils
 import app
 
 router = Blueprint('login', __name__)
@@ -21,7 +20,7 @@ def login():
     redirect_url = form.get('redirect')
     remember = bool(form.get('remember'))
 
-    ip = utils.resolve_ip_address(request)
+    ip = helpers.ip.resolve_ip_address_flask(request)
     login_attempts = app.session.redis.get(f'logins:{ip}') or 0
 
     if int(login_attempts) > 15:

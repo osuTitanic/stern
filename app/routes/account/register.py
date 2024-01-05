@@ -2,7 +2,7 @@
 from app.common.constants.regexes import USERNAME, EMAIL
 from app.common.constants import NotificationType
 from app.common.helpers.external import location
-from app.common import mail, officer
+from app.common import mail, officer, helpers
 from app.common.database.repositories import (
     verifications,
     notifications,
@@ -83,7 +83,7 @@ def register():
 
 @router.post('/register')
 def registration_request():
-    ip = utils.resolve_ip_address(request)
+    ip = helpers.ip.resolve_ip_address_flask(request)
 
     try:
         if validate_email(email := request.form.get('email')):
