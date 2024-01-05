@@ -30,4 +30,4 @@ def profile(user_id: str) -> dict:
     user.stats.sort(key=lambda x: x.mode)
 
     return UserModel.model_validate(user, from_attributes=True) \
-                    .model_dump(exclude=['user'])
+                    .model_dump()
