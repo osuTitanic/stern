@@ -386,7 +386,7 @@
     margin-top: 15px;
 }
 
-#top-scores, #leader-scores {
+#top-scores, #leader-scores, #pinned-scores {
     padding-top: 10px;
     padding-bottom: 10px;
 }
