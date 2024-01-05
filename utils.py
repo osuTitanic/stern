@@ -20,7 +20,7 @@ import config
 import app
 
 def render_template(name: str, **kwargs) -> str:
-    """This will automatically fetch all the required data for bancho-stats"""
+    """This will automatically append the required data to the context for rendering pages"""
     kwargs.update(
         total_scores=int(app.session.redis.get('bancho:totalscores') or 0),
         online_users=int(app.session.redis.get('bancho:users') or 0),
@@ -28,7 +28,7 @@ def render_template(name: str, **kwargs) -> str:
         show_login=request.args.get('login', False, type=bool),
         constants=constants,
         location=location,
-        config=config,
+        config=config
     )
 
     if not flask_login.current_user.is_anonymous:
@@ -107,20 +107,3 @@ def update_ppv1(user: DBUser):
             f'[{user.name}] Failed to update ppv1 calculations: {e}',
             exc_info=e
         )
-
-def resolve_ip_address(request: Request):
-    ip = request.headers.get("CF-Connecting-IP")
-    forwards = None
-
-    if ip is None:
-        forwards = request.headers.get("X-Forwarded-For")
-
-    if forwards:
-        ip = forwards.split(",")[0]
-    else:
-        ip = request.headers.get("X-Real-IP")
-
-    if ip is None:
-        ip = request.environ['REMOTE_ADDR']
-
-    return ip.strip()
