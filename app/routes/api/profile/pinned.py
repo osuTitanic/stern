@@ -11,18 +11,11 @@ import app
 
 router = Blueprint("pinned", __name__)
 
-@router.get('/<user_id>/pinned/add')
+@router.get('/<user_id>/pinned/add/<score_id>')
 @login_required
 @validate()
-def add_pinned(user_id: int):
+def add_pinned(user_id: int, score_id: int):
     with app.session.database.managed_session() as session:
-        if not (score_id := request.args.get('score', type=int)):
-            return Response(
-                response={},
-                status=400,
-                mimetype='application/json'
-            )
-
         if not (user := users.fetch_by_id(user_id, session)):
             return Response(
                 response={},
@@ -63,18 +56,11 @@ def add_pinned(user_id: int):
             mimetype='application/json'
         )
 
-@router.get('/<user_id>/pinned/remove')
+@router.get('/<user_id>/pinned/remove/<score_id>')
 @login_required
 @validate()
-def remove_pinned(user_id: int):
+def remove_pinned(user_id: int, score_id: int):
     with app.session.database.managed_session() as session:
-        if not (score_id := request.args.get('score', type=int)):
-            return Response(
-                response={},
-                status=400,
-                mimetype='application/json'
-            )
-
         if not (user := users.fetch_by_id(user_id, session)):
             return Response(
                 response={},
