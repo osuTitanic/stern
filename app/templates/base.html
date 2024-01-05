@@ -29,6 +29,7 @@
     <script>
         const domainName = "{{ config.DOMAIN_NAME }}";
         const enableSSL = {{ config.ENABLE_SSL|lower }};
+        const currentUser = {{ current_user.id if not current_user.is_anonymous else 'null' }};
     </script>
 </head>
 <body>
