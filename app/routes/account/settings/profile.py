@@ -108,13 +108,32 @@ def update_userpage():
     if (bbcode := request.form.get('bbcode')) is None:
         return redirect('/account/settings/profile')
 
+    user_group_ids = [
+        entry.group_id
+        for entry in flask_login.current_user.groups
+    ]
+
+    is_admin = any([
+        1 in user_group_ids,
+        2 in user_group_ids,
+        4 in user_group_ids
+    ])
+
+    user_id = request.form.get('user_id', type=int)
+
+    if flask_login.current_user.id != user_id and not is_admin:
+        return redirect('/account/settings/profile')
+
     # Update database
     users.update(
-        flask_login.current_user.id,
+        user_id,
         {'userpage_about': bbcode}
     )
 
     # Update user object
     flask_login.current_user.userpage_about = bbcode
+
+    if user_id != flask_login.current_user.id:
+        return redirect(f'/u/{user_id}')
 
     return redirect('/account/settings/profile#userpage')

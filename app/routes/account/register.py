@@ -1,9 +1,15 @@
 
-from app.common.database.repositories import users, verifications, notifications, groups
 from app.common.constants.regexes import USERNAME, EMAIL
 from app.common.constants import NotificationType
 from app.common.helpers.external import location
 from app.common import mail, officer
+from app.common.database.repositories import (
+    verifications,
+    notifications,
+    groups,
+    names,
+    users
+)
 
 from flask import Blueprint, request, redirect
 from typing import Optional
@@ -34,6 +40,8 @@ def get_hashed_password(password: str) -> str:
     ).decode()
 
 def validate_username(username: str) -> Optional[str]:
+    username = username.strip()
+
     if len(username) < 3:
         return "Your username is too short."
 
@@ -46,6 +54,9 @@ def validate_username(username: str) -> Optional[str]:
     safe_name = username.lower().replace(' ', '_')
 
     if users.fetch_by_safe_name(safe_name):
+        return "This username is already in use!"
+
+    if names.fetch_by_name_extended(username):
         return "This username is already in use!"
 
 def validate_email(email: str) -> Optional[str]:
@@ -91,6 +102,10 @@ def registration_request():
             f'Failed to verify registration request: {e}',
             exc_info=e
         )
+        officer.call(
+            f'Failed to verify registration request from IP ({ip}): {e}',
+            exc_info=e
+        )
         return return_to_register_page('Failed to process your request. Please try again!')
 
     registration_count = app.session.redis.get(f'registrations:{ip}') or 0
@@ -105,12 +120,12 @@ def registration_request():
         f'Starting registration process for "{username}" ({email}) ({ip})...'
     )
 
-    geolocation = location.fetch_geolocation(ip)
-    country = geolocation.country_code.upper()
+    geolocation = location.fetch_web(ip)
+    country = geolocation.country_code.upper() if geolocation else 'XX'
 
     hashed_password = get_hashed_password(password)
-    safe_name = username.lower() \
-                        .replace(' ', '_')
+    username = username.strip()
+    safe_name = username.lower().replace(' ', '_')
 
     user = users.create(
         username=username,
@@ -134,7 +149,7 @@ def registration_request():
         NotificationType.Welcome.value,
         'Welcome!',
         'Welcome aboard! '
-        f'Get started by downloading one of our builds [here](https://osu.{config.DOMAIN_NAME}/downloads). '
+        f'Get started by downloading one of our builds [here](https://osu.{config.DOMAIN_NAME}/download). '
         'Enjoy your journey!'
     )
 
@@ -172,10 +187,10 @@ def registration_request():
 @router.get('/register/check')
 def input_validation():
     if not (type := request.args.get('type')):
-        return
+        return ''
 
     if not (value := request.args.get('value')):
-        return
+        return ''
 
     return {
         'username': validate_username,

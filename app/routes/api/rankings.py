@@ -81,14 +81,7 @@ def rankings(
                 'user': UserModel.model_validate(
                     sorted_users[index],
                     from_attributes=True
-                ).model_dump(
-                    exclude=[
-                        'relationships',
-                        'achievements',
-                        'names',
-                        'badges'
-                    ]
-                )
+                ).model_dump()
             }
             for index, user in enumerate(users_top)
         ]

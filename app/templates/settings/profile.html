@@ -102,7 +102,8 @@
             {% with context = {
                 "current": current_user.userpage_about,
                 "submit-text": "Update",
-                "min-height": "140px"
+                "min-height": "140px",
+                "user-id": current_user.id,
             } %}
                 {% include "editor.html" %}
             {% endwith %}

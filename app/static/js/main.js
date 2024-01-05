@@ -103,6 +103,9 @@ async function confirmNotification(element)
 function cookieExists(name) { return document.cookie.indexOf(`${name}=`); }
 function isLoggedIn() { return cookieExists('session'); }
 
+function show(id) { $(`#${id}`).show(); }
+function hide(id) { $(`#${id}`).hide(); }
+
 const params = new URLSearchParams(location.search);
 
 if (params.get('wait') && location.pathname == '/')
