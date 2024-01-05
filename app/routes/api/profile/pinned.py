@@ -63,6 +63,58 @@ def add_pinned(user_id: int):
             mimetype='application/json'
         )
 
+@router.get('/<user_id>/pinned/remove')
+@login_required
+@validate()
+def remove_pinned(user_id: int):
+    with app.session.database.managed_session() as session:
+        if not (score_id := request.args.get('score', type=int)):
+            return Response(
+                response={},
+                status=400,
+                mimetype='application/json'
+            )
+
+        if not (user := users.fetch_by_id(user_id, session)):
+            return Response(
+                response={},
+                status=404,
+                mimetype='application/json'
+            )
+
+        if user.id != current_user.id:
+            return Response(
+                response={},
+                status=403,
+                mimetype='application/json'
+            )
+
+        if (score := scores.fetch_by_id(score_id, session)) is None:
+            return Response(
+                response={},
+                status=404,
+                mimetype='application/json'
+            )
+
+        if score.user_id != user.id:
+            return Response(
+                response={},
+                status=403,
+                mimetype='application/json'
+            )
+
+        scores.update(
+            score.id,
+            {'pinned': False},
+            session=session
+        )
+
+        return Response(
+            response={},
+            status=200,
+            mimetype='application/json'
+        )
+
 @router.get('/<user_id>/pinned/<mode_alias>')
 @validate()
 def get_pinned(
