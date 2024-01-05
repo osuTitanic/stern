@@ -451,6 +451,29 @@
     padding-right: 5px;
 }
 
+.score-pin-icon,
+.score-pinned-icon {
+    cursor: pointer;
+    float: right;
+    text-align: right;
+}
+
+.score-pin-icon {
+    color: #8684c9;
+}
+
+.score-pin-icon:hover {
+    color: #3843a6;
+}
+
+.score-pinned-icon {
+    color: #3843a6;
+}
+
+.score-pinned-icon:hover {
+    color: #8684c9;
+}
+
 .show-more {
     font-size: 90%;
 }
