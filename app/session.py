@@ -33,5 +33,5 @@ jobs = Jobs()
 storage = Storage()
 requests = Session()
 requests.headers = {
-    'User-Agent': 'osuTitanic/titanic'
+    'User-Agent': 'osuTitanic/stern'
 }
