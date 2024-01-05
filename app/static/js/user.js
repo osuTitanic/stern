@@ -209,6 +209,9 @@ function createScoreElement(score, index, type)
   ppWeight.appendChild(ppWeightPercent);
   ppWeight.appendChild(document.createTextNode(` (${(score.pp * (0.95**(index + topScoreOffset))).toFixed(0)}pp)`));
 
+  const iconContainer = document.createElement("div");
+  iconContainer.classList.add("score-icon-container");
+
   const scoreInfoDiv = document.createElement("div");
   scoreInfoDiv.appendChild(scoreGrade);
   scoreInfoDiv.appendChild(scoreInfo);
@@ -216,16 +219,6 @@ function createScoreElement(score, index, type)
 
   const dateDiv = document.createElement("div");
   dateDiv.appendChild(dateText);
-
-  leftColumn.appendChild(scoreInfoDiv);
-  leftColumn.appendChild(dateDiv);
-  rightColumn.appendChild(ppDisplay);
-  rightColumn.appendChild(ppWeight);
-  tableRow.appendChild(leftColumn);
-  tableRow.appendChild(rightColumn);
-  tableBody.appendChild(tableRow);
-  scoreTable.appendChild(tableBody);
-  scoreDiv.appendChild(scoreTable);
 
   if (currentUser == userId)
   {
@@ -264,8 +257,20 @@ function createScoreElement(score, index, type)
         }
       }
     }
-    rightColumn.appendChild(pinIcon);
+
+    iconContainer.appendChild(pinIcon);
   }
+
+  ppWeight.appendChild(iconContainer);
+  leftColumn.appendChild(scoreInfoDiv);
+  leftColumn.appendChild(dateDiv);
+  rightColumn.appendChild(ppDisplay);
+  rightColumn.appendChild(ppWeight);
+  tableRow.appendChild(leftColumn);
+  tableRow.appendChild(rightColumn);
+  tableBody.appendChild(tableRow);
+  scoreTable.appendChild(tableBody);
+  scoreDiv.appendChild(scoreTable);
 
   return scoreDiv;
 }

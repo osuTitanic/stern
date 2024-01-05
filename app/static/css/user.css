@@ -451,11 +451,15 @@
     padding-right: 5px;
 }
 
+.score-icon-container {
+    float: right;
+    margin-left: 2.5px;
+}
+
 .score-pin-icon,
 .score-pinned-icon {
     cursor: pointer;
-    float: right;
-    text-align: right;
+    font-size: 95%;
 }
 
 .score-pin-icon {
