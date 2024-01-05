@@ -44,6 +44,13 @@ def add_pinned(user_id: int, score_id: int):
                 mimetype='application/json'
             )
 
+        if score.pinned:
+            return Response(
+                response={},
+                status=200,
+                mimetype='application/json'
+            )
+
         scores.update(
             score.id,
             {'pinned': True},
@@ -86,6 +93,13 @@ def remove_pinned(user_id: int, score_id: int):
             return Response(
                 response={},
                 status=403,
+                mimetype='application/json'
+            )
+
+        if not score.pinned:
+            return Response(
+                response={},
+                status=200,
                 mimetype='application/json'
             )
 
