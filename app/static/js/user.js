@@ -215,6 +215,62 @@ function createScoreElement(score, index, type)
   return scoreDiv;
 }
 
+function loadPinnedScores(userId, mode)
+{
+  var url = `/api/profile/${userId}/pinned/${mode}`;
+  var scoreContainer = document.getElementById("pinned-scores");
+
+  fetch(url)
+    .then(response => {
+      if (!response.ok)
+        throw new Error(`${response.status}`);
+      return response.json();
+    })
+    .then(scores => {
+      var loadingText = document.getElementById("pinned-scores-loading");
+
+      if (loadingText)
+      {
+        loadingText.parentElement.classList.remove("score");
+        loadingText.remove();
+      }
+
+      if (scores.length <= 0)
+      {
+        scoreContainer.appendChild(
+          document.createTextNode("This player has not pinned any scores yet :(")
+        );
+        return;
+      }
+
+      for (const [index, score] of scores.entries()) {
+        const scoreDiv = createScoreElement(score, index, "pinned");
+        scoreContainer.appendChild(scoreDiv);
+      }
+
+      // Render timeago elements
+      $(".timeago").timeago();
+
+      slideDown(document.getElementById("leader"));
+    })
+    .catch(error => {
+      console.error("Error loading pinned scores:", error);
+
+      const errorText = document.createElement("p");
+      errorText.textContent = "Failed to load pinned scores.";
+      errorText.classList.add("score");
+      scoreContainer.appendChild(errorText);
+
+      var loadingText = document.getElementById("pinned-scores-loading");
+
+      if (loadingText)
+      {
+        loadingText.parentElement.classList.remove("score");
+        loadingText.remove();
+      }
+    });
+}
+
 function loadTopPlays(userId, mode, limit, offset)
 {
     var url = `/api/profile/${userId}/top/${mode}?limit=${limit}&offset=${offset}`;
@@ -935,6 +991,7 @@ function removeFriend()
 
 window.addEventListener('load', () => {
     expandProfileTab(activeTab);
+    loadPinnedScores(userId, modeName);
     loadTopPlays(userId, modeName, 5, 0);
     loadLeaderScores(userId, modeName, 5, 0);
     loadRecentPlays(userId, modeName);
