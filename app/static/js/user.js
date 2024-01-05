@@ -224,15 +224,19 @@ function createScoreElement(score, index, type)
   {
     const pinIcon = document.createElement("i");
     pinIcon.classList.add("fa-regular", "fa-star");
+    pinIcon.classList.add(`score-pin-${score.id}`);
     if (!score.pinned)
     {
       pinIcon.classList.add("score-pin-icon");
       pinIcon.title = "Pin Score";
       pinIcon.onclick = () => {
+        document.querySelectorAll(`.score-pin-${score.id}`)
+          .forEach((icon) => {
+            icon.classList.remove("score-pin-icon");
+            icon.classList.add("score-pinned-icon");
+            icon.title = "Unpin Score";
+          });
         pinScore(score.id, userId);
-        pinIcon.classList.remove("score-pin-icon");
-        pinIcon.classList.add("score-pinned-icon");
-        pinIcon.title = "Unpin Score";
         pinIcon.onclick = () => {
           unpinScore(score.id, userId);
           pinIcon.classList.remove("score-pinned-icon");
@@ -245,10 +249,13 @@ function createScoreElement(score, index, type)
       pinIcon.classList.add("score-pinned-icon");
       pinIcon.title = "Unpin Score";
       pinIcon.onclick = () => {
+        document.querySelectorAll(`.score-pin-${score.id}`)
+          .forEach((icon) => {
+            icon.classList.remove("score-pinned-icon");
+            icon.classList.add("score-pin-icon");
+            icon.title = "Pin Score";
+          });
         unpinScore(score.id, userId);
-        pinIcon.classList.remove("score-pinned-icon");
-        pinIcon.classList.add("score-pin-icon");
-        pinIcon.title = "Pin Score";
         pinIcon.onclick = () => {
           pinScore(score.id, userId);
           pinIcon.classList.remove("score-pin-icon");
