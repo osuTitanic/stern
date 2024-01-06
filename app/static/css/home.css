@@ -92,6 +92,7 @@
 .bottom-stats {
     bottom: 20px;
     position: absolute;
+    width: 54.5%;
 }
 
 .stats-wrapper img {
@@ -139,5 +140,5 @@
 }
 
 .chat-wrapper {
-    width: 470px;
+    width: 100%;
 }
