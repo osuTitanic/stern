@@ -123,10 +123,9 @@ def registration_request():
     geolocation = location.fetch_web(ip)
     country = geolocation.country_code.upper() if geolocation else 'XX'
 
-    if (
-        cf_country := request.headers.get('CF-IPCountry') and
-        cf_country not in ('XX', 'T1')
-    ):
+    cf_country = request.headers.get('CF-IPCountry')
+
+    if cf_country != None and cf_country not in ('XX', 'T1'):
         country = cf_country.upper()
 
     hashed_password = get_hashed_password(password)
