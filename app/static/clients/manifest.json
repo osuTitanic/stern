@@ -1,73 +1,160 @@
-{
-    "downloads": [
-        {
-            "version": "b20130606.1",
-            "description": "A build from 2013 with the new UI overhaul update and some extra patches for relax",
-            "download": "https://raw.githubusercontent.com/osuTitanic/clients/main/b20130606.1-relax.zip",
-            "screenshot": "/images/clients/b20130606.1.jpg",
-            "maxWidth": "356px"
-        },
-        {
-            "version": "b20130303",
-            "description": "The last build before 2013's UI overhaul update",
-            "download": "https://raw.githubusercontent.com/osuTitanic/clients/main/b20130303.zip",
-            "screenshot": "/images/clients/b20130303.jpg",
-            "maxWidth": "356px"
-        },
-        {
-            "version": "b20121229-db2k",
-            "description": "A special build modded by db2k, featuring 3-point sliders, background dim and more!",
-            "download": "https://raw.githubusercontent.com/osuTitanic/clients/main/b20121229-db2k.zip",
-            "screenshot": "/images/clients/b20121229-db2k.jpg",
-            "maxWidth": "356px"
-        },
-        {
-            "version": "b20120522",
-            "description": "Another build from 2012, with a more old-ish ui",
-            "download": "https://raw.githubusercontent.com/osuTitanic/clients/main/b20120522.zip",
-            "screenshot": "/images/clients/b20120522.jpg",
-            "maxWidth": "265px"
-        },
-        {
-            "version": "b1821",
-            "description": "The last build from 2011",
-            "download": "https://raw.githubusercontent.com/osuTitanic/clients/main/b1821.zip",
-            "screenshot": "/images/clients/b1821.jpg",
-            "maxWidth": "265px"
-        },
-        {
-            "version": "b1700",
-            "description": "The last build from 2010",
-            "download": "https://raw.githubusercontent.com/osuTitanic/clients/main/b1700.zip",
-            "screenshot": "/images/clients/b1700.jpg",
-            "maxWidth": "265px"
-        },
-        {
-            "version": "b904",
-            "description": "A build from 2009 that is used in the oldsu server",
-            "download": "https://raw.githubusercontent.com/osuTitanic/clients/main/b904.zip",
-            "screenshot": "/images/clients/b904.png",
-            "maxWidth": "265px"
-        }
-    ],
-    "hashes": [
-        "8f14a97b6d11c1795fc42dcb784a3b7b",
-        "5f26f2538731881cc70333495d00cef2",
-        "2561cbb5dae2c450aae88b68a9a44ab3",
-        "0f4ccbd268b90ca29631533a16a98f77",
-        "b4d96f63909061bfa4f541f9cf77529d",
-        "97520f952bc80c9372ce73a23cd1a0fb",
-        "e61522a3e4a9a1ec18f2e066180dd5d1",
-        "dddffef60c07ec83843d769074212ad3",
-        "8ec0f9b6481198580ec1f5a4b47ab571",
-        "b4fb4221684329e3778254bd3ddece21",
-        "2b8af4273c61f8d0c1ec78e73de85cdb",
-        "a068740bea8aac3db148e44f5f0754ae",
-        "6ff88ed9281528ad20eb58da34e1b8cb",
-        "0c43143d964fd2ecf5c50417fbeba05f",
-        "9f610d458cb69b9ea373d3dd6df1666c",
-        "5361cff8bad587ea8f54bd886b91bcc4",
-        "791ece08ba9dea2ef3ac45da654ee9f7",
-        "7123631119a5be05be03be7b166b7372"
-    ]
-}
+[
+    {
+        "display_name": "osu!2013",
+        "build_name": "b20130606.1",
+        "description": "A build from 2013 with the new UI overhaul update and some extra patches for relax",
+        "known_bugs": "",
+        "supported": true,
+        "recommended": true,
+        "actions": [],
+        "hashes": [
+            {
+                "file": "osu!.exe",
+                "md5": "5361cff8bad587ea8f54bd886b91bcc4"
+            },
+            {
+                "file": "osu!common.dll",
+                "md5": "04b144211e1cf44469dcb46902c1ddd8"
+            }
+        ],
+        "downloads": [
+            "https://raw.githubusercontent.com/osuTitanic/clients/main/b20130606.1-relax.zip"
+        ],
+        "screenshots": [
+            {
+                "src": "/images/clients/b20130606.1.jpg",
+                "width": "356px",
+                "height": "350px"
+            }
+        ]
+    },
+    {
+        "display_name": "osu!2013",
+        "build_name": "b20130303",
+        "description": "This is the last build before 2013's UI overhaul update.",
+        "known_bugs": "",
+        "supported": true,
+        "recommended": true,
+        "actions": [],
+        "hashes": [
+            {
+                "file": "osu!.exe",
+                "md5": "9f610d458cb69b9ea373d3dd6df1666c"
+            },
+            {
+                "file": "osu!common.dll",
+                "md5": "36f241f206e8078fe92e6c2a55ceac00"
+            }
+        ],
+        "downloads": [
+            "https://raw.githubusercontent.com/osuTitanic/clients/main/b20130303.zip"
+        ],
+        "screenshots": [
+            {
+                "src": "/images/clients/b20130303.jpg",
+                "width": "356px",
+                "height": "350px"
+            }
+        ]
+    },
+    {
+        "display_name": "osu!2012",
+        "build_name": "b20120522",
+        "description": "A build from 2012, with a more old-ish ui",
+        "known_bugs": "",
+        "supported": true,
+        "recommended": true,
+        "actions": [],
+        "hashes": [
+            {
+                "file": "osu!.exe",
+                "md5": "0f4ccbd268b90ca29631533a16a98f77"
+            }
+        ],
+        "downloads": [
+            "https://raw.githubusercontent.com/osuTitanic/clients/main/b20120522.zip"
+        ],
+        "screenshots": [
+            {
+                "src": "/images/clients/b20120522.jpg",
+                "width": "265px",
+                "height": "350px"
+            }
+        ]
+    },
+    {
+        "display_name": "osu!2011",
+        "build_name": "b1821",
+        "description": "The last build from 2011",
+        "known_bugs": "",
+        "supported": true,
+        "recommended": true,
+        "actions": [],
+        "hashes": [
+            {
+                "file": "osu!.exe",
+                "md5": "97520f952bc80c9372ce73a23cd1a0fb"
+            }
+        ],
+        "downloads": [
+            "https://raw.githubusercontent.com/osuTitanic/clients/main/b1821.zip"
+        ],
+        "screenshots": [
+            {
+                "src": "/images/clients/b1821.jpg",
+                "width": "265px",
+                "height": "350px"
+            }
+        ]
+    },
+    {
+        "display_name": "osu!2010",
+        "build_name": "b1700",
+        "description": "The last build from 2010",
+        "known_bugs": "",
+        "supported": true,
+        "recommended": true,
+        "actions": [],
+        "hashes": [
+            {
+                "file": "osu!.exe",
+                "md5": "e61522a3e4a9a1ec18f2e066180dd5d1"
+            }
+        ],
+        "downloads": [
+            "https://raw.githubusercontent.com/osuTitanic/clients/main/b1700.zip"
+        ],
+        "screenshots": [
+            {
+                "src": "/images/clients/b1700.jpg",
+                "width": "265px",
+                "height": "350px"
+            }
+        ]
+    },
+    {
+        "display_name": "osu!2009",
+        "build_name": "b904",
+        "description": "A build from 2009 that is used in the oldsu server",
+        "known_bugs": "",
+        "supported": true,
+        "recommended": true,
+        "actions": [],
+        "hashes": [
+            {
+                "file": "osu!.exe",
+                "md5": "7123631119a5be05be03be7b166b7372"
+            }
+        ],
+        "downloads": [
+            "https://raw.githubusercontent.com/osuTitanic/clients/main/b904.zip"
+        ],
+        "screenshots": [
+            {
+                "src": "/images/clients/b904.png",
+                "width": "265px",
+                "height": "350px"
+            }
+        ]
+    }
+]
