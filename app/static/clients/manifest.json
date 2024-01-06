@@ -10,7 +10,14 @@
         "hashes": [
             {
                 "file": "osu!.exe",
-                "md5": ["5361cff8bad587ea8f54bd886b91bcc4"]
+                "md5": [
+                    "5361cff8bad587ea8f54bd886b91bcc4",
+                    "8f14a97b6d11c1795fc42dcb784a3b7b",
+                    "5f26f2538731881cc70333495d00cef2",
+                    "2561cbb5dae2c450aae88b68a9a44ab3",
+                    "b4d96f63909061bfa4f541f9cf77529d",
+                    "dddffef60c07ec83843d769074212ad3"
+                ]
             },
             {
                 "file": "osu!common.dll",
@@ -39,7 +46,13 @@
         "hashes": [
             {
                 "file": "osu!.exe",
-                "md5": ["9f610d458cb69b9ea373d3dd6df1666c"]
+                "md5": [
+                    "9f610d458cb69b9ea373d3dd6df1666c",
+                    "a068740bea8aac3db148e44f5f0754ae",
+                    "8ec0f9b6481198580ec1f5a4b47ab571",
+                    "b4fb4221684329e3778254bd3ddece21",
+                    "2b8af4273c61f8d0c1ec78e73de85cdb"
+                ]
             },
             {
                 "file": "osu!common.dll",
@@ -68,7 +81,11 @@
         "hashes": [
             {
                 "file": "osu!.exe",
-                "md5": ["0f4ccbd268b90ca29631533a16a98f77"]
+                "md5": [
+                    "0f4ccbd268b90ca29631533a16a98f77",
+                    "6ff88ed9281528ad20eb58da34e1b8cb",
+                    "0c43143d964fd2ecf5c50417fbeba05f"
+                ]
             }
         ],
         "downloads": [
@@ -143,7 +160,10 @@
         "hashes": [
             {
                 "file": "osu!.exe",
-                "md5": ["7123631119a5be05be03be7b166b7372"]
+                "md5": [
+                    "7123631119a5be05be03be7b166b7372",
+                    "791ece08ba9dea2ef3ac45da654ee9f7"
+                ]
             }
         ],
         "downloads": [
