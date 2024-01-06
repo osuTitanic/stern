@@ -21,6 +21,9 @@ function loadManifest()
           if (!client.supported)
             return;
 
+          if (!client.recommended)
+            return;
+
           const version = document.createElement('p');
           version.textContent = client.build_name;
           version.classList.add('version')
