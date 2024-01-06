@@ -6,6 +6,7 @@
         "known_bugs": "",
         "supported": true,
         "recommended": true,
+        "preview": false,
         "actions": [],
         "hashes": [
             {
@@ -42,6 +43,7 @@
         "known_bugs": "",
         "supported": true,
         "recommended": true,
+        "preview": false,
         "actions": [],
         "hashes": [
             {
@@ -77,6 +79,7 @@
         "known_bugs": "",
         "supported": true,
         "recommended": true,
+        "preview": false,
         "actions": [],
         "hashes": [
             {
@@ -106,6 +109,7 @@
         "known_bugs": "",
         "supported": true,
         "recommended": true,
+        "preview": false,
         "actions": [],
         "hashes": [
             {
@@ -131,6 +135,7 @@
         "known_bugs": "",
         "supported": true,
         "recommended": true,
+        "preview": false,
         "actions": [],
         "hashes": [
             {
@@ -156,6 +161,7 @@
         "known_bugs": "",
         "supported": true,
         "recommended": true,
+        "preview": false,
         "actions": [],
         "hashes": [
             {
