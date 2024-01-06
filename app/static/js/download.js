@@ -1,6 +1,5 @@
 function loadManifest()
 {
-  // Clients will be dynamically loaded from manifest.json
   const manifestUrl = '/clients/manifest.json';
   const container = document.getElementById('client-container');
 
@@ -9,7 +8,6 @@ function loadManifest()
   fetch(manifestUrl)
     .then(response => {
       if (!response.ok) {
-        // Let user know that something went wrong
         const errorText = document.createElement('b');
         errorText.textContent = 'Failed to load clients. Please contact an administrator!';
         container.appendChild(errorText);
@@ -19,9 +17,12 @@ function loadManifest()
     })
     .then(manifest => {
       // Create client div's for each entry in manifest
-      manifest['downloads'].forEach(client => {
+      manifest.forEach(client => {
+          if (!client.supported)
+            return;
+
           const version = document.createElement('p');
-          version.textContent = client.version;
+          version.textContent = client.build_name;
           version.classList.add('version')
 
           const description = document.createElement('p');
@@ -29,15 +30,16 @@ function loadManifest()
           description.classList.add('description')
 
           const screenshot = document.createElement('img');
-          screenshot.src = client.screenshot;
+          screenshot.src = client.screenshots[0].src;
 
           const downloadLink = document.createElement('a');
           downloadLink.setAttribute('target', '_blank');
           downloadLink.textContent = 'Download';
-          downloadLink.href = client.download;
+          downloadLink.href = client.downloads[0];
 
           const div = document.createElement('div');
-          div.style.maxWidth = client.maxWidth;
+          div.style.maxWidth = client.screenshots[0].width;
+          div.style.maxHeight = client.screenshots[0].height;
           div.classList.add('client');
 
           div.appendChild(version);
