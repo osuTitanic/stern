@@ -209,5 +209,61 @@
                 "height": "350px"
             }
         ]
+    },
+    {
+        "display_name": "osu!2009",
+        "build_name": "b753c",
+        "description": "A build from 2009 that added local rankings",
+        "known_bugs": "",
+        "supported": true,
+        "recommended": true,
+        "preview": false,
+        "actions": [],
+        "hashes": [
+            {
+                "file": "osu!.exe",
+                "md5": ["013a43809a580c63703c3e9238746449"]
+            }
+        ],
+        "downloads": [
+            "https://raw.githubusercontent.com/osuTitanic/clients/main/b753c.zip"
+        ],
+        "screenshots": [
+            {
+                "src": "/images/clients/b753c.png",
+                "width": "265px",
+                "height": "350px"
+            }
+        ]
+    },
+    {
+        "display_name": "osu!2008",
+        "build_name": "b420",
+        "description": "A build from 2008, the first public build featuring the Auto and SpunOut mods",
+        "known_bugs": "Please note that all versions before b452.1 can't load newer beatmaps properly!",
+        "supported": true,
+        "recommended": false,
+        "preview": false,
+        "actions": [],
+        "hashes": [
+            {
+                "file": "osu!.exe",
+                "md5": ["013a43809a580c63703c3e9238746449"]
+            },
+            {
+                "file": "osu!common.dll",
+                "md5": ["59a56444299c426fbe25b53134e86975"]
+            }
+        ],
+        "downloads": [
+            "https://raw.githubusercontent.com/osuTitanic/clients/main/b420.zip"
+        ],
+        "screenshots": [
+            {
+                "src": "/images/clients/b420.png",
+                "width": "265px",
+                "height": "350px"
+            }
+        ]
     }
 ]
