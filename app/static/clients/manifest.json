@@ -242,13 +242,13 @@
         "description": "A build from 2008, the first public build featuring the Auto and SpunOut mods",
         "known_bugs": "Please note that all versions before b452.1 can't load newer beatmaps properly!",
         "supported": true,
-        "recommended": false,
+        "recommended": true,
         "preview": false,
         "actions": [],
         "hashes": [
             {
                 "file": "osu!.exe",
-                "md5": ["013a43809a580c63703c3e9238746449"]
+                "md5": ["ed6939abab532f4d980a71b42b2cd6ad,"]
             },
             {
                 "file": "osu!common.dll",
