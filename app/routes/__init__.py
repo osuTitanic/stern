@@ -2,6 +2,7 @@
 
 from flask import Blueprint
 
+from . import multiplayer
 from . import beatmapset
 from . import changelog
 from . import download
@@ -17,6 +18,7 @@ from . import api
 
 router = Blueprint("routes", __name__)
 router.register_blueprint(download.router, url_prefix='/download')
+router.register_blueprint(multiplayer.router, url_prefix='/mp')
 router.register_blueprint(beatmapset.router, url_prefix='/s')
 router.register_blueprint(changelog.router, url_prefix='/')
 router.register_blueprint(rankings.router, url_prefix='/rankings')

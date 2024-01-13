@@ -1,0 +1,412 @@
+
+const matchId = window.location.pathname.split("/")[2];
+
+const Mods = {
+    NoMod: 0,
+    NoFail: 1 << 0,
+    Easy: 1 << 1,
+    NoVideo: 1 << 2,
+    Hidden: 1 << 3,
+    HardRock: 1 << 4,
+    SuddenDeath: 1 << 5,
+    DoubleTime: 1 << 6,
+    Relax: 1 << 7,
+    HalfTime: 1 << 8,
+    Nightcore: 1 << 9,
+    Flashlight: 1 << 10,
+    Autoplay: 1 << 11,
+    SpunOut: 1 << 12,
+    Autopilot: 1 << 13,
+    Perfect: 1 << 14,
+    Key4: 1 << 15,
+    Key5: 1 << 16,
+    Key6: 1 << 17,
+    Key7: 1 << 18,
+    Key8: 1 << 19,
+    FadeIn: 1 << 20,
+    Random: 1 << 21,
+    LastMod: 1 << 29,
+    KeyMod: 1 << 15 | 1 << 16 | 1 << 17 | 1 << 18 | 1 << 19,
+    SpeedMods: 1 << 6 | 1 << 8 | 1 << 9,
+    FreeModAllowed: 1 << 0 | 1 << 1 | 1 << 3 | 1 << 4 | 1 << 5 | 1 << 10 | 1 << 20 | 1 << 7 | 1 << 13 | 1 << 12 | 1 << 15 | 1 << 16 | 1 << 17 | 1 << 18 | 1 << 19,
+
+    getMembers: function() {
+      let memberList = [];
+      for (const mod in Mods) {
+        if (Mods[mod] === (Mods[mod] & this[mod])) {
+          memberList.push(mod);
+        }
+      }
+      return memberList;
+    },
+
+    getString: function(value) {
+      if (value === 0) return "NM";
+
+      const modMap = {
+        [Mods.NoMod]: "NM",
+        [Mods.NoFail]: "NF",
+        [Mods.Easy]: "EZ",
+        [Mods.Hidden]: "HD",
+        [Mods.HardRock]: "HR",
+        [Mods.SuddenDeath]: "SD",
+        [Mods.DoubleTime]: "DT",
+        [Mods.Relax]: "RX",
+        [Mods.HalfTime]: "HT",
+        [Mods.Nightcore]: "NC",
+        [Mods.Flashlight]: "FL",
+        [Mods.Autoplay]: "AT",
+        [Mods.SpunOut]: "SO",
+        [Mods.Autopilot]: "AP",
+        [Mods.Perfect]: "PF",
+        [Mods.Key4]: "K4",
+        [Mods.Key5]: "K5",
+        [Mods.Key6]: "K6",
+        [Mods.Key7]: "K7",
+        [Mods.Key8]: "K8",
+      };
+
+      const members = [];
+      for (const mod in Mods) {
+        if (Mods[mod] !== 0 && (value & Mods[mod]) === Mods[mod]) {
+          members.push(mod);
+        }
+      }
+
+      return members.map(mod => modMap[Mods[mod]]).join("");
+    }
+};
+
+const Mode = {
+    0: "osu!",
+    1: "Taiko",
+    2: "Catch the Beat",
+    3: "osu!Mania"
+};
+
+const ScoringType = {
+    0: "Score",
+    1: "Accuracy",
+    2: "Combo"
+};
+
+const TeamType = {
+    0: "Head to Head",
+    1: "Tag Co-op",
+    2: "Team VS",
+    3: "Tag Team VS"
+};
+
+const Team = {
+    0: "None",
+    1: "Blue",
+    2: "Red"
+};
+
+function generateResultsTable(results, matchMods=0)
+{
+    const table = document.createElement("table");
+    const headerWrapper = document.createElement("thead");
+    const header = document.createElement("tr");
+
+    const headerRank = document.createElement("th");
+    headerRank.innerHTML = "Rank";
+    const headerPlayer = document.createElement("th");
+    headerPlayer.innerHTML = "Player";
+    const headerScore = document.createElement("th");
+    headerScore.innerHTML = "Score";
+    const headerAccuracy = document.createElement("th");
+    headerAccuracy.innerHTML = "Accuracy";
+    const headerCombo = document.createElement("th");
+    headerCombo.innerHTML = "Combo";
+    const headerMods = document.createElement("th");
+    headerMods.innerHTML = "Mods";
+    const c300 = document.createElement("th");
+    c300.innerHTML = "300s";
+    const c100 = document.createElement("th");
+    c100.innerHTML = "100s";
+    const c50 = document.createElement("th");
+    c50.innerHTML = "50s";
+    const cMiss = document.createElement("th");
+    cMiss.innerHTML = "Misses";
+
+    header.appendChild(headerPlayer);
+    header.appendChild(headerScore);
+    header.appendChild(headerAccuracy);
+    header.appendChild(headerCombo);
+    header.appendChild(headerMods);
+    header.appendChild(c300);
+    header.appendChild(c100);
+    header.appendChild(c50);
+    header.appendChild(cMiss);
+    headerWrapper.appendChild(header);
+    table.appendChild(headerWrapper);
+
+    const tableBody = document.createElement("tbody");
+
+    results.forEach(result => {
+        const row = document.createElement("tr");
+
+        const rank = document.createElement("td");
+        rank.innerHTML = result.place;
+
+        if (result.player.team != 0)
+            rank.classList.add(
+                result.player.team == 1 ? "team-blue" : "team-red"
+            );
+
+        const playerLink = document.createElement("a");
+        playerLink.innerHTML = result.player.name;
+        playerLink.href = `/u/${result.player.id}`;
+
+        const playerFlag = document.createElement("img");
+        playerFlag.src = `/images/flags/${result.player.country.toLowerCase()}.gif`;
+        playerFlag.classList.add("flag");
+
+        const player = document.createElement("td");
+        player.appendChild(playerFlag);
+        player.appendChild(playerLink);
+
+        const score = document.createElement("td");
+        score.innerHTML = result.score.score.toLocaleString();
+
+        const accuracy = document.createElement("td");
+        accuracy.innerHTML = `${result.score.accuracy}%`;
+
+        const combo = document.createElement("td");
+        combo.innerHTML = `${result.score.max_combo}`;
+
+        const mods = document.createElement("td");
+        mods.innerHTML = Mods.getString(result.player.mods + matchMods);
+
+        const c300 = document.createElement("td");
+        c300.innerHTML = result.score.c300.toLocaleString();
+
+        const c100 = document.createElement("td");
+        c100.innerHTML = result.score.c100.toLocaleString();
+
+        const c50 = document.createElement("td");
+        c50.innerHTML = result.score.c50.toLocaleString();
+
+        const cMiss = document.createElement("td");
+        cMiss.innerHTML = result.score.c300.toLocaleString();
+
+        row.appendChild(player);
+        row.appendChild(score);
+        row.appendChild(accuracy);
+        row.appendChild(combo);
+        row.appendChild(mods);
+        row.appendChild(c300);
+        row.appendChild(c100);
+        row.appendChild(c50);
+        row.appendChild(cMiss);
+        tableBody.appendChild(row);
+    });
+
+    table.appendChild(tableBody);
+
+    return table;
+}
+
+function loadMatchEvents(id, after=undefined)
+{
+    const statusText = document.getElementById("status-text");
+    const container = document.getElementById("match-events");
+    let args = "";
+
+    if (after != undefined)
+        args = `?after=${after.getTime()}`;
+
+    fetch(`/api/multiplayer/match/${id}/events${args}`)
+        .then(response => {
+            if (response.error)
+                throw response.error;
+
+            return response.json();
+        })
+        .then(events => {
+            statusText.innerHTML = "";
+
+            events.forEach(event => {
+                const eventDate = new Date(event.time);
+                const eventElement = document.createElement("div");
+                eventElement.classList.add("event");
+
+                const timeElement = document.createElement("span");
+                timeElement.classList.add("event-time");
+                timeElement.innerHTML = `${eventDate.getHours()}:${eventDate.getMinutes()}`;
+
+                switch (event.type)
+                {
+                    case 0:
+                        if (!event.data.name)
+                            throw `Invalid api response: ${event.data}`;
+
+                        var userElement = document.createElement("a");
+                        userElement.innerHTML = event.data.name;
+                        userElement.href = `/u/${event.data.user_id}`;
+                        var descriptionElement = document.createElement("span");
+                        descriptionElement.classList.add("event-description");
+                        descriptionElement.appendChild(userElement);
+                        descriptionElement.appendChild(document.createTextNode(" has joined the match."));
+                        eventElement.appendChild(timeElement);
+                        eventElement.appendChild(descriptionElement);
+                        break;
+
+                    case 1:
+                        if (!event.data.name)
+                            throw `Invalid api response: ${event.data}`;
+
+                        var userElement = document.createElement("a");
+                        userElement.innerHTML = event.data.name;
+                        userElement.href = `/u/${event.data.user_id}`;
+                        var descriptionElement = document.createElement("span");
+                        descriptionElement.classList.add("event-description");
+                        descriptionElement.appendChild(userElement);
+                        descriptionElement.appendChild(document.createTextNode(" has left the match."));
+                        eventElement.appendChild(timeElement);
+                        eventElement.appendChild(descriptionElement);
+                        break;
+
+                    case 2:
+                        if (!event.data.name)
+                            throw `Invalid api response: ${event.data}`;
+
+                        var userElement = document.createElement("a");
+                        userElement.innerHTML = event.data.name;
+                        userElement.href = `/u/${event.data.user_id}`;
+                        var descriptionElement = document.createElement("span");
+                        descriptionElement.classList.add("event-description");
+                        descriptionElement.appendChild(userElement);
+                        descriptionElement.appendChild(document.createTextNode(" was kicked from the match."));
+                        eventElement.appendChild(timeElement);
+                        eventElement.appendChild(descriptionElement);
+                        break;
+
+                    case 3:
+                        if (!event.data.new)
+                            throw `Invalid api response: ${event.data}`;
+
+                        var userElement = document.createElement("a");
+                        userElement.innerHTML = event.data.new.name;
+                        userElement.href = `/u/${event.data.new.id}`;
+                        var descriptionElement = document.createElement("span");
+                        descriptionElement.classList.add("event-description");
+                        descriptionElement.appendChild(userElement);
+                        descriptionElement.appendChild(document.createTextNode(" has become the host."));
+                        eventElement.appendChild(timeElement);
+                        eventElement.appendChild(descriptionElement);
+                        break;
+
+                    case 4:
+                        var descriptionElement = document.createElement("span");
+                        descriptionElement.classList.add("event-description");
+                        descriptionElement.appendChild(document.createTextNode("The match was disbanded."));
+                        eventElement.appendChild(timeElement);
+                        eventElement.appendChild(descriptionElement);
+                        break;
+
+                    case 5:
+                        // Match was started
+                        // TODO: Display this?
+                        break;
+
+                    case 6:
+                        var startTime = new Date(event.data.start_time);
+                        var endTime = new Date(event.data.end_time);
+                        var duration = endTime - startTime;
+                        var durationString = `${Math.floor(duration / 1000 / 60)}m ${Math.floor(duration / 1000 % 60)}s`;
+
+                        var teamType = TeamType[event.data.team_mode];
+                        var scoringType = ScoringType[event.data.scoring_mode];
+                        var mode = Mode[event.data.mode];
+
+                        var matchHeader = document.createElement("div");
+                        matchHeader.classList.add("match-header");
+
+                        var matchDetails = document.createElement("div");
+                        matchDetails.classList.add("match-details");
+
+                        var durationElement = document.createElement("div");
+                        var durationTitle = document.createElement("strong");
+                        durationTitle.innerHTML = "Duration: ";
+                        durationElement.appendChild(durationTitle);
+                        durationElement.appendChild(document.createTextNode(`${durationString}`));
+
+                        var gameModeElement = document.createElement("div");
+                        var gameModeTitle = document.createElement("strong");
+                        gameModeTitle.innerHTML = "Game Mode: ";
+                        gameModeElement.appendChild(gameModeTitle);
+                        gameModeElement.appendChild(document.createTextNode(`${mode} (${teamType})`));
+
+                        var scoringTypeElement = document.createElement("div");
+                        var scoringTypeTitle = document.createElement("strong");
+                        scoringTypeTitle.innerHTML = "Scoring Type: ";
+                        scoringTypeElement.appendChild(scoringTypeTitle);
+                        scoringTypeElement.appendChild(document.createTextNode(`${scoringType}`));
+
+                        matchDetails.appendChild(durationElement);
+                        matchDetails.appendChild(gameModeElement);
+                        matchDetails.appendChild(scoringTypeElement);
+
+                        var beatmapInfo = document.createElement("div");
+                        beatmapInfo.classList.add("beatmap-info"); // TODO
+
+                        matchHeader.appendChild(matchDetails);
+                        matchHeader.appendChild(beatmapInfo);
+                        eventElement.appendChild(matchHeader);
+                        eventElement.appendChild(beatmapInfo);
+
+                        var matchResults = document.createElement("div");
+                        matchResults.classList.add("match-results");
+
+                        var resultsTable = generateResultsTable(event.data.results, event.data.mods);
+
+                        matchResults.appendChild(resultsTable);
+                        eventElement.appendChild(matchResults);
+                        eventElement.classList.add("game");
+                        eventElement.classList.remove("event");
+                        break;
+
+                    case 7:
+                        var descriptionElement = document.createElement("span");
+                        descriptionElement.classList.add("event-description");
+                        descriptionElement.appendChild(document.createTextNode("The match was aborted!"));
+                        descriptionElement.style.color = "#ff0000";
+                        eventElement.appendChild(timeElement);
+                        eventElement.appendChild(descriptionElement);
+
+                }
+
+                container.appendChild(eventElement);
+            });
+        })
+        .catch(error => {
+            document.querySelectorAll(".event").forEach(element => element.remove());
+            document.querySelectorAll(".game").forEach(element => element.remove());
+            statusText.innerHTML = "Failed to load match. Please try again!";
+            console.error(error);
+        });
+}
+
+function loadMatchEventsLoop() {
+    setTimeout(() => {
+        var events = document.getElementById("match-events").innerHTML;
+
+        if (events.includes("disbanded"))
+            return;
+
+        if (events.includes("closed"))
+            return;
+
+        loadMatchEvents(matchId, new Date());
+        loadMatchEventsLoop();
+    }, 8000);
+}
+
+// TODO: Add option for displaying chat
+
+document.addEventListener("DOMContentLoaded", () => {
+    loadMatchEvents(matchId);
+    loadMatchEventsLoop();
+});
