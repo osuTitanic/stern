@@ -179,6 +179,15 @@ function generateResultsTable(results, matchMods=0)
         const score = document.createElement("td");
         score.innerHTML = result.score.score.toLocaleString();
 
+        if (result.score.failed)
+        {
+            const failed = document.createElement("span");
+            failed.style.color = "#ff0000";
+            failed.innerHTML = " FAIL";
+            score.style.fontWeight = "bold";
+            score.appendChild(failed);
+        }
+
         const accuracy = document.createElement("td");
         accuracy.innerHTML = `${result.score.accuracy}%`;
 
