@@ -109,8 +109,8 @@ function generateResultsTable(results, matchMods=0)
     const headerWrapper = document.createElement("thead");
     const header = document.createElement("tr");
 
-    const headerRank = document.createElement("th");
-    headerRank.innerHTML = "Rank";
+    const headerPlace = document.createElement("th");
+    headerPlace.style.width = "25px";
     const headerPlayer = document.createElement("th");
     headerPlayer.innerHTML = "Player";
     const headerScore = document.createElement("th");
@@ -130,6 +130,7 @@ function generateResultsTable(results, matchMods=0)
     const cMiss = document.createElement("th");
     cMiss.innerHTML = "Misses";
 
+    header.appendChild(headerPlace);
     header.appendChild(headerPlayer);
     header.appendChild(headerScore);
     header.appendChild(headerAccuracy);
@@ -147,11 +148,19 @@ function generateResultsTable(results, matchMods=0)
     results.forEach(result => {
         const row = document.createElement("tr");
 
-        const rank = document.createElement("td");
-        rank.innerHTML = result.place;
+        if (result.score.failed)
+            row.classList.add("fail");
+
+        if (results.indexOf(result) % 2 == 0)
+            row.classList.add("light-row");
+        else
+            row.classList.add("dark-row");
+
+        const place = document.createElement("td");
+        place.innerHTML = result.place;
 
         if (result.player.team != 0)
-            rank.classList.add(
+            place.classList.add(
                 result.player.team == 1 ? "team-blue" : "team-red"
             );
 
@@ -191,6 +200,7 @@ function generateResultsTable(results, matchMods=0)
         const cMiss = document.createElement("td");
         cMiss.innerHTML = result.score.c300.toLocaleString();
 
+        row.appendChild(place);
         row.appendChild(player);
         row.appendChild(score);
         row.appendChild(accuracy);
