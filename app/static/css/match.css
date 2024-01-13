@@ -41,7 +41,8 @@
 
 .match-results {
     margin: 0 auto;
-    margin-top: 50px;
+    margin-top: 60px;
+    margin-bottom: 10px;
     width: 100%;
     text-align: center;
 }
@@ -86,4 +87,11 @@
     float: right;
     margin: 3px;
     width: 60%;
+}
+
+.team-results {
+    text-align: center;
+    margin: 15px 0 5px 0;
+    font-size: 135%;
+    width: 100%;
 }
