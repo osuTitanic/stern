@@ -228,6 +228,174 @@ function generateResultsTable(results, matchMods=0)
     return table;
 }
 
+function getTeamWinner(results, condition)
+{
+    var teamResults = document.createElement("div");
+    teamResults.classList.add("team-results");
+
+    switch (condition)
+    {
+        case 0:
+            // Score
+            var blueScore = 0;
+            var redScore = 0;
+
+            results.forEach(result => {
+                if (result.player.team == 1)
+                    blueScore += result.score.score;
+                else if (result.player.team == 2)
+                    redScore += result.score.score;
+            });
+
+            var teamBlue = document.createElement("span");
+            teamBlue.style.color = "#0000ff";
+            teamBlue.innerHTML = `${blueScore.toLocaleString()}`;
+
+            var teamRed = document.createElement("span");
+            teamRed.style.color = "#ff0000";
+            teamRed.innerHTML = `${redScore.toLocaleString()}`;
+
+            teamResults.appendChild(teamBlue);
+            teamResults.appendChild(document.createTextNode(" vs. "));
+            teamResults.appendChild(teamRed);
+
+            var scoreDifference = Math.abs(blueScore - redScore);
+            var winner = document.createElement("span");
+            winner.classList.add("winner");
+            winner.style.fontWeight = "bold";
+
+            if (blueScore > redScore)
+            {
+                winner.style.color = "#0000ff";
+                winner.innerHTML = "Blue";
+            }
+            else if (redScore > blueScore)
+            {
+                winner.style.color = "#ff0000";
+                winner.innerHTML = "Red";
+            }
+            else
+            {
+                winner.style.color = "#000000";
+                winner.innerHTML = "Draw";
+            }
+
+            teamResults.appendChild(document.createElement("br"));
+            teamResults.appendChild(winner);
+            teamResults.appendChild(document.createTextNode(" wins by "));
+            teamResults.appendChild(document.createTextNode(scoreDifference.toLocaleString()));
+            teamResults.appendChild(document.createTextNode(" points!"));
+            return teamResults;
+
+        case 1:
+            // Average Accuracy
+            var blueAccs = [];
+            var redAccs = [];
+
+            results.forEach(result => {
+                if (result.player.team == 1)
+                    blueAccs.push(result.score.accuracy);
+                else if (result.player.team == 2)
+                    redAccs.push(result.score.accuracy);
+            });
+
+            var blueAcc = blueAccs.reduce((a, b) => a + b, 0) / blueAccs.length || 0;
+            var redAcc = redAccs.reduce((a, b) => a + b, 0) / redAccs.length || 0;
+
+            var teamBlue = document.createElement("span");
+            teamBlue.style.color = "#0000ff";
+            teamBlue.innerHTML = `${blueAcc.toFixed(2)}%`;
+
+            var teamRed = document.createElement("span");
+            teamRed.style.color = "#ff0000";
+            teamRed.innerHTML = `${redAcc.toFixed(2)}%`;
+
+            teamResults.appendChild(teamBlue);
+            teamResults.appendChild(document.createTextNode(" vs. "));
+            teamResults.appendChild(teamRed);
+
+            var accDifference = Math.abs(blueAcc - redAcc);
+            var winner = document.createElement("span");
+            winner.classList.add("winner");
+            winner.style.fontWeight = "bold";
+
+            if (blueAcc > redAcc)
+            {
+                winner.style.color = "#0000ff";
+                winner.innerHTML = "Blue";
+            }
+            else if (redAcc > blueAcc)
+            {
+                winner.style.color = "#ff0000";
+                winner.innerHTML = "Red";
+            }
+            else
+            {
+                winner.style.color = "#000000";
+                winner.innerHTML = "Draw";
+            }
+
+            teamResults.appendChild(document.createElement("br"));
+            teamResults.appendChild(winner);
+            teamResults.appendChild(document.createTextNode(" wins by "));
+            teamResults.appendChild(document.createTextNode(accDifference.toFixed(2)));
+            teamResults.appendChild(document.createTextNode("%!"));
+            return teamResults;
+
+        case 2:
+            // Combo
+            var blueCombo = 0;
+            var redCombo = 0;
+
+            results.forEach(result => {
+                if (result.player.team == 1)
+                    blueCombo += result.score.max_combo;
+                else if (result.player.team == 2)
+                    redCombo += result.score.max_combo;
+            });
+
+            var teamBlue = document.createElement("span");
+            teamBlue.style.color = "#0000ff";
+            teamBlue.innerHTML = `${blueCombo.toLocaleString()}`;
+
+            var teamRed = document.createElement("span");
+            teamRed.style.color = "#ff0000";
+            teamRed.innerHTML = `${redCombo.toLocaleString()}`;
+
+            teamResults.appendChild(teamBlue);
+            teamResults.appendChild(document.createTextNode(" vs. "));
+            teamResults.appendChild(teamRed);
+
+            var comboDifference = Math.abs(blueCombo - redCombo);
+            var winner = document.createElement("span");
+            winner.classList.add("winner");
+            winner.style.fontWeight = "bold";
+
+            if (blueCombo > redCombo)
+            {
+                winner.style.color = "#0000ff";
+                winner.innerHTML = "Blue";
+            }
+            else if (redCombo > blueCombo)
+            {
+                winner.style.color = "#ff0000";
+                winner.innerHTML = "Red";
+            }
+            else
+            {
+                winner.style.color = "#000000";
+                winner.innerHTML = "Draw";
+            }
+
+            teamResults.appendChild(document.createElement("br"));
+            teamResults.appendChild(winner);
+            teamResults.appendChild(document.createTextNode(" wins by "));
+            teamResults.appendChild(document.createTextNode(comboDifference.toLocaleString()));
+            teamResults.appendChild(document.createTextNode(" combo!"));
+            return teamResults;
+    }
+}
+
 function loadMatchEvents(id, after=undefined)
 {
     const statusText = document.getElementById("status-text");
@@ -400,6 +568,13 @@ function loadMatchEvents(id, after=undefined)
 
                         matchResults.appendChild(resultsTable);
                         eventElement.appendChild(matchResults);
+
+                        if (event.data.team_mode == 2 || event.data.team_mode == 3)
+                        {
+                            var teamResults = getTeamWinner(event.data.results, event.data.scoring_mode);
+                            eventElement.appendChild(teamResults);
+                        }
+
                         eventElement.classList.add("game");
                         eventElement.classList.remove("event");
                         break;
