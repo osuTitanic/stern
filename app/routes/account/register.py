@@ -1,5 +1,6 @@
 
 from app.common.constants.regexes import USERNAME, EMAIL
+from app.common.constants.strings import BAD_WORDS
 from app.common.constants import NotificationType
 from app.common.helpers.external import location
 from app.common import mail, officer, helpers
@@ -50,6 +51,9 @@ def validate_username(username: str) -> Optional[str]:
 
     if not USERNAME.match(username):
         return "Your username contains invalid characters."
+
+    if any(word in username.lower() for word in BAD_WORDS):
+        return "Your username contains offensive words."
 
     safe_name = username.lower().replace(' ', '_')
 
