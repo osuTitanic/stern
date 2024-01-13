@@ -14,6 +14,10 @@
     font-size: 80%;
 }
 
+.match-details {
+    float: left;
+}
+
 .event {
     color: #555555;
     width: 30%;
@@ -31,7 +35,8 @@
 }
 
 .match-results {
-    margin: 10px auto;
+    margin: 0 auto;
+    margin-top: 50px;
     width: 100%;
     text-align: center;
 }
@@ -70,4 +75,10 @@
 
 .fail {
     color: #888888
+}
+
+.beatmap-info {
+    float: right;
+    margin: 3px;
+    width: 60%;
 }

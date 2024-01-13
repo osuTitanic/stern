@@ -340,9 +340,6 @@ function loadMatchEvents(id, after=undefined)
                         var scoringType = ScoringType[event.data.scoring_mode];
                         var mode = Mode[event.data.mode];
 
-                        var matchHeader = document.createElement("div");
-                        matchHeader.classList.add("match-header");
-
                         var matchDetails = document.createElement("div");
                         matchDetails.classList.add("match-details");
 
@@ -368,12 +365,31 @@ function loadMatchEvents(id, after=undefined)
                         matchDetails.appendChild(gameModeElement);
                         matchDetails.appendChild(scoringTypeElement);
 
-                        var beatmapInfo = document.createElement("div");
-                        beatmapInfo.classList.add("beatmap-info"); // TODO
+                        var beatmapDetails = document.createElement("div");
+                        var beatmapTitle = document.createElement("strong");
+                        beatmapTitle.innerHTML = "Beatmap: ";
+                        beatmapDetails.appendChild(beatmapTitle);;
 
-                        matchHeader.appendChild(matchDetails);
-                        matchHeader.appendChild(beatmapInfo);
-                        eventElement.appendChild(matchHeader);
+                        if (event.data.beatmap_id != 0)
+                        {
+                            var beatmapLink = document.createElement("a");
+                            beatmapLink.href = `/b/${event.data.beatmap_id}`;
+                            beatmapLink.appendChild(beatmapDetails);
+                            beatmapLink.innerHTML = event.data.beatmap_text;
+                            beatmapDetails.appendChild(beatmapLink);
+                        }
+                        else
+                        {
+                            beatmapDetails.appendChild(
+                                document.createTextNode(event.data.beatmap_text)
+                            );
+                        }
+
+                        var beatmapInfo = document.createElement("div");
+                        beatmapInfo.classList.add("beatmap-info");
+                        beatmapInfo.appendChild(beatmapDetails);
+
+                        eventElement.appendChild(matchDetails);
                         eventElement.appendChild(beatmapInfo);
 
                         var matchResults = document.createElement("div");
