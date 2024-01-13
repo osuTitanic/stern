@@ -207,7 +207,7 @@ function generateResultsTable(results, matchMods=0)
         c50.innerHTML = result.score.c50.toLocaleString();
 
         const cMiss = document.createElement("td");
-        cMiss.innerHTML = result.score.c300.toLocaleString();
+        cMiss.innerHTML = result.score.cMiss.toLocaleString();
 
         row.appendChild(place);
         row.appendChild(player);
