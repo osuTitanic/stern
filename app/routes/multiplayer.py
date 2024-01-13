@@ -16,5 +16,8 @@ def get_match(id: int):
         return utils.render_template(
             'match.html',
             css='match.css',
-            match=match
+            match=match,
+            site_description=f"Titanic » Matches » {match.name} (#{match.id:02d})",
+            site_title=f"{match.name}",
+            title=f"{match.name} - Titanic"
         )
