@@ -126,8 +126,13 @@
         </div>
     </div>
     <script src="/js/main.js"></script>
-    {% if show_login %}
-    <script>showLoginForm();</script>
-    {% endif %}
+    <script>
+        {% if show_login %}
+        showLoginForm();
+        {% endif %}
+        {% if alert %}
+        alert("{{ alert }}");
+        {% endif %}
+    </script>
 </body>
 </html>
