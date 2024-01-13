@@ -1,5 +1,6 @@
 
 const matchId = window.location.pathname.split("/")[2];
+const refreshRate = 8000;
 
 const Mods = {
     NoMod: 0,
@@ -234,7 +235,7 @@ function loadMatchEvents(id, after=undefined)
     let args = "";
 
     if (after != undefined)
-        args = `?after=${after.getTime()}`;
+        args = `?after=${after.getTime() - refreshRate}`;
 
     fetch(`/api/multiplayer/match/${id}/events${args}`)
         .then(response => {
@@ -436,7 +437,7 @@ function loadMatchEventsLoop() {
 
         loadMatchEvents(matchId, new Date());
         loadMatchEventsLoop();
-    }, 8000);
+    }, refreshRate);
 }
 
 // TODO: Add option for displaying chat
