@@ -7,6 +7,7 @@ from . import activity
 from . import profile
 from . import history
 from . import friends
+from . import status
 from . import pinned
 from . import recent
 from . import plays
@@ -20,6 +21,7 @@ router.register_blueprint(activity.router)
 router.register_blueprint(profile.router)
 router.register_blueprint(history.router)
 router.register_blueprint(friends.router)
+router.register_blueprint(status.router)
 router.register_blueprint(pinned.router)
 router.register_blueprint(recent.router)
 router.register_blueprint(first.router)
