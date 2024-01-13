@@ -41,14 +41,33 @@
     width: 100%;
 }
 
-.match-results tbody tr {
-    background-color: #e7e4fc;
-}
-
 .match-results .flag {
     margin-right: 4px;
+    margin-top: 1.5px;
 }
 
 .event-time {
     margin-right: 8px;
+}
+
+.team-red {
+    background-color: #ff0000;
+    color: white;
+}
+
+.team-blue {
+    background-color: #0000ff;
+    color: white;
+}
+
+.dark-row {
+    background-color: #dad7fb;
+}
+
+.light-row {
+    background-color: #e7e4fc;
+}
+
+.fail {
+    color: #888888
 }
