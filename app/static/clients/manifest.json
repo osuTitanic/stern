@@ -1,5 +1,33 @@
 [
     {
+        "display_name": "osu!2014",
+        "build_name": "b20140909.11cuttingedge",
+        "description": "A test build from late 2014, with a very new UI",
+        "known_bugs": "",
+        "supported": true,
+        "recommended": true,
+        "preview": false,
+        "actions": [],
+        "hashes": [
+            {
+                "file": "osu!.exe",
+                "md5": [
+                    "e6a7c7912658f28c1b988fbe662c5c99"
+                ]
+            }
+        ],
+        "downloads": [
+            "https://raw.githubusercontent.com/osuTitanic/clients/main/b20140909.11cuttingedge.zip"
+        ],
+        "screenshots": [
+            {
+                "src": "/images/clients/b20140909.11cuttingedge.png",
+                "width": "356px",
+                "height": "350px"
+            }
+        ]
+    },
+    {
         "display_name": "osu!2013",
         "build_name": "b20130606.1",
         "description": "A build from 2013 with the new UI overhaul update and some extra patches for relax",
@@ -74,8 +102,64 @@
     },
     {
         "display_name": "osu!2012",
+        "build_name": "b20121223",
+        "description": "A build from 2012",
+        "known_bugs": "",
+        "supported": true,
+        "recommended": true,
+        "preview": false,
+        "actions": [],
+        "hashes": [
+            {
+                "file": "osu!.exe",
+                "md5": [
+                    "7c5652412fd8e809c93ebe12e42368b7"
+                ]
+            }
+        ],
+        "downloads": [
+            "https://raw.githubusercontent.com/osuTitanic/clients/main/b20121223.zip"
+        ],
+        "screenshots": [
+            {
+                "src": "/images/clients/b20121223.png",
+                "width": "265px",
+                "height": "350px"
+            }
+        ]
+    },
+    {
+        "display_name": "osu!2012",
+        "build_name": "b20121003shine.test",
+        "description": "The first version to add osu!mania",
+        "known_bugs": "",
+        "supported": true,
+        "recommended": true,
+        "preview": false,
+        "actions": [],
+        "hashes": [
+            {
+                "file": "osu!.exe",
+                "md5": [
+                    "c2883d682cf32d0db1f1acf5485ffcfb"
+                ]
+            }
+        ],
+        "downloads": [
+            "https://raw.githubusercontent.com/osuTitanic/clients/main/b20121003shine.test.zip"
+        ],
+        "screenshots": [
+            {
+                "src": "/images/clients/b20121003shine.test.png",
+                "width": "265px",
+                "height": "350px"
+            }
+        ]
+    },
+    {
+        "display_name": "osu!2012",
         "build_name": "b20120916",
-        "description": "A build from 2012, patched by ZRD",
+        "description": "Another build from 2012",
         "known_bugs": "",
         "supported": true,
         "recommended": true,
@@ -182,6 +266,118 @@
         ]
     },
     {
+        "display_name": "osu!2010",
+        "build_name": "A build from 2010",
+        "description": "b1596",
+        "known_bugs": "",
+        "supported": true,
+        "recommended": true,
+        "preview": false,
+        "actions": [],
+        "hashes": [
+            {
+                "file": "osu!.exe",
+                "md5": [
+                    "95cf30e06e332516f11f1a46d73f3b41"
+                ]
+            }
+        ],
+        "downloads": [
+            "https://raw.githubusercontent.com/osuTitanic/clients/main/b1596.zip"
+        ],
+        "screenshots": [
+            {
+                "src": "/images/clients/b1596.png",
+                "width": "265px",
+                "height": "350px"
+            }
+        ]
+    },
+    {
+        "display_name": "osu!2010",
+        "build_name": "b1218",
+        "description": "A version from early 2010",
+        "known_bugs": "",
+        "supported": true,
+        "recommended": true,
+        "preview": false,
+        "actions": [],
+        "hashes": [
+            {
+                "file": "osu!.exe",
+                "md5": [
+                    "210928a5741d7f0777304e9480a0ccad"
+                ]
+            }
+        ],
+        "downloads": [
+            "https://raw.githubusercontent.com/osuTitanic/clients/main/b1218.zip"
+        ],
+        "screenshots": [
+            {
+                "src": "/images/clients/b1218.png",
+                "width": "265px",
+                "height": "350px"
+            }
+        ]
+    },
+    {
+        "display_name": "osu!2009",
+        "build_name": "b1122",
+        "description": "b1122",
+        "known_bugs": "Latest available build from 2009",
+        "supported": true,
+        "recommended": true,
+        "preview": false,
+        "actions": [],
+        "hashes": [
+            {
+                "file": "osu!.exe",
+                "md5": [
+                    "064a1437613a5f545d7d1837979119a2"
+                ]
+            }
+        ],
+        "downloads": [
+            "https://raw.githubusercontent.com/osuTitanic/clients/main/b1122.zip"
+        ],
+        "screenshots": [
+            {
+                "src": "/images/clients/b1122.png",
+                "width": "265px",
+                "height": "350px"
+            }
+        ]
+    },
+    {
+        "display_name": "osu!2009",
+        "build_name": "b1077a",
+        "description": "This is the first version of osu! with proper widescreen support",
+        "known_bugs": "",
+        "supported": true,
+        "recommended": true,
+        "preview": false,
+        "actions": [],
+        "hashes": [
+            {
+                "file": "osu!.exe",
+                "md5": [
+                    "0971459e7bb3c9391602325f05a03121"
+                ]
+            }
+        ],
+        "downloads": [
+            "https://raw.githubusercontent.com/osuTitanic/clients/main/b1077a.zip"
+        ],
+        "screenshots": [
+            {
+                "src": "/images/clients/b1077a.png",
+                "width": "265px",
+                "height": "350px"
+            }
+        ]
+    },
+    {
         "display_name": "osu!2009",
         "build_name": "b904",
         "description": "A build from 2009 that is used in the oldsu server",
@@ -231,6 +427,90 @@
         "screenshots": [
             {
                 "src": "/images/clients/b753c.png",
+                "width": "265px",
+                "height": "350px"
+            }
+        ]
+    },
+    {
+        "display_name": "osu!2009",
+        "build_name": "b699",
+        "description": "nice?",
+        "known_bugs": "",
+        "supported": true,
+        "recommended": true,
+        "preview": false,
+        "actions": [],
+        "hashes": [
+            {
+                "file": "osu!.exe",
+                "md5": [
+                    "2e4469519881be3d41b7b2f8649360d2"
+                ]
+            }
+        ],
+        "downloads": [
+            "https://raw.githubusercontent.com/osuTitanic/clients/main/b699.zip"
+        ],
+        "screenshots": [
+            {
+                "src": "/images/clients/b699.png",
+                "width": "265px",
+                "height": "350px"
+            }
+        ]
+    },
+    {
+        "display_name": "osu!2008",
+        "build_name": "b497",
+        "description": "This version of osu! adds a new song select style and the first version of osu!direct",
+        "known_bugs": "",
+        "supported": true,
+        "recommended": true,
+        "preview": false,
+        "actions": [],
+        "hashes": [
+            {
+                "file": "osu!.exe",
+                "md5": [
+                    "e94d1f53ee1a06391d2fa44aec1da115"
+                ]
+            }
+        ],
+        "downloads": [
+            "https://raw.githubusercontent.com/osuTitanic/clients/main/b497.zip"
+        ],
+        "screenshots": [
+            {
+                "src": "/images/clients/b497.png",
+                "width": "265px",
+                "height": "350px"
+            }
+        ]
+    },
+    {
+        "display_name": "osu!2008",
+        "build_name": "b452",
+        "description": "A very early OpenGL build, that also features work-in-progress sliders",
+        "known_bugs": "",
+        "supported": true,
+        "recommended": true,
+        "preview": false,
+        "actions": [],
+        "hashes": [
+            {
+                "file": "osu!.exe",
+                "md5": [
+                    "25456462bc2c1b32163d85c7598dfd3f"
+                ]
+            }
+        ],
+        "downloads": [
+            "https://raw.githubusercontent.com/osuTitanic/clients/main/b452.zip"
+        ],
+        "screenshots": [
+            {
+                "src": "/images/clients/b452.png",
                 "width": "265px",
                 "height": "350px"
             }
