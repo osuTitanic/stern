@@ -267,8 +267,8 @@
     },
     {
         "display_name": "osu!2010",
-        "build_name": "A build from 2010",
-        "description": "b1596",
+        "build_name": "b1596",
+        "description": "A build from 2010",
         "known_bugs": "",
         "supported": true,
         "recommended": true,
