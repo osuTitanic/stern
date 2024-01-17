@@ -528,7 +528,10 @@
         "hashes": [
             {
                 "file": "osu!.exe",
-                "md5": ["e22f8f7a5d5293e5ca28e412733a4c71"]
+                "md5": [
+                    "e22f8f7a5d5293e5ca28e412733a4c71",
+                    "11f40ed3db477afecc7e20d835809f4e"
+                ]
             },
             {
                 "file": "osu!common.dll",
