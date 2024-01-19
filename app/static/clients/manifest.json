@@ -3,7 +3,7 @@
         "display_name": "osu!2014",
         "build_name": "b20140909.11cuttingedge",
         "description": "A test build from late 2014, with a very new UI",
-        "known_bugs": "",
+        "known_bugs": "This client may not work on Linux.",
         "supported": true,
         "recommended": true,
         "preview": false,
