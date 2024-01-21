@@ -120,78 +120,82 @@ def registration_request():
         )
         return return_to_register_page('There have been too many registrations from this ip. Please try again later!')
 
-    app.session.logger.info(
-        f'Starting registration process for "{username}" ({email}) ({ip})...'
-    )
+    with app.session.database.managed_session() as session:
+        app.session.logger.info(
+            f'Starting registration process for "{username}" ({email}) ({ip})...'
+        )
 
-    geolocation = location.fetch_web(ip)
-    country = geolocation.country_code.upper() if geolocation else 'XX'
+        geolocation = location.fetch_web(ip)
+        country = geolocation.country_code.upper() if geolocation else 'XX'
 
-    cf_country = request.headers.get('CF-IPCountry')
+        cf_country = request.headers.get('CF-IPCountry')
 
-    if cf_country != None and cf_country not in ('XX', 'T1'):
-        country = cf_country.upper()
+        if cf_country != None and cf_country not in ('XX', 'T1'):
+            country = cf_country.upper()
 
-    hashed_password = get_hashed_password(password)
-    username = username.strip()
-    safe_name = username.lower().replace(' ', '_')
+        hashed_password = get_hashed_password(password)
+        username = username.strip()
+        safe_name = username.lower().replace(' ', '_')
 
-    user = users.create(
-        username=username,
-        safe_name=safe_name,
-        email=email.lower(),
-        pw_bcrypt=hashed_password,
-        country=country,
-        activated=False if config.EMAILS_ENABLED else True,
-        permissions=5
-    )
+        user = users.create(
+            username=username,
+            safe_name=safe_name,
+            email=email.lower(),
+            pw_bcrypt=hashed_password,
+            country=country,
+            activated=False if config.EMAILS_ENABLED else True,
+            permissions=5,
+            session=session
+        )
 
-    if not user:
-        officer.call(f'Failed to register user "{username}".')
-        return return_to_register_page('An error occured on the server side. Please try again!')
+        if not user:
+            officer.call(f'Failed to register user "{username}".')
+            return return_to_register_page('An error occured on the server side. Please try again!')
 
-    app.session.logger.info(f'User "{username}" with id "{user.id}" was created.')
+        app.session.logger.info(f'User "{username}" with id "{user.id}" was created.')
 
-    # Send welcome notification
-    notifications.create(
-        user.id,
-        NotificationType.Welcome.value,
-        'Welcome!',
-        'Welcome aboard! '
-        f'Get started by downloading one of our builds [here](https://osu.{config.DOMAIN_NAME}/download). '
-        'Enjoy your journey!'
-    )
+        # Send welcome notification
+        notifications.create(
+            user.id,
+            NotificationType.Welcome.value,
+            'Welcome!',
+            'Welcome aboard! '
+            f'Get started by downloading one of our builds [here](https://osu.{config.DOMAIN_NAME}/download). '
+            'Enjoy your journey!',
+            session=session
+        )
 
-    # Add user to players & supporters group
-    groups.create_entry(user.id, 999)
-    groups.create_entry(user.id, 1000)
+        # Add user to players & supporters group
+        groups.create_entry(user.id, 999, session=session)
+        groups.create_entry(user.id, 1000, session=session)
 
-    # Increment registration count
-    app.session.redis.incr(f'registrations:{ip}')
-    app.session.redis.expire(f'registrations:{ip}', 3600 * 24)
+        # Increment registration count
+        app.session.redis.incr(f'registrations:{ip}')
+        app.session.redis.expire(f'registrations:{ip}', 3600 * 24)
 
-    if not config.EMAILS_ENABLED:
-        # Verification is disabled
-        flask_login.login_user(user)
+        if not config.EMAILS_ENABLED:
+            # Verification is disabled
+            flask_login.login_user(user)
+            app.session.logger.info('Registration finished.')
+            return redirect(f'/u/{user.id}')
+
+        app.session.logger.info('Sending verification email...')
+
+        verification = verifications.create(
+            user.id,
+            type=0,
+            token_size=32,
+            session=session
+        )
+
+        mail.send_welcome_email(
+            verification,
+            user
+        )
+
         app.session.logger.info('Registration finished.')
-        return redirect(f'/u/{user.id}')
 
-    app.session.logger.info('Sending verification email...')
-
-    verification = verifications.create(
-        user.id,
-        type=0,
-        token_size=32
-    )
-
-    mail.send_welcome_email(
-        verification,
-        user
-    )
-
-    app.session.logger.info('Registration finished.')
-
-    return redirect(f'/account/verification?id={verification.id}')
+        return redirect(f'/account/verification?id={verification.id}')
 
 @router.get('/register/check')
 def input_validation():
