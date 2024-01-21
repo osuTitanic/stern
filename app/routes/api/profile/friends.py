@@ -77,7 +77,7 @@ def remove_friend():
 
         current_friends = relationships.fetch_target_ids(
             flask_login.current_user.id,
-            session
+            session=session
         )
 
         if target.id not in current_friends:

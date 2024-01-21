@@ -10,6 +10,7 @@ from app.common.database import DBUser
 from app.models import UserModel
 
 import utils
+import app
 
 router = Blueprint("rankings", __name__)
 
@@ -40,51 +41,53 @@ def rankings(
     country = request.args.get('country', default=None, type=str)
 
     if order_type != 'country':
-        users_top = leaderboards.top_players(
-            mode.value,
-            offset,
-            limit,
-            type=order_type,
-            country=country.lower()
-                 if country else None
-        )
+        with app.session.database.managed_session() as session:
+            users_top = leaderboards.top_players(
+                mode.value,
+                offset,
+                limit,
+                type=order_type,
+                country=country.lower()
+                     if country else None
+            )
 
-        # Fetch user info from database
-        users_db = users.fetch_many(
-            tuple([user[0] for user in users_top]),
-            DBUser.stats
-        )
+            # Fetch user info from database
+            users_db = users.fetch_many(
+                tuple([user[0] for user in users_top]),
+                DBUser.stats,
+                session=session
+            )
 
-        # Sort users based on redis leaderboard
-        sorted_users = [
-            next(filter(lambda db: db.id == id, users_db))
-            for id, score in users_top
-        ]
+            # Sort users based on redis leaderboard
+            sorted_users = [
+                next(filter(lambda db: db.id == id, users_db))
+                for id, score in users_top
+            ]
 
-        for user in sorted_users:
-            user.stats.sort(key=lambda s:s.mode)
-            utils.sync_ranks(user)
+            for user in sorted_users:
+                user.stats.sort(key=lambda s:s.mode)
+                utils.sync_ranks(user, session=session)
 
-        return [
-            {
-                'index': index + offset + 1,
-                'global_rank': leaderboards.global_rank(user[0], mode),
-                'country_rank': leaderboards.country_rank(user[0], mode, sorted_users[index].country),
-                'score_rank': leaderboards.score_rank(user[0], mode),
-                'score_rank_country': leaderboards.score_rank_country(user[0], mode, sorted_users[index].country),
-                'total_score_rank': leaderboards.total_score_rank(user[0], mode),
-                'total_score_rank_country': leaderboards.total_score_rank_country(user[0], mode, sorted_users[index].country),
-                'ppv1_rank': leaderboards.ppv1_rank(user[0], mode),
-                'ppv1_rank_country': leaderboards.ppv1_country_rank(user[0], mode, sorted_users[index].country),
-                'user_id': user[0],
-                'score': user[1],
-                'user': UserModel.model_validate(
-                    sorted_users[index],
-                    from_attributes=True
-                ).model_dump()
-            }
-            for index, user in enumerate(users_top)
-        ]
+            return [
+                {
+                    'index': index + offset + 1,
+                    'global_rank': leaderboards.global_rank(user[0], mode),
+                    'country_rank': leaderboards.country_rank(user[0], mode, sorted_users[index].country),
+                    'score_rank': leaderboards.score_rank(user[0], mode),
+                    'score_rank_country': leaderboards.score_rank_country(user[0], mode, sorted_users[index].country),
+                    'total_score_rank': leaderboards.total_score_rank(user[0], mode),
+                    'total_score_rank_country': leaderboards.total_score_rank_country(user[0], mode, sorted_users[index].country),
+                    'ppv1_rank': leaderboards.ppv1_rank(user[0], mode),
+                    'ppv1_rank_country': leaderboards.ppv1_country_rank(user[0], mode, sorted_users[index].country),
+                    'user_id': user[0],
+                    'score': user[1],
+                    'user': UserModel.model_validate(
+                        sorted_users[index],
+                        from_attributes=True
+                    ).model_dump()
+                }
+                for index, user in enumerate(users_top)
+            ]
 
     # Get country rankings
     top_countries = leaderboards.top_countries(mode)
