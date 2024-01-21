@@ -1,7 +1,11 @@
 
-from flask import render_template as _render_template
-from flask import Request, request
+from __future__ import annotations
 
+from sqlalchemy.orm import Session
+from flask import render_template as _render_template
+from flask import request
+
+from app.common.database.repositories.wrapper import session_wrapper
 from app.common.helpers.external import location
 from app.common.helpers import performance
 from app.common.cache import leaderboards
@@ -44,7 +48,8 @@ def render_template(name: str, **kwargs) -> str:
         **kwargs
     )
 
-def sync_ranks(user: DBUser) -> None:
+@session_wrapper
+def sync_ranks(user: DBUser, session: Session | None = None) -> None:
     """Sync cached rank with database"""
     try:
         for user_stats in user.stats:
@@ -63,26 +68,34 @@ def sync_ranks(user: DBUser) -> None:
                     user_stats.mode,
                     {
                         'rank': global_rank
-                    }
+                    },
+                    session=session
                 )
                 user_stats.rank = global_rank
 
                 # Update rank history
-                histories.update_rank(user_stats, user.country)
+                histories.update_rank(user_stats, user.country, session=session)
     except Exception as e:
         app.session.logger.error(
             f'[{user.name}] Failed to update user rank: {e}',
             exc_info=e
         )
 
-def update_ppv1(user: DBUser):
+@session_wrapper
+def update_ppv1(user: DBUser, session: Session | None = None) -> None:
     """Update ppv1 calculations for a player"""
     try:
         for user_stats in user.stats:
             if user_stats.playcount <= 0:
                 continue
 
-            best_scores = scores.fetch_best(user.id, user_stats.mode, not config.APPROVED_MAP_REWARDS)
+            best_scores = scores.fetch_best(
+                user.id,
+                user_stats.mode,
+                exclude_approved=(not config.APPROVED_MAP_REWARDS),
+                session=session
+            )
+
             user_stats.ppv1 = performance.calculate_weighted_ppv1(best_scores)
 
             stats.update(
@@ -90,7 +103,8 @@ def update_ppv1(user: DBUser):
                 user_stats.mode,
                 {
                     'ppv1': user_stats.ppv1
-                }
+                },
+                session=session
             )
 
             leaderboards.update(
@@ -100,7 +114,8 @@ def update_ppv1(user: DBUser):
 
             histories.update_rank(
                 user_stats,
-                user.country
+                user.country,
+                session=session
             )
     except Exception as e:
         app.session.logger.error(
