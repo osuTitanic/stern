@@ -20,16 +20,17 @@ logger = logging.getLogger('stats-job')
 def update_stats():
     """Update the total users, beatmaps and scores to redis"""
     while True:
-        try:
-            app.session.redis.set('bancho:totalusers', users.fetch_count())
-            app.session.redis.set('bancho:totalbeatmaps', beatmaps.fetch_count())
-            app.session.redis.set('bancho:totalscores', scores.fetch_total_count())
-            app.session.jobs.sleep(config.USERCOUNT_UPDATE_INTERVAL)
-        except Exception as e:
-            app.session.logger.error(
-                f"Failed to update stats: {e}",
-                exc_info=e
-            )
+        with app.session.database.managed_session() as session:
+            try:
+                app.session.redis.set('bancho:totalusers', users.fetch_count(session=session))
+                app.session.redis.set('bancho:totalbeatmaps', beatmaps.fetch_count(session=session))
+                app.session.redis.set('bancho:totalscores', scores.fetch_total_count(session=session))
+                app.session.jobs.sleep(config.USERCOUNT_UPDATE_INTERVAL)
+            except Exception as e:
+                app.session.logger.error(
+                    f"Failed to update stats: {e}",
+                    exc_info=e
+                )
 
 def update_usercount():
     """Add entries of current usercount inside database"""
@@ -47,64 +48,65 @@ def update_usercount():
             app.session.jobs.sleep(next_entry_time)
 
     while True:
-        try:
-            db_usercount.create(count := redis_usercount.get())
-            logger.debug(
-                f'[usercount] -> Created usercount entry ({count} players).'
-            )
-
-            if rows := db_usercount.delete_old(timedelta(weeks=1)):
+        with app.session.database.managed_session() as session:
+            try:
+                db_usercount.create(count := redis_usercount.get(), session=session)
                 logger.debug(
-                    f'[usercount] -> Deleted old usercount entries ({rows} rows affected).'
+                    f'[usercount] -> Created usercount entry ({count} players).'
                 )
 
-            app.session.jobs.sleep(config.USERCOUNT_UPDATE_INTERVAL)
-        except Exception as e:
-            app.session.logger.error(
-                f"Failed to update usercount: {e}",
-                exc_info=e
-            )
+                if rows := db_usercount.delete_old(timedelta(weeks=1), session=session):
+                    logger.debug(
+                        f'[usercount] -> Deleted old usercount entries ({rows} rows affected).'
+                    )
+
+                app.session.jobs.sleep(config.USERCOUNT_UPDATE_INTERVAL)
+            except Exception as e:
+                app.session.logger.error(
+                    f"Failed to update usercount: {e}",
+                    exc_info=e
+                )
 
 def update_ranks():
     """Update the rank history for every user, every 15 minutes."""
     while True:
-        try:
-            app.session.jobs.logger.debug('[ranks] -> Updating rank history...')
+        with app.session.database.managed_session() as session:
+            try:
+                app.session.jobs.logger.debug('[ranks] -> Updating rank history...')
 
-            active_users = users.fetch_active(timedelta(days=90))
+                for user in users.fetch_all(session=session):
+                    utils.sync_ranks(user, session=session)
+                    app.session.jobs.logger.debug(f'[ranks] -> Updated {user.name}')
 
-            for user in active_users:
-                utils.sync_ranks(user)
-                app.session.jobs.logger.debug(f'[ranks] -> Updated {user.name}')
+                    if app.session.jobs._shutdown:
+                        exit()
 
-                if app.session.jobs._shutdown:
-                    exit()
-
-            app.session.jobs.logger.debug('[ranks] -> Done.')
-            app.session.jobs.sleep(900)
-        except Exception as e:
-            app.session.logger.error(
-                f"Failed to update ranks: {e}",
-                exc_info=e
-            )
+                app.session.jobs.logger.debug('[ranks] -> Done.')
+                app.session.jobs.sleep(900)
+            except Exception as e:
+                app.session.logger.error(
+                    f"Failed to update ranks: {e}",
+                    exc_info=e
+                )
 
 def update_ppv1():
     """Update the ppv1 calculations for each user, every 2.5 hours."""
     while True:
-        try:
-            app.session.jobs.logger.debug('[ppv1] -> Updating ppv1 calculations...')
+        with app.session.database.managed_session() as session:
+            try:
+                app.session.jobs.logger.debug('[ppv1] -> Updating ppv1 calculations...')
 
-            for user in users.fetch_all():
-                utils.update_ppv1(user)
-                app.session.jobs.logger.debug(f'[ppv1] -> Updated {user.name}')
+                for user in users.fetch_all(session=session):
+                    utils.update_ppv1(user, session=session)
+                    app.session.jobs.logger.debug(f'[ppv1] -> Updated {user.name}')
 
-                if app.session.jobs._shutdown:
-                    exit()
+                    if app.session.jobs._shutdown:
+                        exit()
 
-            app.session.jobs.logger.debug('[ppv1] -> Done.')
-            app.session.jobs.sleep(3600 * 2.5)
-        except Exception as e:
-            app.session.logger.error(
-                f"Failed to update ppv1: {e}",
-                exc_info=e
-            )
+                app.session.jobs.logger.debug('[ppv1] -> Done.')
+                app.session.jobs.sleep(3600 * 2.5)
+            except Exception as e:
+                app.session.logger.error(
+                    f"Failed to update ppv1: {e}",
+                    exc_info=e
+                )
