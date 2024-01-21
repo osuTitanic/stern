@@ -34,7 +34,7 @@ def userpage(query: str):
 
             return abort(404)
 
-        if not (user := users.fetch_by_id(int(query), session)):
+        if not (user := users.fetch_by_id(int(query), session=session)):
             return abort(404)
 
         if not user.activated:

@@ -19,7 +19,7 @@ def add_friend():
         )
 
     with app.session.database.managed_session() as session:
-        if not (target := users.fetch_by_id(user_id, session)):
+        if not (target := users.fetch_by_id(user_id, session=session)):
             return Response(
                 response=(),
                 status=404,
@@ -68,7 +68,7 @@ def remove_friend():
         )
 
     with app.session.database.managed_session() as session:
-        if not (target := users.fetch_by_id(user_id, session)):
+        if not (target := users.fetch_by_id(user_id, session=session)):
             return Response(
                 response=(),
                 status=404,
