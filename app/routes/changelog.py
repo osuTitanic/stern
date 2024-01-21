@@ -1,4 +1,5 @@
 
+from app.common.helpers.caching import ttl_cache
 from flask import Blueprint, redirect, request
 from datetime import datetime, timedelta
 from collections import defaultdict
@@ -7,7 +8,6 @@ from typing import Tuple, List
 import app
 
 router = Blueprint('changelog', __name__)
-changelog_cache = (None, None)
 
 def get_branch_hash(user: str, repo: str, branch_name: str = 'dev') -> str:
     response = app.session.requests.get(
@@ -82,16 +82,8 @@ def format_commits(commits: List[dict]) -> List[Tuple[str, datetime]]:
 
     return formatted_commits
 
+@ttl_cache(ttl=60*15)
 def get_changelog() -> str:
-    global changelog_cache
-
-    if changelog_cache[0]:
-        # Check "cache expiry"
-        last_refresh = datetime.now() - changelog_cache[1]
-
-        if last_refresh <= timedelta(minutes=10):
-            return changelog_cache[0]
-
     repos = (
         'anchor',
         'stern',
@@ -126,12 +118,6 @@ def get_changelog() -> str:
         f'({date.month}/{date.day}/{date.year})\n' +
         '\n'.join(commits)
         for date, commits in commit_dict.items()
-    )
-
-    # Update the cache
-    changelog_cache = (
-        changelog_result,
-        datetime.now()
     )
 
     return changelog_result

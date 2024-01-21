@@ -14,24 +14,25 @@ def get_beatmapset(id: int):
             description=app.constants.BEATMAP_NOT_FOUND
         )
 
-    if not (set := beatmapsets.fetch_one(id)):
-        return abort(
-            code=404,
-            description=app.constants.BEATMAP_NOT_FOUND
-        )
+    with app.session.database.managed_session() as session:
+        if not (set := beatmapsets.fetch_one(id, session=session)):
+            return abort(
+                code=404,
+                description=app.constants.BEATMAP_NOT_FOUND
+            )
 
-    if mode := request.args.get('mode', ''):
-        mode = f'?mode={mode}'
+        if mode := request.args.get('mode', ''):
+            mode = f'?mode={mode}'
 
-    beatmap = set.beatmaps[0]
+        beatmap = set.beatmaps[0]
 
-    # Redirect to beatmap based on mode
-    available_beatmaps = [
-        map for map in set.beatmaps
-        if map.mode == request.args.get('mode', 0, type=int)
-    ]
+        # Redirect to beatmap based on mode
+        available_beatmaps = [
+            map for map in set.beatmaps
+            if map.mode == request.args.get('mode', 0, type=int)
+        ]
 
-    if available_beatmaps:
-       beatmap = available_beatmaps[0]
+        if available_beatmaps:
+           beatmap = available_beatmaps[0]
 
-    return redirect(f'/b/{beatmap.id}{mode}')
+        return redirect(f'/b/{beatmap.id}{mode}')
