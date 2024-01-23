@@ -7,6 +7,7 @@ from flask import Blueprint, Request, Response, redirect, request
 from typing import Optional
 
 import utils
+import app
 
 router = Blueprint("home", __name__)
 
@@ -55,23 +56,24 @@ def root():
     if result := handle_legacy_redirects(request):
         return result
 
-    return utils.render_template(
-        "home.html",
-        css="home.css",
-        title="Welcome - Titanic",
-        description="Titanic » A private server for osu! that lets you experience the early days of the game.",
-        news=[
-            {
-                "date": "08.10.2023",
-                "link": "#",
-                "title": "Welcome!",
-                "author": "Levi",
-                "text": "This website is currently in development, so enjoy this placeholder message!"
-            }
-        ],
-        beatmapsets=[(p.count, p.beatmapset) for p in plays.fetch_most_played()],
-        messages=messages.fetch_recent()
-    )
+    with app.session.database.managed_session() as session:
+        return utils.render_template(
+            "home.html",
+            css="home.css",
+            title="Welcome - Titanic",
+            description="Titanic » A private server for osu! that lets you experience the early days of the game.",
+            news=[
+                {
+                    "date": "08.10.2023",
+                    "link": "#",
+                    "title": "Welcome!",
+                    "author": "Levi",
+                    "text": "This website is currently in development, so enjoy this placeholder message!"
+                }
+            ],
+            beatmapsets=[(p.count, p.beatmapset) for p in plays.fetch_most_played(session=session)],
+            messages=messages.fetch_recent(session=session)
+        )
 
 # Redirect index.* to root
 @router.get('/index')

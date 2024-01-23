@@ -33,7 +33,7 @@ login_manager.init_app(flask)
 
 @login_manager.user_loader
 def user_loader(user_id: int) -> Optional[DBUser]:
-    if user := users.fetch_by_id(user_id):
+    if user := users.fetch_by_id(user_id, DBUser.groups, DBUser.relationships):
         return user
 
 @login_manager.request_loader

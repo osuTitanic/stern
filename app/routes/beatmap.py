@@ -1,5 +1,5 @@
 
-from app.common.constants import BeatmapLanguage, BeatmapGenre, DatabaseStatus
+from app.common.constants import BeatmapLanguage, BeatmapGenre, DatabaseStatus, Mods
 from app.common.database.repositories import beatmaps, scores, favourites
 from flask import Blueprint, request, abort
 
@@ -50,6 +50,19 @@ def get_beatmap(id: int):
             key=lambda x: x.diff
         )
 
+        beatmap_scores = scores.fetch_range_scores(
+            beatmap.id,
+            mode=int(mode),
+            limit=config.SCORE_RESPONSE_LIMIT,
+            session=session
+        )
+
+        for score in beatmap_scores:
+            mods = Mods(score.mods)
+
+            if Mods.Nightcore in mods:
+                score.mods &= ~Mods.DoubleTime
+
         return utils.render_template(
             'beatmap.html',
             mode=int(mode),
@@ -60,12 +73,7 @@ def get_beatmap(id: int):
             Status=DatabaseStatus,
             Language=BeatmapLanguage,
             Genre=BeatmapGenre,
-            scores=scores.fetch_range_scores(
-                beatmap.id,
-                mode=int(mode),
-                limit=config.SCORE_RESPONSE_LIMIT,
-                session=session
-            ),
+            scores=beatmap_scores,
             favourites_count=favourites.fetch_count_by_set(beatmap.set_id, session=session),
             favourites=favourites.fetch_many_by_set(beatmap.set_id, session=session),
             site_image=f"https://assets.ppy.sh/beatmaps/{beatmap.set_id}/covers/list.jpg",

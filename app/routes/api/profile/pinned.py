@@ -16,7 +16,7 @@ router = Blueprint("pinned", __name__)
 @validate()
 def add_pinned(user_id: int, score_id: int):
     with app.session.database.managed_session() as session:
-        if not (user := users.fetch_by_id(user_id, session)):
+        if not (user := users.fetch_by_id(user_id, session=session)):
             return Response(
                 response={},
                 status=404,
@@ -68,7 +68,7 @@ def add_pinned(user_id: int, score_id: int):
 @validate()
 def remove_pinned(user_id: int, score_id: int):
     with app.session.database.managed_session() as session:
-        if not (user := users.fetch_by_id(user_id, session)):
+        if not (user := users.fetch_by_id(user_id, session=session)):
             return Response(
                 response={},
                 status=404,
@@ -125,7 +125,7 @@ def get_pinned(
     offset = request.args.get('offset', 0, int)
 
     with app.session.database.managed_session() as session:
-        if not (user := users.fetch_by_id(user_id, session)):
+        if not (user := users.fetch_by_id(user_id, session=session)):
             return Response(
                 response=(),
                 status=404,

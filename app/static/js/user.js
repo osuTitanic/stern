@@ -75,6 +75,10 @@ const Mods = {
         }
       }
 
+      if ("DT" in members && "NC" in members) {
+        members.splice(members.indexOf("DT"), 1);
+      }
+
       return members.map(mod => modMap[Mods[mod]]).join("");
     }
 };

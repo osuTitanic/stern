@@ -22,19 +22,19 @@ router = Blueprint('users', __name__)
 def userpage(query: str):
     query = query.strip()
 
-    if not query.isdigit():
-        # Searching for username based on user query
-        if user := users.fetch_by_name_extended(query):
-            return redirect(f'/u/{user.id}')
-
-        # Search name history as a backup
-        if name := names.fetch_by_name_extended(query):
-            return redirect(f'/u/{name.user_id}')
-
-        return abort(404)
-
     with app.session.database.managed_session() as session:
-        if not (user := users.fetch_by_id(int(query), session)):
+        if not query.isdigit():
+            # Searching for username based on user query
+            if user := users.fetch_by_name_extended(query, session):
+                return redirect(f'/u/{user.id}')
+
+            # Search name history as a backup
+            if name := names.fetch_by_name_extended(query, session):
+                return redirect(f'/u/{name.user_id}')
+
+            return abort(404)
+
+        if not (user := users.fetch_by_id(int(query), session=session)):
             return abort(404)
 
         if not user.activated:
