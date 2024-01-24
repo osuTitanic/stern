@@ -130,6 +130,26 @@
     },
     {
         "display_name": "osu!2012",
+        "build_name": "b20121229-db2k",
+        "description": "A build from 2012, modded by db2k",
+        "known_bugs": "",
+        "supported": true,
+        "recommended": false,
+        "preview": false,
+        "actions": [],
+        "hashes": [
+            {
+                "file": "osu!.exe",
+                "md5": [
+                    "2561cbb5dae2c450aae88b68a9a44ab3"
+                ]
+            }
+        ],
+        "downloads": [],
+        "screenshots": []
+    },
+    {
+        "display_name": "osu!2012",
         "build_name": "b20121223",
         "description": "A build from 2012",
         "known_bugs": "",
