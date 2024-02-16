@@ -17,7 +17,7 @@
             }
         ],
         "downloads": [
-            "https://media.githubusercontent.com/media/osuTitanic/clients/main/b20141109.14cuttingedge.zip"
+            "https://eu2.contabostorage.com/6e40dbfbcaa94330a7e1a3f939ff105f:clients/b20141109.14cuttingedge.zip"
         ],
         "screenshots": [
             {
@@ -45,7 +45,7 @@
             }
         ],
         "downloads": [
-            "https://media.githubusercontent.com/media/osuTitanic/clients/main/b20140909.11cuttingedge.zip"
+            "https://eu2.contabostorage.com/6e40dbfbcaa94330a7e1a3f939ff105f:clients/b20140909.11cuttingedge.zip"
         ],
         "screenshots": [
             {
@@ -78,11 +78,13 @@
             },
             {
                 "file": "osu!common.dll",
-                "md5": ["04b144211e1cf44469dcb46902c1ddd8"]
+                "md5": [
+                    "04b144211e1cf44469dcb46902c1ddd8"
+                ]
             }
         ],
         "downloads": [
-            "https://raw.githubusercontent.com/osuTitanic/clients/main/b20130606.1-relax.zip"
+            "https://eu2.contabostorage.com/6e40dbfbcaa94330a7e1a3f939ff105f:clients/b20130606.1.zip"
         ],
         "screenshots": [
             {
@@ -114,11 +116,13 @@
             },
             {
                 "file": "osu!common.dll",
-                "md5": ["36f241f206e8078fe92e6c2a55ceac00"]
+                "md5": [
+                    "36f241f206e8078fe92e6c2a55ceac00"
+                ]
             }
         ],
         "downloads": [
-            "https://raw.githubusercontent.com/osuTitanic/clients/main/b20130303.zip"
+            "https://eu2.contabostorage.com/6e40dbfbcaa94330a7e1a3f939ff105f:clients/b20130303.zip"
         ],
         "screenshots": [
             {
@@ -166,7 +170,7 @@
             }
         ],
         "downloads": [
-            "https://raw.githubusercontent.com/osuTitanic/clients/main/b20121223.zip"
+            "https://eu2.contabostorage.com/6e40dbfbcaa94330a7e1a3f939ff105f:clients/b20121223.zip"
         ],
         "screenshots": [
             {
@@ -194,7 +198,7 @@
             }
         ],
         "downloads": [
-            "https://raw.githubusercontent.com/osuTitanic/clients/main/b20121003shine.test.zip"
+            "https://eu2.contabostorage.com/6e40dbfbcaa94330a7e1a3f939ff105f:clients/b20121003shine.test.zip"
         ],
         "screenshots": [
             {
@@ -216,11 +220,13 @@
         "hashes": [
             {
                 "file": "osu!.exe",
-                "md5": ["21adeccc8a379b49a5dc7cec815552ec"]
+                "md5": [
+                    "21adeccc8a379b49a5dc7cec815552ec"
+                ]
             }
         ],
         "downloads": [
-            "https://raw.githubusercontent.com/osuTitanic/clients/main/b20120916.zip",
+            "https://eu2.contabostorage.com/6e40dbfbcaa94330a7e1a3f939ff105f:clients/b20120916.zip",
             "https://cdn.zndev.xyz/b20120916_patched.7z"
         ],
         "screenshots": [
@@ -251,7 +257,7 @@
             }
         ],
         "downloads": [
-            "https://raw.githubusercontent.com/osuTitanic/clients/main/b20120522.zip"
+            "https://eu2.contabostorage.com/6e40dbfbcaa94330a7e1a3f939ff105f:clients/b20120522.zip"
         ],
         "screenshots": [
             {
@@ -273,11 +279,13 @@
         "hashes": [
             {
                 "file": "osu!.exe",
-                "md5": ["97520f952bc80c9372ce73a23cd1a0fb"]
+                "md5": [
+                    "97520f952bc80c9372ce73a23cd1a0fb"
+                ]
             }
         ],
         "downloads": [
-            "https://raw.githubusercontent.com/osuTitanic/clients/main/b1821.zip"
+            "https://eu2.contabostorage.com/6e40dbfbcaa94330a7e1a3f939ff105f:clients/b1821.zip"
         ],
         "screenshots": [
             {
@@ -299,11 +307,13 @@
         "hashes": [
             {
                 "file": "osu!.exe",
-                "md5": ["e61522a3e4a9a1ec18f2e066180dd5d1"]
+                "md5": [
+                    "e61522a3e4a9a1ec18f2e066180dd5d1"
+                ]
             }
         ],
         "downloads": [
-            "https://raw.githubusercontent.com/osuTitanic/clients/main/b1700.zip"
+            "https://eu2.contabostorage.com/6e40dbfbcaa94330a7e1a3f939ff105f:clients/b1700.zip"
         ],
         "screenshots": [
             {
@@ -326,12 +336,13 @@
             {
                 "file": "osu!.exe",
                 "md5": [
-                    "95cf30e06e332516f11f1a46d73f3b41"
+                    "95cf30e06e332516f11f1a46d73f3b41",
+                    "af9265d333410bbbad55c453bccb1bcf"
                 ]
             }
         ],
         "downloads": [
-            "https://raw.githubusercontent.com/osuTitanic/clients/main/b1596.zip"
+            "https://eu2.contabostorage.com/6e40dbfbcaa94330a7e1a3f939ff105f:clients/b1596.zip"
         ],
         "screenshots": [
             {
@@ -354,12 +365,13 @@
             {
                 "file": "osu!.exe",
                 "md5": [
-                    "210928a5741d7f0777304e9480a0ccad"
+                    "210928a5741d7f0777304e9480a0ccad",
+                    "4e696468cbe7a9f5424b38e26b588c6c"
                 ]
             }
         ],
         "downloads": [
-            "https://raw.githubusercontent.com/osuTitanic/clients/main/b1218.zip"
+            "https://eu2.contabostorage.com/6e40dbfbcaa94330a7e1a3f939ff105f:clients/b1218.zip"
         ],
         "screenshots": [
             {
@@ -382,12 +394,13 @@
             {
                 "file": "osu!.exe",
                 "md5": [
-                    "064a1437613a5f545d7d1837979119a2"
+                    "064a1437613a5f545d7d1837979119a2",
+                    "ba5758b863cbd9c66a95024decce324f"
                 ]
             }
         ],
         "downloads": [
-            "https://raw.githubusercontent.com/osuTitanic/clients/main/b1122.zip"
+            "https://eu2.contabostorage.com/6e40dbfbcaa94330a7e1a3f939ff105f:clients/b1122.zip"
         ],
         "screenshots": [
             {
@@ -410,12 +423,13 @@
             {
                 "file": "osu!.exe",
                 "md5": [
-                    "0971459e7bb3c9391602325f05a03121"
+                    "0971459e7bb3c9391602325f05a03121",
+                    "833f59f6cc3e180a2007199065e61577"
                 ]
             }
         ],
         "downloads": [
-            "https://raw.githubusercontent.com/osuTitanic/clients/main/b1077a.zip"
+            "https://eu2.contabostorage.com/6e40dbfbcaa94330a7e1a3f939ff105f:clients/b1077a.zip"
         ],
         "screenshots": [
             {
@@ -439,12 +453,13 @@
                 "file": "osu!.exe",
                 "md5": [
                     "7123631119a5be05be03be7b166b7372",
-                    "791ece08ba9dea2ef3ac45da654ee9f7"
+                    "791ece08ba9dea2ef3ac45da654ee9f7",
+                    "a2c8319fff784691435e0f7265413b8e"
                 ]
             }
         ],
         "downloads": [
-            "https://raw.githubusercontent.com/osuTitanic/clients/main/b904.zip"
+            "https://eu2.contabostorage.com/6e40dbfbcaa94330a7e1a3f939ff105f:clients/b904.zip"
         ],
         "screenshots": [
             {
@@ -466,11 +481,14 @@
         "hashes": [
             {
                 "file": "osu!.exe",
-                "md5": ["013a43809a580c63703c3e9238746449"]
+                "md5": [
+                    "013a43809a580c63703c3e9238746449",
+                    "8745c3dd69182b916ca49cc6d124737f"
+                ]
             }
         ],
         "downloads": [
-            "https://raw.githubusercontent.com/osuTitanic/clients/main/b753c.zip"
+            "https://eu2.contabostorage.com/6e40dbfbcaa94330a7e1a3f939ff105f:clients/b753c.zip"
         ],
         "screenshots": [
             {
@@ -493,12 +511,13 @@
             {
                 "file": "osu!.exe",
                 "md5": [
-                    "2e4469519881be3d41b7b2f8649360d2"
+                    "2e4469519881be3d41b7b2f8649360d2",
+                    "78479c0e1c33d48b9dad6de40a2aa6ad"
                 ]
             }
         ],
         "downloads": [
-            "https://raw.githubusercontent.com/osuTitanic/clients/main/b699.zip"
+            "https://eu2.contabostorage.com/6e40dbfbcaa94330a7e1a3f939ff105f:clients/b699.zip"
         ],
         "screenshots": [
             {
@@ -521,12 +540,13 @@
             {
                 "file": "osu!.exe",
                 "md5": [
-                    "e94d1f53ee1a06391d2fa44aec1da115"
+                    "e94d1f53ee1a06391d2fa44aec1da115",
+                    "a20d0d72a6e4af5cde416636bc0a5a81"
                 ]
             }
         ],
         "downloads": [
-            "https://raw.githubusercontent.com/osuTitanic/clients/main/b497.zip"
+            "https://eu2.contabostorage.com/6e40dbfbcaa94330a7e1a3f939ff105f:clients/b497.zip"
         ],
         "screenshots": [
             {
@@ -549,12 +569,13 @@
             {
                 "file": "osu!.exe",
                 "md5": [
-                    "25456462bc2c1b32163d85c7598dfd3f"
+                    "25456462bc2c1b32163d85c7598dfd3f",
+                    "4a6144dd47928c9bea3c314f48c4125f"
                 ]
             }
         ],
         "downloads": [
-            "https://raw.githubusercontent.com/osuTitanic/clients/main/b452.zip"
+            "https://eu2.contabostorage.com/6e40dbfbcaa94330a7e1a3f939ff105f:clients/b452.zip"
         ],
         "screenshots": [
             {
@@ -583,11 +604,13 @@
             },
             {
                 "file": "osu!common.dll",
-                "md5": ["59a56444299c426fbe25b53134e86975"]
+                "md5": [
+                    "59a56444299c426fbe25b53134e86975"
+                ]
             }
         ],
         "downloads": [
-            "https://raw.githubusercontent.com/osuTitanic/clients/main/b420.zip"
+            "https://eu2.contabostorage.com/6e40dbfbcaa94330a7e1a3f939ff105f:clients/b420.zip"
         ],
         "screenshots": [
             {
