@@ -144,7 +144,6 @@ def registration_request():
             pw_bcrypt=hashed_password,
             country=country,
             activated=False if config.EMAILS_ENABLED else True,
-            permissions=5,
             session=session
         )
 
