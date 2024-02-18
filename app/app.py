@@ -95,6 +95,20 @@ def get_user_level(total_score: int) -> int:
 
     return round((index + 1) + (total_score - score) / next_level[index])
 
+@flask.template_filter('get_level_score')
+def get_level_score(total_score: int) -> int:
+    next_level = common.constants.level.NEXT_LEVEL
+    total_score = min(total_score, next_level[-1])
+
+    index = 0
+    score = 0
+
+    while score + next_level[index] < total_score:
+        score += next_level[index]
+        index += 1
+
+    return total_score - score
+
 @flask.template_filter('strftime')
 def jinja2_strftime(date: datetime, format='%m/%d/%Y, %H:%M:%S'):
     native = date.replace(tzinfo=None)
