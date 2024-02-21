@@ -268,6 +268,34 @@
         ]
     },
     {
+        "display_name": "osu!2012",
+        "build_name": "b1844.test",
+        "description": "A build that was used to test the osz2 file format",
+        "known_bugs": "",
+        "supported": true,
+        "recommended": true,
+        "preview": false,
+        "actions": [],
+        "hashes": [
+            {
+                "file": "osu!.exe",
+                "md5": [
+                    "2fe2002c28bb08993a27a51a7fe5fcd7"
+                ]
+            }
+        ],
+        "downloads": [
+            "https://eu2.contabostorage.com/6e40dbfbcaa94330a7e1a3f939ff105f:clients/b1844.test.zip"
+        ],
+        "screenshots": [
+            {
+                "src": "/images/clients/b1844.test.png",
+                "width": "265px",
+                "height": "350px"
+            }
+        ]
+    },
+    {
         "display_name": "osu!2011",
         "build_name": "b1821",
         "description": "The last build from 2011",
