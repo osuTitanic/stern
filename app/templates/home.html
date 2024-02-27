@@ -27,14 +27,24 @@
                     </div>
                     <div class="blurb-box">
                         <div class="blurb-text">
-                            {{ message['text'] }}
+                            {{ message['text']|bbcode_no_wrapper|safe }}
                         </div>
                     </div>
+                    {## TODO: Enable this when forums are implemented ##}
+                    {##
                     <div class="blurb-readmore">
                         <a href="{{ message['link'] }}">Read More / Comment...</a>
                     </div>
+                    ##}
                 </div>
             {% endfor %}
+            {% if not news %}
+                <div class="news">
+                    <div class="blurb-box">
+                        No news available at the moment.
+                    </div>
+                </div>
+            {% endif %}
         </div>
 
         <div class="bottom-stats">
