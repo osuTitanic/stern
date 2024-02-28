@@ -69,6 +69,7 @@ class UserModel(BaseModel):
     activated: bool
     preferred_mode: int
     playstyle: int
+    kudosu: int
     userpage_about: Optional[str]
     userpage_signature: Optional[str]
     userpage_banner: Optional[str]
