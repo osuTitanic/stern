@@ -380,6 +380,7 @@ input[type="submit"]:hover {
 .bbcode {
     padding: 8px;
     border-radius: 2.5px;
+    overflow: scroll;
 }
 
 .bbcode h2 {
