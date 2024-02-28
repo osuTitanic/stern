@@ -40,7 +40,7 @@ const Languages = {
 function getBeatmapsets()
 {
     const beatmapContainer = document.getElementById("beatmap-list");
-    const url = "/api/beatmapsets/search" + window.location.search
+    const url = "/api/beatmaps/search" + window.location.search
 
     fetch(url)
         .then(response => {
