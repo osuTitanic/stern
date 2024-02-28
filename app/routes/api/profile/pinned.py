@@ -149,8 +149,17 @@ def get_pinned(
             session=session
         )
 
-        return [
-            ScoreModel.model_validate(score, from_attributes=True) \
-                      .model_dump(exclude=['user'])
-            for score in pinned
-        ]
+        pinned_count = scores.fetch_pinned_count(
+            user.id,
+            mode.value,
+            session=session
+        )
+
+        return {
+            'count': pinned_count,
+            'scores': [
+                ScoreModel.model_validate(score, from_attributes=True) \
+                        .model_dump(exclude=['user'])
+                for score in pinned
+            ]
+        }

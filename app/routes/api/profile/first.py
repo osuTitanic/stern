@@ -39,7 +39,7 @@ def leader_scores(
         offset = request.args.get('offset', default=0, type=int)
         limit = max(1, min(50, request.args.get('limit', default=50, type=int)))
 
-        top_plays = scores.fetch_leader_scores(
+        first_scores = scores.fetch_leader_scores(
             int(user_id),
             mode,
             offset=offset,
@@ -47,8 +47,17 @@ def leader_scores(
             session=session
         )
 
-        return [
-            ScoreModel.model_validate(score, from_attributes=True) \
-                      .model_dump(exclude=['user'])
-            for score in top_plays
-        ]
+        first_count = scores.fetch_leader_count(
+            int(user_id),
+            mode,
+            session=session
+        )
+
+        return {
+            'count': first_count,
+            'scores': [
+                ScoreModel.model_validate(score, from_attributes=True) \
+                        .model_dump(exclude=['user'])
+                for score in first_scores
+            ]
+        }

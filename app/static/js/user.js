@@ -297,8 +297,9 @@ function loadPinnedScores(userId, mode)
         throw new Error(`${response.status}`);
       return response.json();
     })
-    .then(scores => {
+    .then(data => {
       var loadingText = document.getElementById("pinned-scores-loading");
+      var scores = data.scores;
 
       if (loadingText)
       {
@@ -356,8 +357,9 @@ function loadTopPlays(userId, mode, limit, offset)
           throw new Error(`${response.status}`);
         return response.json();
       })
-      .then(scores => {
+      .then(data => {
         var loadingText = document.getElementById("top-scores-loading");
+        var scores = data.scores;
 
         if (loadingText)
         {
@@ -447,8 +449,9 @@ function loadLeaderScores(userId, mode, limit, offset)
         throw new Error(`${response.status}`);
       return response.json();
     })
-    .then(scores => {
+    .then(data => {
       var loadingText = document.getElementById("leader-scores-loading");
+      var scores = data.scores;
 
       if (loadingText)
       {

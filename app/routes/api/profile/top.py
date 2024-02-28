@@ -47,8 +47,17 @@ def top_plays(
             session=session
         )
 
-        return [
-            ScoreModel.model_validate(score, from_attributes=True) \
-                      .model_dump(exclude=['user'])
-            for score in top_plays
-        ]
+        top_count = scores.fetch_top_scores_count(
+            int(user_id),
+            mode.value,
+            session=session
+        )
+
+        return {
+            'count': top_count,
+            'scores': [
+                ScoreModel.model_validate(score, from_attributes=True) \
+                          .model_dump(exclude=['user'])
+                for score in top_plays
+            ]
+        }
