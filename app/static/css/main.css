@@ -380,6 +380,7 @@ input[type="submit"]:hover {
 .bbcode {
     padding: 8px;
     border-radius: 2.5px;
+    overflow: scroll;
 }
 
 .bbcode h2 {
@@ -395,6 +396,8 @@ input[type="submit"]:hover {
     width: 98%;
     border-radius: 2.5px;
     border: 1.5px solid rgb(50, 50, 50, 0.45);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 110%;
 }
 
 .bbcode-help {
