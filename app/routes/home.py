@@ -1,10 +1,16 @@
 
 from __future__ import annotations
 
-from app.common.database.repositories import plays, messages
+from app.common.database.repositories import plays, messages, posts, topics
 
-from flask import Blueprint, Request, Response, redirect, request
 from typing import Optional
+from flask import (
+    Blueprint,
+    Response,
+    redirect,
+    request,
+    Request
+)
 
 import utils
 import app
@@ -51,25 +57,34 @@ def handle_legacy_redirects(request: Request) -> Response | None:
         # TODO: Arguments
         return redirect('/rankings/osu/performance')
 
+def format_announcement(announcement: topics.DBForumTopic, session) -> dict:
+    if (post := posts.fetch_initial_post(announcement.id, session=session)):
+        text = post.content.splitlines()[0]
+
+    return {
+        "date": f"{announcement.created_at.day}.{announcement.created_at.month}.{announcement.created_at.year}",
+        "link": f"/forum/t/{announcement.id}",
+        "title": announcement.title,
+        "author": announcement.creator.name,
+        "text": text if post else ""
+    }
+
 @router.get("/")
 def root():
     if result := handle_legacy_redirects(request):
         return result
 
     with app.session.database.managed_session() as session:
+        announcements = topics.fetch_announcements(4, 0, session=session)
+
         return utils.render_template(
             "home.html",
             css="home.css",
             title="Welcome - Titanic",
             description="Titanic » A private server for osu! that lets you experience the early days of the game.",
             news=[
-                {
-                    "date": "08.10.2023",
-                    "link": "#",
-                    "title": "Welcome!",
-                    "author": "Levi",
-                    "text": "This website is currently in development, so enjoy this placeholder message!"
-                }
+                format_announcement(announcement, session=session)
+                for announcement in announcements
             ],
             beatmapsets=[(p.count, p.beatmapset) for p in plays.fetch_most_played(session=session)],
             messages=messages.fetch_recent(session=session)

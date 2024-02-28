@@ -166,6 +166,10 @@ def clamp_value(value: int, minimum: int, maximum: int):
 def render_bbcode(text: str) -> str:
     return f'<div class="bbcode">{bbcode.formatter.format(text)}</div>'
 
+@flask.template_filter('bbcode_no_wrapper')
+def render_bbcode_no_wrapper(text: str) -> str:
+    return bbcode.formatter.format(text)
+
 @flask.template_filter('bbcode_nowrap')
 def render_bbcode_nowrapper(text: str) -> str:
     return bbcode.formatter.format(text)
