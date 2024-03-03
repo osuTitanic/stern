@@ -56,6 +56,35 @@
         ]
     },
     {
+        "display_name": "osu!2014",
+        "build_name": "b20140323.3",
+        "description": "The first version with the new settings menu",
+        "known_bugs": "",
+        "supported": true,
+        "recommended": true,
+        "preview": false,
+        "actions": [],
+        "hashes": [
+            {
+                "file": "osu!.exe",
+                "md5": [
+                    "f6d0e1c16dc2b3f4490c2bd05e2b63a6"
+                ]
+            }
+        ],
+        "downloads": [
+            "https://eu2.contabostorage.com/6e40dbfbcaa94330a7e1a3f939ff105f:clients/b20140323.3.zip",
+            "https://cdn.zndev.xyz/builds/b2014.0323.3.zip"
+        ],
+        "screenshots": [
+            {
+                "src": "/images/clients/b20140323.3.png",
+                "width": "356px",
+                "height": "350px"
+            }
+        ]
+    },
+    {
         "display_name": "osu!2013",
         "build_name": "b20130606.1",
         "description": "A build from 2013 with the new UI overhaul update and some extra patches for relax",
