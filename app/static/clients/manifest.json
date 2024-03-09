@@ -57,6 +57,34 @@
     },
     {
         "display_name": "osu!2014",
+        "build_name": "b20140616.test",
+        "description": "One of the earliest versions to support decimal AR, OD, CS values",
+        "known_bugs": "",
+        "supported": true,
+        "recommended": true,
+        "preview": false,
+        "actions": [],
+        "hashes": [
+            {
+                "file": "osu!.exe",
+                "md5": [
+                    "b5c4881577650526cccd625c257b7a4c"
+                ]
+            }
+        ],
+        "downloads": [
+            "https://eu2.contabostorage.com/6e40dbfbcaa94330a7e1a3f939ff105f:clients/b20140616.test.zip"
+        ],
+        "screenshots": [
+            {
+                "src": "/images/clients/b20140616.test.png",
+                "width": "356px",
+                "height": "350px"
+            }
+        ]
+    },
+    {
+        "display_name": "osu!2014",
         "build_name": "b20140323.3",
         "description": "The first version with the new settings menu",
         "known_bugs": "",
@@ -79,6 +107,34 @@
         "screenshots": [
             {
                 "src": "/images/clients/b20140323.3.png",
+                "width": "356px",
+                "height": "350px"
+            }
+        ]
+    },
+    {
+        "display_name": "osu!2013",
+        "build_name": "b20131129.1",
+        "description": "The first version with global background dim, and hit error bar",
+        "known_bugs": "",
+        "supported": true,
+        "recommended": true,
+        "preview": false,
+        "actions": [],
+        "hashes": [
+            {
+                "file": "osu!.exe",
+                "md5": [
+                    "7069a7c2eb0132d7c021cfd29dd15a47"
+                ]
+            }
+        ],
+        "downloads": [
+            "https://eu2.contabostorage.com/6e40dbfbcaa94330a7e1a3f939ff105f:clients/b20131129.1.zip"
+        ],
+        "screenshots": [
+            {
+                "src": "/images/clients/b20131129.1.png",
                 "width": "356px",
                 "height": "350px"
             }
