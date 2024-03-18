@@ -2,7 +2,7 @@
     {
         "display_name": "osu!2014",
         "build_name": "b20141222.6cuttingedge",
-        "description": "A 2014 christmas build, has falling snow flakes, christmas themed background and christmas themed menu music",
+        "description": "A christmas-themed version from 2014",
         "known_bugs": "",
         "supported": true,
         "recommended": true,
@@ -31,7 +31,7 @@
     {
         "display_name": "osu!2014",
         "build_name": "b20141206cuttingedge",
-        "description": "A 2014 triangles build, with an easter egg text behind triangles",
+        "description": "A 2014 triangles build, with a little easter egg",
         "known_bugs": "",
         "supported": true,
         "recommended": true,
