@@ -1,6 +1,64 @@
 [
     {
         "display_name": "osu!2014",
+        "build_name": "b20141222.6cuttingedge",
+        "description": "A 2014 christmas build, has falling snow flakes, christmas themed background and christmas themed menu music",
+        "known_bugs": "",
+        "supported": true,
+        "recommended": true,
+        "preview": false,
+        "actions": [],
+        "hashes": [
+            {
+                "file": "osu!.exe",
+                "md5": [
+                    "5daa215bce01e20127e490d2fb667fae"
+                ]
+            }
+        ],
+        "downloads": [
+            "https://eu2.contabostorage.com/6e40dbfbcaa94330a7e1a3f939ff105f:clients/b20141222.6cuttingedge.zip",
+            "https://cdn.zndev.xyz/builds/b20141222.6cuttingedge.zip"
+        ],
+        "screenshots": [
+            {
+                "src": "/images/clients/b20141226.06ce.jpg",
+                "width": "356px",
+                "height": "350px"
+            }
+        ]
+    },
+    {
+        "display_name": "osu!2014",
+        "build_name": "b20141206cuttingedge",
+        "description": "A 2014 triangles build, with an easter egg text behind triangles",
+        "known_bugs": "",
+        "supported": true,
+        "recommended": true,
+        "preview": false,
+        "actions": [],
+        "hashes": [
+            {
+                "file": "osu!.exe",
+                "md5": [
+                    "2a7aa0f279ab630c4beb073fbbd292c9"
+                ]
+            }
+        ],
+        "downloads": [
+            "https://eu2.contabostorage.com/6e40dbfbcaa94330a7e1a3f939ff105f:clients/b20141206cuttingedge.zip",
+            "https://cdn.zndev.xyz/builds/b20141206cuttingedge.zip"
+        ],
+        "screenshots": [
+            {
+                "src": "/images/clients/b20141206ce.jpg",
+                "width": "356px",
+                "height": "350px"
+            }
+        ]
+    },
+    {
+        "display_name": "osu!2014",
         "build_name": "b20141109.14cuttingedge",
         "description": "A version from 2014 with customizable triangles! (Try to drag an image into the game)",
         "known_bugs": "",
