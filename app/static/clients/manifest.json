@@ -1,4 +1,5 @@
 [
+    
     {
         "display_name": "osu!2014",
         "build_name": "b20141222.6cuttingedge",
@@ -57,6 +58,7 @@
             }
         ]
     },
+    
     {
         "display_name": "osu!2014",
         "build_name": "b20141109.14cuttingedge",
@@ -136,6 +138,34 @@
         "screenshots": [
             {
                 "src": "/images/clients/b20140616.test.png",
+                "width": "356px",
+                "height": "350px"
+            }
+        ]
+    },
+    {
+        "display_name": "osu!2014",
+        "build_name": "b20140410.1",
+        "description": "just normal 2014 build from april, nothing special",
+        "known_bugs": "",
+        "supported": true,
+        "recommended": true,
+        "preview": false,
+        "actions": [],
+        "hashes": [
+            {
+                "file": "osu!.exe",
+                "md5": [
+                    "9d262b13d29133bf83ec26dd4502a36a"
+                ]
+            }
+        ],
+        "downloads": [
+            "https://cdn.zndev.xyz/builds/b20140410.1.zip"
+        ],
+        "screenshots": [
+            {
+                "src": "/images/clients/b20140410.1.png",
                 "width": "356px",
                 "height": "350px"
             }
@@ -786,6 +816,35 @@
         "screenshots": [
             {
                 "src": "/images/clients/b420.png",
+                "width": "265px",
+                "height": "350px"
+            }
+        ]
+    },
+    {
+        "display_name": "osu!2008",
+        "build_name": "b394a",
+        "description": "A build from 2008, keep in mind that relax score doesn't get submited in this version",
+        "known_bugs": "Please note that all versions before b452.1 can't load newer beatmaps properly!",
+        "supported": true,
+        "recommended": true,
+        "preview": false,
+        "actions": [],
+        "hashes": [
+            {
+                "file": "osu!.exe",
+                "md5": [
+                    "3ab498a0aac0a9aa883ac9e86c00cbfa"
+                    
+                ]
+            }
+        ],
+        "downloads": [
+            "https://cdn.zndev.xyz/builds/b394a.zip"
+        ],
+        "screenshots": [
+            {
+                "src": "/images/clients/b394a.png",
                 "width": "265px",
                 "height": "350px"
             }
