@@ -2,7 +2,7 @@
 import dotenv
 import os
 
-dotenv.load_dotenv(override=False)
+dotenv.load_dotenv(override=True)
 
 POSTGRES_PASSWORD = os.environ.get('POSTGRES_PASSWORD')
 POSTGRES_PORT = int(os.environ.get('POSTGRES_PORT', 5432))
