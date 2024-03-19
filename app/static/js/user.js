@@ -213,14 +213,14 @@ function createScoreElement(score, index, type)
   ppWeight.appendChild(ppWeightPercent);
   ppWeight.appendChild(document.createTextNode(` (${(score.pp * (0.95**(index + topScoreOffset))).toFixed(0)}pp)`));
 
-    if (!approvedRewards && score.beatmap.status > 2)
-    {
-      // Display heart icon for loved maps
-      ppText.innerHTML = '<i class="fa-regular fa-heart"></i>';
-      ppText.title = `${score.pp.toFixed(0)}pp (if ranked)`;
-      // Reset pp weight text
-      ppWeight.innerHTML = "weighted <b>0%</b> (0pp)";
-    }
+  if (!approvedRewards && score.beatmap.status > 2)
+  {
+    // Display heart icon for loved maps
+    ppText.innerHTML = '<i class="fa-regular fa-heart"></i>';
+    ppText.title = `${score.pp.toFixed(0)}pp (if ranked)`;
+    // Reset pp weight text
+    ppWeight.innerHTML = "weighted <b>0%</b> (0pp)";
+  }
 
   const iconContainer = document.createElement("div");
   iconContainer.classList.add("score-icon-container");
@@ -385,8 +385,11 @@ function loadTopPlays(userId, mode, limit, offset)
         }
 
         for (const [index, score] of scores.entries()) {
-            const scoreDiv = createScoreElement(score, index, "top");
-            scoreContainer.appendChild(scoreDiv);
+          if (score.beatmap.status > 2 && !approvedRewards)
+            continue;
+
+          const scoreDiv = createScoreElement(score, index, "top");
+          scoreContainer.appendChild(scoreDiv);
         }
         topScoreOffset += scores.length;
 
