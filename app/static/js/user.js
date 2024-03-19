@@ -203,6 +203,7 @@ function createScoreElement(score, index, type)
   if (!approvedRewards && score.beatmap.status > 2)
     // Display heart icon for loved maps
     ppText.innerHTML = '<i class="fa-regular fa-heart"></i>';
+    ppText.title = `${score.pp.toFixed(0)}pp (if ranked)`;
 
   const ppDisplay = document.createElement("div");
   ppDisplay.classList.add("pp-display");
