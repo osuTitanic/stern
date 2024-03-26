@@ -1,0 +1,68 @@
+
+@import url("main.css");
+
+.top {
+    margin-bottom: 0;
+}
+
+.forum-home {
+    width: 100%;
+}
+
+.mainforum-head {
+    color: #000000;
+    padding-top: 10px;
+    background-position: 0 10px;
+    height: 28px;
+    text-indent: 10px;
+    background-repeat: no-repeat;
+}
+
+.mainforum-head h4 {
+    color: #FFFFFF;
+    font-size: 120%;
+    margin: 0;
+    line-height: 35px;
+    font-weight: normal;
+    border-radius: 5px;
+    background: rgb(91, 83, 153);
+    background-image: linear-gradient(rgb(123, 114, 207) 0%, rgb(91, 83, 153) 100%);
+}
+
+.subforum-head {
+    border-radius: 5px;
+    background-color: #edebfa;
+    padding: 4px;
+    font-size: 105%;
+}
+
+.subforum-head a {
+    color: #3843a6;
+    text-decoration: none;
+}
+
+.subforum-head p {
+    margin: 1px;
+    font-size: 8.2pt;
+}
+
+.subforum-stats {
+    border-radius: 5px;
+    padding: 4px;
+    background-color: #e3e1fa;
+}
+
+.subforum-topics {
+    border-radius: 5px;
+    padding: 4px;
+    background-color: #e3e1fa;
+    font-size: 9pt;
+}
+
+.subforum-topiccount {
+    font-size: 130%;
+}
+
+.subforum-postcount {
+    color: #4f5355;
+}
