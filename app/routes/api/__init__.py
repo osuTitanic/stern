@@ -10,6 +10,7 @@ from . import groups
 from . import scores
 from . import bbcode
 from . import graph
+from . import stats
 
 router = Blueprint("api", __name__)
 router.register_blueprint(notifications.router, url_prefix="/notifications")
@@ -21,3 +22,4 @@ router.register_blueprint(groups.router, url_prefix="/groups")
 router.register_blueprint(scores.router, url_prefix="/scores")
 router.register_blueprint(bbcode.router, url_prefix="/bbcode")
 router.register_blueprint(graph.router, url_prefix="/graph")
+router.register_blueprint(stats.router, url_prefix="/stats")
