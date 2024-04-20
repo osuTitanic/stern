@@ -115,6 +115,34 @@
     },
     {
         "display_name": "osu!2014",
+        "build_name": "b20140909.7cuttingedge",
+        "description": "The same version as b20140909.11cuttingedge, without the UI update",
+        "known_bugs": "",
+        "supported": true,
+        "recommended": true,
+        "preview": false,
+        "actions": [],
+        "hashes": [
+            {
+                "file": "osu!.exe",
+                "md5": [
+                    "d6a0d802264e190fc26792198dfa238e"
+                ]
+            }
+        ],
+        "downloads": [
+            "https://eu2.contabostorage.com/6e40dbfbcaa94330a7e1a3f939ff105f:clients/b20140909.7cuttingedge.zip"
+        ],
+        "screenshots": [
+            {
+                "src": "/images/clients/b20140909.7cuttingedge.png",
+                "width": "356px",
+                "height": "350px"
+            }
+        ]
+    },
+    {
+        "display_name": "osu!2014",
         "build_name": "b20140616.test",
         "description": "One of the earliest versions to support decimal AR, OD, CS values",
         "known_bugs": "",
