@@ -20,8 +20,8 @@ REDIS_HOST = os.environ.get('REDIS_HOST')
 REDIS_PORT = int(os.environ.get('REDIS_PORT', 6379))
 
 FRONTEND_SECRET_KEY = os.environ.get('FRONTEND_SECRET_KEY')
-FRONTEND_PORT = int(os.environ.get('FRONTEND_PORT'))
-FRONTEND_HOST = os.environ.get('FRONTEND_HOST')
+FRONTEND_HOST = os.environ.get('FRONTEND_HOST', '127.0.0.1')
+FRONTEND_PORT = int(os.environ.get('FRONTEND_PORT', '8080'))
 
 SCORE_RESPONSE_LIMIT = int(os.environ.get('SCORE_RESPONSE_LIMIT', 50))
 DOMAIN_NAME = os.environ.get('DOMAIN_NAME')
