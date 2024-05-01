@@ -27,10 +27,7 @@ COPY . .
 ARG FRONTEND_WORKERS=4
 ENV FRONTEND_WORKERS $FRONTEND_WORKERS
 
-EXPOSE 80
-
 CMD uwsgi --http 0.0.0.0:80 \
           -p ${FRONTEND_WORKERS} \
           -w app:flask \
           --enable-threads
-          # --master
