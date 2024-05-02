@@ -728,6 +728,34 @@
     },
     {
         "display_name": "osu!2008",
+        "build_name": "b509",
+        "description": "The first version of osu! with catch the beat support",
+        "known_bugs": "osu!direct downloads won't work in this version!",
+        "supported": true,
+        "recommended": true,
+        "preview": false,
+        "actions": [],
+        "hashes": [
+            {
+                "file": "osu!.exe",
+                "md5": [
+                    "778e41018c3f23f062a51cce53150ebd"
+                ]
+            }
+        ],
+        "downloads": [
+            "https://eu2.contabostorage.com/6e40dbfbcaa94330a7e1a3f939ff105f:clients/b504.zip"
+        ],
+        "screenshots": [
+            {
+                "src": "/images/clients/b504.png",
+                "width": "265px",
+                "height": "350px"
+            }
+        ]
+    },
+    {
+        "display_name": "osu!2008",
         "build_name": "b497",
         "description": "This version of osu! adds a new song select style and the first version of osu!direct",
         "known_bugs": "",
