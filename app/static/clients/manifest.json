@@ -730,7 +730,7 @@
         "display_name": "osu!2008",
         "build_name": "b504",
         "description": "The first version of osu! with catch the beat support",
-        "known_bugs": "osu!direct downloads won't work in this version!",
+        "known_bugs": "",
         "supported": true,
         "recommended": true,
         "preview": false,
