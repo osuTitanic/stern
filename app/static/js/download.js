@@ -1,6 +1,6 @@
 function loadManifest()
 {
-  const manifestUrl = '/clients/manifest.json';
+  const manifestUrl = '/api/clients';
   const container = document.getElementById('client-container');
 
   console.info('Loading clients...');
@@ -25,7 +25,7 @@ function loadManifest()
             return;
 
           const version = document.createElement('p');
-          version.textContent = client.build_name;
+          version.textContent = client.name;
           version.classList.add('version')
 
           const description = document.createElement('p');
