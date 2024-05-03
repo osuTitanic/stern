@@ -43,6 +43,4 @@ EMAILS_ENABLED = MAILGUN_API_KEY is not None or SENDGRID_API_KEY is not None
 EMAIL = MAILGUN_EMAIL or SENDGRID_EMAIL
 
 OFFICER_WEBHOOK_URL = os.environ.get('OFFICER_WEBHOOK_URL')
-
-IP_DATABASE_URL = "https://github.com/P3TERX/GeoLite.mmdb/raw/download/GeoLite2-City.mmdb"
 DATA_PATH = os.path.abspath('.data')

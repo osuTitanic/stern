@@ -120,7 +120,10 @@ def get_changelog() -> str:
         for date, commits in commit_dict.items()
     )
 
-    return changelog_result
+    return (
+        'Titanic GitHub Updates\n\n' +
+        changelog_result
+    )
 
 @router.get('/p/changelog')
 def changelog():
