@@ -4,6 +4,7 @@ from __future__ import annotations
 from sqlalchemy.orm import Session
 from flask import render_template as _render_template
 from flask import request
+from PIL import Image
 
 from app.common.database.repositories.wrapper import session_wrapper
 from app.common.helpers.external import location
@@ -22,6 +23,7 @@ from app.common.database.repositories import (
 import flask_login
 import config
 import app
+import io
 
 def render_template(name: str, **kwargs) -> str:
     """This will automatically append the required data to the context for rendering pages"""
@@ -80,3 +82,16 @@ def sync_ranks(user: DBUser, session: Session | None = None) -> None:
             f'[{user.name}] Failed to update user rank: {e}',
             exc_info=e
         )
+
+def resize_image(
+    image: bytes,
+    target_width: int | None = None,
+    target_height: int | None = None
+) -> bytes:
+    image_buffer = io.BytesIO()
+
+    img = Image.open(io.BytesIO(image))
+    img = img.resize((target_width, target_height))
+    img.save(image_buffer, format='PNG')
+
+    return image_buffer.getvalue()
