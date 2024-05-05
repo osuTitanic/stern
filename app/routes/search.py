@@ -53,7 +53,7 @@ def download_beatmapset(id: int):
     no_video = request.args.get('novideo', False, type=bool)
 
     if set.server != 0:
-        return redirect(f'/api/beatmaps/osz/{id}{'?noVideo=' if no_video else ''}')
+        return redirect(f'/api/beatmaps/osz/{id}{"?noVideo=" if no_video else ""}')
 
     return redirect(f"https://osu.direct/d/{set.id}{'?noVideo=' if no_video else ''}")
 
