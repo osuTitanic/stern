@@ -107,11 +107,11 @@
             {% endif %}
         </div>
         <div class="userpage-stats">
-            <div title="Arrived" class="activity">
+            <div title="Arrived ({{ user.created_at.strftime('%Y-%m-%d %H:%M:%S') }})" class="activity">
                 <i class="fa-solid fa-right-to-bracket" style="color: #76777b;"></i>
                 <p>{{ user.created_at|timeago }}</p>
             </div>
-            <div title="Last Active" class="activity">
+            <div title="Last Active ({{ user.latest_activity.strftime('%Y-%m-%d %H:%M:%S') }})" class="activity">
                 {% if is_online %}
                 <i class="fa-solid fa-right-from-bracket" style="color: #c966c9;"></i>
                 <p>Online</p>
