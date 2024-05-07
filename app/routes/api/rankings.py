@@ -65,6 +65,15 @@ def rankings(
             ]
 
             for user in sorted_users:
+                if not user.stats:
+                    # Create stats if they don't exist
+                    user.stats = [
+                        stats.create(user.id, 0, session=session),
+                        stats.create(user.id, 1, session=session),
+                        stats.create(user.id, 2, session=session),
+                        stats.create(user.id, 3, session=session)
+                    ]
+
                 user.stats.sort(key=lambda s:s.mode)
                 utils.sync_ranks(user, session=session)
 
