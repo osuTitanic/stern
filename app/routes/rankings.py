@@ -1,6 +1,6 @@
 
+from app.common.database.repositories import users, stats
 from app.common.constants import GameMode, COUNTRIES
-from app.common.database.repositories import users
 from app.common.cache import leaderboards
 from app.common.database import DBUser
 
@@ -52,6 +52,15 @@ def rankings(mode: str, order_type: str):
         ]
 
         for user in sorted_users:
+            if not user.stats:
+                # Create stats if they don't exist
+                user.stats = [
+                    stats.create(user.id, 0),
+                    stats.create(user.id, 1),
+                    stats.create(user.id, 2),
+                    stats.create(user.id, 3)
+                ]
+
             user.stats.sort(key=lambda s:s.mode)
             utils.sync_ranks(user)
 
