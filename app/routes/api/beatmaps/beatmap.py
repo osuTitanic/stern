@@ -17,5 +17,12 @@ def get_beatmap(id: int):
             mimetype='application/json'
         )
 
+    if beatmap.status <= -3:
+        return Response(
+            response={},
+            status=404,
+            mimetype='application/json'
+        )
+
     return BeatmapModel.model_validate(beatmap, from_attributes=True) \
                        .model_dump()
