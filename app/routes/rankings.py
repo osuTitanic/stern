@@ -1,5 +1,5 @@
 
-from app.common.database.repositories import users, stats
+from app.common.database.repositories import users, stats, beatmaps
 from app.common.constants import GameMode, COUNTRIES
 from app.common.cache import leaderboards
 from app.common.database import DBUser
@@ -86,6 +86,7 @@ def rankings(mode: str, order_type: str):
             'rankings.html',
             css='rankings.css',
             title=f'{order_name} Rankings - Titanic',
+            total_beatmaps=beatmaps.fetch_count_with_leaderboards(mode),
             mode=mode,
             page=page,
             country=country,
