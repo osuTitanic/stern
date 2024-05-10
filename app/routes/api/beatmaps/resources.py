@@ -71,7 +71,7 @@ def internal_beatmap_thumbnail(set_id: int):
 
     return send_file(
         io.BytesIO(mt),
-        mimetype='image/png'
+        mimetype='image/jpeg'
     )
 
 @router.get('/mp3/<set_id>')
