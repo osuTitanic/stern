@@ -143,7 +143,7 @@ function getBeatmapsets()
                 beatmapCreatorLink = document.createElement("a");
                 beatmapCreatorLink.textContent = beatmapset.creator;
                 if (beatmapset.server == 0) beatmapCreatorLink.href = `https://osu.ppy.sh/u/${beatmapset.creator}`
-                else beatmapCreatorLink.href = `/u/${set.creator}` // TODO: CreatorId
+                else beatmapCreatorLink.href = `/u/${beatmapset.creator_id}`
 
                 beatmapCreatorDiv = document.createElement("div");
                 beatmapCreatorDiv.appendChild(beatmapCreator);
