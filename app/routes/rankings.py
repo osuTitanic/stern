@@ -1,5 +1,5 @@
 
-from app.common.database.repositories import users, stats
+from app.common.database.repositories import users, stats, beatmaps
 from app.common.constants import GameMode, COUNTRIES
 from app.common.cache import leaderboards
 from app.common.database import DBUser
@@ -16,7 +16,7 @@ def rankings(mode: str, order_type: str):
     if (mode := GameMode.from_alias(mode)) == None:
         return abort(404)
 
-    if order_type not in ('performance', 'rscore', 'tscore', 'ppv1', 'country'):
+    if order_type not in ('performance', 'rscore', 'tscore', 'ppv1', 'country', 'clears'):
         return abort(404)
 
     page = max(1, min(10000, request.args.get('page', default=1, type=int)))
@@ -78,13 +78,15 @@ def rankings(mode: str, order_type: str):
             'rscore': 'Ranked Score',
             'tscore': 'Total Score',
             'performance': 'Performance',
-            'ppv1': 'PPv1'
+            'ppv1': 'PPv1',
+            'clears': 'Clears'
         }[order_type.lower()]
 
         return utils.render_template(
             'rankings.html',
             css='rankings.css',
             title=f'{order_name} Rankings - Titanic',
+            total_beatmaps=beatmaps.fetch_count_with_leaderboards(mode),
             mode=mode,
             page=page,
             country=country,

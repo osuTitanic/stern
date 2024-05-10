@@ -101,7 +101,7 @@
                 {% if beatmapset.server == 0 %}
                     <a href="https://osu.ppy.sh/u/{{ beatmapset.creator }}">{{ beatmapset.creator }}</a>
                 {% else %}
-                    <a href="/u/{{ beatmapset.creator }}">{{ beatmapset.creator }}</a>
+                    <a href="/u/{{ beatmapset.creator_id }}">{{ beatmapset.creator }}</a>
                 {% endif %}
                 </td>
                 <td>Accuracy:</td>
@@ -198,7 +198,9 @@
                 <img src="http{{ 's' if config.ENABLE_SSL else '' }}://s.{{ config.DOMAIN_NAME }}/mt/{{ beatmapset.id }}l" alt="">
                 <audio id="beatmap-preview" src="http{{ 's' if config.ENABLE_SSL else '' }}://s.{{ config.DOMAIN_NAME }}/mp3/preview/{{ beatmapset.id }}.mp3" preload="auto"></audio>
             </a>
-            {{ beatmapset.description|safe }}
+            {% if beatmapset.description %}
+                {{ beatmapset.description|safe }}
+            {% endif %}
         </div>
     </div>
     {% if beatmapset.status > 0 %}

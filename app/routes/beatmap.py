@@ -25,6 +25,13 @@ def get_beatmap(id: int):
                 description=app.constants.BEATMAP_NOT_FOUND
             )
 
+        if beatmap.status <= -3:
+            # Beatmap is inactive
+            return abort(
+                code=404,
+                description=app.constants.BEATMAP_NOT_FOUND
+            )
+
         if not (mode := request.args.get('mode')):
             mode = beatmap.mode
 

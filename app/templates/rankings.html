@@ -106,8 +106,10 @@
                 Ranked Score
                 {% elif order_type == 'ppv1' %}
                 Performance Points
-                {% else %}
+                {% elif order_type == 'tscore' %}
                 Total Score
+                {% else %}
+                Clears
                 {% endif %}
             </th>
             <th>
@@ -154,8 +156,19 @@
                     {{ "{:,}".format(player.stats[mode].rscore|int) }}
                     {% elif order_type == 'ppv1' %}
                     {{ "{:,}".format(player.stats[mode].ppv1|int) }}pp
-                    {% else %}
+                    {% elif order_type == 'tscore' %}
                     {{ "{:,}".format(player.stats[mode].tscore|int) }}
+                    {% else %}
+                    {{ "{:,}".format([
+                        player.stats[mode].xh_count,
+                        player.stats[mode].x_count,
+                        player.stats[mode].sh_count,
+                        player.stats[mode].s_count,
+                        player.stats[mode].a_count,
+                        player.stats[mode].b_count,
+                        player.stats[mode].c_count,
+                        player.stats[mode].d_count
+                    ]|sum) }} / {{ total_beatmaps }}
                     {% endif %}
                 </span>
             </td>

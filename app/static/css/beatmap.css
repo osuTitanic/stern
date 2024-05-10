@@ -161,6 +161,8 @@ h2 {
 .beatmap-description img {
     float: left;
     margin-right: 5px;
+    width: 160px;
+    height: 120px;
 }
 
 .bbcode {

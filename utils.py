@@ -92,6 +92,15 @@ def resize_image(
 
     img = Image.open(io.BytesIO(image))
     img = img.resize((target_width, target_height))
-    img.save(image_buffer, format='PNG')
+    img.save(image_buffer, format='JPEG')
 
+    return image_buffer.getvalue()
+
+def empty_image(
+    width: int,
+    height: int
+) -> bytes:
+    image_buffer = io.BytesIO()
+    img = Image.new('RGB', (width, height), (0, 0, 0))
+    img.save(image_buffer, format='JPEG')
     return image_buffer.getvalue()
