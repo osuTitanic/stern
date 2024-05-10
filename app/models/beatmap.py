@@ -10,6 +10,7 @@ class _BeatmapsetModel(BaseModel):
     creator: Optional[str]
     source: Optional[str]
     tags: Optional[str]
+    creator_id: Optional[int]
     status: int
     has_video: bool
     has_storyboard: bool
