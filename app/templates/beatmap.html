@@ -199,7 +199,12 @@
                 <audio id="beatmap-preview" src="http{{ 's' if config.ENABLE_SSL else '' }}://s.{{ config.DOMAIN_NAME }}/mp3/preview/{{ beatmapset.id }}.mp3" preload="auto"></audio>
             </a>
             {% if beatmapset.description %}
-                {{ beatmapset.description|safe }}
+                {# NOTE: Small workaround for existsing html-bbcode #}
+                {% if beatmapset.server != 0 %}
+                    {{ beatmapset.description|bbcode|safe }}
+                {% else %}
+                    {{ beatmapset.description|safe }}
+                {% endif %}
             {% endif %}
         </div>
     </div>
