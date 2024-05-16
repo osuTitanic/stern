@@ -41,10 +41,15 @@
     background-image: linear-gradient(rgb(123, 114, 207) 0%, rgb(91, 83, 153) 100%);
 }
 
+.subforum-table {
+    width: 100%;
+    margin-top: 10px;
+}
+
 .subforum-head {
     border-radius: 5px;
     background-color: #edebfa;
-    padding: 4px;
+    padding: 8px;
     font-size: 105%;
 }
 
