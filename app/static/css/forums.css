@@ -106,7 +106,7 @@ table {
 }
 
 .light-row td {
-    padding: 4px;
+    padding: 2px;
 }
 
 .dark-row {
@@ -115,5 +115,5 @@ table {
 }
 
 .dark-row td {
-    padding: 4px;
+    padding: 2px;
 }
