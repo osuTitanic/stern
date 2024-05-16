@@ -83,3 +83,29 @@
 .subforum-postcount {
     color: #4f5355;
 }
+
+table {
+    font-size: 90%;
+}
+
+.topics-table {
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+.topic-header {
+    padding-top: 8px;
+    padding-bottom: 2px;
+    color: #5d5d5d;
+    font-weight: bold;
+}
+
+.light-row {
+    background-color: #edebfa;
+    font-size: 90%;
+}
+
+.dark-row {
+    background-color: #e3e1fa;
+    font-size: 90%;
+}

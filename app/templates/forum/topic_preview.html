@@ -4,7 +4,11 @@
 {% set posts_per_page = 12 %}
 {% set page_count = (post_count / posts_per_page)|ceil %}
 
-<tr>
+{% if index % 2 %}
+    <tr class="dark-row">
+{% else %}
+    <tr class="light-row">
+{% endif %}
     <td align="center" width="5%">
         {% if topic.icon %}
             <a href="/t/{{ topic.id }}">

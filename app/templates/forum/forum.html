@@ -40,31 +40,31 @@
     <table width="100%" class="subforum-table">
         <tbody>
             {% for subforum in sub_forums %}
-            <tr>
-                {# TODO: Logo #}
-                <td width="50%" class="subforum-head" style="background-color:#e5e3ff">
-                    <a href="/forum/{{ subforum.id }}">{{ subforum.name }}</a>
-                    <p>{{ subforum.description }}</p>
-                </td>
-                <td style="text-align: center;" class="subforum-stats">
-                    <p class="subforum-topiccount">{{ "{:,}".format(subforum_stats[subforum.id][0]) }}</p>
-                    <p class="subforum-postcount">{{ "{:,}".format(subforum_stats[subforum.id][1]) }}</p>
-                </td>
-                <td style="text-align: right;" class="subforum-topics">
-                    {% set recent = subforum_recent[subforum.id] %}
-                    {% if recent %}
-                        <a href="/t/{{ recent.id }}">
-                            {{ recent.title }}
-                        </a>
-                        <p>
-                            {{ recent.created_at|timeago }} by
-                            <a href="/u/{{ recent.creator_id }}">{{ recent.creator.name }}</a>
-                        </p>
-                    {% else %}
-                        <p>No recent topics</p>
-                    {% endif %}
-                </td>
-            </tr>
+                <tr>
+                    {# TODO: Logo #}
+                    <td width="50%" class="subforum-head" style="background-color:#e5e3ff">
+                        <a href="/forum/{{ subforum.id }}">{{ subforum.name }}</a>
+                        <p>{{ subforum.description }}</p>
+                    </td>
+                    <td style="text-align: center;" class="subforum-stats">
+                        <p class="subforum-topiccount">{{ "{:,}".format(subforum_stats[subforum.id][0]) }}</p>
+                        <p class="subforum-postcount">{{ "{:,}".format(subforum_stats[subforum.id][1]) }}</p>
+                    </td>
+                    <td style="text-align: right;" class="subforum-topics">
+                        {% set recent = subforum_recent[subforum.id] %}
+                        {% if recent %}
+                            <a href="/t/{{ recent.id }}">
+                                {{ recent.title }}
+                            </a>
+                            <p>
+                                {{ recent.created_at|timeago }} by
+                                <a href="/u/{{ recent.creator_id }}">{{ recent.creator.name }}</a>
+                            </p>
+                        {% else %}
+                            <p>No recent topics</p>
+                        {% endif %}
+                    </td>
+                </tr>
             {% endfor %}
         </tbody>
     </table>
@@ -80,22 +80,40 @@
         <tbody>
             {% if announcements %}
                 <tr class="table-header">
-                    <td colspan=4>Announcements</td>
+                    <td colspan=4 class="topic-header">Announcements</td>
                 </tr>
                 {% for topic in announcements %}
+                    {% set index = loop.index0 %}
                     {% include 'forum/topic_preview.html' %}
                 {% endfor %}
             {% endif %}
             {% if recent_topics %}
                 <tr class="table-header">
-                    <td colspan=4>Topics</td>
+                    <td colspan=4 class="topic-header">Topics</td>
                 </tr>
                 {% for topic in recent_topics %}
+                    {% set index = loop.index0 %}
                     {% include 'forum/topic_preview.html' %}
                 {% endfor %}
             {% endif %}
         </tbody>
         {% endif %}
+    </table>
+    <table width='100%'>
+        <tbody>
+        <tr>
+            <td align="right">
+                <a href="#">Jump</a> |
+                {% for page in range(total_pages + 1) %}
+                    {% if page != current_page %}
+                        <a href="/forum/{{ forum.id }}?start={{ (page - 1) * 25 }}">{{ page + 1 }}</a>
+                    {% else %}
+                        <strong>{{ page + 1 }}</strong>
+                    {% endif %}
+                {% endfor %}
+            </td>
+        </tr>
+        </tbody>
     </table>
 </div>
 {% endblock content %}
