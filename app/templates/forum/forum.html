@@ -1,0 +1,94 @@
+{# templates/forum/forum.html #}
+
+{% extends "base.html" %}
+{% block content %}
+<h1 class="header-text">
+    <a href="/forum" style="color:#5a5399">Index</a> »
+    {% for parent_forum in forum|list_parent_forums|reverse %}
+        <a href="/forum/{{ parent_forum.id }}">
+            {{ parent_forum.name }}
+        </a> »
+    {% endfor %}
+    <a href="/forum/{{ forum.id }}">
+        {{ forum.name }}
+    </a>
+</h1>
+<div>
+    {# Page count #}
+    <table width='100%'>
+        <tbody>
+        <tr>
+            <td>
+                Page <strong>{{ current_page + 1 }}</strong> of <strong>{{ total_pages + 1 }}</strong>
+                [ {{ topic_count }} topic{{ 's' if topic_count > 1 else '' }} ]
+            </td>
+            <td>
+                <a href="#">Jump</a> |
+                {% for page in range(total_pages + 1) %}
+                    {% if page != current_page %}
+                        <a href="/forum/{{ forum.id }}?start={{ (page - 1) * 25 }}">{{ page + 1 }}</a>
+                    {% else %}
+                        <strong>{{ page + 1 }}</strong>
+                    {% endif %}
+                {% endfor %}
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    {# Subforums #}
+    <table width="100%" class="subforum-table">
+        <tbody>
+            {% for subforum in sub_forums %}
+            <tr>
+                {# TODO: Logo #}
+                <td width="50%" class="subforum-head" style="background-color:#e5e3ff">
+                    <a href="/forum/{{ subforum.id }}">{{ subforum.name }}</a>
+                    <p>{{ subforum.description }}</p>
+                </td>
+                <td style="text-align: center;" class="subforum-stats">
+                    <p class="subforum-topiccount">{{ "{:,}".format(subforum_stats[subforum.id][0]) }}</p>
+                    <p class="subforum-postcount">{{ "{:,}".format(subforum_stats[subforum.id][1]) }}</p>
+                </td>
+                <td style="text-align: right;" class="subforum-topics">
+                    {% set recent = subforum_recent[subforum.id] %}
+                    {% if recent %}
+                        <a href="/t/{{ recent.id }}">
+                            {{ recent.title }}
+                        </a>
+                        <p>
+                            {{ recent.created_at|timeago }} by
+                            <a href="/u/{{ recent.creator_id }}">{{ recent.creator.name }}</a>
+                        </p>
+                    {% else %}
+                        <p>No recent topics</p>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {# Topics #}
+    <table width="100%" class="topics-table">
+        <thead><tr>
+            <th colspan="2">Topics</th>
+            <th>Author</th>
+            <th></th>
+            <th>Last Post</th>
+        </tr></thead>
+        <tbody>
+            <tr class="table-header">
+                <td>Announcements</td>
+            </tr>
+            {% for topic in announcements %}
+                {% include 'forum/topic_preview.html' %}
+            {% endfor %}
+            <tr class="table-header">
+                <td>Topics</td>
+            </tr>
+            {% for topic in recent_topics %}
+                {% include 'forum/topic_preview.html' %}
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock content %}
