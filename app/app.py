@@ -1,6 +1,6 @@
 
 from app.common.database.objects import DBUser, DBForum, DBForumTopic
-from app.common.database.repositories import users
+from app.common.database.repositories import users, topics
 from app.common.helpers.external import location
 
 from flask import Flask, Request, redirect
@@ -214,7 +214,22 @@ def ceil(value: float) -> int:
 
 @flask.template_filter('get_status_icon')
 def get_status_icon(topic: DBForumTopic) -> str:
-    # TODO
+    if topic.pinned or topic.announcement:
+        if topic.locked_at:
+            return "/images/icons/topics/announce_read_locked.gif"
+
+        return "/images/icons/topics/announce_read.gif"
+
+    if topic.locked_at:
+        return "/images/icons/topics/topic_read_locked.gif"
+
+    time = datetime.now() - topic.created_at
+    views = utils.fetch_average_topic_views()
+
+    if (topic.views > views) and (time.days < 7):
+        return "/images/icons/topics/topic_read_hot.gif"
+
+    # TODO: Read/Unread Logic
     return "/images/icons/topics/topic_read.gif"
 
 @flask.errorhandler(404)

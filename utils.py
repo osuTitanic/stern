@@ -7,10 +7,10 @@ from flask import request
 from PIL import Image
 
 from app.common.database.repositories.wrapper import session_wrapper
-from app.common.database import DBUser, repositories
+from app.common.database import DBUser, repositories, topics
 from app.common.helpers.external import location
-from app.common.helpers import performance
 from app.common.cache import leaderboards
+from app.common.helpers import caching
 from app.common import constants
 
 from app.common.database.repositories import (
@@ -105,3 +105,7 @@ def empty_image(
     img = Image.new('RGB', (width, height), (0, 0, 0))
     img.save(image_buffer, format='JPEG')
     return image_buffer.getvalue()
+
+@caching.ttl_cache(ttl=900)
+def fetch_average_topic_views() -> int:
+    return int(topics.fetch_average_views())
