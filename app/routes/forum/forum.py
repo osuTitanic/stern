@@ -59,6 +59,11 @@ def forum_view(forum_id: int):
             reverse=True
         )
 
+        has_custom_icons = any(
+            topic.icon_id
+            for topic in recent_topics
+        )
+
         return utils.render_template(
             "forum/forum.html",
             css='forums.css',
@@ -75,9 +80,10 @@ def forum_view(forum_id: int):
                 forum.id: topics.fetch_recent(forum.id, session)
                 for forum in sub_forums
             },
-            topic_count=topic_count,
-            recent_topics=recent_topics,
+            has_custom_icons=has_custom_icons,
             announcements=announcements,
+            recent_topics=recent_topics,
+            topic_count=topic_count,
             total_pages=len(recent_topics) // 25,
             current_page=start // 25,
             session=session
