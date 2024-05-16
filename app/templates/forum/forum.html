@@ -20,7 +20,7 @@
         <tr>
             <td>
                 Page <strong>{{ current_page + 1 }}</strong> of <strong>{{ total_pages + 1 }}</strong>
-                [ {{ topic_count }} topic{{ 's' if topic_count > 1 else '' }} ]
+                [ {{ topic_count }} topic{{ 's' if topic_count != 1 else '' }} ]
             </td>
             <td>
                 <a href="#">Jump</a> |
@@ -68,6 +68,7 @@
         </tbody>
     </table>
     {# Topics #}
+    {% if announcements or recent_topics %}
     <table width="100%" class="topics-table">
         <thead><tr>
             <th colspan="2">Topics</th>
@@ -76,19 +77,24 @@
             <th>Last Post</th>
         </tr></thead>
         <tbody>
-            <tr class="table-header">
-                <td>Announcements</td>
-            </tr>
-            {% for topic in announcements %}
-                {% include 'forum/topic_preview.html' %}
-            {% endfor %}
-            <tr class="table-header">
-                <td>Topics</td>
-            </tr>
-            {% for topic in recent_topics %}
-                {% include 'forum/topic_preview.html' %}
-            {% endfor %}
+            {% if announcements %}
+                <tr class="table-header">
+                    <td>Announcements</td>
+                </tr>
+                {% for topic in announcements %}
+                    {% include 'forum/topic_preview.html' %}
+                {% endfor %}
+            {% endif %}
+            {% if recent_topics %}
+                <tr class="table-header">
+                    <td>Topics</td>
+                </tr>
+                {% for topic in recent_topics %}
+                    {% include 'forum/topic_preview.html' %}
+                {% endfor %}
+            {% endif %}
         </tbody>
+        {% endif %}
     </table>
 </div>
 {% endblock content %}
