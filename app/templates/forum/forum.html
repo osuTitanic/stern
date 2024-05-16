@@ -18,11 +18,12 @@
     <table width='100%'>
         <tbody>
         <tr>
-            <td>
+            <td align="left">
                 Page <strong>{{ current_page + 1 }}</strong> of <strong>{{ total_pages + 1 }}</strong>
                 [ {{ topic_count }} topic{{ 's' if topic_count != 1 else '' }} ]
             </td>
-            <td>
+            <td align="right">
+                <a href="#">Mark forum as read</a> |
                 <a href="#">Jump</a> |
                 {% for page in range(total_pages + 1) %}
                     {% if page != current_page %}
