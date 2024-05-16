@@ -1,5 +1,9 @@
 {# templates/forum/topic.html #}
 
+{% set post_count = repositories.topics.fetch_post_count(topic.id, session) %}
+{% set posts_per_page = 12 %}
+{% set page_count = (post_count / posts_per_page)|ceil %}
+
 <tr>
     <td align="center" width="5%">
         {% if topic.icon %}
@@ -11,11 +15,31 @@
         {% endif %}
     </td>
     <td>
-        {% if topic.pinned %}
-            <i class="fa-solid fa-star-of-life" style="font-size: 80%; color: #ababab"></i>
+        <div>
+            {% if topic.pinned %}
+                <i class="fa-solid fa-star-of-life" style="font-size: 80%; color: #ababab"></i>
+            {% endif %}
+            <a href="/t/{{ topic.id }}">{{ topic.title }}</a>
+        </div>
+        {% if page_count > 1 %}
+            <div>
+                {# Display Pagination #}
+                Page:
+                {% if page_count <= 4 %}
+                    {# Display all pages #}
+                    {% for page in range(page_count) %}
+                        <a href="/t/{{ topic.id }}?page={{ page + 1 }}">{{ page + 1 }}</a>{% if page != page_count-1 %},{% endif %}
+                    {% endfor %}
+                {% else %}
+                    {# Display the first, and last 3 pages #}
+                    <a href="/t/{{ topic.id }}?page=1">1</a>,
+                    ...
+                    {% for page in range(page_count-3, page_count) %}
+                        <a href="/t/{{ topic.id }}?page={{ page + 1 }}">{{ page + 1 }}</a>{% if page != page_count-1 %},{% endif %}
+                    {% endfor %}
+                {% endif %}
+            </div>
         {% endif %}
-        <a href="/t/{{ topic.id }}">{{ topic.title }}</a>
-        {# TODO: Pagination #}
     </td>
     <td align="center">
         <a href="/u/{{ topic.creator_id }}" style="color: {{ topic.creator|user_color }}">
@@ -23,7 +47,7 @@
         </a>
     </td>
     <td width="6%" align="center">
-        <p class="subforum-topiccount">{{ repositories.topics.fetch_post_count(topic.id, session) }}</p>
+        <p class="subforum-topiccount">{{ post_count }}</p>
         <p class="subforum-postcount">{{ topic.views }}</p>
     </td>
     <td align="center">
