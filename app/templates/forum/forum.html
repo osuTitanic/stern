@@ -79,7 +79,7 @@
         <tbody>
             {% if announcements %}
                 <tr class="table-header">
-                    <td>Announcements</td>
+                    <td colspan=4>Announcements</td>
                 </tr>
                 {% for topic in announcements %}
                     {% include 'forum/topic_preview.html' %}
@@ -87,7 +87,7 @@
             {% endif %}
             {% if recent_topics %}
                 <tr class="table-header">
-                    <td>Topics</td>
+                    <td colspan=4>Topics</td>
                 </tr>
                 {% for topic in recent_topics %}
                     {% include 'forum/topic_preview.html' %}

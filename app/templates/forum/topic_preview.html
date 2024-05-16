@@ -1,12 +1,14 @@
 {# templates/forum/topic.html #}
 
 <tr>
-    <td width="5%" align="center">
-        <a href="/t/{{ topic.id }}">
-            <img src="{{ topic.icon.location }}"
-                 alt="{{ topic.icon.name }}"
-                 width="20">
-        </a>
+    <td align="center" width="5%">
+        {% if topic.icon %}
+            <a href="/t/{{ topic.id }}">
+                <img src="{{ topic.icon.location }}"
+                    alt="{{ topic.icon.name }}"
+                    width="20">
+            </a>
+        {% endif %}
     </td>
     <td>
         {% if topic.pinned %}
@@ -20,7 +22,7 @@
             {{ topic.creator.name }}
         </a>
     </td>
-    <td width="5%" align="center">
+    <td width="6%" align="center">
         <p class="subforum-topiccount">{{ repositories.topics.fetch_post_count(topic.id, session) }}</p>
         <p class="subforum-postcount">{{ topic.views }}</p>
     </td>
