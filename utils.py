@@ -7,10 +7,10 @@ from flask import request
 from PIL import Image
 
 from app.common.database.repositories.wrapper import session_wrapper
+from app.common.database import DBUser, repositories
 from app.common.helpers.external import location
 from app.common.helpers import performance
 from app.common.cache import leaderboards
-from app.common.database import DBUser
 from app.common import constants
 
 from app.common.database.repositories import (
@@ -32,6 +32,7 @@ def render_template(name: str, **kwargs) -> str:
         online_users=int(app.session.redis.get('bancho:users') or 0),
         total_users=int(app.session.redis.get('bancho:totalusers') or 0),
         show_login=request.args.get('login', False, type=bool),
+        repositories=repositories,
         constants=constants,
         location=location,
         config=config
