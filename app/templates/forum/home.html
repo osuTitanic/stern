@@ -13,10 +13,14 @@
     </tr>
         {% for forum in sub_forum %}
         <tr>
-            {# TODO: Logo #}
             <td width="50%" class="subforum-head">
-                <a href="/forum/{{ forum.id }}">{{ forum.name }}</a>
-                <p>{{ forum.description }}</p>
+                <img src="/images/icons/forum/titanic.png"alt=""
+                     width="34"
+                     style="float: left; margin-right: 12px;">
+                <div>
+                    <a href="/forum/{{ forum.id }}">{{ forum.name }}</a>
+                    <p>{{ forum.description }}</p>
+                </div>
                 {# TODO: Subforums #}
             </td>
             <td style="text-align: center;" class="subforum-stats">

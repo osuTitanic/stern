@@ -41,10 +41,14 @@
         <tbody>
             {% for subforum in sub_forums %}
                 <tr>
-                    {# TODO: Logo #}
                     <td width="50%" class="subforum-head" style="background-color: #eeedff">
-                        <a href="/forum/{{ subforum.id }}">{{ subforum.name }}</a>
-                        <p>{{ subforum.description }}</p>
+                        <img src="/images/icons/forum/titanic.png"alt=""
+                             width="34"
+                             style="float: left; margin-right: 12px;">
+                        <div>
+                            <a href="/forum/{{ subforum.id }}">{{ subforum.name }}</a>
+                            <p>{{ subforum.description }}</p>
+                        </div>
                     </td>
                     <td style="text-align: center;" class="subforum-stats">
                         <p class="subforum-topiccount">{{ "{:,}".format(subforum_stats[subforum.id][0]) }}</p>
