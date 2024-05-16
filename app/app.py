@@ -16,6 +16,7 @@ from . import bbcode
 import timeago
 import config
 import utils
+import math
 import re
 
 flask = Flask(
@@ -206,6 +207,10 @@ def get_user_color(user: DBUser) -> str:
     primary_group_id = min(get_attributes(user.groups, 'group_id'))
     primary_group = next(group for group in user.groups if group.group_id == primary_group_id).group
     return primary_group.color
+
+@flask.template_filter('ceil')
+def ceil(value: float) -> int:
+    return math.ceil(value)
 
 @flask.errorhandler(404)
 def not_found(error: NotFound) -> Tuple[str, int]:
