@@ -1,6 +1,6 @@
 
+from app.common.database.objects import DBUser, DBForum
 from app.common.database.repositories import users
-from app.common.database.objects import DBUser
 from app.common.helpers.external import location
 
 from flask import Flask, Request, redirect
@@ -187,6 +187,16 @@ def format_markdown_urls(value: str) -> str:
         )
 
     return value
+
+@flask.template_filter('list_parent_forums')
+def list_parent_forums(forum: DBForum) -> list:
+    parent_forums = []
+
+    while forum.parent_id:
+        parent_forums.append(forum.parent)
+        forum = forum.parent
+
+    return parent_forums
 
 @flask.errorhandler(404)
 def not_found(error: NotFound) -> Tuple[str, int]:
