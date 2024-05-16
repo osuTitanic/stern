@@ -11,7 +11,6 @@ from app.common.database.repositories import wrapper
 from app.common.cache import leaderboards, status
 from app.common.helpers.external import location
 from app.common.helpers import caching, analytics, ip
-from app.common.database import DBUser
 from app.common import constants
 
 from app.common.database import (
@@ -137,3 +136,7 @@ def track(
             'country': user.country
         }
     )
+
+@caching.ttl_cache(ttl=900)
+def fetch_average_topic_views() -> int:
+    return int(topics.fetch_average_views())
