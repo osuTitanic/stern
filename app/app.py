@@ -1,5 +1,5 @@
 
-from app.common.database.objects import DBUser, DBForum
+from app.common.database.objects import DBUser, DBForum, DBForumTopic
 from app.common.database.repositories import users
 from app.common.helpers.external import location
 
@@ -211,6 +211,11 @@ def get_user_color(user: DBUser) -> str:
 @flask.template_filter('ceil')
 def ceil(value: float) -> int:
     return math.ceil(value)
+
+@flask.template_filter('get_status_icon')
+def get_status_icon(topic: DBForumTopic) -> str:
+    # TODO
+    return "/images/icons/topics/topic_read.gif"
 
 @flask.errorhandler(404)
 def not_found(error: NotFound) -> Tuple[str, int]:
