@@ -105,7 +105,15 @@ table {
     font-size: 90%;
 }
 
+.light-row td {
+    padding: 4px;
+}
+
 .dark-row {
     background-color: #e3e1fa;
     font-size: 90%;
+}
+
+.dark-row td {
+    padding: 4px;
 }
