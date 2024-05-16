@@ -14,11 +14,13 @@
             <img src="{{ topic|get_status_icon }}" width="20">
         </a>
     </td>
-    <td align="center" width="4%">
-    {% if topic.icon %}
-        <img src="{{ topic.icon.location }}"
-            alt="{{ topic.icon.name }}"
-            width="20">
+    {% if has_custom_icons %}
+        <td align="center" width="4%">
+        {% if topic.icon %}
+            <img src="{{ topic.icon.location }}"
+                alt="{{ topic.icon.name }}"
+                width="20">
+        {% endif %}
     {% endif %}
     </td>
     <td>
