@@ -198,6 +198,15 @@ def list_parent_forums(forum: DBForum) -> list:
 
     return parent_forums
 
+@flask.template_filter('user_color')
+def get_user_color(user: DBUser) -> str:
+    if not user.groups:
+        return "#000000"
+
+    primary_group_id = min(get_attributes(user.groups, 'group_id'))
+    primary_group = next(group for group in user.groups if group.group_id == primary_group_id).group
+    return primary_group.color
+
 @flask.errorhandler(404)
 def not_found(error: NotFound) -> Tuple[str, int]:
     return utils.render_template(
