@@ -15,6 +15,16 @@ BEATMAP_NOT_FOUND = (
     '</ul>'
 )
 
+FORUM_NOT_FOUND = (
+    '<h1>The forum you are looking for was not found!</h1>'
+    'There are a few possible reasons for this:'
+    '<ul>'
+    '<li>The forum does not exist.</li>'
+    '<li>The forum may have been removed by an admin.</li>'
+    '<li>You may have made a typo!</li>'
+    '</ul>'
+)
+
 ACHIEVEMENTS = {
     'beatmap-packs': ['Anime Pack vol.1', 'Anime Pack vol.2', 'Anime Pack vol.3', 'Anime Pack vol.4', 'Internet! Pack vol.1', 'Internet! Pack vol.2', 'Internet! Pack vol.3', 'Internet! Pack vol.4', 'Rhythm Game Pack vol.1', 'Rhythm Game Pack vol.2', 'Rhythm Game Pack vol.3', 'Rhythm Game Pack vol.4', 'Video Game Pack vol.1', 'Video Game Pack vol.2', 'Video Game Pack vol.3', 'Video Game Pack vol.4'],
     'dedication': ['5,000 Plays (osu! mode)', '15,000 Plays (osu! mode)', '25,000 Plays (osu! mode)', '50,000 Plays (osu! mode)', '30,000 Drum Hits', '300,000 Drum Hits', '3,000,000 Drum Hits', 'Catch 20,000 fruits', 'Catch 200,000 fruits', 'Catch 2,000,000 fruits', '40,000 Keys', '400,000 Keys', '4,000,000 Keys'],
