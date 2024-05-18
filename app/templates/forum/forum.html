@@ -1,6 +1,7 @@
 {# templates/forum/forum.html #}
 
 {% extends "base.html" %}
+
 {% block content %}
 <h1 class="header-text">
     <a href="/forum" style="color:#5a5399">Index</a> »
@@ -25,13 +26,31 @@
             <td align="right">
                 <a href="#">Mark forum as read</a> |
                 <a href="#">Jump</a> |
-                {% for page in range(total_pages + 1) %}
+                {# Pagination #}
+                {% if current_page > 1 %}
+                    {# "Back" button #}
+                    <a href="/forum/{{ forum.id }}?page={{ current_page - 1 }}">Back</a>
+                {% endif %}
+
+                {# Calculate page range #}
+                {% set page_start = (0, current_page - 1)|max %}
+                {% set page_end = (total_pages, page_start + 4)|min %}
+
+                {% for page in range(page_start, page_end + 1) %}
                     {% if page != current_page %}
-                        <a href="/forum/{{ forum.id }}?start={{ (page - 1) * 25 }}">{{ page + 1 }}</a>
+                        <a href="/forum/{{ forum.id }}?page={{ page + 1 }}">{{ page + 1 }}</a>
                     {% else %}
                         <strong>{{ page + 1 }}</strong>
                     {% endif %}
                 {% endfor %}
+
+                {% if page_end < total_pages - 1 %}
+                    ...
+                    {# Last page after "..." #}
+                    <a href="/forum/{{ forum.id }}?page={{ total_pages + 1 }}">{{ total_pages + 1 }}</a>
+                    {# "Next" button #}
+                    <a href="/forum/{{ forum.id }}?page={{ current_page + 2 }}">Next</a>
+                {% endif %}
             </td>
         </tr>
         </tbody>
@@ -108,13 +127,31 @@
         <tr>
             <td align="right">
                 <a href="#">Jump</a> |
-                {% for page in range(total_pages + 1) %}
+                {# Pagination #}
+                {% if current_page > 1 %}
+                    {# "Back" button #}
+                    <a href="/forum/{{ forum.id }}?page={{ current_page - 1 }}">Back</a>
+                {% endif %}
+
+                {# Calculate page range #}
+                {% set page_start = (0, current_page - 1)|max %}
+                {% set page_end = (total_pages, page_start + 4)|min %}
+
+                {% for page in range(page_start, page_end + 1) %}
                     {% if page != current_page %}
-                        <a href="/forum/{{ forum.id }}?start={{ (page - 1) * 25 }}">{{ page + 1 }}</a>
+                        <a href="/forum/{{ forum.id }}?page={{ page + 1 }}">{{ page + 1 }}</a>
                     {% else %}
                         <strong>{{ page + 1 }}</strong>
                     {% endif %}
                 {% endfor %}
+
+                {% if page_end < total_pages - 1 %}
+                    ...
+                    {# Last page after "..." #}
+                    <a href="/forum/{{ forum.id }}?page={{ total_pages + 1 }}">{{ total_pages + 1 }}</a>
+                    {# "Next" button #}
+                    <a href="/forum/{{ forum.id }}?page={{ current_page + 2 }}">Next</a>
+                {% endif %}
             </td>
         </tr>
         </tbody>
