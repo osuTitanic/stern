@@ -10,7 +10,7 @@
     font-size: 150%;
     font-weight: 100;
     margin-left: 10px;
-    margin-bottom: 22px;
+    margin-bottom: 15px;
     text-shadow: var(#efcfe1) 0px 0px 10px;
     color: #868686;
     white-space: nowrap;
@@ -43,7 +43,7 @@
 
 .subforum-table {
     width: 100%;
-    margin-top: 10px;
+    margin-top: 5px;
 }
 
 .subforum-head {
@@ -89,7 +89,7 @@ table {
 }
 
 .topics-table {
-    margin-top: 10px;
+    margin-top: 15px;
     margin-bottom: 5px;
 }
 
