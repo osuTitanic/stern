@@ -200,9 +200,9 @@ def list_parent_forums(forum: DBForum) -> list:
     return parent_forums
 
 @flask.template_filter('user_color')
-def get_user_color(user: DBUser) -> str:
+def get_user_color(user: DBUser, default='#4a4a4a') -> str:
     if not user.groups:
-        return "#000000"
+        return default
 
     primary_group_id = min(get_attributes(user.groups, 'group_id'))
     primary_group = next(group for group in user.groups if group.group_id == primary_group_id).group
