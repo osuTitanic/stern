@@ -63,7 +63,7 @@ def format_announcement(announcement: topics.DBForumTopic, session) -> dict:
 
     return {
         "date": f"{announcement.created_at.day}.{announcement.created_at.month}.{announcement.created_at.year}",
-        "link": f"/forum/t/{announcement.id}",
+        "link": f"/forum/{announcement.forum_id}/t/{announcement.id}",
         "title": announcement.title,
         "author": announcement.creator.name,
         "text": text if post else ""
