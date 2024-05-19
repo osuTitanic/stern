@@ -34,7 +34,7 @@
 
                 {# Calculate page range #}
                 {% set page_start = (0, current_page - 1)|max %}
-                {% set page_end = (total_pages, page_start + 4)|min %}
+                {% set page_end = (total_pages, page_start + 3)|min %}
 
                 {% for page in range(page_start, page_end + 1) %}
                     {% if page != current_page %}
@@ -135,7 +135,7 @@
 
                 {# Calculate page range #}
                 {% set page_start = (0, current_page - 1)|max %}
-                {% set page_end = (total_pages, page_start + 4)|min %}
+                {% set page_end = (total_pages, page_start + 3)|min %}
 
                 {% for page in range(page_start, page_end + 1) %}
                     {% if page != current_page %}
