@@ -84,7 +84,7 @@ def forum_view(forum_id: int):
             announcements=announcements,
             recent_topics=recent_topics,
             topic_count=topic_count,
-            total_pages=len(recent_topics) // 25,
+            total_pages=topic_count // 25,
             current_page=start // 25,
             session=session
         )
