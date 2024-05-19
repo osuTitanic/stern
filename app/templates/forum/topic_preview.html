@@ -1,6 +1,6 @@
 {# templates/forum/topic.html #}
 
-{% set post_count = repositories.topics.fetch_post_count(topic.id, session) %}
+{% set post_count = repositories.posts.fetch_count(topic.id, session) %}
 {% set posts_per_page = 12 %}
 {% set page_count = (post_count / posts_per_page)|ceil %}
 
