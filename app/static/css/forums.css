@@ -107,6 +107,8 @@ table {
 
 .light-row td {
     padding: 2px;
+    border: 1px solid #e2dffa;
+    border-radius: 2px;
 }
 
 .dark-row {
@@ -116,4 +118,6 @@ table {
 
 .dark-row td {
     padding: 2px;
+    border: 1px solid rgb(206, 215, 250);
+    border-radius: 2px;
 }
