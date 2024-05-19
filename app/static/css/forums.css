@@ -121,3 +121,7 @@ table {
     border: 1px solid rgb(206, 215, 250);
     border-radius: 2px;
 }
+
+.light-row img, .dark-row img {
+    vertical-align: middle;
+}
