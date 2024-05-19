@@ -43,6 +43,11 @@ def topic(forum_id: str, id: str):
             session=session
         )
 
+        post_count = posts.fetch_count(
+            topic_id=id,
+            session=session
+        )
+
         return utils.render_template(
             "forum/topic.html",
             css='forums.css',
@@ -50,5 +55,6 @@ def topic(forum_id: str, id: str):
             topic=topic,
             posts=topic_posts,
             current_page=(page - 1),
+            total_pages=post_count // 12,
             session=session
         )
