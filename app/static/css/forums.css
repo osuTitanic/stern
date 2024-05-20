@@ -125,3 +125,82 @@ table {
 .light-row img, .dark-row img {
     vertical-align: middle;
 }
+
+.bar {
+    margin-top: 2.5px;
+}
+
+.bar td {
+    height: 15px;
+    background-image: linear-gradient(rgb(123, 114, 207) 0%, rgb(91, 83, 153) 100%);
+}
+
+.post-spacing {
+    background-color: #9a9bdb;
+    height: 1px;
+    width: 100%;
+}
+
+.post-profile {
+    display: grid;
+    justify-content: center;
+    text-align: center;
+    width: 160px;
+    vertical-align: middle;
+    overflow: hidden;
+    font-size: 115%;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    border-radius: 5px;
+}
+
+.post-username {
+    font-size: 125%;
+}
+
+.post-profile > div {
+    padding: 3px;
+}
+
+.post-avatar {
+    background-color: white;
+    width: 130px;
+    height: 130px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+    margin: 5px auto;
+}
+
+.post-avatar img {
+    width: 128px;
+    height: 128px;
+}
+
+.groups {
+    display: flex;
+    justify-content: center;
+    overflow-wrap: break-word;
+    flex-wrap: wrap;
+}
+
+.group {
+    margin: 2.5px;
+    margin-bottom: 6px;
+    background-color: #f4f4f7;
+    border-radius: 2.5px;
+    padding: 4px;
+    padding-left: 5px;
+    padding-right: 5px;
+    line-height: 18px;
+    display: inline;
+    text-align: center;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+.group a:hover {
+    text-decoration: none;
+}
+
+.post-time {
+    text-align: right;
+    margin: 5px;
+}
