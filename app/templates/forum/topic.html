@@ -3,6 +3,10 @@
 {% extends "base.html" %}
 
 {% block content %}
+<style>
+    .page { margin: 0 }
+    .header-text { margin: 10px }
+</style>
 <h1 class="header-text">
     <a href="/forum" style="color:#5a5399">Index</a> »
     {% for parent_forum in forum|list_parent_forums|reverse %}
@@ -48,6 +52,70 @@
             {% endif %}
         </td>
     </table>
+    <table width="100%" cellspacing="0" class="bar">
+        <td></td>
+    </table>
+    {% if not posts %}
+        <p style="margin-top: 10px">
+            Hmmm... seems like nothing was posted here?
+        </p>
+    {% endif %}
+    {% for post in posts %}
+        <div class="post-spacing"></div>
+        <table class="post-table" width="100%" cellspacing="0" cellpadding="0">
+            <tbody><tr>
+                <td class="post-profile">
+                    <div class="post-username">
+                        <a href="/u/{{ post.user.id }}" style="color: {{ post.user|user_color }}">
+                            {{ post.user.name }}
+                        </a>
+                    </div>
+                    <a href="/u/{{ post.user.id }}">
+                        <div class="post-avatar">
+                            <img src="/a/{{ post.user_id }}?h=128" alt=" ">
+                        </div>
+                    </a>
+                    <div>
+                        {% set groups = repositories.groups.fetch_user_groups(post.user.id, session=session) %}
+                        {% if groups %}
+                        <div class="groups">
+                            {% for group in groups %}
+                            <div class="group">
+                                <a href="/g/{{ group.id }}" style="color: {{ group.color }}">
+                                    {{ group.short_name|upper }}
+                                </a>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        <div>0 posts</div>
+                        <div>
+                            <img src="/images/flags/{{ post.user.country|lower }}.gif" alt="Flag" class="flag">
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="post-time">
+                        <a href="#">{{ post.created_at }} ({{ post.created_at|timeago }})</a>
+                    </div>
+                    <div class="post-content">
+                        {{ post.content|bbcode|safe }}
+                    </div>
+                    {% if post.edit_count > 0 %}
+                    <div>
+                        Last edited by <a href="/u/{{ post.user.id }}">{{ post.user.name }}</a>
+                        {{ post.edit_time|timeago }}, edited {{ post.edit_count }} time{{ 's' if post.edit_count != 1 }} in total.
+                    </div>
+                    {% endif %}
+                    {% if post.user.userpage_signature %}
+                    <div class="post-signature">
+                        {{ post.user.userpage_signature|bbcode|safe }}
+                    </div>
+                    {% endif %}
+                </td>
+            </tr></tbody>
+        </table>
+    {% endfor %}
 </div>
 {# TODO: Posts... #}
 {% endblock content %}
