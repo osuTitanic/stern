@@ -88,7 +88,9 @@
                             {% endfor %}
                         </div>
                         {% endif %}
-                        <div>0 posts</div>
+                        <div>
+                            {{ repositories.users.fetch_post_count(post.user.id, session=session) }} posts
+                        </div>
                         <div>
                             <img src="/images/flags/{{ post.user.country|lower }}.gif" alt="Flag" class="flag">
                         </div>
