@@ -213,6 +213,8 @@ table {
 .post-content {
     overflow: auto;
     overflow-wrap: break-word;
+    min-height: 282px;
+    padding: 5px;
 }
 
 .post-signature {

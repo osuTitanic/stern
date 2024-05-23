@@ -97,18 +97,20 @@
                     </div>
                 </td>
                 <td style="vertical-align: top; width: 80%;">
-                    <div class="post-time">
-                        <a href="#" title="{{ post.created_at }}">{{ post.created_at|timeago }}</a>
+                    <div style="background-color: #ebe8ff;">
+                        <div class="post-time">
+                            <a href="#" title="{{ post.created_at }}">{{ post.created_at|timeago }}</a>
+                        </div>
+                        <div class="post-content">
+                            {{ post.content|bbcode|safe }}
+                        </div>
+                        {% if post.edit_count > 0 %}
+                        <div>
+                            Last edited by <a href="/u/{{ post.user.id }}">{{ post.user.name }}</a>
+                            {{ post.edit_time|timeago }}, edited {{ post.edit_count }} time{{ 's' if post.edit_count != 1 }} in total.
+                        </div>
+                        {% endif %}
                     </div>
-                    <div class="post-content">
-                        {{ post.content|bbcode|safe }}
-                    </div>
-                    {% if post.edit_count > 0 %}
-                    <div>
-                        Last edited by <a href="/u/{{ post.user.id }}">{{ post.user.name }}</a>
-                        {{ post.edit_time|timeago }}, edited {{ post.edit_count }} time{{ 's' if post.edit_count != 1 }} in total.
-                    </div>
-                    {% endif %}
                     {% if post.user.userpage_signature %}
                     <div class="post-signature">
                         {{ post.user.userpage_signature|bbcode|safe }}
