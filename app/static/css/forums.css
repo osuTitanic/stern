@@ -205,3 +205,13 @@ table {
     text-align: right;
     margin: 5px;
 }
+
+.post-time a {
+    color: #5a5a5a;
+    font-size: 90%;
+}
+
+.post-content {
+    overflow: auto;
+    overflow-wrap: break-word;
+}
