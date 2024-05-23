@@ -137,3 +137,39 @@ def update_userpage():
         return redirect(f'/u/{user_id}')
 
     return redirect('/account/settings/profile#userpage')
+
+@router.post('/profile/signature')
+@login_required
+def update_signature():
+    if (bbcode := request.form.get('bbcode')) is None:
+        return redirect('/account/settings/profile')
+
+    user_group_ids = [
+        entry.group_id
+        for entry in flask_login.current_user.groups
+    ]
+
+    is_admin = any([
+        1 in user_group_ids,
+        2 in user_group_ids,
+        4 in user_group_ids
+    ])
+
+    user_id = request.form.get('user_id', type=int)
+
+    if flask_login.current_user.id != user_id and not is_admin:
+        return redirect('/account/settings/profile')
+
+    # Update database
+    users.update(
+        user_id,
+        {'userpage_signature': bbcode}
+    )
+
+    # Update user object
+    flask_login.current_user.userpage_signature = bbcode
+
+    if user_id != flask_login.current_user.id:
+        return redirect(f'/u/{user_id}')
+
+    return redirect('/account/settings/profile#signature')
