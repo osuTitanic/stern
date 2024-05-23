@@ -15,6 +15,7 @@
     color: #868686;
     white-space: nowrap;
     font-weight: lighter;
+    overflow: auto;
 }
 
 .forum-home {
