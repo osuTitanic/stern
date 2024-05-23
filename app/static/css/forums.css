@@ -214,3 +214,15 @@ table {
     overflow: auto;
     overflow-wrap: break-word;
 }
+
+.post-signature {
+    vertical-align: bottom;
+    border-top: dashed 1px #bcb8e1;
+    background-color: #e5e1ff;
+    min-height: 30px;
+    max-height: 150px;
+    padding: 4px 4px 0px 4px;
+    overflow: hidden;
+    display: inline-block;
+    width: 98.6%;
+}
