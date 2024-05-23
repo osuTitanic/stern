@@ -96,7 +96,7 @@
                 </td>
                 <td>
                     <div class="post-time">
-                        <a href="#">{{ post.created_at }} ({{ post.created_at|timeago }})</a>
+                        <a href="#" title="{{ post.created_at }}">{{ post.created_at|timeago }}</a>
                     </div>
                     <div class="post-content">
                         {{ post.content|bbcode|safe }}
