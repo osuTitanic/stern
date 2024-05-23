@@ -56,5 +56,6 @@ def topic(forum_id: str, id: str):
             posts=topic_posts,
             current_page=(page - 1),
             total_pages=post_count // 12,
+            post_count=post_count,
             session=session
         )
