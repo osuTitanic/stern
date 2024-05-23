@@ -109,11 +109,18 @@
             {% endwith %}
         </form>
     </div>
-    {#
-        <div id="signature">
-            <h2>Edit Signature</h2>
-            <form class="section" action="/account/profile/signature" method="post"></form>
-        </div>
-    #}
+    <div id="signature">
+        <h2>Edit Signature</h2>
+        <form class="section" action="/account/settings/profile/signature" method="post">
+            {% with context = {
+                "current": current_user.userpage_signature,
+                "submit-text": "Update",
+                "min-height": "140px",
+                "user-id": current_user.id,
+            } %}
+                {% include "editor.html" %}
+            {% endwith %}
+        </form>
+    </div>
 </div>
 {% endblock content %}
