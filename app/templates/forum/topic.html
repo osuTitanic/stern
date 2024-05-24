@@ -59,98 +59,99 @@
         <p style="margin-top: 10px; margin-left: 5px;">
             Hmmm... seems like nothing was posted here?
         </p>
-    {% endif %}
-    {% for post in posts %}
-        <div class="post-spacing"></div>
-        <table class="post-table" width="100%" cellspacing="0" cellpadding="0">
-            <tbody><tr>
-                <td class="post-profile">
-                    <div class="post-username">
-                        <a href="/u/{{ post.user.id }}" style="color: {{ post.user|user_color }}">
-                            {{ post.user.name }}
-                        </a>
-                    </div>
-                    <a href="/u/{{ post.user.id }}">
-                        <div class="post-avatar">
-                            <img src="/a/{{ post.user_id }}?h=128" alt=" ">
+    {% else %}
+        {% for post in posts %}
+            <div class="post-spacing"></div>
+            <table class="post-table" width="100%" cellspacing="0" cellpadding="0">
+                <tbody><tr>
+                    <td class="post-profile">
+                        <div class="post-username">
+                            <a href="/u/{{ post.user.id }}" style="color: {{ post.user|user_color }}">
+                                {{ post.user.name }}
+                            </a>
                         </div>
-                    </a>
-                    <div>
-                        {% set groups = repositories.groups.fetch_user_groups(post.user.id, session=session) %}
-                        {% if groups %}
-                        <div class="groups">
-                            {% for group in groups %}
-                            <div class="group">
-                                <a href="/g/{{ group.id }}" style="color: {{ group.color }}">
-                                    {{ group.short_name|upper }}
-                                </a>
+                        <a href="/u/{{ post.user.id }}">
+                            <div class="post-avatar">
+                                <img src="/a/{{ post.user_id }}?h=128" alt=" ">
                             </div>
-                            {% endfor %}
+                        </a>
+                        <div>
+                            {% set groups = repositories.groups.fetch_user_groups(post.user.id, session=session) %}
+                            {% if groups %}
+                            <div class="groups">
+                                {% for group in groups %}
+                                <div class="group">
+                                    <a href="/g/{{ group.id }}" style="color: {{ group.color }}">
+                                        {{ group.short_name|upper }}
+                                    </a>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                            <div>
+                                {{ repositories.users.fetch_post_count(post.user.id, session=session) }} posts
+                            </div>
+                            <div>
+                                <img src="/images/flags/{{ post.user.country|lower }}.gif" alt="Flag" class="flag">
+                            </div>
+                        </div>
+                    </td>
+                    <td style="vertical-align: top; width: 80%;">
+                        <div style="background-color: #ebe8ff;">
+                            <div class="post-time">
+                                <a href="#" title="{{ post.created_at }}">{{ post.created_at|timeago }}</a>
+                            </div>
+                            <div class="post-content">
+                                {{ post.content|bbcode|safe }}
+                            </div>
+                            {% if post.edit_count > 0 %}
+                            <div>
+                                Last edited by <a href="/u/{{ post.user.id }}">{{ post.user.name }}</a>
+                                {{ post.edit_time|timeago }}, edited {{ post.edit_count }} time{{ 's' if post.edit_count != 1 }} in total.
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% if post.user.userpage_signature %}
+                        <div class="post-signature">
+                            {{ post.user.userpage_signature|bbcode|safe }}
                         </div>
                         {% endif %}
-                        <div>
-                            {{ repositories.users.fetch_post_count(post.user.id, session=session) }} posts
-                        </div>
-                        <div>
-                            <img src="/images/flags/{{ post.user.country|lower }}.gif" alt="Flag" class="flag">
-                        </div>
-                    </div>
-                </td>
-                <td style="vertical-align: top; width: 80%;">
-                    <div style="background-color: #ebe8ff;">
-                        <div class="post-time">
-                            <a href="#" title="{{ post.created_at }}">{{ post.created_at|timeago }}</a>
-                        </div>
-                        <div class="post-content">
-                            {{ post.content|bbcode|safe }}
-                        </div>
-                        {% if post.edit_count > 0 %}
-                        <div>
-                            Last edited by <a href="/u/{{ post.user.id }}">{{ post.user.name }}</a>
-                            {{ post.edit_time|timeago }}, edited {{ post.edit_count }} time{{ 's' if post.edit_count != 1 }} in total.
-                        </div>
-                        {% endif %}
-                    </div>
-                    {% if post.user.userpage_signature %}
-                    <div class="post-signature">
-                        {{ post.user.userpage_signature|bbcode|safe }}
-                    </div>
-                    {% endif %}
-                </td>
-            </tr></tbody>
-        </table>
-    {% endfor %}
-    <br>
-    <table width='100%'>
-        <td align="right">
-            {{ post_count }} posts |
-            {# Pagination #}
-                {% if current_page > 1 %}
-                {# "Back" button #}
-                <a href="/forum/{{ forum.id }}/t/{{ topic.id }}?page={{ current_page - 1 }}">Back</a>
-            {% endif %}
-
-            {# Calculate page range #}
-            {% set page_start = (0, current_page - 1)|max %}
-            {% set page_end = (total_pages, page_start + 3)|min %}
-
-            {% for page in range(page_start, page_end + 1) %}
-                {% if page != current_page %}
-                    <a href="/forum/{{ forum.id }}/t/{{ topic.id }}?page={{ page + 1 }}">{{ page + 1 }}</a>
-                {% else %}
-                    <strong>{{ page + 1 }}</strong>
+                    </td>
+                </tr></tbody>
+            </table>
+        {% endfor %}
+        <br>
+        <table width='100%'>
+            <td align="right">
+                {{ post_count }} posts |
+                {# Pagination #}
+                    {% if current_page > 1 %}
+                    {# "Back" button #}
+                    <a href="/forum/{{ forum.id }}/t/{{ topic.id }}?page={{ current_page - 1 }}">Back</a>
                 {% endif %}
-            {% endfor %}
 
-            {% if page_end < total_pages - 1 %}
-                ...
-                {# Last page after "..." #}
-                <a href="/forum/{{ forum.id }}/t/{{ topic.id }}?page={{ total_pages + 1 }}">{{ total_pages + 1 }}</a>
-                {# "Next" button #}
-                <a href="/forum/{{ forum.id }}/t/{{ topic.id }}?page={{ current_page + 2 }}">Next</a>
-            {% endif %}
-        </td>
-    </table>
+                {# Calculate page range #}
+                {% set page_start = (0, current_page - 1)|max %}
+                {% set page_end = (total_pages, page_start + 3)|min %}
+
+                {% for page in range(page_start, page_end + 1) %}
+                    {% if page != current_page %}
+                        <a href="/forum/{{ forum.id }}/t/{{ topic.id }}?page={{ page + 1 }}">{{ page + 1 }}</a>
+                    {% else %}
+                        <strong>{{ page + 1 }}</strong>
+                    {% endif %}
+                {% endfor %}
+
+                {% if page_end < total_pages - 1 %}
+                    ...
+                    {# Last page after "..." #}
+                    <a href="/forum/{{ forum.id }}/t/{{ topic.id }}?page={{ total_pages + 1 }}">{{ total_pages + 1 }}</a>
+                    {# "Next" button #}
+                    <a href="/forum/{{ forum.id }}/t/{{ topic.id }}?page={{ current_page + 2 }}">Next</a>
+                {% endif %}
+            </td>
+        </table>
+    {% endif %}
 </div>
 {# TODO: Posts... #}
 {% endblock content %}
