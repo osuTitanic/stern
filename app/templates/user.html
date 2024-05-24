@@ -122,8 +122,7 @@
             </div>
             <div title="Total Posts" class="activity">
                 <i class="fa-regular fa-pen-to-square" style="color: #76777b;"></i>
-                {# TODO #}
-                <p>0 posts</p>
+                <p>{{ total_posts }} posts</p>
             </div>
         </div>
         {% if user.playstyle > 0 or current_user.id == user.id %}

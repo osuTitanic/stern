@@ -72,6 +72,7 @@ def userpage(query: str):
             achievements={a.name:a for a in user.achievements},
             activity=activities.fetch_recent(user.id, int(mode), session=session),
             current_stats=stats.fetch_by_mode(user.id, int(mode), session=session),
+            total_posts=users.fetch_post_count(user.id, session=session),
             groups=groups.fetch_user_groups(user.id, session=session),
             site_title=f"{user.name} - Player Info",
             site_description=f"Rank ({GameMode(int(mode)).formatted}): Global: #{pp_rank} | Country: #{pp_rank_country}",
