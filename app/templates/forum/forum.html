@@ -120,41 +120,45 @@
                 {% endfor %}
             {% endif %}
         </tbody>
-        {% endif %}
     </table>
     <table width='100%'>
         <tbody>
-        <tr>
-            <td align="right">
-                <a href="#">Jump</a> |
-                {# Pagination #}
-                {% if current_page > 1 %}
+            <tr>
+                <td align="right">
+                    <a href="#">Jump</a> |
+                    {# Pagination #}
+                    {% if current_page > 1 %}
                     {# "Back" button #}
                     <a href="/forum/{{ forum.id }}?page={{ current_page - 1 }}">Back</a>
-                {% endif %}
-
-                {# Calculate page range #}
-                {% set page_start = (0, current_page - 1)|max %}
-                {% set page_end = (total_pages, page_start + 3)|min %}
-
-                {% for page in range(page_start, page_end + 1) %}
-                    {% if page != current_page %}
-                        <a href="/forum/{{ forum.id }}?page={{ page + 1 }}">{{ page + 1 }}</a>
-                    {% else %}
-                        <strong>{{ page + 1 }}</strong>
                     {% endif %}
-                {% endfor %}
 
-                {% if page_end < total_pages - 1 %}
+                    {# Calculate page range #}
+                    {% set page_start = (0, current_page - 1)|max %}
+                    {% set page_end = (total_pages, page_start + 3)|min %}
+
+                    {% for page in range(page_start, page_end + 1) %}
+                    {% if page != current_page %}
+                    <a href="/forum/{{ forum.id }}?page={{ page + 1 }}">{{ page + 1 }}</a>
+                    {% else %}
+                    <strong>{{ page + 1 }}</strong>
+                    {% endif %}
+                    {% endfor %}
+
+                    {% if page_end < total_pages - 1 %}
                     ...
                     {# Last page after "..." #}
                     <a href="/forum/{{ forum.id }}?page={{ total_pages + 1 }}">{{ total_pages + 1 }}</a>
                     {# "Next" button #}
                     <a href="/forum/{{ forum.id }}?page={{ current_page + 2 }}">Next</a>
-                {% endif %}
-            </td>
-        </tr>
+                    {% endif %}
+                </td>
+            </tr>
         </tbody>
     </table>
+    {% else %}
+    <p style="margin-top: 10px; margin-left: 2.5px;">
+        Hmmm... seems like nothing was posted here yet.
+    </p>
+    {% endif %}
 </div>
 {% endblock content %}
