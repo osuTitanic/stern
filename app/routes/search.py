@@ -52,10 +52,17 @@ def download_beatmapset(id: int):
 
     no_video = request.args.get('novideo', False, type=bool)
 
-    if set.server != 0:
-        return redirect(f'/api/beatmaps/osz/{id}{"?noVideo=" if no_video else ""}')
+    if not (response := app.session.storage.api.osz(set.id, no_video)):
+        return abort(code=404)
 
-    return redirect(f"https://osu.direct/d/{set.id}{'?noVideo=' if no_video else ''}")
+    return Response(
+        response.iter_content(6400),
+        mimetype='application/octet-stream',
+        headers={
+            'Content-Disposition': f'attachment; filename={set.id} {set.artist} - {set.title}.osz',
+            'Content-Length': response.headers.get('Content-Length', 0)
+        }
+    )
 
 @router.get('/<id>')
 def redirect_to_set(id: int):
