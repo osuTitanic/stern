@@ -78,6 +78,20 @@ def update_profile_settings():
             error='Please enter in a valid url!'
         )
 
+    if flask_login.current_user.restricted:
+        return utils.render_template(
+            'settings/profile.html',
+            css='settings.css',
+            error='Your account was restricted.'
+        )
+
+    if flask_login.current_user.silence_end:
+        return utils.render_template(
+            'settings/profile.html',
+            css='settings.css',
+            error='Your account was silenced.'
+        )
+
     updates = {
         'userpage_interests': interests,
         'userpage_location': location,
@@ -121,7 +135,12 @@ def update_userpage():
 
     user_id = request.form.get('user_id', type=int)
 
-    if flask_login.current_user.id != user_id and not is_admin:
+    if any([
+        flask_login.current_user.id != user_id and not is_admin,
+        not flask_login.current_user.activated,
+        flask_login.current_user.silence_end,
+        flask_login.current_user.restricted
+    ]):
         return redirect('/account/settings/profile')
 
     # Update database
