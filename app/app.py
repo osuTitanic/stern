@@ -236,7 +236,7 @@ def get_status_icon(topic: DBForumTopic) -> str:
 def not_found(error: NotFound) -> Tuple[str, int]:
     return utils.render_template(
         content=error.description,
-        name='404.html',
+        template_name='404.html',
         css='404.css',
         title='Not Found - osu!Titanic'
     ), 404

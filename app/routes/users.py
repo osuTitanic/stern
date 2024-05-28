@@ -62,7 +62,7 @@ def userpage(query: str):
         ppv1_rank = leaderboards.ppv1_rank(user.id, int(mode))
 
         return utils.render_template(
-            name='user.html',
+            template_name='user.html',
             user=user,
             css='user.css',
             mode=int(mode),
