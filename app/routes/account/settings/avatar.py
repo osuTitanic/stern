@@ -29,6 +29,12 @@ def update_avatar():
     if not (avatar := request.files.get('avatar')):
         return get_profile_page('Please provide a valid image!')
 
+    if flask_login.current_user.restricted:
+        return get_profile_page('Your account was restricted.')
+
+    if flask_login.current_user.silence_end:
+        return get_profile_page('Your account was silenced.')
+
     avatar.stream.seek(0, io.SEEK_END)
     size = avatar.stream.tell()
 
