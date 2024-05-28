@@ -3,4 +3,37 @@
 {% extends "base.html" %}
 
 {% block content %}
+<h1 class="header-text">
+    <a href="/forum" style="color:#5a5399">Index</a> »
+    {% for parent_forum in forum|list_parent_forums|reverse %}
+        <a href="/forum/{{ parent_forum.id }}">
+            {{ parent_forum.name }}
+        </a> »
+    {% endfor %}
+    <a href="/forum/{{ forum.id }}">
+        {{ forum.name }}
+    </a> »
+    <a href="/forum/{{ forum.id }}/t/{{ topic.id }}">
+        {{ topic.title }}
+    </a>
+</h1>
+<form action="/forum/{{ forum.id }}/t/{{ topic.id }}/post?action={{ action }}&id={{ action_id }}"
+      method="post">
+    {% if action == "create" %}
+        <h2>Subject: <input type="text" placeholder="..." name="title" class="nav-search"> </h2>
+    {% endif %}
+    <div>
+        {# Editor #}
+        {% with context = {
+            "submit-text": action|capitalize,
+            "min-height": "200px",
+            "user-id": current_user.id,
+        } %}
+            {% include "editor.html" %}
+        {% endwith %}
+        {# Notify #}
+        <input type="checkbox" class="radio" name="notify">
+        <label for="notify">Notify me when a reply is posted</label>
+    </div>
+</form>
 {% endblock content %}
