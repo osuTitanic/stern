@@ -137,7 +137,7 @@ def format_chat(text: str) -> str:
                .replace(">", "&gt;")
 
     # Replace chat links with html links
-    pattern = r'\[([^\s\]]+)\s+([^\s\]]+)\]'
+    pattern = r'\[([^\s\]]+)\s+(.+?)\]'
     replacement = r'<a href="\1">\2</a>'
     result = re.sub(pattern, replacement, text)
 
