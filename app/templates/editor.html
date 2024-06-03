@@ -5,15 +5,19 @@
 </p>
 <textarea class="bbcode-editor" name="bbcode" style="resize: none; min-height: {{ context['min-height'] }};">
 {%- if context['current'] -%}
-{{ context['current'] | replace('\\r\\n', '\n') | replace('\\n', '\\n') }}
+    {{ context['current'] | replace('\\r\\n', '\n') | replace('\\n', '\\n') }}
 {%- endif -%}
-</textarea>
-<br>
+</textarea><br>
+
 <input type="hidden" name="user_id" value="{{ context['user-id'] }}">
-<input type="submit" value="{{ context['submit-text'] }}">
-<button class="bbcode-preview-button" onclick="return loadBBCodePreview(this)">Preview</button>
+
+<div class="post-buttons" style="justify-content: flex-start;">
+    <input type="submit" value="{{ context['submit-text'] }}" class="button-blue">
+    <button class="bbcode-preview-button button-blue" onclick="return loadBBCodePreview(this)">Preview</button>
+</div><br>
+
 {% if context['current'] %}
-<div class="bbcode-preview bbcode">
-{{ context['current']|bbcode_nowrap|safe }}
-</div>
+    <div class="bbcode-preview bbcode">
+        {{ context['current']|bbcode_nowrap|safe }}
+    </div>
 {% endif %}

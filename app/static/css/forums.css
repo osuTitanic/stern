@@ -238,7 +238,10 @@ table {
     padding: 5px;
 }
 
-.post-buttons a {
+.post-buttons a,
+.post-buttons a:visited,
+.post-buttons input,
+.post-buttons button {
     border-radius: 5px;
     margin-right: 5px;
     color: rgb(236, 236, 236);
