@@ -228,3 +228,42 @@ table {
     display: inline-block;
     width: 98.6%;
 }
+
+.post-buttons {
+    text-align: right;
+    min-height: 15px;
+    font-size: 110%;
+    display: flex;
+    justify-content: flex-end;
+    padding: 5px;
+}
+
+.post-buttons a {
+    border-radius: 5px;
+    margin-right: 5px;
+    color: rgb(236, 236, 236);
+    padding: 4px;
+    padding-right: 10px;
+    padding-left: 10px;
+    text-decoration: none;
+}
+
+.post-buttons a:hover {
+    color: white;
+}
+
+.button-blue {
+    background-image: linear-gradient(rgb(123, 114, 207) 0%, rgb(91, 83, 153) 100%);
+}
+
+.button-blue:hover {
+    background-image: linear-gradient(rgb(83, 147, 207) 0%, rgb(58, 109, 156) 100%);
+}
+
+.button-red {
+    background-image: linear-gradient(rgb(209, 63, 63) 0%, rgb(155, 56, 56) 100%);
+}
+
+.button-red:hover {
+    background-image: linear-gradient(rgb(230, 49, 49) 0%, rgb(211, 51, 51) 100%);
+}
