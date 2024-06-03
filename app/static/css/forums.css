@@ -278,4 +278,6 @@ table {
 
 .post-subject input {
     width: 60%;
+    border-color: gray;
+    border-width: 1px;
 }
