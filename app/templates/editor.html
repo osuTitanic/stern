@@ -20,6 +20,9 @@
 <div class="post-buttons" style="justify-content: flex-start;">
     <input type="submit" value="{{ context['submit-text'] }}" class="button-blue">
     <button class="bbcode-preview-button button-blue" onclick="return loadBBCodePreview(this)">Preview</button>
+    {% if context['cancel'] %}
+        <a href="./" class="button-red">Cancel</a>
+    {% endif %}
 </div>
 
 {% if context['current'] %}
