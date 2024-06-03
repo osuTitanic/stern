@@ -20,7 +20,9 @@
 <form action="/forum/{{ forum.id }}/t/{{ topic.id }}/post"
       method="post">
     {% if action == "create" %}
-        <h2>Subject: <input type="text" placeholder="..." name="title" class="nav-search"> </h2><br>
+        <p class="post-subject">
+            Subject: <input type="text" placeholder="..." name="title" class="nav-search">
+        </p>
     {% endif %}
     <div>
         {# Editor #}

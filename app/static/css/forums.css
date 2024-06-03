@@ -270,3 +270,12 @@ table {
 .button-red:hover {
     background-image: linear-gradient(rgb(230, 49, 49) 0%, rgb(211, 51, 51) 100%);
 }
+
+.post-subject {
+    font-size: 110%;
+    margin-bottom: 15px;
+}
+
+.post-subject input {
+    width: 60%;
+}
