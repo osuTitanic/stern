@@ -104,6 +104,15 @@
                             <div class="post-content">
                                 {{ post.content|bbcode|safe }}
                             </div>
+                            <div class="post-buttons">
+                            {% if not current_user.is_anonymous %}
+                                {% if current_user.id == post.user.id %}
+                                    <a class="button-red" onclick="deletePost(post.id);">Delete</a>
+                                    <a class="button-blue" href="./{{ topic.id }}/post?action=edit&action_id={{ post.id }}">Edit</a>
+                                {% endif %}
+                                <a class="button-blue" href="./{{ topic.id }}/post?action=quote&action_id={{ post.id }}">Quote</a>
+                            {% endif %}
+                            </div>
                             {% if post.edit_count > 0 %}
                             <div>
                                 Last edited by <a href="/u/{{ post.user.id }}">{{ post.user.name }}</a>
