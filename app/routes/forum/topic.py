@@ -7,7 +7,7 @@ import app
 
 router = Blueprint("forum-topics", __name__)
 
-@router.get('/<forum_id>/t/<id>')
+@router.get('/<forum_id>/t/<id>/')
 def topic(forum_id: str, id: str):
     if not forum_id.isdigit():
         return abort(
