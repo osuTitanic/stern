@@ -20,7 +20,7 @@
 <form action="/forum/{{ forum.id }}/t/{{ topic.id }}/post"
       method="post">
     {% if action == "create" %}
-        <h2>Subject: <input type="text" placeholder="..." name="title" class="nav-search"> </h2>
+        <h2>Subject: <input type="text" placeholder="..." name="title" class="nav-search"> </h2><br>
     {% endif %}
     <div>
         {# Editor #}
@@ -28,14 +28,13 @@
             "submit-text": action|capitalize,
             "min-height": "200px",
             "user-id": current_user.id,
+            "notify": true,
+            "cancel": true
         } %}
             {% include "editor.html" %}
         {% endwith %}
-        {# Notify #}
-        <input type="checkbox" class="radio" name="notify">
         <input type="hidden" name="action" value="{{ action }}">
         <input type="hidden" name="action_id" value="{{ action_id }}">
-        <label for="notify">Notify me when a reply is posted</label>
     </div>
 </form>
 {% endblock content %}
