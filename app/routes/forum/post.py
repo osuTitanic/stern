@@ -38,7 +38,14 @@ def post(forum_id: str, topic_id: str):
         action = request.args.get('action', default='post')
         action_id = request.args.get('id', type=int)
 
-        if action not in ('post', 'edit', 'create'):
+        allowed_actions = (
+            'create',
+            'post',
+            'edit',
+            'quote'
+        )
+
+        if action not in allowed_actions:
             return abort(code=404)
 
         return utils.render_template(
