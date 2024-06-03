@@ -46,7 +46,7 @@ function toggleSpoiler(root) {
 }
 
 function loadBBCodePreview(element) {
-    const bbcodeWrapper = element.parentElement;
+    const bbcodeWrapper = element.parentElement.parentElement;
     const bbcodeEditor = bbcodeWrapper.querySelector('textarea');
     const form = new FormData();
     form.set('bbcode', bbcodeEditor.value);
