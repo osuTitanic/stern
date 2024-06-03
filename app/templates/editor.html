@@ -13,10 +13,10 @@
 <div style="margin: 5px">
     <input type="checkbox" class="radio" name="notify">
     <label for="notify">Notify me when a reply is posted</label>
-    <input type="hidden" name="user_id" value="{{ context['user-id'] }}">
 </div>
 {% endif %}
 
+<input type="hidden" name="user_id" value="{{ context['user-id'] }}">
 <div class="post-buttons" style="justify-content: flex-start;">
     <input type="submit" value="{{ context['submit-text'] }}" class="button-blue">
     <button class="bbcode-preview-button button-blue" onclick="return loadBBCodePreview(this)">Preview</button>
