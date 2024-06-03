@@ -17,7 +17,7 @@
         {{ topic.title }}
     </a>
 </h1>
-<form action="/forum/{{ forum.id }}/t/{{ topic.id }}/post?action={{ action }}&id={{ action_id }}"
+<form action="/forum/{{ forum.id }}/t/{{ topic.id }}/post"
       method="post">
     {% if action == "create" %}
         <h2>Subject: <input type="text" placeholder="..." name="title" class="nav-search"> </h2>
@@ -33,6 +33,8 @@
         {% endwith %}
         {# Notify #}
         <input type="checkbox" class="radio" name="notify">
+        <input type="hidden" name="action" value="{{ action }}">
+        <input type="hidden" name="action_Id" value="{{ action_id }}">
         <label for="notify">Notify me when a reply is posted</label>
     </div>
 </form>
