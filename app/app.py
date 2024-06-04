@@ -248,7 +248,7 @@ def forbidden(error: Forbidden) -> Tuple[str, int]:
         template_name='error.html',
         css='error.css',
         title='Forbidden - osu!Titanic'
-    ), 404
+    ), 403
 
 @flask.errorhandler(400)
 def bad_request(error: BadRequest) -> Tuple[str, int]:
@@ -257,7 +257,7 @@ def bad_request(error: BadRequest) -> Tuple[str, int]:
         template_name='error.html',
         css='error.css',
         title='Bad Request - osu!Titanic'
-    ), 500
+    ), 400
 
 @flask.errorhandler(500)
 def internal_error(error: InternalServerError) -> Tuple[str, int]:
