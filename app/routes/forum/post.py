@@ -144,7 +144,9 @@ def handle_post(topic: DBForumTopic, _: int, session: Session) -> Response:
     )
 
     if not content:
-        return abort(400)
+        return redirect(
+            f"/forum/{topic.forum_id}/t/{topic.id}"
+        )
 
     notify = request.form.get(
         'notify',
@@ -205,7 +207,9 @@ def handle_post_edit(topic: DBForumTopic, post_id: int, session: Session) -> Res
     )
 
     if not content:
-        return abort(400)
+        return redirect(
+            f"/forum/{topic.forum_id}/t/{topic.id}/p/{post.id}"
+        )
 
     notify = request.form.get(
         'notify',
