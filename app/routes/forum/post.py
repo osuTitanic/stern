@@ -9,14 +9,14 @@ from flask import (
 )
 
 from app.common.database import DBForumPost, DBForumTopic
-from app.common.database import topics
+from app.common.database import topics, posts
 
 import utils
 import app
 
 router = Blueprint("forum-posts", __name__)
 
-@router.get('/<forum_id>/t/<topic_id>/post')
+@router.get('/<forum_id>/t/<topic_id>/post/')
 def post_view(forum_id: str, topic_id: str):
     if not forum_id.isdigit():
         return abort(
@@ -56,14 +56,44 @@ def post_view(forum_id: str, topic_id: str):
         if action not in allowed_actions:
             return abort(code=404)
 
+        text = fetch_post_text(
+            action,
+            int(action_id or '-1'),
+            session=session
+        )
+
         return utils.render_template(
             "forum/post.html",
             css='forums.css',
+            current_text=text,
             forum=topic.forum,
             topic=topic,
             action=action,
             action_id=action_id
         )
+
+def fetch_post_text(
+    action: str,
+    action_id: int,
+    session: Session
+) -> str | None:
+    if action == 'edit':
+        if not action_id:
+            return
+
+        if not (post := posts.fetch_one(action_id, session=session)):
+            return
+
+        return post.content
+
+    elif action == 'quote':
+        if not action_id:
+            return
+
+        if not (post := posts.fetch_one(int(action_id), session=session)):
+            return
+
+        return f"[quote={post.user.name}]{post.content}[/quote]"
 
 def handle_post(topic: DBForumTopic, _: int, session: Session) -> Response:
     return abort(501) # TODO
