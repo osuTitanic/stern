@@ -13,16 +13,16 @@
 <div style="margin: 12px; float: right; text-align: right;">
     <input type="checkbox" class="radio" name="notify">
     <label for="notify">Notify me when a reply is posted</label>
-    {% if current_user_is_admin %}
-    <div style="margin-bottom: 10px; margin-top: 10px">
-        Post topic as:
-        <input type="radio" name="type" value="global" id="global" checked>
-        <label for="global">Global</label>
-        <input type="radio" name="type" value="pinned" id="pinned">
-        <label for="pinned">Pinned</label>
-        <input type="radio" name="type" value="announcement" id="announcement">
-        <label for="announcement">Announcement</label>
-    </div>
+    {% if current_user_is_admin and context['topic-controls'] %}
+        <div style="margin-bottom: 10px; margin-top: 10px">
+            Post topic as:
+            <input type="radio" name="type" value="global" id="global" checked>
+            <label for="global">Global</label>
+            <input type="radio" name="type" value="pinned" id="pinned">
+            <label for="pinned">Pinned</label>
+            <input type="radio" name="type" value="announcement" id="announcement">
+            <label for="announcement">Announcement</label>
+        </div>
     {% endif %}
 </div>
 {% endif %}

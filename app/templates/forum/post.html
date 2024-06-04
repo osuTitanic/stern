@@ -31,14 +31,15 @@
             "submit-text": action|capitalize,
             "min-height": "200px",
             "user-id": current_user.id,
+            "topic-controls": action == "create",
+            "draft": action == "post",
             "forum-controls": true,
-            "draft": true if action == "post" else false,
             "cancel": true
         } %}
             {% include "editor.html" %}
         {% endwith %}
         <input type="hidden" name="action" value="{{ action }}">
-        <input type="hidden" name="action_id" value="{{ action_id }}">
+        <input type="hidden" name="id" value="{{ action_id }}">
     </div>
 </form>
 {% endblock content %}
