@@ -35,6 +35,10 @@ TOPIC_NOT_FOUND = (
     '</ul>'
 )
 
+TOPIC_LOCKED = (
+    '<h1>The topic you are trying to post in is locked!</h1>'
+)
+
 POST_NOT_FOUND = (
     '<h1>The post you are looking for was not found!</h1>'
     'There are a few possible reasons for this:'
@@ -43,6 +47,10 @@ POST_NOT_FOUND = (
     '<li>The post may have been deleted.</li>'
     '<li>You may have made a typo!</li>'
     '</ul>'
+)
+
+POST_LOCKED = (
+    '<h1>The post you are trying to edit is locked!</h1>'
 )
 
 ACHIEVEMENTS = {
