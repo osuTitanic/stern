@@ -27,6 +27,7 @@
     <div>
         {# Editor #}
         {% with context = {
+            "current": current_text,
             "submit-text": action|capitalize,
             "min-height": "200px",
             "user-id": current_user.id,
