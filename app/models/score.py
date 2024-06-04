@@ -11,6 +11,7 @@ class ScoreModel(BaseModel):
     submitted_at: datetime
     mode: int
     status: int
+    client_version: int
     pp: float
     acc: float
     total_score: int
