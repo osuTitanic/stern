@@ -49,7 +49,6 @@ def post_view(forum_id: str, topic_id: str):
         action_id = request.args.get('id', type=int)
 
         allowed_actions = (
-            'create',
             'post',
             'edit',
             'quote'
@@ -132,9 +131,6 @@ def update_notifications(notify: bool, user_id: int, topic_id: int, session: Ses
     )
 
 def handle_post(topic: DBForumTopic, _: int, session: Session) -> Response:
-    return abort(501) # TODO
-
-def handle_topic_create(topic: DBForumTopic, _: int, session: Session) -> Response:
     return abort(501) # TODO
 
 def handle_post_edit(topic: DBForumTopic, post_id: int, session: Session) -> Response:
@@ -228,7 +224,6 @@ def do_post(forum_id: str, topic_id: str):
         action_id = request.form.get('id', type=int)
 
         actions = {
-            'create': handle_topic_create,
             'edit': handle_post_edit,
             'quote': handle_post,
             'post': handle_post
