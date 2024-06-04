@@ -138,7 +138,63 @@ def handle_topic_create(topic: DBForumTopic, _: int, session: Session) -> Respon
     return abort(501) # TODO
 
 def handle_post_edit(topic: DBForumTopic, post_id: int, session: Session) -> Response:
-    return abort(501) # TODO
+    if topic.locked_at:
+        return abort(
+            403,
+            description=app.constants.TOPIC_LOCKED
+        )
+
+    if not (post := posts.fetch_one(post_id, session=session)):
+        return abort(
+            404,
+            description=app.constants.POST_NOT_FOUND
+        )
+
+    if post.edit_locked:
+        return abort(
+            403,
+            description=app.constants.POST_LOCKED
+        )
+
+    user_id = request.form.get(
+        'user_id',
+        type=int,
+        default=-1
+    )
+
+    if post.user_id != user_id:
+        return abort(403)
+
+    content = request.form.get(
+        'bbcode',
+        type=str
+    )
+
+    if not content:
+        return abort(400)
+
+    notify = request.form.get(
+        'notify',
+        type=bool,
+        default=False
+    )
+
+    update_notifications(
+        notify,
+        current_user.id,
+        topic.id,
+        session=session
+    )
+
+    posts.update(
+        post.id,
+        {'content': content},
+        session=session
+    )
+
+    return redirect(
+        f"/forum/{topic.forum_id}/t/{topic.id}/p/{post.id}"
+    )
 
 @router.post('/<forum_id>/t/<topic_id>/post')
 @login_required
