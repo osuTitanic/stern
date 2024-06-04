@@ -116,6 +116,21 @@ def fetch_post_text(
 
         return drafts[0].content
 
+def update_notifications(notify: bool, user_id: int, topic_id: int, session: Session):
+    if notify:
+        topics.add_subscriber(
+            topic_id,
+            user_id,
+            session=session
+        )
+        return
+
+    topics.delete_subscriber(
+        topic_id,
+        user_id,
+        session=session
+    )
+
 def handle_post(topic: DBForumTopic, _: int, session: Session) -> Response:
     return abort(501) # TODO
 
