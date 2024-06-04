@@ -4,7 +4,7 @@
 .page {
     font-weight: normal;
     display: grid;
-    margin: auto;
+    margin: auto 25px auto;
     justify-content: center;
 }
 

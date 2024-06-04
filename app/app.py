@@ -236,8 +236,8 @@ def get_status_icon(topic: DBForumTopic) -> str:
 def not_found(error: NotFound) -> Tuple[str, int]:
     return utils.render_template(
         content=error.description or 'Not Found',
-        template_name='404.html',
-        css='404.css',
+        template_name='error.html',
+        css='error.css',
         title='Not Found - osu!Titanic'
     ), 404
 
@@ -245,8 +245,8 @@ def not_found(error: NotFound) -> Tuple[str, int]:
 def forbidden(error: Forbidden) -> Tuple[str, int]:
     return utils.render_template(
         content=error.description or 'Forbidden',
-        template_name='404.html',
-        css='404.css',
+        template_name='error.html',
+        css='error.css',
         title='Forbidden - osu!Titanic'
     ), 404
 
@@ -254,8 +254,8 @@ def forbidden(error: Forbidden) -> Tuple[str, int]:
 def bad_request(error: BadRequest) -> Tuple[str, int]:
     return utils.render_template(
         content=error.description or 'Bad Request',
-        template_name='404.html',
-        css='404.css',
+        template_name='error.html',
+        css='error.css',
         title='Bad Request - osu!Titanic'
     ), 500
 
@@ -263,7 +263,7 @@ def bad_request(error: BadRequest) -> Tuple[str, int]:
 def internal_error(error: InternalServerError) -> Tuple[str, int]:
     return utils.render_template(
         content=error.description or 'Internal Server Error',
-        template_name='404.html',
-        css='404.css',
+        template_name='error.html',
+        css='error.css',
         title='Internal Server Error - osu!Titanic'
     ), 500
