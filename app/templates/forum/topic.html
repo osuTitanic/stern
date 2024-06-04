@@ -108,9 +108,9 @@
                             <div class="post-buttons">
                                 {% if current_user.id == post.user.id %}
                                     <a class="button-red" onclick="deletePost(post.id);">Delete</a>
-                                    <a class="button-blue" href="./post?action=edit&action_id={{ post.id }}">Edit</a>
+                                    <a class="button-blue" href="./post?action=edit&id={{ post.id }}">Edit</a>
                                 {% endif %}
-                                <a class="button-blue" href="./post?action=quote&action_id={{ post.id }}">Quote</a>
+                                <a class="button-blue" href="./post?action=quote&id={{ post.id }}">Quote</a>
                             </div>
                             {% endif %}
                             {% if post.edit_count > 0 %}
