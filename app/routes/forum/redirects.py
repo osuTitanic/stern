@@ -37,6 +37,7 @@ def get_topic_by_post_and_topic(forum_id: str, topic_id: str, post_id: str):
 
         page_count = posts.fetch_count_before_post(
             post_id,
+            topic_id,
             session=session
         )
 
