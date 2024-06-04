@@ -131,7 +131,44 @@ def update_notifications(notify: bool, user_id: int, topic_id: int, session: Ses
     )
 
 def handle_post(topic: DBForumTopic, _: int, session: Session) -> Response:
-    return abort(501) # TODO
+    if topic.locked_at:
+        return abort(
+            403,
+            description=app.constants.TOPIC_LOCKED
+        )
+
+    content = request.form.get(
+        'bbcode',
+        type=str
+    )
+
+    if not content:
+        return abort(400)
+
+    notify = request.form.get(
+        'notify',
+        type=bool,
+        default=False
+    )
+
+    update_notifications(
+        notify,
+        current_user.id,
+        topic.id,
+        session=session
+    )
+
+    post = posts.create(
+        topic.id,
+        topic.forum_id,
+        current_user.id,
+        content,
+        session=session
+    )
+
+    return redirect(
+        f"/forum/{topic.forum_id}/t/{topic.id}/p/{post.id}"
+    )
 
 def handle_post_edit(topic: DBForumTopic, post_id: int, session: Session) -> Response:
     if topic.locked_at:
