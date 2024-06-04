@@ -116,7 +116,7 @@
                             </div>
                             {% endif %}
                             {% if post.edit_count > 0 %}
-                            <div>
+                            <div style="padding: 5px">
                                 Last edited by <a href="/u/{{ post.user.id }}">{{ post.user.name }}</a>
                                 {{ post.edit_time|timeago }}, edited {{ post.edit_count }} time{{ 's' if post.edit_count != 1 }} in total.
                             </div>
