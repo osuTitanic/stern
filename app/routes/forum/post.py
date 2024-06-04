@@ -1,6 +1,7 @@
 
 from flask_login import login_required, current_user
 from sqlalchemy.orm import Session
+from datetime import datetime
 from flask import (
     Blueprint,
     Response,
@@ -221,7 +222,11 @@ def handle_post_edit(topic: DBForumTopic, post_id: int, session: Session) -> Res
 
     posts.update(
         post.id,
-        {'content': content},
+        {
+            'content': content,
+            'edit_count': DBForumPost.edit_count + 1,
+            'edit_time': datetime.now()
+        },
         session=session
     )
 
