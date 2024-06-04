@@ -66,10 +66,12 @@ def render_code(tag_name, value, options, parent, context):
     if 'quote' not in options:
         return '<blockquote>%s</blockquote>' % value
 
-    return '<blockquote>' \
-           '<h4>%s wrote:</h4>' \
-           '%s' \
-           '</blockquote>' % (options["quote"], value)
+    return (
+        '<blockquote>'
+        '<h4>%s wrote:</h4><i>'
+        '%s'
+        '</i></blockquote>' % (options["quote"], value)
+    )
 
 @parser.formatter('size')
 def render_size(tag_name, value, options, parent, context):
@@ -101,9 +103,11 @@ def render_list(tag_name, value, options, parent, context):
 
 @parser.formatter('email')
 def render_email(tag_name, value, options, parent, context):
-    email = options.get('email') \
-        if 'email' in options \
+    email = (
+        options.get('email')
+        if 'email' in options
         else value
+    )
 
     if not (regexes.EMAIL.match(email)):
         return value
