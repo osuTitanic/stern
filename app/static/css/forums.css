@@ -271,6 +271,14 @@ table {
     background-image: linear-gradient(rgb(230, 49, 49) 0%, rgb(211, 51, 51) 100%);
 }
 
+.button-grey {
+    background-image: linear-gradient(rgb(199, 199, 199) 0%, rgb(122, 122, 122) 100%);
+}
+
+.button-grey:hover {
+    background-image: linear-gradient(rgb(202, 202, 202) 0%, rgb(150, 150, 150) 100%);
+}
+
 .post-subject {
     font-size: 110%;
     margin-bottom: 15px;
