@@ -168,8 +168,8 @@ def do_post(forum_id: str, topic_id: str):
                 description=app.constants.FORUM_NOT_FOUND
             )
 
-        action = request.args.get('action', default='post')
-        action_id = request.args.get('id', type=int)
+        action = request.form.get('action', default='post')
+        action_id = request.form.get('id', type=int)
 
         actions = {
             'create': handle_topic_create,
