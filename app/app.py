@@ -4,10 +4,10 @@ from app.common.database.repositories import users, topics
 from app.common.helpers.external import location
 
 from flask import Flask, Request, redirect
-from werkzeug.exceptions import NotFound
 from datetime import datetime, timedelta
 from flask_login import LoginManager
 from typing import Tuple, Optional
+from werkzeug.exceptions import *
 
 from . import common
 from . import routes
@@ -242,7 +242,7 @@ def not_found(error: NotFound) -> Tuple[str, int]:
     ), 404
 
 @flask.errorhandler(403)
-def forbidden(error: NotFound) -> Tuple[str, int]:
+def forbidden(error: Forbidden) -> Tuple[str, int]:
     return utils.render_template(
         content=error.description or 'Forbidden',
         template_name='404.html',
@@ -250,11 +250,20 @@ def forbidden(error: NotFound) -> Tuple[str, int]:
         title='Forbidden - osu!Titanic'
     ), 404
 
+@flask.errorhandler(400)
+def bad_request(error: BadRequest) -> Tuple[str, int]:
+    return utils.render_template(
+        content=error.description or 'Bad Request',
+        template_name='404.html',
+        css='404.css',
+        title='Bad Request - osu!Titanic'
+    ), 500
+
 @flask.errorhandler(500)
-def internal_error(error: NotFound) -> Tuple[str, int]:
+def internal_error(error: InternalServerError) -> Tuple[str, int]:
     return utils.render_template(
         content=error.description or 'Internal Server Error',
-        template_name='500.html',
-        css='500.css',
+        template_name='404.html',
+        css='404.css',
         title='Internal Server Error - osu!Titanic'
     ), 500
