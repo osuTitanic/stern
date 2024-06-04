@@ -131,47 +131,47 @@
                 </tr></tbody>
             </table>
         {% endfor %}
-        <br>
-        <table width='100%'>
-            <td align="right" style="float: right">
-                {{ post_count }} posts |
-                {# Pagination #}
-                    {% if current_page > 1 %}
-                    {# "Back" button #}
-                    <a href="/forum/{{ forum.id }}/t/{{ topic.id }}?page={{ current_page - 1 }}">Back</a>
-                {% endif %}
-
-                {# Calculate page range #}
-                {% set page_start = (0, current_page - 1)|max %}
-                {% set page_end = (total_pages, page_start + 3)|min %}
-
-                {% for page in range(page_start, page_end + 1) %}
-                    {% if page != current_page %}
-                        <a href="/forum/{{ forum.id }}/t/{{ topic.id }}?page={{ page + 1 }}">{{ page + 1 }}</a>
-                    {% else %}
-                        <strong>{{ page + 1 }}</strong>
-                    {% endif %}
-                {% endfor %}
-
-                {% if page_end < total_pages - 1 %}
-                    ...
-                    {# Last page after "..." #}
-                    <a href="/forum/{{ forum.id }}/t/{{ topic.id }}?page={{ total_pages + 1 }}">{{ total_pages + 1 }}</a>
-                    {# "Next" button #}
-                    <a href="/forum/{{ forum.id }}/t/{{ topic.id }}?page={{ current_page + 2 }}">Next</a>
-                {% endif %}
-            </td>
-            <td align="left" style="float: left">
-                <div class="post-buttons-bottom" id="post-bottom">
-                    {% if not topic.locked_at %}
-                        <a href="/forum/{{ forum.id }}/t/{{ topic.id }}/post?action=post" class="button-blue">Reply</a>
-                        {% else %}
-                        <a href="#post-bottom" class="button-grey" title="This post is locked, only admins can reply to it.">Locked</a>
-                    {% endif %}
-                </div>
-            </td>
-        </table>
     {% endif %}
+    <br>
+    <table width='100%'>
+        <td align="right" style="float: right">
+            {{ post_count }} posts |
+            {# Pagination #}
+                {% if current_page > 1 %}
+                {# "Back" button #}
+                <a href="/forum/{{ forum.id }}/t/{{ topic.id }}?page={{ current_page - 1 }}">Back</a>
+            {% endif %}
+
+            {# Calculate page range #}
+            {% set page_start = (0, current_page - 1)|max %}
+            {% set page_end = (total_pages, page_start + 3)|min %}
+
+            {% for page in range(page_start, page_end + 1) %}
+                {% if page != current_page %}
+                    <a href="/forum/{{ forum.id }}/t/{{ topic.id }}?page={{ page + 1 }}">{{ page + 1 }}</a>
+                {% else %}
+                    <strong>{{ page + 1 }}</strong>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_end < total_pages - 1 %}
+                ...
+                {# Last page after "..." #}
+                <a href="/forum/{{ forum.id }}/t/{{ topic.id }}?page={{ total_pages + 1 }}">{{ total_pages + 1 }}</a>
+                {# "Next" button #}
+                <a href="/forum/{{ forum.id }}/t/{{ topic.id }}?page={{ current_page + 2 }}">Next</a>
+            {% endif %}
+        </td>
+        <td align="left" style="float: left">
+            <div class="post-buttons-bottom" id="post-bottom">
+                {% if not topic.locked_at %}
+                    <a href="/forum/{{ forum.id }}/t/{{ topic.id }}/post?action=post" class="button-blue">Reply</a>
+                    {% else %}
+                    <a href="#post-bottom" class="button-grey" title="This post is locked, only admins can reply to it.">Locked</a>
+                {% endif %}
+            </div>
+        </td>
+    </table>
 </div>
 {# TODO: Posts... #}
 {% endblock content %}
