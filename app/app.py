@@ -249,3 +249,12 @@ def forbidden(error: NotFound) -> Tuple[str, int]:
         css='404.css',
         title='Forbidden - osu!Titanic'
     ), 404
+
+@flask.errorhandler(500)
+def internal_error(error: NotFound) -> Tuple[str, int]:
+    return utils.render_template(
+        content=error.description or 'Internal Server Error',
+        template_name='500.html',
+        css='500.css',
+        title='Internal Server Error - osu!Titanic'
+    ), 500
