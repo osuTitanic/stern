@@ -133,7 +133,7 @@
         {% endfor %}
         <br>
         <table width='100%'>
-            <td align="right">
+            <td align="right" style="float: right">
                 {{ post_count }} posts |
                 {# Pagination #}
                     {% if current_page > 1 %}
@@ -160,6 +160,15 @@
                     {# "Next" button #}
                     <a href="/forum/{{ forum.id }}/t/{{ topic.id }}?page={{ current_page + 2 }}">Next</a>
                 {% endif %}
+            </td>
+            <td align="left" style="float: left">
+                <div class="post-buttons-bottom" id="post-bottom">
+                    {% if not topic.locked_at %}
+                        <a href="/forum/{{ forum.id }}/t/{{ topic.id }}/post?action=post" class="button-blue">Reply</a>
+                        {% else %}
+                        <a href="#post-bottom" class="button-grey" title="This post is locked, only admins can reply to it.">Locked</a>
+                    {% endif %}
+                </div>
             </td>
         </table>
     {% endif %}
