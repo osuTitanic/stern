@@ -59,6 +59,7 @@ def post_view(forum_id: str, topic_id: str):
             return abort(code=404)
 
         text = fetch_post_text(
+            topic.id,
             action,
             int(action_id or '-1'),
             session=session
@@ -75,6 +76,7 @@ def post_view(forum_id: str, topic_id: str):
         )
 
 def fetch_post_text(
+    topic_id: int,
     action: str,
     action_id: int,
     session: Session
@@ -96,6 +98,23 @@ def fetch_post_text(
             return
 
         return f"[quote={post.user.name}]{post.content}[/quote]"
+
+    elif action == 'post':
+        drafts = posts.fetch_drafts(
+            current_user.id,
+            topic_id,
+            session=session
+        )
+
+        if not drafts:
+            return
+
+        posts.delete(
+            drafts[0].id,
+            session=session
+        )
+
+        return drafts[0].content
 
 def handle_post(topic: DBForumTopic, _: int, session: Session) -> Response:
     return abort(501) # TODO
