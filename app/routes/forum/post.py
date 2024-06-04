@@ -1,4 +1,5 @@
 
+from flask_login import login_required, current_user
 from sqlalchemy.orm import Session
 from flask import (
     Blueprint,
@@ -17,6 +18,7 @@ import app
 router = Blueprint("forum-posts", __name__)
 
 @router.get('/<forum_id>/t/<topic_id>/post/')
+@login_required
 def post_view(forum_id: str, topic_id: str):
     if not forum_id.isdigit():
         return abort(
@@ -105,6 +107,7 @@ def handle_post_edit(topic: DBForumTopic, post_id: int, session: Session) -> Res
     return abort(501) # TODO
 
 @router.post('/<forum_id>/t/<topic_id>/post')
+@login_required
 def do_post(forum_id: str, topic_id: str):
     if not forum_id.isdigit():
         return abort(
@@ -136,9 +139,9 @@ def do_post(forum_id: str, topic_id: str):
 
         actions = {
             'create': handle_topic_create,
-            'post': handle_post,
             'edit': handle_post_edit,
-            'quote': handle_post
+            'quote': handle_post,
+            'post': handle_post
         }
 
         if action not in actions:
