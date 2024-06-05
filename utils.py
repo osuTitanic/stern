@@ -8,9 +8,10 @@ from PIL import Image
 
 from app.common.database import DBUser, repositories, topics
 from app.common.database.repositories import wrapper
+from app.common.cache import leaderboards, status
 from app.common.helpers.external import location
-from app.common.cache import leaderboards
-from app.common.helpers import caching
+from app.common.helpers import caching, analytics, ip
+from app.common.database import DBUser
 from app.common import constants
 
 from app.common.database import (
@@ -112,3 +113,27 @@ def empty_image(
     img = Image.new('RGB', (width, height), (0, 0, 0))
     img.save(image_buffer, format='JPEG')
     return image_buffer.getvalue()
+
+def track(
+    event: str,
+    properties: dict | None,
+    user: DBUser | None
+) -> None:
+    if not user:
+        return
+
+    ip_address = ip.resolve_ip_address_flask(request)
+    device_id = status.device_id(user.id)
+
+    analytics.track(
+        event,
+        user_id=user.id,
+        device_id=device_id,
+        ip=ip_address,
+        event_properties=properties,
+        user_properties={
+            'user_id': user.id,
+            'name': user.name,
+            'country': user.country
+        }
+    )
