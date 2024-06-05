@@ -8,6 +8,7 @@ from datetime import datetime
 import flask_login
 import hashlib
 import bcrypt
+import utils
 import app
 
 router = Blueprint('login', __name__)
@@ -32,48 +33,39 @@ def login():
     app.session.redis.expire(f'logins:{ip}', time=30)
 
     with app.session.database.managed_session() as session:
-        if user := users.fetch_by_name(username, session=session):
-            md5_password = hashlib.md5(password.encode()).hexdigest()
+        if not (user := users.fetch_by_name(username, session=session)):
+            return redirect(redirect_url or '/')
 
-            if not bcrypt.checkpw(md5_password.encode(), user.bcrypt.encode()):
-                return redirect(redirect_url or '/')
+        md5_password = hashlib.md5(password.encode()).hexdigest()
 
-            if not user.activated:
-                # Get pending verifications
-                pending_verifications = verifications.fetch_all_by_type(
-                    user.id,
-                    verification_type=0,
-                    session=session
-                )
+        if not bcrypt.checkpw(md5_password.encode(), user.bcrypt.encode()):
+            return redirect(redirect_url or '/')
 
-                pending_verifications.sort(
-                    key=lambda x: x.sent_at,
-                    reverse=True
-                )
+        if not user.activated:
+            # Get pending verifications
+            pending_verifications = verifications.fetch_all_by_type(
+                user.id,
+                verification_type=0,
+                session=session
+            )
 
-                if pending_verifications:
-                    verification = pending_verifications[0]
+            pending_verifications.sort(
+                key=lambda x: x.sent_at,
+                reverse=True
+            )
 
-                    # Check age of verification
-                    difference = (datetime.now() - verification.sent_at).seconds
-                    max_age = 60 * 60 * 12
+            if pending_verifications:
+                verification = pending_verifications[0]
 
-                    if difference > max_age:
-                        # Delete old verification
-                        verifications.delete(verification.token, session=session)
+                # Check age of verification
+                difference = (datetime.now() - verification.sent_at).seconds
+                max_age = 60 * 60 * 12
 
-                        # Resend verification
-                        verification = verifications.create(
-                            user.id,
-                            type=0,
-                            token_size=32,
-                            session=session
-                        )
+                if difference > max_age:
+                    # Delete old verification
+                    verifications.delete(verification.token, session=session)
 
-                        mail.send_welcome_email(verification, user)
-
-                else:
-                    # No activation email was sent?
+                    # Resend verification
                     verification = verifications.create(
                         user.id,
                         type=0,
@@ -83,10 +75,28 @@ def login():
 
                     mail.send_welcome_email(verification, user)
 
-                # Redirect to verification page
-                return redirect(f'/account/verification?id={verification.id}')
+            else:
+                # No activation email was sent?
+                verification = verifications.create(
+                    user.id,
+                    type=0,
+                    token_size=32,
+                    session=session
+                )
 
-            flask_login.login_user(user, remember)
-            return redirect(redirect_url or f'/u/{user.id}')
+                mail.send_welcome_email(verification, user)
 
-        return redirect(redirect_url or '/')
+            # Redirect to verification page
+            return redirect(f'/account/verification?id={verification.id}')
+
+        utils.track(
+            'website_login',
+            user=user,
+            properties={
+                'login_attempts': login_attempts,
+                'remember': remember
+            }
+        )
+
+        flask_login.login_user(user, remember)
+        return redirect(redirect_url or f'/u/{user.id}')
