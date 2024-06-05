@@ -55,6 +55,17 @@ def download_beatmapset(id: int):
     if not (response := app.session.storage.api.osz(set.id, no_video)):
         return abort(code=404)
 
+    utils.track(
+        'website_beatmap_download',
+        user=flask_login.current_user,
+        properties={
+            'beatmapset_id': set.id,
+            'beatmapset_artist': set.artist,
+            'beatmapset_title': set.title,
+            'no_video': no_video
+        }
+    )
+
     return Response(
         response.iter_content(6400),
         mimetype='application/octet-stream',
