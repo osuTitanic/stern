@@ -153,6 +153,18 @@ def registration_request():
 
         app.session.logger.info(f'User "{username}" with id "{user.id}" was created.')
 
+        # Send register event to amplitude
+        utils.track(
+            'website_registration',
+            user=user,
+            properties={
+                'user_id': user.id,
+                'username': user.name,
+                'email': user.email,
+                'country': user.country
+            }
+        )
+
         # Send welcome notification
         notifications.create(
             user.id,
