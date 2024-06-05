@@ -112,7 +112,10 @@ def resend_verification():
             if not (verification_id := request.args.get('id', type=int)):
                 return abort(404)
 
-            verification = verifications.fetch_by_id(verification_id, session=session)
+            verification = verifications.fetch_by_id(
+                verification_id,
+                session=session
+            )
 
             if not verification:
                 return abort(404)

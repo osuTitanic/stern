@@ -13,7 +13,8 @@ def logout():
 
     utils.track(
         'website_logout',
-        user=flask_login.current_user
+        user=flask_login.current_user,
+        properties={}
     )
 
     redirect_url = request.args.get('redirect', '/')
