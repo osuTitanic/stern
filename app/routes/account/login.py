@@ -93,7 +93,7 @@ def login():
             'website_login',
             user=user,
             properties={
-                'login_attempts': login_attempts,
+                'login_attempts': int(login_attempts),
                 'remember': remember
             }
         )
