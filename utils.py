@@ -6,17 +6,18 @@ from flask import render_template as _render_template
 from flask import request
 from PIL import Image
 
-from app.common.database import DBUser, repositories, topics
 from app.common.database.repositories import wrapper
 from app.common.cache import leaderboards, status
-from app.common.helpers.external import location
 from app.common.helpers import caching, analytics, ip
+from app.common.helpers.external import location
+from app.common.database import DBUser
 from app.common import constants
 
 from app.common.database import (
     notifications,
+    repositories,
     histories,
-    scores,
+    topics,
     stats
 )
 
