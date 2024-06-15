@@ -70,9 +70,11 @@
                         No notifications
                         {% endif %}
                     </a>
+                    {% if request.view_args %}
                     <a href="/account/logout?redirect={{ url_for(request.endpoint, **request.view_args) }}">
                         <i class="fa-solid fa-power-off" style="color: #808080;"></i> Logout
                     </a>
+                    {% endif %}
                 {% else %}
                     <p class="nav-login" id="welcome-text">Welcome, guest!</p>
                     <a onclick="showLoginForm()" class="nav-login" id="login-text">Login</a>
@@ -82,7 +84,11 @@
             </div>
             <div class="login-dropdown" style="display: none;">
                 <form action="/account/login" method="post">
-                    <input type="hidden" name="redirect" value="{{ url_for(request.endpoint, **request.view_args) }}">
+                    {% if request.view_args %}
+                        <input type="hidden" name="redirect" value="{{ url_for(request.endpoint, **request.view_args) }}">
+                    {% else %}
+                        <input type="hidden" name="redirect" value="/">
+                    {% endif %}
                     Please enter your credentials:
                     <br>
                     <input id="username-field" class="post" type="text" name="username" placeholder="Username" maxlength="30" value="" tabindex="0" autocomplete="off">

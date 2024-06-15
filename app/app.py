@@ -232,38 +232,22 @@ def get_status_icon(topic: DBForumTopic) -> str:
     # TODO: Read/Unread Logic
     return "/images/icons/topics/topic_read.gif"
 
-@flask.errorhandler(404)
-def not_found(error: NotFound) -> Tuple[str, int]:
+@flask.errorhandler(HTTPException)
+def on_http_exception(error: HTTPException) -> Tuple[str, int]:
     return utils.render_template(
-        content=error.description or 'Not Found',
+        content=error.description or error.name,
+        code=error.code,
         template_name='error.html',
         css='error.css',
-        title='Not Found - osu!Titanic'
-    ), 404
+        title=f'{error.name} - osu!Titanic'
+    ), error.code
 
-@flask.errorhandler(403)
-def forbidden(error: Forbidden) -> Tuple[str, int]:
+@flask.errorhandler(Exception)
+def on_exception(error: Exception) -> Tuple[str, int]:
     return utils.render_template(
-        content=error.description or 'Forbidden',
+        content=InternalServerError.description,
+        code=500,
         template_name='error.html',
         css='error.css',
-        title='Forbidden - osu!Titanic'
-    ), 403
-
-@flask.errorhandler(400)
-def bad_request(error: BadRequest) -> Tuple[str, int]:
-    return utils.render_template(
-        content=error.description or 'Bad Request',
-        template_name='error.html',
-        css='error.css',
-        title='Bad Request - osu!Titanic'
-    ), 400
-
-@flask.errorhandler(500)
-def internal_error(error: InternalServerError) -> Tuple[str, int]:
-    return utils.render_template(
-        content=error.description or 'Internal Server Error',
-        template_name='error.html',
-        css='error.css',
-        title='Internal Server Error - osu!Titanic'
+        title=f'Internal Server Error - osu!Titanic'
     ), 500
