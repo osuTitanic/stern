@@ -421,6 +421,7 @@ input[type="submit"]:hover {
     margin: 5px 5px 1.5px 5px;
     background-color: #dbd8fd;
     border-radius: 2.5px;
+    min-width: 90%;
 }
 
 .popup {
