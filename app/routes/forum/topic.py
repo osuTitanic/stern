@@ -1,5 +1,6 @@
 
 from app.common.database import forums, topics, posts
+from flask_login import current_user, login_required
 from flask import Blueprint, abort, request
 
 import utils
@@ -58,4 +59,26 @@ def topic(forum_id: str, id: str):
             total_pages=post_count // 12,
             post_count=post_count,
             session=session
+        )
+
+@router.get('/<forum_id>/create')
+@login_required
+def create_post_view(forum_id: str):
+    if not forum_id.isdigit():
+        return abort(
+            code=404,
+            description=app.constants.FORUM_NOT_FOUND
+        )
+    
+    with app.session.database.managed_session() as session:
+        if not (forum := forums.fetch_by_id(forum_id, session=session)):
+            return abort(
+                code=404,
+                description=app.constants.FORUM_NOT_FOUND
+            )
+        
+        return utils.render_template(
+            "forum/create.html",
+            css='forums.css',
+            forum=forum
         )
