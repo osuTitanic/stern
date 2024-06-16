@@ -1,7 +1,9 @@
 
 from app.common.database import forums, topics, posts
+
+from flask import Blueprint, abort, redirect, request
 from flask_login import current_user, login_required
-from flask import Blueprint, abort, request
+from sqlalchemy.orm import Session
 
 import utils
 import app
@@ -81,4 +83,89 @@ def create_post_view(forum_id: str):
             "forum/create.html",
             css='forums.css',
             forum=forum
+        )
+
+def update_notifications(notify: bool, user_id: int, topic_id: int, session: Session):
+    if notify:
+        topics.add_subscriber(
+            topic_id,
+            user_id,
+            session=session
+        )
+        return
+
+    topics.delete_subscriber(
+        topic_id,
+        user_id,
+        session=session
+    )
+
+@router.post('/<forum_id>/create')
+@login_required
+def create_post_action(forum_id: str):
+    if not forum_id.isdigit():
+        return abort(
+            code=404,
+            description=app.constants.FORUM_NOT_FOUND
+        )
+    
+    with app.session.database.managed_session() as session:
+        if not (forum := forums.fetch_by_id(forum_id, session=session)):
+            return abort(
+                code=404,
+                description=app.constants.FORUM_NOT_FOUND
+            )
+        
+        if forum.hidden:
+            return abort(
+                code=404,
+                description=app.constants.FORUM_NOT_FOUND
+            )
+
+        if current_user.silence_end:
+            return abort(
+                code=403,
+                description=app.constants.USER_SILENCED
+            )
+
+        if current_user.restricted:
+            return abort(
+                code=403,
+                description=app.constants.USER_RESTRICTED
+            )
+
+        type = request.form.get('type') # TODO
+        title = request.form.get('title')
+        content = request.form.get('bbcode')
+
+        topic = topics.create(
+            forum.id,
+            current_user.id,
+            title,
+            session=session
+        )
+
+        posts.create(
+            topic.id,
+            forum.id,
+            current_user.id,
+            content,
+            session=session
+        )
+
+        notify = request.form.get(
+            'notify',
+            type=bool,
+            default=False
+        )
+
+        update_notifications(
+            notify,
+            current_user.id,
+            topic.id,
+            session=session
+        )
+
+        return redirect(
+            f"/forum/{forum.id}/t/{topic.id}"
         )
