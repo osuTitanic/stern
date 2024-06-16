@@ -3,7 +3,7 @@
 <p id="bbcode-help">
     This section is formatted in bbcode. Learn more about it <a href="https://osu.ppy.sh/wiki/en/BBCode">here</a>!
 </p>
-<textarea class="bbcode-editor" name="bbcode" style="resize: none; min-height: {{ context['min-height'] }};">
+<textarea class="bbcode-editor" name="bbcode" style="resize: {{ context['resize'] or 'none' }}; min-height: {{ context['min-height'] }};">
 {%- if context['current'] -%}
     {{ context['current'] | replace('\\r\\n', '\n') | replace('\\n', '\\n') }}
 {%- endif -%}
