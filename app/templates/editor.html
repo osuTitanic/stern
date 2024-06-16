@@ -35,7 +35,7 @@
         <a href="../" class="button-red">Cancel</a>
     {% endif %}
     {% if context['draft'] %}
-        <input formaction="/forum/{{ forum.id }}/t/{{ topic.id }}/draft"
+        <input formaction="../draft"
                class="button-grey"
                type="submit"
                value="Save Draft">
