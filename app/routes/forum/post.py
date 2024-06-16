@@ -266,6 +266,18 @@ def do_post(forum_id: str, topic_id: str):
                 description=app.constants.FORUM_NOT_FOUND
             )
 
+        if current_user.silence_end:
+            return abort(
+                code=403,
+                description=app.constants.USER_SILENCED
+            )
+
+        if current_user.restricted:
+            return abort(
+                code=403,
+                description=app.constants.USER_RESTRICTED
+            )
+
         action = request.form.get('action', default='post')
         action_id = request.form.get('id', type=int)
 
