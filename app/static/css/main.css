@@ -401,7 +401,8 @@ input[type="submit"]:hover {
 }
 
 #bbcode-help {
-    font-size: 80%
+    font-size: 80%;
+    color: #999999;
 }
 
 .bbcode-preview-button {
