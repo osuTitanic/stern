@@ -53,6 +53,12 @@ def topic(forum_id: str, id: str):
                 description=app.constants.TOPIC_NOT_FOUND
             )
 
+        if topic.hidden:
+            return abort(
+                code=404,
+                description=app.constants.TOPIC_NOT_FOUND
+            )
+
         if topic.forum_id != int(forum_id):
             return abort(
                 code=404,
