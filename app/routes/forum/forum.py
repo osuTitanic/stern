@@ -24,6 +24,12 @@ def forum_view(forum_id: int):
                 description=app.constants.FORUM_NOT_FOUND
             )
 
+        if forum.hidden:
+            return abort(
+                code=404,
+                description=app.constants.FORUM_NOT_FOUND
+            )
+
         if not forum.parent_id:
             # Forum can be viewed on front-page
             return redirect('/forum')
