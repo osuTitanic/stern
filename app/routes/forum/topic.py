@@ -1,5 +1,7 @@
 
 from app.common.database import forums, topics, posts
+from app.common.database import DBForumTopic
+from app.common.helpers import ip
 
 from flask import Blueprint, abort, redirect, request
 from flask_login import current_user, login_required
@@ -9,6 +11,26 @@ import utils
 import app
 
 router = Blueprint("forum-topics", __name__)
+
+def update_views(topic_id: int, session: Session) -> None:
+    ip_address = ip.resolve_ip_address_flask(request)
+
+    lock = app.session.redis.get(f'forums:viewlock:{topic_id}:{ip_address}')
+
+    if lock:
+        return
+
+    topics.update(
+        topic_id,
+        {'views': DBForumTopic.views + 1},
+        session=session
+    )
+
+    app.session.redis.set(
+        f'forums:viewlock:{topic_id}:{ip_address}',
+        value=1,
+        ex=60
+    )
 
 @router.get('/<forum_id>/t/<id>/')
 def topic(forum_id: str, id: str):
@@ -48,6 +70,11 @@ def topic(forum_id: str, id: str):
 
         post_count = posts.fetch_count(
             topic_id=id,
+            session=session
+        )
+
+        update_views(
+            topic.id,
             session=session
         )
 
