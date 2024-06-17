@@ -118,7 +118,12 @@ def create_post_view(forum_id: str):
             forum=forum
         )
 
-def update_notifications(notify: bool, user_id: int, topic_id: int, session: Session):
+def update_notifications(
+    notify: bool,
+    user_id: int,
+    topic_id: int,
+    session: Session
+) -> None:
     if notify:
         topics.add_subscriber(
             topic_id,
