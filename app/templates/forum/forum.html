@@ -25,7 +25,7 @@
             </td>
             <td align="right">
                 <a href="#">Mark forum as read</a> |
-                <a href="#">Jump</a> |
+                <a onclick="jumpToPage();">Jump</a> |
                 {# Pagination #}
                 {% if current_page > 1 %}
                     {# "Back" button #}
@@ -125,7 +125,7 @@
         <tbody>
             <tr>
                 <td align="right">
-                    <a href="#">Jump</a> |
+                    <a onclick="jumpToPage();">Jump</a> |
                     {# Pagination #}
                     {% if current_page > 1 %}
                     {# "Back" button #}
@@ -161,4 +161,16 @@
     </p>
     {% endif %}
 </div>
+<script>
+    function jumpToPage() {
+        var page = prompt("Enter the page to jump to:")
+
+        if (page !== null && !isNaN(page) && page > 0)
+        {
+            var query = new URLSearchParams();
+            query.set('start', (page - 1) * 25);
+            location.search = query.toString();
+        }
+    }
+</script>
 {% endblock content %}
