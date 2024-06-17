@@ -1,6 +1,6 @@
 
 from app.common.constants import BeatmapLanguage, BeatmapGenre, DatabaseStatus, Mods
-from app.common.database.repositories import beatmaps, scores, favourites
+from app.common.database import beatmaps, scores, favourites
 from flask import Blueprint, request, abort
 
 import flask_login

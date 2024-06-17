@@ -52,14 +52,16 @@ def rankings(mode: str, order_type: str):
         ]
 
         for user in sorted_users:
-            if not user.stats:
-                # Create stats if they don't exist
-                user.stats = [
-                    stats.create(user.id, 0),
-                    stats.create(user.id, 1),
-                    stats.create(user.id, 2),
-                    stats.create(user.id, 3)
-                ]
+            if user.stats:
+                continue
+
+            # Create stats if they don't exist
+            user.stats = [
+                stats.create(user.id, 0),
+                stats.create(user.id, 1),
+                stats.create(user.id, 2),
+                stats.create(user.id, 3)
+            ]
 
             user.stats.sort(key=lambda s:s.mode)
             utils.sync_ranks(user)
@@ -98,8 +100,10 @@ def rankings(mode: str, order_type: str):
             min_page_display=min_page_display,
             items_per_page=items_per_page,
             order_name=order_name,
-            site_title=f'{order_name} Rankings' \
-                       f'{f" for {COUNTRIES[country.upper()]}" if country else ""}'
+            site_title=(
+                f'{order_name} Rankings'
+                f'{f" for {COUNTRIES[country.upper()]}" if country else ""}'
+            )
         )
 
     # Get country ranking

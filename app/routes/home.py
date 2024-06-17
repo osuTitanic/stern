@@ -1,7 +1,12 @@
 
 from __future__ import annotations
 
-from app.common.database.repositories import plays, messages, posts, topics
+from app.common.database import (
+    messages,
+    topics,
+    plays,
+    posts
+)
 
 from typing import Optional
 from flask import (
@@ -24,6 +29,7 @@ def handle_legacy_redirects(request: Request) -> Response | None:
     if page == 'beatmap':
         if id := request.args.get("b"):
             return redirect(f'/b/{id}')
+
         elif id := request.args.get("s"):
             return redirect(f'/s/{id}')
 
