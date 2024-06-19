@@ -311,3 +311,16 @@ table {
     border-color: gray;
     border-width: 1px;
 }
+
+.icon-selection {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 10px;
+    overflow: hidden;
+    overflow-wrap: break-word;
+}
+
+.icon-selection label {
+    margin-right: 6px;
+    margin-left: 6px;
+}

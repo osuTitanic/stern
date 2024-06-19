@@ -19,6 +19,18 @@
     <p class="post-subject">
         Subject: <input type="text" name="title" class="nav-search">
     </p>
+    {% if forum.allow_icons or (current_user_is_bat or current_user_is_admin) %}
+    <div class="icon-selection">
+        <input type="radio" name="icon" value="-1" checked="checked">
+        <label for="-1">None</label>
+        {% for icon in icons %}
+            <input type="radio" name="icon" value="{{ icon.id }}">
+            <label for="{{ icon.id }}">
+                <img src="{{ icon.location }}" alt="{{ icon.name }}">
+            </label>
+        {% endfor %}
+    </div>
+    {% endif %}
     <div>
         {# Editor #}
         {% with context = {

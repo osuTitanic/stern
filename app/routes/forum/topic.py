@@ -1,6 +1,6 @@
 
 from app.common.database import forums, topics, posts
-from app.common.database import DBForumTopic
+from app.common.database import DBForumTopic, DBForum
 from app.common.helpers import ip
 
 from flask import Blueprint, abort, redirect, request
@@ -115,7 +115,8 @@ def create_post_view(forum_id: str):
         return utils.render_template(
             "forum/create.html",
             css='forums.css',
-            forum=forum
+            forum=forum,
+            icons=forums.fetch_icons(session)
         )
 
 def update_notifications(
