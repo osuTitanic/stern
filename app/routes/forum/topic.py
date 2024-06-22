@@ -139,6 +139,28 @@ def update_notifications(
         session=session
     )
 
+def get_icon_id(forum: DBForum) -> int | None:
+    if not forum.allow_icons and not current_user.is_bat:
+        return
+
+    icon_id = request.form.get(
+        'icon',
+        default=-1,
+        type=int
+    )
+
+    if icon_id != -1:
+        return icon_id
+
+def get_type_dict(type: str) -> dict:
+    if type == 'announcement':
+        return {'announcement': True}
+
+    if type == 'pinned':
+        return {'pinned': True}
+
+    return {}
+
 @router.post('/<forum_id>/create')
 @login_required
 def create_post_action(forum_id: str):
@@ -154,7 +176,7 @@ def create_post_action(forum_id: str):
                 code=404,
                 description=app.constants.FORUM_NOT_FOUND
             )
-        
+
         if forum.hidden:
             return abort(
                 code=404,
@@ -173,7 +195,7 @@ def create_post_action(forum_id: str):
                 description=app.constants.USER_RESTRICTED
             )
 
-        type = request.form.get('type') # TODO
+        type = request.form.get('type')
         title = request.form.get('title')
         content = request.form.get('bbcode')
 
@@ -181,7 +203,9 @@ def create_post_action(forum_id: str):
             forum.id,
             current_user.id,
             title,
-            session=session
+            session=session,
+            icon_id=get_icon_id(forum),
+            **get_type_dict(type)
         )
 
         posts.create(
