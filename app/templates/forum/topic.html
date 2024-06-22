@@ -2,6 +2,12 @@
 
 {% extends "base.html" %}
 
+{# BATs are able to moderate topics if they are linked to a beatmapset #}
+{% set is_privileged = (
+    (current_user.is_moderator) or
+    (current_user.is_bat if beatmapset else False)
+) %}
+
 {% block content %}
 <style>
     .page { margin: 0 }
@@ -114,11 +120,9 @@
                                 {{ post.edit_time|timeago }}, edited {{ post.edit_count }} time{{ 's' if post.edit_count != 1 }} in total.
                             </div>
                             {% endif %}
-                            {# Check if user is logged in and if the topic is locked #}
-                            {% if (not current_user.is_anonymous) and (not topic.locked_at or current_user.is_moderator) %}
+                            {% if (not current_user.is_anonymous) and (not topic.locked_at or is_privileged) %}
                             <div class="post-buttons">
-                                {# Check if user is the owner of this post and if the edit is locked #}
-                                {% if (current_user.id == post.user.id) and (not post.edit_locked) %}
+                                {% if (current_user.id == post.user.id or is_privileged) and (not post.edit_locked or is_privileged) %}
                                 <a class="button-red" onclick="deletePost(post.id);">Delete</a>
                                 <a class="button-blue" href="./post?action=edit&id={{ post.id }}">Edit</a>
                                 {% endif %}
