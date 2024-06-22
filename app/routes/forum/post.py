@@ -179,7 +179,12 @@ def handle_beatmap_icon_update(
 ) -> None:
     ... # TODO
 
-def update_notifications(notify: bool, user_id: int, topic_id: int, session: Session):
+def update_notifications(
+    notify: bool,
+    user_id: int,
+    topic_id: int,
+    session: Session
+) -> None:
     if notify:
         topics.add_subscriber(
             topic_id,
@@ -195,7 +200,7 @@ def update_notifications(notify: bool, user_id: int, topic_id: int, session: Ses
     )
 
 def notify_subscribers(topic: DBForumTopic, session: Session):
-    ...
+    ... # TODO
 
 def handle_post(topic: DBForumTopic, _: int, session: Session) -> Response:
     if topic.locked_at:
