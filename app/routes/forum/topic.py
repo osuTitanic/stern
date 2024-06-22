@@ -204,6 +204,7 @@ def create_post_action(forum_id: str):
             current_user.id,
             title,
             session=session,
+            can_change_icon=forum.allow_icons,
             icon_id=get_icon_id(forum),
             **get_type_dict(type)
         )
