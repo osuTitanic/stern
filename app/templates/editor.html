@@ -11,8 +11,17 @@
 
 {% if context['forum-controls'] %}
 <div style="margin: 12px; float: right; text-align: right;">
-    <input type="checkbox" class="radio" name="notify">
-    <label for="notify">Notify me when a reply is posted</label>
+    <input type="checkbox"
+           class="radio"
+           name="notify"
+           {% if is_subscribed %}
+           checked="checked"
+           {% endif %}>
+
+    <label for="notify">
+        Notify me when a reply is posted
+    </label>
+
     {% if current_user.is_admin and context['topic-controls'] %}
         <div style="margin-bottom: 10px; margin-top: 10px">
             Post topic as:

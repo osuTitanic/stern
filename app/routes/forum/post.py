@@ -58,6 +58,12 @@ def post_view(forum_id: str, topic_id: str):
         if action not in allowed_actions:
             return abort(code=404)
 
+        is_subscribed = topics.is_subscribed(
+            topic.id,
+            current_user.id,
+            session=session
+        )
+
         text = fetch_post_text(
             topic.id,
             action,
@@ -72,7 +78,8 @@ def post_view(forum_id: str, topic_id: str):
             forum=topic.forum,
             topic=topic,
             action=action,
-            action_id=action_id
+            action_id=action_id,
+            is_subscribed=is_subscribed
         )
 
 def fetch_post_text(
@@ -131,6 +138,9 @@ def update_notifications(notify: bool, user_id: int, topic_id: int, session: Ses
         session=session
     )
 
+def notify_subscribers(topic: DBForumTopic, session: Session):
+    ...
+
 def handle_post(topic: DBForumTopic, _: int, session: Session) -> Response:
     if topic.locked_at:
         return abort(
@@ -148,24 +158,29 @@ def handle_post(topic: DBForumTopic, _: int, session: Session) -> Response:
             f"/forum/{topic.forum_id}/t/{topic.id}"
         )
 
+    post = posts.create(
+        topic.id,
+        topic.forum_id,
+        current_user.id,
+        content,
+        session=session
+    )
+
     notify = request.form.get(
         'notify',
         type=bool,
         default=False
     )
 
+    notify_subscribers(
+        topic,
+        session=session
+    )
+
     update_notifications(
         notify,
         current_user.id,
         topic.id,
-        session=session
-    )
-
-    post = posts.create(
-        topic.id,
-        topic.forum_id,
-        current_user.id,
-        content,
         session=session
     )
 
