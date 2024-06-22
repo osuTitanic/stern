@@ -102,7 +102,11 @@
                                 <a href="#" title="{{ post.created_at }}">{{ post.created_at|timeago }}</a>
                             </div>
                             <div class="post-content">
-                                {{ post.content|bbcode|safe }}
+                                {% if post.deleted %}
+                                    [ Deleted ]
+                                {% else %}
+                                    {{ post.content|bbcode|safe }}
+                                {% endif %}
                             </div>
                             {% if post.edit_count > 0 %}
                             <div style="margin-top: 15px; margin-left: 5px; float: left; overflow-wrap: anywhere;">
