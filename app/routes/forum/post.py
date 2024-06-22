@@ -184,6 +184,12 @@ def handle_post(topic: DBForumTopic, _: int, session: Session) -> Response:
         session=session
     )
 
+    topics.update(
+        topic.id,
+        {'last_post_at': datetime.now()},
+        session=session
+    )
+
     return redirect(
         f"/forum/{topic.forum_id}/t/{topic.id}/p/{post.id}"
     )
