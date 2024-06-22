@@ -74,6 +74,10 @@
                     <a href="/account/logout?redirect={{ url_for(request.endpoint, **request.view_args) }}">
                         <i class="fa-solid fa-power-off" style="color: #808080;"></i> Logout
                     </a>
+                    {% else %}
+                    <a href="/account/logout">
+                        <i class="fa-solid fa-power-off" style="color: #808080;"></i> Logout
+                    </a>
                     {% endif %}
                 {% else %}
                     <p class="nav-login" id="welcome-text">Welcome, guest!</p>
