@@ -85,7 +85,8 @@ def post_view(forum_id: str, topic_id: str):
             action=action,
             action_id=action_id,
             is_subscribed=is_subscribed,
-            initial_post=initial_post
+            initial_post=initial_post,
+            icons=forums.fetch_icons(session)
         )
 
 def fetch_post_text(
