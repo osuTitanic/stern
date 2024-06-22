@@ -140,7 +140,12 @@ def update_notifications(
     )
 
 def get_icon_id(forum: DBForum) -> int | None:
-    if not forum.allow_icons and not current_user.is_bat:
+    is_priviliged = (
+        current_user.is_bat or
+        current_user.is_moderator
+    )
+
+    if not forum.allow_icons and not is_priviliged:
         return
 
     icon_id = request.form.get(
@@ -153,6 +158,14 @@ def get_icon_id(forum: DBForum) -> int | None:
         return icon_id
 
 def get_type_dict(type: str) -> dict:
+    is_priviliged = (
+        current_user.is_bat or
+        current_user.is_moderator
+    )
+
+    if not is_priviliged:
+        return {}
+
     if type == 'announcement':
         return {'announcement': True}
 
