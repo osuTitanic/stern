@@ -92,7 +92,9 @@ def post_view(forum_id: str, topic_id: str):
             action_id=action_id,
             is_subscribed=is_subscribed,
             initial_post=initial_post,
-            icons=forums.fetch_icons(session)
+            icons=forums.fetch_icons(session),
+            topic_type=get_post_type(topic),
+            topic_icon=topic.icon_id
         )
 
 def fetch_post_text(
@@ -135,6 +137,15 @@ def fetch_post_text(
         )
 
         return drafts[0].content
+
+def get_post_type(topic: DBForumTopic) -> str:
+    if topic.announcement:
+        return 'announcement'
+
+    if topic.pinned:
+        return 'pinned'
+
+    return 'global'
 
 def update_topic_type() -> dict:
     if not current_user.is_moderator:

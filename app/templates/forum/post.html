@@ -32,10 +32,10 @@
     <div>
         {% if editing_initial_post and (topic.can_edit_icon or is_privileged) %}
         <div class="icon-selection">
-            <input type="radio" name="icon" value="-1" checked="checked">
+            <input type="radio" name="icon" value="-1" {% if not topic_icon %} checked {% endif %}>
             <label for="-1">None</label>
             {% for icon in icons %}
-                <input type="radio" name="icon" value="{{ icon.id }}">
+                <input type="radio" name="icon" value="{{ icon.id }}" {% if topic_icon == icon.id %} checked {% endif %}>
                 <label for="{{ icon.id }}">
                     <img src="{{ icon.location }}" alt="{{ icon.name }}">
                 </label>

@@ -25,11 +25,11 @@
     {% if current_user.is_moderator and context['topic-controls'] %}
         <div style="margin-bottom: 10px; margin-top: 10px">
             Post topic as:
-            <input type="radio" name="type" value="global" id="global" checked>
+            <input type="radio" name="type" value="global" id="global" {% if topic_type == 'global' %} checked {% endif %}>
             <label for="global">Global</label>
-            <input type="radio" name="type" value="pinned" id="pinned">
+            <input type="radio" name="type" value="pinned" id="pinned" {% if topic_type == 'pinned' %} checked {% endif %}>
             <label for="pinned">Pinned</label>
-            <input type="radio" name="type" value="announcement" id="announcement">
+            <input type="radio" name="type" value="announcement" id="announcement" {% if topic_type == 'announcement' %} checked {% endif %}>
             <label for="announcement">Announcement</label>
         </div>
     {% endif %}
