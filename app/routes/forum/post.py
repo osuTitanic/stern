@@ -140,7 +140,7 @@ def update_topic_type() -> dict:
     if not current_user.is_moderator:
         return {}
 
-    type = request.form.get('type')
+    type = request.form.get('type', default='global')
 
     if type == 'announcement':
         return {
