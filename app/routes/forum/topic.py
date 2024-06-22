@@ -1,5 +1,5 @@
 
-from app.common.database import forums, topics, posts
+from app.common.database import forums, topics, posts, beatmapsets
 from app.common.database import DBForumTopic, DBForum
 from app.common.helpers import ip
 
@@ -84,6 +84,11 @@ def topic(forum_id: str, id: str):
             session=session
         )
 
+        beatmapset = beatmapsets.fetch_by_topic(
+            topic.id,
+            session=session
+        )
+
         return utils.render_template(
             "forum/topic.html",
             css='forums.css',
@@ -93,6 +98,7 @@ def topic(forum_id: str, id: str):
             current_page=(page - 1),
             total_pages=post_count // 12,
             post_count=post_count,
+            beatmapset=beatmapset,
             session=session
         )
 
