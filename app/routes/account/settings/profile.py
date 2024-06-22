@@ -4,6 +4,7 @@ from app.common.database.repositories import users
 
 from flask_login import login_required, current_user
 from flask import Blueprint, request, redirect
+from datetime import datetime
 
 from . import account
 from . import avatar
@@ -22,6 +23,29 @@ def profile_settings():
         'settings/profile.html',
         css='settings.css'
     )
+
+def check_account_status() -> str | None:
+    if current_user.restricted:
+        return utils.render_template(
+            'settings/profile.html',
+            css='settings.css',
+            error='Your account was restricted.'
+        )
+
+    if current_user.silence_end and \
+       current_user.silence_end > datetime.now():
+            return utils.render_template(
+                'settings/profile.html',
+                css='settings.css',
+                error='Your account was silenced.'
+            )
+
+    if not current_user.activated:
+        return utils.render_template(
+            'settings/profile.html',
+            css='settings.css',
+            error='Your account is not activated.'
+        )
 
 @router.post('/profile')
 @login_required
@@ -77,19 +101,8 @@ def update_profile_settings():
             error='Please enter in a valid url!'
         )
 
-    if current_user.restricted:
-        return utils.render_template(
-            'settings/profile.html',
-            css='settings.css',
-            error='Your account was restricted.'
-        )
-
-    if current_user.silence_end:
-        return utils.render_template(
-            'settings/profile.html',
-            css='settings.css',
-            error='Your account was silenced.'
-        )
+    if error := check_account_status():
+        return error
 
     updates = {
         'userpage_interests': interests,
@@ -126,16 +139,8 @@ def update_userpage():
     if current_user.id != user_id and not current_user.is_admin:
         return redirect('/account/settings/profile')
 
-    if any([
-        not current_user.activated,
-        current_user.silence_end,
-        current_user.restricted
-    ]):
-        utils.render_template(
-            'settings/profile.html',
-            css='settings.css',
-            error='Your account was restricted or silenced.'
-        )
+    if error := check_account_status():
+        return error
 
     # Update database
     users.update(
@@ -162,16 +167,8 @@ def update_signature():
     if current_user.id != user_id and not current_user.is_admin:
         return redirect('/account/settings/profile')
 
-    if any([
-        not current_user.activated,
-        current_user.silence_end,
-        current_user.restricted
-    ]):
-        utils.render_template(
-            'settings/profile.html',
-            css='settings.css',
-            error='Your account was restricted or silenced.'
-        )
+    if error := check_account_status():
+        return error
 
     # Update database
     users.update(
