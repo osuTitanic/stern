@@ -356,17 +356,22 @@ def handle_post_edit(topic: DBForumTopic, post_id: int, session: Session) -> Res
 
         handle_beatmap_icon_update(
             topic_updates.get('icon_id'),
+            topic.icon_id,
             topic,
             session=session
         )
 
+    updates = {
+        'content': content
+    }
+
+    if post.user_id == current_user.id:
+        updates['edit_count'] = DBForumPost.edit_count + 1,
+        updates['edit_time'] = datetime.now()
+
     posts.update(
         post.id,
-        {
-            'content': content,
-            'edit_count': DBForumPost.edit_count + 1,
-            'edit_time': datetime.now()
-        },
+        updates,
         session=session
     )
 
