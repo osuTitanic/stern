@@ -9,10 +9,16 @@ from flask import (
     request,
     abort
 )
-
-from app.common.database import topics, posts, forums, notifications
-from app.common.database import DBForumPost, DBForumTopic
-from app.common.constants import NotificationType
+from app.common.database import DBForumPost, DBForumTopic, DBBeatmapset
+from app.common.constants import NotificationType, DatabaseStatus
+from app.common.database import (
+    notifications,
+    beatmapsets,
+    beatmaps,
+    topics,
+    forums,
+    posts
+)
 
 import utils
 import app
@@ -288,7 +294,12 @@ def handle_post_edit(topic: DBForumTopic, post_id: int, session: Session) -> Res
             description=app.constants.POST_NOT_FOUND
         )
 
-    if post.edit_locked:
+    is_priviliged = (
+        current_user.is_bat or
+        current_user.is_moderator
+    )
+
+    if post.edit_locked and not is_priviliged:
         return abort(
             403,
             description=app.constants.POST_LOCKED
@@ -298,11 +309,6 @@ def handle_post_edit(topic: DBForumTopic, post_id: int, session: Session) -> Res
         'user_id',
         type=int,
         default=-1
-    )
-
-    is_priviliged = (
-        current_user.is_bat or
-        current_user.is_moderator
     )
 
     if post.user_id != user_id and not is_priviliged:
