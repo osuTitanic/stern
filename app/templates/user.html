@@ -196,7 +196,7 @@
         {% endif %}
     {% else %}
         {% if user.userpage_about %}
-        {% if current_user_is_admin and current_user.id != user.id %}
+        {% if current_user.is_moderator and current_user.id != user.id %}
             <a class="edit-button" onclick="show('admin-userpage-controls')">Edit</a>
             <br>
             <div id="admin-userpage-controls" class="popup">

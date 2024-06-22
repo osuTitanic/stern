@@ -111,7 +111,7 @@
                             </div>
                             {% endif %}
                             {# Check if user is logged in and if the topic is locked #}
-                            {% if (not current_user.is_anonymous) and (not topic.locked_at or current_user_is_admin) %}
+                            {% if (not current_user.is_anonymous) and (not topic.locked_at or current_user.is_moderator) %}
                             <div class="post-buttons">
                                 {# Check if user is the owner of this post and if the edit is locked #}
                                 {% if (current_user.id == post.user.id) and (not post.edit_locked) %}

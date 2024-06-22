@@ -113,18 +113,6 @@
                 </form>
             </div>
             <div class="page">
-                {# User Permissions #}
-                {% if not current_user.is_anonymous and current_user.groups %}
-                    {% set current_user_group_ids = current_user.groups|get_attributes('group_id') %}
-                    {% set current_user_is_admin = (1 in current_user_group_ids) or
-                                                   (2 in current_user_group_ids) or
-                                                   (4 in current_user_group_ids) %}
-                    {% set current_user_is_bat = (1 in current_user_group_ids) or
-                                                 (3 in current_user_group_ids) %}
-                {% else %}
-                    {% set current_user_is_admin = False %}
-                    {% set current_user_is_bat = False %}
-                {% endif %}
                 {# Page Content #}
                 {% block content %}
                 {% endblock content %}

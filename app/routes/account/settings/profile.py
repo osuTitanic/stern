@@ -2,13 +2,12 @@
 from app.common.constants.regexes import DISCORD_USERNAME, URL
 from app.common.database.repositories import users
 
+from flask_login import login_required, current_user
 from flask import Blueprint, request, redirect
-from flask_login import login_required
 
 from . import account
 from . import avatar
 
-import flask_login
 import utils
 import app
 
@@ -78,14 +77,14 @@ def update_profile_settings():
             error='Please enter in a valid url!'
         )
 
-    if flask_login.current_user.restricted:
+    if current_user.restricted:
         return utils.render_template(
             'settings/profile.html',
             css='settings.css',
             error='Your account was restricted.'
         )
 
-    if flask_login.current_user.silence_end:
+    if current_user.silence_end:
         return utils.render_template(
             'settings/profile.html',
             css='settings.css',
@@ -102,11 +101,11 @@ def update_profile_settings():
     }
 
     # Update user object
-    flask_login.current_user.__dict__.update(updates)
+    current_user.__dict__.update(updates)
 
     # Update database
     users.update(
-        flask_login.current_user.id,
+        current_user.id,
         updates
     )
 
@@ -122,26 +121,21 @@ def update_userpage():
     if (bbcode := request.form.get('bbcode')) is None:
         return redirect('/account/settings/profile')
 
-    user_group_ids = [
-        entry.group_id
-        for entry in flask_login.current_user.groups
-    ]
-
-    is_admin = any([
-        1 in user_group_ids,
-        2 in user_group_ids,
-        4 in user_group_ids
-    ])
-
     user_id = request.form.get('user_id', type=int)
 
-    if any([
-        flask_login.current_user.id != user_id and not is_admin,
-        not flask_login.current_user.activated,
-        flask_login.current_user.silence_end,
-        flask_login.current_user.restricted
-    ]):
+    if current_user.id != user_id and not current_user.is_admin:
         return redirect('/account/settings/profile')
+
+    if any([
+        not current_user.activated,
+        current_user.silence_end,
+        current_user.restricted
+    ]):
+        utils.render_template(
+            'settings/profile.html',
+            css='settings.css',
+            error='Your account was restricted or silenced.'
+        )
 
     # Update database
     users.update(
@@ -150,9 +144,9 @@ def update_userpage():
     )
 
     # Update user object
-    flask_login.current_user.userpage_about = bbcode
+    current_user.userpage_about = bbcode
 
-    if user_id != flask_login.current_user.id:
+    if user_id != current_user.id:
         return redirect(f'/u/{user_id}')
 
     return redirect('/account/settings/profile#userpage')
@@ -163,21 +157,21 @@ def update_signature():
     if (bbcode := request.form.get('bbcode')) is None:
         return redirect('/account/settings/profile')
 
-    user_group_ids = [
-        entry.group_id
-        for entry in flask_login.current_user.groups
-    ]
-
-    is_admin = any([
-        1 in user_group_ids,
-        2 in user_group_ids,
-        4 in user_group_ids
-    ])
-
     user_id = request.form.get('user_id', type=int)
 
-    if flask_login.current_user.id != user_id and not is_admin:
+    if current_user.id != user_id and not current_user.is_admin:
         return redirect('/account/settings/profile')
+
+    if any([
+        not current_user.activated,
+        current_user.silence_end,
+        current_user.restricted
+    ]):
+        utils.render_template(
+            'settings/profile.html',
+            css='settings.css',
+            error='Your account was restricted or silenced.'
+        )
 
     # Update database
     users.update(
@@ -186,9 +180,9 @@ def update_signature():
     )
 
     # Update user object
-    flask_login.current_user.userpage_signature = bbcode
+    current_user.userpage_signature = bbcode
 
-    if user_id != flask_login.current_user.id:
+    if user_id != current_user.id:
         return redirect(f'/u/{user_id}')
 
     return redirect('/account/settings/profile#signature')

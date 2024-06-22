@@ -19,7 +19,7 @@
     <p class="post-subject">
         Subject: <input type="text" name="title" class="nav-search">
     </p>
-    {% if forum.allow_icons or (current_user_is_bat or current_user_is_admin) %}
+    {% if forum.allow_icons or current_user.is_bat %}
     <div class="icon-selection">
         <input type="radio" name="icon" value="-1" checked="checked">
         <label for="-1">None</label>
