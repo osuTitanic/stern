@@ -158,12 +158,7 @@ def get_icon_id(forum: DBForum) -> int | None:
         return icon_id
 
 def get_type_dict(type: str) -> dict:
-    is_priviliged = (
-        current_user.is_bat or
-        current_user.is_moderator
-    )
-
-    if not is_priviliged:
+    if not current_user.is_moderator:
         return {}
 
     if type == 'announcement':
