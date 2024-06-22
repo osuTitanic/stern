@@ -2,6 +2,11 @@
 
 {% extends "base.html" %}
 
+{% set is_privileged = (
+    current_user.is_bat or
+    current_user.is_moderator
+) %}
+
 {% block content %}
 <h1 class="header-text">
     <a href="/forum" style="color:#5a5399">Index</a> »
@@ -19,7 +24,7 @@
     <p class="post-subject">
         Subject: <input type="text" name="title" class="nav-search">
     </p>
-    {% if forum.allow_icons or current_user.is_bat %}
+    {% if forum.allow_icons or is_privileged %}
     <div class="icon-selection">
         <input type="radio" name="icon" value="-1" checked="checked">
         <label for="-1">None</label>
