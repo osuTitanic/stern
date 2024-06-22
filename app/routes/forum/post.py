@@ -10,8 +10,9 @@ from flask import (
     abort
 )
 
+from app.common.database import topics, posts, forums, notifications
 from app.common.database import DBForumPost, DBForumTopic
-from app.common.database import topics, posts, forums
+from app.common.constants import NotificationType
 
 import utils
 import app
@@ -200,8 +201,26 @@ def update_notifications(
         session=session
     )
 
-def notify_subscribers(topic: DBForumTopic, session: Session):
-    ... # TODO
+def notify_subscribers(post: DBForumPost, topic: DBForumTopic, session: Session):
+    subscribers = topics.fetch_subscribers(
+        topic.id,
+        session=session
+    )
+
+    for subscriber in subscribers:
+        if subscriber.user_id == current_user.id:
+            continue
+
+        notifications.create(
+            subscriber.user_id,
+            NotificationType.News.value,
+            f'New Post',
+            f'{current_user.name} posted something in "{topic.title}". Click here to view it!',
+            link=f'/forum/{topic.forum_id}/p/{post.id}',
+            session=session
+        )
+
+        # TODO: Send email, based on preferences
 
 def handle_post(topic: DBForumTopic, _: int, session: Session) -> Response:
     if topic.locked_at:
@@ -235,6 +254,7 @@ def handle_post(topic: DBForumTopic, _: int, session: Session) -> Response:
     )
 
     notify_subscribers(
+        post,
         topic,
         session=session
     )
