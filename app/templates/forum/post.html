@@ -2,6 +2,16 @@
 
 {% extends "base.html" %}
 
+{% set is_privileged = (
+    current_user.is_bat or
+    current_user.is_moderator
+) %}
+
+{% set editing_initial_post = (
+    action == "edit" and
+    initial_post.id == action_id
+) %}
+
 {% block content %}
 <h1 class="header-text">
     <a href="/forum" style="color:#5a5399">Index</a> »
@@ -20,6 +30,18 @@
 <form action="/forum/{{ forum.id }}/t/{{ topic.id }}/post"
       method="post">
     <div>
+        {% if editing_initial_post and (topic.can_edit_icon or is_privileged) %}
+        <div class="icon-selection">
+            <input type="radio" name="icon" value="-1" checked="checked">
+            <label for="-1">None</label>
+            {% for icon in icons %}
+                <input type="radio" name="icon" value="{{ icon.id }}">
+                <label for="{{ icon.id }}">
+                    <img src="{{ icon.location }}" alt="{{ icon.name }}">
+                </label>
+            {% endfor %}
+        </div>
+        {% endif %}
         {# Editor #}
         {% with context = {
             "current": current_text,
@@ -28,6 +50,7 @@
             "user-id": current_user.id,
             "draft": action == "post",
             "forum-controls": true,
+            "topic-controls": editing_initial_post,
             "resize": "vertical",
             "cancel": true
         } %}
