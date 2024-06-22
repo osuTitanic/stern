@@ -71,6 +71,11 @@ def post_view(forum_id: str, topic_id: str):
             session=session
         )
 
+        initial_post = posts.fetch_initial_post(
+            topic.id,
+            session=session
+        )
+
         return utils.render_template(
             "forum/post.html",
             css='forums.css',
@@ -79,7 +84,8 @@ def post_view(forum_id: str, topic_id: str):
             topic=topic,
             action=action,
             action_id=action_id,
-            is_subscribed=is_subscribed
+            is_subscribed=is_subscribed,
+            initial_post=initial_post
         )
 
 def fetch_post_text(
@@ -122,6 +128,56 @@ def fetch_post_text(
         )
 
         return drafts[0].content
+
+def update_topic_type() -> dict:
+    if not current_user.is_moderator:
+        return {}
+
+    type = request.form.get('type')
+
+    if type == 'announcement':
+        return {
+            'announcement': True,
+            'pinned': False
+        }
+
+    if type == 'pinned':
+        return {
+            'pinned': True,
+            'announcement': False
+        }
+
+    return {
+        'pinned': False,
+        'announcement': False
+    }
+
+def update_icon_id(topic: DBForumTopic) -> dict:
+    is_priviliged = (
+        current_user.is_bat or
+        current_user.is_moderator
+    )
+
+    if not topic.can_change_icon and not is_priviliged:
+        return
+
+    icon_id = request.form.get(
+        'icon',
+        default=-1,
+        type=int
+    )
+
+    if icon_id != -1:
+        return {'icon_id': icon_id}
+
+    return {'icon_id': None}
+
+def handle_beatmap_icon_update(
+    icon_id: int | None,
+    topic: DBForumTopic,
+    session: Session
+) -> None:
+    ... # TODO
 
 def update_notifications(notify: bool, user_id: int, topic_id: int, session: Session):
     if notify:
@@ -219,7 +275,12 @@ def handle_post_edit(topic: DBForumTopic, post_id: int, session: Session) -> Res
         default=-1
     )
 
-    if post.user_id != user_id:
+    is_priviliged = (
+        current_user.is_bat or
+        current_user.is_moderator
+    )
+
+    if post.user_id != user_id and not is_priviliged:
         return abort(403)
 
     content = request.form.get(
@@ -245,13 +306,30 @@ def handle_post_edit(topic: DBForumTopic, post_id: int, session: Session) -> Res
         session=session
     )
 
+    updates = {
+        'content': content,
+        'edit_count': DBForumPost.edit_count + 1,
+        'edit_time': datetime.now()
+    }
+
+    initial_post = posts.fetch_initial_post(
+        topic.id,
+        session=session
+    )
+
+    if post.id == initial_post.id:
+        updates.update(update_topic_type())
+        updates.update(update_icon_id(topic))
+
+        handle_beatmap_icon_update(
+            updates.get('icon_id'),
+            topic,
+            session=session
+        )
+
     posts.update(
         post.id,
-        {
-            'content': content,
-            'edit_count': DBForumPost.edit_count + 1,
-            'edit_time': datetime.now()
-        },
+        updates,
         session=session
     )
 
