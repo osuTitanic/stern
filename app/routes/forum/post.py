@@ -42,9 +42,8 @@ def post_view(forum_id: str, topic_id: str):
             )
 
         if topic.forum_id != int(forum_id):
-            return abort(
-                code=404,
-                description=app.constants.FORUM_NOT_FOUND
+            return redirect(
+                f"/forum/{topic.forum_id}/t/{topic.id}/post/"
             )
 
         action = request.args.get('action', default='post')

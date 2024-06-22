@@ -60,9 +60,8 @@ def topic(forum_id: str, id: str):
             )
 
         if topic.forum_id != int(forum_id):
-            return abort(
-                code=404,
-                description=app.constants.FORUM_NOT_FOUND
+            return redirect(
+                f"/forum/{topic.forum_id}/t/{id}/"
             )
 
         page = max(1, request.args.get('page', 1, type=int))
