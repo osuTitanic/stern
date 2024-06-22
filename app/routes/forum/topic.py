@@ -157,9 +157,11 @@ def get_icon_id(forum: DBForum) -> int | None:
     if icon_id != -1:
         return icon_id
 
-def get_type_dict(type: str) -> dict:
+def get_type_dict() -> dict:
     if not current_user.is_moderator:
         return {}
+
+    type = request.form.get('type')
 
     if type == 'announcement':
         return {'announcement': True}
@@ -203,7 +205,6 @@ def create_post_action(forum_id: str):
                 description=app.constants.USER_RESTRICTED
             )
 
-        type = request.form.get('type')
         title = request.form.get('title')
         content = request.form.get('bbcode')
 
@@ -214,7 +215,7 @@ def create_post_action(forum_id: str):
             session=session,
             can_change_icon=forum.allow_icons,
             icon_id=get_icon_id(forum),
-            **get_type_dict(type)
+            **get_type_dict()
         )
 
         posts.create(
