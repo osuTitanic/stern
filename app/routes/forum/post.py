@@ -11,7 +11,7 @@ from flask import (
 )
 
 from app.common.database import DBForumPost, DBForumTopic
-from app.common.database import topics, posts
+from app.common.database import topics, posts, forums
 
 import utils
 import app
@@ -311,30 +311,36 @@ def handle_post_edit(topic: DBForumTopic, post_id: int, session: Session) -> Res
         session=session
     )
 
-    updates = {
-        'content': content,
-        'edit_count': DBForumPost.edit_count + 1,
-        'edit_time': datetime.now()
-    }
-
     initial_post = posts.fetch_initial_post(
         topic.id,
         session=session
     )
 
     if post.id == initial_post.id:
-        updates.update(update_topic_type())
-        updates.update(update_icon_id(topic))
+        topic_updates = {
+            **update_icon_id(topic),
+            **update_topic_type()
+        }
+
+        topics.update(
+            topic.id,
+            topic_updates,
+            session=session
+        )
 
         handle_beatmap_icon_update(
-            updates.get('icon_id'),
+            topic_updates.get('icon_id'),
             topic,
             session=session
         )
 
     posts.update(
         post.id,
-        updates,
+        {
+            'content': content,
+            'edit_count': DBForumPost.edit_count + 1,
+            'edit_time': datetime.now()
+        },
         session=session
     )
 
