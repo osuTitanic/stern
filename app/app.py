@@ -1,9 +1,8 @@
 
-from app.common.database.objects import DBUser, DBForum, DBForumTopic
-from app.common.database.repositories import users, topics
-from app.common.helpers.external import location
+from app.common.database import DBUser, DBForum, DBForumTopic
+from app.common.database.repositories import users
 
-from flask import Flask, Request, redirect
+from flask import Flask, Request, jsonify, redirect, request
 from datetime import datetime, timedelta
 from flask_login import LoginManager
 from typing import Tuple, Optional
@@ -234,6 +233,12 @@ def get_status_icon(topic: DBForumTopic) -> str:
 
 @flask.errorhandler(HTTPException)
 def on_http_exception(error: HTTPException) -> Tuple[str, int]:
+    if '/api' in request.base_url:
+        return jsonify(
+            error=error.code,
+            details=error.description or error.name
+        ), error.code
+
     return utils.render_template(
         content=error.description or error.name,
         code=error.code,
@@ -244,6 +249,12 @@ def on_http_exception(error: HTTPException) -> Tuple[str, int]:
 
 @flask.errorhandler(Exception)
 def on_exception(error: Exception) -> Tuple[str, int]:
+    if '/api' in request.base_url:
+        return jsonify(
+            error=500,
+            details=InternalServerError.description
+        ), 500
+
     return utils.render_template(
         content=InternalServerError.description,
         code=500,
