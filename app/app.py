@@ -12,6 +12,7 @@ from . import common
 from . import routes
 from . import bbcode
 
+import traceback
 import timeago
 import config
 import utils
@@ -211,6 +212,10 @@ def get_user_color(user: DBUser, default='#4a4a4a') -> str:
 def ceil(value: float) -> int:
     return math.ceil(value)
 
+@flask.template_filter('required_nominations')
+def get_required_nominations(beatmapset) -> int:
+    return utils.required_nominations(beatmapset)
+
 @flask.template_filter('get_status_icon')
 def get_status_icon(topic: DBForumTopic) -> str:
     if topic.pinned or topic.announcement:
@@ -249,6 +254,8 @@ def on_http_exception(error: HTTPException) -> Tuple[str, int]:
 
 @flask.errorhandler(Exception)
 def on_exception(error: Exception) -> Tuple[str, int]:
+    traceback.print_exc()
+
     if '/api' in request.base_url:
         return jsonify(
             error=500,
