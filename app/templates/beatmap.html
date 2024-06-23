@@ -10,6 +10,8 @@
     {{beatmapset.title if beatmapset.title}}
     {% if beatmapset.server == 0 %}
     <p>View on <a href="https://osu.ppy.sh/b/{{ beatmap.id }}">osu.ppy.sh</a></p>
+    {% else %}
+    <p>View on <a href="/forum/t/{{ beatmapset.topic_id }}">forums</a></p>
     {% endif %}
 </h1>
 <div class="beatmap">
