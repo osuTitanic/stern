@@ -1,6 +1,6 @@
 
 from app.common.constants import BeatmapLanguage, BeatmapGenre
-from app.common.database.repositories import beatmapsets
+from app.common.database import beatmapsets, beatmaps
 
 from flask import Blueprint, abort, redirect, request
 from flask_login import current_user, login_required
@@ -52,3 +52,34 @@ def bat_update():
         )
 
     return redirect(f'/s/{set_id}')
+
+@router.get('/update/<set_id>/hashes')
+@login_required
+def update_hashes(set_id: int):
+    if not current_user.is_bat:
+        return abort(code=401)
+
+    with app.session.database.managed_session() as session:
+        if not (beatmapset := beatmapsets.fetch_one(set_id, session)):
+            return redirect(f'/s/{set_id}')
+
+        if beatmapset.server != 0:
+            return abort(code=400)
+
+        try:
+            for beatmap in beatmapset.beatmaps:
+                response = app.session.requests.get(f'https://api.osu.direct/b/{beatmap.id}')
+                response.raise_for_status()
+
+                beatmap_hash = response.json()['FileMD5']
+
+                beatmaps.update(
+                    beatmap.id,
+                    updates={'md5': beatmap_hash},
+                    session=session
+                )
+        except Exception as e:
+            app.session.logger.warning(f'Failed to update hashes: {e}')
+            return redirect(f'/b/{beatmap.id}?bat_error=Failed to update beatmap hashes.')
+
+    return redirect(f'/s/{beatmapset.id}')
