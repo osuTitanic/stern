@@ -7,10 +7,10 @@ from flask import request
 from PIL import Image
 
 from app.common.database.repositories import wrapper
-from app.common.cache import leaderboards, status
 from app.common.helpers import caching, analytics, ip
+from app.common.database import DBUser, DBBeatmapset
+from app.common.cache import leaderboards, status
 from app.common.helpers.external import location
-from app.common.database import DBUser
 from app.common import constants
 
 from app.common.database import (
@@ -91,6 +91,20 @@ def sync_ranks(user: DBUser, session: Session | None = None) -> None:
                 user.country,
                 session=session
             )
+
+def required_nominations(beatmapset: DBBeatmapset) -> bool:
+    beatmap_modes = len(
+        set(
+            beatmap.mode
+            for beatmap in beatmapset.beatmaps
+        )
+    )
+
+    # NOTE: Beatmap requires 2 approvals + 1 for each other mode
+    additional_modes = beatmap_modes - 1
+    required_nominations = 2 + additional_modes
+
+    return required_nominations
 
 def resize_image(
     image: bytes,
