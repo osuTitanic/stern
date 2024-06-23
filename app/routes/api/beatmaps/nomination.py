@@ -11,7 +11,6 @@ router = Blueprint('beatmap-nomination', __name__)
 
 @router.get('/nominations/<set_id>/add')
 @login_required
-@validate()
 def add_nomination(set_id: int):
     if not current_user.is_bat:
         return abort(code=401)
@@ -41,7 +40,6 @@ def add_nomination(set_id: int):
 
 @router.get('/nominations/<set_id>/reset')
 @login_required
-@validate()
 def reset_nominations(set_id: int):
     if not current_user.is_bat:
         return abort(code=401)
