@@ -1,9 +1,10 @@
 
 from app.common.constants import BeatmapLanguage, BeatmapGenre, DatabaseStatus, Mods
-from app.common.database import beatmaps, scores, favourites
-from flask import Blueprint, request, abort
+from app.common.database import beatmaps, scores, favourites, nominations
 
-import flask_login
+from flask import Blueprint, request, abort
+from flask_login import current_user
+
 import config
 import utils
 import app
@@ -38,16 +39,16 @@ def get_beatmap(id: int):
         personal_best = None
         personal_best_rank = None
 
-        if not flask_login.current_user.is_anonymous:
+        if not current_user.is_anonymous:
             personal_best = scores.fetch_personal_best(
                 beatmap.id,
-                flask_login.current_user.id,
+                current_user.id,
                 int(mode),
                 session=session
             )
 
             personal_best_rank = scores.fetch_score_index(
-                flask_login.current_user.id,
+                current_user.id,
                 beatmap.id,
                 int(mode),
                 session=session
@@ -88,5 +89,6 @@ def get_beatmap(id: int):
             site_title=f"{beatmap.full_name} - Beatmap Info",
             personal_best=personal_best,
             personal_best_rank=personal_best_rank,
+            bat_nomination=nominations.fetch_one(beatmap.set_id, current_user.id),
             bat_error=request.args.get('bat_error')
         )
