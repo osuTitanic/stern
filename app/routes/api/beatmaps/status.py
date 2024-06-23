@@ -67,6 +67,53 @@ def move_beatmap_topic(beatmapset: DBBeatmapset, status: int, session: Session):
             session=session
         )
 
+def update_beatmap_icon(
+    beatmapset: DBBeatmapset,
+    status: int,
+    previous_status: int,
+    session: Session
+) -> None:
+    if status in (DatabaseStatus.Ranked, DatabaseStatus.Qualified, DatabaseStatus.Loved):
+        # Set icon to heart
+        topics.update(
+            beatmapset.topic_id,
+            {'icon_id': 1},
+            session=session
+        )
+        return
+
+    if status == DatabaseStatus.Approved:
+        # Set icon to flame
+        topics.update(
+            beatmapset.topic_id,
+            {'icon_id': 5},
+            session=session
+        )
+        return
+
+    ranked_statuses = (
+        DatabaseStatus.Qualified,
+        DatabaseStatus.Approved,
+        DatabaseStatus.Ranked,
+        DatabaseStatus.Loved
+    )
+
+    if previous_status in ranked_statuses:
+        # Set icon to broken heart
+        topics.update(
+            beatmapset.topic_id,
+            {'icon_id': 2},
+            session=session
+        )
+        return
+
+    # Remove icon
+    topics.update(
+        beatmapset.topic_id,
+        {'icon_id': None},
+        session=session
+    )
+
 @router.post('/status/difficulty')
 @login_required
 def diff_status_update():
@@ -90,6 +137,7 @@ def diff_status_update():
             return abort(code=400)
 
         set_status = max(statuses.values())
+        previous_status = beatmapset.status
 
         contains_ranked_status = any(
             status == DatabaseStatus.Ranked
@@ -146,6 +194,13 @@ def diff_status_update():
         move_beatmap_topic(
             beatmapset,
             set_status,
+            session=session
+        )
+
+        update_beatmap_icon(
+            beatmapset,
+            set_status,
+            previous_status,
             session=session
         )
 
