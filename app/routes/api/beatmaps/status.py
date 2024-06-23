@@ -96,22 +96,26 @@ def diff_status_update():
             for status in statuses.values()
         )
 
-        contains_approved_status = any(
-            status == DatabaseStatus.Approved
-            for status in statuses.values()
-        )
-
-        if contains_ranked_status or contains_approved_status:
+        if contains_ranked_status:
             if beatmapset.status not in (DatabaseStatus.Ranked, DatabaseStatus.Approved):
                 return redirect(
                     f'/b/{list(statuses.keys())[0]}?bat_error=This beatmap is not yet ranked. Try to qualify it first!'
                 )
 
-            set_status = (
-                DatabaseStatus.Ranked.value
-                if contains_ranked_status
-                else DatabaseStatus.Approved.value
-            )
+            set_status = DatabaseStatus.Ranked.value
+
+        contains_approved_status = any(
+            status == DatabaseStatus.Approved
+            for status in statuses.values()
+        )
+
+        if contains_approved_status:
+            if not has_enough_nominations(beatmapset, session):
+                return redirect(
+                    f'/b/{list(statuses.keys())[0]}?bat_error=This beatmap has not enough nominations.'
+                )
+
+            set_status = DatabaseStatus.Approved.value
 
         contains_qualified_status = any(
             status == DatabaseStatus.Qualified
@@ -126,18 +130,18 @@ def diff_status_update():
 
             set_status = DatabaseStatus.Qualified.value
 
-        beatmapsets.update(
-            beatmapset.id,
-            {'status': set_status},
-            session=session
-        )
-
         for beatmap_id, status in statuses.items():
             beatmaps.update(
                 beatmap_id,
                 {'status': status},
                 session=session
             )
+
+        beatmapsets.update(
+            beatmapset.id,
+            {'status': set_status},
+            session=session
+        )
 
         move_beatmap_topic(
             beatmapset,
