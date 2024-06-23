@@ -91,8 +91,8 @@ def get_beatmap(id: int):
             personal_best_rank=personal_best_rank,
             bat_error=request.args.get('bat_error'),
             bat_nomination=(
-                nominations.fetch_one(beatmap.set_id, current_user.id)
+                nominations.fetch_one(beatmap.set_id, current_user.id, session)
                 if not current_user.is_anonymous else None
             ),
-            nominations=nominations.fetch_by_beatmapset(beatmap.set_id)
+            nominations=nominations.fetch_by_beatmapset(beatmap.set_id, session)
         )
