@@ -75,19 +75,19 @@ def login():
 
                     mail.send_welcome_email(verification, user)
 
-            else:
-                # No activation email was sent?
-                verification = verifications.create(
-                    user.id,
-                    type=0,
-                    token_size=32,
-                    session=session
-                )
+                else:
+                    # No activation email was sent?
+                    verification = verifications.create(
+                        user.id,
+                        type=0,
+                        token_size=32,
+                        session=session
+                    )
 
-                mail.send_welcome_email(verification, user)
+                    mail.send_welcome_email(verification, user)
 
-            # Redirect to verification page
-            return redirect(f'/account/verification?id={verification.id}')
+                # Redirect to verification page
+                return redirect(f'/account/verification?id={verification.id}')
 
         utils.track(
             'website_login',
