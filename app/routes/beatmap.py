@@ -89,6 +89,9 @@ def get_beatmap(id: int):
             site_title=f"{beatmap.full_name} - Beatmap Info",
             personal_best=personal_best,
             personal_best_rank=personal_best_rank,
-            bat_nomination=nominations.fetch_one(beatmap.set_id, current_user.id),
-            bat_error=request.args.get('bat_error')
+            bat_error=request.args.get('bat_error'),
+            bat_nomination=(
+                nominations.fetch_one(beatmap.set_id, current_user.id)
+                if not current_user.is_anonymous else None
+            )
         )
