@@ -171,12 +171,7 @@ def update_topic_type() -> dict:
     }
 
 def update_icon_id(topic: DBForumTopic) -> dict:
-    is_priviliged = (
-        current_user.is_bat or
-        current_user.is_moderator
-    )
-
-    if not topic.can_change_icon and not is_priviliged:
+    if not topic.can_change_icon and not current_user.is_admin:
         return
 
     icon_id = request.form.get(
@@ -189,38 +184,6 @@ def update_icon_id(topic: DBForumTopic) -> dict:
         return {'icon_id': icon_id}
 
     return {'icon_id': None}
-
-def update_beatmap_status(
-    beatmapset: DBBeatmapset,
-    status: DatabaseStatus,
-    session: Session
-) -> None:
-    beatmapsets.update(
-        beatmapset.id,
-        {
-            'status': status.value,
-            'last_update': datetime.now()
-        },
-        session=session
-    )
-    beatmaps.update_by_set_id(
-        beatmapset.id,
-        {
-            'status': status.value,
-            'last_update': datetime.now()
-        },
-        session=session
-    )
-
-    if status > DatabaseStatus.Pending:
-        beatmapsets.update(
-            beatmapset.id,
-            {
-                'approved_at': datetime.now(),
-                'approved_by': current_user.id
-            },
-            session=session
-        )
 
 def update_topic_location(
     topic: DBForumTopic,
@@ -237,102 +200,6 @@ def update_topic_location(
         {'forum_id': forum_id},
         session=session
     )
-
-def handle_beatmap_icon_update(
-    icon_id: int | None,
-    previous_icon: int | None,
-    topic: DBForumTopic,
-    session: Session
-) -> None:
-    if not current_user.is_bat:
-        topics.update(
-            topic.id,
-            {'icon_id': previous_icon},
-            session=session
-        )
-        return
-
-    beatmapset = beatmapsets.fetch_by_topic(
-        topic.id,
-        session=session
-    )
-
-    if not beatmapset:
-        return
-
-    disallowed_statuses = (
-        DatabaseStatus.Ranked,
-        DatabaseStatus.Approved,
-        DatabaseStatus.Loved
-    )
-
-    if beatmapset.status in disallowed_statuses:
-        # Beatmap was already ranked
-        # -> Set icon back to previous icon
-        topics.update(
-            topic.id,
-            {'icon_id': previous_icon},
-            session=session
-        )
-        return
-
-    if icon_id == 1:
-        # BAT wants to rank beatmapset
-        if previous_icon != 3:
-            # Beatmap was not bubbled
-            topics.update(
-                topic.id,
-                {'icon_id': previous_icon},
-                session=session
-            )
-            return
-
-        # Qualify beatmapset
-        # (Beatmap will automatically be ranked after 7 days)
-        update_beatmap_status(
-            beatmapset,
-            DatabaseStatus.Qualified,
-            session=session
-        )
-
-        # Move topic into ranked beatmaps forum
-        update_topic_location(
-            topic,
-            forum_id=8,
-            session=session
-        )
-        return
-
-    if icon_id == 5:
-        # TODO: Should this be "Loved" status?
-        update_beatmap_status(
-            beatmapset,
-            DatabaseStatus.Approved,
-            session=session
-        )
-
-        # Move topic into ranked beatmaps forum
-        update_topic_location(
-            topic,
-            forum_id=8,
-            session=session
-        )
-        return
-
-    # All other statuses
-    update_beatmap_status(
-        beatmapset,
-        DatabaseStatus.Pending,
-        session=session
-    )
-
-    if topic.forum_id not in (9, 10):
-        # Move topic back to pending beatmaps forum
-        update_topic_location(
-            topic,
-            forum_id=9,
-            session=session
-        )
 
 def update_notifications(
     notify: bool,
@@ -491,8 +358,6 @@ def handle_post_edit(topic: DBForumTopic, post_id: int, session: Session) -> Res
     )
 
     if post.id == initial_post.id:
-        previous_icon = topic.icon_id
-
         topic_updates = {
             **update_icon_id(topic),
             **update_topic_type()
@@ -501,13 +366,6 @@ def handle_post_edit(topic: DBForumTopic, post_id: int, session: Session) -> Res
         topics.update(
             topic.id,
             topic_updates,
-            session=session
-        )
-
-        handle_beatmap_icon_update(
-            topic_updates.get('icon_id'),
-            previous_icon,
-            topic,
             session=session
         )
 
