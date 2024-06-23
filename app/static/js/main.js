@@ -100,7 +100,7 @@ async function confirmNotification(element)
     element.onclick = () => {};
 }
 
-function confirmRedirect(url, prompt)
+function confirmRedirect(url, prompt='Are you sure?')
 {
     do_redirect = confirm(prompt);
 
