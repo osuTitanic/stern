@@ -179,11 +179,11 @@
     <div class="padding">
         <div class="beatmap-download">
             {% if current_user.id %}
-                <a href="/beatmapsets/download/{{ beatmapset.id }}">
+                <a href="/beatmapsets/download/{{ beatmapset.id }}" target="_blank">
                     <img src="/images/beatmap/osu-download-beatmap.png" alt="Download">
                 </a>
                 {% if beatmapset.has_video %}
-                    <a href="/beatmapsets/download/{{ beatmapset.id }}?novideo=True">
+                    <a href="/beatmapsets/download/{{ beatmapset.id }}?novideo=True" target="_blank">
                         <img src="/images/beatmap/osu-download-beatmap-novid.png" alt="Download without Video">
                     </a>
                 {% endif %}
@@ -199,7 +199,12 @@
                 <audio id="beatmap-preview" src="http{{ 's' if config.ENABLE_SSL else '' }}://s.{{ config.DOMAIN_NAME }}/mp3/preview/{{ beatmapset.id }}.mp3" preload="auto"></audio>
             </a>
             {% if beatmapset.description %}
-                {{ beatmapset.description|safe }}
+                {# NOTE: Small workaround for existsing html-bbcode #}
+                {% if beatmapset.server != 0 %}
+                    {{ beatmapset.description|bbcode|safe }}
+                {% else %}
+                    {{ beatmapset.description|safe }}
+                {% endif %}
             {% endif %}
         </div>
     </div>

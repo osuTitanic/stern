@@ -35,7 +35,10 @@ def verification():
         return abort(404)
 
     with app.session.database.managed_session() as session:
-        verification = verifications.fetch_by_id(verification_id, session=session)
+        verification = verifications.fetch_by_id(
+            verification_id,
+            session=session
+        )
 
         if not verification:
             return abort(404)
@@ -81,6 +84,15 @@ def verification():
 
         verifications.delete(verification.token)
 
+        utils.track(
+            'website_verification_success',
+            user=verification.user,
+            properties={
+                'verification_id': verification.id,
+                'verification_type': verification.type
+            }
+        )
+
         return utils.render_template(
             'verification.html',
             css='verification.css',
@@ -100,7 +112,10 @@ def resend_verification():
             if not (verification_id := request.args.get('id', type=int)):
                 return abort(404)
 
-            verification = verifications.fetch_by_id(verification_id, session=session)
+            verification = verifications.fetch_by_id(
+                verification_id,
+                session=session
+            )
 
             if not verification:
                 return abort(404)
@@ -119,7 +134,10 @@ def resend_verification():
         except ValueError:
             return abort(404)
 
-        verifications.delete(verification.token, session=session)
+        verifications.delete(
+            verification.token,
+            session=session
+        )
 
         verification = verifications.create(
             verification.user_id,
@@ -128,6 +146,18 @@ def resend_verification():
             session=session
         )
 
-        mail.send_welcome_email(verification, verification.user)
+        mail.send_welcome_email(
+            verification,
+            verification.user
+        )
+
+        utils.track(
+            'website_resend_verification',
+            user=verification.user,
+            properties={
+                'verification_id': verification.id,
+                'verification_type': verification.type
+            }
+        )
 
         return redirect(f'/account/verification?id={verification.id}')

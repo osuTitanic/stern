@@ -31,6 +31,8 @@ ENABLE_SSL = eval(os.environ.get('ENABLE_SSL', 'False').capitalize())
 S3_ENABLED = eval(os.environ.get('ENABLE_S3', 'True').capitalize())
 DEBUG = eval(os.environ.get('DEBUG', 'False').capitalize())
 
+AMPLITUDE_API_KEY = os.environ.get('AMPLITUDE_API_KEY')
+
 SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY')
 SENDGRID_EMAIL = os.environ.get('SENDGRID_EMAIL')
 
@@ -43,4 +45,5 @@ EMAILS_ENABLED = bool(MAILGUN_API_KEY or SENDGRID_API_KEY)
 EMAIL = MAILGUN_EMAIL or SENDGRID_EMAIL
 
 OFFICER_WEBHOOK_URL = os.environ.get('OFFICER_WEBHOOK_URL')
+EVENT_WEBHOOK_URL = os.environ.get('EVENT_WEBHOOK_URL')
 DATA_PATH = os.path.abspath('.data')

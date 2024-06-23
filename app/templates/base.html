@@ -17,15 +17,15 @@
     {% if site_image %}<meta property="og:image" content="{{ site_image }}">{% endif %}
     {% if site_url %}<meta property="og:url" content="{{ site_url }}">{% endif %}
     <title>{{ title or 'Titanic' }}</title>
-    <script src="/js/jquery.min.js"></script>
-    <script src="/js/jquery.timeago.js"></script>
-    <script src="/js/d3.v3.js"></script>
-    <script src="/js/nv.d3.js"></script>
+    <script src="/lib/jquery.min.js"></script>
+    <script src="/lib/jquery.timeago.js"></script>
+    <script src="/lib/d3.v3.js"></script>
+    <script src="/lib/nv.d3.js"></script>
     <link rel="stylesheet" href="/css/{{ css or 'main.css' }}">
-    <link rel="stylesheet" href="/css/nv.d3.min.css">
-    <link rel="stylesheet" href="/css/fontawesome.min.css">
-    <link rel="stylesheet" href="/css/fontawesome.solid.min.css">
-    <link rel="stylesheet" href="/css/fontawesome.brands.min.css">
+    <link rel="stylesheet" href="/lib/nv.d3.min.css">
+    <link rel="stylesheet" href="/lib/fontawesome.min.css">
+    <link rel="stylesheet" href="/lib/fontawesome.solid.min.css">
+    <link rel="stylesheet" href="/lib/fontawesome.brands.min.css">
     <script>
         const domainName = "{{ config.DOMAIN_NAME }}";
         const enableSSL = {{ config.ENABLE_SSL|lower }};
@@ -34,6 +34,14 @@
     </script>
 </head>
 <body>
+    {% if current_user.restricted %}
+    <div class="alert-header">
+        <h1 style="margin-top: 0px; color: white;">Your account was <strong>restricted</strong>!</h1>
+        <div>
+            You won't have be able to engage with other users or submit scores. If you wish to appeal your restriction, please <a href="mailto:{{ config.EMAIL }}" style="color:white; font-weight: bold;">contact the administration team</a>.
+        </div>
+    </div><br>
+    {% endif %}
     <div class="main">
         <img src="/images/logo/headerlogo@0,25x.png" class="logo" loading="eager" alt="">
         <div class="nav">
