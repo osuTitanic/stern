@@ -141,3 +141,4 @@ def track(
 @caching.ttl_cache(ttl=900)
 def fetch_average_topic_views() -> int:
     return int(topics.fetch_average_views())
+
