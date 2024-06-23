@@ -131,6 +131,7 @@ def diff_status_update():
             int(key.removeprefix('status-')): int(value)
             for key, value in request.form.items()
             if key.startswith('status')
+            and int(value) != -3
         }
 
         if not statuses:
