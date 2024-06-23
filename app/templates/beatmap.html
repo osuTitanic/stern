@@ -229,6 +229,7 @@
                                     </dd>
                                 </dl>
                                 <input type="submit" value="Save">
+                                <input type="hidden" name="beatmapset_id" value="{{ beatmapset.id }}">
                             </form>
                         </td>
                         <td>
@@ -296,6 +297,7 @@
                                         {% endfor %}
                                     </div>
                                     <input type="submit" value="Update">
+                                    <input type="hidden" name="beatmapset_id" value="{{ beatmapset.id }}">
                                 </form>
                             </details>
                         </td>
