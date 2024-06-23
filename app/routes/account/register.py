@@ -128,9 +128,9 @@ def registration_request():
         geolocation = location.fetch_web(ip)
         country = geolocation.country_code.upper() if geolocation else 'XX'
 
-        cf_country = request.headers.get('CF-IPCountry')
+        cf_country = request.headers.get('CF-IPCountry', 'XX')
 
-        if cf_country != None and cf_country not in ('XX', 'T1'):
+        if cf_country not in ('XX', 'T1'):
             country = cf_country.upper()
 
         hashed_password = get_hashed_password(password)
@@ -216,7 +216,12 @@ def input_validation():
     if not (value := request.args.get('value')):
         return ''
 
-    return {
+    validators = {
         'username': validate_username,
         'email': validate_email
-    }[type](value) or ''
+    }
+
+    if not (validator := validators.get(type)):
+        return ''
+
+    return validator(value) or ''
