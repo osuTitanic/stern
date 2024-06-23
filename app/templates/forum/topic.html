@@ -2,10 +2,9 @@
 
 {% extends "base.html" %}
 
-{# BATs are able to moderate topics if they are linked to a beatmapset #}
 {% set is_privileged = (
-    (current_user.is_moderator) or
-    (current_user.is_bat if beatmapset else False)
+    current_user.is_moderator or
+    current_user.is_admin
 ) %}
 
 {% block content %}
