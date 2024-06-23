@@ -100,6 +100,17 @@ async function confirmNotification(element)
     element.onclick = () => {};
 }
 
+function confirmRedirect(url, prompt)
+{
+    do_redirect = confirm(prompt);
+
+    if (!do_redirect)
+        return;
+
+    window.location.href = url;
+    return false;
+}
+
 function cookieExists(name) { return document.cookie.indexOf(`${name}=`); }
 function isLoggedIn() { return cookieExists('session'); }
 
