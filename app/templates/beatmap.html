@@ -240,7 +240,7 @@
                             {# Beatmap is not ranked #}
                             <div>
                                 {% if not bat_nomination %}
-                                <a onclick="confirmRedirect('/api/beatmaps/nominations/{{ beatmapset.id }}/add')" style="color: green;">
+                                <a href="/api/beatmaps/nominations/{{ beatmapset.id }}/add" style="color: green;">
                                     Nominate this beatmap
                                     (Bubble)
                                 </a><br>
