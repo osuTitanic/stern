@@ -215,3 +215,155 @@ def diff_status_update():
             )
 
     return redirect(f'/s/{set_id}')
+
+def handle_pending_status(beatmapset: DBBeatmapset, session: Session):
+    if beatmapset.status > 0:
+        nominations.delete_all(
+            beatmapset.id,
+            session=session
+        )
+
+    update_beatmap_icon(
+        beatmapset,
+        DatabaseStatus.Pending.value,
+        beatmapset.status,
+        session=session
+    )
+
+    beatmapsets.update(
+        beatmapset.id,
+        {'status': DatabaseStatus.Pending.value},
+        session=session
+    )
+
+    move_beatmap_topic(
+        beatmapset,
+        DatabaseStatus.Pending.value,
+        session=session
+    )
+
+    return redirect(
+        f'/s/{beatmapset.id}'
+    )
+
+def handle_approved_status(beatmapset: DBBeatmapset, session: Session):
+    if not has_enough_nominations(beatmapset, session):
+        return redirect(
+            f'/b/{beatmapset.beatmaps[0].id}?bat_error=This beatmap has not enough nominations.'
+        )
+
+    update_beatmap_icon(
+        beatmapset,
+        DatabaseStatus.Approved.value,
+        beatmapset.status,
+        session=session
+    )
+
+    beatmapsets.update(
+        beatmapset.id,
+        {
+            'status': DatabaseStatus.Approved.value,
+            'approved_at': datetime.now(),
+            'approved_by': current_user.id
+        },
+        session=session
+    )
+
+    move_beatmap_topic(
+        beatmapset,
+        DatabaseStatus.Approved.value,
+        session=session
+    )
+
+    return redirect(
+        f'/s/{beatmapset.id}'
+    )
+
+def handle_qualified_status(beatmapset: DBBeatmapset, session: Session):
+    if not has_enough_nominations(beatmapset, session):
+        return redirect(
+            f'/b/{beatmapset.beatmaps[0].id}?bat_error=This beatmap has not enough nominations.'
+        )
+
+    update_beatmap_icon(
+        beatmapset,
+        DatabaseStatus.Qualified.value,
+        beatmapset.status,
+        session=session
+    )
+
+    beatmapsets.update(
+        beatmapset.id,
+        {
+            'status': DatabaseStatus.Qualified.value,
+            'approved_at': datetime.now(),
+            'approved_by': current_user.id
+        },
+        session=session
+    )
+
+    move_beatmap_topic(
+        beatmapset,
+        DatabaseStatus.Qualified.value,
+        session=session
+    )
+
+    return redirect(
+        f'/s/{beatmapset.id}'
+    )
+
+def handle_loved_status(beatmapset: DBBeatmapset, session: Session):
+    update_beatmap_icon(
+        beatmapset,
+        DatabaseStatus.Loved.value,
+        beatmapset.status,
+        session=session
+    )
+
+    beatmapsets.update(
+        beatmapset.id,
+        {
+            'status': DatabaseStatus.Loved.value,
+            'approved_at': datetime.now(),
+            'approved_by': current_user.id
+        },
+        session=session
+    )
+
+    move_beatmap_topic(
+        beatmapset,
+        DatabaseStatus.Loved.value,
+        session=session
+    )
+
+    return redirect(
+        f'/s/{beatmapset.id}'
+    )
+
+@router.get('/status/<set_id>/update')
+@login_required
+def status_update(set_id: int):
+    if not current_user.is_bat:
+        return abort(code=401)
+
+    if (status := request.args.get('status', type=int)) == None:
+        return abort(code=400)
+
+    if status not in DatabaseStatus.values():
+        return abort(code=400)
+
+    with app.session.database.managed_session() as session:
+        if not (beatmapset := beatmapsets.fetch_one(set_id, session)):
+            return redirect(f'/s/{set_id}')
+
+        status_handlers = {
+            0: handle_pending_status,
+            2: handle_approved_status,
+            3: handle_qualified_status,
+            4: handle_loved_status
+        }
+
+        if not (handler := status_handlers.get(status)):
+            return abort(code=400)
+
+        return handler(beatmapset, session)
