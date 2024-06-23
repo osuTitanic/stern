@@ -176,8 +176,136 @@
                 </td>
             </tr>
         </table>
+        {% if current_user.is_bat %}
+        <div class="bat-controls">
+            <details>
+                <summary>BAT Controls</summary>
+                {% if bat_error %}
+                <div id="error">
+                    {{ bat_error }}
+                </div>
+                {% endif %}
+                {% if bat_info %}
+                <div id="info">
+                    {{ bat_info }}
+                </div>
+                {% endif %}
+                <table>
+                    <thead>
+                        <th><h2>General</h2></th>
+                        <th><h2>Ranking</h2></th>
+                    </thead>
+                    <tbody>
+                        <td style="width: 50%">
+                            <form action="/api/beatmaps/update" method="post">
+                                <dl>
+                                    <dt>Offset:</dt>
+                                    <dd>
+                                        <input type="text" name="offset" value="{{ beatmapset.offset }}" size="6">
+                                    </dd>
+                                    <dt>Display Title:</dt>
+                                    <dd>
+                                        <textarea name="display_title">{{ beatmapset.display_title }}</textarea>
+                                    </dd>
+                                    <dt>Genre:</dt>
+                                    <dd>
+                                        <select name="genre">
+                                            {% for genre in constants.BeatmapGenre.values() %}
+                                            <option value="{{ genre }}" {% if beatmapset.genre_id == genre %}selected{% endif %}>{{ constants.BeatmapGenre(genre).name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </dd>
+                                    <dt>Language:</dt>
+                                    <dd>
+                                        <select name="language">
+                                            {% for language in constants.BeatmapLanguage.values() %}
+                                            <option value="{{ language }}" {% if beatmapset.language_id == language %}selected{% endif %}>{{ constants.BeatmapLanguage(language).name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </dd>
+                                    <dt>Tags:</dt>
+                                    <dd>
+                                        <textarea name="tags">{{ beatmapset.tags or '' }}</textarea>
+                                    </dd>
+                                </dl>
+                                <input type="submit" value="Save">
+                            </form>
+                        </td>
+                        <td>
+                            {# TODO: Add update endpoint #}
+                            <p>
+                                The current status of this beatmap is "{{ constants.DatabaseStatus(beatmapset.status).name }}".
+                            </p><br>
+                            {% if beatmapset.status <= 0 %}
+                            {# Beatmap is not ranked #}
+                            <div>
+                                <a href="#" style="color: green;">
+                                    {# TODO: Check if already nominated #}
+                                    Nominate this beatmap
+                                    (Bubble)
+                                </a><br>
+                                <a href="#" style="color: red;">
+                                    Remove all nominations from this beatmap
+                                    (Bubble pop)
+                                </a>
+                            </div><br>
+                            <div>
+                                <a href="#">Update status to "Qualified"</a><br>
+                                <a href="#">Update status to "Approved"</a><br>
+                                <a href="#">Update status to "Loved"</a><br>
+                            </div><br>
+                            {% elif beatmapset.status in (1, 2) %}
+                            <div>
+                                <a href="#" style="color: red;">
+                                    Unrank this beatmap
+                                </a>
+                            </div>
+                            {% elif beatmapset.status == 3 %}
+                            <div>
+                                <a href="#" style="color: red;">
+                                    Disqualify this beatmap
+                                </a>
+                            </div>
+                            {% elif beatmapset.status == 4 %}
+                            <div>
+                                <a href="#" style="color: red;">
+                                    Remove from "Loved" category
+                                </a>
+                            </div>
+                            {% endif %}
+                            {% if beatmapset.server != 1 %}
+                            <div>
+                                <a href="#">Update beatmap hashes</a>
+                            </div><br>
+                            {% endif %}
+                            <details>
+                                <summary>Difficulty Status Updates</summary><br>
+                                <form action="/api/beatmaps/status/{{ beatmapset.id }}" method="post">
+                                    <div class="bat-diffs">
+                                        {% for beatmap in beatmapset.beatmaps %}
+                                        <div>
+                                            <dt>{{ beatmap.version }}</dt>
+                                            <dd>
+                                                <select name="status-{{ beatmap.id }}">
+                                                    {% for status in constants.DatabaseStatus.values() %}
+                                                    <option value="{{ status }}" {% if beatmap.status == status %}selected{% endif %}>{{ constants.DatabaseStatus(status).name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </dd>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                    <input type="submit" value="Update">
+                                </form>
+                            </details>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </details>
+        </div>
     </div>
-    {# TODO: BAT/Creator Controls #}
+    {% endif %}
     <div class="padding">
         <div class="beatmap-download">
             {% if current_user.id %}
