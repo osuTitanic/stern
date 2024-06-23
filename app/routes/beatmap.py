@@ -87,5 +87,6 @@ def get_beatmap(id: int):
             site_description=f"Titanic » beatmaps » {beatmap.full_name}",
             site_title=f"{beatmap.full_name} - Beatmap Info",
             personal_best=personal_best,
-            personal_best_rank=personal_best_rank
+            personal_best_rank=personal_best_rank,
+            bat_error=request.args.get('bat_error')
         )
