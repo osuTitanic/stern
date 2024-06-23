@@ -235,6 +235,9 @@
                         <td>
                             <p>
                                 The current status of this beatmap is "{{ constants.DatabaseStatus(beatmapset.status).name }}".
+                                {% if nominations|length >= beatmapset|required_nominations %}
+                                This beatmap has enough nominations to be qualified!
+                                {% endif %}
                             </p><br>
                             {% if beatmapset.status <= 0 %}
                             {# Beatmap is not ranked #}
@@ -244,38 +247,43 @@
                                     Nominate this beatmap
                                     (Bubble)
                                 </a><br>
+                                {% else %}
+                                <p style="color: green;">
+                                    You have nominated this beatmap
+                                    (Bubbled)
+                                </p>
                                 {% endif %}
                                 <a onclick="confirmRedirect('/api/beatmaps/nominations/{{ beatmapset.id }}/reset')" style="color: red;">
                                     Remove all nominations from this beatmap
-                                    (Bubble pop)
+                                    (Pop Bubble)
                                 </a>
                             </div><br>
                             <div>
-                                <a onclick="confirmRedirect('/api/beatmaps/status/{{ beatmapset.id }}/update?status=Qualified')">
+                                <a onclick="confirmRedirect('/api/beatmaps/status/{{ beatmapset.id }}/update?status=3')">
                                     Update status to "Qualified"
                                 </a><br>
-                                <a onclick="confirmRedirect('/api/beatmaps/status/{{ beatmapset.id }}/update?status=Approved')">
+                                <a onclick="confirmRedirect('/api/beatmaps/status/{{ beatmapset.id }}/update?status=2')">
                                     Update status to "Approved"
                                 </a><br>
-                                <a onclick="confirmRedirect('/api/beatmaps/status/{{ beatmapset.id }}/update?status=Loved')">
+                                <a onclick="confirmRedirect('/api/beatmaps/status/{{ beatmapset.id }}/update?status=4')">
                                     Update status to "Loved"
                                 </a><br>
                             </div><br>
                             {% elif beatmapset.status in (1, 2) %}
                             <div>
-                                <a onclick="confirmRedirect('/api/beatmaps/status/{{ beatmapset.id }}/update?status=Pending')" style="color: red;">
+                                <a onclick="confirmRedirect('/api/beatmaps/status/{{ beatmapset.id }}/update?status=0')" style="color: red;">
                                     Unrank this beatmap
                                 </a>
                             </div>
                             {% elif beatmapset.status == 3 %}
                             <div>
-                                <a onclick="confirmRedirect('/api/beatmaps/status/{{ beatmapset.id }}/update?status=Pending')" style="color: red;">
+                                <a onclick="confirmRedirect('/api/beatmaps/status/{{ beatmapset.id }}/update?status=0')" style="color: red;">
                                     Disqualify this beatmap
                                 </a>
                             </div>
                             {% elif beatmapset.status == 4 %}
                             <div>
-                                <a onclick="confirmRedirect('/api/beatmaps/status/{{ beatmapset.id }}/update?status=Pending')" style="color: red;">
+                                <a onclick="confirmRedirect('/api/beatmaps/status/{{ beatmapset.id }}/update?status=0')" style="color: red;">
                                     Remove from "Loved" category
                                 </a>
                             </div>
