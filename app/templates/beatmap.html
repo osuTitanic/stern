@@ -281,7 +281,7 @@
                             {% endif %}
                             <details>
                                 <summary>Difficulty Status Updates</summary><br>
-                                <form action="/api/beatmaps/status/{{ beatmapset.id }}" method="post">
+                                <form action="/api/beatmaps/status" method="post">
                                     <div class="bat-diffs">
                                         {% for beatmap in beatmapset.beatmaps %}
                                         <div>
