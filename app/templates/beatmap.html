@@ -178,7 +178,7 @@
         </table>
         {% if current_user.is_bat %}
         <div class="bat-controls">
-            <details>
+            <details {% if bat_error or bat_info %}open{% endif %}>
                 <summary>BAT Controls</summary>
                 {% if bat_error %}
                 <div id="error">
