@@ -175,6 +175,30 @@
                     {% endif %}
                 </td>
             </tr>
+            {% if nominations or beatmapset.status <= 0 %}
+            <tr>
+                <td>Nominators:</td>
+                <td colspan="3">
+                    {% if not nominations %}
+                    <p>No one has nominated this map yet.</p>
+                    {% else %}
+                    <div>
+                        {% for nomination in nominations %}
+                        <a href="/u/{{ nomination.user_id }}">{{ nomination.user.name }}</a>{% if loop.index0 != nominations|length - 1 %},{% endif %}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </td>
+                <td>Links:</td>
+                <td>
+                    {% if beatmapset.server == 0 %}
+                    <p>View on <a href="https://osu.ppy.sh/b/{{ beatmap.id }}">osu.ppy.sh</a></p>
+                    {% else %}
+                    <p>View on <a href="/forum/t/{{ beatmapset.topic_id }}">forums</a></p>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endif %}
         </table>
         {% if current_user.is_bat %}
         <div class="bat-controls">
