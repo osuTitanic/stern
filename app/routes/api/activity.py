@@ -29,7 +29,7 @@ def calculate_peak_x(
         )
     )
 
-@router.get('/activity')
+@router.get('/')
 def user_activity_chart(
     width: int = 600,
     height: int = 90
