@@ -93,5 +93,6 @@ def get_beatmap(id: int):
             bat_nomination=(
                 nominations.fetch_one(beatmap.set_id, current_user.id)
                 if not current_user.is_anonymous else None
-            )
+            ),
+            nominations=nominations.fetch_by_beatmapset(beatmap.set_id)
         )
