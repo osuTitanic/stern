@@ -1,10 +1,11 @@
 
-from flask import Blueprint, Response, request
-from pydantic import ValidationError
-from flask_pydantic import validate
-
 from app.common.database.repositories import beatmapsets
 from app.models import SearchRequest, BeatmapsetModel
+
+from flask import Blueprint, Response, request
+from flask_login import current_user
+from pydantic import ValidationError
+from flask_pydantic import validate
 
 import app
 
@@ -14,6 +15,11 @@ router = Blueprint('search', __name__)
 @validate()
 def search_api():
     with app.session.database.managed_session() as session:
+        user_id = (
+            current_user.id
+            if not current_user.is_anonymous else None
+        )
+
         try:
             query = SearchRequest.model_validate(request.args.to_dict())
         except ValidationError as e:
@@ -28,7 +34,7 @@ def search_api():
             query.genre,
             query.language,
             query.played,
-            None, # TODO: user_id
+            user_id,
             query.mode,
             query.order,
             query.category,
