@@ -92,7 +92,7 @@ def root():
                 format_announcement(announcement, session=session)
                 for announcement in announcements
             ],
-            beatmapsets=[(p.count, p.beatmapset) for p in plays.fetch_most_played(session=session)],
+            most_played=plays.fetch_most_played(session=session),
             messages=messages.fetch_recent(session=session)
         )
 
