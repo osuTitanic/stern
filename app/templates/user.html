@@ -467,7 +467,7 @@
                                             {% if fav.beatmapset.server == 0 %}
                                                 <a href="https://osu.ppy.sh/u/{{ fav.beatmapset.creator }}">mapped by {{ fav.beatmapset.creator }}</a>
                                             {% else %}
-                                                <a href="/u/{{ set.creator }}">mapped by {{ fav.beatmapset.creator }}</a>
+                                                <a href="/u/{{ set.creator_id }}">mapped by {{ fav.beatmapset.creator }}</a>
                                             {% endif %}
                                         </td>
                                         <td>
