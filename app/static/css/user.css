@@ -494,6 +494,7 @@
     margin: 3px;
     padding: 2.5px;
     width: 49%;
+    transition: opacity 0.2s ease-in-out;
 }
 
 .profile-beatmap img {
