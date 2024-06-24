@@ -365,8 +365,8 @@
         </div>
         <div class="beatmap-description" title="Play Song">
             <a onclick="resetOrPlayAudio('beatmap-preview')">
-                <img src="http{{ 's' if config.ENABLE_SSL else '' }}://s.{{ config.DOMAIN_NAME }}/mt/{{ beatmapset.id }}l" alt="">
-                <audio id="beatmap-preview" src="http{{ 's' if config.ENABLE_SSL else '' }}://s.{{ config.DOMAIN_NAME }}/mp3/preview/{{ beatmapset.id }}.mp3" preload="auto"></audio>
+                <img src="{{ config.STATIC_BASEURL }}/mt/{{ beatmapset.id }}l" alt="">
+                <audio id="beatmap-preview" src="{{ config.STATIC_BASEURL }}/mp3/preview/{{ beatmapset.id }}.mp3" preload="auto"></audio>
             </a>
             {% if beatmapset.description %}
                 {# NOTE: Small workaround for existsing html-bbcode #}

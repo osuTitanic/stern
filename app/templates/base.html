@@ -27,8 +27,8 @@
     <link rel="stylesheet" href="/lib/fontawesome.solid.min.css">
     <link rel="stylesheet" href="/lib/fontawesome.brands.min.css">
     <script>
-        const domainName = "{{ config.DOMAIN_NAME }}";
-        const enableSSL = {{ config.ENABLE_SSL|lower }};
+        const osuBaseurl = "{{ config.OSU_BASEURL }}";
+        const staticBaseurl = "{{ config.STATIC_BASEURL }}";
         const currentUser = {{ current_user.id if not current_user.is_anonymous else 'null' }};
         const approvedRewards = {{ config.APPROVED_MAP_REWARDS|lower }};
     </script>

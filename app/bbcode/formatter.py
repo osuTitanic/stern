@@ -55,7 +55,7 @@ def render_color(tag_name, value, options, parent, context):
 
 @parser.formatter('profile')
 def render_profile(tag_name, value, options, parent, context):
-    return '<a href="https://osu.%s/u/%s">%s</a>' % (config.DOMAIN_NAME, options.get('profile', value), value)
+    return '<a href="%s/u/%s">%s</a>' % (config.OSU_BASEURL, options.get('profile', value), value)
 
 @parser.formatter('url')
 def render_link(tag_name, value, options, parent, context):

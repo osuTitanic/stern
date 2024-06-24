@@ -471,7 +471,7 @@
                                             {% endif %}
                                         </td>
                                         <td>
-                                            <img src="http{{ 's' if config.ENABLE_SSL else '' }}://s.{{ config.DOMAIN_NAME }}/mt/{{ fav.set_id }}" alt="" loading="lazy">
+                                            <img src="{{ config.STATIC_BASEURL }}/mt/{{ fav.set_id }}" alt="" loading="lazy">
                                         </td>
                                     </tr>
                                 </tbody>

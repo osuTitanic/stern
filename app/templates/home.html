@@ -123,7 +123,7 @@
                         <td>{{ count }}</th>
                         <td>
                             <a href="/s/{{ set.id }}">
-                                <img src="http{{ 's' if config.ENABLE_SSL else '' }}://s.{{ config.DOMAIN_NAME }}/mt/{{ set.id }}" loading="lazy" alt="image"/>
+                                <img src="{{ config.STATIC_BASEURL }}/mt/{{ set.id }}" loading="lazy" alt="image"/>
                                 {{ set.artist }} - {{ set.title }}
                             </a>
                         </td>
