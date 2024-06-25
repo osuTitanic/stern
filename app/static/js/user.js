@@ -1080,7 +1080,7 @@ function removeFriend()
 
 function removeFavourite(setId)
 {
-  fetch(`/api/profile/favourites/${setId}/delete`)
+  fetch(`/api/profile/${currentUser}/favourites/delete?set_id=${setId}`)
     .then(response => {
       if (!response.ok)
         throw new Error(`${response.status}: "${response.statusText}"`);
