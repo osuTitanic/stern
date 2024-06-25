@@ -292,6 +292,11 @@
                                 <a onclick="confirmRedirect('/api/beatmaps/status/{{ beatmapset.id }}/update?status=4')">
                                     Update status to "Loved"
                                 </a><br>
+                                {% if beatmapset.server != 0 %}
+                                <a onclick="confirmRedirect('/api/beatmaps/{{ beatmapset.id }}/nuke')" style="color: red">
+                                    Nuke this beatmap
+                                </a><br>
+                                {% endif %}
                             </div><br>
                             {% elif beatmapset.status in (1, 2) %}
                             <div>
