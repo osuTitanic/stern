@@ -1,13 +1,34 @@
 
 from app.common.database import beatmapsets, nominations, topics
+from app.models.user import UserModel
 
 from flask_login import current_user, login_required
 from flask import Blueprint, abort, redirect
-from flask_pydantic import validate
 
 import app
 
 router = Blueprint('beatmap-nomination', __name__)
+
+@router.get('/nominations/<set_id>')
+def get_nominations(set_id: int):
+    with app.session.database.managed_session() as session:
+        nominations_list = nominations.fetch_by_beatmapset(
+            set_id,
+            session=session
+        )
+
+        return [
+            {
+                'set_id': nom.set_id,
+                'user_id': nom.user_id,
+                'created_at': str(nom.time),
+                'user': (
+                    UserModel.model_validate(nom.user, from_attributes=True) \
+                             .model_dump()
+                )
+            }
+            for nom in nominations_list
+        ]
 
 @router.get('/nominations/<set_id>/add')
 @login_required
