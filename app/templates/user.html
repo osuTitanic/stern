@@ -456,7 +456,7 @@
                         {% else %}
                         <div class="profile-beatmaps-container">
                             {% for fav in user.favourites %}
-                            <table class="profile-beatmap">
+                            <table class="profile-beatmap" id="favourite-{{ fav.beatmapset.id }}">
                                 <tbody>
                                     <tr>
                                         <td>
@@ -465,12 +465,18 @@
                                             </a>
                                             <br>
                                             {% if fav.beatmapset.server == 0 %}
-                                                <a href="https://osu.ppy.sh/u/{{ fav.beatmapset.creator }}">mapped by {{ fav.beatmapset.creator }}</a>
+                                            <a href="https://osu.ppy.sh/u/{{ fav.beatmapset.creator }}">mapped by {{ fav.beatmapset.creator }}</a>
                                             {% else %}
                                                 <a href="/u/{{ set.creator_id }}">mapped by {{ fav.beatmapset.creator }}</a>
                                             {% endif %}
+                                            {% if not user.is_anonymous %}
+                                            <br>
+                                            <div style="float: right; text-align: right; padding-right: 2.5px;">
+                                                <a onclick="return removeFavourite({{ fav.beatmapset.id }})">delete</a>
+                                            </div>
+                                            {% endif %}
                                         </td>
-                                        <td>
+                                        <td style="width:80px; height:60px;">
                                             <img src="{{ config.STATIC_BASEURL }}/mt/{{ fav.set_id }}" alt="" loading="lazy">
                                         </td>
                                     </tr>

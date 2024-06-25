@@ -1078,6 +1078,54 @@ function removeFriend()
   return false;
 }
 
+function removeFavourite(setId)
+{
+  fetch(`/api/beatmaps/favourites/${setId}/delete`)
+    .then(response => {
+      if (!response.ok)
+        throw new Error(`${response.status}: "${response.statusText}"`);
+      return response.json();
+    })
+    .then(data => {
+      const favouritesContainer = document.querySelector(".favourites");
+      const container = document.getElementById(`favourite-${setId}`);
+      const beatmapsContainer = document.getElementById('beatmaps');
+
+      console.log(beatmapsContainer.scrollHeight);
+
+      if (!container)
+        return;
+
+      container.style.opacity = 0;
+
+      setTimeout(() => {
+        container.remove();
+
+        if (data.length == 0)
+        {
+          // User has no favourite beatmaps anymore
+          const textElement = document.createElement('p');
+          textElement.style.margin = '5px';
+          textElement.innerHTML = 'This player has no favourite beatmaps :(';
+          favouritesContainer.appendChild(textElement);
+        }
+      }, 350);
+
+      setTimeout(() => {
+        slideUp(beatmapsContainer);
+
+        setTimeout(() => {
+          slideDown(beatmapsContainer)
+        }, 150);
+      }, 400);
+    })
+    .catch(error => {
+      console.error(error);
+    });
+
+  return false;
+}
+
 window.addEventListener('load', () => {
     expandProfileTab(activeTab);
     loadPinnedScores(userId, modeName);
