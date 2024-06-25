@@ -469,7 +469,7 @@
                                             {% else %}
                                                 <a href="/u/{{ set.creator_id }}">mapped by {{ fav.beatmapset.creator }}</a>
                                             {% endif %}
-                                            {% if not user.is_anonymous %}
+                                            {% if not current_user.is_anonymous %}
                                             <br>
                                             <div style="float: right; text-align: right; padding-right: 2.5px;">
                                                 <a onclick="return removeFavourite({{ fav.beatmapset.id }})">delete</a>
