@@ -1130,6 +1130,51 @@ function removeFavourite(setId)
   return false;
 }
 
+function deleteBeatmap(setId) {
+  const proceed = confirm('Are you sure you want to delete this beatmap?');
+
+  if (!proceed)
+    return;
+
+  fetch(`/api/profile/${currentUser}/beatmaps/delete?set_id=${setId}`)
+    .then(response => {
+      return response.json();
+    })
+    .then(data => {
+      if (data.error)
+      {
+        alert(data.details);
+        return;
+      }
+
+      window.location.href = `/u/${currentUser}#beatmaps`;
+      window.location.reload();
+    })
+    .catch(error => {
+      console.error(error);
+    });
+}
+
+function reviveBeatmap(setId) {
+  fetch(`/api/profile/${currentUser}/beatmaps/revive?set_id=${setId}`)
+  .then(response => {
+    return response.json();
+  })
+  .then(data => {
+    if (data.error)
+    {
+      alert(data.details);
+      return;
+    }
+
+    window.location.href = `/u/${currentUser}#beatmaps`;
+    window.location.reload();
+  })
+  .catch(error => {
+    console.error(error);
+  });
+}
+
 window.addEventListener('load', () => {
     expandProfileTab(activeTab);
     loadPinnedScores(userId, modeName);

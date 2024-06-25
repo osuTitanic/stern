@@ -538,8 +538,21 @@
                                             {% else %}
                                                 <a href="/u/{{ set.creator_id }}">mapped by {{ set.creator }}</a>
                                             {% endif %}
+                                            {% if current_user.id == user.id and category in ('WIP', 'Pending', 'Graveyarded') %}
+                                            <br>
+                                            <div>
+                                                <div style="float: right; text-align: right; padding-right: 2.5px;">
+                                                    <a onclick="return deleteBeatmap({{ set.id }})">delete</a>
+                                                </div>
+                                                {% if category == 'Graveyarded' %}
+                                                <div style="float: right; text-align: right; margin-right: 5px;">
+                                                    <a onclick="return reviveBeatmap({{ set.id }})">revive</a>
+                                                </div>
+                                                {% endif %}
+                                            </div>
+                                            {% endif %}
                                         </td>
-                                        <td style="width:80px; height:60px;">
+                                        <td style="width: 80px; height: 60px;">
                                             <img src="{{ config.STATIC_BASEURL }}/mt/{{ set.id }}" alt="" loading="lazy">
                                         </td>
                                     </tr>
