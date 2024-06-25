@@ -209,9 +209,13 @@ function createScoreElement(score, index, type)
 
   const ppWeight = document.createElement("div");
   ppWeight.classList.add("pp-display-weight");
-  ppWeight.appendChild(document.createTextNode("weighted "));
-  ppWeight.appendChild(ppWeightPercent);
-  ppWeight.appendChild(document.createTextNode(` (${(score.pp * (0.95**(index + topScoreOffset))).toFixed(0)}pp)`));
+
+  if (type == "top")
+  {
+    ppWeight.appendChild(document.createTextNode("weighted "));
+    ppWeight.appendChild(ppWeightPercent);
+    ppWeight.appendChild(document.createTextNode(` (${(score.pp * (0.95**(index + topScoreOffset))).toFixed(0)}pp)`));
+  }
 
   if (!approvedRewards && score.beatmap.status > 2)
   {
@@ -219,7 +223,7 @@ function createScoreElement(score, index, type)
     ppText.innerHTML = '<i class="fa-regular fa-heart"></i>';
     ppText.title = `${score.pp.toFixed(0)}pp (if ranked)`;
     // Reset pp weight text
-    ppWeight.innerHTML = "weighted <b>0%</b> (0pp)";
+    ppWeight.innerHTML = type == "top" ? "weighted <b>0%</b> (0pp)" : "";
   }
 
   const iconContainer = document.createElement("div");
