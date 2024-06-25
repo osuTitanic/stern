@@ -84,6 +84,10 @@ def get_beatmap(id: int):
             scores=beatmap_scores,
             favourites_count=favourites.fetch_count_by_set(beatmap.set_id, session=session),
             favourites=favourites.fetch_many_by_set(beatmap.set_id, session=session),
+            favorite=(
+                favourites.fetch_one(current_user.id, beatmap.set_id, session=session)
+                if not current_user.is_anonymous else None
+            ),
             site_image=f"https://assets.ppy.sh/beatmaps/{beatmap.set_id}/covers/list.jpg",
             site_description=f"Titanic » beatmaps » {beatmap.full_name}",
             site_title=f"{beatmap.full_name} - Beatmap Info",
