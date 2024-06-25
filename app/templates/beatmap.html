@@ -175,8 +175,8 @@
                     {% endif %}
                 </td>
             </tr>
-            {% if nominations or beatmapset.status <= 0 %}
             <tr>
+                {% if nominations or beatmapset.status <= 0 %}
                 <td>Nominators:</td>
                 <td colspan="3">
                     {% if not nominations %}
@@ -189,16 +189,27 @@
                     </div>
                     {% endif %}
                 </td>
-                <td>Links:</td>
-                <td>
+                {% endif %}
+                <td>Options:</td>
+                <td {% if not nominations or beatmapset.status > 0 %} colspan="5" {% endif %}>
+                    {% if not current_user.is_anonymous %}
+                        {% if favorite %}
+                        <a onclick="removeFavorite({{ beatmapset.id }})" style="color: red" id="favourites-button">
+                            Remove Favourite
+                        </a>
+                        {% else %}
+                        <a onclick="addFavorite({{ beatmapset.id }})" style="color: green" id="favourites-button">
+                            Add Favourite
+                        </a>
+                        {% endif %}
+                    {% endif %}
                     {% if beatmapset.server == 0 %}
-                    <p>View on <a href="https://osu.ppy.sh/b/{{ beatmap.id }}">osu.ppy.sh</a></p>
+                    <p><a href="https://osu.ppy.sh/beatmapsets/{{ beatmapset.id }}/discussion">Modding / Discussion</a></p>
                     {% else %}
-                    <p>View on <a href="/forum/t/{{ beatmapset.topic_id }}">forums</a></p>
+                    <p><a href="/forum/t/{{ beatmapset.topic_id }}">Modding / Discussion</a></p>
                     {% endif %}
                 </td>
             </tr>
-            {% endif %}
         </table>
         {% if current_user.is_bat %}
         <div class="bat-controls">
@@ -665,5 +676,44 @@
     {% endif %}
     {% endif %}
 </div>
+<script>
+    function addFavorite(beatmapset_id) {
+        fetch(`/api/profile/${currentUser}/favourites/add?set_id=${beatmapset_id}`)
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error('Failed to add favourite');
+            })
+            .then(data => {
+                const favourites = document.getElementById('favourites-button');
+                favourites.innerHTML = 'Remove Favourite';
+                favourites.style.color = 'red';
+                favourites.onclick = () => removeFavorite(beatmapset_id);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+
+    function removeFavorite(beatmapset_id) {
+        fetch(`/api/profile/${currentUser}/favourites/delete?set_id=${beatmapset_id}`)
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error('Failed to remove favourite');
+            })
+            .then(data => {
+                const favourites = document.getElementById('favourites-button');
+                favourites.innerHTML = 'Add Favourite';
+                favourites.style.color = 'green';
+                favourites.onclick = () => addFavorite(beatmapset_id);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+</script>
 {# TODO: Beatmap Comments #}
 {% endblock content %}
