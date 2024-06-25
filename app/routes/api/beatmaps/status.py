@@ -55,6 +55,18 @@ def move_beatmap_topic(beatmapset: DBBeatmapset, status: int, session: Session):
             session=session
         )
 
+    elif status == DatabaseStatus.Graveyard:
+        topics.update(
+            beatmapset.topic_id,
+            {'forum_id': 12},
+            session=session
+        )
+        posts.update_by_topic(
+            beatmapset.topic_id,
+            {'forum_id': 12},
+            session=session
+        )
+
     else:
         topics.update(
             beatmapset.topic_id,
