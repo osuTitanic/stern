@@ -237,6 +237,12 @@ def handle_pending_status(beatmapset: DBBeatmapset, session: Session):
         session=session
     )
 
+    beatmaps.update_by_set_id(
+        beatmapset.id,
+        {'status': DatabaseStatus.Pending.value},
+        session=session
+    )
+
     move_beatmap_topic(
         beatmapset,
         DatabaseStatus.Pending.value,
@@ -267,6 +273,12 @@ def handle_approved_status(beatmapset: DBBeatmapset, session: Session):
             'approved_at': datetime.now(),
             'approved_by': current_user.id
         },
+        session=session
+    )
+
+    beatmaps.update_by_set_id(
+        beatmapset.id,
+        {'status': DatabaseStatus.Approved.value},
         session=session
     )
 
@@ -303,6 +315,12 @@ def handle_qualified_status(beatmapset: DBBeatmapset, session: Session):
         session=session
     )
 
+    beatmaps.update_by_set_id(
+        beatmapset.id,
+        {'status': DatabaseStatus.Qualified.value},
+        session=session
+    )
+
     move_beatmap_topic(
         beatmapset,
         DatabaseStatus.Qualified.value,
@@ -328,6 +346,12 @@ def handle_loved_status(beatmapset: DBBeatmapset, session: Session):
             'approved_at': datetime.now(),
             'approved_by': current_user.id
         },
+        session=session
+    )
+
+    beatmaps.update_by_set_id(
+        beatmapset.id,
+        {'status': DatabaseStatus.Loved.value},
         session=session
     )
 

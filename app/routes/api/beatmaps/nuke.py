@@ -1,5 +1,5 @@
 
-from app.common.database import beatmapsets, topics, posts
+from app.common.database import beatmapsets, topics, posts, beatmaps
 from app.common.constants import DatabaseStatus
 
 from flask_login import current_user, login_required
@@ -44,6 +44,12 @@ def nuke_beatmap(set_id: int):
         )
 
         beatmapsets.update(
+            set_id,
+            {'status': DatabaseStatus.WIP.value},
+            session=session
+        )
+
+        beatmaps.update_by_set_id(
             set_id,
             {'status': DatabaseStatus.WIP.value},
             session=session
