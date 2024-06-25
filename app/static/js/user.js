@@ -1087,7 +1087,11 @@ function removeFavourite(setId)
       return response.json();
     })
     .then(data => {
+      const favouritesContainer = document.querySelector(".favourites");
       const container = document.getElementById(`favourite-${setId}`);
+      const beatmapsContainer = document.getElementById('beatmaps');
+
+      console.log(beatmapsContainer.scrollHeight);
 
       if (!container)
         return;
@@ -1100,14 +1104,20 @@ function removeFavourite(setId)
         if (data.length == 0)
         {
           // User has no favourite beatmaps anymore
-          const favouritesContainer = document.querySelector(".favourites")
-          const textElement = document.createElement('p')
+          const textElement = document.createElement('p');
           textElement.style.margin = '5px';
           textElement.innerHTML = 'This player has no favourite beatmaps :(';
           favouritesContainer.appendChild(textElement);
-          console.log('hey');
         }
-      }, 350)
+      }, 350);
+
+      setTimeout(() => {
+        slideUp(beatmapsContainer);
+
+        setTimeout(() => {
+          slideDown(beatmapsContainer)
+        }, 150);
+      }, 400);
     })
     .catch(error => {
       console.error(error);
