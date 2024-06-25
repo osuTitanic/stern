@@ -1,5 +1,5 @@
 
-from app.common.database import beatmapsets, nominations, topics
+from app.common.database import beatmapsets, nominations, topics, posts
 from app.models.user import UserModel
 
 from flask_login import current_user, login_required
@@ -53,7 +53,16 @@ def add_nomination(set_id: int):
         # Set icon to bubble
         topics.update(
             beatmapset.topic_id,
-            {'icon_id': 3},
+            {
+                'icon_id': 3,
+                'forum_id': 9
+            },
+            session=session
+        )
+
+        posts.update_by_topic(
+            beatmapset.topic_id,
+            {'forum_id': 9},
             session=session
         )
 
