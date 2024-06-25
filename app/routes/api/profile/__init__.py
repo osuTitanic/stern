@@ -5,6 +5,7 @@ from . import achievements
 from . import favourites
 from . import playstyle
 from . import activity
+from . import beatmaps
 from . import profile
 from . import history
 from . import friends
@@ -20,6 +21,7 @@ router.register_blueprint(achievements.router)
 router.register_blueprint(favourites.router)
 router.register_blueprint(playstyle.router)
 router.register_blueprint(activity.router)
+router.register_blueprint(beatmaps.router)
 router.register_blueprint(profile.router)
 router.register_blueprint(history.router)
 router.register_blueprint(friends.router)
