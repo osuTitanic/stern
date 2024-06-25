@@ -2,6 +2,7 @@
 from flask import Blueprint
 
 from . import achievements
+from . import favourites
 from . import playstyle
 from . import activity
 from . import profile
@@ -16,6 +17,7 @@ from . import top
 
 router = Blueprint("profile", __name__)
 router.register_blueprint(achievements.router)
+router.register_blueprint(favourites.router)
 router.register_blueprint(playstyle.router)
 router.register_blueprint(activity.router)
 router.register_blueprint(profile.router)

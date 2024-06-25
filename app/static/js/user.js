@@ -1080,7 +1080,7 @@ function removeFriend()
 
 function removeFavourite(setId)
 {
-  fetch(`/api/beatmaps/favourites/${setId}/delete`)
+  fetch(`/api/profile/favourites/${setId}/delete`)
     .then(response => {
       if (!response.ok)
         throw new Error(`${response.status}: "${response.statusText}"`);
