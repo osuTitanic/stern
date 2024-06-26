@@ -39,13 +39,13 @@ def get_favourites(user_id: int):
 def add_favourite(user_id: int):
     if current_user.id != user_id:
         return {
-            'error': 'unauthorized',
+            'error': 403,
             'details': 'You are not authorized to perform this action.'
         }, 403
 
     if not (set_id := request.args.get('set_id', type=int)):
         return {
-            'error': 'invalid_request',
+            'error': 400,
             'details': 'The request is missing the required "set_id" parameter.'
         }, 400
 
@@ -57,7 +57,7 @@ def add_favourite(user_id: int):
 
         if not beatmapset:
             return {
-                'error': 'not_found',
+                'error': 404,
                 'details': 'The requested beatmap was not found.'
             }, 404
 
@@ -69,7 +69,7 @@ def add_favourite(user_id: int):
 
         if already_exists:
             return {
-                'error': 'exists',
+                'error': 400,
                 'details': 'You have already added this beatmap to your favourites.'
             }, 400
 
@@ -81,7 +81,7 @@ def add_favourite(user_id: int):
 
         if not favourite:
             return {
-                'error': 'failed',
+                'error': 500,
                 'details': (
                     'Something went wrong while trying to add this beatmap to your favourites.'
                     'Please try again!'
@@ -112,13 +112,13 @@ def add_favourite(user_id: int):
 def delete_favourite(user_id: int):
     if current_user.id != user_id:
         return {
-            'error': 'unauthorized',
+            'error': 403,
             'details': 'You are not authorized to perform this action.'
         }, 403
 
     if not (set_id := request.args.get('set_id', type=int)):
         return {
-            'error': 'invalid_request',
+            'error': 400,
             'details': 'The request is missing the required "set_id" parameter.'
         }, 400
 
@@ -130,7 +130,7 @@ def delete_favourite(user_id: int):
 
         if not beatmapset:
             return {
-                'error': 'not_found',
+                'error': 404,
                 'details': 'The requested beatmap was not found.'
             }, 404
 
@@ -142,7 +142,7 @@ def delete_favourite(user_id: int):
 
         if not is_deleted:
             return {
-                'error': 'no_favourite',
+                'error': 400,
                 'details': 'You have not added this beatmap to your favourites.'
             }, 400
 

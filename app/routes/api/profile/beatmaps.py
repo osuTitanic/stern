@@ -40,13 +40,13 @@ def get_beatmaps(user_id: int):
 def revive_beatmap(user_id: int):
     if current_user.id != user_id:
         return {
-            'error': 'unauthorized',
+            'error': 403,
             'details': 'You are not authorized to perform this action.'
         }, 403
 
     if not (set_id := request.args.get('set_id', type=int)):
         return {
-            'error': 'invalid_request',
+            'error': 400,
             'details': 'The request is missing the required "set_id" parameter.'
         }, 400
 
@@ -60,19 +60,19 @@ def revive_beatmap(user_id: int):
 
         if not (beatmapset := beatmapsets.fetch_one(set_id, session)):
             return {
-                'error': 'not_found',
+                'error': 404,
                 'details': 'The requested beatmapset does not exist.'
             }, 404
 
         if beatmapset.creator_id != user.id:
             return {
-                'error': 'unauthorized',
+                'error': 403,
                 'details': 'You are not authorized to perform this action.'
             }, 403
 
         if beatmapset.status != DatabaseStatus.Graveyard:
             return {
-                'error': 'invalid_request',
+                'error': 400,
                 'details': 'The requested beatmapset is not in the graveyard.'
             }, 400
 
@@ -118,13 +118,13 @@ def revive_beatmap(user_id: int):
 def delete_beatmap(user_id: int):
     if current_user.id != user_id:
         return {
-            'error': 'unauthorized',
+            'error': 403,
             'details': 'You are not authorized to perform this action.'
         }, 403
 
     if not (set_id := request.args.get('set_id', type=int)):
         return {
-            'error': 'invalid_request',
+            'error': 400,
             'details': 'The request is missing the required "set_id" parameter.'
         }, 400
 
@@ -138,19 +138,19 @@ def delete_beatmap(user_id: int):
 
         if not (beatmapset := beatmapsets.fetch_one(set_id, session)):
             return {
-                'error': 'not_found',
+                'error': 404,
                 'details': 'The requested beatmapset does not exist.'
             }, 404
 
         if beatmapset.creator_id != user.id:
             return {
-                'error': 'unauthorized',
+                'error': 403,
                 'details': 'You are not authorized to perform this action.'
             }, 403
 
         if beatmapset.status > 0:
             return {
-                'error': 'ranked',
+                'error': 400,
                 'details': 'The requested beatmapset cannot be deleted.'
             }, 400
 
