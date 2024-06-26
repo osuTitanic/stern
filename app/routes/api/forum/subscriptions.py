@@ -37,26 +37,23 @@ def get_subscriptions():
 @validate()
 def add_subscription():
     if not (topic_id := request.args.get('topic_id', type=int)):
-        return Response(
-            response={},
-            status=400,
-            mimetype='application/json'
-        )
+        return {
+            'error': 400,
+            'details': 'The request is missing the required "topic_id" parameter.'
+        }, 400
 
     with app.session.database.managed_session() as session:
         if not (topic := topics.fetch_one(topic_id, session)):
-            return Response(
-                response={},
-                status=404,
-                mimetype='application/json'
-            )
+            return {
+                'error': 404,
+                'details': 'The requested topic does not exist.'
+            }, 404
 
         if topic.hidden:
-            return Response(
-                response={},
-                status=404,
-                mimetype='application/json'
-            )
+            return {
+                'error': 404,
+                'details': 'The requested topic does not exist.'
+            }, 404
 
         topics.add_subscriber(
             topic_id=topic.id,
@@ -86,11 +83,10 @@ def add_subscription():
 @validate()
 def remove_subscription():
     if not (topic_id := request.args.get('topic_id', type=int)):
-        return Response(
-            response={},
-            status=400,
-            mimetype='application/json'
-        )
+        return {
+            'error': 400,
+            'details': 'The request is missing the required "topic_id" parameter.'
+        }, 400
 
     with app.session.database.managed_session() as session:
         topics.delete_subscriber(
