@@ -12,6 +12,7 @@ from . import friends
 from . import status
 from . import pinned
 from . import recent
+from . import forum
 from . import plays
 from . import first
 from . import top
@@ -28,6 +29,7 @@ router.register_blueprint(friends.router)
 router.register_blueprint(status.router)
 router.register_blueprint(pinned.router)
 router.register_blueprint(recent.router)
+router.register_blueprint(forum.router)
 router.register_blueprint(first.router)
 router.register_blueprint(plays.router)
 router.register_blueprint(top.router)
