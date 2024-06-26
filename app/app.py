@@ -44,6 +44,12 @@ def request_loader(request: Request):
 
 @login_manager.unauthorized_handler
 def unauthorized_user():
+    if '/api' in request.base_url:
+        return jsonify(
+            error=403,
+            details='You are not authorized to perform this action.'
+        ), 403
+
     return redirect('/?login=True')
 
 @flask.template_filter('timeago')
