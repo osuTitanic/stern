@@ -1,15 +1,15 @@
 
 from app.common.database.repositories import users, relationships
+from flask_login import current_user, login_required
 from flask import Blueprint, Response, request
 
-import flask_login
 import json
 import app
 
 router = Blueprint("friends", __name__)
 
 @router.get('/friends/add')
-@flask_login.login_required
+@login_required
 def add_friend():
     if not (user_id := request.args.get('id', type=int)):
         return Response(
@@ -27,14 +27,14 @@ def add_friend():
             )
 
         current_friends = relationships.fetch_target_ids(
-            flask_login.current_user.id,
+            current_user.id,
             session
         )
 
         if target.id not in current_friends:
             # Create relationship
             relationships.create(
-                flask_login.current_user.id,
+                current_user.id,
                 target.id,
                 status=0,
                 session=session
@@ -48,7 +48,7 @@ def add_friend():
             session
         )
 
-        if flask_login.current_user.id in target_friends:
+        if current_user.id in target_friends:
             status = 'mutual'
 
         return Response(
@@ -58,7 +58,7 @@ def add_friend():
         )
 
 @router.get('/friends/remove')
-@flask_login.login_required
+@login_required
 def remove_friend():
     if not (user_id := request.args.get('id', type=int)):
         return Response(
@@ -76,7 +76,7 @@ def remove_friend():
             )
 
         current_friends = relationships.fetch_target_ids(
-            flask_login.current_user.id,
+            current_user.id,
             session=session
         )
 
@@ -88,7 +88,7 @@ def remove_friend():
             )
 
         relationships.delete(
-            flask_login.current_user.id,
+            current_user.id,
             target.id,
             status=0,
             session=session
@@ -102,7 +102,7 @@ def remove_friend():
             session
         )
 
-        if flask_login.current_user.id in target_friends:
+        if current_user.id in target_friends:
             status = 'mutual'
 
         return Response(
