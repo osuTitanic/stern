@@ -2,8 +2,8 @@
 from app.models.forums import BookmarkModel
 from app.common.database import users
 
+from flask_login import current_user, login_required
 from flask import Blueprint, Response
-from flask_login import current_user
 from flask_pydantic import validate
 
 import app
@@ -11,15 +11,9 @@ import app
 router = Blueprint("forum-bookmarks", __name__)
 
 @router.get('/bookmarks')
+@login_required
 @validate()
 def get_bookmarks():
-    if current_user.is_anonymous:
-        return Response(
-            response={},
-            status=403,
-            mimetype='application/json'
-        )
-
     with app.session.database.managed_session() as session:
         bookmarks = users.fetch_bookmarks(
             current_user.id,
