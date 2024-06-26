@@ -1,9 +1,9 @@
 
 from app.models.forums import SubscriptionModel
-from app.common.database import users
+from app.common.database import users, topics
 
-from flask import Blueprint, Response
-from flask_login import current_user
+from flask_login import current_user, login_required
+from flask import Blueprint, Response, request
 from flask_pydantic import validate
 
 import app
@@ -11,16 +11,94 @@ import app
 router = Blueprint("forum-subscriptions", __name__)
 
 @router.get('/subscriptions')
+@login_required
 @validate()
 def get_subscriptions():
-    if current_user.is_anonymous:
+    with app.session.database.managed_session() as session:
+        subscriptions = users.fetch_subscriptions(
+            current_user.id,
+            session=session
+        )
+
+        subscriptions = [
+            subscription
+            for subscription in subscriptions
+            if not subscription.topic.hidden
+        ]
+
+        return [
+            SubscriptionModel.model_validate(subscription, from_attributes=True) \
+                             .model_dump()
+            for subscription in subscriptions
+        ]
+
+@router.get('/subscriptions/add')
+@login_required
+@validate()
+def add_subscription():
+    if not (topic_id := request.args.get('topic_id', type=int)):
         return Response(
             response={},
-            status=403,
+            status=400,
             mimetype='application/json'
         )
 
     with app.session.database.managed_session() as session:
+        if not (topic := topics.fetch_one(topic_id, session)):
+            return Response(
+                response={},
+                status=404,
+                mimetype='application/json'
+            )
+
+        if topic.hidden:
+            return Response(
+                response={},
+                status=404,
+                mimetype='application/json'
+            )
+
+        topics.add_subscriber(
+            topic_id=topic.id,
+            user_id=current_user.id,
+            session=session
+        )
+
+        subscriptions = users.fetch_subscriptions(
+            current_user.id,
+            session=session
+        )
+
+        subscriptions = [
+            subscription
+            for subscription in subscriptions
+            if not subscription.topic.hidden
+        ]
+
+        return [
+            SubscriptionModel.model_validate(subscription, from_attributes=True) \
+                             .model_dump()
+            for subscription in subscriptions
+        ]
+
+@router.get('/subscriptions/remove')
+@login_required
+@validate()
+def remove_subscription():
+    if not (topic_id := request.args.get('topic_id', type=int)):
+        return Response(
+            response={},
+            status=400,
+            mimetype='application/json'
+        )
+
+    with app.session.database.managed_session() as session:
+        topics.delete_subscriber(
+            topic_id=topic_id,
+            user_id=current_user.id,
+            session=session
+        )
+
         subscriptions = users.fetch_subscriptions(
             current_user.id,
             session=session
