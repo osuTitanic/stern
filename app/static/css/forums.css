@@ -184,6 +184,13 @@ table {
     height: 128px;
 }
 
+.beatmapset-link-info {
+    text-align: center;
+    font-size: 80%;
+    color: grey;
+    padding-top: 2px;
+}
+
 .groups {
     display: flex;
     justify-content: center;

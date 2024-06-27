@@ -89,6 +89,12 @@
     {% else %}
         {% for post in posts %}
             <div class="post-spacing"></div>
+            {% if beatmapset %}
+            <div class="beatmapset-link-info">
+                This topic is linked to a beatmapset.
+                Click <a href="/s/{{ beatmapset.id }}">here</a> to view it!
+            </div>
+            {% endif %}
             <table class="post-table" width="100%" cellspacing="0" cellpadding="0">
                 <tbody><tr>
                     <td class="post-profile">
