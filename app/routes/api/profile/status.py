@@ -10,11 +10,10 @@ router = Blueprint("status", __name__)
 @validate()
 def get_status(user_id: int) -> dict:
     if not (user_status := status.get(int(user_id))):
-        return Response(
-            response=(),
-            status=404,
-            mimetype='application/json'
-        )
+        return {
+            'error': 404,
+            'details': 'The requested user could not be found.'
+        }, 404
 
     return {
         'action': user_status.action.value,

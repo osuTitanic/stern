@@ -12,19 +12,17 @@ router = Blueprint("friends", __name__)
 @login_required
 def add_friend():
     if not (user_id := request.args.get('id', type=int)):
-        return Response(
-            response=(),
-            status=400,
-            mimetype='application/json'
-        )
+        return {
+            'error': 400,
+            'details': 'The request is missing the required "id" parameter.'
+        }, 400
 
     with app.session.database.managed_session() as session:
         if not (target := users.fetch_by_id(user_id, session=session)):
-            return Response(
-                response=(),
-                status=404,
-                mimetype='application/json'
-            )
+            return {
+                'error': 404,
+                'details': 'The requested user could not be found.'
+            }, 404
 
         current_friends = relationships.fetch_target_ids(
             current_user.id,
@@ -51,29 +49,23 @@ def add_friend():
         if current_user.id in target_friends:
             status = 'mutual'
 
-        return Response(
-            response=json.dumps({'status': status}),
-            status=200,
-            mimetype='application/json'
-        )
+        return {'status': status}
 
 @router.get('/friends/remove')
 @login_required
 def remove_friend():
     if not (user_id := request.args.get('id', type=int)):
-        return Response(
-            response=(),
-            status=400,
-            mimetype='application/json'
-        )
+        return {
+            'error': 400,
+            'details': 'The request is missing the required "id" parameter.'
+        }, 400
 
     with app.session.database.managed_session() as session:
         if not (target := users.fetch_by_id(user_id, session=session)):
-            return Response(
-                response=(),
-                status=404,
-                mimetype='application/json'
-            )
+            return {
+                'error': 404,
+                'details': 'The requested user could not be found.'
+            }, 404
 
         current_friends = relationships.fetch_target_ids(
             current_user.id,
@@ -81,11 +73,10 @@ def remove_friend():
         )
 
         if target.id not in current_friends:
-            return Response(
-                response=(),
-                status=400,
-                mimetype='application/json'
-            )
+            return {
+                'error': 400,
+                'details': 'You are not friends with this user.'
+            }, 400
 
         relationships.delete(
             current_user.id,
@@ -105,8 +96,4 @@ def remove_friend():
         if current_user.id in target_friends:
             status = 'mutual'
 
-        return Response(
-            response=json.dumps({'status': status}),
-            status=200,
-            mimetype='application/json'
-        )
+        return {'status': status}

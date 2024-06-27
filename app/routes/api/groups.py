@@ -2,8 +2,8 @@
 from app.common.database.repositories import groups
 from app.models.groups import GroupModel
 from app.models.user import UserModel
-from flask import Blueprint, Response
 from flask_pydantic import validate
+from flask import Blueprint
 
 import app
 
@@ -32,12 +32,17 @@ def get_group(id: int):
     with app.session.database.managed_session() as session:
         group = groups.fetch_one(id, session=session)
 
+        if not group:
+            return {
+                'error': 404,
+                'details': 'The requested group could not be found.'
+            }, 404
+
         if group.hidden:
-            return Response(
-                response={},
-                status=404,
-                mimetype='application/json'
-            )
+            return {
+                'error': 404,
+                'details': 'The requested group could not be found.'
+            }, 404
 
         return {
                 'group': GroupModel.model_validate(group, from_attributes=True).model_dump(),

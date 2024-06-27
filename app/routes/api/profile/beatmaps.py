@@ -17,11 +17,10 @@ router = Blueprint('profile-beatmaps', __name__)
 def get_beatmaps(user_id: int):
     with app.session.database.managed_session() as session:
         if not (user := users.fetch_by_id(user_id, session=session)):
-            return Response(
-                response={},
-                status=404,
-                mimetype='application/json'
-            )
+            return {
+                'error': 404,
+                'details': 'The requested user could not be found.'
+            }, 404
 
         user_beatmaps = beatmapsets.fetch_by_creator(
             user.id,
@@ -52,11 +51,10 @@ def revive_beatmap(user_id: int):
 
     with app.session.database.managed_session() as session:
         if not (user := users.fetch_by_id(user_id, session=session)):
-            return Response(
-                response={},
-                status=404,
-                mimetype='application/json'
-            )
+            return {
+                'error': 404,
+                'details': 'The requested user could not be found.'
+            }, 404
 
         if not (beatmapset := beatmapsets.fetch_one(set_id, session)):
             return {
@@ -130,11 +128,10 @@ def delete_beatmap(user_id: int):
 
     with app.session.database.managed_session() as session:
         if not (user := users.fetch_by_id(user_id, session=session)):
-            return Response(
-                response={},
-                status=404,
-                mimetype='application/json'
-            )
+            return {
+                'error': 404,
+                'details': 'The requested user could not be found.'
+            }, 404
 
         if not (beatmapset := beatmapsets.fetch_one(set_id, session)):
             return {

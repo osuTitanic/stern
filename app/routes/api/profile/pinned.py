@@ -17,39 +17,34 @@ router = Blueprint("pinned", __name__)
 def add_pinned(user_id: int, score_id: int):
     with app.session.database.managed_session() as session:
         if not (user := users.fetch_by_id(user_id, session=session)):
-            return Response(
-                response={},
-                status=404,
-                mimetype='application/json'
-            )
+            return {
+                'error': 404,
+                'details': 'The requested user could not be found.'
+            }, 404
 
         if user.id != current_user.id:
-            return Response(
-                response={},
-                status=403,
-                mimetype='application/json'
-            )
+            return {
+                'error': 403,
+                'details': 'You are not authorized to perform this action.'
+            }, 403
 
         if (score := scores.fetch_by_id(score_id, session)) is None:
-            return Response(
-                response={},
-                status=404,
-                mimetype='application/json'
-            )
+            return {
+                'error': 404,
+                'details': 'The requested score could not be found.'
+            }, 404
 
         if score.user_id != user.id:
-            return Response(
-                response={},
-                status=403,
-                mimetype='application/json'
-            )
+            return {
+                'error': 400,
+                'details': 'The requested score was not set by the user.'
+            }, 400
 
         if score.pinned:
-            return Response(
-                response={},
-                status=200,
-                mimetype='application/json'
-            )
+            return {
+                'error': 400,
+                'details': 'The requested score is already pinned.'
+            }, 400
 
         scores.update(
             score.id,
@@ -57,11 +52,7 @@ def add_pinned(user_id: int, score_id: int):
             session=session
         )
 
-        return Response(
-            response={},
-            status=200,
-            mimetype='application/json'
-        )
+        return {'success': True}
 
 @router.get('/<user_id>/pinned/remove/<score_id>')
 @login_required
@@ -69,39 +60,34 @@ def add_pinned(user_id: int, score_id: int):
 def remove_pinned(user_id: int, score_id: int):
     with app.session.database.managed_session() as session:
         if not (user := users.fetch_by_id(user_id, session=session)):
-            return Response(
-                response={},
-                status=404,
-                mimetype='application/json'
-            )
+            return {
+                'error': 404,
+                'details': 'The requested user could not be found.'
+            }, 404
 
         if user.id != current_user.id:
-            return Response(
-                response={},
-                status=403,
-                mimetype='application/json'
-            )
+            return {
+                'error': 403,
+                'details': 'You are not authorized to perform this action.'
+            }, 403
 
         if (score := scores.fetch_by_id(score_id, session)) is None:
-            return Response(
-                response={},
-                status=404,
-                mimetype='application/json'
-            )
+            return {
+                'error': 404,
+                'details': 'The requested score could not be found.'
+            }, 404
 
         if score.user_id != user.id:
-            return Response(
-                response={},
-                status=403,
-                mimetype='application/json'
-            )
+            return {
+                'error': 400,
+                'details': 'The requested score was not set by the user.'
+            }, 400
 
         if not score.pinned:
-            return Response(
-                response={},
-                status=200,
-                mimetype='application/json'
-            )
+            return {
+                'error': 400,
+                'details': 'The requested score was not pinned.'
+            }, 400
 
         scores.update(
             score.id,
@@ -109,11 +95,7 @@ def remove_pinned(user_id: int, score_id: int):
             session=session
         )
 
-        return Response(
-            response={},
-            status=200,
-            mimetype='application/json'
-        )
+        return {'success': True}
 
 @router.get('/<user_id>/pinned/<mode_alias>')
 @validate()
@@ -126,18 +108,16 @@ def get_pinned(
 
     with app.session.database.managed_session() as session:
         if not (user := users.fetch_by_id(user_id, session=session)):
-            return Response(
-                response=(),
-                status=404,
-                mimetype='application/json'
-            )
+            return {
+                'error': 404,
+                'details': 'The requested user could not be found.'
+            }, 404
 
         if (mode := GameMode.from_alias(mode_alias)) is None:
-            return Response(
-                response={},
-                status=400,
-                mimetype='application/json'
-            )
+            return {
+                'error': 400,
+                'details': 'The requested mode does not exist.'
+            }, 400
 
         limit = max(1, min(50, limit))
 

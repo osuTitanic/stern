@@ -2,7 +2,7 @@
 from app.common.database.repositories import beatmapsets
 from app.models import SearchRequest, BeatmapsetModel
 
-from flask import Blueprint, Response, request
+from flask import Blueprint, request
 from flask_login import current_user
 from pydantic import ValidationError
 from flask_pydantic import validate
@@ -23,11 +23,10 @@ def search_api():
         try:
             query = SearchRequest.model_validate(request.args.to_dict())
         except ValidationError as e:
-            return Response(
-                response=e.json(),
-                status=400,
-                mimetype='application/json'
-            )
+            return {
+                'error': 400,
+                'details': e.json()
+            }, 400
 
         results = beatmapsets.search_extended(
             query.query,
