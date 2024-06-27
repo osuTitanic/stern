@@ -1,13 +1,12 @@
 
 from app.common.database.repositories import notifications
+from flask_login import login_required
 from flask import Blueprint, request
-
-import flask_login
 
 router = Blueprint('notifications', __name__)
 
 @router.get('/confirm')
-@flask_login.login_required
+@login_required
 def mark_as_read():
     if (id := request.args.get('id')) is None:
         return {
