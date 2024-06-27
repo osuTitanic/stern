@@ -88,6 +88,22 @@ def topic(forum_id: str, id: str):
             session=session
         )
 
+        is_subscribed = False
+        is_bookmarked = False
+
+        if current_user.is_authenticated:
+            is_subscribed = topics.is_subscribed(
+                topic.id,
+                current_user.id,
+                session=session
+            )
+
+            is_bookmarked = topics.is_bookmarked(
+                topic.id,
+                current_user.id,
+                session=session
+            )
+
         return utils.render_template(
             "forum/topic.html",
             css='forums.css',
@@ -98,6 +114,8 @@ def topic(forum_id: str, id: str):
             total_pages=post_count // 12,
             post_count=post_count,
             beatmapset=beatmapset,
+            is_bookmarked=is_bookmarked,
+            is_subscribed=is_subscribed,
             session=session
         )
 
