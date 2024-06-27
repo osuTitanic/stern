@@ -11,18 +11,16 @@ router = Blueprint('beatmap', __name__)
 @validate()
 def get_beatmap(id: int):
     if not (beatmap := beatmaps.fetch_by_id(id)):
-        return Response(
-            response={},
-            status=404,
-            mimetype='application/json'
-        )
+        return {
+            'error': 404,
+            'details': 'The requested beatmap could not be found.'
+        }, 404
 
     if beatmap.status <= -3:
-        return Response(
-            response={},
-            status=404,
-            mimetype='application/json'
-        )
+        return {
+            'error': 404,
+            'details': 'The requested beatmap could not be found.'
+        }, 404
 
     return BeatmapModel.model_validate(beatmap, from_attributes=True) \
                        .model_dump()

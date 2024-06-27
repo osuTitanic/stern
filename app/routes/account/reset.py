@@ -71,6 +71,10 @@ def password_reset_request():
 
         verifications.delete(verification.token)
 
+        app.session.logger.info(
+            f'User "{verification.user_id}" successfully reset their password.'
+        )
+
         return utils.render_template(
             'verification.html',
             css='verification.css',

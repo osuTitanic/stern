@@ -1,0 +1,54 @@
+{# templates/forum/create.html #}
+
+{% extends "base.html" %}
+
+{% set is_privileged = (
+    current_user.is_bat or
+    current_user.is_moderator
+) %}
+
+{% block content %}
+<h1 class="header-text">
+    <a href="/forum" style="color:#5a5399">Index</a> »
+    {% for parent_forum in forum|list_parent_forums|reverse %}
+        <a href="/forum/{{ parent_forum.id }}">
+            {{ parent_forum.name }}
+        </a> »
+    {% endfor %}
+    <a href="/forum/{{ forum.id }}">
+        {{ forum.name }}
+    </a>
+</h1>
+<form action="/forum/{{ forum.id }}/create"
+      method="post">
+    <p class="post-subject">
+        Subject: <input type="text" name="title" class="nav-search">
+    </p>
+    {% if forum.allow_icons or is_privileged %}
+    <div class="icon-selection">
+        <input type="radio" name="icon" value="-1" checked="checked">
+        <label for="-1">None</label>
+        {% for icon in icons %}
+            <input type="radio" name="icon" value="{{ icon.id }}">
+            <label for="{{ icon.id }}">
+                <img src="{{ icon.location }}" alt="{{ icon.name }}">
+            </label>
+        {% endfor %}
+    </div>
+    {% endif %}
+    <div>
+        {# Editor #}
+        {% with context = {
+            "submit-text": "Create Topic",
+            "min-height": "200px",
+            "user-id": current_user.id,
+            "topic-controls": true,
+            "forum-controls": true,
+            "resize": "vertical",
+            "cancel": true
+        } %}
+            {% include "editor.html" %}
+        {% endwith %}
+    </div>
+</form>
+{% endblock content %}

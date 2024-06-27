@@ -27,9 +27,9 @@
     <link rel="stylesheet" href="/lib/fontawesome.solid.min.css">
     <link rel="stylesheet" href="/lib/fontawesome.brands.min.css">
     <script>
-        const domainName = "{{ config.DOMAIN_NAME }}";
-        const enableSSL = {{ config.ENABLE_SSL|lower }};
-        const currentUser = {{ current_user.id if not current_user.is_anonymous else 'null' }};
+        const osuBaseurl = "{{ config.OSU_BASEURL }}";
+        const staticBaseurl = "{{ config.STATIC_BASEURL }}";
+        const currentUser = {{ current_user.id if current_user.is_authenticated else 'null' }};
         const approvedRewards = {{ config.APPROVED_MAP_REWARDS|lower }};
     </script>
 </head>
@@ -78,9 +78,15 @@
                         No notifications
                         {% endif %}
                     </a>
+                    {% if request.view_args %}
                     <a href="/account/logout?redirect={{ url_for(request.endpoint, **request.view_args) }}">
                         <i class="fa-solid fa-power-off" style="color: #808080;"></i> Logout
                     </a>
+                    {% else %}
+                    <a href="/account/logout">
+                        <i class="fa-solid fa-power-off" style="color: #808080;"></i> Logout
+                    </a>
+                    {% endif %}
                 {% else %}
                     <p class="nav-login" id="welcome-text">Welcome, guest!</p>
                     <a onclick="showLoginForm()" class="nav-login" id="login-text">Login</a>
@@ -90,7 +96,11 @@
             </div>
             <div class="login-dropdown" style="display: none;">
                 <form action="/account/login" method="post">
-                    <input type="hidden" name="redirect" value="{{ url_for(request.endpoint, **request.view_args) }}">
+                    {% if request.view_args %}
+                        <input type="hidden" name="redirect" value="{{ url_for(request.endpoint, **request.view_args) }}">
+                    {% else %}
+                        <input type="hidden" name="redirect" value="/">
+                    {% endif %}
                     Please enter your credentials:
                     <br>
                     <input id="username-field" class="post" type="text" name="username" placeholder="Username" maxlength="30" value="" tabindex="0" autocomplete="off">
@@ -115,18 +125,6 @@
                 </form>
             </div>
             <div class="page">
-                {# User Permissions #}
-                {% if not current_user.is_anonymous and current_user.groups %}
-                    {% set current_user_group_ids = current_user.groups|get_attributes('group_id') %}
-                    {% set current_user_is_admin = (1 in current_user_group_ids) or
-                                                   (2 in current_user_group_ids) or
-                                                   (4 in current_user_group_ids) %}
-                    {% set current_user_is_bat = (1 in current_user_group_ids) or
-                                                 (3 in current_user_group_ids) %}
-                {% else %}
-                    {% set current_user_is_admin = False %}
-                    {% set current_user_is_bat = False %}
-                {% endif %}
                 {# Page Content #}
                 {% block content %}
                 {% endblock content %}

@@ -3,20 +3,20 @@ from app.common.database import favourites, beatmapsets
 from app.models import BeatmapsetModel
 
 from flask_login import current_user, login_required
-from flask import Blueprint, Response
+from flask import Blueprint, request
 from flask_pydantic import validate
 
 import app
 
 router = Blueprint('beatmap-favourites', __name__)
 
-@router.get('/favourites/')
+@router.get('/<user_id>/favourites/')
 @login_required
 @validate()
-def get_favourites():
+def get_favourites(user_id: int):
     with app.session.database.managed_session() as session:
         user_favourites = favourites.fetch_many(
-            current_user.id,
+            user_id,
             session=session
         )
 
@@ -33,10 +33,22 @@ def get_favourites():
             for fav in user_favourites
         ]
 
-@router.get('/favourites/<set_id>/add')
+@router.get('/<user_id>/favourites/add')
 @login_required
 @validate()
-def add_favourite(set_id: int):
+def add_favourite(user_id: int):
+    if current_user.id != user_id:
+        return {
+            'error': 403,
+            'details': 'You are not authorized to perform this action.'
+        }, 403
+
+    if not (set_id := request.args.get('set_id', type=int)):
+        return {
+            'error': 400,
+            'details': 'The request is missing the required "set_id" parameter.'
+        }, 400
+
     with app.session.database.managed_session() as session:
         beatmapset = beatmapsets.fetch_one(
             set_id,
@@ -45,7 +57,7 @@ def add_favourite(set_id: int):
 
         if not beatmapset:
             return {
-                'error': 'not_found',
+                'error': 404,
                 'details': 'The requested beatmap was not found.'
             }, 404
 
@@ -57,7 +69,7 @@ def add_favourite(set_id: int):
 
         if already_exists:
             return {
-                'error': 'exists',
+                'error': 400,
                 'details': 'You have already added this beatmap to your favourites.'
             }, 400
 
@@ -69,7 +81,7 @@ def add_favourite(set_id: int):
 
         if not favourite:
             return {
-                'error': 'failed',
+                'error': 500,
                 'details': (
                     'Something went wrong while trying to add this beatmap to your favourites.'
                     'Please try again!'
@@ -94,10 +106,22 @@ def add_favourite(set_id: int):
             for fav in user_favourites
         ]
 
-@router.get('/favourites/<set_id>/delete')
+@router.get('/<user_id>/favourites/delete')
 @login_required
 @validate()
-def delete_favourite(set_id: int):
+def delete_favourite(user_id: int):
+    if current_user.id != user_id:
+        return {
+            'error': 403,
+            'details': 'You are not authorized to perform this action.'
+        }, 403
+
+    if not (set_id := request.args.get('set_id', type=int)):
+        return {
+            'error': 400,
+            'details': 'The request is missing the required "set_id" parameter.'
+        }, 400
+
     with app.session.database.managed_session() as session:
         beatmapset = beatmapsets.fetch_one(
             set_id,
@@ -106,7 +130,7 @@ def delete_favourite(set_id: int):
 
         if not beatmapset:
             return {
-                'error': 'not_found',
+                'error': 404,
                 'details': 'The requested beatmap was not found.'
             }, 404
 
@@ -118,7 +142,7 @@ def delete_favourite(set_id: int):
 
         if not is_deleted:
             return {
-                'error': 'no_favourite',
+                'error': 400,
                 'details': 'You have not added this beatmap to your favourites.'
             }, 400
 

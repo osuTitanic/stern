@@ -264,3 +264,47 @@ h2 {
     background-color: white;
     cursor: pointer;
 }
+
+.bat-controls {
+    margin: 5px;
+}
+
+.bat-controls details {
+    padding: 5px;
+}
+
+.bat-controls dt {
+    float: left;
+    clear: left;
+    width: 30%;
+}
+
+.bat-controls dd {
+    color: #536482;
+    margin-bottom: 5px;
+    line-height: 25px;
+}
+
+.bat-diffs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    margin-bottom: 10px;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+    text-align: center;
+}
+
+.bat-diffs div {
+    text-align: center;
+    display: grid;
+    margin: 2px;
+}
+
+.bat-diffs select {
+    text-align: center;
+}
+
+.bat-diffs dt {
+    width: auto;
+}

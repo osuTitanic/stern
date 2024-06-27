@@ -71,7 +71,7 @@ function getBeatmapsets()
 
                 var beatmapImage = document.createElement("div");
                 beatmapImage.classList.add("beatmap-image");
-                beatmapImage.style.backgroundImage = `url("http${enableSSL ? 's' : ''}://s.${domainName}/mt/${beatmapset.id}")`;
+                beatmapImage.style.backgroundImage = `url("${staticBaseurl}/mt/${beatmapset.id}")`;
 
                 var playIcon = document.createElement("i");
                 playIcon.classList.add("fa-solid", "fa-play");
@@ -106,7 +106,7 @@ function getBeatmapsets()
                 };
 
                 var beatmapAudio = document.createElement("audio");
-                beatmapAudio.src = `http${enableSSL ? 's' : ''}://s.${domainName}/mp3/preview/${beatmapset.id}`;
+                beatmapAudio.src = `${staticBaseurl}/mp3/preview/${beatmapset.id}`;
                 beatmapAudio.id = `beatmap-preview-${beatmapset.id}`;
                 beatmapAudio.onended = () => {
                     playIcon.classList.remove("fa-pause");

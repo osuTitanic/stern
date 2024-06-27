@@ -1,9 +1,10 @@
 
 from app.common.constants import BeatmapLanguage, BeatmapGenre, DatabaseStatus, Mods
-from app.common.database.repositories import beatmaps, scores, favourites
-from flask import Blueprint, request, abort
+from app.common.database import beatmaps, scores, favourites, nominations
 
-import flask_login
+from flask import Blueprint, request, abort
+from flask_login import current_user
+
 import config
 import utils
 import app
@@ -38,16 +39,16 @@ def get_beatmap(id: int):
         personal_best = None
         personal_best_rank = None
 
-        if not flask_login.current_user.is_anonymous:
+        if current_user.is_authenticated:
             personal_best = scores.fetch_personal_best(
                 beatmap.id,
-                flask_login.current_user.id,
+                current_user.id,
                 int(mode),
                 session=session
             )
 
             personal_best_rank = scores.fetch_score_index(
-                flask_login.current_user.id,
+                current_user.id,
                 beatmap.id,
                 int(mode),
                 session=session
@@ -83,9 +84,19 @@ def get_beatmap(id: int):
             scores=beatmap_scores,
             favourites_count=favourites.fetch_count_by_set(beatmap.set_id, session=session),
             favourites=favourites.fetch_many_by_set(beatmap.set_id, session=session),
+            favorite=(
+                favourites.fetch_one(current_user.id, beatmap.set_id, session=session)
+                if current_user.is_authenticated else None
+            ),
             site_image=f"https://assets.ppy.sh/beatmaps/{beatmap.set_id}/covers/list.jpg",
             site_description=f"Titanic » beatmaps » {beatmap.full_name}",
             site_title=f"{beatmap.full_name} - Beatmap Info",
             personal_best=personal_best,
-            personal_best_rank=personal_best_rank
+            personal_best_rank=personal_best_rank,
+            bat_error=request.args.get('bat_error'),
+            bat_nomination=(
+                nominations.fetch_one(beatmap.set_id, current_user.id, session)
+                if current_user.is_authenticated else None
+            ),
+            nominations=nominations.fetch_by_beatmapset(beatmap.set_id, session)
         )

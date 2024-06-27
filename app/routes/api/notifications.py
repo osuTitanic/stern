@@ -1,18 +1,23 @@
 
 from app.common.database.repositories import notifications
-from flask import Blueprint, Response, request
-
-import flask_login
+from flask_login import login_required
+from flask import Blueprint, request
 
 router = Blueprint('notifications', __name__)
 
 @router.get('/confirm')
-@flask_login.login_required
+@login_required
 def mark_as_read():
     if (id := request.args.get('id')) is None:
-        return Response(None, 400)
+        return {
+            'error': 400,
+            'details': 'The request is missing the required "id" parameter.'
+        }, 400
 
     if not notifications.update(id, {'read': True}):
-        return Response(None, 404)
+        return {
+            'error': 404,
+            'details': 'The requested notification does not exist.'
+        }, 404
 
-    return Response(None, 200)
+    return {'success': True}

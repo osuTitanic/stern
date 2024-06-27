@@ -93,6 +93,10 @@ def verification():
             }
         )
 
+        app.session.logger.info(
+            f'{verification.user.name} successfully verified their account.'
+        )
+
         return utils.render_template(
             'verification.html',
             css='verification.css',
@@ -158,6 +162,10 @@ def resend_verification():
                 'verification_id': verification.id,
                 'verification_type': verification.type
             }
+        )
+
+        app.session.logger.info(
+            f'Resending verification email for {verification.user.name}...'
         )
 
         return redirect(f'/account/verification?id={verification.id}')

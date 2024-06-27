@@ -1,10 +1,10 @@
 
+from flask_login import login_required, current_user
 from flask import Blueprint, redirect, request
-from flask_login import login_required
+from datetime import datetime
 from typing import Optional
 from PIL import Image
 
-import flask_login
 import utils
 import app
 import io
@@ -29,11 +29,15 @@ def update_avatar():
     if not (avatar := request.files.get('avatar')):
         return get_profile_page('Please provide a valid image!')
 
-    if flask_login.current_user.restricted:
+    if current_user.restricted:
         return get_profile_page('Your account was restricted.')
 
-    if flask_login.current_user.silence_end:
+    if current_user.silence_end and \
+       current_user.silence_end > datetime.now():
         return get_profile_page('Your account was silenced.')
+
+    if not current_user.activated:
+        return get_profile_page('Your account is not activated.')
 
     avatar.stream.seek(0, io.SEEK_END)
     size = avatar.stream.tell()
@@ -57,12 +61,12 @@ def update_avatar():
     image.save(buffer, format='PNG')
 
     app.session.storage.upload_avatar(
-        flask_login.current_user.id,
+        current_user.id,
         buffer.getvalue()
     )
 
     app.session.logger.info(
-        f'{flask_login.current_user.name} changed their avatar.'
+        f'{current_user.name} changed their avatar.'
     )
 
     return redirect('/account/settings/profile')

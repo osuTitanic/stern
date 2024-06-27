@@ -15,11 +15,10 @@ def most_played(user_id: str) -> List[dict]:
         if not user_id.isdigit():
             # Lookup user by username
             if not (user := users.fetch_by_name_extended(user_id, session=session)):
-                return Response(
-                    response=(),
-                    status=404,
-                    mimetype='application/json'
-                )
+                return {
+                    'error': 404,
+                    'details': 'The requested user could not be found.'
+                }, 404
 
             user_id = user.id
 

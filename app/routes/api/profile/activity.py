@@ -1,6 +1,6 @@
 
-from flask import Blueprint, Response
 from flask_pydantic import validate
+from flask import Blueprint
 from typing import List
 
 from app.common.database.repositories import activities, users
@@ -21,20 +21,17 @@ def recent_activity(
         if not user_id.isdigit():
             # Lookup user by username
             if not (user := users.fetch_by_name_extended(user_id, session=session)):
-                return Response(
-                    response=(),
-                    status=404,
-                    mimetype='application/json'
-                )
-
+                return {
+                    'error': 404,
+                    'details': 'The requested user could not be found.'
+                }, 404
             user_id = user.id
 
         if (mode := GameMode.from_alias(mode)) is None:
-            return Response(
-                response={},
-                status=404,
-                mimetype='application/json'
-            )
+            return {
+                'error': 400,
+                'details': 'The requested mode does not exist.'
+            }, 400
 
         recent_activity = [
             (
