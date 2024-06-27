@@ -292,6 +292,10 @@ def handle_post(topic: DBForumTopic, _: int, session: Session) -> Response:
         session=session
     )
 
+    app.session.logger.info(
+        f'{current_user.name} created a post on "{topic.title}" ({post.id}).'
+    )
+
     return redirect(
         f"/forum/{topic.forum_id}/t/{topic.id}/p/{post.id}"
     )
@@ -381,6 +385,10 @@ def handle_post_edit(topic: DBForumTopic, post_id: int, session: Session) -> Res
         post.id,
         updates,
         session=session
+    )
+
+    app.session.logger.info(
+        f'{current_user.name} edited their post ({post.id}).'
     )
 
     return redirect(

@@ -262,6 +262,10 @@ def create_post_action(forum_id: str):
             session=session
         )
 
+        app.session.logger.info(
+            f'{current_user.name} created a new topic "{topic.title}" ({topic.id}).'
+        )
+
         return redirect(
             f"/forum/{forum.id}/t/{topic.id}"
         )
