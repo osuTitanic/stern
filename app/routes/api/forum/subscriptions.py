@@ -3,12 +3,12 @@ from app.models.forums import SubscriptionModel
 from app.common.database import users, topics
 
 from flask_login import current_user, login_required
-from flask import Blueprint, Response, request
+from flask import Blueprint, request
 from flask_pydantic import validate
 
 import app
 
-router = Blueprint("forum-subscriptions", __name__)
+router = Blueprint("forum-subscriptions-api", __name__)
 
 @router.get('/subscriptions')
 @login_required

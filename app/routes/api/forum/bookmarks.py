@@ -8,7 +8,7 @@ from flask_pydantic import validate
 
 import app
 
-router = Blueprint("forum-bookmarks", __name__)
+router = Blueprint("forum-bookmarks-api", __name__)
 
 @router.get('/bookmarks')
 @login_required
