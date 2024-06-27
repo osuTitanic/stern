@@ -51,6 +51,10 @@ def bat_update():
             session=session
         )
 
+        app.session.logger.info(
+            f'{current_user.name} updated beatmap metadata for "{beatmapset.full_name}".'
+        )
+
     return redirect(f'/s/{set_id}')
 
 @router.get('/update/<set_id>/hashes')

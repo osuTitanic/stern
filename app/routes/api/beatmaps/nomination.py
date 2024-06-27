@@ -70,6 +70,10 @@ def add_nomination(set_id: int):
             session=session
         )
 
+        app.session.logger.info(
+            f'Beatmap "{beatmapset.full_name}" was nominated by {current_user.name}.'
+        )
+
     return redirect(f'/s/{set_id}')
 
 @router.get('/nominations/<set_id>/reset')
@@ -96,6 +100,10 @@ def reset_nominations(set_id: int):
             beatmapset.topic_id,
             {'icon_id': 4},
             session=session
+        )
+
+        app.session.logger.info(
+            f'{current_user.name} removed all nominations from "{beatmapset.full_name}".'
         )
 
     return redirect(f'/s/{set_id}')

@@ -55,4 +55,8 @@ def nuke_beatmap(set_id: int):
             session=session
         )
 
+        app.session.logger.info(
+            f'Beatmap "{beatmapset.full_name}" was nuked by {current_user.name}.'
+        )
+
     return redirect(f'/s/{set_id}')

@@ -237,6 +237,10 @@ def diff_status_update():
                 session=session
             )
 
+        app.session.logger.info(
+            f'{current_user.name} updated statuses for "{beatmapset.full_name}".'
+        )
+
     return redirect(f'/s/{set_id}')
 
 def handle_pending_status(beatmapset: DBBeatmapset, session: Session):
@@ -273,6 +277,10 @@ def handle_pending_status(beatmapset: DBBeatmapset, session: Session):
         beatmapset,
         DatabaseStatus.Pending.value,
         session=session
+    )
+
+    app.session.logger.info(
+        f'"{beatmapset.full_name}" was set to "Pending" status by {current_user.name}.'
     )
 
     return redirect(
@@ -314,6 +322,10 @@ def handle_approved_status(beatmapset: DBBeatmapset, session: Session):
         session=session
     )
 
+    app.session.logger.info(
+        f'"{beatmapset.full_name}" was set to "Approved" status by {current_user.name}.'
+    )
+
     return redirect(
         f'/s/{beatmapset.id}'
     )
@@ -353,6 +365,10 @@ def handle_qualified_status(beatmapset: DBBeatmapset, session: Session):
         session=session
     )
 
+    app.session.logger.info(
+        f'"{beatmapset.full_name}" was set to "Qualified" status by {current_user.name}.'
+    )
+
     return redirect(
         f'/s/{beatmapset.id}'
     )
@@ -385,6 +401,10 @@ def handle_loved_status(beatmapset: DBBeatmapset, session: Session):
         beatmapset,
         DatabaseStatus.Loved.value,
         session=session
+    )
+
+    app.session.logger.info(
+        f'"{beatmapset.full_name}" was set to "Loved" status by {current_user.name}.'
     )
 
     return redirect(
