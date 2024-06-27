@@ -44,6 +44,10 @@ def add_nomination(set_id: int):
             # User already nominated that map
             return redirect(f'/s/{set_id}')
 
+        if beatmapset.status > 0:
+            # Beatmap was already approved
+            return redirect(f'/s/{set_id}')
+
         nominations.create(
             beatmapset.id,
             current_user.id,
@@ -76,6 +80,10 @@ def reset_nominations(set_id: int):
 
     with app.session.database.managed_session() as session:
         if not (beatmapset := beatmapsets.fetch_one(set_id, session)):
+            return redirect(f'/s/{set_id}')
+
+        if beatmapset.status > 0:
+            # Beatmap was already approved
             return redirect(f'/s/{set_id}')
 
         nominations.delete_all(
