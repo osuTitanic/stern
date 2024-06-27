@@ -89,6 +89,18 @@ def remove_subscription():
         }, 400
 
     with app.session.database.managed_session() as session:
+        if not (topic := topics.fetch_one(topic_id, session)):
+            return {
+                'error': 404,
+                'details': 'The requested topic does not exist.'
+            }, 404
+
+        if topic.hidden:
+            return {
+                'error': 404,
+                'details': 'The requested topic does not exist.'
+            }, 404
+
         topics.delete_subscriber(
             topic_id=topic_id,
             user_id=current_user.id,
