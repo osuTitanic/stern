@@ -227,6 +227,16 @@ def diff_status_update():
                 session=session
             )
 
+        else:
+            beatmapsets.update(
+                beatmapset.id,
+                {
+                    'approved_at': None,
+                    'approved_by': None
+                },
+                session=session
+            )
+
     return redirect(f'/s/{set_id}')
 
 def handle_pending_status(beatmapset: DBBeatmapset, session: Session):
@@ -245,7 +255,11 @@ def handle_pending_status(beatmapset: DBBeatmapset, session: Session):
 
     beatmapsets.update(
         beatmapset.id,
-        {'status': DatabaseStatus.Pending.value},
+        {
+            'status': DatabaseStatus.Pending.value,
+            'approved_at': None,
+            'approved_by': None
+        },
         session=session
     )
 
