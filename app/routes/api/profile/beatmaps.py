@@ -1,10 +1,17 @@
 
-from app.common.database import beatmapsets, topics, posts, users, beatmaps
 from app.common.constants import DatabaseStatus
 from app.models import BeatmapsetModel
+from app.common.database import (
+    nominations,
+    beatmapsets,
+    beatmaps,
+    topics,
+    posts,
+    users
+)
 
 from flask_login import current_user, login_required
-from flask import Blueprint, Response, request
+from flask import Blueprint, request
 from flask_pydantic import validate
 from datetime import datetime
 
@@ -149,6 +156,17 @@ def delete_beatmap(user_id: int):
             return {
                 'error': 400,
                 'details': 'The requested beatmapset cannot be deleted.'
+            }, 400
+
+        has_nomination = nominations.fetch_by_beatmapset(
+            beatmapset.id,
+            session=session
+        )
+
+        if has_nomination:
+            return {
+                'error': 400,
+                'details': 'The requested beatmapset was nominated, and cannot be deleted.'
             }, 400
 
         # Beatmap will be deleted on next bss upload
