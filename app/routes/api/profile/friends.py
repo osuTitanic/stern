@@ -38,6 +38,10 @@ def add_friend():
                 session=session
             )
 
+        app.session.logger.info(
+            f'{current_user.name} added {target.name} to their friends list.'
+        )
+
         status = 'friends'
 
         # Check for mutual
@@ -83,6 +87,10 @@ def remove_friend():
             target.id,
             status=0,
             session=session
+        )
+
+        app.session.logger.info(
+            f'{current_user.name} removed {target.name} from their friends list.'
         )
 
         status = 'friends'
