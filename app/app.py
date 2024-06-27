@@ -29,6 +29,40 @@ flask = Flask(
 flask.register_blueprint(routes.router)
 flask.secret_key = config.FRONTEND_SECRET_KEY
 
+@flask.errorhandler(HTTPException)
+def on_http_exception(error: HTTPException) -> Tuple[str, int]:
+    if '/api' in request.base_url and error.code != 404:
+        return jsonify(
+            error=error.code,
+            details=error.description or error.name
+        ), error.code
+
+    return utils.render_template(
+        content=error.description or error.name,
+        code=error.code,
+        template_name='error.html',
+        css='error.css',
+        title=f'{error.name} - osu!Titanic'
+    ), error.code
+
+@flask.errorhandler(Exception)
+def on_exception(error: Exception) -> Tuple[str, int]:
+    traceback.print_exc()
+
+    if '/api' in request.base_url:
+        return jsonify(
+            error=500,
+            details=InternalServerError.description
+        ), 500
+
+    return utils.render_template(
+        content=InternalServerError.description,
+        code=500,
+        template_name='error.html',
+        css='error.css',
+        title=f'Internal Server Error - osu!Titanic'
+    ), 500
+
 login_manager = LoginManager()
 login_manager.init_app(flask)
 
@@ -241,37 +275,3 @@ def get_status_icon(topic: DBForumTopic) -> str:
 
     # TODO: Read/Unread Logic
     return "/images/icons/topics/topic_read.gif"
-
-@flask.errorhandler(HTTPException)
-def on_http_exception(error: HTTPException) -> Tuple[str, int]:
-    if '/api' in request.base_url:
-        return jsonify(
-            error=error.code,
-            details=error.description or error.name
-        ), error.code
-
-    return utils.render_template(
-        content=error.description or error.name,
-        code=error.code,
-        template_name='error.html',
-        css='error.css',
-        title=f'{error.name} - osu!Titanic'
-    ), error.code
-
-@flask.errorhandler(Exception)
-def on_exception(error: Exception) -> Tuple[str, int]:
-    traceback.print_exc()
-
-    if '/api' in request.base_url:
-        return jsonify(
-            error=500,
-            details=InternalServerError.description
-        ), 500
-
-    return utils.render_template(
-        content=InternalServerError.description,
-        code=500,
-        template_name='error.html',
-        css='error.css',
-        title=f'Internal Server Error - osu!Titanic'
-    ), 500
