@@ -134,6 +134,15 @@ table {
 .bar td {
     height: 15px;
     background-image: linear-gradient(rgb(123, 114, 207) 0%, rgb(91, 83, 153) 100%);
+    color: white;
+    padding-left: 2.5px;
+    padding-bottom: 2px;
+}
+
+.bar a {
+    color: white;
+    font-size: 90%;
+    padding: 2.5px;
 }
 
 .post-spacing {

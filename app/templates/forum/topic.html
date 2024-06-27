@@ -58,7 +58,29 @@
         </td>
     </table>
     <table width="100%" cellspacing="0" class="bar">
-        <td></td>
+        <td>
+        {% if current_user.is_authenticated %}
+            {% if is_subscribed %}
+            <a onclick="removeSubscription({{ topic.id }})" id="subscribe-button">
+                Unsubscribe topic
+            </a>
+            {% else %}
+            <a onclick="addSubscription({{ topic.id }})" id="subscribe-button">
+                Subscribe topic
+            </a>
+            {% endif %}
+            |
+            {% if is_bookmarked %}
+            <a onclick="removeBookmark({{ topic.id }})" id="bookmark-button">
+                Remove Bookmark
+            </a>
+            {% else %}
+            <a onclick="addBookmark({{ topic.id }})" id="bookmark-button">
+                Bookmark topic
+            </a>
+            {% endif %}
+        {% endif %}
+        </td>
     </table>
     {% if not posts %}
         <p style="margin-top: 10px; margin-left: 5px;">
@@ -180,5 +202,81 @@
         </td>
     </table>
 </div>
-{# TODO: Posts... #}
+<script>
+    function addSubscription(topicId) {
+        fetch(`/api/forum/subscriptions/add?topic_id=${topicId}`)
+            .then(response => {
+                if (response.ok)
+                    return response.json();
+                throw new Error('Failed to add subscription.');
+            })
+            .then(data => {
+                const button = document.getElementById('subscribe-button');
+                button.onclick = () => { removeSubscription(topicId) };
+                button.innerText = 'Unsubscribe topic';
+            })
+            .catch(error => {
+                console.error(error)
+            });
+
+        return false;
+    }
+
+    function removeSubscription(topicId) {
+        fetch(`/api/forum/subscriptions/remove?topic_id=${topicId}`)
+            .then(response => {
+                if (response.ok)
+                    return response.json();
+                throw new Error('Failed to remove subscription.');
+            })
+            .then(data => {
+                const button = document.getElementById('subscribe-button');
+                button.onclick = () => { addSubscription(topicId) };
+                button.innerText = 'Subscribe topic';
+            })
+            .catch(error => {
+                console.error(error)
+            });
+
+        return false;
+    }
+
+    function addBookmark(topicId) {
+        fetch(`/api/forum/bookmarks/add?topic_id=${topicId}`)
+            .then(response => {
+                if (response.ok)
+                    return response.json();
+                throw new Error('Failed to add bookmark.');
+            })
+            .then(data => {
+                const button = document.getElementById('bookmark-button');
+                button.onclick = () => { removeBookmark(topicId) };
+                button.innerText = 'Remove Bookmark';
+            })
+            .catch(error => {
+                console.error(error)
+            });
+
+        return false;
+    }
+
+    function removeBookmark(topicId) {
+        fetch(`/api/forum/bookmarks/remove?topic_id=${topicId}`)
+            .then(response => {
+                if (response.ok)
+                    return response.json();
+                throw new Error('Failed to remove bookmark.');
+            })
+            .then(data => {
+                const button = document.getElementById('bookmark-button');
+                button.onclick = () => { addBookmark(topicId) };
+                button.innerText = 'Bookmark topic';
+            })
+            .catch(error => {
+                console.error(error)
+            });
+
+        return false;
+    }
+</script>
 {% endblock content %}
