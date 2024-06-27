@@ -119,7 +119,7 @@
                                 {{ post.edit_time|timeago }}, edited {{ post.edit_count }} time{{ 's' if post.edit_count != 1 }} in total.
                             </div>
                             {% endif %}
-                            {% if (not current_user.is_anonymous) and (not topic.locked_at or is_privileged) %}
+                            {% if (current_user.is_authenticated) and (not topic.locked_at or is_privileged) %}
                             <div class="post-buttons">
                                 {% if (current_user.id == post.user.id or is_privileged) and (not post.edit_locked or is_privileged) %}
                                 <a class="button-red" onclick="deletePost(post.id);">Delete</a>

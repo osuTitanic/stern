@@ -17,7 +17,7 @@ def search_api():
     with app.session.database.managed_session() as session:
         user_id = (
             current_user.id
-            if not current_user.is_anonymous else None
+            if current_user.is_authenticated else None
         )
 
         try:

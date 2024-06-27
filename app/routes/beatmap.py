@@ -39,7 +39,7 @@ def get_beatmap(id: int):
         personal_best = None
         personal_best_rank = None
 
-        if not current_user.is_anonymous:
+        if current_user.is_authenticated:
             personal_best = scores.fetch_personal_best(
                 beatmap.id,
                 current_user.id,
@@ -86,7 +86,7 @@ def get_beatmap(id: int):
             favourites=favourites.fetch_many_by_set(beatmap.set_id, session=session),
             favorite=(
                 favourites.fetch_one(current_user.id, beatmap.set_id, session=session)
-                if not current_user.is_anonymous else None
+                if current_user.is_authenticated else None
             ),
             site_image=f"https://assets.ppy.sh/beatmaps/{beatmap.set_id}/covers/list.jpg",
             site_description=f"Titanic » beatmaps » {beatmap.full_name}",
@@ -96,7 +96,7 @@ def get_beatmap(id: int):
             bat_error=request.args.get('bat_error'),
             bat_nomination=(
                 nominations.fetch_one(beatmap.set_id, current_user.id, session)
-                if not current_user.is_anonymous else None
+                if current_user.is_authenticated else None
             ),
             nominations=nominations.fetch_by_beatmapset(beatmap.set_id, session)
         )

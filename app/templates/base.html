@@ -29,7 +29,7 @@
     <script>
         const osuBaseurl = "{{ config.OSU_BASEURL }}";
         const staticBaseurl = "{{ config.STATIC_BASEURL }}";
-        const currentUser = {{ current_user.id if not current_user.is_anonymous else 'null' }};
+        const currentUser = {{ current_user.id if current_user.is_authenticated else 'null' }};
         const approvedRewards = {{ config.APPROVED_MAP_REWARDS|lower }};
     </script>
 </head>

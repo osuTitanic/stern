@@ -71,7 +71,7 @@
             <dd>
                 <a data-name="video">Has Video</a>
                 <a data-name="storyboard">Has Storyboard</a>
-                {% if not current_user.is_anonymous %}
+                {% if current_user.is_authenticated %}
                 <a data-name="played">Has Played</a>
                 {% endif %}
             </dd>

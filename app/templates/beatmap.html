@@ -192,7 +192,7 @@
                 {% endif %}
                 <td>Options:</td>
                 <td {% if not nominations or beatmapset.status > 0 %} colspan="5" {% endif %}>
-                    {% if not current_user.is_anonymous %}
+                    {% if current_user.is_authenticated %}
                         {% if favorite %}
                         <a onclick="removeFavorite({{ beatmapset.id }})" style="color: red" id="favourites-button">
                             Remove Favourite
@@ -604,7 +604,7 @@
                 {% endif %}
                 <th><strong>Misses</strong></th>
                 <th><strong>Mods</strong></th>
-                {% if not current_user.is_anonymous %}
+                {% if current_user.is_authenticated %}
                 {# TODO: Report button #}
                 <th>
                     {# Replay Downloads #}
@@ -663,7 +663,7 @@
                 {% endif %}
                 <td>{{ score.nMiss }}</td>
                 <td>{{ score.mods|short_mods }}</td>
-                {% if not current_user.is_anonymous %}
+                {% if current_user.is_authenticated %}
                 {# Replay Downloads #}
                 <td style="text-align: center;">
                     <a href="/scores/{{ score.id }}/download" target="_blank">Replay</a>
