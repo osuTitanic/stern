@@ -254,7 +254,7 @@ table {
     padding: 5px;
 }
 
-.post-buttons-bottom {
+.post-buttons-large {
     text-align: right;
     min-height: 15px;
     font-size: 125%;
@@ -278,14 +278,14 @@ table {
     text-decoration: none;
 }
 
-.post-buttons-bottom a,
-.post-buttons-bottom a:visited {
+.post-buttons-large a,
+.post-buttons-large a:visited {
     border-radius: 5px;
     margin-right: 5px;
     color: rgb(236, 236, 236);
-    padding: 5px;
-    padding-right: 35px;
-    padding-left: 35px;
+    padding: 4.5px;
+    padding-right: 32px;
+    padding-left: 32px;
     text-decoration: none;
 }
 
