@@ -124,7 +124,7 @@
     <table width='100%'>
         <tbody>
             <tr>
-                <td align="right">
+                <td align="right" style="float: right">
                     <a onclick="jumpToPage();">Jump</a> |
                     {# Pagination #}
                     {% if current_page > 1 %}
@@ -152,6 +152,13 @@
                     <a href="/forum/{{ forum.id }}?page={{ current_page + 2 }}">Next</a>
                     {% endif %}
                 </td>
+                {% if not current_user.is_anonymous %}
+                <td align="left" style="float: left">
+                    <div class="post-buttons-large" style="margin-left: 0;">
+                        <a href="/forum/{{ forum.id }}/create" class="button-blue">Create</a>
+                    </div>
+                </td>
+                {% endif %}
             </tr>
         </tbody>
     </table>
