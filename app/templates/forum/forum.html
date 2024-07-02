@@ -121,6 +121,11 @@
             {% endif %}
         </tbody>
     </table>
+    {% else %}
+    <p style="margin-top: 10px; margin-left: 2.5px;">
+        Hmmm... seems like nothing was posted here yet. Why not be the first one?
+    </p><br>
+    {% endif %}
     <table width='100%'>
         <tbody>
             <tr>
@@ -162,11 +167,6 @@
             </tr>
         </tbody>
     </table>
-    {% else %}
-    <p style="margin-top: 10px; margin-left: 2.5px;">
-        Hmmm... seems like nothing was posted here yet. Why not be the first one?
-    </p>
-    {% endif %}
 </div>
 <script>
     function jumpToPage() {
