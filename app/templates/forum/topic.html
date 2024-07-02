@@ -197,7 +197,7 @@
                 <a href="/forum/{{ forum.id }}/t/{{ topic.id }}?page={{ current_page + 2 }}">Next</a>
             {% endif %}
         </td>
-        {% if not current_user.is_anonymous %}
+        {% if current_user.is_authenticated %}
         <td align="left" style="float: left">
             <div class="post-buttons-large" id="post-bottom">
                 {% if not topic.locked_at %}

@@ -123,7 +123,10 @@
     </table>
     {% else %}
     <p style="margin-top: 10px; margin-left: 2.5px;">
-        Hmmm... seems like nothing was posted here yet. Why not be the first one?
+        Hmmm... seems like nothing was posted here yet.
+        {% if current_user.is_authenticated %}
+        Why not be the first one?
+        {% endif %}
     </p><br>
     {% endif %}
     <table width='100%'>
@@ -157,7 +160,7 @@
                     <a href="/forum/{{ forum.id }}?page={{ current_page + 2 }}">Next</a>
                     {% endif %}
                 </td>
-                {% if not current_user.is_anonymous %}
+                {% if current_user.is_authenticated %}
                 <td align="left" style="float: left">
                     <div class="post-buttons-large" style="margin-left: 0;">
                         <a href="/forum/{{ forum.id }}/create" class="button-blue">Create</a>
