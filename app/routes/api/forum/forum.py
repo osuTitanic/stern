@@ -19,6 +19,12 @@ def get_forum(forum_id: int):
                 'details': 'The requested forum could not be found.'
             }, 404
 
+        if forum.hidden:
+            return {
+                'error': 404,
+                'details': 'The requested forum could not be found.'
+            }, 404
+
         return ForumModel.model_validate(forum, from_attributes=True) \
                         .model_dump()
 
@@ -27,6 +33,12 @@ def get_forum(forum_id: int):
 def get_topics(forum_id: int):
     with app.session.database.managed_session() as session:
         if not (forum := forums.fetch_by_id(forum_id, session=session)):
+            return {
+                'error': 404,
+                'details': 'The requested forum could not be found.'
+            }, 404
+
+        if forum.hidden:
             return {
                 'error': 404,
                 'details': 'The requested forum could not be found.'
