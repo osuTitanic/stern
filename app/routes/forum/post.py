@@ -110,6 +110,9 @@ def fetch_post_text(
         if not (post := posts.fetch_one(action_id, session=session)):
             return
 
+        if post.deleted:
+            return
+
         return post.content
 
     elif action == 'quote':
@@ -117,6 +120,9 @@ def fetch_post_text(
             return
 
         if not (post := posts.fetch_one(int(action_id), session=session)):
+            return
+
+        if post.deleted:
             return
 
         return f"[quote={post.user.name}]{post.content}[/quote]"
