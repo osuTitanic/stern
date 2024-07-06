@@ -40,7 +40,7 @@ def get_topics(forum_id: int):
 
         forum_topics = topics.fetch_recent_many(
             forum.id,
-            limit=50,
+            limit=25,
             offset=start,
             session=session
         )

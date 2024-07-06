@@ -40,7 +40,7 @@ def get_posts(topic_id: int):
 
         topic_posts = posts.fetch_range_by_topic(
             topic.id,
-            range=50,
+            range=25,
             offset=start,
             session=session
         )
