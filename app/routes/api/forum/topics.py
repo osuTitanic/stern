@@ -19,6 +19,12 @@ def get_topic(topic_id: int):
                 'details': 'The requested topic could not be found.'
             }, 404
 
+        if topic.hidden:
+            return {
+                'error': 404,
+                'details': 'The requested topic could not be found.'
+            }, 404
+
         return TopicModel.model_validate(topic, from_attributes=True) \
                          .model_dump()
 
@@ -27,6 +33,12 @@ def get_topic(topic_id: int):
 def get_posts(topic_id: int):
     with app.session.database.managed_session() as session:
         if not (topic := topics.fetch_one(topic_id, session=session)):
+            return {
+                'error': 404,
+                'details': 'The requested topic could not be found.'
+            }, 404
+
+        if topic.hidden:
             return {
                 'error': 404,
                 'details': 'The requested topic could not be found.'
@@ -45,8 +57,14 @@ def get_posts(topic_id: int):
             session=session
         )
 
+        for post in topic_posts:
+            if not post.hidden:
+                continue
+
+            post.content = '[ Deleted ]'
+
         return [
             PostModel.model_validate(post, from_attributes=True) \
-                      .model_dump()
+                     .model_dump()
             for post in topic_posts
         ]
