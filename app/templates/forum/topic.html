@@ -134,7 +134,7 @@
                             <div class="post-time">
                                 <a href="#" title="{{ post.created_at }}">{{ post.created_at|timeago }}</a>
                             </div>
-                            <div class="post-content">
+                            <div class="post-content" id="post-{{ post.id }}">
                                 {% if post.deleted %}
                                     [ Deleted ]
                                 {% else %}
@@ -150,8 +150,10 @@
                             {% if (current_user.is_authenticated) and (not topic.locked_at or is_privileged) %}
                             <div class="post-buttons">
                                 {% if (current_user.id == post.user.id or is_privileged) and (not post.edit_locked or is_privileged) %}
-                                <a class="button-red" onclick="deletePost(post.id);">Delete</a>
-                                <a class="button-blue" href="./post?action=edit&id={{ post.id }}">Edit</a>
+                                    {% if not post.deleted %}
+                                        <a class="button-red" onclick="deletePost({{ post.id }})">Delete</a>
+                                        <a class="button-blue" href="./post?action=edit&id={{ post.id }}">Edit</a>
+                                    {% endif %}
                                 {% endif %}
                                 <a class="button-blue" href="./post?action=quote&id={{ post.id }}">Quote</a>
                             </div>
@@ -282,6 +284,42 @@
             })
             .catch(error => {
                 console.error(error)
+            });
+
+        return false;
+    }
+
+    function deletePost(postId) {
+        if (!confirm('Are you sure you want to delete this post?'))
+            return;
+
+        fetch(`/api/forum/posts/${postId}/delete`)
+            .then(response => {
+                return response.json();
+            })
+            .then(data => {
+                if (data.error) {
+                    throw new Error(
+                        data.detail ? data.detail : `Failed to delete post. (${data.error})`
+                    );
+                }
+
+                const post = document.getElementById(`post-${postId}`);
+                post.innerHTML = '[ Deleted ]';
+
+                // Remove delete button
+                const buttons = post.parentElement.getElementsByClassName('post-buttons');
+
+                if (!buttons)
+                    return;
+
+                for (const button of buttons) {
+                    button.remove();
+                }
+            })
+            .catch(error => {
+                alert(error);
+                console.error(error);
             });
 
         return false;
