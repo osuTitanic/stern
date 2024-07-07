@@ -104,6 +104,11 @@ def topic(forum_id: str, id: str):
                 session=session
             )
 
+        initial_post = posts.fetch_initial_post(
+            topic.id,
+            session=session
+        )
+
         return utils.render_template(
             "forum/topic.html",
             css='forums.css',
@@ -116,6 +121,7 @@ def topic(forum_id: str, id: str):
             beatmapset=beatmapset,
             is_bookmarked=is_bookmarked,
             is_subscribed=is_subscribed,
+            initial_post=initial_post,
             session=session
         )
 
