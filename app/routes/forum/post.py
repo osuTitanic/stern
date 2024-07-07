@@ -176,8 +176,13 @@ def update_topic_type() -> dict:
         'announcement': False
     }
 
-def update_icon_id(topic: DBForumTopic) -> dict:
-    if not topic.can_change_icon and not current_user.is_admin:
+def get_icon_id(topic: DBForumTopic) -> int | None:
+    is_privileged = (
+        current_user.is_bat or
+        current_user.is_moderator
+    )
+
+    if not topic.can_change_icon and not is_privileged:
         return
 
     icon_id = request.form.get(
@@ -186,10 +191,11 @@ def update_icon_id(topic: DBForumTopic) -> dict:
         type=int
     )
 
-    if icon_id != -1:
-        return {'icon_id': icon_id}
+    if topic.icon_id == icon_id:
+        return
 
-    return {'icon_id': None}
+    if icon_id != -1:
+        return icon_id
 
 def update_topic_location(
     topic: DBForumTopic,
@@ -270,6 +276,7 @@ def handle_post(topic: DBForumTopic, _: int, session: Session) -> Response:
         topic.forum_id,
         current_user.id,
         content,
+        icon_id=get_icon_id(topic),
         session=session
     )
 
@@ -294,7 +301,14 @@ def handle_post(topic: DBForumTopic, _: int, session: Session) -> Response:
 
     topics.update(
         topic.id,
-        {'last_post_at': datetime.now()},
+        {
+            'last_post_at': datetime.now(),
+            'icon_id': (
+                post.icon_id
+                if post.icon_id != None
+                else topic.icon_id
+            )
+        },
         session=session
     )
 
