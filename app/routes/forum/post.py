@@ -368,14 +368,9 @@ def handle_post_edit(topic: DBForumTopic, post_id: int, session: Session) -> Res
     )
 
     if post.id == initial_post.id:
-        topic_updates = {
-            **update_icon_id(topic),
-            **update_topic_type()
-        }
-
         topics.update(
             topic.id,
-            topic_updates,
+            update_topic_type(),
             session=session
         )
 
