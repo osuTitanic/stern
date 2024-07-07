@@ -109,6 +109,10 @@ def topic(forum_id: str, id: str):
             session=session
         )
 
+        if initial_post in topic_posts:
+            # Override icon for initial post
+            topic_posts[0].icon = topic.icon
+
         return utils.render_template(
             "forum/topic.html",
             css='forums.css',
