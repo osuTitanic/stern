@@ -132,7 +132,15 @@
                     <td style="vertical-align: top; width: 82%;">
                         <div style="background-color: #ebe8ff;">
                             <div class="post-time">
-                                <a href="#" title="{{ post.created_at }}">{{ post.created_at|timeago }}</a>
+                                <a href="#" title="{{ post.created_at }}" style="line-height: 18px">
+                                    {{ post.created_at|timeago }}
+                                </a>
+                                {% if post.icon %}
+                                    <img src="{{ post.icon.location }}"
+                                        alt="{{ post.icon.name }}"
+                                        style="float: right; margin-left: 4px"
+                                        width="15">
+                                {% endif %}
                             </div>
                             <div class="post-content" id="post-{{ post.id }}">
                                 {% if post.deleted %}
