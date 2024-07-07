@@ -89,7 +89,7 @@
     {% else %}
         {% for post in posts %}
             <div class="post-spacing"></div>
-            {% if beatmapset %}
+            {% if beatmapset and post == initial_post %}
             <div class="beatmapset-link-info">
                 This topic is linked to a beatmapset.
                 Click <a href="/s/{{ beatmapset.id }}">here</a> to view it!
