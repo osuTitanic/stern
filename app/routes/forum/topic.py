@@ -1,7 +1,12 @@
 
-from app.common.database import forums, topics, posts, beatmapsets
 from app.common.database import DBForumTopic, DBForum
 from app.common.helpers import ip
+from app.common.database import (
+    beatmapsets,
+    forums,
+    topics,
+    posts
+)
 
 from flask import Blueprint, abort, redirect, request
 from flask_login import current_user, login_required
