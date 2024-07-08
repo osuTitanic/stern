@@ -160,6 +160,18 @@
                 </td>
                 <td>
                     <strong>Favourited {{ favourites_count }} times</strong> in total
+                    {% if current_user.is_authenticated %}
+                        <br>
+                        {% if favorite %}
+                        <a onclick="removeFavorite({{ beatmapset.id }})" style="color: red" id="favourites-button">
+                            (Remove Favourite)
+                        </a>
+                        {% else %}
+                        <a onclick="addFavorite({{ beatmapset.id }})" style="color: green" id="favourites-button">
+                            (Add Favourite)
+                        </a>
+                        {% endif %}
+                    {% endif %}
                 </td>
                 <td id="favourites">
                     {% if favourites_count > 0 %}
@@ -192,17 +204,6 @@
                 {% endif %}
                 <td>Options:</td>
                 <td {% if not nominations or beatmapset.status > 0 %} colspan="5" {% endif %}>
-                    {% if current_user.is_authenticated %}
-                        {% if favorite %}
-                        <a onclick="removeFavorite({{ beatmapset.id }})" style="color: red" id="favourites-button">
-                            Remove Favourite
-                        </a>
-                        {% else %}
-                        <a onclick="addFavorite({{ beatmapset.id }})" style="color: green" id="favourites-button">
-                            Add Favourite
-                        </a>
-                        {% endif %}
-                    {% endif %}
                     {% if beatmapset.server == 0 %}
                     <p><a href="https://osu.ppy.sh/beatmapsets/{{ beatmapset.id }}/discussion">Modding / Discussion</a></p>
                     {% else %}
@@ -687,7 +688,7 @@
             })
             .then(data => {
                 const favourites = document.getElementById('favourites-button');
-                favourites.innerHTML = 'Remove Favourite';
+                favourites.innerHTML = '(Remove Favourite)';
                 favourites.style.color = 'red';
                 favourites.onclick = () => removeFavorite(beatmapset_id);
             })
@@ -706,7 +707,7 @@
             })
             .then(data => {
                 const favourites = document.getElementById('favourites-button');
-                favourites.innerHTML = 'Add Favourite';
+                favourites.innerHTML = '(Add Favourite)';
                 favourites.style.color = 'green';
                 favourites.onclick = () => addFavorite(beatmapset_id);
             })
