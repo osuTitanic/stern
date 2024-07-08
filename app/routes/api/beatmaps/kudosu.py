@@ -180,28 +180,35 @@ def revoke_kudosu(set_id: int, post_id: int):
                 'details': 'You cannot modify kudosu on your own post.'
             }, 400
 
+        total_kudosu = modding.total_amount(
+            post_id=post.id,
+            session=session
+        )
+
+        if total_kudosu < 0:
+            return {
+                'error': 400,
+                'details': 'This post has already been revoked.'
+            }, 400
+
         existing_mod = modding.fetch_by_post_and_sender(
             post_id,
-            current_user.id,
+            beatmapset.creator_id,
             session=session
         )
 
         if existing_mod:
-            modding.update(
+            modding.delete(
                 existing_mod.id,
-                {'amount': -1},
                 session=session
             )
-
-            return KudosuModel.model_validate(existing_mod, from_attributes=True) \
-                              .model_dump()
 
         kudosu = modding.create(
             target_id=post.user_id,
             sender_id=current_user.id,
             set_id=set_id,
             post_id=post_id,
-            amount=-1,
+            amount=min(-1, -total_kudosu),
             session=session
         )
 
