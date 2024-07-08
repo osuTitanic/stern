@@ -231,10 +231,10 @@ def reset_kudosu(set_id: int, post_id: int):
                 'details': 'You are not authorized to perform this action.'
             }, 403
 
-        if beatmapset.status >= DatabaseStatus.Ranked:
+        if beatmapset.status < DatabaseStatus.Ranked:
             return {
                 'error': 400,
-                'details': 'This beatmapset is already ranked.'
+                'details': 'This beatmapset is not ranked.'
             }, 400
 
         if not (post := posts.fetch_one(post_id, session)):
