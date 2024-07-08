@@ -112,6 +112,12 @@ def reward_kudosu(set_id: int, post_id: int):
             session=session
         )
 
+        if existing_mod:
+            return {
+                'error': 400,
+                'details': 'Kudosu was already rewarded to this post.'
+            }, 400
+
         topic_activity = (
             datetime.now() - post.topic.last_post_at
         )
@@ -120,16 +126,6 @@ def reward_kudosu(set_id: int, post_id: int):
             1 if topic_activity < timedelta(days=7)
             else 2
         )
-
-        if existing_mod:
-            modding.update(
-                existing_mod.id,
-                {'amount': kudosu_amount},
-                session=session
-            )
-
-            return KudosuModel.model_validate(existing_mod, from_attributes=True) \
-                              .model_dump()
 
         kudosu = modding.create(
             target_id=post.user_id,
