@@ -341,3 +341,16 @@ table {
     margin-right: 6px;
     margin-left: 6px;
 }
+
+.kudosu-box {
+    margin-bottom: 16px;
+    background-color: #f0f5ff;
+    border-style: solid;
+    border-color: var(--content-border-grey);
+    border-radius: 5px 5px 5px 5px;
+    border-width: 0.5px;
+    font-size: 85%;
+    padding: 2.5px;
+    margin: 5px;
+    text-align: center;
+}

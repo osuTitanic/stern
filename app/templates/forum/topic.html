@@ -7,6 +7,11 @@
     current_user.is_admin
 ) %}
 
+{% set can_award_kudosu = (
+    current_user.id == beatmapset.creator_id or
+    current_user.is_bat
+) %}
+
 {% block content %}
 <style>
     .page { margin: 0 }
@@ -128,6 +133,45 @@
                                 <img src="/images/flags/{{ post.user.country|lower }}.gif" alt="Flag" class="flag">
                             </div>
                         </div>
+                        <br>
+                        {% if post.user_id != beatmapset.creator_id and not post.icon %}
+                            {% set total_kudosu = repositories.modding.total_amount(post.id, session) %}
+                            {% if (total_kudosu != 0 or can_award_kudosu) %}
+                            <div class="kudosu-box">
+                                {# This will be displayed for every user #}
+                                <p style="color: {{ 'green' if total_kudosu >= 0 else 'red' }}">
+                                    {% if total_kudosu >= 0 %}
+                                    Earned {{ total_kudosu }} kudosu.
+                                    {% else %}
+                                    Lost {{ total_kudosu|abs }} kudosu.
+                                    {% endif %}
+                                </p>
+
+                                {% if can_award_kudosu %}
+                                    {% set kudosu = repositories.modding.fetch_by_post_and_sender(
+                                        post.id,
+                                        current_user.id,
+                                        session=session
+                                    ) %}
+                                    {% if beatmapset.status <= 0 %}
+                                        {# Beatmap is not ranked #}
+                                        {% if kudosu and current_user.is_bat and kudosu.amount > 0 %}
+                                            {# BATs can revoke existing kudosu #}
+                                            <a href="#">Deny Kudos</a>
+                                        {% elif kudosu and current_user.is_bat %}
+                                            {# Kudosu was revoked -> BATs have the option to reset it #}
+                                            <a href="#">Reset Kudos</a>
+                                        {% elif not kudosu %}
+                                            <a href="#">Give Kudos</a>
+                                        {% endif %}
+                                    {% elif kudosu and current_user.is_bat %}
+                                        {# Beatmap got ranked -> BATs can reset kudosu now #}
+                                        <a href="#">Reset Kudos</a>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                            {% endif %}
+                        {% endif %}
                     </td>
                     <td style="vertical-align: top; width: 82%;">
                         <div style="background-color: #ebe8ff;">
