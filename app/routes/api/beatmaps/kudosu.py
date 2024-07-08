@@ -156,7 +156,7 @@ def revoke_kudosu(set_id: int, post_id: int):
                 'details': 'This beatmapset is not linked to a forum topic.'
             }, 400
 
-        if current_user.id != beatmapset.creator_id and not current_user.is_bat:
+        if not current_user.is_bat:
             return {
                 'error': 403,
                 'details': 'You are not authorized to perform this action.'
