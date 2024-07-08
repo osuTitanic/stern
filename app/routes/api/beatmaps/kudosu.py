@@ -8,6 +8,7 @@ from app.common.constants import DatabaseStatus
 from app.models.kudosu import KudosuModel
 
 from flask_login import current_user, login_required
+from datetime import datetime, timedelta
 from flask_pydantic import validate
 from sqlalchemy.orm import Session
 from flask import Blueprint
@@ -111,16 +112,19 @@ def reward_kudosu(set_id: int, post_id: int):
             session=session
         )
 
-        kudosu_amount = {
-            DatabaseStatus.Pending: 1,
-            DatabaseStatus.Graveyard: 2,
-            DatabaseStatus.WIP: 2
-        }
+        topic_activity = (
+            datetime.now() - post.topic.last_post_at
+        )
+
+        kudosu_amount = (
+            1 if topic_activity < timedelta(days=7)
+            else 2
+        )
 
         if existing_mod:
             modding.update(
                 existing_mod.id,
-                {'amount': kudosu_amount.get(beatmapset.status, 0)},
+                {'amount': kudosu_amount},
                 session=session
             )
 
@@ -132,7 +136,7 @@ def reward_kudosu(set_id: int, post_id: int):
             sender_id=current_user.id,
             set_id=set_id,
             post_id=post_id,
-            amount=kudosu_amount.get(beatmapset.status, 0),
+            amount=kudosu_amount,
             session=session
         )
 
@@ -186,16 +190,10 @@ def revoke_kudosu(set_id: int, post_id: int):
             session=session
         )
 
-        kudosu_amount = {
-            DatabaseStatus.Pending: -1,
-            DatabaseStatus.Graveyard: -2,
-            DatabaseStatus.WIP: -2
-        }
-
         if existing_mod:
             modding.update(
                 existing_mod.id,
-                {'amount': kudosu_amount.get(beatmapset.status, 0)},
+                {'amount': -1},
                 session=session
             )
 
@@ -207,7 +205,7 @@ def revoke_kudosu(set_id: int, post_id: int):
             sender_id=current_user.id,
             set_id=set_id,
             post_id=post_id,
-            amount=kudosu_amount.get(beatmapset.status, 0),
+            amount=-1,
             session=session
         )
 
