@@ -38,9 +38,12 @@
             {{ post_count }} posts |
             <a onclick="jumpToPage();">Jump</a> |
             {# Pagination #}
-                {% if current_page > 1 %}
+            {% if current_page > 1 %}
                 {# "Back" button #}
                 <a href="/forum/{{ forum.id }}/t/{{ topic.id }}?page={{ current_page }}">Back</a>
+                {# First page #}
+                <a href="/forum/{{ forum.id }}/t/{{ topic.id }}?page=1">1</a>
+                ...
             {% endif %}
 
             {# Calculate page range #}
@@ -227,10 +230,14 @@
     <table width='100%'>
         <td align="right" style="float: right">
             {{ post_count }} posts |
+            <a onclick="jumpToPage();">Jump</a> |
             {# Pagination #}
             {% if current_page > 1 %}
                 {# "Back" button #}
                 <a href="/forum/{{ forum.id }}/t/{{ topic.id }}?page={{ current_page }}">Back</a>
+                {# First page #}
+                <a href="/forum/{{ forum.id }}/t/{{ topic.id }}?page=1">1</a>
+                ...
             {% endif %}
 
             {# Calculate page range #}
