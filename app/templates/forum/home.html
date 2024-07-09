@@ -11,7 +11,7 @@
             <h4>{{ main_forum.name }}</h4>
         </td>
     </tr>
-        {% for forum in sub_forum %}
+        {% for forum in sub_forum|sort(attribute='id') %}
         <tr>
             <td width="50%" class="subforum-head">
                 <img src="/images/icons/forum/titanic.png"alt=""
