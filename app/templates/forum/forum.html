@@ -29,7 +29,7 @@
                 {# Pagination #}
                 {% if current_page > 1 %}
                     {# "Back" button #}
-                    <a href="/forum/{{ forum.id }}?page={{ current_page - 1 }}">Back</a>
+                    <a href="/forum/{{ forum.id }}?page={{ current_page }}">Back</a>
                 {% endif %}
 
                 {# Calculate page range #}
@@ -137,7 +137,7 @@
                     {# Pagination #}
                     {% if current_page > 1 %}
                     {# "Back" button #}
-                    <a href="/forum/{{ forum.id }}?page={{ current_page - 1 }}">Back</a>
+                    <a href="/forum/{{ forum.id }}?page={{ current_page }}">Back</a>
                     {% endif %}
 
                     {# Calculate page range #}
