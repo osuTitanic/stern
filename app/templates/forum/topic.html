@@ -139,7 +139,7 @@
                             {% if (total_kudosu != 0 or can_award_kudosu) %}
                             <div class="kudosu-box">
                                 {# This will be displayed for every user #}
-                                <p style="color: {{ 'green' if total_kudosu >= 0 else 'red' }}">
+                                <p style="color: {{ 'green' if total_kudosu >= 0 else 'red' }}" id="kudosu-status-{{ post.id }}">
                                     {% if total_kudosu >= 0 %}
                                     Earned {{ total_kudosu }} kudosu.
                                     {% else %}
@@ -157,16 +157,16 @@
                                         {# Beatmap is not ranked #}
                                         {% if kudosu and current_user.is_bat and kudosu.amount > 0 %}
                                             {# BATs can revoke existing kudosu #}
-                                            <a href="#">Deny Kudos</a>
+                                            <a onclick="revokeKudos({{ post.id }}, {{ beatmapset.id }})">Deny Kudos</a>
                                         {% elif kudosu and current_user.is_bat %}
                                             {# Kudosu was revoked -> BATs have the option to reset it #}
-                                            <a href="#">Reset Kudos</a>
+                                            <a onclick="resetKudos({{ post.id }}, {{ beatmapset.id }})">Reset Kudos</a>
                                         {% elif not kudosu %}
-                                            <a href="#">Give Kudos</a>
+                                            <a onclick="giveKudos({{ post.id }}, {{ beatmapset.id }})">Give Kudos</a>
                                         {% endif %}
                                     {% elif kudosu and current_user.is_bat %}
                                         {# Beatmap got ranked -> BATs can reset kudosu now #}
-                                        <a href="#">Reset Kudos</a>
+                                        <a onclick="resetKudos({{ post.id }}, {{ beatmapset.id }})">Reset Kudos</a>
                                     {% endif %}
                                 {% endif %}
                             </div>
@@ -368,6 +368,96 @@
                 for (const button of buttons) {
                     button.remove();
                 }
+            })
+            .catch(error => {
+                alert(error);
+                console.error(error);
+            });
+
+        return false;
+    }
+
+    function giveKudos(postId, beatmapsetId) {
+        fetch(`/api/beatmaps/${beatmapsetId}/kudosu/${postId}/reward`)
+            .then(response => {
+                return response.json();
+            })
+            .then(data => {
+                if (data.error) {
+                    throw new Error(
+                        data.detail ? data.detail : `Failed to give kudosu. (${data.error})`
+                    );
+                }
+
+                const kudosuStatus = document.getElementById(`kudosu-status-${postId}`);
+                const kudosuActions = kudosuStatus.parentElement.getElementsByTagName('a');
+
+                for (const action of kudosuActions) {
+                    action.remove();
+                }
+
+                kudosuStatus.innerText = `Earned ${data.amount} kudosu.`;
+                kudosuStatus.style.color = 'green';
+            })
+            .catch(error => {
+                alert(error);
+                console.error(error);
+            });
+
+        return false;
+    }
+
+    function revokeKudos(postId, beatmapsetId) {
+        fetch(`/api/beatmaps/${beatmapsetId}/kudosu/${postId}/revoke`)
+            .then(response => {
+                return response.json();
+            })
+            .then(data => {
+                if (data.error) {
+                    throw new Error(
+                        data.detail ? data.detail : `Failed to revoke kudosu. (${data.error})`
+                    );
+                }
+
+                const kudosuStatus = document.getElementById(`kudosu-status-${postId}`);
+                const kudosuActions = kudosuStatus.parentElement.getElementsByTagName('a');
+
+                for (const action of kudosuActions) {
+                    action.remove();
+                }
+
+                kudosuStatus.innerText = 'Successfully revoked kudosu.';
+                kudosuStatus.style.color = 'red';
+            })
+            .catch(error => {
+                alert(error);
+                console.error(error);
+            });
+
+        return false;
+    }
+
+    function resetKudos(postId, beatmapsetId) {
+        fetch(`/api/beatmaps/${beatmapsetId}/kudosu/${postId}/reset`)
+            .then(response => {
+                return response.json();
+            })
+            .then(data => {
+                if (data.error) {
+                    throw new Error(
+                        data.detail ? data.detail : `Failed to reset kudosu. (${data.error})`
+                    );
+                }
+
+                const kudosuStatus = document.getElementById(`kudosu-status-${postId}`);
+                const kudosuActions = kudosuStatus.parentElement.getElementsByTagName('a');
+
+                for (const action of kudosuActions) {
+                    action.remove();
+                }
+
+                kudosuStatus.innerText = 'Successfully reset kudosu.';
+                kudosuStatus.style.color = 'blue';
             })
             .catch(error => {
                 alert(error);
