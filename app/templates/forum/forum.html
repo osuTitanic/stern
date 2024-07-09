@@ -178,7 +178,7 @@
         if (page !== null && !isNaN(page) && page > 0)
         {
             var query = new URLSearchParams();
-            query.set('start', (page - 1) * 25);
+            query.set('page', page);
             location.search = query.toString();
         }
     }

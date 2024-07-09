@@ -34,15 +34,16 @@ def forum_view(forum_id: int):
             # Forum can be viewed on front-page
             return redirect('/forum')
 
-        start = request.args.get('start', 0, type=int)
+        page = max(request.args.get('page', 1, type=int), 1)
+        topics_per_page = 25
 
         sub_forums = forums.fetch_sub_forums(forum.id, session)
         topic_count = forums.fetch_topic_count(forum_id, session)
 
         recent_topics = topics.fetch_recent_many(
             forum.id,
-            limit=25,
-            offset=start,
+            limit=topics_per_page,
+            offset=(page - 1) * topics_per_page,
             session=session
         )
 
@@ -90,7 +91,7 @@ def forum_view(forum_id: int):
             announcements=announcements,
             recent_topics=recent_topics,
             topic_count=topic_count,
-            total_pages=topic_count // 25,
-            current_page=start // 25,
+            total_pages=topic_count // topics_per_page,
+            current_page=page - 1,
             session=session
         )
