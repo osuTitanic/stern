@@ -8,6 +8,7 @@
 ) %}
 
 {% set can_award_kudosu = (
+    current_user.is_authenticated and
     current_user.id == beatmapset.creator_id or
     current_user.is_bat
 ) %}
