@@ -234,6 +234,7 @@
                             <td onclick="expandProfileTab('leader', true)">Top Plays</td>
                             <td onclick="expandProfileTab('history', true)">Historical</td>
                             <td onclick="expandProfileTab('beatmaps', true)">Beatmaps</td>
+                            <td onclick="expandProfileTab('kudosu', true)">Kudosu</td>
                             <td onclick="expandProfileTab('achievements', true)">Achievements</td>
                         </tbody>
                     </table>
@@ -650,6 +651,42 @@
                         {% endfor %}
                     </div>
                 {% endif %}
+                </div>
+            </td>
+            <tr onclick="expandProfileTab('kudosu')">
+                <td id="tab-kudosu" class="tab-heading">Kudosu</td>
+            </tr>
+            <td>
+                <div id="kudosu" class="tab-content" style="opacity: 1; filter: none; display: none; height: 0px;">
+                    {% if not recent_mods %}
+                        <p>This user has not earned any kudosu yet.</p>
+                    {% else %}
+                        <h4 class="profile-stats-element">
+                            <b>Total Kudosu Earned</b>: {{ "{:,}".format(total_kudosu) }}
+                        </h4>
+                        <h3 class="profile-stats-header">Recent Kudosu History</h3>
+                        {% for mod in recent_mods %}
+                            {% set mod_status = (
+                                'revoked' if mod.amount < 0 else
+                                'received' if mod.target_id == user.id else
+                                'gave'
+                            ) %}
+                            {{ mod.time|timeago }} -
+                            {% if mod_status != 'received' %}
+                                <a href="/u/{{ mod.sender_id }}">{{ mod.sender.name }}</a>
+                            {% else %}
+                                <a href="/u/{{ mod.target_id }}">{{ mod.target.name }}</a>
+                            {% endif %}
+                            {{ mod_status }}
+                            <b>{{ mod.amount|abs }} kudos</b> {{ 'from' if mod_status != 'gave' else 'to' }} a post by
+                            {% if mod_status == 'received' %}
+                                <a href="/u/{{ mod.sender_id }}">{{ mod.sender.name }}</a>
+                            {% else %}
+                                <a href="/u/{{ mod.target_id }}">{{ mod.target.name }}</a>
+                            {% endif %}
+                            in <a href="/forum/p/{{ mod.post_id }}">{{ mod.post.topic.title }}</a>
+                        {% endfor %}
+                    {% endif %}
                 </div>
             </td>
             <tr onclick="expandProfileTab('account')">
