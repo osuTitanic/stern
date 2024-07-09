@@ -36,10 +36,11 @@
     <table width='100%'>
         <td align="right">
             {{ post_count }} posts |
+            <a onclick="jumpToPage();">Jump</a> |
             {# Pagination #}
                 {% if current_page > 1 %}
                 {# "Back" button #}
-                <a href="/forum/{{ forum.id }}/t/{{ topic.id }}?page={{ current_page - 1 }}">Back</a>
+                <a href="/forum/{{ forum.id }}/t/{{ topic.id }}?page={{ current_page }}">Back</a>
             {% endif %}
 
             {# Calculate page range #}
@@ -229,7 +230,7 @@
             {# Pagination #}
             {% if current_page > 1 %}
                 {# "Back" button #}
-                <a href="/forum/{{ forum.id }}/t/{{ topic.id }}?page={{ current_page - 1 }}">Back</a>
+                <a href="/forum/{{ forum.id }}/t/{{ topic.id }}?page={{ current_page }}">Back</a>
             {% endif %}
 
             {# Calculate page range #}
@@ -466,6 +467,17 @@
             });
 
         return false;
+    }
+
+    function jumpToPage() {
+        var page = prompt("Enter the page to jump to:")
+
+        if (page !== null && !isNaN(page) && page > 0)
+        {
+            var query = new URLSearchParams();
+            query.set('page', page);
+            location.search = query.toString();
+        }
     }
 </script>
 {% endblock content %}
