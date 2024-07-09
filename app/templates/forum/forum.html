@@ -24,12 +24,14 @@
                 [ {{ topic_count }} topic{{ 's' if topic_count != 1 else '' }} ]
             </td>
             <td align="right">
-                <a href="#">Mark forum as read</a> |
                 <a onclick="jumpToPage();">Jump</a> |
                 {# Pagination #}
                 {% if current_page > 1 %}
                     {# "Back" button #}
                     <a href="/forum/{{ forum.id }}?page={{ current_page }}">Back</a>
+                    {# First page #}
+                    <a href="/forum/{{ forum.id }}?page=1">1</a>
+                    ...
                 {% endif %}
 
                 {# Calculate page range #}
@@ -136,8 +138,11 @@
                     <a onclick="jumpToPage();">Jump</a> |
                     {# Pagination #}
                     {% if current_page > 1 %}
-                    {# "Back" button #}
-                    <a href="/forum/{{ forum.id }}?page={{ current_page }}">Back</a>
+                        {# "Back" button #}
+                        <a href="/forum/{{ forum.id }}?page={{ current_page }}">Back</a>
+                        {# First page #}
+                        <a href="/forum/{{ forum.id }}?page=1">1</a>
+                        ...
                     {% endif %}
 
                     {# Calculate page range #}
