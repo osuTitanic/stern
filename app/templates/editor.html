@@ -36,6 +36,13 @@
 </div>
 {% endif %}
 
+{% if beatmapset and beatmapset.creator_id != current_user.id %}
+<div style="font-size: 90%; padding: 5px; margin-top: 6px">
+    You will gain <b>{{ 1 if datetime.now() - topic.last_post_at < timedelta(days=7) else 2 }} kudosu</b>
+    for this post if it is deemed as helpful by the map's creator.
+</div>
+{% endif %}
+
 <input type="hidden" name="user_id" value="{{ context['user-id'] }}">
 <div class="post-buttons" style="justify-content: flex-start;">
     <input type="submit" value="{{ context['submit-text'] }}" class="button-blue">

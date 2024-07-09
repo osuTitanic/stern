@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from sqlalchemy.orm import Session
+from datetime import datetime, timedelta
 from flask import render_template as _render_template
 from flask import request
 from PIL import Image
@@ -34,7 +35,9 @@ def render_template(template_name: str, **context) -> str:
         total_users=int(app.session.redis.get('bancho:totalusers') or 0),
         show_login=request.args.get('login', False, type=bool),
         repositories=repositories,
+        timedelta=timedelta,
         constants=constants,
+        datetime=datetime,
         location=location,
         config=config
     )

@@ -82,6 +82,11 @@ def post_view(forum_id: str, topic_id: str):
             session=session
         )
 
+        beatmapset = beatmapsets.fetch_by_topic(
+            topic.id,
+            session=session
+        )
+
         return utils.render_template(
             "forum/post.html",
             css='forums.css',
@@ -90,6 +95,7 @@ def post_view(forum_id: str, topic_id: str):
             topic=topic,
             action=action,
             action_id=action_id,
+            beatmapset=beatmapset,
             is_subscribed=is_subscribed,
             initial_post=initial_post,
             icons=forums.fetch_icons(session),
