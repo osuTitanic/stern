@@ -103,7 +103,7 @@ def reward_kudosu(set_id: int, post_id: int):
         if post.user_id == current_user.id:
             return {
                 'error': 400,
-                'details': 'You cannot modify kudosu on your own post.'
+                'details': 'You cannot reward kudosu on your own post.'
             }, 400
 
         existing_mod = modding.fetch_by_post_and_sender(
@@ -177,7 +177,7 @@ def revoke_kudosu(set_id: int, post_id: int):
         if post.user_id == current_user.id:
             return {
                 'error': 400,
-                'details': 'You cannot modify kudosu on your own post.'
+                'details': 'You cannot revoke kudosu on your own post.'
             }, 400
 
         total_kudosu = modding.total_amount(
@@ -247,23 +247,22 @@ def reset_kudosu(set_id: int, post_id: int):
         if post.user_id == current_user.id:
             return {
                 'error': 400,
-                'details': 'You cannot modify kudosu on your own post.'
+                'details': 'You cannot reset kudosu on your own post.'
             }, 400
 
-        existing_mod = modding.fetch_by_post_and_sender(
+        existing_mod = modding.fetch_all_by_post(
             post.id,
-            current_user.id,
             session=session
         )
 
         if not existing_mod:
             return {
                 'error': 404,
-                'details': 'You have not given any kudosu to this post.'
+                'details': 'This post has no kudosu exchanges.'
             }, 404
 
-        modding.delete(
-            existing_mod.id,
+        modding.delete_by_post(
+            post_id,
             session=session
         )
 
