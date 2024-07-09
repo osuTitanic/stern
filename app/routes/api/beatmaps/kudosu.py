@@ -3,14 +3,12 @@ from __future__ import annotations
 from typing import Tuple
 
 from app.common.database import beatmapsets, posts, modding
-from app.common.database import DBForumPost, DBBeatmapset
 from app.common.constants import DatabaseStatus
 from app.models.kudosu import KudosuModel
 
 from flask_login import current_user, login_required
 from datetime import datetime, timedelta
 from flask_pydantic import validate
-from sqlalchemy.orm import Session
 from flask import Blueprint
 
 import app
@@ -136,6 +134,12 @@ def reward_kudosu(set_id: int, post_id: int):
             session=session
         )
 
+        beatmapsets.update(
+            beatmapset.id,
+            {'star_priority': max(beatmapset.star_priority + kudosu_amount, 0)},
+            session=session
+        )
+
         return KudosuModel.model_validate(kudosu, from_attributes=True) \
                           .model_dump()
 
@@ -212,6 +216,12 @@ def revoke_kudosu(set_id: int, post_id: int):
             session=session
         )
 
+        beatmapsets.update(
+            beatmapset.id,
+            {'star_priority': max(beatmapset.star_priority + kudosu.amount, 0)},
+            session=session
+        )
+
         return KudosuModel.model_validate(kudosu, from_attributes=True) \
                           .model_dump()
 
@@ -250,12 +260,12 @@ def reset_kudosu(set_id: int, post_id: int):
                 'details': 'You cannot reset kudosu on your own post.'
             }, 400
 
-        existing_mod = modding.fetch_all_by_post(
+        total_kudosu = modding.total_amount(
             post.id,
             session=session
         )
 
-        if not existing_mod:
+        if total_kudosu == 0:
             return {
                 'error': 404,
                 'details': 'This post has no kudosu exchanges.'
@@ -263,6 +273,12 @@ def reset_kudosu(set_id: int, post_id: int):
 
         modding.delete_by_post(
             post_id,
+            session=session
+        )
+
+        beatmapsets.update(
+            beatmapset.id,
+            {'star_priority': max(beatmapset.star_priority - total_kudosu, 0)},
             session=session
         )
 
