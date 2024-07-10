@@ -1,8 +1,19 @@
 
-from werkzeug.exceptions import NotFound
+from werkzeug.exceptions import NotFound, InternalServerError
 
 NotFound.description = (
     '<h1>We could not find what you are looking for...</h1>'
+)
+
+InternalServerError.description = (
+    '<div style="text-align: center">'
+    '<h1>Internal Server Error</h1>'
+    '<p>Hmm.. guess something went wrong, huh?</p>'
+    '<p>'
+    'Either the server is dying or you are trying to break something, whether it was intentional or not. '
+    'Anyway, please try again later or contact the server administrator.'
+    '</p>'
+    '</div>'
 )
 
 BEATMAP_NOT_FOUND = (
