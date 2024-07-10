@@ -3,6 +3,7 @@ from app.common.database import DBUser, DBForum, DBForumTopic
 from app.common.database.repositories import users
 
 from flask import Flask, Request, jsonify, redirect, request
+from flask_pydantic.exceptions import ValidationError
 from datetime import datetime, timedelta
 from flask_login import LoginManager
 from typing import Tuple, Optional
@@ -28,10 +29,34 @@ flask = Flask(
 
 flask.register_blueprint(routes.router)
 flask.secret_key = config.FRONTEND_SECRET_KEY
+flask.config['FLASK_PYDANTIC_VALIDATION_ERROR_RAISE'] = True
+
+login_manager = LoginManager()
+login_manager.init_app(flask)
+
+@login_manager.user_loader
+def user_loader(user_id: int) -> Optional[DBUser]:
+    if user := users.fetch_by_id(user_id, DBUser.groups, DBUser.relationships):
+        return user
+
+@login_manager.request_loader
+def request_loader(request: Request):
+    user_id = request.form.get('id')
+    return user_loader(user_id)
+
+@login_manager.unauthorized_handler
+def unauthorized_user():
+    if '/api' in request.base_url:
+        return jsonify(
+            error=403,
+            details='You are not authorized to perform this action.'
+        ), 403
+
+    return redirect('/?login=True')
 
 @flask.errorhandler(HTTPException)
 def on_http_exception(error: HTTPException) -> Tuple[str, int]:
-    if '/api' in request.base_url and error.code != 404:
+    if '/api' in request.base_url:
         return jsonify(
             error=error.code,
             details=error.description or error.name
@@ -63,28 +88,28 @@ def on_exception(error: Exception) -> Tuple[str, int]:
         title=f'Internal Server Error - osu!Titanic'
     ), 500
 
-login_manager = LoginManager()
-login_manager.init_app(flask)
+@flask.errorhandler(ValidationError)
+def on_validation_error(error: ValidationError) -> Tuple[str, int]:
+    params = {
+        param: getattr(error, param)
+        for param in (
+            'body_params',
+            'form_params',
+            'path_params',
+            'query_params'
+        )
+    }
 
-@login_manager.user_loader
-def user_loader(user_id: int) -> Optional[DBUser]:
-    if user := users.fetch_by_id(user_id, DBUser.groups, DBUser.relationships):
-        return user
-
-@login_manager.request_loader
-def request_loader(request: Request):
-    user_id = request.form.get('id')
-    return user_loader(user_id)
-
-@login_manager.unauthorized_handler
-def unauthorized_user():
-    if '/api' in request.base_url:
-        return jsonify(
-            error=403,
-            details='You are not authorized to perform this action.'
-        ), 403
-
-    return redirect('/?login=True')
+    return jsonify(
+        error=400,
+        details={
+            'validation_error': {
+                name: value
+                for name, value in params.items()
+                if value is not None
+            }
+        }
+    ), 400
 
 @flask.template_filter('timeago')
 def timeago_formatting(date: datetime):
