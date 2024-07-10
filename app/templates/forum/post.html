@@ -9,10 +9,10 @@
 
 {% set can_edit_icon = (
     action != "edit" and
-    is_privileged or
     (
-        topic.can_edit_icon and
-        current_user.id == initial_post.user_id
+        is_privileged or
+        topic.can_change_icon and
+        current_user.id == topic.creator_id
     )
 ) %}
 
