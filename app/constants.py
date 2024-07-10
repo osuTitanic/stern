@@ -8,9 +8,10 @@ NotFound.description = (
 InternalServerError.description = (
     '<div style="text-align: center">'
     '<h1>Internal Server Error</h1>'
-    '<p>Hmm.. guess something went wrong, huh?</p>'
+    '<p>Hmm.. I guess something went wrong, huh?</p>'
     '<p>'
     'Either the server is dying or you are trying to break something, whether it was intentional or not. '
+    'Or maybe contabo is just trolling us again. Who knows? '
     'Anyway, please try again later or contact the server administrator.'
     '</p>'
     '</div>'
