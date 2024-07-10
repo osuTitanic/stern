@@ -18,7 +18,7 @@ h1 {
 
 .page img {
     margin-bottom: 15px;
-    height: 150px;
+    max-height: 150px;
     align-self: center;
     display: block;
     margin-left: auto;
@@ -26,5 +26,5 @@ h1 {
 }
 
 .description {
-    max-width: 400px;
+    max-width: 500px;
 }
