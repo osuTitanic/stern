@@ -1,6 +1,10 @@
 
 @import url('main.css');
 
+.top {
+    margin-bottom: 15px;
+}
+
 .page {
     font-weight: normal;
     display: grid;
