@@ -205,7 +205,7 @@
                             </div>
                             {% endif %}
                             {% if (current_user.is_authenticated) and (not topic.locked_at or is_privileged) %}
-                            <div class="post-buttons">
+                            <div class="post-buttons hover-button">
                                 {% if (current_user.id == post.user.id or is_privileged) and (not post.edit_locked or is_privileged) %}
                                     {% if not post.deleted %}
                                         <a class="button-red" onclick="deletePost({{ post.id }})">Delete</a>
