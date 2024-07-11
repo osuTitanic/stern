@@ -103,7 +103,8 @@ def revive_beatmap(user_id: int):
             beatmapset.topic_id,
             {
                 'forum_id': 10,
-                'icon_id': None
+                'icon_id': None,
+                'status_text': 'Needs modding'
             },
             session=session
         )
