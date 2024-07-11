@@ -141,12 +141,18 @@
                         <br>
                         {% if beatmapset and post.user_id != beatmapset.creator_id and not post.icon %}
                             {% set total_kudosu = repositories.modding.total_amount(post.id, session) %}
-                            {% if (total_kudosu != 0 or can_award_kudosu) %}
                             <div class="kudosu-box">
-                                {# This will be displayed for every user #}
-                                <p style="color: {{ 'green' if total_kudosu >= 0 else 'red' }}" id="kudosu-status-{{ post.id }}">
-                                    {% if total_kudosu >= 0 %}
+                                {% set kudosu_status_color = (
+                                    'green' if total_kudosu > 0
+                                    else 'black' if total_kudosu == 0
+                                    else 'red'
+                                ) %}
+
+                                <p style="color: {{ kudosu_status_color }}" id="kudosu-status-{{ post.id }}">
+                                    {% if total_kudosu > 0 %}
                                     Earned {{ total_kudosu }} kudosu.
+                                    {% elif total_kudosu == 0 %}
+                                    No kudosu yet.
                                     {% else %}
                                     Lost {{ total_kudosu|abs }} kudosu.
                                     {% endif %}
@@ -175,7 +181,6 @@
                                     {% endif %}
                                 {% endif %}
                             </div>
-                            {% endif %}
                         {% endif %}
                     </td>
                     <td class="post-content-wrapper">
