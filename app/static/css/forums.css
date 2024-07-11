@@ -22,6 +22,18 @@
     width: 100%;
 }
 
+.forum-home td:hover {
+    text-shadow: 1px 1px 8px #afb7ff;
+}
+
+.topics-table td:hover {
+    text-shadow: 1px 1px 8px #afb7ff;
+}
+
+.subforum-table td:hover {
+    text-shadow: 1px 1px 8px #afb7ff;
+}
+
 .mainforum-head {
     color: #000000;
     padding-top: 10px;
