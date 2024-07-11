@@ -26,11 +26,11 @@
         {% if action != 'edit' %}
         <div style="margin-top: 5px">
             <input type="checkbox"
-            class="radio"
-            name="locked"
-            {% if topic.locked_at %}
-            checked="checked"
-            {% endif %}>
+                class="radio"
+                name="locked"
+                {% if topic.locked_at %}
+                checked="checked"
+                {% endif %}>
 
             <label for="locked">
                 Lock this topic

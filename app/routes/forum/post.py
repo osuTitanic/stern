@@ -308,16 +308,31 @@ def handle_post(topic: DBForumTopic, _: int, session: Session) -> Response:
         session=session
     )
 
+    topic_updates = {
+        'last_post_at': datetime.now(),
+        'icon_id': (
+            post.icon_id
+            if post.icon_id != None
+            else topic.icon_id
+        )
+    }
+
+    if current_user.is_moderator:
+        locked = request.form.get(
+            'locked',
+            type=bool,
+            default=False
+        )
+
+        topic_updates['locked_at'] = (
+            datetime.now()
+            if locked
+            else None
+        )
+
     topics.update(
         topic.id,
-        {
-            'last_post_at': datetime.now(),
-            'icon_id': (
-                post.icon_id
-                if post.icon_id != None
-                else topic.icon_id
-            )
-        },
+        topic_updates,
         session=session
     )
 
