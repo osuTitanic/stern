@@ -322,6 +322,7 @@ table {
 }
 
 .post-buttons a:hover {
+    text-shadow: 1px 1px 8px #afb7ff;
     color: white;
 }
 
@@ -330,6 +331,7 @@ table {
 }
 
 .button-blue:hover {
+    text-shadow: 2px 1px 8px #b7befd;
     background-image: linear-gradient(rgb(83, 147, 207) 0%, rgb(58, 109, 156) 100%);
 }
 
@@ -338,6 +340,7 @@ table {
 }
 
 .button-red:hover {
+    text-shadow: 2px 1px 8px #b7befd;
     background-image: linear-gradient(rgb(230, 49, 49) 0%, rgb(211, 51, 51) 100%);
 }
 
@@ -346,6 +349,7 @@ table {
 }
 
 .button-grey:hover {
+    text-shadow: 2px 1px 8px #b7befd;
     background-image: linear-gradient(rgb(179, 179, 179) 0%, rgb(109, 109, 109) 100%);
 }
 
