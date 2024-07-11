@@ -353,7 +353,6 @@ def handle_post_edit(topic: DBForumTopic, post_id: int, session: Session) -> Res
             description=app.constants.POST_LOCKED
         )
 
-
     if current_user.id != post.user_id and not is_priviliged:
         return abort(403)
 
@@ -395,6 +394,13 @@ def handle_post_edit(topic: DBForumTopic, post_id: int, session: Session) -> Res
     updates = {
         'content': content
     }
+
+    if is_priviliged:
+        updates['edit_locked'] = request.form.get(
+            'edit-locked',
+            type=bool,
+            default=False
+        )
 
     if post.user_id == current_user.id:
         updates['edit_count'] = post.edit_count + 1,
