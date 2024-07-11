@@ -97,7 +97,11 @@
     {% if announcements or recent_topics %}
     <table width="100%" class="topics-table">
         <thead><tr>
+            {% if recent_topics|get_attributes('icon')|any %}
             <th colspan="3">Topics</th>
+            {% else %}
+            <th colspan="2">Topics</th>
+            {% endif %}
             <th>Author</th>
             <th></th>
             <th>Last Post</th>
