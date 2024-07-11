@@ -23,6 +23,7 @@
     </label>
 
     {% if topic and current_user.is_moderator %}
+        {% if action != 'edit' %}
         <div style="margin-top: 5px">
             <input type="checkbox"
             class="radio"
@@ -35,8 +36,7 @@
                 Lock this topic
             </label>
         </div>
-
-        {% if action == 'edit' %}
+        {% else %}
         {% set post = repositories.posts.fetch_one(action_id) %}
         <div style="margin-top: 5px">
             <input type="checkbox"
