@@ -150,6 +150,15 @@ table {
     padding: 2.5px;
 }
 
+.post-content-wrapper {
+    vertical-align: top;
+    width: 82%;
+}
+
+.post-content-wrapper:hover .post-buttons {
+    opacity: 100%;
+}
+
 .post-spacing {
     background-color: #9a9bdb;
     height: 1px;
@@ -258,6 +267,8 @@ table {
     display: flex;
     justify-content: flex-end;
     padding: 5px;
+    opacity: 0%;
+    transition: opacity 0.1s;
 }
 
 .post-buttons-large {
