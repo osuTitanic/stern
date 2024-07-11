@@ -397,7 +397,7 @@ def handle_post_edit(topic: DBForumTopic, post_id: int, session: Session) -> Res
     }
 
     if post.user_id == current_user.id:
-        updates['edit_count'] = DBForumPost.edit_count + 1,
+        updates['edit_count'] = post.edit_count + 1,
         updates['edit_time'] = datetime.now()
 
     posts.update(
