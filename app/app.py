@@ -123,6 +123,14 @@ def on_validation_error(error: ValidationError) -> Tuple[str, int]:
         }
     ), 400
 
+@flask.template_filter('any')
+def any_filter(value: list) -> bool:
+    return any(value)
+
+@flask.template_filter('all')
+def all_filter(value: list) -> bool:
+    return all(value)
+
 @flask.template_filter('timeago')
 def timeago_formatting(date: datetime):
     return timeago.format(date.replace(tzinfo=None), datetime.now())
