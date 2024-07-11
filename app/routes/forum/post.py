@@ -264,7 +264,7 @@ def notify_subscribers(post: DBForumPost, topic: DBForumTopic, session: Session)
         # TODO: Send email, based on preferences
 
 def handle_post(topic: DBForumTopic, _: int, session: Session) -> Response:
-    if topic.locked_at:
+    if topic.locked_at and not current_user.is_moderator:
         return abort(
             403,
             description=app.constants.TOPIC_LOCKED
@@ -345,7 +345,7 @@ def handle_post(topic: DBForumTopic, _: int, session: Session) -> Response:
     )
 
 def handle_post_edit(topic: DBForumTopic, post_id: int, session: Session) -> Response:
-    if topic.locked_at:
+    if topic.locked_at and not current_user.is_moderator:
         return abort(
             403,
             description=app.constants.TOPIC_LOCKED
