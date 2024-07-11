@@ -62,7 +62,7 @@ def render_link(tag_name, value, options, parent, context):
     return '<a href="%s">%s</a>' % (options.get('url', ''), value)
 
 @parser.formatter('quote')
-def render_code(tag_name, value, options, parent, context):
+def render_quote(tag_name, value, options, parent, context):
     if 'quote' not in options:
         return '<blockquote>%s</blockquote>' % value
 
