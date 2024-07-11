@@ -36,8 +36,20 @@ login_manager.init_app(flask)
 
 @login_manager.user_loader
 def user_loader(user_id: int) -> Optional[DBUser]:
-    if user := users.fetch_by_id(user_id, DBUser.groups, DBUser.relationships):
+    try:
+        user = users.fetch_by_id(
+            user_id,
+            DBUser.groups,
+            DBUser.relationships
+        )
+
+        if not user:
+            return
+
         return user
+    except Exception as e:
+        flask.logger.error(f'Failed to load user: {e}', exc_info=e)
+        return None
 
 @login_manager.request_loader
 def request_loader(request: Request):

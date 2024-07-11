@@ -29,11 +29,26 @@ import io
 
 def render_template(template_name: str, **context) -> str:
     """This will automatically append the required data to the context for rendering pages"""
+    total_scores = 0
+    online_users = 0
+    total_users = 0
+
+    try:
+        total_scores = int(app.session.redis.get('bancho:totalscores') or 0)
+        online_users = int(app.session.redis.get('bancho:users') or 0)
+        total_users = int(app.session.redis.get('bancho:totalusers') or 0)
+    except Exception as e:
+        # Most likely failed to connect to redis instance
+        app.session.logger.error(
+            f'Failed to fetch bancho stats: {e}',
+            exc_info=e
+        )
+
     context.update(
-        total_scores=int(app.session.redis.get('bancho:totalscores') or 0),
-        online_users=int(app.session.redis.get('bancho:users') or 0),
-        total_users=int(app.session.redis.get('bancho:totalusers') or 0),
         show_login=request.args.get('login', False, type=bool),
+        total_scores=total_scores,
+        online_users=online_users,
+        total_users=total_users,
         repositories=repositories,
         timedelta=timedelta,
         constants=constants,
