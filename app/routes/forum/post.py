@@ -404,7 +404,7 @@ def handle_post(topic: DBForumTopic, _: int, session: Session) -> Response:
             'topic-status',
             type=str,
             default=''
-        ) or topic.status_text
+        ) or None
 
         if topic_status != topic.status_text:
             topic_updates['status_text'] = topic_status
