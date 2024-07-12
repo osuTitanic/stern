@@ -163,12 +163,26 @@ def update_topic_status_text(
             )
             return
 
-        last_post = posts.fetch_last(
+        last_bat_post = posts.fetch_last_bat_post(
             beatmapset.topic_id,
             session=session
         )
 
-        if last_post.user.is_bat:
+        if not last_bat_post:
+            topics.update(
+                beatmapset.topic_id,
+                {'status_text': 'Needs modding'},
+                session=session
+            )
+            return
+
+        last_creator_post = posts.fetch_last_by_user(
+            beatmapset.topic_id,
+            beatmapset.creator_id,
+            session=session
+        )
+
+        if last_bat_post.id > last_creator_post.id:
             topics.update(
                beatmapset.topic_id,
                 {'status_text': "Waiting for creator's response..."},
@@ -176,17 +190,9 @@ def update_topic_status_text(
             )
             return
 
-        if last_post.user_id == beatmapset.creator_id:
-            topics.update(
-                beatmapset.topic_id,
-                {'status_text': 'Waiting for further modding...'},
-                session=session
-            )
-            return
-
         topics.update(
             beatmapset.topic_id,
-            {'status_text': 'Needs modding'},
+            {'status_text': 'Waiting for further modding...'},
             session=session
         )
 
