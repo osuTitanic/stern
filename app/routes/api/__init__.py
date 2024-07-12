@@ -3,6 +3,7 @@ from flask import Blueprint
 
 from . import notifications
 from . import multiplayer
+from . import benchmarks
 from . import beatmaps
 from . import rankings
 from . import profile
@@ -16,6 +17,7 @@ from . import stats
 router = Blueprint("api", __name__)
 router.register_blueprint(notifications.router, url_prefix="/notifications")
 router.register_blueprint(multiplayer.router, url_prefix="/multiplayer")
+router.register_blueprint(benchmarks.router, url_prefix="/benchmarks")
 router.register_blueprint(beatmaps.router, url_prefix="/beatmaps")
 router.register_blueprint(rankings.router, url_prefix="/rankings")
 router.register_blueprint(profile.router, url_prefix="/profile")
