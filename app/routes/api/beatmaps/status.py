@@ -132,6 +132,9 @@ def update_topic_status_text(
     status: int,
     session: Session
 ) -> None:
+    if not beatmapset.topic_id:
+        return
+
     if beatmapset.status > DatabaseStatus.Pending:
         topics.update(
             beatmapset.topic_id,

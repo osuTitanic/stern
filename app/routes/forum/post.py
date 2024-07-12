@@ -14,7 +14,7 @@ from app.common.constants import NotificationType, DatabaseStatus
 from app.common.database import (
     notifications,
     beatmapsets,
-    beatmaps,
+    nominations,
     topics,
     forums,
     posts
@@ -222,6 +222,69 @@ def update_topic_location(
         session=session
     )
 
+def update_topic_status_text(
+    beatmapset: DBBeatmapset,
+    status: int,
+    session: Session
+) -> None:
+    if not beatmapset.topic_id:
+        return
+
+    if beatmapset.status > DatabaseStatus.Pending:
+        topics.update(
+            beatmapset.topic_id,
+            {'status_text': None},
+            session=session
+        )
+
+    elif status == DatabaseStatus.Graveyard:
+        topics.update(
+            beatmapset.topic_id,
+            {'status_text': None},
+            session=session
+        )
+
+    else:
+        beatmap_nominations = nominations.count(
+            beatmapset.id,
+            session=session
+        )
+
+        if beatmap_nominations > 0:
+            topics.update(
+                beatmapset.topic_id,
+                {'status_text': 'Waiting for approval...'},
+                session=session
+            )
+            return
+
+        last_post = posts.fetch_last(
+            beatmapset.topic_id,
+            session=session
+        )
+
+        if last_post.user.is_bat:
+            topics.update(
+               beatmapset.topic_id,
+                {'status_text': "Waiting for creator's response..."},
+                session=session
+            )
+            return
+
+        if last_post.user_id == beatmapset.creator_id:
+            topics.update(
+                beatmapset.topic_id,
+                {'status_text': 'Waiting for further modding...'},
+                session=session
+            )
+            return
+
+        topics.update(
+            beatmapset.topic_id,
+            {'status_text': 'Needs modding'},
+            session=session
+        )
+
 def update_notifications(
     notify: bool,
     user_id: int,
@@ -335,6 +398,18 @@ def handle_post(topic: DBForumTopic, _: int, session: Session) -> Response:
         topic_updates,
         session=session
     )
+
+    beatmapset = beatmapsets.fetch_by_topic(
+        topic.id,
+        session=session
+    )
+
+    if beatmapset:
+        update_topic_status_text(
+            beatmapset,
+            beatmapset.status,
+            session=session
+        )
 
     app.session.logger.info(
         f'{current_user.name} created a post on "{topic.title}" ({post.id}).'
