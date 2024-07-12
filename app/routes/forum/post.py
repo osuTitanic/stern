@@ -399,6 +399,16 @@ def handle_post(topic: DBForumTopic, _: int, session: Session) -> Response:
             else None
         )
 
+    if current_user.is_admin:
+        topic_status = request.form.get(
+            'topic-status',
+            type=str,
+            default=''
+        ) or topic.status_text
+
+        if topic_status != topic.status_text:
+            topic_updates['status_text'] = topic_status
+
     topics.update(
         topic.id,
         topic_updates,
@@ -410,7 +420,7 @@ def handle_post(topic: DBForumTopic, _: int, session: Session) -> Response:
         session=session
     )
 
-    if beatmapset:
+    if beatmapset and not topic_updates.get('status_text'):
         update_topic_status_text(
             beatmapset,
             beatmapset.status,
