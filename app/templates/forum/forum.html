@@ -23,6 +23,7 @@
                 Page <strong>{{ current_page + 1 }}</strong> of <strong>{{ total_pages + 1 }}</strong>
                 [ {{ topic_count }} topic{{ 's' if topic_count != 1 else '' }} ]
             </td>
+            {% if total_pages > 0 %}
             <td align="right">
                 <a onclick="jumpToPage();">Jump</a> |
                 {# Pagination #}
@@ -54,6 +55,7 @@
                     <a href="/forum/{{ forum.id }}?page={{ current_page + 2 }}">Next</a>
                 {% endif %}
             </td>
+            {% endif %}
         </tr>
         </tbody>
     </table>
@@ -138,6 +140,7 @@
     <table width='100%'>
         <tbody>
             <tr>
+                {% if total_pages > 0 %}
                 <td align="right" style="float: right">
                     <a onclick="jumpToPage();">Jump</a> |
                     {# Pagination #}
@@ -169,6 +172,7 @@
                     <a href="/forum/{{ forum.id }}?page={{ current_page + 2 }}">Next</a>
                     {% endif %}
                 </td>
+                {% endif %}
                 {% if current_user.is_authenticated %}
                 <td align="left" style="float: left">
                     <div class="post-buttons-large" style="margin-left: 0;">
