@@ -100,9 +100,16 @@ def reset_nominations(set_id: int):
         topics.update(
             beatmapset.topic_id,
             {
+                'forum_id': 10,
                 'icon_id': 4,
                 'status_text': 'Waiting for further modding...'
             },
+            session=session
+        )
+
+        posts.update_by_topic(
+            beatmapset.topic_id,
+            {'forum_id': 10},
             session=session
         )
 
