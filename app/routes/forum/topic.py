@@ -142,14 +142,14 @@ def create_post_view(forum_id: str):
             code=404,
             description=app.constants.FORUM_NOT_FOUND
         )
-    
+
     with app.session.database.managed_session() as session:
         if not (forum := forums.fetch_by_id(forum_id, session=session)):
             return abort(
                 code=404,
                 description=app.constants.FORUM_NOT_FOUND
             )
-        
+
         return utils.render_template(
             "forum/create.html",
             css='forums.css',

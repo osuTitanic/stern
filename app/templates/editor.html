@@ -11,6 +11,17 @@
 
 {% if context['forum-controls'] %}
 <div style="margin: 12px; float: right; text-align: right; font-size: 90%">
+    {% if current_user.is_admin and action != 'edit' and topic %}
+    <div style="margin-bottom: 8px">
+        Status:
+        <input type="text"
+               name="topic-status"
+               value="{{ topic.status_text or '' }}"
+               style="min-width: 300px"
+               class="nav-search">
+    </div>
+    {% endif %}
+
     <input type="checkbox"
            class="radio"
            name="notify"
@@ -24,32 +35,32 @@
 
     {% if topic and current_user.is_moderator %}
         {% if action != 'edit' %}
-        <div style="margin-top: 5px">
-            <input type="checkbox"
-                class="radio"
-                name="locked"
-                {% if topic.locked_at %}
-                checked="checked"
-                {% endif %}>
+            <div style="margin-top: 5px">
+                <input type="checkbox"
+                    class="radio"
+                    name="locked"
+                    {% if topic.locked_at %}
+                    checked="checked"
+                    {% endif %}>
 
-            <label for="locked">
-                Lock this topic
-            </label>
-        </div>
+                <label for="locked">
+                    Lock this topic
+                </label>
+            </div>
         {% else %}
-        {% set post = repositories.posts.fetch_one(action_id) %}
-        <div style="margin-top: 5px">
-            <input type="checkbox"
-                class="radio"
-                name="edit-locked"
-                {% if post.edit_locked %}
-                checked="checked"
-                {% endif %}>
+            {% set post = repositories.posts.fetch_one(action_id) %}
+            <div style="margin-top: 5px">
+                <input type="checkbox"
+                    class="radio"
+                    name="edit-locked"
+                    {% if post.edit_locked %}
+                    checked="checked"
+                    {% endif %}>
 
-            <label for="edit-locked">
-                Lock this post
-            </label>
-        </div>
+                <label for="edit-locked">
+                    Lock this post
+                </label>
+            </div>
         {% endif %}
     {% endif %}
 
