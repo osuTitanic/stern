@@ -118,6 +118,11 @@ table {
     font-weight: bold;
 }
 
+.topic-status-text {
+    font-size: 85%;
+    color: #868686;
+}
+
 .light-row {
     background-color: #edebfa;
     font-size: 90%;
