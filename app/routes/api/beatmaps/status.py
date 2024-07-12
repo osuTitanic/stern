@@ -5,6 +5,7 @@ from app.common.database import (
     nominations,
     beatmapsets,
     beatmaps,
+    modding,
     topics,
     posts
 )
@@ -126,6 +127,66 @@ def update_beatmap_icon(
         session=session
     )
 
+def update_topic_status_text(
+    beatmapset: DBBeatmapset,
+    status: int,
+    session: Session
+) -> None:
+    if beatmapset.status > DatabaseStatus.Pending:
+        topics.update(
+            beatmapset.topic_id,
+            {'status_text': None},
+            session=session
+        )
+
+    elif status == DatabaseStatus.Graveyard:
+        topics.update(
+            beatmapset.topic_id,
+            {'status_text': None},
+            session=session
+        )
+
+    else:
+        beatmap_nominations = nominations.count(
+            beatmapset.id,
+            session=session
+        )
+
+        if beatmap_nominations > 0:
+            topics.update(
+                beatmapset.topic_id,
+                {'status_text': 'Waiting for approval...'},
+                session=session
+            )
+            return
+
+        last_post = posts.fetch_last(
+            beatmapset.topic_id,
+            session=session
+        )
+
+        if last_post.user.is_bat:
+            topics.update(
+               beatmapset.topic_id,
+                {'status_text': "Waiting for creator's response..."},
+                session=session
+            )
+            return
+
+        if last_post.user_id == beatmapset.creator_id:
+            topics.update(
+                beatmapset.topic_id,
+                {'status_text': 'Waiting for further modding...'},
+                session=session
+            )
+            return
+
+        topics.update(
+            beatmapset.topic_id,
+            {'status_text': 'Needs modding'},
+            session=session
+        )
+
 @router.post('/status/difficulty')
 @login_required
 def diff_status_update():
@@ -217,6 +278,12 @@ def diff_status_update():
             session=session
         )
 
+        update_topic_status_text(
+            beatmapset,
+            set_status,
+            session=session
+        )
+
         if set_status > DatabaseStatus.Pending:
             beatmapsets.update(
                 beatmapset.id,
@@ -279,6 +346,12 @@ def handle_pending_status(beatmapset: DBBeatmapset, session: Session):
         session=session
     )
 
+    update_topic_status_text(
+        beatmapset,
+        DatabaseStatus.Pending.value,
+        session=session
+    )
+
     app.session.logger.info(
         f'"{beatmapset.full_name}" was set to "Pending" status by {current_user.name}.'
     )
@@ -317,6 +390,12 @@ def handle_approved_status(beatmapset: DBBeatmapset, session: Session):
     )
 
     move_beatmap_topic(
+        beatmapset,
+        DatabaseStatus.Approved.value,
+        session=session
+    )
+
+    update_topic_status_text(
         beatmapset,
         DatabaseStatus.Approved.value,
         session=session
@@ -365,6 +444,12 @@ def handle_qualified_status(beatmapset: DBBeatmapset, session: Session):
         session=session
     )
 
+    update_topic_status_text(
+        beatmapset,
+        DatabaseStatus.Qualified.value,
+        session=session
+    )
+
     app.session.logger.info(
         f'"{beatmapset.full_name}" was set to "Qualified" status by {current_user.name}.'
     )
@@ -398,6 +483,12 @@ def handle_loved_status(beatmapset: DBBeatmapset, session: Session):
     )
 
     move_beatmap_topic(
+        beatmapset,
+        DatabaseStatus.Loved.value,
+        session=session
+    )
+
+    update_topic_status_text(
         beatmapset,
         DatabaseStatus.Loved.value,
         session=session
