@@ -21,14 +21,17 @@
                 alt="{{ topic.icon.name }}"
                 width="20">
         {% endif %}
+        </td>
     {% endif %}
-    </td>
     <td>
         <div>
             {% if topic.pinned %}
                 <i class="fa-solid fa-star-of-life" style="font-size: 80%; color: #ababab"></i>
             {% endif %}
             <a href="/forum/{{ forum.id }}/t/{{ topic.id }}">{{ topic.title }}</a>
+            {% if topic.status_text %}
+                <p class="topic-status-text">{{ topic.status_text }}</p>
+            {% endif %}
         </div>
         {% if page_count > 1 %}
             <div>
