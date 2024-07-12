@@ -32,7 +32,8 @@ def nuke_beatmap(set_id: int):
             topic.id,
             {
                 'icon_id': 7,
-                'forum_id': 10
+                'forum_id': 10,
+                'status_text': None
             },
             session=session
         )
