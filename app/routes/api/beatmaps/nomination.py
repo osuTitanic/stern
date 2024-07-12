@@ -59,7 +59,8 @@ def add_nomination(set_id: int):
             beatmapset.topic_id,
             {
                 'icon_id': 3,
-                'forum_id': 9
+                'forum_id': 9,
+                'status_text': 'Waiting for approval...'
             },
             session=session
         )
@@ -98,7 +99,10 @@ def reset_nominations(set_id: int):
         # Set icon to popped bubble
         topics.update(
             beatmapset.topic_id,
-            {'icon_id': 4},
+            {
+                'icon_id': 4,
+                'status_text': 'Waiting for further modding...'
+            },
             session=session
         )
 
