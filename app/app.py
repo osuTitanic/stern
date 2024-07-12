@@ -74,8 +74,14 @@ def on_http_exception(error: HTTPException) -> Tuple[str, int]:
             details=error.description or error.name
         ), error.code
 
+    custom_description = getattr(
+        error,
+        'html_description',
+        error.description or error.name
+    )
+
     return utils.render_template(
-        content=error.description or error.name,
+        content=custom_description,
         code=error.code,
         template_name='error.html',
         css='error.css',
@@ -93,7 +99,7 @@ def on_exception(error: Exception) -> Tuple[str, int]:
         ), 500
 
     return utils.render_template(
-        content=InternalServerError.description,
+        content=InternalServerError.html_description,
         code=500,
         template_name='error.html',
         css='error.css',

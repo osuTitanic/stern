@@ -1,11 +1,11 @@
 
 from werkzeug.exceptions import NotFound, InternalServerError
 
-NotFound.description = (
+NotFound.html_description = (
     '<h1>We could not find what you are looking for...</h1>'
 )
 
-InternalServerError.description = (
+InternalServerError.html_description = (
     '<div style="text-align: center">'
     '<h1>Internal Server Error</h1>'
     '<p>Hmm.. I guess something went wrong, huh?</p>'
