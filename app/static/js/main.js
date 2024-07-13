@@ -46,7 +46,7 @@ function toggleSpoiler(root) {
 }
 
 function loadBBCodePreview(element) {
-    const bbcodeWrapper = element.parentElement;
+    const bbcodeWrapper = element.parentElement.parentElement;
     const bbcodeEditor = bbcodeWrapper.querySelector('textarea');
     const form = new FormData();
     form.set('bbcode', bbcodeEditor.value);
@@ -98,6 +98,17 @@ async function confirmNotification(element)
 
     element.classList.remove('new');
     element.onclick = () => {};
+}
+
+function confirmRedirect(url, prompt='Are you sure?')
+{
+    do_redirect = confirm(prompt);
+
+    if (!do_redirect)
+        return;
+
+    window.location.href = url;
+    return false;
 }
 
 function cookieExists(name) { return document.cookie.indexOf(`${name}=`); }

@@ -46,8 +46,10 @@ def internal_beatmap_file(beatmap_id: int):
     if not osu:
         return Response(status=404)
 
-    return Response(
-        osu,
+    return send_file(
+        io.BytesIO(osu),
+        as_attachment=True,
+        download_name=f'{beatmap_id}.osu',
         mimetype='text/plain'
     )
 

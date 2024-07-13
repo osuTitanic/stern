@@ -1,8 +1,20 @@
 
-from werkzeug.exceptions import NotFound
+from werkzeug.exceptions import NotFound, InternalServerError
 
-NotFound.description = (
+NotFound.html_description = (
     '<h1>We could not find what you are looking for...</h1>'
+)
+
+InternalServerError.html_description = (
+    '<div style="text-align: center">'
+    '<h1>Internal Server Error</h1>'
+    '<p>Hmm.. I guess something went wrong, huh?</p>'
+    '<p>'
+    'Either the server is dying or you are trying to break something, whether it was intentional or not. '
+    'Or maybe contabo is just trolling us again. Who knows? '
+    'Anyway, please try again later or contact the server administrator.'
+    '</p>'
+    '</div>'
 )
 
 BEATMAP_NOT_FOUND = (
@@ -13,6 +25,52 @@ BEATMAP_NOT_FOUND = (
     '<li>The map may have been removed due to infringing content.</li>'
     '<li>You may have made a typo!</li>'
     '</ul>'
+)
+
+FORUM_NOT_FOUND = (
+    '<h1>The forum you are looking for was not found!</h1>'
+    'There are a few possible reasons for this:'
+    '<ul>'
+    '<li>The forum does not exist.</li>'
+    '<li>The forum may have been removed by an admin.</li>'
+    '<li>You may have made a typo!</li>'
+    '</ul>'
+)
+
+TOPIC_NOT_FOUND = (
+    '<h1>The topic you are looking for was not found!</h1>'
+    'There are a few possible reasons for this:'
+    '<ul>'
+    '<li>The topic does not exist.</li>'
+    '<li>The topic may have been deleted.</li>'
+    '<li>You may have made a typo!</li>'
+    '</ul>'
+)
+
+TOPIC_LOCKED = (
+    '<h1>The topic you are trying to post in is locked!</h1>'
+)
+
+POST_NOT_FOUND = (
+    '<h1>The post you are looking for was not found!</h1>'
+    'There are a few possible reasons for this:'
+    '<ul>'
+    '<li>The post does not exist.</li>'
+    '<li>The post may have been deleted.</li>'
+    '<li>You may have made a typo!</li>'
+    '</ul>'
+)
+
+POST_LOCKED = (
+    '<h1>The post you are trying to edit is locked!</h1>'
+)
+
+USER_SILENCED = (
+    '<h1>You are not allowed to make posts while silenced.</h1>'
+)
+
+USER_RESTRICTED = (
+    '<h1>You are not allowed to make posts while restricted.</h1>'
 )
 
 ACHIEVEMENTS = {

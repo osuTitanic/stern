@@ -1,5 +1,5 @@
 
-from app.common.database.repositories import logins, notifications
+from app.common.database import users, logins, notifications
 
 from datetime import datetime, timedelta
 from flask_login import login_required
@@ -37,6 +37,9 @@ def settings_overview():
             logins=logins.fetch_many(
                flask_login.current_user.id,
                limit=5
+            ),
+            total_posts=users.fetch_post_count(
+                flask_login.current_user.id
             ),
             notifications=all_notifications
         )

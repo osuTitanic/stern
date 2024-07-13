@@ -1,0 +1,49 @@
+{# templates/forum/home.html #}
+
+{% extends "base.html" %}
+
+{% block content %}
+<table class="forum-home">
+    <tbody>
+    {% for main_forum, sub_forum in forums.items() %}
+    <tr>
+        <td class="mainforum-head" colspan="5">
+            <h4>{{ main_forum.name }}</h4>
+        </td>
+    </tr>
+        {% for forum in sub_forum|sort(attribute='id') %}
+        <tr>
+            <td width="50%" class="subforum-head">
+                <img src="/images/icons/forum/titanic.png"alt=""
+                     width="34"
+                     style="float: left; margin-right: 12px;">
+                <div>
+                    <a href="/forum/{{ forum.id }}">{{ forum.name }}</a>
+                    <p>{{ forum.description }}</p>
+                </div>
+                {# TODO: Subforums #}
+            </td>
+            <td style="text-align: center;" class="subforum-stats">
+                <p class="subforum-topiccount">{{ "{:,}".format(forum_stats[forum.id][0]) }}</p>
+                <p class="subforum-postcount">{{ "{:,}".format(forum_stats[forum.id][1]) }}</p>
+            </td>
+            <td style="text-align: right;" class="subforum-topics">
+                {% set recent = forum_recent[forum.id] %}
+                {% if recent %}
+                    <a href="/forum/{{ forum.id }}/t/{{ recent.id }}">
+                        {{ recent.title }}
+                    </a>
+                    <p>
+                        {{ recent.created_at|timeago }} by
+                        <a href="/u/{{ recent.creator_id }}">{{ recent.creator.name }}</a>
+                    </p>
+                {% else %}
+                    <p>No recent topics</p>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock content %}

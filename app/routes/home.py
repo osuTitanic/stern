@@ -1,7 +1,12 @@
 
 from __future__ import annotations
 
-from app.common.database.repositories import plays, messages, posts, topics
+from app.common.database import (
+    messages,
+    topics,
+    plays,
+    posts
+)
 
 from typing import Optional
 from flask import (
@@ -24,6 +29,7 @@ def handle_legacy_redirects(request: Request) -> Response | None:
     if page == 'beatmap':
         if id := request.args.get("b"):
             return redirect(f'/b/{id}')
+
         elif id := request.args.get("s"):
             return redirect(f'/s/{id}')
 
@@ -63,7 +69,7 @@ def format_announcement(announcement: topics.DBForumTopic, session) -> dict:
 
     return {
         "date": f"{announcement.created_at.day}.{announcement.created_at.month}.{announcement.created_at.year}",
-        "link": f"/forum/t/{announcement.id}",
+        "link": f"/forum/{announcement.forum_id}/t/{announcement.id}",
         "title": announcement.title,
         "author": announcement.creator.name,
         "text": text if post else ""
@@ -86,7 +92,7 @@ def root():
                 format_announcement(announcement, session=session)
                 for announcement in announcements
             ],
-            beatmapsets=[(p.count, p.beatmapset) for p in plays.fetch_most_played(session=session)],
+            most_played=plays.fetch_most_played(session=session),
             messages=messages.fetch_recent(session=session)
         )
 

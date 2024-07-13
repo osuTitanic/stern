@@ -1,0 +1,85 @@
+{# templates/forum/topic_preview.html #}
+
+{% set post_count = repositories.posts.fetch_count(topic.id, session) %}
+{% set posts_per_page = 12 %}
+{% set page_count = (post_count / posts_per_page)|ceil %}
+
+{% if index % 2 %}
+    <tr class="light-row">
+{% else %}
+    <tr class="dark-row">
+{% endif %}
+    <td align="center" width="4%">
+        <a href="/forum/{{ forum.id }}/t/{{ topic.id }}">
+            <img src="{{ topic|get_status_icon }}" width="20">
+        </a>
+    </td>
+    {% if has_custom_icons %}
+        <td align="center" width="4%">
+        {% if topic.icon %}
+            <img src="{{ topic.icon.location }}"
+                alt="{{ topic.icon.name }}"
+                width="20">
+        {% endif %}
+        </td>
+    {% endif %}
+    <td>
+        <div>
+            {% if topic.pinned %}
+                <i class="fa-solid fa-star-of-life" style="font-size: 80%; color: #ababab"></i>
+            {% endif %}
+            <a href="/forum/{{ forum.id }}/t/{{ topic.id }}">{{ topic.title }}</a>
+            {% if topic.status_text %}
+                <p class="topic-status-text">{{ topic.status_text }}</p>
+            {% endif %}
+        </div>
+        {% if page_count > 1 %}
+            <div>
+                {# Display Pagination #}
+                Page:
+                {% if page_count <= 4 %}
+                    {# Display all pages #}
+                    {% for page in range(page_count) %}
+                        <a href="/forum/{{ forum.id }}/t/{{ topic.id }}?page={{ page + 1 }}">{{ page + 1 }}</a>{% if page != page_count-1 %},{% endif %}
+                    {% endfor %}
+                {% else %}
+                    {# Display the first, and last 3 pages #}
+                    <a href="/forum/{{ forum.id }}/t/{{ topic.id }}?page=1">1</a>,
+                    ...
+                    {% for page in range(page_count-3, page_count) %}
+                        <a href="/forum/{{ forum.id }}/t/{{ topic.id }}?page={{ page + 1 }}">{{ page + 1 }}</a>{% if page != page_count-1 %},{% endif %}
+                    {% endfor %}
+                {% endif %}
+            </div>
+        {% endif %}
+    </td>
+    <td align="center">
+        <a href="/u/{{ topic.creator_id }}" style="color: {{ topic.creator|user_color }}">
+            {{ topic.creator.name }}
+        </a>
+    </td>
+    <td width="6%" align="center">
+        <p class="subforum-topiccount">{{ post_count }}</p>
+        <p class="subforum-postcount">{{ topic.views }}</p>
+    </td>
+    <td align="center">
+        {% set last_post = repositories.posts.fetch_last(topic.id, session) %}
+        {% if last_post %}
+            <p>
+                <a href="/u/{{ last_post.user.id }}" style="color: {{ last_post.user|user_color }}">
+                    {{ last_post.user.name }}
+                </a>
+                <a href="/forum/{{ forum.id }}/p/{{ last_post.id }}">
+                    <i class="fa-solid fa-arrow-right" style="color: #ababab"></i>
+                </a>
+            </p>
+            <p>
+                {{ last_post.edit_time|timeago }}
+            </p>
+        {% else %}
+            <p>No posts</p>
+        {% endif %}
+    </td>
+    {# Seperator #}
+    <tr></tr>
+</tr>

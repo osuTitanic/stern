@@ -1,0 +1,500 @@
+{# templates/forum/topic.html #}
+
+{% extends "base.html" %}
+
+{% set is_privileged = (
+    current_user.is_moderator or
+    current_user.is_admin
+) %}
+
+{% set can_award_kudosu = (
+    current_user.is_authenticated and
+    current_user.id == beatmapset.creator_id or
+    current_user.is_bat
+) %}
+
+{% block content %}
+<style>
+    .page { margin: 0 }
+    .header-text { margin: 10px }
+</style>
+<h1 class="header-text">
+    <a href="/forum" style="color:#5a5399">Index</a> »
+    {% for parent_forum in forum|list_parent_forums|reverse %}
+        <a href="/forum/{{ parent_forum.id }}">
+            {{ parent_forum.name }}
+        </a> »
+    {% endfor %}
+    <a href="/forum/{{ forum.id }}">
+        {{ forum.name }}
+    </a> »
+    <a href="/forum/{{ forum.id }}/t/{{ topic.id }}">
+        {{ topic.title }}
+    </a>
+</h1>
+<div>
+    <table width='100%'>
+        <td align="right">
+            {{ post_count }} posts |
+            <a onclick="jumpToPage();">Jump</a> |
+            {# Pagination #}
+            {% if current_page > 1 %}
+                {# "Back" button #}
+                <a href="/forum/{{ forum.id }}/t/{{ topic.id }}?page={{ current_page }}">Back</a>
+                {# First page #}
+                <a href="/forum/{{ forum.id }}/t/{{ topic.id }}?page=1">1</a>
+                ...
+            {% endif %}
+
+            {# Calculate page range #}
+            {% set page_start = (0, current_page - 1)|max %}
+            {% set page_end = (total_pages, page_start + 3)|min %}
+
+            {% for page in range(page_start, page_end + 1) %}
+                {% if page != current_page %}
+                    <a href="/forum/{{ forum.id }}/t/{{ topic.id }}?page={{ page + 1 }}">{{ page + 1 }}</a>
+                {% else %}
+                    <strong>{{ page + 1 }}</strong>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_end < total_pages - 1 %}
+                ...
+                {# Last page after "..." #}
+                <a href="/forum/{{ forum.id }}/t/{{ topic.id }}?page={{ total_pages + 1 }}">{{ total_pages + 1 }}</a>
+                {# "Next" button #}
+                <a href="/forum/{{ forum.id }}/t/{{ topic.id }}?page={{ current_page + 2 }}">Next</a>
+            {% endif %}
+        </td>
+    </table>
+    <table width="100%" cellspacing="0" class="bar">
+        <td>
+        {% if current_user.is_authenticated %}
+            {% if is_subscribed %}
+            <a onclick="removeSubscription({{ topic.id }})" id="subscribe-button">
+                Unsubscribe topic
+            </a>
+            {% else %}
+            <a onclick="addSubscription({{ topic.id }})" id="subscribe-button">
+                Subscribe topic
+            </a>
+            {% endif %}
+            |
+            {% if is_bookmarked %}
+            <a onclick="removeBookmark({{ topic.id }})" id="bookmark-button">
+                Remove Bookmark
+            </a>
+            {% else %}
+            <a onclick="addBookmark({{ topic.id }})" id="bookmark-button">
+                Bookmark topic
+            </a>
+            {% endif %}
+        {% endif %}
+        </td>
+    </table>
+    {% if not posts %}
+        <p style="margin-top: 10px; margin-left: 5px;">
+            Hmmm... seems like nothing was posted here?
+        </p>
+    {% else %}
+        {% for post in posts %}
+            <div class="post-spacing"></div>
+            {% if beatmapset and post == initial_post %}
+            <div class="beatmapset-link-info">
+                This topic is linked to a beatmapset.
+                Click <a href="/s/{{ beatmapset.id }}">here</a> to view it!
+            </div>
+            {% endif %}
+            <table class="post-table" width="100%" cellspacing="0" cellpadding="0">
+                <tbody><tr>
+                    <td class="post-profile">
+                        <div class="post-username">
+                            <a href="/u/{{ post.user.id }}" style="color: {{ post.user|user_color }}">
+                                {{ post.user.name }}
+                            </a>
+                        </div>
+                        <a href="/u/{{ post.user.id }}">
+                            <div class="post-avatar">
+                                <img src="/a/{{ post.user_id }}?h=128" alt=" ">
+                            </div>
+                        </a>
+                        <div>
+                            {% set groups = repositories.groups.fetch_user_groups(post.user.id, session=session) %}
+                            {% if groups %}
+                            <div class="groups">
+                                {% for group in groups %}
+                                <div class="group">
+                                    <a href="/g/{{ group.id }}" style="color: {{ group.color }}">
+                                        {{ group.short_name|upper }}
+                                    </a>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                            <div>
+                                {{ repositories.users.fetch_post_count(post.user.id, session=session) }} posts
+                            </div>
+                            <div>
+                                <img src="/images/flags/{{ post.user.country|lower }}.gif" alt="" class="flag">
+                            </div>
+                        </div>
+                        <br>
+                        {% if beatmapset and post.user_id != beatmapset.creator_id and not post.icon %}
+                            {% set total_kudosu = repositories.modding.total_amount(post.id, session) %}
+                            <div class="kudosu-box">
+                                {% set kudosu_status_color = (
+                                    'green' if total_kudosu > 0
+                                    else 'black' if total_kudosu == 0
+                                    else 'red'
+                                ) %}
+
+                                <p style="color: {{ kudosu_status_color }}" id="kudosu-status-{{ post.id }}">
+                                    {% if total_kudosu > 0 %}
+                                    Earned {{ total_kudosu }} kudosu.
+                                    {% elif total_kudosu == 0 %}
+                                    No kudosu yet.
+                                    {% else %}
+                                    Lost {{ total_kudosu|abs }} kudosu.
+                                    {% endif %}
+                                </p>
+
+                                {% if can_award_kudosu %}
+                                    {% set kudosu = repositories.modding.fetch_by_post_and_sender(
+                                        post.id,
+                                        current_user.id,
+                                        session=session
+                                    ) %}
+                                    {% if beatmapset.status <= 0 %}
+                                        {# Beatmap is not ranked #}
+                                        {% if kudosu and current_user.is_bat and kudosu.amount > 0 %}
+                                            {# BATs can revoke existing kudosu #}
+                                            <a onclick="revokeKudos({{ post.id }}, {{ beatmapset.id }})">Deny Kudos</a>
+                                        {% elif kudosu and current_user.is_bat %}
+                                            {# Kudosu was revoked -> BATs have the option to reset it #}
+                                            <a onclick="resetKudos({{ post.id }}, {{ beatmapset.id }})">Reset Kudos</a>
+                                        {% elif not kudosu %}
+                                            <a onclick="giveKudos({{ post.id }}, {{ beatmapset.id }})">Give Kudos</a>
+                                        {% endif %}
+                                    {% elif kudosu and current_user.is_bat %}
+                                        {# Beatmap got ranked -> BATs can reset kudosu now #}
+                                        <a onclick="resetKudos({{ post.id }}, {{ beatmapset.id }})">Reset Kudos</a>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    </td>
+                    <td class="post-content-wrapper">
+                        <div style="background-color: #ebe8ff;">
+                            <div class="post-time">
+                                <a href="#" title="{{ post.created_at }}" style="line-height: 18px">
+                                    {{ post.created_at|timeago }}
+                                </a>
+                                {% if post.icon %}
+                                    <img src="{{ post.icon.location }}"
+                                        alt="{{ post.icon.name }}"
+                                        style="float: right; margin-left: 4px"
+                                        width="15">
+                                {% endif %}
+                            </div>
+                            <div class="post-content" id="post-{{ post.id }}">
+                                {% if post.deleted %}
+                                    [ Deleted ]
+                                {% else %}
+                                    {{ post.content|bbcode|safe }}
+                                {% endif %}
+                            </div>
+                            {% if post.edit_count > 0 %}
+                            <div style="margin-top: 15px; margin-left: 5px; float: left; overflow-wrap: anywhere;">
+                                Last edited by <a href="/u/{{ post.user.id }}">{{ post.user.name }}</a>
+                                {{ post.edit_time|timeago }}, edited {{ post.edit_count }} time{{ 's' if post.edit_count != 1 }} in total.
+                            </div>
+                            {% endif %}
+                            {% if (current_user.is_authenticated) and (not topic.locked_at or is_privileged) %}
+                            <div class="post-buttons hover-button">
+                                {% if (current_user.id == post.user.id or is_privileged) and (not post.edit_locked or is_privileged) %}
+                                    {% if not post.deleted %}
+                                        <a class="button-red" onclick="deletePost({{ post.id }})">Delete</a>
+                                        <a class="button-blue" href="./post?action=edit&id={{ post.id }}">Edit</a>
+                                    {% endif %}
+                                {% endif %}
+                                <a class="button-blue" href="./post?action=quote&id={{ post.id }}">Quote</a>
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% if post.user.userpage_signature %}
+                        <div class="post-signature">
+                            {{ post.user.userpage_signature|bbcode|safe }}
+                        </div>
+                        {% endif %}
+                    </td>
+                </tr></tbody>
+            </table>
+        {% endfor %}
+    {% endif %}
+    <br>
+    <table width='100%'>
+        <td align="right" style="float: right">
+            {{ post_count }} posts |
+            <a onclick="jumpToPage();">Jump</a> |
+            {# Pagination #}
+            {% if current_page > 1 %}
+                {# "Back" button #}
+                <a href="/forum/{{ forum.id }}/t/{{ topic.id }}?page={{ current_page }}">Back</a>
+                {# First page #}
+                <a href="/forum/{{ forum.id }}/t/{{ topic.id }}?page=1">1</a>
+                ...
+            {% endif %}
+
+            {# Calculate page range #}
+            {% set page_start = (0, current_page - 1)|max %}
+            {% set page_end = (total_pages, page_start + 3)|min %}
+
+            {% for page in range(page_start, page_end + 1) %}
+                {% if page != current_page %}
+                    <a href="/forum/{{ forum.id }}/t/{{ topic.id }}?page={{ page + 1 }}">{{ page + 1 }}</a>
+                {% else %}
+                    <strong>{{ page + 1 }}</strong>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_end < total_pages - 1 %}
+                ...
+                {# Last page after "..." #}
+                <a href="/forum/{{ forum.id }}/t/{{ topic.id }}?page={{ total_pages + 1 }}">{{ total_pages + 1 }}</a>
+                {# "Next" button #}
+                <a href="/forum/{{ forum.id }}/t/{{ topic.id }}?page={{ current_page + 2 }}">Next</a>
+            {% endif %}
+        </td>
+        {% if current_user.is_authenticated %}
+        <td align="left" style="float: left">
+            <div class="post-buttons-large" id="post-bottom">
+                {% if not topic.locked_at %}
+                <a href="/forum/{{ forum.id }}/t/{{ topic.id }}/post?action=post" class="button-blue">Reply</a>
+                {% else %}
+                    {% if current_user.is_moderator %}
+                    {# Allow moderators to reply to locked thread #}
+                    <a href="/forum/{{ forum.id }}/t/{{ topic.id }}/post?action=post" class="button-grey">Reply (Locked)</a>
+                    {% else %}
+                    <a href="#post-bottom" class="button-grey" title="This topic is locked, only moderators can reply to it.">Locked</a>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </td>
+        {% endif %}
+    </table>
+</div>
+<script>
+    function addSubscription(topicId) {
+        fetch(`/api/forum/subscriptions/add?topic_id=${topicId}`)
+            .then(response => {
+                if (response.ok)
+                    return response.json();
+                throw new Error('Failed to add subscription.');
+            })
+            .then(data => {
+                const button = document.getElementById('subscribe-button');
+                button.onclick = () => { removeSubscription(topicId) };
+                button.innerText = 'Unsubscribe topic';
+            })
+            .catch(error => {
+                console.error(error)
+            });
+
+        return false;
+    }
+
+    function removeSubscription(topicId) {
+        fetch(`/api/forum/subscriptions/remove?topic_id=${topicId}`)
+            .then(response => {
+                if (response.ok)
+                    return response.json();
+                throw new Error('Failed to remove subscription.');
+            })
+            .then(data => {
+                const button = document.getElementById('subscribe-button');
+                button.onclick = () => { addSubscription(topicId) };
+                button.innerText = 'Subscribe topic';
+            })
+            .catch(error => {
+                console.error(error)
+            });
+
+        return false;
+    }
+
+    function addBookmark(topicId) {
+        fetch(`/api/forum/bookmarks/add?topic_id=${topicId}`)
+            .then(response => {
+                if (response.ok)
+                    return response.json();
+                throw new Error('Failed to add bookmark.');
+            })
+            .then(data => {
+                const button = document.getElementById('bookmark-button');
+                button.onclick = () => { removeBookmark(topicId) };
+                button.innerText = 'Remove Bookmark';
+            })
+            .catch(error => {
+                console.error(error)
+            });
+
+        return false;
+    }
+
+    function removeBookmark(topicId) {
+        fetch(`/api/forum/bookmarks/remove?topic_id=${topicId}`)
+            .then(response => {
+                if (response.ok)
+                    return response.json();
+                throw new Error('Failed to remove bookmark.');
+            })
+            .then(data => {
+                const button = document.getElementById('bookmark-button');
+                button.onclick = () => { addBookmark(topicId) };
+                button.innerText = 'Bookmark topic';
+            })
+            .catch(error => {
+                console.error(error)
+            });
+
+        return false;
+    }
+
+    function deletePost(postId) {
+        if (!confirm('Are you sure you want to delete this post?'))
+            return;
+
+        fetch(`/api/forum/posts/${postId}/delete`)
+            .then(response => {
+                return response.json();
+            })
+            .then(data => {
+                if (data.error) {
+                    throw new Error(
+                        data.details ? data.details : `Failed to delete post. (${data.error})`
+                    );
+                }
+
+                const post = document.getElementById(`post-${postId}`);
+                post.innerHTML = '[ Deleted ]';
+
+                // Remove delete button
+                const buttons = post.parentElement.getElementsByClassName('post-buttons');
+
+                if (!buttons)
+                    return;
+
+                for (const button of buttons) {
+                    button.remove();
+                }
+            })
+            .catch(error => {
+                alert(error);
+                console.error(error);
+            });
+
+        return false;
+    }
+
+    function giveKudos(postId, beatmapsetId) {
+        fetch(`/api/beatmaps/${beatmapsetId}/kudosu/${postId}/reward`)
+            .then(response => {
+                return response.json();
+            })
+            .then(data => {
+                if (data.error) {
+                    throw new Error(
+                        data.details ? data.details : `Failed to give kudosu. (${data.error})`
+                    );
+                }
+
+                const kudosuStatus = document.getElementById(`kudosu-status-${postId}`);
+                const kudosuActions = kudosuStatus.parentElement.getElementsByTagName('a');
+
+                for (const action of kudosuActions) {
+                    action.remove();
+                }
+
+                kudosuStatus.innerText = `Earned ${data.amount} kudosu.`;
+                kudosuStatus.style.color = 'green';
+            })
+            .catch(error => {
+                alert(error);
+                console.error(error);
+            });
+
+        return false;
+    }
+
+    function revokeKudos(postId, beatmapsetId) {
+        fetch(`/api/beatmaps/${beatmapsetId}/kudosu/${postId}/revoke`)
+            .then(response => {
+                return response.json();
+            })
+            .then(data => {
+                if (data.error) {
+                    throw new Error(
+                        data.details ? data.details : `Failed to revoke kudosu. (${data.error})`
+                    );
+                }
+
+                const kudosuStatus = document.getElementById(`kudosu-status-${postId}`);
+                const kudosuActions = kudosuStatus.parentElement.getElementsByTagName('a');
+
+                for (const action of kudosuActions) {
+                    action.remove();
+                }
+
+                kudosuStatus.innerText = 'Successfully revoked kudosu.';
+                kudosuStatus.style.color = 'red';
+            })
+            .catch(error => {
+                alert(error);
+                console.error(error);
+            });
+
+        return false;
+    }
+
+    function resetKudos(postId, beatmapsetId) {
+        fetch(`/api/beatmaps/${beatmapsetId}/kudosu/${postId}/reset`)
+            .then(response => {
+                return response.json();
+            })
+            .then(data => {
+                if (data.error) {
+                    throw new Error(
+                        data.details ? data.details : `Failed to reset kudosu. (${data.error})`
+                    );
+                }
+
+                const kudosuStatus = document.getElementById(`kudosu-status-${postId}`);
+                const kudosuActions = kudosuStatus.parentElement.getElementsByTagName('a');
+
+                for (const action of kudosuActions) {
+                    action.remove();
+                }
+
+                kudosuStatus.innerText = 'Successfully reset kudosu.';
+                kudosuStatus.style.color = 'blue';
+            })
+            .catch(error => {
+                alert(error);
+                console.error(error);
+            });
+
+        return false;
+    }
+
+    function jumpToPage() {
+        var page = prompt("Enter the page to jump to:")
+
+        if (page !== null && !isNaN(page) && page > 0)
+        {
+            var query = new URLSearchParams();
+            query.set('page', page);
+            location.search = query.toString();
+        }
+    }
+</script>
+{% endblock content %}

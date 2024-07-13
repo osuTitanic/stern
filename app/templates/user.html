@@ -122,8 +122,7 @@
             </div>
             <div title="Total Posts" class="activity">
                 <i class="fa-regular fa-pen-to-square" style="color: #76777b;"></i>
-                {# TODO #}
-                <p>0 posts</p>
+                <p>{{ total_posts }} post{{ 's' if total_posts != 1 }}</p>
             </div>
         </div>
         {% if user.playstyle > 0 or current_user.id == user.id %}
@@ -197,7 +196,7 @@
         {% endif %}
     {% else %}
         {% if user.userpage_about %}
-        {% if current_user_is_admin and current_user.id != user.id %}
+        {% if current_user.is_moderator and current_user.id != user.id %}
             <a class="edit-button" onclick="show('admin-userpage-controls')">Edit</a>
             <br>
             <div id="admin-userpage-controls" class="popup">
@@ -207,7 +206,7 @@
                         "current": user.userpage_about,
                         "submit-text": "Update",
                         "min-height": "140px",
-                        "user-id": user.id,
+                        "user-id": user.id
                     } %}
                         {% include "editor.html" %}
                     {% endwith %}
@@ -235,6 +234,7 @@
                             <td onclick="expandProfileTab('leader', true)">Top Plays</td>
                             <td onclick="expandProfileTab('history', true)">Historical</td>
                             <td onclick="expandProfileTab('beatmaps', true)">Beatmaps</td>
+                            <td onclick="expandProfileTab('kudosu', true)">Kudosu</td>
                             <td onclick="expandProfileTab('achievements', true)">Achievements</td>
                         </tbody>
                     </table>
@@ -468,9 +468,9 @@
                                             {% if fav.beatmapset.server == 0 %}
                                             <a href="https://osu.ppy.sh/u/{{ fav.beatmapset.creator }}">mapped by {{ fav.beatmapset.creator }}</a>
                                             {% else %}
-                                            <a href="/u/{{ set.creator }}">mapped by {{ fav.beatmapset.creator }}</a>
+                                                <a href="/u/{{ set.creator_id }}">mapped by {{ fav.beatmapset.creator }}</a>
                                             {% endif %}
-                                            {% if not current_user.is_anonymous and current_user.id == user.id %}
+                                            {% if current_user.is_authenticated and current_user.id == user.id %}
                                             <br>
                                             <div style="float: right; text-align: right; padding-right: 2.5px;">
                                                 <a onclick="return removeFavourite({{ fav.beatmapset.id }})">delete</a>
@@ -478,7 +478,7 @@
                                             {% endif %}
                                         </td>
                                         <td style="width:80px; height:60px;">
-                                            <img src="http{{ 's' if config.ENABLE_SSL else '' }}://s.{{ config.DOMAIN_NAME }}/mt/{{ fav.set_id }}" alt="" loading="lazy">
+                                            <img src="{{ config.STATIC_BASEURL }}/mt/{{ fav.set_id }}" alt="" loading="lazy">
                                         </td>
                                     </tr>
                                 </tbody>
@@ -487,6 +487,83 @@
                         </div>
                         {% endif %}
                     </div>
+                    {% if user.is_bat %}
+                    <div>
+                        <h2 class="profile-stats-header">Nominated Beatmaps</h2>
+                        {% if not nominations %}
+                            <p style="margin: 5px;">This BAT has not nominated any beatmaps :(</p>
+                        {% else %}
+                        <div class="profile-beatmaps-container">
+                            {% for nomination in nominations %}
+                            <table class="profile-beatmap">
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <a href="/s/{{ nomination.set_id }}" class="profile-beatmap-description">
+                                                <b>{{ nomination.beatmapset.artist }} - {{ nomination.beatmapset.title }}</b>
+                                            </a>
+                                            <br>
+                                            {% if nomination.beatmapset.server == 0 %}
+                                            <a href="https://osu.ppy.sh/u/{{ nomination.beatmapset.creator }}">mapped by {{ nomination.beatmapset.creator }}</a>
+                                            {% else %}
+                                                <a href="/u/{{ nomination.beatmapset.creator_id }}">mapped by {{ nomination.beatmapset.creator }}</a>
+                                            {% endif %}
+                                        </td>
+                                        <td style="width:80px; height:60px;">
+                                            <img src="{{ config.STATIC_BASEURL }}/mt/{{ nomination.set_id }}" alt="" loading="lazy">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                    {% for category, beatmapsets in beatmapset_categories.items() %}
+                    {% if beatmapsets %}
+                    <div>
+                        <h2 class="profile-stats-header">{{ category }} Beatmaps</h2>
+                        <div class="profile-beatmaps-container">
+                            {% for set in beatmapsets %}
+                            <table class="profile-beatmap">
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <a href="/s/{{ set.id }}" class="profile-beatmap-description">
+                                                <b>{{ set.artist }} - {{ set.title }}</b>
+                                            </a>
+                                            <br>
+                                            {% if set.server == 0 %}
+                                            <a href="https://osu.ppy.sh/u/{{ set.creator }}">mapped by {{ set.creator }}</a>
+                                            {% else %}
+                                                <a href="/u/{{ set.creator_id }}">mapped by {{ set.creator }}</a>
+                                            {% endif %}
+                                            {% if current_user.id == user.id and category in ('WIP', 'Pending', 'Graveyarded') %}
+                                            <br>
+                                            <div>
+                                                <div style="float: right; text-align: right; padding-right: 2.5px;">
+                                                    <a onclick="return deleteBeatmap({{ set.id }})">delete</a>
+                                                </div>
+                                                {% if category == 'Graveyarded' %}
+                                                <div style="float: right; text-align: right; margin-right: 5px;">
+                                                    <a onclick="return reviveBeatmap({{ set.id }})">revive</a>
+                                                </div>
+                                                {% endif %}
+                                            </div>
+                                            {% endif %}
+                                        </td>
+                                        <td style="width: 80px; height: 60px;">
+                                            <img src="{{ config.STATIC_BASEURL }}/mt/{{ set.id }}" alt="" loading="lazy">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
                 </div>
             </td>
             <tr onclick="expandProfileTab('achievements')">
@@ -574,6 +651,42 @@
                         {% endfor %}
                     </div>
                 {% endif %}
+                </div>
+            </td>
+            <tr onclick="expandProfileTab('kudosu')">
+                <td id="tab-kudosu" class="tab-heading">Kudosu</td>
+            </tr>
+            <td>
+                <div id="kudosu" class="tab-content" style="opacity: 1; filter: none; display: none; height: 0px;">
+                    {% if not recent_mods %}
+                        <p>This user has not earned any kudosu yet.</p>
+                    {% else %}
+                        <h4 class="profile-stats-element">
+                            <b>Total Kudosu Earned</b>: {{ "{:,}".format(total_kudosu) }}
+                        </h4>
+                        <h3 class="profile-stats-header">Recent Kudosu History</h3>
+                        {% for mod in recent_mods %}
+                            {% set mod_status = (
+                                'revoked' if mod.amount < 0 else
+                                'received' if mod.target_id == user.id else
+                                'gave'
+                            ) %}
+                            {{ mod.time|timeago }} -
+                            {% if mod_status != 'received' %}
+                                <a href="/u/{{ mod.sender_id }}">{{ mod.sender.name }}</a>
+                            {% else %}
+                                <a href="/u/{{ mod.target_id }}">{{ mod.target.name }}</a>
+                            {% endif %}
+                            {{ mod_status }}
+                            <b>{{ mod.amount|abs }} kudos</b> {{ 'from' if mod_status != 'gave' else 'to' }} a post by
+                            {% if mod_status == 'received' %}
+                                <a href="/u/{{ mod.sender_id }}">{{ mod.sender.name }}</a>
+                            {% else %}
+                                <a href="/u/{{ mod.target_id }}">{{ mod.target.name }}</a>
+                            {% endif %}
+                            in <a href="/forum/p/{{ mod.post_id }}">{{ mod.post.topic.title }}</a>
+                        {% endfor %}
+                    {% endif %}
                 </div>
             </td>
             <tr onclick="expandProfileTab('account')">

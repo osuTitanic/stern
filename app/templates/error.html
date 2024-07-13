@@ -1,0 +1,19 @@
+{# templates/error.html #}
+
+{% extends 'base.html' %}
+
+{% set default_image = "/images/art/ffffff.png" %}
+{% set error_images = {
+        500: "/images/art/titanic.gif"
+    } 
+%}
+
+{% block content %}
+<div class="error">
+    {% set image = error_images[code] or default_image %}
+    <img src="{{ image }}" alt="">
+    <div class="description">
+        {{ content|safe }}
+    </div>
+</div>
+{% endblock content %}
