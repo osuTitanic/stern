@@ -1,13 +1,34 @@
 
 from app.common.database import beatmapsets, topics, posts, beatmaps
+from app.common.webhooks import Embed, Author, Image
+from app.common.database import DBUser, DBBeatmapset
 from app.common.constants import DatabaseStatus
+from app.common import officer
 
 from flask_login import current_user, login_required
 from flask import Blueprint, abort, redirect
 
+import config
 import app
 
 router = Blueprint('beatmap-nuking', __name__)
+
+def send_nuke_webhook(
+    beatmapset: DBBeatmapset,
+    user: DBUser
+) -> None:
+    embed = Embed(
+        title=f'{beatmapset.artist} - {beatmapset.title}',
+        url=f'http://osu.{config.DOMAIN_NAME}/s/{beatmapset.id}',
+        thumbnail=Image(f'http://osu.{config.DOMAIN_NAME}/mt/{beatmapset.id}'),
+        color=0xff0000
+    )
+    embed.author = Author(
+        name=f'{user.name} nuked a Beatmap',
+        url=f'http://osu.{config.DOMAIN_NAME}/u/{user.id}',
+        icon_url=f'http://osu.{config.DOMAIN_NAME}/a/{user.id}'
+    )
+    officer.event(embeds=[embed])
 
 @router.get('/<set_id>/nuke')
 @login_required
@@ -54,6 +75,11 @@ def nuke_beatmap(set_id: int):
             set_id,
             {'status': DatabaseStatus.WIP.value},
             session=session
+        )
+
+        send_nuke_webhook(
+            beatmapset,
+            current_user
         )
 
         app.session.logger.info(
