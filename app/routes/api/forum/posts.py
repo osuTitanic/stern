@@ -55,6 +55,12 @@ def delete_post(post_id: int):
                 'details': 'You are not authorized to perform this action.'
             }, 403
 
+        if post.edit_locked:
+            return {
+                'error': 403,
+                'details': 'This post is locked and cannot be deleted.'
+            }, 403
+
         posts.update(
             post.id,
             {'deleted': True},
