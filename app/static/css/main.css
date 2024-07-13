@@ -426,6 +426,10 @@ input[type="submit"]:hover {
     background-color: rgb(205, 205, 240);
 }
 
+.bbcode img {
+    max-width: 660px;
+}
+
 .bbcode-preview {
     margin: 5px 5px 1.5px 5px;
     background-color: #dbd8fd;
