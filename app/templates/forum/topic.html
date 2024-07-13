@@ -371,7 +371,7 @@
             .then(data => {
                 if (data.error) {
                     throw new Error(
-                        data.detail ? data.detail : `Failed to delete post. (${data.error})`
+                        data.details ? data.details : `Failed to delete post. (${data.error})`
                     );
                 }
 
@@ -404,7 +404,7 @@
             .then(data => {
                 if (data.error) {
                     throw new Error(
-                        data.detail ? data.detail : `Failed to give kudosu. (${data.error})`
+                        data.details ? data.details : `Failed to give kudosu. (${data.error})`
                     );
                 }
 
@@ -434,7 +434,7 @@
             .then(data => {
                 if (data.error) {
                     throw new Error(
-                        data.detail ? data.detail : `Failed to revoke kudosu. (${data.error})`
+                        data.details ? data.details : `Failed to revoke kudosu. (${data.error})`
                     );
                 }
 
@@ -464,7 +464,7 @@
             .then(data => {
                 if (data.error) {
                     throw new Error(
-                        data.detail ? data.detail : `Failed to reset kudosu. (${data.error})`
+                        data.details ? data.details : `Failed to reset kudosu. (${data.error})`
                     );
                 }
 
