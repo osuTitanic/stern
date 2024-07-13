@@ -1,13 +1,43 @@
 
 from app.common.database import beatmapsets, nominations, topics, posts
+from app.common.webhooks import Embed, Author, Image
+from app.common.database import DBUser, DBBeatmapset
 from app.models.user import UserModel
+from app.common import officer
 
 from flask_login import current_user, login_required
 from flask import Blueprint, abort, redirect
 
+import config
 import app
 
 router = Blueprint('beatmap-nomination', __name__)
+
+def send_nomination_webhook(
+    beatmapset: DBBeatmapset,
+    user: DBUser,
+    type: str = 'add'
+) -> None:
+    author_text = {
+        'add': f'{user.name} nominated a Beatmap',
+        'reset': f'{user.name} reset all nominations',
+    }
+    color = {
+        'add': 0x00da1d,
+        'reset': 0xff0000,
+    }
+    embed = Embed(
+        title=f'{beatmapset.artist} - {beatmapset.title}',
+        url=f'http://osu.{config.DOMAIN_NAME}/s/{beatmapset.id}',
+        thumbnail=Image(f'http://osu.{config.DOMAIN_NAME}/mt/{beatmapset.id}'),
+        color=color.get(type)
+    )
+    embed.author = Author(
+        name=author_text.get(type),
+        url=f'http://osu.{config.DOMAIN_NAME}/u/{user.id}',
+        icon_url=f'http://osu.{config.DOMAIN_NAME}/a/{user.id}'
+    )
+    officer.event(embeds=[embed])
 
 @router.get('/nominations/<set_id>')
 def get_nominations(set_id: int):
@@ -71,6 +101,12 @@ def add_nomination(set_id: int):
             session=session
         )
 
+        send_nomination_webhook(
+            beatmapset,
+            current_user,
+            type='add'
+        )
+
         app.session.logger.info(
             f'Beatmap "{beatmapset.full_name}" was nominated by {current_user.name}.'
         )
@@ -111,6 +147,12 @@ def reset_nominations(set_id: int):
             beatmapset.topic_id,
             {'forum_id': 10},
             session=session
+        )
+
+        send_nomination_webhook(
+            beatmapset,
+            current_user,
+            type='reset'
         )
 
         app.session.logger.info(
