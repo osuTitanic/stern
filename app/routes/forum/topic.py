@@ -40,7 +40,7 @@ def update_views(topic_id: int, session: Session) -> None:
         ex=60
     )
 
-def send_topic_event(
+def send_topic_webhook(
     topic: DBForumTopic,
     post: DBForumPost,
     author: DBUser
@@ -55,7 +55,7 @@ def send_topic_event(
         url=f'http://osu.{config.DOMAIN_NAME}/u/{author.id}',
         icon_url=f'http://osu.{config.DOMAIN_NAME}/a/{author.id}'
     )
-    embed.color = 0xc49a52
+    embed.color = 0xc4492e
     officer.event(embeds=[embed])
 
 @router.get('/<forum_id>/t/<id>/')
@@ -298,7 +298,7 @@ def create_post_action(forum_id: str):
             session=session
         )
 
-        send_topic_event(
+        send_topic_webhook(
             topic,
             post,
             current_user
