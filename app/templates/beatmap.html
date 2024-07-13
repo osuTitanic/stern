@@ -209,7 +209,9 @@
                     {% if beatmapset.server == 0 %}
                     <p><a href="https://osu.ppy.sh/beatmapsets/{{ beatmapset.id }}/discussion">Modding / Discussion</a></p>
                     {% else %}
-                    <p><a href="/forum/t/{{ beatmapset.topic_id }}">Modding / Discussion</a></p>
+                        {% if beatmapset.topic_id %}
+                        <p><a href="/forum/t/{{ beatmapset.topic_id }}">Modding / Discussion</a></p>
+                        {% endif %}
                     {% endif %}
                 </td>
                 {% endif %}
