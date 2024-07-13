@@ -1,11 +1,12 @@
 
+from app.common.webhooks import Embed, Author, Image, Field
+from app.common.database import DBBeatmapset, DBUser
 from app.common.constants import DatabaseStatus
-from app.common.database import DBBeatmapset
+from app.common import officer
 from app.common.database import (
     nominations,
     beatmapsets,
     beatmaps,
-    modding,
     topics,
     posts
 )
@@ -15,6 +16,7 @@ from flask_login import current_user, login_required
 from sqlalchemy.orm import Session
 from datetime import datetime
 
+import config
 import utils
 import app
 
@@ -196,6 +198,34 @@ def update_topic_status_text(
             session=session
         )
 
+def send_status_webhook(
+    beatmapset: DBBeatmapset,
+    user: DBUser
+) -> None:
+    embed = Embed(
+        title=f'{beatmapset.artist} - {beatmapset.title}',
+        url=f'http://osu.{config.DOMAIN_NAME}/s/{beatmapset.id}',
+        thumbnail=Image(f'http://osu.{config.DOMAIN_NAME}/mt/{beatmapset.id}'),
+        color=0x009ed9
+    )
+
+    embed.author = Author(
+        name=f'{user.name} updated a beatmap',
+        url=f'http://osu.{config.DOMAIN_NAME}/u/{user.id}',
+        icon_url=f'http://osu.{config.DOMAIN_NAME}/a/{user.id}'
+    )
+
+    embed.fields= [
+        Field(
+            beatmap.version,
+            f'{DatabaseStatus(beatmap.status).name}',
+            inline=True
+        )
+        for beatmap in beatmapset.beatmaps
+    ]
+
+    officer.event(embeds=[embed])
+
 @router.post('/status/difficulty')
 @login_required
 def diff_status_update():
@@ -293,6 +323,11 @@ def diff_status_update():
             session=session
         )
 
+        send_status_webhook(
+            beatmapset,
+            current_user
+        )
+
         if set_status > DatabaseStatus.Pending:
             beatmapsets.update(
                 beatmapset.id,
@@ -365,6 +400,11 @@ def handle_pending_status(beatmapset: DBBeatmapset, session: Session):
         f'"{beatmapset.full_name}" was set to "Pending" status by {current_user.name}.'
     )
 
+    send_status_webhook(
+        beatmapset,
+        current_user
+    )
+
     return redirect(
         f'/s/{beatmapset.id}'
     )
@@ -408,6 +448,11 @@ def handle_approved_status(beatmapset: DBBeatmapset, session: Session):
         beatmapset,
         DatabaseStatus.Approved.value,
         session=session
+    )
+
+    send_status_webhook(
+        beatmapset,
+        current_user
     )
 
     app.session.logger.info(
@@ -459,6 +504,11 @@ def handle_qualified_status(beatmapset: DBBeatmapset, session: Session):
         session=session
     )
 
+    send_status_webhook(
+        beatmapset,
+        current_user
+    )
+
     app.session.logger.info(
         f'"{beatmapset.full_name}" was set to "Qualified" status by {current_user.name}.'
     )
@@ -501,6 +551,11 @@ def handle_loved_status(beatmapset: DBBeatmapset, session: Session):
         beatmapset,
         DatabaseStatus.Loved.value,
         session=session
+    )
+
+    send_status_webhook(
+        beatmapset,
+        current_user
     )
 
     app.session.logger.info(
