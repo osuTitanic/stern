@@ -11,7 +11,7 @@ from flask import (
 )
 from app.common.database import DBUser, DBForumPost, DBForumTopic, DBBeatmapset
 from app.common.constants import NotificationType, DatabaseStatus
-from app.common.webhooks import Embed, Author
+from app.common.webhooks import Embed, Author, Image
 from app.common import officer
 from app.common.database import (
     notifications,
@@ -37,7 +37,10 @@ def send_post_webhook(
         title=topic.title,
         description=post.content[:512] + ('...' if len(post.content) > 1024 else ''),
         url=f'http://osu.{config.DOMAIN_NAME}/forum/{topic.forum_id}/p/{post.id}',
-        thumbnail=f'https://osu.{config.DOMAIN_NAME}/{topic.icon.location}' if topic.icon else None
+        thumbnail=(
+            Image(f'https://osu.{config.DOMAIN_NAME}/{topic.icon.location}')
+            if topic.icon else None
+        )
     )
     embed.author = Author(
         name=f'{author.name} created a Post',

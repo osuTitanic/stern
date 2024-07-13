@@ -1,6 +1,6 @@
 
 from app.common.database import DBForumTopic, DBForumPost, DBForum, DBUser
-from app.common.webhooks import Embed, Field, Author
+from app.common.webhooks import Embed, Image, Author
 from app.common.helpers import ip
 from app.common import officer
 from app.common.database import (
@@ -49,7 +49,10 @@ def send_topic_webhook(
         title=topic.title,
         description=post.content[:512] + ('...' if len(post.content) > 1024 else ''),
         url=f'http://osu.{config.DOMAIN_NAME}/forum/{topic.forum_id}/t/{topic.id}',
-        thumbnail=f'https://osu.{config.DOMAIN_NAME}/{topic.icon.location}' if topic.icon else None
+        thumbnail=(
+            Image(f'https://osu.{config.DOMAIN_NAME}/{topic.icon.location}')
+            if topic.icon else None
+        )
     )
     embed.author = Author(
         name=f'{author.name} created a new Topic',
