@@ -183,4 +183,16 @@ def delete_beatmap(user_id: int):
             session=session
         )
 
+        topics.update(
+            beatmapset.topic_id,
+            {'hidden': True},
+            session=session
+        )
+
+        posts.update_by_topic(
+            beatmapset.topic_id,
+            {'hidden': True},
+            session=session
+        )
+
         return {'success': True}
