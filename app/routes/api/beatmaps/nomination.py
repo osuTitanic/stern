@@ -39,6 +39,11 @@ def send_nomination_webhook(
     )
     officer.event(embeds=[embed])
 
+def error_redirect(error: str, beatmapset: DBBeatmapset):
+    return redirect(
+        f'/b/{beatmapset.beatmaps[0].id}?bat_error={error}'
+    )
+
 @router.get('/nominations/<set_id>')
 def get_nominations(set_id: int):
     with app.session.database.managed_session() as session:
@@ -70,13 +75,26 @@ def add_nomination(set_id: int):
         if not (beatmapset := beatmapsets.fetch_one(set_id, session)):
             return redirect(f'/s/{set_id}')
 
+        if beatmapset.creator_id == current_user.id:
+            # User is the creator of the beatmap
+            return error_redirect(
+                'You cannot nominate your own beatmap.',
+                beatmapset
+            )
+
         if nominations.fetch_one(set_id, current_user.id, session):
             # User already nominated that map
-            return redirect(f'/s/{set_id}')
+            return error_redirect(
+                'You have already nominated this beatmap.',
+                beatmapset
+            )
 
         if beatmapset.status > 0:
             # Beatmap was already approved
-            return redirect(f'/s/{set_id}')
+            return error_redirect(
+                'This beatmap was already ranked.',
+                beatmapset
+            )
 
         nominations.create(
             beatmapset.id,
@@ -125,7 +143,10 @@ def reset_nominations(set_id: int):
 
         if beatmapset.status > 0:
             # Beatmap was already approved
-            return redirect(f'/s/{set_id}')
+            return error_redirect(
+                'This beatmap was already ranked.',
+                beatmapset
+            )
 
         nominations.delete_all(
             beatmapset.id,
