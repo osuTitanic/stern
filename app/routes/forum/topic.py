@@ -1,6 +1,8 @@
 
-from app.common.database import DBForumTopic, DBForum
+from app.common.database import DBForumTopic, DBForumPost, DBForum, DBUser
+from app.common.webhooks import Embed, Field, Author
 from app.common.helpers import ip
+from app.common import officer
 from app.common.database import (
     beatmapsets,
     forums,
@@ -12,6 +14,7 @@ from flask import Blueprint, abort, redirect, request
 from flask_login import current_user, login_required
 from sqlalchemy.orm import Session
 
+import config
 import utils
 import app
 
@@ -36,6 +39,24 @@ def update_views(topic_id: int, session: Session) -> None:
         value=1,
         ex=60
     )
+
+def send_topic_event(
+    topic: DBForumTopic,
+    post: DBForumPost,
+    author: DBUser
+) -> None:
+    embed = Embed(
+        title=topic.title,
+        description=post.content[:512] + ('...' if len(post.content) > 1024 else ''),
+        url=f'http://osu.{config.DOMAIN_NAME}/forum/{topic.forum_id}/t/{topic.id}',
+    )
+    embed.author = Author(
+        name=f'{author.name} created a new Topic',
+        url=f'http://osu.{config.DOMAIN_NAME}/u/{author.id}',
+        icon_url=f'http://osu.{config.DOMAIN_NAME}/a/{author.id}'
+    )
+    embed.color = 0xc49a52
+    officer.event(embeds=[embed])
 
 @router.get('/<forum_id>/t/<id>/')
 def topic(forum_id: str, id: str):
@@ -256,7 +277,7 @@ def create_post_action(forum_id: str):
             **get_type_dict()
         )
 
-        posts.create(
+        post = posts.create(
             topic.id,
             forum.id,
             current_user.id,
@@ -275,6 +296,12 @@ def create_post_action(forum_id: str):
             current_user.id,
             topic.id,
             session=session
+        )
+
+        send_topic_event(
+            topic,
+            post,
+            current_user
         )
 
         app.session.logger.info(
