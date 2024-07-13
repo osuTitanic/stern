@@ -49,6 +49,7 @@ def send_topic_webhook(
         title=topic.title,
         description=post.content[:512] + ('...' if len(post.content) > 1024 else ''),
         url=f'http://osu.{config.DOMAIN_NAME}/forum/{topic.forum_id}/t/{topic.id}',
+        thumbnail=f'https://osu.{config.DOMAIN_NAME}/{topic.icon.location}' if topic.icon else None
     )
     embed.author = Author(
         name=f'{author.name} created a new Topic',
