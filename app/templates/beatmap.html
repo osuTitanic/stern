@@ -96,7 +96,7 @@
                     <div class="starfield" style="width: {{ image_width*max_stars }}px">
                         <div class="starfield-selected" style="width: {{ image_width*beatmap.diff }}px"></div>
                     </div>
-                    ({{ beatmap.diff }})
+                    ({{ beatmap.diff|round(2) }})
                 </td>
             </tr>
             <tr>
