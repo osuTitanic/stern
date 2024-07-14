@@ -79,10 +79,7 @@ def render_quote(tag_name, value, options, parent, context):
         '<blockquote>'
         '<h4>%s wrote:</h4><i>'
         '%s'
-        '</i></blockquote>' % (
-            options["quote"].replace('[', '').replace(']', ''),
-            value
-        )
+        '</i></blockquote>' % (options["quote"], value)
     )
 
 @parser.formatter('size')

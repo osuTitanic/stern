@@ -159,7 +159,15 @@ def fetch_post_text(
         if post.deleted:
             return
 
-        return f"[quote={post.user.name}]{post.content}[/quote]"
+        if post.content.strip('\r\n').startswith('[quote'):
+            # Remove the quoted content from the post
+            post.content = post.content.split('[/quote]', 1)[-1].strip('\r\n')
+
+        return (
+            f"[quote={post.user.name.replace('[', '').replace(']', '')}]"
+            f"{post.content}"
+            f"[/quote]"
+        )
 
     elif action == 'post':
         drafts = posts.fetch_drafts(
