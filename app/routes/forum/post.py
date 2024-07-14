@@ -115,6 +115,9 @@ def post_view(forum_id: str, topic_id: str):
         return utils.render_template(
             "forum/post.html",
             css='forums.css',
+            title="Create a Post - Titanic",
+            site_title=f"Titanic » Forums » {topic.forum.name} » {topic.title} » Post",
+            site_description="Discuss and share your thoughts with the community.",
             current_text=text,
             forum=topic.forum,
             topic=topic,
@@ -156,7 +159,15 @@ def fetch_post_text(
         if post.deleted:
             return
 
-        return f"[quote={post.user.name}]{post.content}[/quote]"
+        if post.content.strip('\r\n').startswith('[quote'):
+            # Remove the quoted content from the post
+            post.content = post.content.split('[/quote]', 1)[-1].strip('\r\n')
+
+        return (
+            f"[quote={post.user.name.replace('[', '').replace(']', '')}]"
+            f"{post.content}"
+            f"[/quote]"
+        )
 
     elif action == 'post':
         drafts = posts.fetch_drafts(

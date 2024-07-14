@@ -188,6 +188,7 @@ table {
     text-align: center;
     width: 160px;
     overflow: hidden;
+    overflow-wrap: anywhere;
     font-size: 115%;
     padding-top: 8px;
     padding-bottom: 8px;
@@ -272,7 +273,7 @@ table {
     min-height: 30px;
     max-height: 150px;
     padding: 4px 4px 0px 4px;
-    overflow: hidden;
+    overflow: auto;
     display: inline-block;
     width: 98.6%;
 }

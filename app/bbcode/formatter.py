@@ -10,7 +10,6 @@ parser.add_simple_formatter('u', '<u>%(value)s</u>')
 parser.add_simple_formatter('heading', '<h2>%(value)s</h2>')
 parser.add_simple_formatter('strike', '<strike>%(value)s</strike>')
 parser.add_simple_formatter('centre', '<center>%(value)s</center>')
-parser.add_simple_formatter('c', '<div class="code-block">%(value)s</div>')
 
 parser.add_simple_formatter(
     'img',
@@ -23,7 +22,17 @@ parser.add_simple_formatter(
     '%(value)s',
     same_tag_closes=True,
     render_embedded=False,
-    transform_newlines=False,
+    transform_newlines=True,
+    escape_html=False,
+    replace_links=False
+)
+
+parser.add_simple_formatter(
+    'c',
+    '%(value)s',
+    same_tag_closes=True,
+    render_embedded=False,
+    transform_newlines=True,
     escape_html=False,
     replace_links=False
 )
