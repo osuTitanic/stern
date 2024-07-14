@@ -23,7 +23,7 @@ parser.add_simple_formatter(
     '%(value)s',
     same_tag_closes=True,
     render_embedded=False,
-    transform_newlines=False,
+    transform_newlines=True,
     escape_html=False,
     replace_links=False
 )
