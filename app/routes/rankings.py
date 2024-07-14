@@ -52,16 +52,14 @@ def rankings(mode: str, order_type: str):
         ]
 
         for user in sorted_users:
-            if user.stats:
-                continue
-
-            # Create stats if they don't exist
-            user.stats = [
-                stats.create(user.id, 0),
-                stats.create(user.id, 1),
-                stats.create(user.id, 2),
-                stats.create(user.id, 3)
-            ]
+            if not user.stats:
+                # Create stats if they don't exist
+                user.stats = [
+                    stats.create(user.id, 0),
+                    stats.create(user.id, 1),
+                    stats.create(user.id, 2),
+                    stats.create(user.id, 3)
+                ]
 
             user.stats.sort(key=lambda s:s.mode)
             utils.sync_ranks(user)
