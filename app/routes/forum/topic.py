@@ -146,6 +146,9 @@ def topic(forum_id: str, id: str):
         return utils.render_template(
             "forum/topic.html",
             css='forums.css',
+            title=f"{topic.title} - Titanic",
+            site_title=f"Titanic » Forums » {topic.forum.name} » {topic.title}",
+            site_description=initial_post.content.split('\n')[0],
             forum=topic.forum,
             topic=topic,
             posts=topic_posts,
@@ -178,6 +181,9 @@ def create_post_view(forum_id: str):
         return utils.render_template(
             "forum/create.html",
             css='forums.css',
+            title="Create a Topic - Titanic",
+            site_title=f"Titanic » Forums » {forum.name} » Create",
+            site_description="Discuss and share your thoughts with the community.",
             forum=forum,
             icons=forums.fetch_icons(session)
         )
