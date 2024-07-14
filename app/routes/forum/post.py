@@ -184,11 +184,26 @@ def get_post_type(topic: DBForumTopic) -> str:
 
     return 'global'
 
-def update_topic_type() -> dict:
+def update_topic_type(
+    post: DBForumPost,
+    topic: DBForumTopic,
+    session: Session
+) -> dict:
     if not current_user.is_moderator:
         return {}
 
-    type = request.form.get('type', default='global')
+    initial_post = posts.fetch_initial_post(
+        topic.id,
+        session=session
+    )
+
+    if post.id != initial_post.id:
+        return {}
+
+    type = request.form.get(
+        key='type',
+        default='global'
+    )
 
     if type == 'announcement':
         return {
@@ -516,15 +531,16 @@ def handle_post_edit(topic: DBForumTopic, post_id: int, session: Session) -> Res
         session=session
     )
 
-    initial_post = posts.fetch_initial_post(
-        topic.id,
+    topic_type = update_topic_type(
+        post,
+        topic,
         session=session
     )
 
-    if post.id == initial_post.id:
+    if topic_type:
         topics.update(
             topic.id,
-            update_topic_type(),
+            topic_type,
             session=session
         )
 
