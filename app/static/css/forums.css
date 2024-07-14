@@ -188,6 +188,7 @@ table {
     text-align: center;
     width: 160px;
     overflow: hidden;
+    overflow-wrap: anywhere;
     font-size: 115%;
     padding-top: 8px;
     padding-bottom: 8px;
