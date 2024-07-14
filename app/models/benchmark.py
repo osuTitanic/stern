@@ -1,4 +1,3 @@
-
 from pydantic import BaseModel
 from datetime import datetime
 
@@ -11,4 +10,5 @@ class BenchmarkModel(BaseModel):
     score: int
     grade: str
     created_at: datetime
+    client: str
     user: UserModel
