@@ -272,7 +272,7 @@ table {
     min-height: 30px;
     max-height: 150px;
     padding: 4px 4px 0px 4px;
-    overflow: hidden;
+    overflow: auto;
     display: inline-block;
     width: 98.6%;
 }
