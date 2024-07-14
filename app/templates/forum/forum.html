@@ -1,0 +1,199 @@
+{# templates/forum/forum.html #}
+
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="header-text">
+    <a href="/forum" style="color:#5a5399">Index</a> »
+    {% for parent_forum in forum|list_parent_forums|reverse %}
+        <a href="/forum/{{ parent_forum.id }}">
+            {{ parent_forum.name }}
+        </a> »
+    {% endfor %}
+    <a href="/forum/{{ forum.id }}">
+        {{ forum.name }}
+    </a>
+</h1>
+<div>
+    {# Page count #}
+    <table width='100%'>
+        <tbody>
+        <tr>
+            <td align="left">
+                Page <strong>{{ current_page + 1 }}</strong> of <strong>{{ total_pages + 1 }}</strong>
+                [ {{ topic_count }} topic{{ 's' if topic_count != 1 else '' }} ]
+            </td>
+            {% if total_pages > 0 %}
+            <td align="right">
+                <a onclick="jumpToPage();">Jump</a> |
+                {# Pagination #}
+                {% if current_page > 1 %}
+                    {# "Back" button #}
+                    <a href="/forum/{{ forum.id }}?page={{ current_page }}">Back</a>
+                    {# First page #}
+                    <a href="/forum/{{ forum.id }}?page=1">1</a>
+                    ...
+                {% endif %}
+
+                {# Calculate page range #}
+                {% set page_start = (0, current_page - 1)|max %}
+                {% set page_end = (total_pages, page_start + 3)|min %}
+
+                {% for page in range(page_start, page_end + 1) %}
+                    {% if page != current_page %}
+                        <a href="/forum/{{ forum.id }}?page={{ page + 1 }}">{{ page + 1 }}</a>
+                    {% else %}
+                        <strong>{{ page + 1 }}</strong>
+                    {% endif %}
+                {% endfor %}
+
+                {% if page_end < total_pages - 1 %}
+                    ...
+                    {# Last page after "..." #}
+                    <a href="/forum/{{ forum.id }}?page={{ total_pages + 1 }}">{{ total_pages + 1 }}</a>
+                    {# "Next" button #}
+                    <a href="/forum/{{ forum.id }}?page={{ current_page + 2 }}">Next</a>
+                {% endif %}
+            </td>
+            {% endif %}
+        </tr>
+        </tbody>
+    </table>
+    {# Subforums #}
+    <table width="100%" class="subforum-table">
+        <tbody>
+            {% for subforum in sub_forums %}
+                <tr>
+                    <td width="50%" class="subforum-head" style="background-color: #e3e1fa">
+                        <img src="/images/icons/forum/titanic.png"alt=""
+                             width="34"
+                             style="float: left; margin-right: 12px;">
+                        <div>
+                            <a href="/forum/{{ subforum.id }}">{{ subforum.name }}</a>
+                            <p>{{ subforum.description }}</p>
+                        </div>
+                    </td>
+                    <td style="text-align: center;" class="subforum-stats">
+                        <p class="subforum-topiccount">{{ "{:,}".format(subforum_stats[subforum.id][0]) }}</p>
+                        <p class="subforum-postcount">{{ "{:,}".format(subforum_stats[subforum.id][1]) }}</p>
+                    </td>
+                    <td style="text-align: right;" class="subforum-topics">
+                        {% set recent = subforum_recent[subforum.id] %}
+                        {% if recent %}
+                            <a href="/forum/{{ forum.id }}/t/{{ recent.id }}">
+                                {{ recent.title }}
+                            </a>
+                            <p>
+                                {{ recent.created_at|timeago }} by
+                                <a href="/u/{{ recent.creator_id }}">{{ recent.creator.name }}</a>
+                            </p>
+                        {% else %}
+                            <p>No recent topics</p>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {# Topics #}
+    {% if announcements or recent_topics %}
+    <table width="100%" class="topics-table">
+        <thead><tr>
+            {% if recent_topics|get_attributes('icon')|any %}
+            <th colspan="3">Topics</th>
+            {% else %}
+            <th colspan="2">Topics</th>
+            {% endif %}
+            <th>Author</th>
+            <th></th>
+            <th>Last Post</th>
+        </tr></thead>
+        <tbody>
+            {% if announcements %}
+                <tr class="table-header">
+                    <td colspan=4 class="topic-header">Announcements</td>
+                </tr>
+                {% for topic in announcements %}
+                    {% set index = loop.index0 %}
+                    {% include 'forum/topic_preview.html' %}
+                {% endfor %}
+            {% endif %}
+            {% if recent_topics %}
+                <tr class="table-header">
+                    <td colspan=4 class="topic-header">Topics</td>
+                </tr>
+                {% for topic in recent_topics %}
+                    {% set index = loop.index0 %}
+                    {% include 'forum/topic_preview.html' %}
+                {% endfor %}
+            {% endif %}
+        </tbody>
+    </table>
+    {% else %}
+    <p style="margin-top: 10px; margin-left: 2.5px;">
+        Hmmm... seems like nothing was posted here yet.
+        {% if current_user.is_authenticated %}
+        Why not be the first one?
+        {% endif %}
+    </p><br>
+    {% endif %}
+    <table width='100%'>
+        <tbody>
+            <tr>
+                {% if total_pages > 0 %}
+                <td align="right" style="float: right">
+                    <a onclick="jumpToPage();">Jump</a> |
+                    {# Pagination #}
+                    {% if current_page > 1 %}
+                        {# "Back" button #}
+                        <a href="/forum/{{ forum.id }}?page={{ current_page }}">Back</a>
+                        {# First page #}
+                        <a href="/forum/{{ forum.id }}?page=1">1</a>
+                        ...
+                    {% endif %}
+
+                    {# Calculate page range #}
+                    {% set page_start = (0, current_page - 1)|max %}
+                    {% set page_end = (total_pages, page_start + 3)|min %}
+
+                    {% for page in range(page_start, page_end + 1) %}
+                    {% if page != current_page %}
+                    <a href="/forum/{{ forum.id }}?page={{ page + 1 }}">{{ page + 1 }}</a>
+                    {% else %}
+                    <strong>{{ page + 1 }}</strong>
+                    {% endif %}
+                    {% endfor %}
+
+                    {% if page_end < total_pages - 1 %}
+                    ...
+                    {# Last page after "..." #}
+                    <a href="/forum/{{ forum.id }}?page={{ total_pages + 1 }}">{{ total_pages + 1 }}</a>
+                    {# "Next" button #}
+                    <a href="/forum/{{ forum.id }}?page={{ current_page + 2 }}">Next</a>
+                    {% endif %}
+                </td>
+                {% endif %}
+                {% if current_user.is_authenticated %}
+                <td align="left" style="float: left">
+                    <div class="post-buttons-large" style="margin-left: 0;">
+                        <a href="/forum/{{ forum.id }}/create" class="button-blue">Create</a>
+                    </div>
+                </td>
+                {% endif %}
+            </tr>
+        </tbody>
+    </table>
+</div>
+<script>
+    function jumpToPage() {
+        var page = prompt("Enter the page to jump to:")
+
+        if (page !== null && !isNaN(page) && page > 0)
+        {
+            var query = new URLSearchParams();
+            query.set('page', page);
+            location.search = query.toString();
+        }
+    }
+</script>
+{% endblock content %}

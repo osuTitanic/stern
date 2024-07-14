@@ -22,34 +22,30 @@ def recent_scores(
         if not user_id.isdigit():
             # Lookup user by username
             if not (user := users.fetch_by_name_extended(user_id, session=session)):
-                return Response(
-                    response=(),
-                    status=404,
-                    mimetype='application/json'
-                )
+                return {
+                    'error': 404,
+                    'details': 'The requested user could not be found.'
+                }, 404
 
             user_id = user.id
 
         if (mode := GameMode.from_alias(mode)) is None:
-            return Response(
-                response={},
-                status=400,
-                mimetype='application/json'
-            )
+            return {
+                'error': 404,
+                'details': 'The requested mode does not exist.'
+            }, 404
 
         try:
+            min_status = max(0, request.args.get("min_status", 3, type=int))
+            until = datetime.now() - timedelta(hours=24)
+
             if date_string := request.args.get('until'):
                 until = datetime.fromisoformat(date_string)
-            else:
-                until = datetime.now() - timedelta(hours=24)
-
-            min_status = max(0, int(request.args.get("min_status", 3)))
         except ValueError:
-            return Response(
-                response={},
-                status=400,
-                mimetype='application/json'
-            )
+            return {
+                'error': 400,
+                'details': 'Invalid parameters.'
+            }, 400
 
         # Limit time
         until = sorted((

@@ -209,9 +209,13 @@ function createScoreElement(score, index, type)
 
   const ppWeight = document.createElement("div");
   ppWeight.classList.add("pp-display-weight");
-  ppWeight.appendChild(document.createTextNode("weighted "));
-  ppWeight.appendChild(ppWeightPercent);
-  ppWeight.appendChild(document.createTextNode(` (${(score.pp * (0.95**(index + topScoreOffset))).toFixed(0)}pp)`));
+
+  if (type == "top")
+  {
+    ppWeight.appendChild(document.createTextNode("weighted "));
+    ppWeight.appendChild(ppWeightPercent);
+    ppWeight.appendChild(document.createTextNode(` (${(score.pp * (0.95**(index + topScoreOffset))).toFixed(0)}pp)`));
+  }
 
   if (!approvedRewards && score.beatmap.status > 2)
   {
@@ -219,7 +223,7 @@ function createScoreElement(score, index, type)
     ppText.innerHTML = '<i class="fa-regular fa-heart"></i>';
     ppText.title = `${score.pp.toFixed(0)}pp (if ranked)`;
     // Reset pp weight text
-    ppWeight.innerHTML = "weighted <b>0%</b> (0pp)";
+    ppWeight.innerHTML = type == "top" ? "weighted <b>0%</b> (0pp)" : "";
   }
 
   const iconContainer = document.createElement("div");
@@ -1076,6 +1080,99 @@ function removeFriend()
     });
 
   return false;
+}
+
+function removeFavourite(setId)
+{
+  fetch(`/api/profile/${currentUser}/favourites/delete?set_id=${setId}`)
+    .then(response => {
+      if (!response.ok)
+        throw new Error(`${response.status}: "${response.statusText}"`);
+      return response.json();
+    })
+    .then(data => {
+      const favouritesContainer = document.querySelector(".favourites");
+      const container = document.getElementById(`favourite-${setId}`);
+      const beatmapsContainer = document.getElementById('beatmaps');
+
+      console.log(beatmapsContainer.scrollHeight);
+
+      if (!container)
+        return;
+
+      container.style.opacity = 0;
+
+      setTimeout(() => {
+        container.remove();
+
+        if (data.length == 0)
+        {
+          // User has no favourite beatmaps anymore
+          const textElement = document.createElement('p');
+          textElement.style.margin = '5px';
+          textElement.innerHTML = 'This player has no favourite beatmaps :(';
+          favouritesContainer.appendChild(textElement);
+        }
+      }, 350);
+
+      setTimeout(() => {
+        slideUp(beatmapsContainer);
+
+        setTimeout(() => {
+          slideDown(beatmapsContainer)
+        }, 150);
+      }, 400);
+    })
+    .catch(error => {
+      console.error(error);
+    });
+
+  return false;
+}
+
+function deleteBeatmap(setId) {
+  const proceed = confirm('Are you sure you want to delete this beatmap?');
+
+  if (!proceed)
+    return;
+
+  fetch(`/api/profile/${currentUser}/beatmaps/delete?set_id=${setId}`)
+    .then(response => {
+      return response.json();
+    })
+    .then(data => {
+      if (data.error)
+      {
+        alert(data.details);
+        return;
+      }
+
+      window.location.href = `/u/${currentUser}#beatmaps`;
+      window.location.reload();
+    })
+    .catch(error => {
+      console.error(error);
+    });
+}
+
+function reviveBeatmap(setId) {
+  fetch(`/api/profile/${currentUser}/beatmaps/revive?set_id=${setId}`)
+  .then(response => {
+    return response.json();
+  })
+  .then(data => {
+    if (data.error)
+    {
+      alert(data.details);
+      return;
+    }
+
+    window.location.href = `/u/${currentUser}#beatmaps`;
+    window.location.reload();
+  })
+  .catch(error => {
+    console.error(error);
+  });
 }
 
 window.addEventListener('load', () => {

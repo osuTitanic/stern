@@ -2,9 +2,8 @@
 from app.common.database.repositories import users
 from app.common.constants import Playstyle
 
-from flask import Blueprint, Response, request
+from flask import Blueprint, request
 import flask_login
-import json
 
 router = Blueprint("playstyle", __name__)
 
@@ -12,18 +11,16 @@ router = Blueprint("playstyle", __name__)
 @flask_login.login_required
 def add_playstyle():
     if not (playstyle_name := request.args.get('type', type=str)):
-        return Response(
-            response=(),
-            status=400,
-            mimetype='application/json'
-        )
+        return {
+            'error': 400,
+            'details': 'The request is missing the required "type" parameter.'
+        }, 400
 
     if playstyle_name not in Playstyle._member_names_:
-        return Response(
-            response=(),
-            status=400,
-            mimetype='application/json'
-        )
+        return {
+            'error': 400,
+            'details': 'The requested playstyle does not exist.'
+        }, 400
 
     new_playstyle = Playstyle(flask_login.current_user.playstyle) | Playstyle[playstyle_name]
 
@@ -32,28 +29,22 @@ def add_playstyle():
         {'playstyle': new_playstyle.value}
     )
 
-    return Response(
-        response=json.dumps({'playstyle': new_playstyle.value}),
-        status=200,
-        mimetype='application/json'
-    )
+    return {'playstyle': new_playstyle.value}
 
 @router.get('/playstyle/remove')
 @flask_login.login_required
 def remove_playstyle():
     if not (playstyle_name := request.args.get('type', type=str)):
-        return Response(
-            response=(),
-            status=400,
-            mimetype='application/json'
-        )
+        return {
+            'error': 400,
+            'details': 'The request is missing the required "type" parameter.'
+        }, 400
 
     if playstyle_name not in Playstyle._member_names_:
-        return Response(
-            response=(),
-            status=400,
-            mimetype='application/json'
-        )
+        return {
+            'error': 400,
+            'details': 'The requested playstyle does not exist.'
+        }, 400
 
     new_playstyle = Playstyle(flask_login.current_user.playstyle) & ~Playstyle[playstyle_name]
 
@@ -62,8 +53,4 @@ def remove_playstyle():
         {'playstyle': new_playstyle.value}
     )
 
-    return Response(
-        response=json.dumps({'playstyle': new_playstyle.value}),
-        status=200,
-        mimetype='application/json'
-    )
+    return {'playstyle': new_playstyle.value}

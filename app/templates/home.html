@@ -50,7 +50,7 @@
         <div class="bottom-stats">
             <div class="stats-wrapper">
                 <h2 class="headers">Online Users<span>Over the last 24 hours</span></h2>
-                <img src="/api/graph/activity" alt="User Activity">
+                <img src="/api/activity" alt="User Activity">
             </div>
 
             <div class="chat-wrapper">
@@ -114,23 +114,23 @@
                     </tr>
                 </thead>
                 <tbody>
-                {% for count, set in beatmapsets %}
+                {% for plays in most_played %}
                     {% if loop.index0 % 2 %}
                         <tr class="light-row">
                     {% else %}
                         <tr class="dark-row">
                     {% endif %}
-                        <td>{{ count }}</th>
+                        <td>{{ plays.count }}</th>
                         <td>
-                            <a href="/s/{{ set.id }}">
-                                <img src="http{{ 's' if config.ENABLE_SSL else '' }}://s.{{ config.DOMAIN_NAME }}/mt/{{ set.id }}" loading="lazy" alt="image"/>
-                                {{ set.artist }} - {{ set.title }}
+                            <a href="/b/{{ plays.beatmap_id }}">
+                                <img src="{{ config.STATIC_BASEURL }}/mt/{{ plays.beatmapset.id }}" loading="lazy" alt="image"/>
+                                {{ plays.beatmapset.artist }} - {{ plays.beatmapset.title }} [{{ plays.beatmap.version }}]
                             </a>
                         </td>
-                    {% if set.server == 0 %}
-                        <td><a href="https://osu.ppy.sh/u/{{ set.creator }}">{{ set.creator }}</a></td>
+                    {% if plays.beatmapset.server == 0 %}
+                        <td><a href="https://osu.ppy.sh/u/{{ plays.beatmapset.creator }}">{{ plays.beatmapset.creator }}</a></td>
                     {% else %}
-                        <td><a href="/u/{{ set.creator }}">{{ set.creator }}</a></td>
+                        <td><a href="/u/{{ plays.beatmapset.creator_id }}">{{ plays.beatmapset.creator }}</a></td>
                     {% endif %}
                     </tr>
                 {% endfor %}

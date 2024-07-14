@@ -1,19 +1,107 @@
 {# templates/editor.html #}
 
-<p class="bbcode-help">
+<p id="bbcode-help">
     This section is formatted in bbcode. Learn more about it <a href="https://osu.ppy.sh/wiki/en/BBCode">here</a>!
 </p>
-<textarea class="bbcode-editor" name="bbcode" style="resize: none; min-height: {{ context['min-height'] }};">
+<textarea class="bbcode-editor" name="bbcode" style="resize: {{ context['resize'] or 'none' }}; min-height: {{ context['min-height'] }};">
 {%- if context['current'] -%}
-{{ context['current'] | replace('\\r\\n', '\n') | replace('\\n', '\\n') }}
+    {{ context['current'] | replace('\\r\\n', '\n') | replace('\\n', '\\n') }}
 {%- endif -%}
-</textarea>
-<br>
-<input type="hidden" name="user_id" value="{{ context['user-id'] }}">
-<input type="submit" value="{{ context['submit-text'] }}">
-<button class="bbcode-preview-button" onclick="return loadBBCodePreview(this)">Preview</button>
-{% if context['current'] %}
-<div class="bbcode-preview bbcode">
-{{ context['current']|bbcode_nowrap|safe }}
+</textarea><br>
+
+{% if context['forum-controls'] %}
+<div style="margin: 12px; float: right; text-align: right; font-size: 90%">
+    {% if current_user.is_admin and action != 'edit' and topic %}
+    <div style="margin-bottom: 8px">
+        Status:
+        <input type="text"
+               name="topic-status"
+               value="{{ topic.status_text or '' }}"
+               style="min-width: 300px"
+               class="nav-search">
+    </div>
+    {% endif %}
+
+    <input type="checkbox"
+           class="radio"
+           name="notify"
+           {% if is_subscribed %}
+           checked="checked"
+           {% endif %}>
+
+    <label for="notify">
+        Notify me when a reply is posted
+    </label>
+
+    {% if topic and current_user.is_moderator %}
+        {% if action != 'edit' %}
+            <div style="margin-top: 5px">
+                <input type="checkbox"
+                    class="radio"
+                    name="locked"
+                    {% if topic.locked_at %}
+                    checked="checked"
+                    {% endif %}>
+
+                <label for="locked">
+                    Lock this topic
+                </label>
+            </div>
+        {% else %}
+            {% set post = repositories.posts.fetch_one(action_id) %}
+            <div style="margin-top: 5px">
+                <input type="checkbox"
+                    class="radio"
+                    name="edit-locked"
+                    {% if post.edit_locked %}
+                    checked="checked"
+                    {% endif %}>
+
+                <label for="edit-locked">
+                    Lock this post
+                </label>
+            </div>
+        {% endif %}
+    {% endif %}
+
+    {% if current_user.is_moderator and context['topic-controls'] %}
+        <div style="margin-bottom: 10px; margin-top: 10px">
+            Post topic as:
+            <input type="radio" name="type" value="global" id="global" {% if topic_type == 'global' %} checked {% endif %}>
+            <label for="global">Global</label>
+            <input type="radio" name="type" value="pinned" id="pinned" {% if topic_type == 'pinned' %} checked {% endif %}>
+            <label for="pinned">Pinned</label>
+            <input type="radio" name="type" value="announcement" id="announcement" {% if topic_type == 'announcement' %} checked {% endif %}>
+            <label for="announcement">Announcement</label>
+        </div>
+    {% endif %}
 </div>
+{% endif %}
+
+{% if beatmapset and beatmapset.creator_id != current_user.id %}
+<div style="font-size: 90%; padding: 5px; margin-top: 6px">
+    You will gain <b>{{ 1 if datetime.now() - topic.last_post_at < timedelta(days=7) else 2 }} kudosu</b>
+    for this post if it is deemed as helpful by the map's creator.
+</div>
+{% endif %}
+
+<input type="hidden" name="user_id" value="{{ context['user-id'] }}">
+<div class="post-buttons" style="justify-content: flex-start;">
+    <input type="submit" value="{{ context['submit-text'] }}" class="button-blue">
+    <button class="bbcode-preview-button button-blue" onclick="return loadBBCodePreview(this)">Preview</button>
+    {% if context['cancel'] %}
+        <a href="../" class="button-red">Cancel</a>
+    {% endif %}
+    {% if context['draft'] %}
+        <input formaction="../draft"
+               class="button-grey"
+               type="submit"
+               value="Save Draft">
+    {% endif %}
+</div>
+
+{% if context['current'] %}
+    <div class="bbcode-preview bbcode">
+        {{ context['current']|bbcode_nowrap|safe }}
+    </div>
 {% endif %}

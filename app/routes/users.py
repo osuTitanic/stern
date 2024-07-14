@@ -1,16 +1,19 @@
 
 from app.common.database.repositories import (
     infringements,
+    nominations,
+    beatmapsets,
     activities,
+    modding,
     groups,
     names,
     users,
     stats
 )
 
+from app.common.constants import GameMode, DatabaseStatus
 from flask import Blueprint, abort, redirect, request
 from app.common.cache import status, leaderboards
-from app.common.constants import GameMode
 
 import config
 import utils
@@ -61,8 +64,52 @@ def userpage(query: str):
         score_rank_country = leaderboards.score_rank_country(user.id, int(mode), user.country)
         ppv1_rank = leaderboards.ppv1_rank(user.id, int(mode))
 
+        user_beatmapsets = beatmapsets.fetch_by_creator(
+            user.id,
+            session=session
+        )
+
+        graveyarded_beatmapsets = [
+            s for s in user_beatmapsets
+            if s.status == DatabaseStatus.Graveyard
+        ]
+
+        wip_beatmapsets = [
+            s for s in user_beatmapsets
+            if s.status == DatabaseStatus.WIP
+        ]
+
+        pending_beatmapsets = [
+            s for s in user_beatmapsets
+            if s.status == DatabaseStatus.Pending
+        ]
+
+        ranked_beatmapsets = [
+            s for s in user_beatmapsets
+            if s.status in (DatabaseStatus.Ranked, DatabaseStatus.Approved)
+        ]
+
+        qualified_beatmapsets = [
+            s for s in user_beatmapsets
+            if s.status == DatabaseStatus.Qualified
+        ]
+
+        loved_beatmapsets = [
+            s for s in user_beatmapsets
+            if s.status == DatabaseStatus.Loved
+        ]
+
+        beatmapset_categories = {
+            'Ranked': ranked_beatmapsets,
+            'Loved': loved_beatmapsets,
+            'Qualified': qualified_beatmapsets,
+            'Pending': pending_beatmapsets,
+            'WIP': wip_beatmapsets,
+            'Graveyarded': graveyarded_beatmapsets
+        }
+
         return utils.render_template(
-            name='user.html',
+            template_name='user.html',
             user=user,
             css='user.css',
             mode=int(mode),
@@ -70,13 +117,18 @@ def userpage(query: str):
             is_online=status.exists(user.id),
             achievement_categories=app.constants.ACHIEVEMENTS,
             achievements={a.name:a for a in user.achievements},
+            total_kudosu=modding.total_amount_by_user(user.id, session=session),
+            recent_mods=modding.fetch_range_by_user(user.id, session=session),
+            nominations=nominations.fetch_by_user(user.id, session=session),
             activity=activities.fetch_recent(user.id, int(mode), session=session),
             current_stats=stats.fetch_by_mode(user.id, int(mode), session=session),
+            total_posts=users.fetch_post_count(user.id, session=session),
             groups=groups.fetch_user_groups(user.id, session=session),
             site_title=f"{user.name} - Player Info",
             site_description=f"Rank ({GameMode(int(mode)).formatted}): Global: #{pp_rank} | Country: #{pp_rank_country}",
-            site_image=f"https//osu.{config.DOMAIN_NAME}/a/{user.id}_000.png",
-            site_url=f"https://osu.{config.DOMAIN_NAME}/u/{user.id}",
+            site_image=f"{config.OSU_BASEURL}/a/{user.id}_000.png",
+            site_url=f"{config.OSU_BASEURL}/u/{user.id}",
+            beatmapset_categories=beatmapset_categories,
             pp_rank=pp_rank,
             pp_rank_country=pp_rank_country,
             score_rank=score_rank,

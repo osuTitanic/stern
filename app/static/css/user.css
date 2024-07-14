@@ -272,7 +272,7 @@
     background-color: #e7e4fc;
     text-align: center;
     font-weight: bold;
-    font-size: 90%;
+    font-size: 80%;
     border-top: solid 2px #dad7fb;
     border-left: solid 2px #dad7fb;
     border-right: solid 2px #dad7fb;
@@ -494,6 +494,7 @@
     margin: 3px;
     padding: 2.5px;
     width: 49%;
+    transition: opacity 0.2s ease-in-out;
 }
 
 .profile-beatmap img {

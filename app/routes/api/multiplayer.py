@@ -2,7 +2,7 @@
 from app.common.database.repositories import matches, events
 from app.models import MatchModel, MatchEventModel
 
-from flask import Blueprint, Response, request
+from flask import Blueprint, request
 from datetime import datetime
 
 import app
@@ -13,7 +13,10 @@ router = Blueprint('multiplayer', __name__)
 def get_match(id: int):
     with app.session.database.managed_session() as session:
         if not (match := matches.fetch_by_id(id, session=session)):
-            return Response({}, 404)
+            return {
+                'error': 404,
+                'details': 'The requested match could not be found.'
+            }, 404
 
         return MatchModel.model_validate(match, from_attributes=True) \
                          .model_dump()
@@ -22,7 +25,10 @@ def get_match(id: int):
 def get_events(id: int):
     with app.session.database.managed_session() as session:
         if not (match := matches.fetch_by_id(id, session=session)):
-            return Response({}, 404)
+            return {
+                'error': 404,
+                'details': 'The requested match could not be found.'
+            }, 404
 
         start_time = match.created_at
 

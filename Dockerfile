@@ -30,4 +30,5 @@ ENV FRONTEND_WORKERS $FRONTEND_WORKERS
 CMD uwsgi --http 0.0.0.0:80 \
           -p ${FRONTEND_WORKERS} \
           -w app:flask \
-          --enable-threads
+          --enable-threads \
+          --lazy-apps

@@ -21,20 +21,18 @@ def leader_scores(
         if not user_id.isdigit():
             # Lookup user by username
             if not (user := users.fetch_by_name_extended(user_id, session=session)):
-                return Response(
-                    response=(),
-                    status=404,
-                    mimetype='application/json'
-                )
+                return {
+                    'error': 404,
+                    'details': 'The requested user could not be found.'
+                }, 404
 
             user_id = user.id
 
         if (mode := GameMode.from_alias(mode)) is None:
-            return Response(
-                response={},
-                status=404,
-                mimetype='application/json'
-            )
+            return {
+                'error': 400,
+                'details': 'The requested mode does not exist.'
+            }, 400
 
         offset = request.args.get('offset', default=0, type=int)
         limit = max(1, min(50, request.args.get('limit', default=50, type=int)))

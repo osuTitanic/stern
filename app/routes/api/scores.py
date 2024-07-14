@@ -18,11 +18,10 @@ def get_score(score_id: int) -> dict | Response:
         score = scores.fetch_by_id(score_id, session=session)
 
         if not score:
-            return Response(
-                response={},
-                status=404,
-                mimetype="application/json"
-            )
+            return {
+                'error': 404,
+                'details': 'The requested score could not be found.'
+            }, 404
 
         return ScoreModel.model_validate(score, from_attributes=True) \
                          .model_dump()

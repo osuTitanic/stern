@@ -10,6 +10,10 @@
     {{beatmapset.title if beatmapset.title}}
     {% if beatmapset.server == 0 %}
     <p>View on <a href="https://osu.ppy.sh/b/{{ beatmap.id }}">osu.ppy.sh</a></p>
+    {% else %}
+        {% if beatmapset.topic_id %}
+        <p>View on <a href="/forum/t/{{ beatmapset.topic_id }}">forums</a></p>
+        {% endif %}
     {% endif %}
 </h1>
 <div class="beatmap">
@@ -92,7 +96,7 @@
                     <div class="starfield" style="width: {{ image_width*max_stars }}px">
                         <div class="starfield-selected" style="width: {{ image_width*beatmap.diff }}px"></div>
                     </div>
-                    ({{ beatmap.diff }})
+                    ({{ beatmap.diff|round(2) }})
                 </td>
             </tr>
             <tr>
@@ -158,6 +162,18 @@
                 </td>
                 <td>
                     <strong>Favourited {{ favourites_count }} times</strong> in total
+                    {% if current_user.is_authenticated %}
+                        <br>
+                        {% if favorite %}
+                        <a onclick="removeFavorite({{ beatmapset.id }})" style="color: red" id="favourites-button">
+                            (Remove Favourite)
+                        </a>
+                        {% else %}
+                        <a onclick="addFavorite({{ beatmapset.id }})" style="color: green" id="favourites-button">
+                            (Add Favourite)
+                        </a>
+                        {% endif %}
+                    {% endif %}
                 </td>
                 <td id="favourites">
                     {% if favourites_count > 0 %}
@@ -173,9 +189,187 @@
                     {% endif %}
                 </td>
             </tr>
+            <tr>
+                {% if nominations or beatmapset.status <= 0 %}
+                <td>Nominators:</td>
+                <td colspan="3">
+                    {% if not nominations %}
+                    <p>No one has nominated this map yet.</p>
+                    {% else %}
+                    <div>
+                        {% for nomination in nominations %}
+                        <a href="/u/{{ nomination.user_id }}">{{ nomination.user.name }}</a>{% if loop.index0 != nominations|length - 1 %},{% endif %}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </td>
+                {% endif %}
+                {% if beatmapset.server == 1 %}
+                <td>Options:</td>
+                <td {% if not nominations or beatmapset.status > 0 %} colspan="5" {% endif %}>
+                    <a href="/api/beatmaps/osu/{{ beatmap.id }}">Grab latest .osu file</a>
+                    {% if beatmapset.server == 0 %}
+                    <p><a href="https://osu.ppy.sh/beatmapsets/{{ beatmapset.id }}/discussion">Modding / Discussion</a></p>
+                    {% else %}
+                        {% if beatmapset.topic_id %}
+                        <p><a href="/forum/t/{{ beatmapset.topic_id }}">Modding / Discussion</a></p>
+                        {% endif %}
+                    {% endif %}
+                </td>
+                {% endif %}
+            </tr>
         </table>
+        {% if current_user.is_bat %}
+        <div class="bat-controls">
+            <details {% if bat_error or bat_info %}open{% endif %}>
+                <summary>BAT Controls</summary>
+                {% if bat_error %}
+                <div id="error">
+                    {{ bat_error }}
+                </div>
+                {% endif %}
+                {% if bat_info %}
+                <div id="info">
+                    {{ bat_info }}
+                </div>
+                {% endif %}
+                <table>
+                    <thead>
+                        <th><h2>General</h2></th>
+                        <th><h2>Ranking</h2></th>
+                    </thead>
+                    <tbody>
+                        <td style="width: 50%">
+                            <form action="/api/beatmaps/update" method="post">
+                                <dl>
+                                    <dt>Offset:</dt>
+                                    <dd>
+                                        <input type="text" name="offset" value="{{ beatmapset.offset }}" size="6">
+                                    </dd>
+                                    <dt>Display Title:</dt>
+                                    <dd>
+                                        <textarea name="display_title">{{ beatmapset.display_title }}</textarea>
+                                    </dd>
+                                    <dt>Genre:</dt>
+                                    <dd>
+                                        <select name="genre">
+                                            {% for genre in constants.BeatmapGenre.values() %}
+                                            <option value="{{ genre }}" {% if beatmapset.genre_id == genre %}selected{% endif %}>{{ constants.BeatmapGenre(genre).name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </dd>
+                                    <dt>Language:</dt>
+                                    <dd>
+                                        <select name="language">
+                                            {% for language in constants.BeatmapLanguage.values() %}
+                                            <option value="{{ language }}" {% if beatmapset.language_id == language %}selected{% endif %}>{{ constants.BeatmapLanguage(language).name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </dd>
+                                    <dt>Tags:</dt>
+                                    <dd>
+                                        <textarea name="tags">{{ beatmapset.tags or '' }}</textarea>
+                                    </dd>
+                                </dl>
+                                <input type="submit" value="Save">
+                                <input type="hidden" name="beatmapset_id" value="{{ beatmapset.id }}">
+                            </form>
+                        </td>
+                        <td>
+                            <p>
+                                The current status of this beatmap is "{{ constants.DatabaseStatus(beatmapset.status).name }}".
+                                {% if nominations|length >= beatmapset|required_nominations and beatmapset.status <= 0 %}
+                                This beatmap has enough nominations to be qualified!
+                                {% endif %}
+                            </p><br>
+                            {% if beatmapset.status <= 0 %}
+                            {# Beatmap is not ranked #}
+                            <div>
+                                {% if not bat_nomination %}
+                                <a href="/api/beatmaps/nominations/{{ beatmapset.id }}/add" style="color: green;">
+                                    Nominate this beatmap
+                                    (Bubble)
+                                </a><br>
+                                {% else %}
+                                <p style="color: green;">
+                                    You have nominated this beatmap
+                                    (Bubbled)
+                                </p>
+                                {% endif %}
+                                <a onclick="confirmRedirect('/api/beatmaps/nominations/{{ beatmapset.id }}/reset')" style="color: red;">
+                                    Remove all nominations from this beatmap
+                                    (Pop Bubble)
+                                </a>
+                            </div><br>
+                            <div>
+                                <a onclick="confirmRedirect('/api/beatmaps/status/{{ beatmapset.id }}/update?status=3')">
+                                    Update status to "Qualified"
+                                </a><br>
+                                <a onclick="confirmRedirect('/api/beatmaps/status/{{ beatmapset.id }}/update?status=2')">
+                                    Update status to "Approved"
+                                </a><br>
+                                <a onclick="confirmRedirect('/api/beatmaps/status/{{ beatmapset.id }}/update?status=4')">
+                                    Update status to "Loved"
+                                </a><br>
+                                {% if beatmapset.server != 0 %}
+                                <a onclick="confirmRedirect('/api/beatmaps/{{ beatmapset.id }}/nuke')" style="color: red">
+                                    Nuke this beatmap
+                                </a><br>
+                                {% endif %}
+                            </div><br>
+                            {% elif beatmapset.status in (1, 2) %}
+                            <div>
+                                <a onclick="confirmRedirect('/api/beatmaps/status/{{ beatmapset.id }}/update?status=0')" style="color: red;">
+                                    Unrank this beatmap
+                                </a>
+                            </div>
+                            {% elif beatmapset.status == 3 %}
+                            <div>
+                                <a onclick="confirmRedirect('/api/beatmaps/status/{{ beatmapset.id }}/update?status=0')" style="color: red;">
+                                    Disqualify this beatmap
+                                </a>
+                            </div>
+                            {% elif beatmapset.status == 4 %}
+                            <div>
+                                <a onclick="confirmRedirect('/api/beatmaps/status/{{ beatmapset.id }}/update?status=0')" style="color: red;">
+                                    Remove from "Loved" category
+                                </a>
+                            </div>
+                            {% endif %}
+                            {% if beatmapset.server != 1 %}
+                            <div>
+                                <a href="/api/beatmaps/update/{{ beatmapset.id }}/hashes">Update beatmap hashes</a>
+                            </div><br>
+                            {% endif %}
+                            <details>
+                                <summary>Difficulty Status Updates</summary><br>
+                                <form action="/api/beatmaps/status/difficulty" method="post">
+                                    <div class="bat-diffs">
+                                        {% for beatmap in beatmapset.beatmaps %}
+                                        <div>
+                                            <dt>{{ beatmap.version }}</dt>
+                                            <dd>
+                                                <select name="status-{{ beatmap.id }}">
+                                                    {% for status in constants.DatabaseStatus.values() %}
+                                                    <option value="{{ status }}" {% if beatmap.status == status %}selected{% endif %}>{{ constants.DatabaseStatus(status).name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </dd>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                    <input type="submit" value="Update">
+                                    <input type="hidden" name="beatmapset_id" value="{{ beatmapset.id }}">
+                                </form>
+                            </details>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </details>
+        </div>
     </div>
-    {# TODO: BAT/Creator Controls #}
+    {% endif %}
     <div class="padding">
         <div class="beatmap-download">
             {% if current_user.id %}
@@ -195,8 +389,8 @@
         </div>
         <div class="beatmap-description" title="Play Song">
             <a onclick="resetOrPlayAudio('beatmap-preview')">
-                <img src="http{{ 's' if config.ENABLE_SSL else '' }}://s.{{ config.DOMAIN_NAME }}/mt/{{ beatmapset.id }}l" alt="">
-                <audio id="beatmap-preview" src="http{{ 's' if config.ENABLE_SSL else '' }}://s.{{ config.DOMAIN_NAME }}/mp3/preview/{{ beatmapset.id }}.mp3" preload="auto"></audio>
+                <img src="{{ config.STATIC_BASEURL }}/mt/{{ beatmapset.id }}l" alt="">
+                <audio id="beatmap-preview" src="{{ config.STATIC_BASEURL }}/mp3/preview/{{ beatmapset.id }}.mp3" preload="auto"></audio>
             </a>
             {% if beatmapset.description %}
                 {# NOTE: Small workaround for existsing html-bbcode #}
@@ -418,7 +612,7 @@
                 {% endif %}
                 <th><strong>Misses</strong></th>
                 <th><strong>Mods</strong></th>
-                {% if not current_user.is_anonymous %}
+                {% if current_user.is_authenticated %}
                 {# TODO: Report button #}
                 <th>
                     {# Replay Downloads #}
@@ -477,7 +671,7 @@
                 {% endif %}
                 <td>{{ score.nMiss }}</td>
                 <td>{{ score.mods|short_mods }}</td>
-                {% if not current_user.is_anonymous %}
+                {% if current_user.is_authenticated %}
                 {# Replay Downloads #}
                 <td style="text-align: center;">
                     <a href="/scores/{{ score.id }}/download" target="_blank">Replay</a>
@@ -490,5 +684,44 @@
     {% endif %}
     {% endif %}
 </div>
+<script>
+    function addFavorite(beatmapset_id) {
+        fetch(`/api/profile/${currentUser}/favourites/add?set_id=${beatmapset_id}`)
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error('Failed to add favourite');
+            })
+            .then(data => {
+                const favourites = document.getElementById('favourites-button');
+                favourites.innerHTML = '(Remove Favourite)';
+                favourites.style.color = 'red';
+                favourites.onclick = () => removeFavorite(beatmapset_id);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+
+    function removeFavorite(beatmapset_id) {
+        fetch(`/api/profile/${currentUser}/favourites/delete?set_id=${beatmapset_id}`)
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error('Failed to remove favourite');
+            })
+            .then(data => {
+                const favourites = document.getElementById('favourites-button');
+                favourites.innerHTML = '(Add Favourite)';
+                favourites.style.color = 'green';
+                favourites.onclick = () => addFavorite(beatmapset_id);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+</script>
 {# TODO: Beatmap Comments #}
 {% endblock content %}

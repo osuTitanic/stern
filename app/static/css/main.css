@@ -387,7 +387,8 @@ input[type="submit"]:hover {
 .bbcode {
     padding: 8px;
     border-radius: 2.5px;
-    overflow: scroll;
+    overflow: hidden;
+    overflow-wrap: anywhere;
 }
 
 .bbcode h2 {
@@ -407,8 +408,9 @@ input[type="submit"]:hover {
     font-size: 110%;
 }
 
-.bbcode-help {
-    font-size: 80%
+#bbcode-help {
+    font-size: 80%;
+    color: #999999;
 }
 
 .bbcode-preview-button {
@@ -424,10 +426,15 @@ input[type="submit"]:hover {
     background-color: rgb(205, 205, 240);
 }
 
+.bbcode img {
+    max-width: 660px;
+}
+
 .bbcode-preview {
     margin: 5px 5px 1.5px 5px;
     background-color: #dbd8fd;
     border-radius: 2.5px;
+    min-width: 90%;
 }
 
 .popup {
@@ -444,4 +451,20 @@ input[type="submit"]:hover {
     text-align: right;
     cursor: pointer;
     font-size: 150%;
+}
+
+#error {
+    background-color: #eab9d6;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+    margin: 10px;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+#info {
+    background-color: #e1f1fa;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    margin: 10px;
+    border-radius: 5px;
+    padding: 10px;
 }

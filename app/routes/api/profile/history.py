@@ -20,20 +20,18 @@ def rank_history(
         if not user_id.isdigit():
             # Lookup user by username
             if not (user := users.fetch_by_name_extended(user_id, session=session)):
-                return Response(
-                    response=(),
-                    status=404,
-                    mimetype='application/json'
-                )
+                return {
+                    'error': 404,
+                    'details': 'The requested user could not be found.'
+                }, 404
 
             user_id = user.id
 
         if (mode := GameMode.from_alias(mode)) is None:
-            return Response(
-                response={},
-                status=400,
-                mimetype='application/json'
-            )
+            return {
+                'error': 400,
+                'details': 'The requested mode does not exist.'
+            }, 400
 
         if date_string := request.args.get('until'):
             until = datetime.fromisoformat(date_string)
@@ -59,29 +57,26 @@ def plays_history(
     mode: str
 ) -> List[dict]:
     if (mode := GameMode.from_alias(mode)) is None:
-        return Response(
-            response={},
-            status=400,
-            mimetype='application/json'
-        )
+        return {
+            'error': 400,
+            'details': 'The requested mode does not exist.'
+        }, 400
 
     with app.session.database.managed_session() as session:
         if not user_id.isdigit():
             # Lookup user by username
             if not (user := users.fetch_by_name_extended(user_id, session=session)):
-                return Response(
-                    response=(),
-                    status=404,
-                    mimetype='application/json'
-                )
+                return {
+                    'error': 404,
+                    'details': 'The requested user could not be found.'
+                }, 404
 
         else:
             if not (user := users.fetch_by_id(user_id, session=session)):
-                return Response(
-                    response=(),
-                    status=404,
-                    mimetype='application/json'
-                )
+                return {
+                    'error': 404,
+                    'details': 'The requested user could not be found.'
+                }, 404
 
         if date_string := request.args.get('until'):
             until = datetime.fromisoformat(date_string)
@@ -107,29 +102,26 @@ def replay_views_history(
     mode: str
 ) -> List[dict]:
     if (mode := GameMode.from_alias(mode)) is None:
-        return Response(
-            response={},
-            status=400,
-            mimetype='application/json'
-        )
+        return {
+            'error': 400,
+            'details': 'The requested mode does not exist.'
+        }, 400
 
     with app.session.database.managed_session() as session:
         if not user_id.isdigit():
             # Lookup user by username
             if not (user := users.fetch_by_name_extended(user_id, session=session)):
-                return Response(
-                    response=(),
-                    status=404,
-                    mimetype='application/json'
-                )
+                return {
+                    'error': 404,
+                    'details': 'The requested user could not be found.'
+                }, 404
 
         else:
             if not (user := users.fetch_by_id(user_id, session=session)):
-                return Response(
-                    response=(),
-                    status=404,
-                    mimetype='application/json'
-                )
+                return {
+                    'error': 404,
+                    'details': 'The requested user could not be found.'
+                }, 404
 
         if date_string := request.args.get('until'):
             until = datetime.fromisoformat(date_string)
