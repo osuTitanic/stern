@@ -21,6 +21,9 @@ def home():
         return utils.render_template(
             "forum/home.html",
             css='forums.css',
+            title="Forums - Titanic",
+            site_title="Titanic » Forums » Home",
+            site_description="Discuss and share your thoughts with the community.",
             forums=forum_dict,
             forum_stats={
                 forum.id: (
