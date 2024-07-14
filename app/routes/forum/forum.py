@@ -74,6 +74,9 @@ def forum_view(forum_id: int):
         return utils.render_template(
             "forum/forum.html",
             css='forums.css',
+            title=f"{forum.name} - Titanic",
+            site_title=f"Titanic » Forums » {forum.name}",
+            site_description=forum.description,
             forum=forum,
             sub_forums=sub_forums,
             subforum_stats={
