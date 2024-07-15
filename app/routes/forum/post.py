@@ -240,10 +240,10 @@ def get_icon_id(topic: DBForumTopic) -> int | None:
     )
 
     if not topic.can_change_icon and not is_privileged:
-        return
+        return -2
 
     if current_user.id != topic.creator_id and not is_privileged:
-        return
+        return -2
 
     icon_id = request.form.get(
         'icon',
@@ -252,7 +252,7 @@ def get_icon_id(topic: DBForumTopic) -> int | None:
     )
 
     if topic.icon_id == icon_id:
-        return
+        return -2
 
     if icon_id != -1:
         return icon_id
@@ -400,12 +400,18 @@ def handle_post(topic: DBForumTopic, _: int, session: Session) -> Response:
             f"/forum/{topic.forum_id}/t/{topic.id}"
         )
 
+    new_icon = get_icon_id(topic)
+
     post = posts.create(
         topic.id,
         topic.forum_id,
         current_user.id,
         content,
-        icon_id=get_icon_id(topic),
+        icon_id=(
+            new_icon
+            if new_icon != -2
+            else None
+        ),
         session=session
     )
 
@@ -431,8 +437,8 @@ def handle_post(topic: DBForumTopic, _: int, session: Session) -> Response:
     topic_updates = {
         'last_post_at': datetime.now(),
         'icon_id': (
-            post.icon_id
-            if post.icon_id != None
+            new_icon
+            if new_icon != -2
             else topic.icon_id
         )
     }
