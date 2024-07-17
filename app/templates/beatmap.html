@@ -143,12 +143,16 @@
                     Submitted:
                     {% if beatmapset.status > 0 %}
                     <br>{{ Status(beatmapset.status).name }}:
+                    {% else %}
+                    <br>Last Updated:
                     {% endif %}
                 </td>
                 <td>
                     {{ beatmapset.created_at.strftime('%b %d, %Y') }}
                     {% if beatmapset.status > 0 and beatmapset.approved_at %}
                     <br>{{ beatmapset.approved_at.strftime('%b %d, %Y') }}
+                    {% else %}
+                    <br>{{ beatmapset.last_update.strftime('%b %d, %Y') }}
                     {% endif %}
                 </td>
                 <td>Average Rating:</td>
