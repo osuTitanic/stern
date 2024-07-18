@@ -139,7 +139,7 @@
                             </div>
                         </div>
                         <br>
-                        {% if beatmapset and post.user_id != beatmapset.creator_id and not post.icon %}
+                        {% if beatmapset and post.user_id != beatmapset.creator_id %}
                             {% set total_kudosu = repositories.modding.total_amount(post.id, session) %}
                             <div class="kudosu-box">
                                 {% set kudosu_status_color = (
