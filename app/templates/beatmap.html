@@ -284,6 +284,8 @@
                                 The current status of this beatmap is "{{ constants.DatabaseStatus(beatmapset.status).name }}".
                                 {% if nominations|length >= beatmapset|required_nominations and beatmapset.status <= 0 %}
                                 This beatmap has enough nominations to be qualified!
+                                {% elif beatmapset.status == 3 %}
+                                This beatmap will be ranked {{ (beatmapset.approved_at + timedelta(days=7))|timeago }}.
                                 {% endif %}
                             </p><br>
                             {% if beatmapset.status <= 0 %}
