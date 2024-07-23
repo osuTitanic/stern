@@ -278,6 +278,9 @@ def create_post_action(forum_id: str):
         title = request.form.get('title')
         content = request.form.get('bbcode')
 
+        if not title or not content:
+            return redirect(f"/forum/{forum.id}")
+
         topic = topics.create(
             forum.id,
             current_user.id,

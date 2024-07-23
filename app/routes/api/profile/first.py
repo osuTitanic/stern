@@ -55,7 +55,7 @@ def leader_scores(
             'count': first_count,
             'scores': [
                 ScoreModel.model_validate(score, from_attributes=True) \
-                        .model_dump(exclude=['user'])
+                          .model_dump(exclude=['user'])
                 for score in first_scores
             ]
         }

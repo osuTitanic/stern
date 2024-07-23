@@ -50,9 +50,18 @@ def download_beatmapset(id: int):
     if not (set := beatmapsets.fetch_one(id)):
         return abort(code=404)
 
-    no_video = request.args.get('novideo', False, type=bool)
+    no_video = request.args.get(
+        'novideo',
+        default=False,
+        type=bool
+    )
 
-    if not (response := app.session.storage.api.osz(set.id, no_video)):
+    response = app.session.storage.api.osz(
+        set.id,
+        no_video
+    )
+
+    if not response:
         return abort(code=404)
 
     utils.track(

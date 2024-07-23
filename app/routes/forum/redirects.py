@@ -1,6 +1,6 @@
 
+from flask import Blueprint, redirect, abort, request
 from app.common.database import topics, posts
-from flask import Blueprint, redirect, abort
 
 import app
 
@@ -136,3 +136,23 @@ def post_redirect(post_id: str):
         return redirect(
             f"/forum/{post.topic.forum_id}/t/{post.topic_id}/p/{post.id}/"
         )
+
+@router.get('/posting.php')
+def quick_reply_redirect():
+    topic_id = request.args.get('t', type=int)
+
+    if not topic_id:
+        return abort(
+            code=404,
+            description=app.constants.TOPIC_NOT_FOUND
+        )
+
+    if not (topic := topics.fetch_one(topic_id)):
+        return abort(
+            code=404,
+            description=app.constants.TOPIC_NOT_FOUND
+        )
+
+    return redirect(
+        f"/forum/{topic.forum_id}/t/{topic.id}/post"
+    )
