@@ -2,7 +2,7 @@
 from app.common.database import forums, users, beatmapsets
 from datetime import datetime, timedelta
 from dataclasses import dataclass, field
-from flask import Blueprint
+from flask import Blueprint, Response
 from typing import List
 
 import app
@@ -110,4 +110,7 @@ sitemap = Sitemap()
 
 @router.get('/sitemap.xml')
 def sitemap_xml():
-    return sitemap.render()
+    return Response(
+        sitemap.render(),
+        mimetype='application/xml'
+    )
