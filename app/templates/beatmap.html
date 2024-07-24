@@ -374,8 +374,8 @@
                 </table>
             </details>
         </div>
+        {% endif %}
     </div>
-    {% endif %}
     <div class="padding">
         <div class="beatmap-download">
             {% if current_user.id %}
@@ -438,7 +438,7 @@
         <b>No records have been set for this game mode yet!</b>
     {% else %}
         {% set leader_score = scores[0] %}
-        <table class="leader" style="width: auto">
+        <table class="leader">
             <tbody>
                 <tr>
                     <td class="row-title" colspan="3">
