@@ -5,6 +5,7 @@ from dataclasses import dataclass, field
 from flask import Blueprint, Response
 from typing import List
 
+import config
 import app
 
 @dataclass
@@ -38,7 +39,7 @@ class Sitemap:
             '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' +
             ''.join(
                 f'<url>'
-                f'<loc>{entry.location}</loc>'
+                f'<loc>{config.OSU_BASEURL}/{entry.location}</loc>'
                 f'<priority>{entry.priority}</priority>'
                 f'<changefreq>{entry.change_frequency}</changefreq>'
                 f'</url>'
