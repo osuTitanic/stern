@@ -2,6 +2,7 @@
 from flask import Blueprint, Response, request, redirect, abort
 from app.common.constants import BeatmapSortBy, BeatmapOrder
 from app.common.database.repositories import beatmapsets
+from werkzeug.utils import secure_filename
 
 import flask_login
 import utils
@@ -75,11 +76,15 @@ def download_beatmapset(id: int):
         }
     )
 
+    osz_filename = secure_filename(
+        f'{set.id} {set.artist} - {set.title}.osz'
+    )
+
     return Response(
         response.iter_content(6400),
         mimetype='application/octet-stream',
         headers={
-            'Content-Disposition': f'attachment; filename={set.id} {set.artist} - {set.title}.osz',
+            'Content-Disposition': f'attachment; filename={osz_filename}',
             'Content-Length': response.headers.get('Content-Length', 0)
         }
     )
