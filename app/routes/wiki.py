@@ -19,6 +19,8 @@ def home_wiki_page():
 
     return utils.render_template(
         'wiki.html',
+        css='wiki.css',
+        title='Home - Titanic! Wiki',
         content=wiki.process_markdown(text)
     )
 
@@ -32,7 +34,13 @@ def wiki_page(path: str):
     if not (text := wiki.fetch_markdown(path, language)):
         return abort(404)
 
+    name = (
+        path.strip('/').split('/')[-1]
+    )
+
     return utils.render_template(
         'wiki.html',
+        css='wiki.css',
+        title=f'{name} - Titanic! Wiki',
         content=wiki.process_markdown(text)
     )
