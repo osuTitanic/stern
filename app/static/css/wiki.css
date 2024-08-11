@@ -1,1 +1,44 @@
 @import url('main.css');
+
+.wiki-content * {
+    margin-bottom: 4px;
+}
+
+.wiki-content h1 {
+    font-size: 1.5em;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    color: #cc2e8a;
+    font-weight: normal;
+}
+
+.wiki-content h2 {
+    font-size: 1.25em;
+    margin-top: 0.6em;
+    margin-bottom: 0.5em;
+    color: #cc2e8a;
+    font-weight: normal;
+}
+
+.wiki-content h3 {
+    font-size: 1.05em;
+    margin-top: 0.6em;
+    margin-bottom: 0.5em;
+    color: #cc2e8a;
+    font-weight: normal;
+}
+
+.wiki-content h4 {
+    font-size: 1em;
+    margin-top: 0.6em;
+    margin-bottom: 0.5em;
+    color: #cc2e8a;
+    font-weight: normal;
+}
+
+.wiki-content hr {
+    margin-top: 1em;
+    margin-bottom: 1em;
+    border: 0;
+    border-top: 1px solid #ccc;
+}
