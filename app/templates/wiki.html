@@ -1,0 +1,10 @@
+{# templates/wiki.html #}
+
+{% extends 'base.html' %}
+
+{% block content %}
+{# TODO: Navigation Bar (Source, History, Discussion, ...) #}
+<div class="wiki-content">
+    {{ content|safe }}
+</div>
+{% endblock content %}
