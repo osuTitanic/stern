@@ -85,7 +85,7 @@ def on_http_exception(error: HTTPException) -> Tuple[str, int]:
         code=error.code,
         template_name='error.html',
         css='error.css',
-        title=f'{error.name} - osu!Titanic'
+        title=f'{error.name} - Titanic!'
     ), error.code
 
 @flask.errorhandler(Exception)
@@ -103,7 +103,7 @@ def on_exception(error: Exception) -> Tuple[str, int]:
         code=500,
         template_name='error.html',
         css='error.css',
-        title=f'Internal Server Error - osu!Titanic'
+        title=f'Internal Server Error - Titanic!'
     ), 500
 
 @flask.errorhandler(ValidationError)

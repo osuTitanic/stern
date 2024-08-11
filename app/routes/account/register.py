@@ -29,7 +29,7 @@ def return_to_register_page(error: Optional[str] = None) -> str:
         'register.html',
         css='register.css',
         error=error,
-        title='Register - osu!Titanic'
+        title='Register - Titanic!'
     )
 
 def get_hashed_password(password: str) -> str:
@@ -80,7 +80,7 @@ def register():
     return utils.render_template(
         'register.html',
         css='register.css',
-        title='Register - osu!Titanic',
+        title='Register - Titanic!',
         site_title='Register',
         site_description='Create your account and start playing today!'
     )

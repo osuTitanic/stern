@@ -49,7 +49,7 @@ def verification():
                 'verification.html',
                 css='verification.css',
                 verification=verification,
-                title="Verification - osu!Titanic"
+                title="Verification - Titanic!"
             )
 
         if verification_token != verification.token:
@@ -74,7 +74,7 @@ def verification():
                 'verification.html',
                 css='verification.css',
                 verification=verification,
-                title="Verification - osu!Titanic",
+                title="Verification - Titanic!",
                 reset=True
             )
 
@@ -100,7 +100,7 @@ def verification():
         return utils.render_template(
             'verification.html',
             css='verification.css',
-            title="Verification - osu!Titanic",
+            title="Verification - Titanic!",
             verification=verification,
             success=True
         )
@@ -133,7 +133,7 @@ def resend_verification():
                     css='verification.css',
                     verification=verification,
                     error='Please wait a few minutes, until you resend the email!',
-                    title="Verification - osu!Titanic"
+                    title="Verification - Titanic!"
                 )
         except ValueError:
             return abort(404)

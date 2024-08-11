@@ -27,7 +27,7 @@ def return_to_reset_page(error: Optional[str] = None) -> str:
         'reset.html',
         css='register.css',
         error=error,
-        title='Password Reset - osu!Titanic'
+        title='Password Reset - Titanic!'
     )
 
 @router.get('/reset')
@@ -39,7 +39,7 @@ def reset():
     return utils.render_template(
         'reset.html',
         css='register.css',
-        title='Password Reset - osu!Titanic'
+        title='Password Reset - Titanic!'
     )
 
 @router.post('/reset')
@@ -58,7 +58,7 @@ def password_reset_request():
                 css='verification.css',
                 verification=verification,
                 error="The passwords don't match. Please try again!",
-                title="Verification - osu!Titanic",
+                title="Verification - Titanic!",
                 reset=True
             )
 
@@ -80,7 +80,7 @@ def password_reset_request():
             css='verification.css',
             verification=verification,
             success=True,
-            title="Verification - osu!Titanic"
+            title="Verification - Titanic!"
         )
 
     if not config.EMAILS_ENABLED:
