@@ -487,11 +487,11 @@
                         </div>
                         {% endif %}
                     </div>
-                    {% if user.is_bat %}
+                    {% if user.is_bat or nominations %}
                     <div>
                         <h2 class="profile-stats-header">Nominated Beatmaps</h2>
                         {% if not nominations %}
-                            <p style="margin: 5px;">This BAT has not nominated any beatmaps :(</p>
+                            <p style="margin: 5px;">This user has not nominated any beatmaps :(</p>
                         {% else %}
                         <div class="profile-beatmaps-container">
                             {% for nomination in nominations %}
