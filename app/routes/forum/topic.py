@@ -98,8 +98,8 @@ def topic(forum_id: str, id: str):
 
         topic_posts = posts.fetch_range_by_topic(
             topic.id,
-            range=12,
-            offset=(page - 1) * 12,
+            range=15,
+            offset=(page - 1) * 15,
             session=session
         )
 
