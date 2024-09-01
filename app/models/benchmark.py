@@ -11,4 +11,5 @@ class BenchmarkModel(BaseModel):
     grade: str
     created_at: datetime
     client: str
+    hardware: str
     user: UserModel
