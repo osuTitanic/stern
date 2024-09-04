@@ -98,8 +98,8 @@ def topic(forum_id: str, id: str):
 
         topic_posts = posts.fetch_range_by_topic(
             topic.id,
-            range=12,
-            offset=(page - 1) * 12,
+            range=15,
+            offset=(page - 1) * 15,
             session=session
         )
 
@@ -154,7 +154,7 @@ def topic(forum_id: str, id: str):
             topic=topic,
             posts=topic_posts,
             current_page=(page - 1),
-            total_pages=post_count // 12,
+            total_pages=post_count // 15,
             post_count=post_count,
             beatmapset=beatmapset,
             is_bookmarked=is_bookmarked,

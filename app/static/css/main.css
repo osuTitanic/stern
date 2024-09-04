@@ -128,8 +128,8 @@ input:focus {
 .nav-element a:visited {
     text-decoration: none;
     padding: 4.5px;
-    padding-left: 17px;
-    padding-right: 17px;
+    padding-left: 25px;
+    padding-right: 25px;
     font-weight: bold;
     font-size: 11px;
     color: var(--nav-element);

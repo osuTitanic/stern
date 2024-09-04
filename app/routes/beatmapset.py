@@ -21,6 +21,12 @@ def get_beatmapset(id: int):
                 description=app.constants.BEATMAP_NOT_FOUND
             )
 
+        if not set.beatmaps:
+            return abort(
+                code=404,
+                description=app.constants.BEATMAP_NOT_FOUND
+            )
+
         if mode := request.args.get('mode', ''):
             mode = f'?mode={mode}'
 

@@ -41,7 +41,7 @@ def get_topic_by_post_and_topic(forum_id: str, topic_id: str, post_id: str):
             session=session
         )
 
-        page = (page_count // 12) + 1
+        page = (page_count // 15) + 1
 
         return redirect(
             f"/forum/{forum_id}/t/{topic_id}/?page={page}#post-{post_id}"

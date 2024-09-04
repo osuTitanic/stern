@@ -31,8 +31,15 @@
             {{ error }}
         </div>
     {% endif %}
+    <div style="text-align: center; display: grid; justify-items: center;">
+        <img src="/images/signup-multi.png" alt="" height="90px">
+        <div class="input-description" style="width: 100%; margin-top: 15px;">
+            Titanic! has a policy of <strong>one account per person</strong>!
+            Please be aware that creating more than one account per person may result in <strong>permanent deactivation of all accounts</strong>.
+        </div>
+    </div>
     <div style="display: block;">
-        Need further assistance? Contact us on our <a href="https://discord.gg/qupv72e7YH">discord</a> or via <a href="mailto:{{ config.EMAIL }}">email</a>.
+        Need further assistance? Contact us on our <a href="https://discord.gg/qupv72e7YH">Discord</a> or via <a href="mailto:{{ config.EMAIL }}">Email</a>.
     </div>
 </form>
 <script>$("#username").select();</script>
