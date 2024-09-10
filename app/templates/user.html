@@ -34,7 +34,7 @@
 
             {% if user.names %}
             {# Name History #}
-            {% set name_string = user.names|map(attribute='name')|join(', ') %}
+            {% set name_string = user.names|map(attribute='name')|unique|join(', ') %}
             <div class="username" style="color: {{ color }}; font-size: {{ name_size }}px;" title="Previously known as {{ name_string }}">
                 {{ user.name }}
             </div>
