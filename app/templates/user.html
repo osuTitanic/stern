@@ -33,7 +33,9 @@
             {% set name_size = (21 - (name_length - 14) * 1.5)|clamp(12, 25) %}
 
             {% if user.names %}
-            <div class="username" style="color: {{ color }}; font-size: {{ name_size }}px;" title="Previously known as {{ user.names[-1].name }}">
+            {# Name History #}
+            {% set names = user.names|map(attribute='name')|reject('equalto', user.name)|unique|join(', ') %}
+            <div class="username" style="color: {{ color }}; font-size: {{ name_size }}px;" title="Previously known as {{ names }}">
                 {{ user.name }}
             </div>
             {% else %}

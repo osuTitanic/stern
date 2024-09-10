@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from datetime import datetime
+from typing import Optional
 
 from .user import UserModel
 
@@ -11,4 +12,5 @@ class BenchmarkModel(BaseModel):
     grade: str
     created_at: datetime
     client: str
+    hardware: Optional[dict]
     user: UserModel
