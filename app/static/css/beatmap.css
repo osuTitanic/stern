@@ -154,16 +154,16 @@ h2 {
 }
 
 .beatmap-description .bbcode {
-    padding: 0;
     font-size: 70%;
     text-align: left;
     overflow: auto;
     display: inline;
+    padding: 0;
 }
 
 .beatmap-description .bbcode br {
     display: grid;
-    margin-bottom: 5px;
+    margin-bottom: 4px;
 }
 
 .beatmap-preview-link {
@@ -171,6 +171,20 @@ h2 {
     width: 160px;
     height: 120px;
     margin-right: 5px;
+}
+
+.beatmap-description .spoiler {
+    padding: 5px;
+}
+
+.beatmap-description .spoiler-head {
+    display: block;
+    color: black;
+}
+
+.beatmap-description .spoiler-head:hover {
+    cursor: pointer;
+    text-decoration: none;
 }
 
 .beatmap-download {
