@@ -161,8 +161,7 @@ h2 {
     padding: 0;
 }
 
-.beatmap-description .bbcode br {
-    display: grid;
+.beatmap-description .bbcode--normal-line-height br {
     margin-bottom: 4px;
 }
 
