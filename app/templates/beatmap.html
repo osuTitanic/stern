@@ -393,19 +393,23 @@
                 </a>
             {% endif %}
         </div>
-        <div class="beatmap-description" title="Play Song">
-            <a onclick="resetOrPlayAudio('beatmap-preview')">
-                <img src="{{ config.STATIC_BASEURL }}/mt/{{ beatmapset.id }}l" alt="">
-                <audio id="beatmap-preview" src="{{ config.STATIC_BASEURL }}/mp3/preview/{{ beatmapset.id }}.mp3" preload="auto"></audio>
-            </a>
-            {% if beatmapset.description %}
-                {# NOTE: Small workaround for existsing html-bbcode #}
-                {% if beatmapset.server != 0 %}
-                    {{ beatmapset.description|bbcode|safe }}
-                {% else %}
-                    {{ beatmapset.description|safe }}
+        <div class="beatmap-description">
+            <div title="Play Song">
+                <a onclick="resetOrPlayAudio('beatmap-preview')" class="beatmap-preview-link">
+                    <img src="{{ config.STATIC_BASEURL }}/mt/{{ beatmapset.id }}l" alt="">
+                    <audio id="beatmap-preview" src="{{ config.STATIC_BASEURL }}/mp3/preview/{{ beatmapset.id }}.mp3" preload="auto"></audio>
+                </a>
+            </div>
+            <div class="beatmap-description-bbcode">
+                {% if beatmapset.description %}
+                    {# NOTE: Small workaround for existsing html-bbcode #}
+                    {% if beatmapset.server != 0 %}
+                        {{ beatmapset.description|bbcode|safe }}
+                    {% else %}
+                        {{ beatmapset.description|safe }}
+                    {% endif %}
                 {% endif %}
-            {% endif %}
+            </div>
         </div>
     </div>
     {% if beatmapset.status > 0 %}
