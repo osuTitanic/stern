@@ -153,13 +153,18 @@ h2 {
     max-width: 650px;
 }
 
-.beatmap-preview-link {
-    float: left;
-}
-
-.bbcode {
+.beatmap-description .bbcode {
+    padding: 0;
+    padding-left: 5px;
     font-size: 70%;
     text-align: left;
+    display: initial;
+}
+
+.beatmap-preview-link {
+    float: left;
+    width: 160px;
+    height: 120px;
 }
 
 .beatmap-download {

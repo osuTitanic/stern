@@ -400,16 +400,14 @@
                     <audio id="beatmap-preview" src="{{ config.STATIC_BASEURL }}/mp3/preview/{{ beatmapset.id }}.mp3" preload="auto"></audio>
                 </a>
             </div>
-            <div class="beatmap-description-bbcode">
-                {% if beatmapset.description %}
-                    {# NOTE: Small workaround for existsing html-bbcode #}
-                    {% if beatmapset.server != 0 %}
-                        {{ beatmapset.description|bbcode|safe }}
-                    {% else %}
-                        {{ beatmapset.description|safe }}
-                    {% endif %}
+            {% if beatmapset.description %}
+                {# NOTE: Small workaround for existsing html-bbcode #}
+                {% if beatmapset.server != 0 %}
+                    {{ beatmapset.description|bbcode|safe }}
+                {% else %}
+                    {{ beatmapset.description|safe }}
                 {% endif %}
-            </div>
+            {% endif %}
         </div>
     </div>
     {% if beatmapset.status > 0 %}
@@ -695,6 +693,27 @@
     {% endif %}
 </div>
 <script>
+    // osu.ppy.sh spoilerbox conversion
+    spoilerBoxes = document.querySelectorAll('.js-spoilerbox')
+    spoilerBoxes.forEach(spoilerBox => {
+        spoilerBox.classList.add('spoiler')
+    })
+
+    spoilerBoxContents = document.querySelectorAll('.js-spoilerbox__body')
+    spoilerBoxContents.forEach(spoilerBox => {
+        spoilerBox.classList.add('spoiler-body')
+    })
+
+    spoilerBoxHeads = document.querySelectorAll('.js-spoilerbox__link')
+    spoilerBoxHeads.forEach(spoilerBox => {
+        // Change element type to div
+        spoilerBox.tagName = 'div'
+        spoilerBox.addEventListener('click', () => {
+            return toggleSpoiler(spoilerBox)
+        })
+        spoilerBox.classList.add('spoiler-head')
+    })
+
     function addFavorite(beatmapset_id) {
         fetch(`/api/profile/${currentUser}/favourites/add?set_id=${beatmapset_id}`)
             .then(response => {
