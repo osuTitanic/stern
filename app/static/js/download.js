@@ -23,11 +23,12 @@ function loadManifest()
 
           if (!client.recommended)
             return;
+          
 
+          
           const version = document.createElement('p');
           version.textContent = client.name;
           version.classList.add('version')
-
           const description = document.createElement('p');
           description.textContent = client.description;
           description.classList.add('description')
@@ -44,7 +45,18 @@ function loadManifest()
           div.style.maxWidth = client.screenshots[0].width;
           div.style.maxHeight = client.screenshots[0].height;
           div.classList.add('client');
-
+          if (client.known_bugs != null) {
+            const bugsdiv = document.createElement('div');
+            bugsdiv.style.float = 'right'; 
+            const bugs = document.createElement('a');
+            bugs.classList.add("fa-solid");
+            bugs.classList.add('fa-triangle-exclamation');
+            bugs.style.color = "#c40900"
+            bugs.style.backgroundColor = "Transparent"
+            bugs.title = `This client is known to have problems such as: ${client.known_bugs}`
+            bugsdiv.appendChild(bugs);
+            div.appendChild(bugsdiv)
+          }
           div.appendChild(version);
           div.appendChild(description);
           div.appendChild(screenshot);
