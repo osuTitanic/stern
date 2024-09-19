@@ -116,12 +116,24 @@ def reward_kudosu(set_id: int, post_id: int):
                 'details': 'Kudosu was already rewarded to this post.'
             }, 400
 
-        topic_activity = (
-            datetime.now() - post.topic.last_post_at
+        previous_post = posts.fetch_previous(
+            post_id,
+            beatmapset.topic_id,
+            session=session
+        )
+
+        if not previous_post:
+            return {
+                'error': 400,
+                'details': 'This post is the first post in the topic.'
+            }, 400
+
+        delta = (
+            post.created_at - previous_post.created_at
         )
 
         kudosu_amount = (
-            1 if topic_activity < timedelta(days=7)
+            1 if delta < timedelta(days=7)
             else 2
         )
 
