@@ -56,7 +56,7 @@
     height: 200px;
 }
 
-.client a {
+.client .download-link {
     display: block;
     margin-top: 10px;
     padding: 10px;
@@ -69,10 +69,22 @@
     transition: all 0.1s ease;
 }
 
-.client a:hover {
+.client .download-link:hover {
     color: #ebebeb;
     background-color: var(--download-button-text);
     transition: all 0.1s ease;
+}
+
+.known-bugs {
+    float: right;
+    cursor: pointer;
+    text-decoration: none;
+    position: absolute;
+    font-size: 115%;
+    right: 10px;
+    top: 8px;
+    padding-top: 2px;
+    padding-bottom: 5px;
 }
 
 .version {

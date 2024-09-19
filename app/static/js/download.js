@@ -24,8 +24,23 @@ function loadManifest()
           if (!client.recommended)
             return;
           
+          const div = document.createElement('div');
+          div.style.maxWidth = client.screenshots[0].width;
+          div.style.maxHeight = client.screenshots[0].height;
+          div.classList.add('client');
 
-          
+          if (client.known_bugs) {
+            const bugs = document.createElement('div');
+            bugs.classList.add('known-bugs');
+            bugs.title = client.known_bugs;
+            const icon = document.createElement('a');
+            icon.classList.add("fa-solid");
+            icon.classList.add('fa-triangle-exclamation');
+            icon.style.color = '#c40900';
+            bugs.appendChild(icon);
+            div.appendChild(bugs);
+          }
+
           const version = document.createElement('p');
           version.textContent = client.name;
           version.classList.add('version')
@@ -37,26 +52,11 @@ function loadManifest()
           screenshot.src = client.screenshots[0].src;
 
           const downloadLink = document.createElement('a');
+          downloadLink.classList.add('download-link');
           downloadLink.setAttribute('target', '_blank');
           downloadLink.textContent = 'Download';
           downloadLink.href = client.downloads[0];
 
-          const div = document.createElement('div');
-          div.style.maxWidth = client.screenshots[0].width;
-          div.style.maxHeight = client.screenshots[0].height;
-          div.classList.add('client');
-          if (client.known_bugs != null) {
-            const bugsdiv = document.createElement('div');
-            bugsdiv.style.float = 'right'; 
-            const bugs = document.createElement('a');
-            bugs.classList.add("fa-solid");
-            bugs.classList.add('fa-triangle-exclamation');
-            bugs.style.color = "#c40900"
-            bugs.style.backgroundColor = "Transparent"
-            bugs.title = `This client is known to have problems such as: ${client.known_bugs}`
-            bugsdiv.appendChild(bugs);
-            div.appendChild(bugsdiv)
-          }
           div.appendChild(version);
           div.appendChild(description);
           div.appendChild(screenshot);
