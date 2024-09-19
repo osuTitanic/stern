@@ -79,12 +79,9 @@
     float: right;
     cursor: pointer;
     text-decoration: none;
-    position: absolute;
     font-size: 115%;
-    right: 10px;
-    top: 8px;
-    padding-top: 2px;
-    padding-bottom: 5px;
+    position: relative;
+    z-index: 1;
 }
 
 .version {
