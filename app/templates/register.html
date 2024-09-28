@@ -41,7 +41,19 @@
     <div style="display: block;">
         Need further assistance? Contact us on our <a href="https://discord.gg/qupv72e7YH">Discord</a> or via <a href="mailto:{{ config.EMAIL }}">Email</a>.
     </div>
+    <input type="hidden" name="recaptcha_response" id="recaptcha-response">
 </form>
 <script>$("#username").select();</script>
 <script src="/js/register.js"></script>
+{% if config.RECAPTCHA_SITE_KEY %}
+<script src="https://www.google.com/recaptcha/api.js?render={{ config.RECAPTCHA_SITE_KEY }}"></script>
+<script>
+    grecaptcha.ready(function () {
+        grecaptcha.execute('{{ config.RECAPTCHA_SITE_KEY }}', { action: 'register' }).then(function (token) {
+            var recaptchaResponse = document.getElementById('recaptcha-response');
+            recaptchaResponse.value = token;
+        });
+    });
+</script>
+{% endif %}
 {% endblock content %}
