@@ -84,15 +84,6 @@ def verification():
 
         verifications.delete(verification.token)
 
-        utils.track(
-            'website_verification_success',
-            user=verification.user,
-            properties={
-                'verification_id': verification.id,
-                'verification_type': verification.type
-            }
-        )
-
         app.session.logger.info(
             f'{verification.user.name} successfully verified their account.'
         )
@@ -153,15 +144,6 @@ def resend_verification():
         mail.send_welcome_email(
             verification,
             verification.user
-        )
-
-        utils.track(
-            'website_resend_verification',
-            user=verification.user,
-            properties={
-                'verification_id': verification.id,
-                'verification_type': verification.type
-            }
         )
 
         app.session.logger.info(

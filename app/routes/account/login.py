@@ -89,14 +89,5 @@ def login():
             # Redirect to verification page
             return redirect(f'/account/verification?id={verification.id}')
 
-        utils.track(
-            'website_login',
-            user=user,
-            properties={
-                'login_attempts': int(login_attempts),
-                'remember': remember
-            }
-        )
-
         flask_login.login_user(user, remember)
         return redirect(redirect_url or f'/u/{user.id}')

@@ -65,17 +65,6 @@ def download_beatmapset(id: int):
     if not response:
         return abort(code=404)
 
-    utils.track(
-        'website_beatmap_download',
-        user=flask_login.current_user,
-        properties={
-            'beatmapset_id': set.id,
-            'beatmapset_artist': set.artist,
-            'beatmapset_title': set.title,
-            'no_video': no_video
-        }
-    )
-
     osz_filename = secure_filename(
         f'{set.id} {set.artist} - {set.title}.osz'
     )
