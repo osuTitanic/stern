@@ -42,6 +42,7 @@
         Need further assistance? Contact us on our <a href="https://discord.gg/qupv72e7YH">Discord</a> or via <a href="mailto:{{ config.EMAIL }}">Email</a>.
     </div>
     <input type="hidden" name="recaptcha_response" id="recaptcha-response">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 </form>
 <script>$("#username").select();</script>
 <script src="/js/register.js"></script>

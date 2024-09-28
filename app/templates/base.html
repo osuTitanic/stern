@@ -33,6 +33,7 @@
         const staticBaseurl = "{{ config.STATIC_BASEURL }}";
         const currentUser = {{ current_user.id if current_user.is_authenticated else 'null' }};
         const approvedRewards = {{ config.APPROVED_MAP_REWARDS|lower }};
+        const csrfToken = "{{ csrf_token() }}";
     </script>
 </head>
 <body>
@@ -124,6 +125,7 @@
                             Create new account!
                         </a>
                     </div>
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                 </form>
             </div>
             <div class="page">
