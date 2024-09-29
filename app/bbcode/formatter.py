@@ -68,7 +68,7 @@ def render_profile(tag_name, value, options, parent, context):
 
 @parser.formatter('url')
 def render_link(tag_name, value, options, parent, context):
-    return '<a href="%s">%s</a>' % (options.get('url', ''), value)
+    return '<a href="%s" target="_blank">%s</a>' % (options.get('url', ''), value)
 
 @parser.formatter('quote')
 def render_quote(tag_name, value, options, parent, context):
