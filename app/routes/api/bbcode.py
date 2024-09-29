@@ -13,7 +13,7 @@ def render_bbcode():
         }, 400
 
     return Response(
-        bbcode.formatter.format(input),
+        bbcode.render_html(input),
         status=200,
         mimetype='text/html'
     )
