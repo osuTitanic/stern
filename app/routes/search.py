@@ -44,7 +44,8 @@ def search_beatmap():
 def secure_filename(filename: str) -> str:
     filename = unicodedata.normalize("NFKD", filename)
     filename = filename.encode("ascii", "ignore").decode("ascii")
-    filename = re.sub(r'[<>:"/\\|?*]', '', filename)
+    filename = re.compile(r"[^A-Za-z0-9_.-]").sub(" ", filename)
+    filename = re.compile(r"\s+").sub(" ", filename)
     return filename.strip()
 
 @router.get('/download/<id>')
