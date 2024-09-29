@@ -23,11 +23,27 @@ function loadManifest()
 
           if (!client.recommended)
             return;
+          
+          const div = document.createElement('div');
+          div.style.maxWidth = client.screenshots[0].width;
+          div.style.maxHeight = client.screenshots[0].height;
+          div.classList.add('client');
+
+          if (client.known_bugs) {
+            const bugs = document.createElement('div');
+            bugs.classList.add('known-bugs');
+            bugs.title = client.known_bugs;
+            const icon = document.createElement('a');
+            icon.classList.add("fa-solid");
+            icon.classList.add('fa-triangle-exclamation');
+            icon.style.color = '#c40900';
+            bugs.appendChild(icon);
+            div.appendChild(bugs);
+          }
 
           const version = document.createElement('p');
           version.textContent = client.name;
           version.classList.add('version')
-
           const description = document.createElement('p');
           description.textContent = client.description;
           description.classList.add('description')
@@ -36,14 +52,10 @@ function loadManifest()
           screenshot.src = client.screenshots[0].src;
 
           const downloadLink = document.createElement('a');
+          downloadLink.classList.add('download-link');
           downloadLink.setAttribute('target', '_blank');
           downloadLink.textContent = 'Download';
           downloadLink.href = client.downloads[0];
-
-          const div = document.createElement('div');
-          div.style.maxWidth = client.screenshots[0].width;
-          div.style.maxHeight = client.screenshots[0].height;
-          div.classList.add('client');
 
           div.appendChild(version);
           div.appendChild(description);

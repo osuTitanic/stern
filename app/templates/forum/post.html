@@ -62,6 +62,7 @@
         {% endwith %}
         <input type="hidden" name="action" value="{{ action }}">
         <input type="hidden" name="id" value="{{ action_id }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     </div>
 </form>
 {% endblock content %}

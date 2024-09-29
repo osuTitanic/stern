@@ -277,6 +277,7 @@
                                 </dl>
                                 <input type="submit" value="Save">
                                 <input type="hidden" name="beatmapset_id" value="{{ beatmapset.id }}">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                             </form>
                         </td>
                         <td>
@@ -366,6 +367,7 @@
                                     </div>
                                     <input type="submit" value="Update">
                                     <input type="hidden" name="beatmapset_id" value="{{ beatmapset.id }}">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                                 </form>
                             </details>
                         </td>
@@ -393,11 +395,13 @@
                 </a>
             {% endif %}
         </div>
-        <div class="beatmap-description" title="Play Song">
-            <a onclick="resetOrPlayAudio('beatmap-preview')">
-                <img src="{{ config.STATIC_BASEURL }}/mt/{{ beatmapset.id }}l" alt="">
-                <audio id="beatmap-preview" src="{{ config.STATIC_BASEURL }}/mp3/preview/{{ beatmapset.id }}.mp3" preload="auto"></audio>
-            </a>
+        <div class="beatmap-description">
+            <div title="Play Song">
+                <a onclick="resetOrPlayAudio('beatmap-preview')" class="beatmap-preview-link">
+                    <img src="{{ config.STATIC_BASEURL }}/mt/{{ beatmapset.id }}l" alt="">
+                    <audio id="beatmap-preview" src="{{ config.STATIC_BASEURL }}/mp3/preview/{{ beatmapset.id }}.mp3" preload="auto"></audio>
+                </a>
+            </div>
             {% if beatmapset.description %}
                 {# NOTE: Small workaround for existsing html-bbcode #}
                 {% if beatmapset.server != 0 %}
@@ -691,6 +695,27 @@
     {% endif %}
 </div>
 <script>
+    // osu.ppy.sh spoilerbox conversion
+    spoilerBoxes = document.querySelectorAll('.js-spoilerbox')
+    spoilerBoxes.forEach(spoilerBox => {
+        spoilerBox.classList.add('spoiler')
+    })
+
+    spoilerBoxContents = document.querySelectorAll('.js-spoilerbox__body')
+    spoilerBoxContents.forEach(spoilerBox => {
+        spoilerBox.classList.add('spoiler-body')
+    })
+
+    spoilerBoxHeads = document.querySelectorAll('.js-spoilerbox__link')
+    spoilerBoxHeads.forEach(spoilerBox => {
+        // Change element type to div
+        spoilerBox.tagName = 'div'
+        spoilerBox.addEventListener('click', () => {
+            return toggleSpoiler(spoilerBox)
+        })
+        spoilerBox.classList.add('spoiler-head')
+    })
+
     function addFavorite(beatmapset_id) {
         fetch(`/api/profile/${currentUser}/favourites/add?set_id=${beatmapset_id}`)
             .then(response => {

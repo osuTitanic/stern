@@ -31,8 +31,6 @@ ENABLE_SSL = eval(os.environ.get('ENABLE_SSL', 'False').capitalize())
 S3_ENABLED = eval(os.environ.get('ENABLE_S3', 'True').capitalize())
 DEBUG = eval(os.environ.get('DEBUG', 'False').capitalize())
 
-AMPLITUDE_API_KEY = os.environ.get('AMPLITUDE_API_KEY')
-
 SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY')
 SENDGRID_EMAIL = os.environ.get('SENDGRID_EMAIL')
 
@@ -40,6 +38,9 @@ MAILGUN_API_KEY = os.environ.get('MAILGUN_API_KEY')
 MAILGUN_EMAIL = os.environ.get('MAILGUN_EMAIL', '')
 MAILGUN_URL = os.environ.get('MAILGUN_URL', 'api.eu.mailgun.net')
 MAILGUN_DOMAIN = MAILGUN_EMAIL.split('@')[-1]
+
+RECAPTCHA_SECRET_KEY = os.environ.get('RECAPTCHA_SECRET_KEY')
+RECAPTCHA_SITE_KEY = os.environ.get('RECAPTCHA_SITE_KEY')
 
 EMAILS_ENABLED = bool(MAILGUN_API_KEY or SENDGRID_API_KEY)
 EMAIL = MAILGUN_EMAIL or SENDGRID_EMAIL

@@ -28,6 +28,7 @@
             </div>
             <input type="file" id="avatar" name="avatar" /><br>
             <input class="submit-button" type="submit" name="submit" value="Upload">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         </form>
         <form class="profile-section section" action="/account/settings/profile/edit" method="post">
             <dl>
@@ -64,6 +65,7 @@
 
                 <dd><input class="submit-button" type="submit" name="submit" value="Save"></dd>
             </dl>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         </form>
         <form class="profile-section section" action="/account/settings/profile" method="post">
             <dl>
@@ -94,6 +96,7 @@
 
                 <dd><input class="submit-button" type="submit" name="submit" value="Save"></dd>
             </dl>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         </form>
     </div>
     <div id="userpage">
@@ -108,6 +111,7 @@
             } %}
                 {% include "editor.html" %}
             {% endwith %}
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         </form>
     </div>
     <div id="signature">
@@ -122,6 +126,7 @@
             } %}
                 {% include "editor.html" %}
             {% endwith %}
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         </form>
     </div>
 </div>

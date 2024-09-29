@@ -3,10 +3,30 @@ from flask import Blueprint, Response, send_file, request
 from flask_pydantic import validate
 
 import app.session as session
+import zipfile
 import utils
 import io
 
 router = Blueprint('resources', __name__)
+
+def remove_video_from_osz(osz: bytes) -> bytes:
+    video_extensions = [
+        ".wmv", ".flv", ".mp4", ".avi", ".m4v"
+    ]
+
+    with zipfile.ZipFile(io.BytesIO(osz), 'r') as osz_file:
+        files_to_keep = [
+            item for item in osz_file.namelist()
+            if not any(item.lower().endswith(ext) for ext in video_extensions)
+        ]
+
+        output = io.BytesIO()
+
+        with zipfile.ZipFile(output, 'w') as new_osz:
+            for file in files_to_keep:
+                new_osz.writestr(file, osz_file.read(file))
+
+        return output.getvalue()
 
 @router.get('/osz/<set_id>')
 @validate()
@@ -15,6 +35,15 @@ def internal_osz(set_id: int):
 
     if not osz:
         return Response(status=404)
+
+    no_video = request.args.get(
+        'noVideo',
+        default=False,
+        type=bool
+    )
+
+    if no_video:
+        osz = remove_video_from_osz(osz)
 
     return send_file(
         io.BytesIO(osz),

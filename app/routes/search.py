@@ -2,11 +2,12 @@
 from flask import Blueprint, Response, request, redirect, abort
 from app.common.constants import BeatmapSortBy, BeatmapOrder
 from app.common.database.repositories import beatmapsets
-from werkzeug.utils import secure_filename
 
 import flask_login
+import unicodedata
 import utils
 import app
+import re
 
 router = Blueprint('beatmapsets', __name__)
 
@@ -40,6 +41,13 @@ def search_beatmap():
         page=page
     )
 
+def secure_filename(filename: str) -> str:
+    filename = unicodedata.normalize("NFKD", filename)
+    filename = filename.encode("ascii", "ignore").decode("ascii")
+    filename = re.compile(r"[^A-Za-z0-9_.-]").sub(" ", filename)
+    filename = re.compile(r"\s+").sub(" ", filename)
+    return filename.strip()
+
 @router.get('/download/<id>')
 def download_beatmapset(id: int):
     if not id.isdigit():
@@ -65,20 +73,9 @@ def download_beatmapset(id: int):
     if not response:
         return abort(code=404)
 
-    utils.track(
-        'website_beatmap_download',
-        user=flask_login.current_user,
-        properties={
-            'beatmapset_id': set.id,
-            'beatmapset_artist': set.artist,
-            'beatmapset_title': set.title,
-            'no_video': no_video
-        }
-    )
-
     osz_filename = secure_filename(
-        f'{set.id} {set.artist} - {set.title}.osz'
-    )
+        f'{set.id} {set.artist} - {set.title}'
+    ) + '.osz'
 
     return Response(
         response.iter_content(6400),

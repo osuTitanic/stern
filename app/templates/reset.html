@@ -22,5 +22,6 @@
     <div style="display: block;">
         Need further assistance? Contact us on our <a href="https://discord.gg/qupv72e7YH">discord</a> or via <a href="mailto:{{ config.EMAIL }}">email</a>.
     </div>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 </form>
 {% endblock content %}

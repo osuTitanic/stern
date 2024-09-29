@@ -50,6 +50,7 @@ function loadBBCodePreview(element) {
     const bbcodeEditor = bbcodeWrapper.querySelector('textarea');
     const form = new FormData();
     form.set('bbcode', bbcodeEditor.value);
+    form.set('csrf_token', csrfToken);
 
     // Remove old previews
     document.querySelectorAll('.bbcode-preview').forEach(element => {

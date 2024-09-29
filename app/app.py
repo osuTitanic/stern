@@ -5,6 +5,7 @@ from app.common.database.repositories import users
 from flask import Flask, Request, jsonify, redirect, request
 from flask_pydantic.exceptions import ValidationError
 from datetime import datetime, timedelta
+from flask_wtf.csrf import CSRFProtect
 from flask_login import LoginManager
 from typing import Tuple, Optional
 from werkzeug.exceptions import *
@@ -33,6 +34,9 @@ flask.config['FLASK_PYDANTIC_VALIDATION_ERROR_RAISE'] = True
 
 login_manager = LoginManager()
 login_manager.init_app(flask)
+
+csrf = CSRFProtect()
+csrf.init_app(flask)
 
 @login_manager.user_loader
 def user_loader(user_id: int) -> Optional[DBUser]:
@@ -256,15 +260,15 @@ def clamp_value(value: int, minimum: int, maximum: int):
 
 @flask.template_filter('bbcode')
 def render_bbcode(text: str) -> str:
-    return f'<div class="bbcode">{bbcode.formatter.format(text)}</div>'
+    return f'<div class="bbcode">{bbcode.render_html(text)}</div>'
 
 @flask.template_filter('bbcode_no_wrapper')
 def render_bbcode_no_wrapper(text: str) -> str:
-    return bbcode.formatter.format(text)
+    return bbcode.render_html(text)
 
 @flask.template_filter('bbcode_nowrap')
 def render_bbcode_nowrapper(text: str) -> str:
-    return bbcode.formatter.format(text)
+    return bbcode.render_html(text)
 
 @flask.template_filter('markdown_urls')
 def format_markdown_urls(value: str) -> str:

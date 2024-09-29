@@ -120,6 +120,27 @@ def registration_request():
         )
         return return_to_register_page('There have been too many registrations from this ip. Please try again later!')
 
+    if config.RECAPTCHA_SECRET_KEY and config.RECAPTCHA_SITE_KEY:
+        client_response = request.form.get('recaptcha_response')
+
+        if not client_response:
+            return return_to_register_page('Invalid captcha response!')
+
+        response = app.session.requests.post(
+            'https://www.google.com/recaptcha/api/siteverify',
+            data={
+                'secret': config.RECAPTCHA_SECRET_KEY,
+                'response': client_response,
+                'remoteip': ip
+            }
+        )
+
+        if not response.ok:
+            return return_to_register_page('Failed to verify captcha response!')
+
+        if not response.json().get('success', False):
+            return return_to_register_page('Captcha verification failed!')
+
     with app.session.database.managed_session() as session:
         app.session.logger.info(
             f'Starting registration process for "{username}" ({email}) ({ip})...'
@@ -152,18 +173,6 @@ def registration_request():
             return return_to_register_page('An error occured on the server side. Please try again!')
 
         app.session.logger.info(f'User "{username}" with id "{user.id}" was created.')
-
-        # Send register event to amplitude
-        utils.track(
-            'website_registration',
-            user=user,
-            properties={
-                'user_id': user.id,
-                'username': user.name,
-                'email': user.email,
-                'country': user.country
-            }
-        )
 
         # Send welcome notification
         notifications.create(

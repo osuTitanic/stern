@@ -1,4 +1,3 @@
-
 @import url("main.css");
 
 :root {
@@ -154,20 +153,37 @@ h2 {
     max-width: 650px;
 }
 
-.beatmap-description:hover {
-    cursor: pointer;
-}
-
-.beatmap-description img {
-    float: left;
-    margin-right: 5px;
-    width: 160px;
-    height: 120px;
-}
-
-.bbcode {
+.beatmap-description .bbcode {
     font-size: 70%;
     text-align: left;
+    overflow: auto;
+    display: inline;
+    padding: 0;
+}
+
+.beatmap-description .bbcode--normal-line-height br {
+    margin-bottom: 4px;
+}
+
+.beatmap-preview-link {
+    float: left;
+    width: 160px;
+    height: 120px;
+    margin-right: 5px;
+}
+
+.beatmap-description .spoiler {
+    padding: 5px;
+}
+
+.beatmap-description .spoiler-head {
+    display: block;
+    color: black;
+}
+
+.beatmap-description .spoiler-head:hover {
+    cursor: pointer;
+    text-decoration: none;
 }
 
 .beatmap-download {
@@ -260,7 +276,8 @@ h2 {
     vertical-align: middle;
 }
 
-.scores .row-light:hover, .scores .row-dark:hover {
+.scores .row-light:hover,
+.scores .row-dark:hover {
     background-color: white;
     cursor: pointer;
 }
