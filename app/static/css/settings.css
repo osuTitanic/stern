@@ -63,7 +63,7 @@ h2 {
 }
 
 .activity-details dd {
-    color: #536482;
+    color: var(--details-color);
     margin-bottom: 5px;
 }
 
@@ -74,7 +74,7 @@ h2 {
 }
 
 .login-details dd {
-    color: #536482;
+    color: var(--details-color);
     margin-bottom: 5px;
 }
 
@@ -89,7 +89,7 @@ h2 {
 }
 
 .profile-section dd {
-    color: #536482;
+    color: var(--details-color);
     margin-bottom: 5px;
     line-height: 25px;
 }
@@ -174,7 +174,7 @@ h2 {
 
 .friend {
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
-    background-color: #f9f7ff;
+    background-color: var(--user-box-background);
     border: 1px solid #ddd;
     margin: 5px auto;
     padding: 8px;

@@ -108,8 +108,8 @@ h1 {
 }
 
 .player-listing th {
-    background-color: #d7d2fb;
-    border-bottom: 1px solid #a79ef3;
+    background-color: var(--table-header-background);
+    border-bottom: 1px solid var(--table-header-border);
 }
 
 .player-listing td {
