@@ -59,4 +59,13 @@
         {# TODO #}
     </div>
 </div>
+<script>
+    async function confirmNotification(element)
+    {
+        await fetch(`/api/notifications/confirm?id=${element.id}`);
+
+        element.classList.remove('new');
+        element.onclick = () => {};
+    }
+</script>
 {% endblock content %}

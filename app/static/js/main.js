@@ -90,17 +90,6 @@ function loadBBCodePreview(element) {
     return false;
 }
 
-async function confirmNotification(element)
-{
-    await fetch(`/api/notifications/confirm?id=${element.id}`);
-
-    if (element.getAttribute("href"))
-        window.location.href = element.getAttribute("href");
-
-    element.classList.remove('new');
-    element.onclick = () => {};
-}
-
 function confirmRedirect(url, prompt='Are you sure?')
 {
     do_redirect = confirm(prompt);
