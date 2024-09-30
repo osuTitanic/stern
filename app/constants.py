@@ -22,6 +22,7 @@ BEATMAP_NOT_FOUND = (
     'There are a few possible reasons for this:'
     '<ul>'
     '<li>The user may have deleted the map.</li>'
+    '<li>The map may only be available on <a onclick="redirectToBancho()">the official osu! website</a>.</li>'
     '<li>The map may have been removed due to infringing content.</li>'
     '<li>You may have made a typo!</li>'
     '</ul>'
