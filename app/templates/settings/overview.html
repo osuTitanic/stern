@@ -32,7 +32,7 @@
             <div class="notifications">
                 {% for notification in notifications %}
                 <div class="notification {{ 'new' if not notification.read else '' }}" onclick="return confirmNotification(this)" id="{{ notification.id }}">
-                    <a href="{{ notification.link or '#' }}">{{ notification.header }}</a>
+                    <a href="{{ notification.link or '#' }}" class="notification-link">{{ notification.header }}</a>
                     <p>{{ notification.content|markdown_urls|safe }}</p>
                     <p class="time">{{ notification.time|strftime }}</p>
                 </div>
