@@ -5,6 +5,15 @@ from flask import Blueprint, request
 
 router = Blueprint('notifications', __name__)
 
+@router.get('/confirm/all')
+@login_required
+def mark_all_as_read():
+    notifications.update_by_user_id(
+        current_user.id,
+        {'read': True}
+    )
+    return {'success': True}
+
 @router.get('/confirm')
 @login_required
 def mark_as_read():
