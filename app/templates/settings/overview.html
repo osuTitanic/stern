@@ -19,26 +19,23 @@
         </dl>
     </div>
     <div id="notifications">
-        <h2>Notifications</h2>
+        <h2>
+            Notifications
+            {% if notifications %}
+            <a onclick="clearAllNotifications()" class="clear-all">(clear all)</a>
+            {% endif %}
+        </h2>
         <div class="section">
             {% if not notifications %}
             You have no new notifications
             {% else %}
             <div class="notifications">
                 {% for notification in notifications %}
-                    {% if notification.link %}
-                    <div class="notification {{ 'new' if not notification.read else '' }}" onclick="return confirmNotification(this)" id="{{ notification.id }}" href="{{ notification.link }}">
-                        <h2>{{ notification.header }}</h2>
-                        <p>{{ notification.content|markdown_urls|safe }}</p>
-                        <p class="time">{{ notification.time|strftime }}</p>
-                    </div>
-                    {% else %}
-                    <div class="notification {{ 'new' if not notification.read else '' }}" onclick="return confirmNotification(this)" id="{{ notification.id }}">
-                        <h2>{{ notification.header }}</h2>
-                        <p>{{ notification.content|markdown_urls|safe }}</p>
-                        <p class="time">{{ notification.time|strftime }}</p>
-                    </div>
-                    {% endif %}
+                <div class="notification {{ 'new' if not notification.read else '' }}" onclick="return confirmNotification(this)" id="{{ notification.id }}">
+                    <a href="{{ notification.link }}">{{ notification.header }}</a>
+                    <p>{{ notification.content|markdown_urls|safe }}</p>
+                    <p class="time">{{ notification.time|strftime }}</p>
+                </div>
                 {% endfor %}
             </div>
             {% endif %}
@@ -66,6 +63,20 @@
 
         element.classList.remove('new');
         element.onclick = () => {};
+    }
+
+    async function clearAllNotifications()
+    {
+        await fetch(`/api/notifications/confirm/all`);
+
+        document.querySelectorAll('.notification').forEach((element) => {
+            element.classList.remove('new');
+            element.onclick = () => {};
+        });
+
+        setTimeout(() => {
+            window.location.reload();
+        }, 500);
     }
 </script>
 {% endblock content %}
