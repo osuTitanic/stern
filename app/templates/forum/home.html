@@ -30,12 +30,12 @@
             <td style="text-align: right;" class="subforum-topics">
                 {% set recent = forum_recent[forum.id] %}
                 {% if recent %}
-                    <a href="/forum/{{ forum.id }}/t/{{ recent.id }}">
-                        {{ recent.title }}
+                    <a href="/forum/{{ forum.id }}/p/{{ recent.id }}">
+                        {{ recent.topic.title }}
                     </a>
                     <p>
                         {{ recent.created_at|timeago }} by
-                        <a href="/u/{{ recent.creator_id }}">{{ recent.creator.name }}</a>
+                        <a href="/u/{{ recent.user_id }}">{{ recent.user.name }}</a>
                     </p>
                 {% else %}
                     <p>No recent topics</p>
