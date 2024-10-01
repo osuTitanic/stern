@@ -395,3 +395,21 @@ table {
     margin: 5px;
     text-align: center;
 }
+
+.quick-reply textarea {
+    background-color: var(--content-main);
+    border: none;
+    white-space: pre-line;
+    resize: vertical;
+    height: 15px;
+    margin: 3px 3px 0px 3px;
+    padding: 3px;
+    width: 97.5%;
+    font-size: 80% !important;
+}
+
+.quick-reply {
+    justify-content: center;
+    display: flex;
+    margin-bottom: 5px;
+}
