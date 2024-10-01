@@ -434,6 +434,11 @@ input[type="submit"]:hover {
     max-width: 660px;
 }
 
+.bbcode video {
+    max-width: 500px;
+    max-height: 500px;
+}
+
 .bbcode-preview {
     margin: 5px 5px 1.5px 5px;
     background-color: #dbd8fd;
