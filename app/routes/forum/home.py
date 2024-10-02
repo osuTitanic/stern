@@ -1,5 +1,5 @@
 
-from app.common.database import forums, topics
+from app.common.database import forums, posts
 from flask import Blueprint
 
 import app.session
@@ -33,7 +33,7 @@ def home():
                 for forum in itertools.chain(*forum_dict.values())
             },
             forum_recent={
-                forum.id: topics.fetch_recent(forum.id, session)
+                forum.id: posts.fetch_last_by_forum(forum.id, session)
                 for forum in itertools.chain(*forum_dict.values())
             }
         )

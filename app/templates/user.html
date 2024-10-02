@@ -490,39 +490,6 @@
                         </div>
                         {% endif %}
                     </div>
-                    {% if user.is_bat or nominations %}
-                    <div>
-                        <h2 class="profile-stats-header">Nominated Beatmaps</h2>
-                        {% if not nominations %}
-                            <p style="margin: 5px;">This user has not nominated any beatmaps :(</p>
-                        {% else %}
-                        <div class="profile-beatmaps-container">
-                            {% for nomination in nominations %}
-                            <table class="profile-beatmap">
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <a href="/s/{{ nomination.set_id }}" class="profile-beatmap-description">
-                                                <b>{{ nomination.beatmapset.artist }} - {{ nomination.beatmapset.title }}</b>
-                                            </a>
-                                            <br>
-                                            {% if nomination.beatmapset.server == 0 %}
-                                            <a href="https://osu.ppy.sh/u/{{ nomination.beatmapset.creator }}">mapped by {{ nomination.beatmapset.creator }}</a>
-                                            {% else %}
-                                                <a href="/u/{{ nomination.beatmapset.creator_id }}">mapped by {{ nomination.beatmapset.creator }}</a>
-                                            {% endif %}
-                                        </td>
-                                        <td style="width:80px; height:60px;">
-                                            <img src="{{ config.STATIC_BASEURL }}/mt/{{ nomination.set_id }}" alt="" loading="lazy">
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            {% endfor %}
-                        </div>
-                        {% endif %}
-                    </div>
-                    {% endif %}
                     {% for category, beatmapsets in beatmapset_categories.items() %}
                     {% if beatmapsets %}
                     <div>
@@ -567,6 +534,39 @@
                     </div>
                     {% endif %}
                     {% endfor %}
+                    {% if user.is_bat or nominations %}
+                    <div>
+                        <h2 class="profile-stats-header">Nominated Beatmaps</h2>
+                        {% if not nominations %}
+                            <p style="margin: 5px;">This user has not nominated any beatmaps :(</p>
+                        {% else %}
+                        <div class="profile-beatmaps-container">
+                            {% for nomination in nominations %}
+                            <table class="profile-beatmap">
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <a href="/s/{{ nomination.set_id }}" class="profile-beatmap-description">
+                                                <b>{{ nomination.beatmapset.artist }} - {{ nomination.beatmapset.title }}</b>
+                                            </a>
+                                            <br>
+                                            {% if nomination.beatmapset.server == 0 %}
+                                            <a href="https://osu.ppy.sh/u/{{ nomination.beatmapset.creator }}">mapped by {{ nomination.beatmapset.creator }}</a>
+                                            {% else %}
+                                                <a href="/u/{{ nomination.beatmapset.creator_id }}">mapped by {{ nomination.beatmapset.creator }}</a>
+                                            {% endif %}
+                                        </td>
+                                        <td style="width:80px; height:60px;">
+                                            <img src="{{ config.STATIC_BASEURL }}/mt/{{ nomination.set_id }}" alt="" loading="lazy">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endif %}
                 </div>
             </td>
             <tr onclick="expandProfileTab('achievements')">

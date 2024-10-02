@@ -212,8 +212,8 @@
 .beatmap-order-select th {
     padding-left: 10px;
     padding-right: 10px;
-    background-color: #d7d2fb;
-    border-bottom: 1px solid #a79ef3;
+    background-color: var(--table-header-background);
+    border-bottom: 1px solid var(--table-header-border);
 }
 
 .beatmap-order-select a {

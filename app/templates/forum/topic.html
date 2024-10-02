@@ -232,6 +232,17 @@
         {% endfor %}
     {% endif %}
     <br>
+    {% if current_user.is_authenticated %}
+    <form action="/forum/{{ forum.id }}/t/{{ topic.id }}/post"
+          method="post"
+          class="quick-reply">
+        <textarea name="bbcode"
+                  placeholder="Quick Reply: Type your message here and hit Ctrl+Enter to send!"></textarea>
+        <input type="hidden" name="user_id" value="{{ current_user.id }}">
+        <input type="hidden" name="action" value="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    </form>
+    {% endif %}
     <table width='100%'>
         <td align="right" style="float: right">
             {{ post_count }} posts |
@@ -496,5 +507,22 @@
             location.search = query.toString();
         }
     }
+
+    document.addEventListener('keydown', function(event) {
+        if (event.ctrlKey && event.key === 'Enter') {
+            var form = document.querySelector('.quick-reply');
+            var textarea = form.querySelector('textarea');
+
+            // Focus textarea if no message was written
+            if (textarea.value.trim() === '')
+            {
+                textarea.focus();
+                return;
+            }
+
+            // Submit quick reply otherwise
+            form.submit();
+        }
+    });
 </script>
 {% endblock content %}

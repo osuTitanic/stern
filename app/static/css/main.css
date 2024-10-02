@@ -1,13 +1,17 @@
 :root {
+    --table-header-background: #d7d2fb;
+    --table-header-border: #a79ef3;
     --background-gradient-lower: #e8d2ff;
     --background-gradient: #686fc1;
     --background-main: #a9a9ff;
+    --user-box-background: #f9f7ff;
     --content-border-grey: #d2d4fa;
     --content-border: #5c559c;
     --table-row-light: #edebfa;
     --table-row-dark: #e3e1fa;
     --content-main: #f0ecfa;
     --text-shadow: #efcfe1;
+    --details-color: #536482;
     --outlink-blue: #7284ff;
     --outlink-pink: #ff64ba;
     --font-color: #323232;
@@ -428,6 +432,11 @@ input[type="submit"]:hover {
 
 .bbcode img {
     max-width: 660px;
+}
+
+.bbcode video {
+    max-width: 500px;
+    max-height: 500px;
 }
 
 .bbcode-preview {

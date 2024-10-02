@@ -40,6 +40,7 @@ def search_api():
             query.sort,
             query.storyboard,
             query.video,
+            query.titanic,
             offset=query.page * 50,
             limit=50,
             session=session

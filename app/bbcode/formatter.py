@@ -51,6 +51,12 @@ parser.add_simple_formatter(
     '</div>'
 )
 
+parser.add_simple_formatter(
+    'video',
+    '<video src="%(value)s" controls></video>',
+    replace_links=False
+)
+
 @parser.formatter('box')
 def render_box(tag_name, value, options, parent, context):
     return '<div class="spoiler">' \

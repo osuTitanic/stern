@@ -3,10 +3,13 @@
 :root {
     --header-pink: #e15fac;
     --header-blue: #3843a6;
+    --description-border: #e1dfe7;
+    --description-color: #f9f7fe;
     --difficulty-background: #e1d6fb;
     --difficulty-active: #bfa8f8;
     --difficulty-text: #5e5e5e;
     --difficulty: #e7e2f3;
+    --leader-link: #fdbf2a;
     --border-light: #cfc1ef;
     --border: #8462db;
 }
@@ -144,8 +147,8 @@ h2 {
 }
 
 .beatmap-description {
-    border: 1px solid #e1dfe7;
-    background-color: #f9f7fe;
+    border: 1px solid var(--description-border);
+    background-color: var(--description-color);
     overflow: auto;
     padding: 7px;
     margin: 5px;
@@ -213,7 +216,7 @@ h2 {
 }
 
 .leader a {
-    color: #fdbf2a;
+    color: var(--leader-link);
 }
 
 .leader td {
@@ -248,7 +251,7 @@ h2 {
 }
 
 .scores-header {
-    background-color: #d7d2fb;
+    background-color: var(--table-header-background);
     text-align: center;
 }
 
@@ -262,7 +265,7 @@ h2 {
 }
 
 .scores th {
-    border-bottom: 1px solid #a79ef3;
+    border-bottom: 1px solid var(--table-header-border);
 }
 
 .scores td {
@@ -297,7 +300,7 @@ h2 {
 }
 
 .bat-controls dd {
-    color: #536482;
+    color: var(--details-color);
     margin-bottom: 5px;
     line-height: 25px;
 }

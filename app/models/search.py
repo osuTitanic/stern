@@ -22,4 +22,5 @@ class SearchRequest(BaseModel):
     sort: BeatmapSortBy = BeatmapSortBy.Ranked
     storyboard: bool = False
     video: bool = False
+    titanic: bool = False
     page: int = 0

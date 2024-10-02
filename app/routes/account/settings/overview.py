@@ -21,16 +21,6 @@ def settings_overview():
             session=session
         )
 
-        old_notifications = notifications.fetch_all(
-            flask_login.current_user.id,
-            until=datetime.now() - timedelta(days=7),
-            read=True,
-            session=session
-        )
-
-        all_notifications = [*new_notifications, *old_notifications]
-        all_notifications.sort(key=lambda n: n.time, reverse=True)
-
         return utils.render_template(
             'settings/overview.html',
             css='settings.css',
@@ -41,5 +31,5 @@ def settings_overview():
             total_posts=users.fetch_post_count(
                 flask_login.current_user.id
             ),
-            notifications=all_notifications
+            notifications=new_notifications
         )

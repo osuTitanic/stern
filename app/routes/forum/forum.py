@@ -1,5 +1,5 @@
 
-from app.common.database import forums, topics
+from app.common.database import forums, topics, posts
 
 from flask import Blueprint, abort, redirect, request
 
@@ -87,7 +87,7 @@ def forum_view(forum_id: int):
                 for subforum in sub_forums
             },
             subforum_recent={
-                forum.id: topics.fetch_recent(forum.id, session)
+                forum.id: posts.fetch_last_by_forum(forum.id, session)
                 for forum in sub_forums
             },
             has_custom_icons=has_custom_icons,
