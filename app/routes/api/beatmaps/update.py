@@ -72,7 +72,7 @@ def update_hashes(set_id: int):
 
         try:
             for beatmap in beatmapset.beatmaps:
-                response = app.session.requests.get(f'https://api.osu.direct/b/{beatmap.id}')
+                response = app.session.requests.get(f'https://osu.direct/api/b/{beatmap.id}')
                 response.raise_for_status()
 
                 beatmap_hash = response.json()['FileMD5']
