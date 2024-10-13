@@ -42,7 +42,21 @@ class Sitemap:
         for outlink in self.children:
             outlink.refresh()
 
-        xml = (
+        if self.children:
+            return (
+                '<?xml version="1.0" encoding="UTF-8"?>' +
+                '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' +
+                ''.join(
+                    f'<sitemap>'
+                    f'<loc>{config.OSU_BASEURL}{entry.location}</loc>'
+                    f'<lastmod>{entry.last_modified.isoformat()}</lastmod>'
+                    f'</sitemap>'
+                    for entry in self.children
+                ) +
+                '</sitemapindex>'
+            )
+
+        return (
             '<?xml version="1.0" encoding="UTF-8"?>' +
             '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' +
             ''.join(
@@ -55,20 +69,6 @@ class Sitemap:
             ) +
             '</urlset>'
         )
-
-        if self.children:
-            xml += (
-                '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' +
-                ''.join(
-                    f'<sitemap>'
-                    f'<loc>{config.OSU_BASEURL}{outlink.location}</loc>'
-                    f'</sitemap>'
-                    for outlink in self.children
-                ) +
-                '</sitemapindex>'
-            )
-
-        return xml
 
 def get_main_sites() -> List[SitemapEntry]:
     return [
@@ -152,9 +152,11 @@ popular_beatmaps_sitemap = Sitemap('/sitemap/beatmaps/popular.xml', get_most_pla
 recent_beatmaps_sitemap = Sitemap('/sitemap/beatmaps/recent.xml', get_recent_beatmaps)
 forum_sitemap = Sitemap('/sitemap/forum.xml', get_forums)
 user_sitemap = Sitemap('/sitemap/users.xml', get_top_users)
-main_sitemap = Sitemap(
+main_sitemap = Sitemap('/sitemap/main.xml', get_main_sites)
+index_sitemap = Sitemap(
     '/sitemap.xml', get_main_sites,
     [
+        main_sitemap,
         user_sitemap,
         forum_sitemap,
         recent_beatmaps_sitemap,
@@ -162,7 +164,14 @@ main_sitemap = Sitemap(
     ]
 )
 
-if config.DOMAIN_NAME == 'titanic.sh':
+if config.DOMAIN_NAME == 'localhost':
+    @router.get('/sitemap/main.xml')
+    def main_sitemap_xml():
+        return Response(
+            main_sitemap.render(),
+            mimetype='application/xml'
+        )
+
     @router.get('/sitemap/users.xml')
     def user_sitemap_xml():
         return Response(
@@ -194,6 +203,6 @@ if config.DOMAIN_NAME == 'titanic.sh':
     @router.get('/sitemap.xml')
     def sitemap_xml():
         return Response(
-            main_sitemap.render(),
+            index_sitemap.render(),
             mimetype='application/xml'
         )
