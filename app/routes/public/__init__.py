@@ -7,6 +7,7 @@ from . import changelog
 from . import download
 from . import rankings
 from . import beatmap
+from . import sitemap
 from . import groups
 from . import scores
 from . import search
@@ -18,6 +19,7 @@ router.register_blueprint(download.router, url_prefix='/download')
 router.register_blueprint(multiplayer.router, url_prefix='/mp')
 router.register_blueprint(beatmapset.router, url_prefix='/s')
 router.register_blueprint(changelog.router, url_prefix='/')
+router.register_blueprint(sitemap.router, url_prefix='/')
 router.register_blueprint(rankings.router, url_prefix='/rankings')
 router.register_blueprint(beatmap.router, url_prefix='/b')
 router.register_blueprint(search.router, url_prefix='/beatmapsets')

@@ -111,6 +111,9 @@ sitemap = Sitemap()
 
 @router.get('/sitemap.xml')
 def sitemap_xml():
+    if config.DOMAIN_NAME != 'titanic.sh':
+        return Response('', status=404)
+
     return Response(
         sitemap.render(),
         mimetype='application/xml'
