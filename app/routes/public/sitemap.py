@@ -167,7 +167,7 @@ index_sitemap = SitemapIndex(
 
 if config.DOMAIN_NAME in ('titanic.sh', 'localhost'):
     for entry in index_sitemap.sitemaps:
-        view_func = lambda: Response(entry.render(), mimetype='application/xml')
+        view_func = lambda entry=entry: Response(entry.render(), mimetype='application/xml')
         view_func.__name__ = f'sitemap_{entry.generator.__name__}'
 
         router.add_url_rule(
