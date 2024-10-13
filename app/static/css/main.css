@@ -56,14 +56,6 @@ html[data-darkreader-mode="dynamic"] .nav-dropdown {
     filter: drop-shadow(0px 1px 2px #000000) !important;
 }
 
-html[data-darkreader-mode="dynamic"] {
-    background: linear-gradient(#263c93, #364377 10%) !important;
-}
-
-html {
-    background-color: inherit !important;
-}
-
 * {
     margin: 0;
     font-family: "Arial Grande", Tahoma, Helvetica, Arial, sans-serif;
@@ -85,8 +77,13 @@ a:visited {
     color: rgb(0, 102, 204);
 }
 
-body {
+html {
     background: linear-gradient(var(--background-gradient), var(--background-main) 20%);
+    background-attachment: fixed;
+}
+
+html[data-darkreader-mode="dynamic"] {
+    background: linear-gradient(#475280, #2f3b6a 20%) !important;
     background-attachment: fixed;
 }
 
