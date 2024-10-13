@@ -42,7 +42,7 @@ class Sitemap:
         for outlink in self.children:
             outlink.refresh()
 
-        return (
+        xml = (
             '<?xml version="1.0" encoding="UTF-8"?>' +
             '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' +
             ''.join(
@@ -52,16 +52,23 @@ class Sitemap:
                 f'<changefreq>{entry.change_frequency}</changefreq>'
                 f'</url>'
                 for entry in self.entries
-            ),
-            ''.join(
-                f'<sitemap>'
-                f'<loc>{config.OSU_BASEURL}{link.location}</loc>'
-                f'<lastmod>{link.last_modified.isoformat()}+00:00</lastmod>'
-                f'</sitemap>'
-                for link in self.children
-            )
-            + '</urlset>'
+            ) +
+            '</urlset>'
         )
+
+        if self.children:
+            xml += (
+                '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' +
+                ''.join(
+                    f'<sitemap>'
+                    f'<loc>{config.OSU_BASEURL}{outlink.location}</loc>'
+                    f'</sitemap>'
+                    for outlink in self.children
+                ) +
+                '</sitemapindex>'
+            )
+
+        return xml
 
 def get_main_sites() -> List[SitemapEntry]:
     return [
