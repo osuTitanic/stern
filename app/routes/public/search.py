@@ -49,7 +49,6 @@ def search_beatmap():
         site_title="Beatmaps Listing",
         max_page_display=max_page_display,
         min_page_display=min_page_display,
-        is_canonical=True,
         canonical_url=canonical_url,
         arguments=arguments,
         page=page
