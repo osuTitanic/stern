@@ -49,7 +49,6 @@ class Sitemap:
                 ''.join(
                     f'<sitemap>'
                     f'<loc>{config.OSU_BASEURL}{entry.location}</loc>'
-                    f'<lastmod>{entry.last_modified.isoformat()}</lastmod>'
                     f'</sitemap>'
                     for entry in self.children
                 ) +
