@@ -54,6 +54,9 @@ def validate_username(username: str) -> Optional[str]:
 
     if any(word in username.lower() for word in BAD_WORDS):
         return "Your username contains offensive words."
+    
+    if username.lower().startswith('deleteduser'):
+        return "This username is not allowed."
 
     safe_name = username.lower().replace(' ', '_')
 
