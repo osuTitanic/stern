@@ -86,7 +86,7 @@ def on_http_exception(error: HTTPException) -> Tuple[str, int]:
 
     if error.description.startswith('<'):
         # Okay, I know this solution is bad, but I'm
-        # too lazy to find a better solution right now.
+        # too lazy to find a better one right now.
         custom_description = error.description
 
     return utils.render_template(
