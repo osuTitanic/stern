@@ -98,5 +98,6 @@ def get_beatmap(id: int):
                 nominations.fetch_one(beatmap.set_id, current_user.id, session)
                 if current_user.is_authenticated else None
             ),
-            nominations=nominations.fetch_by_beatmapset(beatmap.set_id, session)
+            nominations=nominations.fetch_by_beatmapset(beatmap.set_id, session),
+            canonical_url=f'/b/{beatmap.id}'
         )
