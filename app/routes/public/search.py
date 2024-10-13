@@ -33,7 +33,11 @@ def search_beatmap():
         for key, value in request.args.items()
         if key not in ['page', 'order', 'storyboard', 'video']
     ])
-    canonical_url = f"{request.base_url}?{canonical_arguments}"
+
+    canonical_url = (
+        f"{request.base_url}"
+        f"{'?' + canonical_arguments if canonical_arguments else ''}"
+    )
 
     return utils.render_template(
         'search.html',
