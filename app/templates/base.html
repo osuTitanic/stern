@@ -28,6 +28,7 @@
     <link rel="stylesheet" href="/lib/fontawesome.min.css">
     <link rel="stylesheet" href="/lib/fontawesome.solid.min.css">
     <link rel="stylesheet" href="/lib/fontawesome.brands.min.css">
+    {% if is_canonical %}<link rel="canonical" href="{{ canonical_url }}"{% endif %}>
     <script>
         const osuBaseurl = "{{ config.OSU_BASEURL }}";
         const staticBaseurl = "{{ config.STATIC_BASEURL }}";
