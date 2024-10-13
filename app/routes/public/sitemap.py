@@ -164,7 +164,7 @@ index_sitemap = Sitemap(
     ]
 )
 
-if config.DOMAIN_NAME == 'localhost':
+if config.DOMAIN_NAME in ('titanic.sh', 'localhost'):
     @router.get('/sitemap/main.xml')
     def main_sitemap_xml():
         return Response(
