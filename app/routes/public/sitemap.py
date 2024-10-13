@@ -1,9 +1,11 @@
 
+from app.common.constants import BeatmapOrder, BeatmapSortBy, BeatmapCategory
 from app.common.database import forums, users, beatmapsets
+
 from datetime import datetime, timedelta
 from dataclasses import dataclass, field
 from flask import Blueprint, Response
-from typing import List
+from typing import List, Callable
 
 import config
 import app
@@ -16,23 +18,29 @@ class SitemapEntry:
 
 @dataclass
 class Sitemap:
+    location: str
+    generator: Callable
+    children: List["Sitemap"] = field(default_factory=list)
     entries: List[SitemapEntry] = field(default_factory=list)
     last_modified: datetime = datetime.now()
+    refresh_interval: timedelta = timedelta(hours=1)
 
     def refresh(self) -> None:
         time_since_refresh = (
             datetime.now() - self.last_modified
         )
 
-        if time_since_refresh > timedelta(hours=1) and self.entries:
+        if time_since_refresh > self.refresh_interval and self.entries:
             return
 
-        self.entries = generate_sitemap_entries()
-        self.entries.sort(key=lambda entry: entry.priority, reverse=True)
+        self.entries = self.generator()
         self.last_modified = datetime.now()
 
     def render(self) -> str:
         self.refresh()
+
+        for outlink in self.children:
+            outlink.refresh()
 
         return (
             '<?xml version="1.0" encoding="UTF-8"?>' +
@@ -44,77 +52,141 @@ class Sitemap:
                 f'<changefreq>{entry.change_frequency}</changefreq>'
                 f'</url>'
                 for entry in self.entries
+            ),
+            ''.join(
+                f'<sitemap>'
+                f'<loc>{config.OSU_BASEURL}{link.location}</loc>'
+                f'<lastmod>{link.last_modified.isoformat()}+00:00</lastmod>'
+                f'</sitemap>'
+                for link in self.children
             )
             + '</urlset>'
         )
 
-def generate_sitemap_entries() -> List[SitemapEntry]:
-    with app.session.database.managed_session() as session:
-        top_users = [
-            user.id
-            for user in users.fetch_top(100, session)
-        ]
-
-        main_forums = [
-            sub_forum.id
-            for forum in forums.fetch_main_forums(session)
-            for sub_forum in forums.fetch_sub_forums(forum.id, session)
-        ]
-
-        recent_beatmaps = [
-            beatmapset.id
-            for beatmapset in beatmapsets.search(
-                'Newest', 1,
-                session=session
-            )
-        ]
-
-        most_played_beatmaps = [
-            beatmapset.id
-            for beatmapset in beatmapsets.search(
-                'Most Played', 1,
-                session=session
-            )
-        ]
-
+def get_main_sites() -> List[SitemapEntry]:
     return [
         SitemapEntry('/', 1.0),
         SitemapEntry('/download/', 1.0),
         SitemapEntry('/beatmapsets/', 1.0),
         SitemapEntry('/forum/', 1.0),
-        SitemapEntry('/rankings/osu/performance', 0.9),
-        SitemapEntry('/rankings/osu/country', 0.7),
-        SitemapEntry('/rankings/osu/rscore', 0.7),
-        SitemapEntry('/rankings/osu/tscore', 0.7),
-        SitemapEntry('/rankings/osu/ppv1', 0.7),
-        SitemapEntry('/rankings/osu/clears', 0.7),
-        *(
-            SitemapEntry(f'/forum/{forum_id}', 0.7, 'hourly')
-            for forum_id in main_forums
-        ),
-        *(
-            SitemapEntry(f'/users/{user_id}', 0.5, 'hourly')
-            for user_id in top_users
-        ),
-        *(
-            SitemapEntry(f'/s/{beatmapset_id}', 0.5, 'hourly')
-            for beatmapset_id in recent_beatmaps
-        ),
-        *(
-            SitemapEntry(f'/s/{beatmapset_id}', 0.5, 'hourly')
-            for beatmapset_id in most_played_beatmaps
+        SitemapEntry('/rankings/osu/performance', 1.0),
+        SitemapEntry('/rankings/osu/country', 0.9),
+        SitemapEntry('/rankings/osu/rscore', 0.9),
+        SitemapEntry('/rankings/osu/tscore', 0.9),
+        SitemapEntry('/rankings/osu/ppv1', 0.9),
+        SitemapEntry('/rankings/osu/clears', 0.9),
+    ]
+
+def get_top_users() -> List[SitemapEntry]:
+    top_users = [
+        user.id
+        for user in users.fetch_top(1000)
+        if user.activated
+    ]
+
+    return [
+        SitemapEntry(f'/u/{user_id}', 0.5, 'hourly')
+        for user_id in top_users
+    ]
+
+def get_forums() -> List[SitemapEntry]:
+    with app.session.database.managed_session() as session:
+        site_forums = [forum.id for forum in forums.fetch_all(session)]
+        site_forums.sort()
+
+    return [
+        SitemapEntry(f'/forum/{forum_id}', 0.8, 'hourly')
+        for forum_id in site_forums
+    ]
+
+def get_most_played_beatmaps() -> List[SitemapEntry]:
+    most_played_beatmaps = [
+        beatmapset.id
+        for beatmapset in beatmapsets.search_extended(
+            None, None, None, None, None, None,
+            sort=BeatmapSortBy.Plays,
+            order=BeatmapOrder.Descending,
+            category=BeatmapCategory.Leaderboard,
+            has_storyboard=False,
+            has_video=False,
+            titanic_only=False,
+            limit=1000
         )
     ]
 
+    return [
+        SitemapEntry(f'/s/{beatmapset_id}', 0.4, 'hourly')
+        for beatmapset_id in most_played_beatmaps
+    ]
+
+def get_recent_beatmaps() -> List[SitemapEntry]:
+    recent_beatmaps = [
+        beatmapset.id
+        for beatmapset in beatmapsets.search_extended(
+            None, None, None, None, None, None,
+            sort=BeatmapSortBy.Created,
+            order=BeatmapOrder.Descending,
+            category=BeatmapCategory.Leaderboard,
+            has_storyboard=False,
+            has_video=False,
+            titanic_only=False,
+            limit=1000
+        )
+    ]
+
+    return [
+        SitemapEntry(f'/s/{beatmapset_id}', 0.3, 'hourly')
+        for beatmapset_id in recent_beatmaps
+    ]
+
 router = Blueprint('sitemap', __name__)
-sitemap = Sitemap()
 
-@router.get('/sitemap.xml')
-def sitemap_xml():
-    if config.DOMAIN_NAME != 'titanic.sh':
-        return Response('', status=404)
+popular_beatmaps_sitemap = Sitemap('/sitemap/beatmaps/popular.xml', get_most_played_beatmaps)
+recent_beatmaps_sitemap = Sitemap('/sitemap/beatmaps/recent.xml', get_recent_beatmaps)
+forum_sitemap = Sitemap('/sitemap/forum.xml', get_forums)
+user_sitemap = Sitemap('/sitemap/users.xml', get_top_users)
+main_sitemap = Sitemap(
+    '/sitemap.xml', get_main_sites,
+    [
+        user_sitemap,
+        forum_sitemap,
+        recent_beatmaps_sitemap,
+        popular_beatmaps_sitemap
+    ]
+)
 
-    return Response(
-        sitemap.render(),
-        mimetype='application/xml'
-    )
+if config.DOMAIN_NAME == 'titanic.sh':
+    @router.get('/sitemap/users.xml')
+    def user_sitemap_xml():
+        return Response(
+            user_sitemap.render(),
+            mimetype='application/xml'
+        )
+
+    @router.get('/sitemap/forum.xml')
+    def forum_sitemap_xml():
+        return Response(
+            forum_sitemap.render(),
+            mimetype='application/xml'
+        )
+
+    @router.get('/sitemap/beatmaps/recent.xml')
+    def recent_beatmaps_sitemap_xml():
+        return Response(
+            recent_beatmaps_sitemap.render(),
+            mimetype='application/xml'
+        )
+
+    @router.get('/sitemap/beatmaps/popular.xml')
+    def popular_beatmaps_sitemap_xml():
+        return Response(
+            popular_beatmaps_sitemap.render(),
+            mimetype='application/xml'
+        )
+
+    @router.get('/sitemap.xml')
+    def sitemap_xml():
+        return Response(
+            main_sitemap.render(),
+            mimetype='application/xml'
+        )
