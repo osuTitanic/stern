@@ -17,10 +17,29 @@ class SitemapEntry:
     change_frequency: str = 'daily'
 
 @dataclass
+class SitemapIndex:
+    sitemaps: List['Sitemap']
+
+    def render(self) -> str:
+        for entry in self.sitemaps:
+            entry.refresh()
+
+        return (
+            '<?xml version="1.0" encoding="UTF-8"?>' +
+            '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' +
+            ''.join(
+                f'<sitemap>'
+                f'<loc>{config.OSU_BASEURL}{entry.location}</loc>'
+                f'</sitemap>'
+                for entry in self.sitemaps
+            ) +
+            '</sitemapindex>'
+        )
+
+@dataclass
 class Sitemap:
     location: str
     generator: Callable
-    children: List["Sitemap"] = field(default_factory=list)
     entries: List[SitemapEntry] = field(default_factory=list)
     last_modified: datetime = datetime.now()
     refresh_interval: timedelta = timedelta(hours=1)
@@ -38,22 +57,6 @@ class Sitemap:
 
     def render(self) -> str:
         self.refresh()
-
-        for outlink in self.children:
-            outlink.refresh()
-
-        if self.children:
-            return (
-                '<?xml version="1.0" encoding="UTF-8"?>' +
-                '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' +
-                ''.join(
-                    f'<sitemap>'
-                    f'<loc>{config.OSU_BASEURL}{entry.location}</loc>'
-                    f'</sitemap>'
-                    for entry in self.children
-                ) +
-                '</sitemapindex>'
-            )
 
         return (
             '<?xml version="1.0" encoding="UTF-8"?>' +
@@ -152,8 +155,7 @@ recent_beatmaps_sitemap = Sitemap('/sitemap/beatmaps/recent.xml', get_recent_bea
 forum_sitemap = Sitemap('/sitemap/forum.xml', get_forums)
 user_sitemap = Sitemap('/sitemap/users.xml', get_top_users)
 main_sitemap = Sitemap('/sitemap/main.xml', get_main_sites)
-index_sitemap = Sitemap(
-    '/sitemap.xml', get_main_sites,
+index_sitemap = SitemapIndex(
     [
         main_sitemap,
         user_sitemap,
@@ -164,39 +166,13 @@ index_sitemap = Sitemap(
 )
 
 if config.DOMAIN_NAME in ('titanic.sh', 'localhost'):
-    @router.get('/sitemap/main.xml')
-    def main_sitemap_xml():
-        return Response(
-            main_sitemap.render(),
-            mimetype='application/xml'
-        )
+    for entry in index_sitemap.sitemaps:
+        view_func = lambda: Response(entry.render(), mimetype='application/xml')
+        view_func.__name__ = f'sitemap_{entry.generator.__name__}'
 
-    @router.get('/sitemap/users.xml')
-    def user_sitemap_xml():
-        return Response(
-            user_sitemap.render(),
-            mimetype='application/xml'
-        )
-
-    @router.get('/sitemap/forum.xml')
-    def forum_sitemap_xml():
-        return Response(
-            forum_sitemap.render(),
-            mimetype='application/xml'
-        )
-
-    @router.get('/sitemap/beatmaps/recent.xml')
-    def recent_beatmaps_sitemap_xml():
-        return Response(
-            recent_beatmaps_sitemap.render(),
-            mimetype='application/xml'
-        )
-
-    @router.get('/sitemap/beatmaps/popular.xml')
-    def popular_beatmaps_sitemap_xml():
-        return Response(
-            popular_beatmaps_sitemap.render(),
-            mimetype='application/xml'
+        router.add_url_rule(
+            entry.location,
+            view_func=view_func
         )
 
     @router.get('/sitemap.xml')
