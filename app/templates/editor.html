@@ -83,6 +83,13 @@
     You will gain <b>{{ 1 if datetime.now() - topic.last_post_at < timedelta(days=7) else 2 }} kudosu</b>
     for this post if it is deemed as helpful by the map's creator.
 </div>
+{% if current_user.is_bat %}
+<div style="font-size: 90%; padding: 5px;">
+    Please note that changing the icon <i><b>won't</b></i> affect the status of the map.
+    Instead, please do so in the <a href="/s/{{ beatmapset.id }}">BAT Controls</a> panel.
+    The icon will automatically update.
+</div>
+{% endif %}
 {% endif %}
 
 <input type="hidden" name="user_id" value="{{ context['user-id'] }}">
