@@ -104,9 +104,12 @@ input:focus {
 
 .logo {
     position: absolute;
-    top: -73.5px;
-    left: 10px;
-    width: 200px;
+    top: -82px;
+    left: -83px;
+    width: 140px;
+    transform: rotate(-5deg);
+    z-index: 10;
+    filter: drop-shadow(5px 2px 0.2rem #00000029)
 }
 
 .nav {
@@ -120,7 +123,7 @@ input:focus {
 .nav-list {
     list-style: none;
     position: absolute;
-    left: -35px;
+    left: -8px;
     display: flex;
     margin-left: 30px;
 }
@@ -229,18 +232,21 @@ input:focus {
 .search-container {
     display: flex;
     max-height: 18px;
+    margin-left: 45px;
+}
+
+.search-form {
+    display: flex;
+    width: 35%;
 }
 
 .nav-search {
     border-radius: 3px 3px 3px 3px;
     font-size: 85%;
-    margin-left: 2.5px;
-    margin-right: 2.5px;
+    margin-left: 5px;
+    margin-right: 5px;
     border-color: beige;
-}
-
-.search-form {
-    display: flex;
+    width: 80%;
 }
 
 .login-container {
