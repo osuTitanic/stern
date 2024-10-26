@@ -18,10 +18,8 @@
     {% if site_url %}<meta property="og:url" content="{{ site_url }}">{% endif %}
     {% if config.ENABLE_SSL %}<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">{% endif %}
     <title>{{ title or 'Titanic!' }}</title>
-    <script src="/lib/jquery.min.js" async></script>
-    <script src="/lib/jquery.timeago.js" async></script>
-    <script src="/lib/d3.v3.js" async></script> 
-    <script src="/lib/nv.d3.js" async></script>
+    <script src="/lib/jquery.min.js"></script>
+    <script src="/lib/jquery.timeago.js"></script>
     <link rel="prefetch" href="/images/logo/main-vector.min.svg" as="image">
     <link rel="prefetch" href="/images/logo/main-low.png">
     <link rel="prefetch" href="/css/{{ css or 'main.css' }}">
@@ -30,7 +28,6 @@
     <link rel="stylesheet" href="/lib/fontawesome.min.css">
     <link rel="stylesheet" href="/lib/fontawesome.solid.min.css">
     <link rel="stylesheet" href="/lib/fontawesome.brands.min.css">
-    <link rel="stylesheet" href="/lib/nv.d3.min.css">
     {% if canonical_url %}<link rel="canonical" href="{{ canonical_url }}">{% endif %}
     <script>
         const osuBaseurl = "{{ config.OSU_BASEURL }}";
