@@ -20,14 +20,15 @@
     <title>{{ title or 'Titanic!' }}</title>
     <script src="/lib/jquery.min.js"></script>
     <script src="/lib/jquery.timeago.js"></script>
-    <script src="/lib/d3.v3.js"></script>
-    <script src="/lib/nv.d3.js"></script>
+    <link rel="prefetch" href="/images/logo/main-vector.min.svg" as="image">
+    <link rel="prefetch" href="/images/logo/main-low.png">
+    <link rel="prefetch" href="/css/{{ css or 'main.css' }}">
     <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
     <link rel="stylesheet" href="/css/{{ css or 'main.css' }}">
-    <link rel="stylesheet" href="/lib/nv.d3.min.css">
     <link rel="stylesheet" href="/lib/fontawesome.min.css">
     <link rel="stylesheet" href="/lib/fontawesome.solid.min.css">
     <link rel="stylesheet" href="/lib/fontawesome.brands.min.css">
+    {% if canonical_url %}<link rel="canonical" href="{{ canonical_url }}">{% endif %}
     <script>
         const osuBaseurl = "{{ config.OSU_BASEURL }}";
         const staticBaseurl = "{{ config.STATIC_BASEURL }}";
@@ -46,7 +47,9 @@
     </div><br>
     {% endif %}
     <div class="main">
-        <img src="/images/logo/headerlogo@0,15x.png" class="logo" loading="eager" alt="">
+        <a href="/">
+            <img src="/images/logo/main-vector.min.svg" class="logo" loading="preload" alt="">
+        </a>
         <div class="nav">
             {% include "navigation.html" %}
         </div>

@@ -14,7 +14,7 @@ from . import search
 from . import users
 from . import home
 
-router = Blueprint("routes", __name__)
+router = Blueprint("public", __name__)
 router.register_blueprint(download.router, url_prefix='/download')
 router.register_blueprint(multiplayer.router, url_prefix='/mp')
 router.register_blueprint(beatmapset.router, url_prefix='/s')

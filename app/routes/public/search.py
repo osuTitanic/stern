@@ -27,6 +27,18 @@ def search_beatmap():
     if page > 1000: return redirect(f'?page=1000&{arguments}')
     elif page < 0: return redirect(f'?page=0&{arguments}')
 
+    # Canonical URL without the page parameter
+    canonical_arguments = '&'.join([
+        f'{key}={value}'
+        for key, value in request.args.items()
+        if key not in ['page', 'order', 'storyboard', 'video']
+    ])
+
+    canonical_url = (
+        f"{request.base_url}"
+        f"{'?' + canonical_arguments if canonical_arguments else ''}"
+    )
+
     return utils.render_template(
         'search.html',
         css='search.css',
@@ -37,6 +49,7 @@ def search_beatmap():
         site_title="Beatmaps Listing",
         max_page_display=max_page_display,
         min_page_display=min_page_display,
+        canonical_url=canonical_url,
         arguments=arguments,
         page=page
     )

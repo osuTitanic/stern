@@ -56,14 +56,6 @@ html[data-darkreader-mode="dynamic"] .nav-dropdown {
     filter: drop-shadow(0px 1px 2px #000000) !important;
 }
 
-html[data-darkreader-mode="dynamic"] body {
-    background: linear-gradient(#395f94, #3b4a85 20%) !important
-}
-
-html {
-    background-color: inherit !important;
-}
-
 * {
     margin: 0;
     font-family: "Arial Grande", Tahoma, Helvetica, Arial, sans-serif;
@@ -85,8 +77,13 @@ a:visited {
     color: rgb(0, 102, 204);
 }
 
-body {
+html {
     background: linear-gradient(var(--background-gradient), var(--background-main) 20%);
+    background-attachment: fixed;
+}
+
+html[data-darkreader-mode="dynamic"] {
+    background: linear-gradient(#475280, #2f3b6a 20%) !important;
     background-attachment: fixed;
 }
 
@@ -107,9 +104,12 @@ input:focus {
 
 .logo {
     position: absolute;
-    top: -73.5px;
-    left: 10px;
-    width: 200px;
+    top: -82px;
+    left: -88px;
+    width: 140px;
+    transform: rotate(-2.5deg);
+    z-index: 10;
+    filter: drop-shadow(5px 2px 0.2rem #0000001c);
 }
 
 .nav {
@@ -123,7 +123,7 @@ input:focus {
 .nav-list {
     list-style: none;
     position: absolute;
-    left: -35px;
+    left: -8px;
     display: flex;
     margin-left: 30px;
 }
@@ -177,6 +177,8 @@ input:focus {
 .dropdown-indicator {
     margin-left: 5px;
     margin-bottom: 1px;
+    width: 9px;
+    height: 5px;
 }
 
 .bancho-stats {
@@ -232,18 +234,21 @@ input:focus {
 .search-container {
     display: flex;
     max-height: 18px;
+    margin-left: 45px;
+}
+
+.search-form {
+    display: flex;
+    width: 35%;
 }
 
 .nav-search {
     border-radius: 3px 3px 3px 3px;
     font-size: 85%;
-    margin-left: 2.5px;
-    margin-right: 2.5px;
+    margin-left: 5px;
+    margin-right: 5px;
     border-color: beige;
-}
-
-.search-form {
-    display: flex;
+    width: 80%;
 }
 
 .login-container {

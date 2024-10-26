@@ -399,7 +399,10 @@
             <div title="Play Song">
                 <a onclick="resetOrPlayAudio('beatmap-preview')" class="beatmap-preview-link">
                     <img src="{{ config.STATIC_BASEURL }}/mt/{{ beatmapset.id }}l" alt="">
-                    <audio id="beatmap-preview" src="{{ config.STATIC_BASEURL }}/mp3/preview/{{ beatmapset.id }}.mp3" preload="auto"></audio>
+                    <audio id="beatmap-preview"
+                           src="{{ config.STATIC_BASEURL }}/mp3/preview/{{ beatmapset.id }}.mp3"
+                           preload="auto">
+                    </audio>
                 </a>
             </div>
             {% if beatmapset.description %}
@@ -715,6 +718,10 @@
         })
         spoilerBox.classList.add('spoiler-head')
     })
+
+    // Set volume of beatmap preview to 0.5
+    const beatmapPreview = document.getElementById('beatmap-preview')
+    beatmapPreview.volume = 0.5
 
     function addFavorite(beatmapset_id) {
         fetch(`/api/profile/${currentUser}/favourites/add?set_id=${beatmapset_id}`)

@@ -108,6 +108,7 @@ function getBeatmapsets()
                 var beatmapAudio = document.createElement("audio");
                 beatmapAudio.src = `${staticBaseurl}/mp3/preview/${beatmapset.id}`;
                 beatmapAudio.id = `beatmap-preview-${beatmapset.id}`;
+                beatmapAudio.volume = 0.5;
                 beatmapAudio.onended = () => {
                     playIcon.classList.remove("fa-pause");
                     playIcon.classList.add("fa-play");
