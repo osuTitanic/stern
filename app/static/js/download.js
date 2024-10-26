@@ -1,6 +1,6 @@
 function loadManifest()
 {
-  const manifestUrl = '/api/clients';
+  const manifestUrl = `${window.location.protocol}//${window.location.host}/api/clients`;
   const container = document.getElementById('client-container');
 
   console.info('Loading clients...');
