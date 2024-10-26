@@ -177,6 +177,8 @@ input:focus {
 .dropdown-indicator {
     margin-left: 5px;
     margin-bottom: 1px;
+    width: 9px;
+    height: 5px;
 }
 
 .bancho-stats {
