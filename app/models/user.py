@@ -69,14 +69,14 @@ class UserModel(BaseModel):
     activated: bool
     preferred_mode: int
     playstyle: int
-    userpage_about: Optional[str]
-    userpage_signature: Optional[str]
-    userpage_banner: Optional[str]
-    userpage_website: Optional[str]
-    userpage_discord: Optional[str]
-    userpage_twitter: Optional[str]
-    userpage_location: Optional[str]
-    userpage_interests: Optional[str]
+    userpage: Optional[str]
+    signature: Optional[str]
+    banner: Optional[str]
+    website: Optional[str]
+    discord: Optional[str]
+    twitter: Optional[str]
+    location: Optional[str]
+    interests: Optional[str]
 
     relationships: List[RelationshipModel]
     achievements: List[AchievementModel]

@@ -221,9 +221,9 @@
                             </div>
                             {% endif %}
                         </div>
-                        {% if post.user.userpage_signature %}
+                        {% if post.user.signature %}
                         <div class="post-signature">
-                            {{ post.user.userpage_signature|bbcode|safe }}
+                            {{ post.user.signature|bbcode|safe }}
                         </div>
                         {% endif %}
                     </td>
