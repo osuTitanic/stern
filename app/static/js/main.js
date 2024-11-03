@@ -101,7 +101,7 @@ function confirmRedirect(url, promptText) {
 }
 
 function cookieExists(name) {
-    return document.cookie.indexOf(name + '=') !== -1;
+    return document.cookie.indexOf(`${name}=`);
 }
 
 function isLoggedIn() {
