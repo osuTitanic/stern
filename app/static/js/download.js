@@ -1,5 +1,5 @@
 function loadManifest() {
-  var manifestUrl = '/api/clients';
+  var manifestUrl = '/api/clients/';
   var container = document.getElementById('client-container');
 
   console.info('Loading clients...');
