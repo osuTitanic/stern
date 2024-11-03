@@ -221,7 +221,7 @@ function createScoreElement(score, index, type) {
   if (type == "top") {
     ppWeight.appendChild(document.createTextNode("weighted "));
     ppWeight.appendChild(ppWeightPercent);
-    ppWeight.appendChild(document.createTextNode(" (" + (score.pp * (0.95 ** (index + topScoreOffset))).toFixed(0) + "pp)"));
+    ppWeight.appendChild(document.createTextNode(" (" + (score.pp * Math.pow(0.95, index + topScoreOffset)).toFixed(0) + "pp)"));
   }
 
   if (!approvedRewards && score.beatmap.status > 2) {
