@@ -101,11 +101,11 @@ function confirmRedirect(url, promptText) {
 }
 
 function cookieExists(name) {
-    return document.cookie.indexOf(`${name}=`);
+    return document.cookie.indexOf(name + "=") !== -1;
 }
 
 function isLoggedIn() {
-    return cookieExists('session');
+    return document.getElementById('welcome-text').textContent != 'Welcome, guest!'
 }
 
 function show(id) {
