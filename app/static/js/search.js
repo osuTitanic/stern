@@ -57,14 +57,11 @@ function getBeatmapsets() {
     var beatmapContainer = document.getElementById("beatmap-list");
     var url = "/api/beatmaps/search" + window.location.search;
 
-    fetch(url)
-        .then(function(response) {
-            if (!response.ok) {
-                throw new Error(response.status.toString());
-            }
-            return response.json();
-        })
-        .then(function(beatmapsets) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", url, true);
+    xhr.onload = function() {
+        if (xhr.status >= 200 && xhr.status < 300) {
+            var beatmapsets = JSON.parse(xhr.responseText);
             var loadingText = document.getElementById("loading-text");
 
             if (loadingText) {
@@ -234,11 +231,16 @@ function getBeatmapsets() {
 
                 $(".pagination").css("display", "block");
             });
-        })
-        .catch(function(error) {
-            // TODO
-            throw error;
-        });
+        } else {
+            console.error('Error loading beatmapsets: ' + xhr.statusText);
+        }
+    };
+
+    xhr.onerror = function() {
+        console.error('Network Error');
+    };
+
+    xhr.send();
 }
 
 function reloadInput() {
