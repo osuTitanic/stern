@@ -774,7 +774,7 @@ function processRankHistory(entries) {
 
 function loadUserPerformanceGraph(userId, mode)
 {
-    var url = `/api/profile/${userId}/history/rank/${mode}`;
+    var url = '/api/profile/' + userId + '/history/rank/' + mode;
     var xhr = new XMLHttpRequest();
     xhr.open("GET", url, true);
     
@@ -799,8 +799,8 @@ function loadUserPerformanceGraph(userId, mode)
                     .axisLabel("Days")
                     .tickFormat(function(days) {
                         if (days == 0) return "now";
-                        if (days > 0) return (days != 1) ? `In ${days} days` : `In ${days} day`;
-                        return (days != -1) ? `${-days} days ago` : `${-days} day ago`;
+                        if (days > 0) return (days != 1) ? 'In ' + days + ' days' : 'In ' + days + ' day';
+                        return (days != -1) ? (-days) + ' days ago' : (-days) + ' day ago';
                     });
 
                 chart.yAxis
@@ -808,7 +808,7 @@ function loadUserPerformanceGraph(userId, mode)
                     .tickFormat(function(rank) {
                         rank = Math.round(rank);
                         if (rank >= 0) return "";
-                        return `#${-rank}`;
+                        return '#' + (-rank);
                     });
 
                 // Calculate the relative min/max user rank to display on y axis
