@@ -1,4 +1,4 @@
-const Genres = {
+var Genres = {
     Any: 0,
     Unspecified: 1,
     Video_Game: 2,
@@ -14,10 +14,18 @@ const Genres = {
     Folk: 13,
     Jazz: 14,
 
-    get: function(value) {return Object.keys(this).find(key => this[key] === value)}
+    get: function(value) {
+        var keys = Object.keys(this);
+        for (var i = 0; i < keys.length; i++) {
+            if (this[keys[i]] === value) {
+                return keys[i];
+            }
+        }
+        return undefined;
+    }
 };
 
-const Languages = {
+var Languages = {
     Any: 0,
     Unspecified: 1,
     English: 2,
@@ -34,52 +42,59 @@ const Languages = {
     Polish: 13,
     Other: 14,
 
-    get: function(value) {return Object.keys(this).find(key => this[key] === value)}
+    get: function(value) {
+        var keys = Object.keys(this);
+        for (var i = 0; i < keys.length; i++) {
+            if (this[keys[i]] === value) {
+                return keys[i];
+            }
+        }
+        return undefined;
+    }
 };
 
-function getBeatmapsets()
-{
-    const beatmapContainer = document.getElementById("beatmap-list");
-    const url = "/api/beatmaps/search" + window.location.search
+function getBeatmapsets() {
+    var beatmapContainer = document.getElementById("beatmap-list");
+    var url = "/api/beatmaps/search" + window.location.search;
 
     fetch(url)
-        .then(response => {
-            if (!response.ok)
-                throw new Error(`${response.status}`);
+        .then(function(response) {
+            if (!response.ok) {
+                throw new Error(response.status.toString());
+            }
             return response.json();
         })
-        .then(beatmapsets => {
-            const loadingText = document.getElementById("loading-text");
+        .then(function(beatmapsets) {
+            var loadingText = document.getElementById("loading-text");
 
-            if (loadingText)
+            if (loadingText) {
                 loadingText.remove();
+            }
 
             beatmapContainer.innerHTML = ""; // Remove child elements
 
-            if (beatmapsets.length <= 0)
-            {
+            if (beatmapsets.length <= 0) {
                 var noMapsText = document.createElement("h3");
-                noMapsText.textContent = "Nothing found... :("
+                noMapsText.textContent = "Nothing found... :(";
                 noMapsText.style.margin = "0 auto";
                 beatmapContainer.appendChild(noMapsText);
                 return;
             }
 
-            beatmapsets.forEach(beatmapset => {
+            beatmapsets.forEach(function(beatmapset) {
                 var beatmapsetDiv = document.createElement("div");
                 beatmapsetDiv.classList.add("beatmapset");
 
                 var beatmapImage = document.createElement("div");
                 beatmapImage.classList.add("beatmap-image");
-                beatmapImage.style.backgroundImage = `url("${staticBaseurl}/mt/${beatmapset.id}")`;
+                beatmapImage.style.backgroundImage = 'url("' + staticBaseurl + '/mt/' + beatmapset.id + '")';
 
                 var playIcon = document.createElement("i");
                 playIcon.classList.add("fa-solid", "fa-play");
-                playIcon.onclick = (e) => {
-                    document.querySelectorAll('[id^="beatmap-preview-"]').forEach(element => {
+                playIcon.onclick = function(e) {
+                    document.querySelectorAll('[id^="beatmap-preview-"]').forEach(function(element) {
                         // Disable other active audios
-                        if (!element.paused && element.id != `beatmap-preview-${beatmapset.id}`)
-                        {
+                        if (!element.paused && element.id !== 'beatmap-preview-' + beatmapset.id) {
                             element.pause();
                             element.currentTime = 0;
 
@@ -89,27 +104,24 @@ function getBeatmapsets()
                         }
                     });
 
-                    resetOrPlayAudio(`beatmap-preview-${beatmapset.id}`);
+                    resetOrPlayAudio('beatmap-preview-' + beatmapset.id);
 
-                    var audio = document.getElementById(`beatmap-preview-${beatmapset.id}`);
+                    var audio = document.getElementById('beatmap-preview-' + beatmapset.id);
 
-                    if (audio.paused)
-                    {
+                    if (audio.paused) {
                         playIcon.classList.remove("fa-pause");
                         playIcon.classList.add("fa-play");
-                    }
-                    else
-                    {
+                    } else {
                         playIcon.classList.remove("fa-play");
                         playIcon.classList.add("fa-pause");
                     }
                 };
 
                 var beatmapAudio = document.createElement("audio");
-                beatmapAudio.src = `${staticBaseurl}/mp3/preview/${beatmapset.id}`;
-                beatmapAudio.id = `beatmap-preview-${beatmapset.id}`;
+                beatmapAudio.src = staticBaseurl + '/mp3/preview/' + beatmapset.id;
+                beatmapAudio.id = 'beatmap-preview-' + beatmapset.id;
                 beatmapAudio.volume = 0.5;
-                beatmapAudio.onended = () => {
+                beatmapAudio.onended = function() {
                     playIcon.classList.remove("fa-pause");
                     playIcon.classList.add("fa-play");
                 };
@@ -123,8 +135,8 @@ function getBeatmapsets()
 
                 var beatmapLink = document.createElement("a");
                 beatmapLink.classList.add("beatmap-link");
-                beatmapLink.href = `/s/${beatmapset.id}`;
-                beatmapLink.textContent = `${beatmapset.artist} - ${beatmapset.title}`;
+                beatmapLink.href = '/s/' + beatmapset.id;
+                beatmapLink.textContent = beatmapset.artist + ' - ' + beatmapset.title;
 
                 var videoIcon = document.createElement("i");
                 videoIcon.classList.add("fa-solid", "fa-film");
@@ -132,21 +144,26 @@ function getBeatmapsets()
                 var imageIcon = document.createElement("i");
                 imageIcon.classList.add("fa-regular", "fa-image");
 
-                if (beatmapset.has_video)
+                if (beatmapset.has_video) {
                     beatmapInfoLeft.appendChild(videoIcon);
+                }
 
-                if (beatmapset.has_storyboard)
+                if (beatmapset.has_storyboard) {
                     beatmapInfoLeft.appendChild(imageIcon);
+                }
 
-                beatmapCreator = document.createElement("span");
+                var beatmapCreator = document.createElement("span");
                 beatmapCreator.textContent = "mapped by ";
 
-                beatmapCreatorLink = document.createElement("a");
+                var beatmapCreatorLink = document.createElement("a");
                 beatmapCreatorLink.textContent = beatmapset.creator;
-                if (beatmapset.server == 0) beatmapCreatorLink.href = `https://osu.ppy.sh/u/${beatmapset.creator}`
-                else beatmapCreatorLink.href = `/u/${beatmapset.creator_id}`
+                if (beatmapset.server === 0) {
+                    beatmapCreatorLink.href = 'https://osu.ppy.sh/u/' + beatmapset.creator;
+                } else {
+                    beatmapCreatorLink.href = '/u/' + beatmapset.creator_id;
+                }
 
-                beatmapCreatorDiv = document.createElement("div");
+                var beatmapCreatorDiv = document.createElement("div");
                 beatmapCreatorDiv.appendChild(beatmapCreator);
                 beatmapCreatorDiv.appendChild(beatmapCreatorLink);
                 beatmapCreatorDiv.classList.add("beatmap-creator");
@@ -159,28 +176,26 @@ function getBeatmapsets()
                 var beatmapTagsDiv = document.createElement("div");
                 beatmapTagsDiv.classList.add("beatmap-tags");
 
-                if (beatmapset.language_id > 0)
-                {
+                if (beatmapset.language_id > 0) {
                     var query = new URLSearchParams(location.search);
                     query.set("language", beatmapset.language_id);
                     var languageTag = document.createElement("a");
                     languageTag.textContent = Languages.get(beatmapset.language_id).toString();
-                    languageTag.href = `?${query.toString()}`
+                    languageTag.href = '?' + query.toString();
                     beatmapTagsDiv.appendChild(languageTag);
                 }
 
-                if (beatmapset.genre_id > 0)
-                {
+                if (beatmapset.genre_id > 0) {
                     var query = new URLSearchParams(location.search);
                     query.set("genre", beatmapset.genre_id);
                     var genreTag = document.createElement("a");
                     genreTag.textContent = Genres.get(beatmapset.genre_id).toString().replace("_", " ");
-                    genreTag.href = `?${query.toString()}`
+                    genreTag.href = '?' + query.toString();
                     beatmapTagsDiv.appendChild(genreTag);
                 }
 
                 var ratingBar = document.createElement("div");
-                ratingBar.style.width = `${100 - ((beatmapset.ratings / 10) * 100)}%`;
+                ratingBar.style.width = (100 - ((beatmapset.ratings / 10) * 100)) + '%';
                 ratingBar.classList.add("beatmap-rating-bar");
 
                 var beatmapRating = document.createElement("div");
@@ -194,11 +209,15 @@ function getBeatmapsets()
                 playsIcon.classList.add("fa-solid", "fa-play");
 
                 var totalPlays = beatmapset.beatmaps
-                            .map((item) => item.playcount)
-                            .reduce((prev, next) => prev + next);
+                    .map(function(item) {
+                        return item.playcount;
+                    })
+                    .reduce(function(prev, next) {
+                        return prev + next;
+                    });
 
                 var detailsDiv = document.createElement("div");
-                detailsDiv.classList.add("beatmap-details")
+                detailsDiv.classList.add("beatmap-details");
                 detailsDiv.appendChild(heartIcon);
                 detailsDiv.appendChild(document.createTextNode(beatmapset.favourites));
                 detailsDiv.appendChild(playsIcon);
@@ -216,174 +235,39 @@ function getBeatmapsets()
                 $(".pagination").css("display", "block");
             });
         })
-        .catch(error => {
+        .catch(function(error) {
             // TODO
             throw error;
         });
 }
 
-function reloadInput()
-{
-    const dataElements = document.querySelectorAll(".beatmap-options dl");
+function reloadInput() {
+    var dataElements = document.querySelectorAll(".beatmap-options dl");
     var query = new URLSearchParams();
 
-    dataElements.forEach(item => {
+    dataElements.forEach(function(item) {
         var dataName = item.getAttribute("data-name");
 
         // Element has no "data-name"
         // Multiple selections can be made
-        if (!dataName)
-        {
-            item.querySelectorAll(".selected")
-                .forEach(selectedElement => {
-                    query.set(selectedElement.getAttribute("data-name"), "true");
-                });
-            return;
-        }
-
-        var selectedElement = item.querySelector(".selected");
-        var dataValue = selectedElement.getAttribute("data-id");
-
-        // Don't set parameter if "data-id" is empty
-        if (dataValue.length > 0)
-            query.set(dataName, dataValue);
-    });
-
-    // Keep search input from previous request
-    var search = new URLSearchParams(location.search).get("query");
-    if (search) query.set("query", search);
-
-    // Keep sort and order from previous request
-    var sort = new URLSearchParams(location.search).get("sort");
-    var order = new URLSearchParams(location.search).get("order");
-
-    if (sort) query.set("sort", sort);
-    if (order) query.set("order", order);
-
-    // Browser will reload
-    location.search = query.toString();
-}
-
-function setElement(element)
-{
-    const dataName = element.parentNode.parentNode.getAttribute("data-name");
-    const elements = element.parentNode.querySelectorAll("a");
-
-    if (!dataName)
-    {
-        element.classList.toggle("selected");
-        reloadInput();
-        return;
-    }
-
-    elements.forEach(dataElement => {
-        if (dataElement !== element)
-            dataElement.classList.remove("selected");
-    });
-
-    element.classList.toggle("selected");
-
-    // Select default/first element if no element was selected
-    if (!element.parentNode.querySelector(".selected"))
-        elements[0].classList.add("selected");
-
-    reloadInput();
-}
-
-function setOrder(element)
-{
-    const query = new URLSearchParams(location.search);
-    query.set("sort", element.getAttribute("data-id"));
-    query.delete("page");
-
-    if (element.classList.contains("selected"))
-    {
-        // 0 - Descending
-        // 1 - Ascending
-        const currentOrder = query.get("order") || 0;
-        query.set("order", (currentOrder == 0 ? 1 : 0));
-    }
-
-    // Browser will reload
-    location.search = query.toString();
-}
-
-document.querySelectorAll(".beatmap-options a")
-        .forEach(selectableElement => {
-            selectableElement.addEventListener("click", (event) => {
-                event.preventDefault();
-                setElement(event.target);
-            })
-        });
-
-document.querySelectorAll(".beatmap-order-select a")
-        .forEach(selectableElement => {
-            selectableElement.addEventListener("click", (event) => {
-                event.preventDefault();
-                setOrder(event.target);
-            })
-        });
-
-window.addEventListener('load', () => {
-    const dataElements = document.querySelectorAll(".beatmap-options dl");
-    const query = new URLSearchParams(location.search);
-
-    const beatmapOrder = query.get("order") || 0;
-    const beatmapSort = query.get("sort") || 0;
-
-    const orderElement = document.querySelector(`.beatmap-order-select a[data-id="${beatmapSort}"]`);
-    orderElement.classList.add("selected");
-
-    // Reset "selected" class based on query
-    dataElements.forEach(item => {
-        var dataName = item.getAttribute("data-name");
-
-        if (!dataName)
-        {
-            // Element has no "data-name"
-            // Multiple selections can be made
-            item.querySelectorAll("a").forEach(element => {
-                const elementDataName = element.getAttribute("data-name");
-
-                if (elementDataName) {
-                    const queryValue = query.get(elementDataName);
-                    element.classList.toggle("selected", queryValue === "true");
-                }
-            })
-            return;
-        }
-
-        const queryValue = query.get(dataName);
-
-        if (queryValue)
-        {
-            item.querySelectorAll(".selected").forEach(selectedElement => {
-                selectedElement.classList.remove("selected");
+        if (!dataName) {
+            item.querySelectorAll(".selected").forEach(function(selectedItem) {
+                query.append("mods[]", selectedItem.getAttribute("data-id"));
             });
-
-            const selectedItem = item.querySelector(`a[data-id="${queryValue}"]`);
-            if (selectedItem) {
-                selectedItem.classList.add("selected");
+        } else {
+            var selectedElement = item.querySelector(".selected");
+            if (selectedElement) {
+                query.set(dataName, selectedElement.getAttribute("data-id"));
             }
         }
     });
 
-    // Load beatmapsets
+    var searchParams = window.location.search ? window.location.search + '&' : '?';
+    searchParams += query.toString();
+
+    history.pushState(null, '', searchParams);
     getBeatmapsets();
-});
+}
 
-var input = document.getElementById("search-input");
-var timeout = null;
-
-// Event listener for search query input
-input.addEventListener("keyup", (e) => {
-    var input = document.getElementById("search-input");
-    var query = new URLSearchParams(location.search);
-
-    clearTimeout(timeout);
-
-    timeout = setTimeout(() => {
-        query.set("query", input.value);
-        location.search = query.toString();
-    }, 500);
-});
+// Get beatmapsets on load
+getBeatmapsets();
