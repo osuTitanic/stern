@@ -253,6 +253,13 @@ function reloadInput()
     var search = new URLSearchParams(location.search).get("query");
     if (search) query.set("query", search);
 
+    // Keep sort and order from previous request
+    var sort = new URLSearchParams(location.search).get("sort");
+    var order = new URLSearchParams(location.search).get("order");
+
+    if (sort) query.set("sort", sort);
+    if (order) query.set("order", order);
+
     // Browser will reload
     location.search = query.toString();
 }
