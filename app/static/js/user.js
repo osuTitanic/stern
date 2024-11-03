@@ -1,11 +1,16 @@
-var activeTab = window.location.hash != "" ? window.location.hash.replace("#","") : "general";
+var activeTab = window.location.hash !== "" ? window.location.hash.replace("#", "") : "general";
 var topLeaderOffset = 0;
 var topScoreOffset = 0;
 
-const slideDown = elem => elem.style.height = `${elem.scrollHeight}px`;
-const slideUp = elem => elem.style.height = "0px";
+function slideDown(elem) {
+    elem.style.height = elem.scrollHeight + "px";
+}
 
-const Mods = {
+function slideUp(elem) {
+    elem.style.height = "0px";
+}
+
+var Mods = {
     NoMod: 0,
     NoFail: 1 << 0,
     Easy: 1 << 1,
@@ -30,73 +35,77 @@ const Mods = {
     FadeIn: 1 << 20,
     Random: 1 << 21,
     LastMod: 1 << 29,
-    KeyMod: 1 << 15 | 1 << 16 | 1 << 17 | 1 << 18 | 1 << 19,
-    SpeedMods: 1 << 6 | 1 << 8 | 1 << 9,
-    FreeModAllowed: 1 << 0 | 1 << 1 | 1 << 3 | 1 << 4 | 1 << 5 | 1 << 10 | 1 << 20 | 1 << 7 | 1 << 13 | 1 << 12 | 1 << 15 | 1 << 16 | 1 << 17 | 1 << 18 | 1 << 19,
+    KeyMod: (1 << 15) | (1 << 16) | (1 << 17) | (1 << 18) | (1 << 19),
+    SpeedMods: (1 << 6) | (1 << 8) | (1 << 9),
+    FreeModAllowed: (1 << 0) | (1 << 1) | (1 << 3) | (1 << 4) | (1 << 5) | (1 << 10) | (1 << 20) | (1 << 7) | (1 << 13) | (1 << 12) | (1 << 15) | (1 << 16) | (1 << 17) | (1 << 18) | (1 << 19),
 
     getMembers: function() {
-      let memberList = [];
-      for (const mod in Mods) {
-        if (Mods[mod] === (Mods[mod] & this[mod])) {
-          memberList.push(mod);
+        var memberList = [];
+        for (var mod in Mods) {
+            if (Mods[mod] === (Mods[mod] & this[mod])) {
+                memberList.push(mod);
+            }
         }
-      }
-      return memberList;
+        return memberList;
     },
 
     getString: function(value) {
-      const modMap = {
-        [Mods.NoMod]: "NM",
-        [Mods.NoFail]: "NF",
-        [Mods.Easy]: "EZ",
-        [Mods.Hidden]: "HD",
-        [Mods.HardRock]: "HR",
-        [Mods.SuddenDeath]: "SD",
-        [Mods.DoubleTime]: "DT",
-        [Mods.Relax]: "RX",
-        [Mods.HalfTime]: "HT",
-        [Mods.Nightcore]: "NC",
-        [Mods.Flashlight]: "FL",
-        [Mods.Autoplay]: "AT",
-        [Mods.SpunOut]: "SO",
-        [Mods.Autopilot]: "AP",
-        [Mods.Perfect]: "PF",
-        [Mods.Key4]: "K4",
-        [Mods.Key5]: "K5",
-        [Mods.Key6]: "K6",
-        [Mods.Key7]: "K7",
-        [Mods.Key8]: "K8",
-      };
+        var modMap = {
+            0: "NM",
+            1: "NF",
+            2: "EZ",
+            3: "HD",
+            4: "HR",
+            5: "SD",
+            6: "DT",
+            7: "RX",
+            8: "HT",
+            9: "NC",
+            10: "FL",
+            11: "AT",
+            12: "SO",
+            13: "AP",
+            14: "PF",
+            15: "K4",
+            16: "K5",
+            17: "K6",
+            18: "K7",
+            19: "K8"
+        };
 
-      const members = [];
-      for (const mod in Mods) {
-        if (Mods[mod] !== 0 && (value & Mods[mod]) === Mods[mod]) {
-          members.push(mod);
+        var members = [];
+        for (var mod in Mods) {
+            if (Mods[mod] !== 0 && (value & Mods[mod]) === Mods[mod]) {
+                members.push(mod);
+            }
         }
-      }
 
-      if ("DT" in members && "NC" in members) {
-        members.splice(members.indexOf("DT"), 1);
-      }
+        if (members.indexOf("DT") !== -1 && members.indexOf("NC") !== -1) {
+            members.splice(members.indexOf("DT"), 1);
+        }
 
-      return members.map(mod => modMap[Mods[mod]]).join("");
+        return members.map(function(mod) {
+            return modMap[Mods[mod]];
+        }).join("");
     }
 };
 
-function pinScore(scoreId, userId)
-{
-  fetch(`/api/profile/${userId}/pinned/add/${scoreId}`)
-    .then(response => {
-      loadPinnedScores(userId, modeName);
-    });
+function pinScore(scoreId, userId) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/api/profile/" + userId + "/pinned/add/" + scoreId, true);
+    xhr.onload = function() {
+        loadPinnedScores(userId, modeName);
+    };
+    xhr.send();
 }
 
-function unpinScore(scoreId, userId)
-{
-  fetch(`/api/profile/${userId}/pinned/remove/${scoreId}`)
-    .then(response => {
-      loadPinnedScores(userId, modeName);
-    });
+function unpinScore(scoreId, userId) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/api/profile/" + userId + "/pinned/remove/" + scoreId, true);
+    xhr.onload = function() {
+        loadPinnedScores(userId, modeName);
+    };
+    xhr.send();
 }
 
 function expandProfileTab(id, forceExpand) {
@@ -104,80 +113,80 @@ function expandProfileTab(id, forceExpand) {
   activeTab = id;
 
   if (!tab) {
-    // Tab can be null sometimes?
-    return;
+      // Tab can be null sometimes?
+      return;
   }
 
-  if (!tab.classList.contains("expanded") || forceExpand) {
-    tab.classList.add("expanded");
-    tab.style.display = "block";
+  // Check for 'expanded' class
+  if (tab.className.indexOf("expanded") === -1 || forceExpand) {
+      tab.className += " expanded";
+      tab.style.display = "block";
 
-    if (tab.style.height == "0px") {
-      slideDown(tab);
-    }
+      if (tab.style.height === "0px") {
+          slideDown(tab);
+      }
 
-    if (forceExpand) {
-      window.location.hash = "#" + activeTab;
-    }
+      if (forceExpand) {
+          window.location.hash = "#" + activeTab;
+      }
   } else {
-    slideUp(tab);
-    tab.classList.remove("expanded");
-    // This can cause issues
-    // tab.addEventListener("transitionend", () => {
-    //   tab.style.display = "none";
-    // }, { once: true });
+      slideUp(tab);
+      tab.className = tab.className.replace(/(?:^|\s)expanded(?!\S)/, '');
   }
 
-  if (activeTab == 'general') {
-    loadUserPerformanceGraph(userId, modeName);
+  if (activeTab === 'general') {
+      loadUserPerformanceGraph(userId, modeName);
   } else {
-    loadUserPlaysGraph(userId, modeName);
-    loadUserViewsGraph(userId, modeName);
+      loadUserPlaysGraph(userId, modeName);
+      loadUserViewsGraph(userId, modeName);
   }
 }
 
-function expandRecentActivity()
-{
-    document.getElementById("profile-recent-preview").style.display = "none";
-    document.getElementById("profile-recent-full").style.display = "block";
-    slideDown(document.getElementById("general"));
+function expandRecentActivity() {
+  var recentPreview = document.getElementById("profile-recent-preview");
+  var recentFull = document.getElementById("profile-recent-full");
+  var general = document.getElementById("general");
+  
+  recentPreview.style.display = "none";
+  recentFull.style.display = "block";
+  slideDown(general);
 }
 
 function createScoreElement(score, index, type)
 {
-  const scoreDiv = document.createElement("div");
+  var scoreDiv = document.createElement("div");
   scoreDiv.id = `score-${type}-${index}`;
   scoreDiv.classList.add("score");
 
-  const scoreTable = document.createElement("table");
-  const tableBody = document.createElement("tbody");
-  const tableRow = document.createElement("tr");
+  var scoreTable = document.createElement("table");
+  var tableBody = document.createElement("tbody");
+  var tableRow = document.createElement("tr");
 
-  const leftColumn = document.createElement("td");
+  var leftColumn = document.createElement("td");
   leftColumn.classList.add('score-left');
 
-  const scoreGrade = document.createElement("img");
+  var scoreGrade = document.createElement("img");
   scoreGrade.src = `/images/grades/${score.grade}_small.png`
   scoreGrade.loading = "lazy";
 
-  const beatmapInfo = document.createElement("a");
+  var beatmapInfo = document.createElement("a");
   beatmapInfo.href = `/b/${score.beatmap.id}?mode=${score.mode}`;
   beatmapInfo.textContent = `${score.beatmap.beatmapset.artist} - ${score.beatmap.beatmapset.title} [${score.beatmap.version}]`;
 
-  const modsText = document.createElement("b");
+  var modsText = document.createElement("b");
 
   if (score.mods > 0)
     modsText.textContent = `+${Mods.getString(score.mods)}`;
 
-  const scoreInfo = document.createElement("b");
+  var scoreInfo = document.createElement("b");
   scoreInfo.appendChild(beatmapInfo);
   scoreInfo.appendChild(modsText);
 
-  const accuracyText = document.createTextNode(`(${(score.acc * 100).toFixed(2)}%)`);
+  var accuracyText = document.createTextNode(`(${(score.acc * 100).toFixed(2)}%)`);
 
   // Parse date to a format that timeago can understand
-  const scoreDate = new Date(score.submitted_at);
-  const scoreDateString = scoreDate.toLocaleDateString(
+  var scoreDate = new Date(score.submitted_at);
+  var scoreDateString = scoreDate.toLocaleDateString(
     "en-us", {
       year: "numeric",
       month: "numeric",
@@ -189,25 +198,25 @@ function createScoreElement(score, index, type)
     }
   );
 
-  const dateText = document.createElement("time");
+  var dateText = document.createElement("time");
   dateText.setAttribute("datetime", scoreDateString);
   dateText.textContent = score.submitted_at;
   dateText.classList.add("timeago");
 
-  const rightColumn = document.createElement("td");
+  var rightColumn = document.createElement("td");
   rightColumn.classList.add('score-right');
 
-  const ppText = document.createElement("b");
+  var ppText = document.createElement("b");
   ppText.textContent = `${score.pp.toFixed(0)}pp`;
 
-  const ppDisplay = document.createElement("div");
+  var ppDisplay = document.createElement("div");
   ppDisplay.classList.add("pp-display");
   ppDisplay.appendChild(ppText);
 
-  const ppWeightPercent = document.createElement("b");
+  var ppWeightPercent = document.createElement("b");
   ppWeightPercent.textContent = `${((0.95**(index + topScoreOffset)) * 100).toFixed(0)}%`;
 
-  const ppWeight = document.createElement("div");
+  var ppWeight = document.createElement("div");
   ppWeight.classList.add("pp-display-weight");
 
   if (type == "top")
@@ -226,20 +235,20 @@ function createScoreElement(score, index, type)
     ppWeight.innerHTML = type == "top" ? "weighted <b>0%</b> (0pp)" : "";
   }
 
-  const iconContainer = document.createElement("div");
+  var iconContainer = document.createElement("div");
   iconContainer.classList.add("score-icon-container");
 
-  const scoreInfoDiv = document.createElement("div");
+  var scoreInfoDiv = document.createElement("div");
   scoreInfoDiv.appendChild(scoreGrade);
   scoreInfoDiv.appendChild(scoreInfo);
   scoreInfoDiv.appendChild(accuracyText);
 
-  const dateDiv = document.createElement("div");
+  var dateDiv = document.createElement("div");
   dateDiv.appendChild(dateText);
 
   if (currentUser == userId)
   {
-    const pinIcon = document.createElement("i");
+    var pinIcon = document.createElement("i");
     pinIcon.classList.add("fa-regular", "fa-star");
     pinIcon.classList.add(`score-pin-${score.id}`);
     if (!score.pinned)
@@ -331,8 +340,8 @@ function loadPinnedScores(userId, mode)
         return;
       }
 
-      for (const [index, score] of scores.entries()) {
-        const scoreDiv = createScoreElement(score, index, "pinned");
+      for (var [index, score] of scores.entries()) {
+        var scoreDiv = createScoreElement(score, index, "pinned");
         scoreContainer.appendChild(scoreDiv);
       }
 
@@ -344,7 +353,7 @@ function loadPinnedScores(userId, mode)
     .catch(error => {
       console.error("Error loading pinned scores:", error);
 
-      const errorText = document.createElement("p");
+      var errorText = document.createElement("p");
       errorText.textContent = "Failed to load pinned scores.";
       errorText.classList.add("score");
       scoreContainer.appendChild(errorText);
@@ -388,11 +397,11 @@ function loadTopPlays(userId, mode, limit, offset)
           return;
         }
 
-        for (const [index, score] of scores.entries()) {
+        for (var [index, score] of scores.entries()) {
           if (score.beatmap.status > 2 && !approvedRewards)
             continue;
 
-          const scoreDiv = createScoreElement(score, index, "top");
+          var scoreDiv = createScoreElement(score, index, "top");
           scoreContainer.appendChild(scoreDiv);
         }
         topScoreOffset += scores.length;
@@ -403,20 +412,20 @@ function loadTopPlays(userId, mode, limit, offset)
         if (scores.length >= limit)
         {
             // Create show more text
-            const showMoreText = document.createElement("b");
+            var showMoreText = document.createElement("b");
             showMoreText.textContent = "Show me more!";
 
             // Add onclick event
-            const showMoreHref = document.createElement("a");
+            var showMoreHref = document.createElement("a");
             showMoreHref.href = `#score-top-${scores.length}`;
             showMoreHref.id = "show-more-top";
             showMoreHref.appendChild(showMoreText);
             showMoreHref.onclick = () => {
-                const loadingText = document.createElement("p");
+                var loadingText = document.createElement("p");
                 loadingText.textContent = "Loading...";
                 loadingText.id = "top-scores-loading";
 
-                const showMore = document.getElementById("show-more-top");
+                var showMore = document.getElementById("show-more-top");
                 showMore.parentElement.appendChild(loadingText);
                 showMore.remove();
 
@@ -424,7 +433,7 @@ function loadTopPlays(userId, mode, limit, offset)
             }
 
             // Create wrapper that contains styling
-            const showMore = document.createElement("div");
+            var showMore = document.createElement("div");
             showMore.classList.add("score", "show-more");
             showMore.appendChild(showMoreHref);
 
@@ -437,7 +446,7 @@ function loadTopPlays(userId, mode, limit, offset)
       .catch(error => {
         console.error("Error loading top scores:", error);
 
-        const errorText = document.createElement("p");
+        var errorText = document.createElement("p");
         errorText.textContent = "Failed to load top plays.";
         errorText.classList.add("score");
         scoreContainer.appendChild(errorText);
@@ -483,8 +492,8 @@ function loadLeaderScores(userId, mode, limit, offset)
         return;
       }
 
-      for (const [index, score] of scores.entries()) {
-        const scoreDiv = createScoreElement(score, index, "leader");
+      for (var [index, score] of scores.entries()) {
+        var scoreDiv = createScoreElement(score, index, "leader");
         scoreContainer.appendChild(scoreDiv);
       }
       topLeaderOffset += scores.length;
@@ -495,20 +504,20 @@ function loadLeaderScores(userId, mode, limit, offset)
       if (scores.length >= limit)
       {
           // Create show more text
-          const showMoreText = document.createElement("b");
+          var showMoreText = document.createElement("b");
           showMoreText.textContent = "Show me more!";
 
           // Add onclick event
-          const showMoreHref = document.createElement("a");
+          var showMoreHref = document.createElement("a");
           showMoreHref.href = `#score-leader-${scores.length}`;
           showMoreHref.id = "show-more-leader";
           showMoreHref.appendChild(showMoreText);
           showMoreHref.onclick = () => {
-              const loadingText = document.createElement("p");
+              var loadingText = document.createElement("p");
               loadingText.textContent = "Loading...";
               loadingText.id = "leader-scores-loading";
 
-              const showMore = document.getElementById("show-more-leader");
+              var showMore = document.getElementById("show-more-leader");
               showMore.parentElement.appendChild(loadingText);
               showMore.remove();
 
@@ -516,7 +525,7 @@ function loadLeaderScores(userId, mode, limit, offset)
           }
 
           // Create wrapper that contains styling
-          const showMore = document.createElement("div");
+          var showMore = document.createElement("div");
           showMore.classList.add("score", "show-more");
           showMore.appendChild(showMoreHref);
 
@@ -529,7 +538,7 @@ function loadLeaderScores(userId, mode, limit, offset)
     .catch(error => {
       console.error("Error loading leader scores:", error);
 
-      const errorText = document.createElement("p");
+      var errorText = document.createElement("p");
       errorText.textContent = "Failed to load first place ranks.";
       errorText.classList.add("score");
       scoreContainer.appendChild(errorText);
@@ -548,7 +557,7 @@ function loadLeaderScores(userId, mode, limit, offset)
 
 function loadMostPlayed(userId, limit, offset)
 {
-  const loadingText = document.getElementById("plays-loading")
+  var loadingText = document.getElementById("plays-loading")
 
   if (!loadingText)
     return;
@@ -571,13 +580,13 @@ function loadMostPlayed(userId, limit, offset)
         return;
       }
 
-      for (const [index, item] of plays.entries())
+      for (var [index, item] of plays.entries())
       {
-        const beatmapLink = document.createElement("a");
+        var beatmapLink = document.createElement("a");
         beatmapLink.textContent = `${item.beatmap.beatmapset.artist} - ${item.beatmap.beatmapset.title} [${item.beatmap.version}]`;
         beatmapLink.href = `/b/${item.beatmap.id}`;
 
-        const playsDiv = document.createElement("div");
+        var playsDiv = document.createElement("div");
         playsDiv.style.fontSize = `${180 * 0.95**index+1}%`;
         playsDiv.style.margin = "2.5px";
         playsDiv.appendChild(
@@ -599,7 +608,7 @@ function loadMostPlayed(userId, limit, offset)
 
 function loadRecentPlays(userId, mode)
 {
-  const loadingText = document.getElementById("recent-loading")
+  var loadingText = document.getElementById("recent-loading")
 
   if (!loadingText)
     return;
@@ -627,8 +636,8 @@ function loadRecentPlays(userId, mode)
       scores.forEach((score) =>
       {
         // Parse date to a format that timeago can understand
-        const scoreDate = new Date(score.submitted_at);
-        const scoreDateString = scoreDate.toLocaleDateString(
+        var scoreDate = new Date(score.submitted_at);
+        var scoreDateString = scoreDate.toLocaleDateString(
           "en-us", {
             year: "numeric",
             month: "numeric",
@@ -640,12 +649,12 @@ function loadRecentPlays(userId, mode)
           }
         );
 
-        const dateText = document.createElement("time");
+        var dateText = document.createElement("time");
         dateText.setAttribute("datetime", scoreDateString);
         dateText.textContent = score.submitted_at;
         dateText.classList.add("timeago");
 
-        const beatmapLink = document.createElement("a");
+        var beatmapLink = document.createElement("a");
         beatmapLink.textContent = `${score.beatmap.beatmapset.artist} - ${score.beatmap.beatmapset.title} [${score.beatmap.version}]`;
         beatmapLink.href = `/b/${score.beatmap.id}`;
 
@@ -654,7 +663,7 @@ function loadRecentPlays(userId, mode)
         if (score.mods > 0)
           modsText = `+${Mods.getString(score.mods)}`;
 
-        const scoreDiv = document.createElement("div");
+        var scoreDiv = document.createElement("div");
         scoreDiv.appendChild(dateText);
         scoreDiv.appendChild(document.createTextNode(" - "));
         scoreDiv.appendChild(beatmapLink);
@@ -750,7 +759,7 @@ function processRankHistory(entries)
 
 function loadUserPerformanceGraph(userId, mode)
 {
-    const url = `/api/profile/${userId}/history/rank/${mode}`;
+    var url = `/api/profile/${userId}/history/rank/${mode}`;
 
     fetch(url)
       .then(response => {
@@ -762,7 +771,7 @@ function loadUserPerformanceGraph(userId, mode)
         var rankData = processRankHistory(entries);
 
         nv.addGraph(() => {
-          const chart = nv.models.lineChart()
+          var chart = nv.models.lineChart()
               .margin({left: 80, bottom: 20, right: 50})
               .useInteractiveGuideline(true)
               .transitionDuration(250)
@@ -868,7 +877,7 @@ function processPlayHistory(entries)
 
 function loadUserPlaysGraph(userId, mode)
 {
-    const url = `/api/profile/${userId}/history/plays/${mode}`;
+    var url = `/api/profile/${userId}/history/plays/${mode}`;
 
     fetch(url)
       .then(response => {
@@ -880,7 +889,7 @@ function loadUserPlaysGraph(userId, mode)
         var playData = processPlayHistory(entries);
 
         nv.addGraph(() => {
-          const chart = nv.models.lineChart()
+          var chart = nv.models.lineChart()
               .margin({left: 80, bottom: 20, right: 50})
               .useInteractiveGuideline(true)
               .transitionDuration(250)
@@ -953,7 +962,7 @@ function processViewsHistory(entries)
 
 function loadUserViewsGraph(userId, mode)
 {
-    const url = `/api/profile/${userId}/history/views/${mode}`;
+    var url = `/api/profile/${userId}/history/views/${mode}`;
 
     fetch(url)
       .then(response => {
@@ -965,7 +974,7 @@ function loadUserViewsGraph(userId, mode)
         var viewsData = processViewsHistory(entries);
 
         nv.addGraph(() => {
-          const chart = nv.models.lineChart()
+          var chart = nv.models.lineChart()
               .margin({left: 80, bottom: 20, right: 50})
               .useInteractiveGuideline(true)
               .transitionDuration(250)
@@ -1036,7 +1045,7 @@ function addFriend()
         return response.json();
     })
     .then(data => {
-      const friendStatus = document.getElementById('friend-status');
+      var friendStatus = document.getElementById('friend-status');
       friendStatus.classList.remove('friend-add');
       friendStatus.classList.add('friend-remove');
       friendStatus.onclick = () => { return removeFriend() };
@@ -1065,7 +1074,7 @@ function removeFriend()
         return response.json();
     })
     .then(data => {
-      const friendStatus = document.getElementById('friend-status');
+      var friendStatus = document.getElementById('friend-status');
       friendStatus.classList.remove('friend-remove');
       friendStatus.classList.add('friend-add');
       friendStatus.onclick = () => { return addFriend() };
@@ -1091,9 +1100,9 @@ function removeFavourite(setId)
       return response.json();
     })
     .then(data => {
-      const favouritesContainer = document.querySelector(".favourites");
-      const container = document.getElementById(`favourite-${setId}`);
-      const beatmapsContainer = document.getElementById('beatmaps');
+      var favouritesContainer = document.querySelector(".favourites");
+      var container = document.getElementById(`favourite-${setId}`);
+      var beatmapsContainer = document.getElementById('beatmaps');
 
       console.log(beatmapsContainer.scrollHeight);
 
@@ -1108,7 +1117,7 @@ function removeFavourite(setId)
         if (data.length == 0)
         {
           // User has no favourite beatmaps anymore
-          const textElement = document.createElement('p');
+          var textElement = document.createElement('p');
           textElement.style.margin = '5px';
           textElement.innerHTML = 'This player has no favourite beatmaps :(';
           favouritesContainer.appendChild(textElement);
@@ -1131,7 +1140,7 @@ function removeFavourite(setId)
 }
 
 function deleteBeatmap(setId) {
-  const proceed = confirm('Are you sure you want to delete this beatmap?');
+  var proceed = confirm('Are you sure you want to delete this beatmap?');
 
   if (!proceed)
     return;
