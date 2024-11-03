@@ -84,8 +84,8 @@ h1 {
 }
 
 .country-listing th {
-    background-color: var(--table-header-background);
-    border-bottom: 1px solid var(--table-header-border);
+    background-color: #d7d2fb;
+    border-bottom: 1px solid #a79ef3;
 }
 
 .country-listing td {

@@ -11,7 +11,7 @@
     font-weight: 100;
     margin-left: 10px;
     margin-bottom: 15px;
-    text-shadow: var(#efcfe1) 0px 0px 10px;
+    text-shadow: #efcfe1 0px 0px 10px;
     color: #868686;
     white-space: nowrap;
     font-weight: lighter;
@@ -387,7 +387,7 @@ table {
     margin-bottom: 16px;
     background-color: #f0f5ff;
     border-style: solid;
-    border-color: var(--content-border-grey);
+    border-color: #d2d4fa;
     border-radius: 5px 5px 5px 5px;
     border-width: 0.5px;
     font-size: 85%;
@@ -397,7 +397,7 @@ table {
 }
 
 .quick-reply textarea {
-    background-color: var(--content-main);
+    background-color: #f0ecfa;
     border: none;
     white-space: pre-line;
     resize: vertical;

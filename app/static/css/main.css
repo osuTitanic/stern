@@ -1,31 +1,4 @@
 :root {
-    --table-header-background: #d7d2fb;
-    --table-header-border: #a79ef3;
-    --background-gradient-lower: #e8d2ff;
-    --background-gradient: #686fc1;
-    --background-main: #a9a9ff;
-    --user-box-background: #f9f7ff;
-    --content-border-grey: #d2d4fa;
-    --content-border: #5c559c;
-    --table-row-light: #edebfa;
-    --table-row-dark: #e3e1fa;
-    --content-main: #f0ecfa;
-    --text-shadow: #efcfe1;
-    --details-color: #536482;
-    --outlink-blue: #7284ff;
-    --outlink-pink: #ff64ba;
-    --font-color: #323232;
-    --dark-header: #cc2e8a;
-    --header: #e15fac;
-    --search: #ffffff;
-    --top-color: #d6d2df;
-    --bancho-stats: #5b5399;
-    --nav-element: #4e2151;
-    --nav-dropdown: #f375c5;
-    --nav: #ffd6f3;
-}
-
-:root {
     --darkreader-bg--nav: #863c86 !important;
     --darkreader-bg--search: #353232 !important;
 }
@@ -78,7 +51,7 @@ a:visited {
 }
 
 html {
-    background: linear-gradient(var(--background-gradient), var(--background-main) 20%);
+    background: linear-gradient(#686fc1, #a9a9ff 20%);
     background-attachment: fixed;
 }
 
@@ -113,7 +86,7 @@ input:focus {
 }
 
 .nav {
-    background-color: var(--nav);
+    background-color: #ffd6f3;
     border-radius: 5px 5px 0px 0px;
     min-height: 22.5px;
     max-width: 630px;
@@ -136,12 +109,12 @@ input:focus {
     padding-right: 25px;
     font-weight: bold;
     font-size: 11px;
-    color: var(--nav-element);
+    color: #4e2151;
 }
 
 .nav-element a:hover {
     color: white;
-    background: var(--nav-dropdown);
+    background: #f375c5;
     text-decoration: none;
 }
 
@@ -183,7 +156,7 @@ input:focus {
 
 .bancho-stats {
     position: absolute;
-    background-color: var(--bancho-stats);
+    background-color: #5b5399;
     min-width: 200px;
     height: 30px;
     margin-top: -38px;
@@ -199,17 +172,17 @@ input:focus {
 }
 
 .content {
-    background-color: var(--content-main);
+    background-color: #f0ecfa;
     min-height: 500px;
     border-style: solid;
-    border-color: var(--content-border);
+    border-color: #5c559c;
     border-radius: 0px 5px 5px 5px;
     border-width: 2px;
 }
 
 .gradient {
     /* kinda hard to make a gradient stick to the bottom of the page... */
-    background: linear-gradient(var(--content-main), var(--background-gradient-lower));
+    background: linear-gradient(#f0ecfa, #e8d2ff);
     position: absolute;
     height: 15px;
     left: 2px;
@@ -222,8 +195,8 @@ input:focus {
 }
 
 .top {
-    background-color: var(--search);
-    filter: drop-shadow(0px 1px 2px var(--top-color));
+    background-color: #ffffff;
+    filter: drop-shadow(0px 1px 2px #d6d2df);
     margin-bottom: 2vh;
     padding: 0.5vh;
     max-height: 18px;
@@ -287,12 +260,12 @@ input:focus {
 }
 
 #login-text {
-    color: var(--outlink-blue);
+    color: #7284ff;
     font-weight: bold;
 }
 
 #register-text {
-    color: var(--outlink-pink);
+    color: #ff64ba;
     font-weight: bold;
 }
 

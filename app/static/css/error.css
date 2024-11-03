@@ -13,10 +13,10 @@
 }
 
 h1 {
-    color: var(--header);
+    color: #e15fac;
     font-size: 120%;
     margin-bottom: 15px;
-    text-shadow: var(--text-shadow) 0px 0px 10px;
+    text-shadow: #efcfe1 0px 0px 10px;
     font-weight: normal;
 }
 

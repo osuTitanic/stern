@@ -23,24 +23,24 @@
     font-weight: 100;
     margin-left: 10px;
     margin-bottom: 22px;
-    color: var(--header-pink);
-    text-shadow: var(--text-shadow) 0px 0px 10px;
+    color: #e15fac;
+    text-shadow: #efcfe1 0px 0px 10px;
 }
 
 .header-text p {
     font-weight: lighter;
     font-size: 8pt;
-    color: var(--dark-header);
+    color: #cc2e8a;
 }
 
 .header-text a {
-    color: var(--header-blue);
-    text-shadow: var(--text-shadow) 0px 0px 10px;
+    color: #3843a6;
+    text-shadow: #efcfe1 0px 0px 10px;
 }
 
 h2 {
-    text-shadow: var(--text-shadow) 0px 0px 10px;
-    color: var(--dark-header);
+    text-shadow: #efcfe1 0px 0px 10px;
+    color: #cc2e8a;
     font-weight: normal;
     font-size: 110%;
     margin: 10px;
@@ -51,8 +51,8 @@ h2 {
 }
 
 .tab-list {
-    background-color: var(--difficulty-background);
-    border-bottom: 1px solid var(--border-light);
+    background-color: #e1d6fb;
+    border-bottom: 1px solid #cfc1ef;
     width: 100%;
     float: left;
 }
@@ -70,8 +70,8 @@ h2 {
     font-size: 90%;
     padding: 7px 8px 7px 8px;
     line-height: 15px;
-    color: var(--difficulty-text);
-    background-color: var(--difficulty);
+    color: #5e5e5e;
+    background-color: #e7e2f3;
     display: flex;
 }
 
@@ -95,18 +95,18 @@ h2 {
 }
 
 .tab-link:visited {
-    color: var(--difficulty-text);
+    color: #5e5e5e;
 }
 
 .active {
-    background-color: var(--difficulty-active);
+    background-color: #bfa8f8;
 }
 
 .beatmap-stats {
     clear: both;
-    background-color: var(--difficulty);
-    border-top: 1px solid var(--border-light);
-    border-bottom: 1px solid var(--border);
+    background-color: #e7e2f3;
+    border-top: 1px solid #cfc1ef;
+    border-bottom: 1px solid #8462db;
     padding: 2px;
     font-size: 9pt;
 }
@@ -116,7 +116,7 @@ h2 {
 }
 
 .beatmap-stats td {
-    border-bottom: 1px solid var(--border-light);
+    border-bottom: 1px solid #cfc1ef;
     padding: 8px
 }
 
@@ -147,8 +147,8 @@ h2 {
 }
 
 .beatmap-description {
-    border: 1px solid var(--description-border);
-    background-color: var(--description-color);
+    border: 1px solid #e1dfe7;
+    background-color: #f9f7fe;
     overflow: auto;
     padding: 7px;
     margin: 5px;
@@ -216,7 +216,7 @@ h2 {
 }
 
 .leader a {
-    color: var(--leader-link);
+    color: #fdbf2a;
 }
 
 .leader td {
@@ -233,11 +233,11 @@ h2 {
 }
 
 .row-light {
-    background-color: var(--table-row-light);
+    background-color: #edebfa;
 }
 
 .row-dark {
-    background-color: var(--table-row-dark);
+    background-color: #e3e1fa;
 }
 
 .row-grade {
@@ -251,7 +251,7 @@ h2 {
 }
 
 .scores-header {
-    background-color: var(--table-header-background);
+    background-color: #d7d2fb;
     text-align: center;
 }
 
@@ -265,7 +265,7 @@ h2 {
 }
 
 .scores th {
-    border-bottom: 1px solid var(--table-header-border);
+    border-bottom: 1px solid #a79ef3;
 }
 
 .scores td {
@@ -300,7 +300,7 @@ h2 {
 }
 
 .bat-controls dd {
-    color: var(--details-color);
+    color: #536482;
     margin-bottom: 5px;
     line-height: 25px;
 }

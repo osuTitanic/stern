@@ -1,21 +1,14 @@
 
 @import url("main.css");
 
-:root {
-    --download-button-text: #ff5d93;
-    --download-button-color: #e9cedf;
-    --client-container: #ffdef5;
-    --client: #ffd6f3;
-}
-
 .heading {
     margin-bottom: 16px;
     margin-left: 10px;
 }
 
 .heading h2 {
-    text-shadow: var(--text-shadow) 0px 0px 10px;
-    color: var(--header);
+    text-shadow: #efcfe1 0px 0px 10px;
+    color: #e15fac;
     font-weight: normal;
     font-size: 130%;
     margin-bottom: 2.5px;
@@ -24,7 +17,7 @@
 #client-container {
     overflow: auto;
     white-space: nowrap;
-    background-color: var(--client-container);
+    background-color: #ffdef5;
     padding: 5px;
     margin: 5px;
     border-radius: 5px;
@@ -42,7 +35,7 @@
     margin: 10px;
     overflow: hidden;
     vertical-align: middle;
-    background-color: var(--client);
+    background-color: #ffd6f3;
     filter: drop-shadow(1px 2px 1px #c6c6ca);
 }
 
@@ -60,8 +53,8 @@
     display: block;
     margin-top: 10px;
     padding: 10px;
-    color: var(--download-button-text);
-    background-color: var(--download-button-color);
+    color: #ff5d93;
+    background-color: #e9cedf;
     border-radius: 5px;
     text-align: center;
     text-decoration: none;
@@ -71,7 +64,7 @@
 
 .client .download-link:hover {
     color: #ebebeb;
-    background-color: var(--download-button-text);
+    background-color: #ff5d93;
     transition: all 0.1s ease;
 }
 
