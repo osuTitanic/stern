@@ -200,40 +200,40 @@ function createScoreElement(score, index, type) {
   var dateText = document.createElement("time");
   dateText.setAttribute("datetime", scoreDateString);
   dateText.textContent = score.submitted_at; 
-  dateText.className = "timeago"; // Replaced classList.add with className
+  dateText.className = "timeago";
 
   var rightColumn = document.createElement("td");
-  rightColumn.className = 'score-right'; // Replaced classList.add with className
+  rightColumn.className = 'score-right';
 
   var ppText = document.createElement("b");
-  ppText.textContent = (score.pp.toFixed(0) + "pp"); // Changed from template literals
+  ppText.textContent = (score.pp.toFixed(0) + "pp");
 
   var ppDisplay = document.createElement("div");
-  ppDisplay.className = "pp-display"; // Replaced classList.add with className
+  ppDisplay.className = "pp-display";
   ppDisplay.appendChild(ppText);
 
   var ppWeightPercent = document.createElement("b");
-  ppWeightPercent.textContent = ((0.95 ** (index + topScoreOffset)) * 100).toFixed(0) + "%"; // Changed from template literals
+  ppWeightPercent.innerText = (Math.pow(0.95, index + topScoreOffset) * 100).toFixed(0) + "%";
 
   var ppWeight = document.createElement("div");
-  ppWeight.className = "pp-display-weight"; // Replaced classList.add with className
+  ppWeight.className = "pp-display-weight";
 
   if (type == "top") {
     ppWeight.appendChild(document.createTextNode("weighted "));
     ppWeight.appendChild(ppWeightPercent);
-    ppWeight.appendChild(document.createTextNode(" (" + (score.pp * (0.95 ** (index + topScoreOffset))).toFixed(0) + "pp)")); // Changed from template literals
+    ppWeight.appendChild(document.createTextNode(" (" + (score.pp * (0.95 ** (index + topScoreOffset))).toFixed(0) + "pp)"));
   }
 
   if (!approvedRewards && score.beatmap.status > 2) {
     // Display heart icon for loved maps
     ppText.innerHTML = '<i class="fa-regular fa-heart"></i>';
-    ppText.title = score.pp.toFixed(0) + "pp (if ranked)"; // Changed from template literals
+    ppText.title = score.pp.toFixed(0) + "pp (if ranked)";
     // Reset pp weight text
     ppWeight.innerHTML = (type == "top" ? "weighted <b>0%</b> (0pp)" : "");
   }
 
   var iconContainer = document.createElement("div");
-  iconContainer.className = "score-icon-container"; // Replaced classList.add with className
+  iconContainer.className = "score-icon-container";
 
   var scoreInfoDiv = document.createElement("div");
   scoreInfoDiv.appendChild(scoreGrade);
@@ -245,7 +245,7 @@ function createScoreElement(score, index, type) {
 
   if (currentUser === userId) {
     var pinIcon = document.createElement("i");
-    pinIcon.className = "fa-regular fa-star score-pin-" + score.id; // Changed from template literals
+    pinIcon.className = "fa-regular fa-star score-pin-" + score.id;
 
     if (!score.pinned) {
       pinIcon.className += " score-pin-icon"; // Append className
@@ -449,7 +449,7 @@ function loadTopPlays(userId, mode, limit, offset) {
 
           // Create wrapper that contains styling
           var showMore = document.createElement("div");
-          showMore.className = "score show-more"; // Using className for older browsers
+          showMore.className = "score show-more";
           showMore.appendChild(showMoreHref);
 
           // Append show more text to container
