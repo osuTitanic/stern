@@ -267,9 +267,20 @@ function reloadInput() {
         }
     }
 
+    // Keep search input from previous request
     var searchParams = new RegExp('[?&]query=([^&#]*)').exec(window.location.search);
     var search = searchParams ? searchParams[1] : null;
     if (search) query.push("query=" + encodeURIComponent(search));
+
+    // Keep sort from previous request
+    var sortParams = new RegExp('[?&]sort=([^&#]*)').exec(window.location.search);
+    var sort = sortParams ? sortParams[1] : null;
+    if (sort) query.push("sort=" + sort);
+
+    // Keep order from previous request
+    var orderParams = new RegExp('[?&]order=([^&#]*)').exec(window.location.search);
+    var order = orderParams ? orderParams[1] : null;
+    if (order) query.push("order=" + order);
 
     location.search = "?" + query.join("&");
 }
