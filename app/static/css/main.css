@@ -191,6 +191,7 @@ input:focus {
 
 .gradient {
     /* kinda hard to make a gradient stick to the bottom of the page... */
+    background: -webkit-linear-gradient(#f0ecfa, #e8d2ff);
     background: linear-gradient(#f0ecfa, #e8d2ff);
     position: absolute;
     height: 15px;

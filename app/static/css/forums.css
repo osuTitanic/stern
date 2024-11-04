@@ -51,6 +51,7 @@
     font-weight: normal;
     border-radius: 5px;
     background: rgb(91, 83, 153);
+    background: -webkit-linear-gradient(rgb(123, 114, 207) 0%, rgb(91, 83, 153) 100%);
     background-image: linear-gradient(rgb(123, 114, 207) 0%, rgb(91, 83, 153) 100%);
 }
 
@@ -155,6 +156,7 @@ table {
 
 .bar td {
     height: 15px;
+    background: -webkit-linear-gradient(rgb(123, 114, 207) 0%, rgb(91, 83, 153) 100%);
     background-image: linear-gradient(rgb(123, 114, 207) 0%, rgb(91, 83, 153) 100%);
     color: white;
     padding-left: 2.5px;
@@ -333,29 +335,35 @@ table {
 }
 
 .button-blue {
+    background: -webkit-linear-gradient(rgb(123, 114, 207) 0%, rgb(91, 83, 153) 100%);
     background-image: linear-gradient(rgb(123, 114, 207) 0%, rgb(91, 83, 153) 100%);
 }
 
 .button-blue:hover {
     text-shadow: 2px 1px 8px #b7befd;
+    background: -webkit-linear-gradient(rgb(83, 147, 207) 0%, rgb(58, 109, 156) 100%);
     background-image: linear-gradient(rgb(83, 147, 207) 0%, rgb(58, 109, 156) 100%);
 }
 
 .button-red {
+    background: -webkit-linear-gradient(rgb(209, 63, 63) 0%, rgb(155, 56, 56) 100%);
     background-image: linear-gradient(rgb(209, 63, 63) 0%, rgb(155, 56, 56) 100%);
 }
 
 .button-red:hover {
     text-shadow: 2px 1px 8px #b7befd;
+    background: -webkit-linear-gradient(rgb(230, 49, 49) 0%, rgb(211, 51, 51) 100%);
     background-image: linear-gradient(rgb(230, 49, 49) 0%, rgb(211, 51, 51) 100%);
 }
 
 .button-grey {
+    background: -webkit-linear-gradient(rgb(170, 170, 170) 0%, rgb(100, 100, 100) 100%);
     background-image: linear-gradient(rgb(170, 170, 170) 0%, rgb(100, 100, 100) 100%);
 }
 
 .button-grey:hover {
     text-shadow: 2px 1px 8px #b7befd;
+    background: -webkit-linear-gradient(rgb(179, 179, 179) 0%, rgb(109, 109, 109) 100%);
     background-image: linear-gradient(rgb(179, 179, 179) 0%, rgb(109, 109, 109) 100%);
 }
 
