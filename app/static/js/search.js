@@ -89,7 +89,10 @@ function getBeatmapsets() {
                 var playIcon = document.createElement("i");
                 playIcon.classList.add("fa-solid", "fa-play");
                 playIcon.onclick = function(e) {
-                    document.querySelectorAll('[id^="beatmap-preview-"]').forEach(function(element) {
+                    var beatmapPreviewElements = document.querySelectorAll('[id^="beatmap-preview-"]');
+                    for (var i = 0; i < beatmapPreviewElements.length; i++) {
+                        element = beatmapPreviewElements[i];
+
                         // Disable other active audios
                         if (!element.paused && element.id !== 'beatmap-preview-' + beatmapset.id) {
                             element.pause();
@@ -99,10 +102,9 @@ function getBeatmapsets() {
                             audioPlayIcon.classList.remove("fa-pause");
                             audioPlayIcon.classList.add("fa-play");
                         }
-                    });
+                    };
 
                     resetOrPlayAudio('beatmap-preview-' + beatmapset.id);
-
                     var audio = document.getElementById('beatmap-preview-' + beatmapset.id);
 
                     if (audio.paused) {
@@ -338,19 +340,21 @@ function setOrder(element) {
     location.search = "?" + query.join("&");
 }
 
-document.querySelectorAll(".beatmap-options a").forEach(function (selectableElement) {
-    selectableElement.addEventListener("click", function (event) {
+var beatmapOptionsLinks = document.querySelectorAll(".beatmap-options a");
+for (var i = 0; i < beatmapOptionsLinks.length; i++) {
+    beatmapOptionsLinks[i].addEventListener("click", function (event) {
         event.preventDefault();
         setElement(event.target);
     });
-});
+}
 
-document.querySelectorAll(".beatmap-order-select a").forEach(function (selectableElement) {
-    selectableElement.addEventListener("click", function (event) {
+var beatmapOrderSelectLinks = document.querySelectorAll(".beatmap-order-select a");
+for (var i = 0; i < beatmapOrderSelectLinks.length; i++) {
+    beatmapOrderSelectLinks[i].addEventListener("click", function (event) {
         event.preventDefault();
         setOrder(event.target);
     });
-});
+}
 
 window.addEventListener('load', function () {
     var dataElements = document.querySelectorAll(".beatmap-options dl");
