@@ -43,6 +43,10 @@
     white-space: pre-wrap;
 }
 
+.description {
+    max-width: 350px;
+}
+
 .client img {
     margin-top: 8px;
     border-radius: 2px;

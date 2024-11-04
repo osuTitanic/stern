@@ -77,9 +77,12 @@ function loadManifest() {
   }
 
   function createImageElement(src) {
+      var imgContainer = document.createElement('div');
+      imgContainer.style.textAlign = 'center';
       var img = document.createElement('img');
       img.src = src;
-      return img;
+      imgContainer.appendChild(img);
+      return imgContainer;
   }
 
   function createDownloadLink(href) {
