@@ -53,6 +53,8 @@ a:visited {
 html {
     background: -webkit-linear-gradient(#686fc1, #a9a9ff 20%);
     background: -moz-linear-gradient(#686fc1, #a9a9ff 20%);
+    background: -ms-linear-gradient(#686fc1, #a9a9ff 20%);
+    background: -o-linear-gradient(#686fc1, #a9a9ff 20%);
     background: linear-gradient(#686fc1, #a9a9ff 20%);
     background-attachment: fixed;
 }
