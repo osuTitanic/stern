@@ -9,7 +9,8 @@
 }
 
 .content-wrapper {
-    display: flex;
+    display: inline-block;
+    display: flex !important;
 }
 
 .left-side {
