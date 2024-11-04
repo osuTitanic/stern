@@ -159,7 +159,7 @@
                 <td>
                     {# TODO: Create rating graph #}
                     {% if beatmapset.ratings %}
-                    {{ beatmapset.ratings | sum(attribute='rating') / beatmapset.ratings | count }}
+                    {{ (beatmapset.ratings | sum(attribute='rating') / beatmapset.ratings | count) | round(4) }}
                     {% else %}
                     Nobody has rated this map yet... ):
                     {% endif %}
