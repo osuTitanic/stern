@@ -243,161 +243,172 @@ function getBeatmapsets() {
     xhr.send();
 }
 
-function reloadInput()
-{
-    const dataElements = document.querySelectorAll(".beatmap-options dl");
-    var query = new URLSearchParams();
+function reloadInput() {
+    var dataElements = document.querySelectorAll(".beatmap-options dl");
+    var query = [];
 
-    dataElements.forEach(item => {
+    for (var i = 0; i < dataElements.length; i++) {
+        var item = dataElements[i];
         var dataName = item.getAttribute("data-name");
 
-        // Element has no "data-name"
-        // Multiple selections can be made
-        if (!dataName)
-        {
-            item.querySelectorAll(".selected")
-                .forEach(selectedElement => {
-                    query.set(selectedElement.getAttribute("data-name"), "true");
-                });
-            return;
+        if (!dataName) {
+            var selectedElements = item.querySelectorAll(".selected");
+            for (var j = 0; j < selectedElements.length; j++) {
+                query.push(selectedElements[j].getAttribute("data-name") + "=true");
+            }
+            continue;
         }
 
         var selectedElement = item.querySelector(".selected");
-        var dataValue = selectedElement.getAttribute("data-id");
+        var dataValue = selectedElement ? selectedElement.getAttribute("data-id") : "";
 
-        // Don't set parameter if "data-id" is empty
-        if (dataValue.length > 0)
-            query.set(dataName, dataValue);
-    });
+        if (dataValue.length > 0) {
+            query.push(dataName + "=" + encodeURIComponent(dataValue));
+        }
+    }
 
-    // Keep search input from previous request
-    var search = new URLSearchParams(location.search).get("query");
-    if (search) query.set("query", search);
+    var searchParams = new RegExp('[?&]query=([^&#]*)').exec(window.location.search);
+    var search = searchParams ? searchParams[1] : null;
+    if (search) query.push("query=" + encodeURIComponent(search));
 
-    // Browser will reload
-    location.search = query.toString();
+    location.search = "?" + query.join("&");
 }
 
-function setElement(element)
-{
-    const dataName = element.parentNode.parentNode.getAttribute("data-name");
-    const elements = element.parentNode.querySelectorAll("a");
+function setElement(element) {
+    var dataName = element.parentNode.parentNode.getAttribute("data-name");
+    var elements = element.parentNode.querySelectorAll("a");
 
-    if (!dataName)
-    {
+    if (!dataName) {
         element.classList.toggle("selected");
         reloadInput();
         return;
     }
 
-    elements.forEach(dataElement => {
-        if (dataElement !== element)
-            dataElement.classList.remove("selected");
-    });
+    for (var i = 0; i < elements.length; i++) {
+        if (elements[i] !== element) {
+            elements[i].classList.remove("selected");
+        }
+    }
 
     element.classList.toggle("selected");
 
-    // Select default/first element if no element was selected
-    if (!element.parentNode.querySelector(".selected"))
+    if (!element.parentNode.querySelector(".selected")) {
         elements[0].classList.add("selected");
+    }
 
     reloadInput();
 }
 
-function setOrder(element)
-{
-    const query = new URLSearchParams(location.search);
-    query.set("sort", element.getAttribute("data-id"));
-    query.delete("page");
+function setOrder(element) {
+    var query = [];
+    var searchParams = location.search.substring(1).split("&");
 
-    if (element.classList.contains("selected"))
-    {
-        // 0 - Descending
-        // 1 - Ascending
-        const currentOrder = query.get("order") || 0;
-        query.set("order", (currentOrder == 0 ? 1 : 0));
+    for (var i = 0; i < searchParams.length; i++) {
+        var param = searchParams[i].split("=");
+        if (param[0] !== "sort" && param[0] !== "page" && param[0] !== "order") {
+            query.push(param[0] + "=" + param[1]);
+        }
     }
 
-    // Browser will reload
-    location.search = query.toString();
+    query.push("sort=" + element.getAttribute("data-id"));
+
+    if (element.classList.contains("selected")) {
+        var currentOrder = 0;
+        for (var i = 0; i < searchParams.length; i++) {
+            var param = searchParams[i].split("=");
+            if (param[0] === "order") {
+                currentOrder = parseInt(param[1]);
+                break;
+            }
+        }
+        query.push("order=" + (currentOrder == 0 ? 1 : 0));
+    }
+
+    location.search = "?" + query.join("&");
 }
 
-document.querySelectorAll(".beatmap-options a")
-        .forEach(selectableElement => {
-            selectableElement.addEventListener("click", (event) => {
-                event.preventDefault();
-                setElement(event.target);
-            })
-        });
+document.querySelectorAll(".beatmap-options a").forEach(function (selectableElement) {
+    selectableElement.addEventListener("click", function (event) {
+        event.preventDefault();
+        setElement(event.target);
+    });
+});
 
-document.querySelectorAll(".beatmap-order-select a")
-        .forEach(selectableElement => {
-            selectableElement.addEventListener("click", (event) => {
-                event.preventDefault();
-                setOrder(event.target);
-            })
-        });
+document.querySelectorAll(".beatmap-order-select a").forEach(function (selectableElement) {
+    selectableElement.addEventListener("click", function (event) {
+        event.preventDefault();
+        setOrder(event.target);
+    });
+});
 
-window.addEventListener('load', () => {
-    const dataElements = document.querySelectorAll(".beatmap-options dl");
-    const query = new URLSearchParams(location.search);
+window.addEventListener('load', function () {
+    var dataElements = document.querySelectorAll(".beatmap-options dl");
+    var searchParams = location.search.substring(1).split("&");
+    var query = {};
 
-    const beatmapOrder = query.get("order") || 0;
-    const beatmapSort = query.get("sort") || 0;
+    for (var i = 0; i < searchParams.length; i++) {
+        var param = searchParams[i].split("=");
+        query[param[0]] = param[1];
+    }
 
-    const orderElement = document.querySelector(`.beatmap-order-select a[data-id="${beatmapSort}"]`);
-    orderElement.classList.add("selected");
+    var beatmapOrder = query["order"] || 0;
+    var beatmapSort = query["sort"] || 0;
 
-    // Reset "selected" class based on query
-    dataElements.forEach(item => {
+    var orderElement = document.querySelector('.beatmap-order-select a[data-id="' + beatmapSort + '"]');
+    if (orderElement) {
+        orderElement.classList.add("selected");
+    }
+
+    for (var i = 0; i < dataElements.length; i++) {
+        var item = dataElements[i];
         var dataName = item.getAttribute("data-name");
 
-        if (!dataName)
-        {
-            // Element has no "data-name"
-            // Multiple selections can be made
-            item.querySelectorAll("a").forEach(element => {
-                const elementDataName = element.getAttribute("data-name");
-
-                if (elementDataName) {
-                    const queryValue = query.get(elementDataName);
-                    element.classList.toggle("selected", queryValue === "true");
+        if (!dataName) {
+            var elements = item.querySelectorAll("a");
+            for (var j = 0; j < elements.length; j++) {
+                var element = elements[j];
+                var elementDataName = element.getAttribute("data-name");
+                if (elementDataName && query[elementDataName] === "true") {
+                    element.classList.add("selected");
                 }
-            })
-            return;
+            }
+            continue;
         }
 
-        const queryValue = query.get(dataName);
-
-        if (queryValue)
-        {
-            item.querySelectorAll(".selected").forEach(selectedElement => {
-                selectedElement.classList.remove("selected");
-            });
-
-            const selectedItem = item.querySelector(`a[data-id="${queryValue}"]`);
+        var queryValue = query[dataName];
+        if (queryValue) {
+            var selectedItems = item.querySelectorAll(".selected");
+            for (var j = 0; j < selectedItems.length; j++) {
+                selectedItems[j].classList.remove("selected");
+            }
+            var selectedItem = item.querySelector('a[data-id="' + queryValue + '"]');
             if (selectedItem) {
                 selectedItem.classList.add("selected");
             }
         }
-    });
+    }
 
-    // Load beatmapsets
     getBeatmapsets();
 });
 
 var input = document.getElementById("search-input");
 var timeout = null;
 
-// Event listener for search query input
-input.addEventListener("keyup", (e) => {
+input.addEventListener("keyup", function (e) {
     var input = document.getElementById("search-input");
-    var query = new URLSearchParams(location.search);
+    var query = [];
+    var searchParams = location.search.substring(1).split("&");
+
+    for (var i = 0; i < searchParams.length; i++) {
+        var param = searchParams[i].split("=");
+        if (param[0] !== "query") {
+            query.push(param[0] + "=" + param[1]);
+        }
+    }
 
     clearTimeout(timeout);
-
-    timeout = setTimeout(() => {
-        query.set("query", input.value);
-        location.search = query.toString();
+    timeout = setTimeout(function () {
+        query.push("query=" + encodeURIComponent(input.value));
+        location.search = "?" + query.join("&");
     }, 500);
 });
