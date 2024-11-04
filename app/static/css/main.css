@@ -98,19 +98,26 @@ input:focus {
     list-style: none;
     position: absolute;
     left: -8px;
-    display: flex;
+    display: inline-block;
     margin-left: 30px;
+}
+
+.nav-element {
+    display: inline-block;
 }
 
 .nav-element a,
 .nav-element a:visited {
     text-decoration: none;
-    padding: 4.5px;
-    padding-left: 25px;
-    padding-right: 25px;
+    padding: 1px;
+    padding-left: 22px;
+    padding-right: 22px;
     font-weight: bold;
     font-size: 11px;
     color: #4e2151;
+    display: block;
+    line-height: 20.5px;
+    margin-bottom: -4px;
 }
 
 .nav-element a:hover {
@@ -132,17 +139,18 @@ input:focus {
 .nav-dropdown li {
     background-color: #eca1dd;
     position: relative;
-    display: grid;
+    display: block;
     width: 100%;
-    line-height: 16px;
 }
 
-.nav-element-dropdown a {
+.nav-element-dropdown li a {
     text-decoration: none;
     font-weight: bold;
+    line-height: 22px;
+    margin-bottom: 0 !important;
 }
 
-.nav-element-dropdown:hover ul {
+.nav-element-dropdown:hover .nav-dropdown {
     visibility: visible;
     display: block;
     z-index: 1;
