@@ -14,8 +14,10 @@ h1, h2 {
 }
 
 .register-form > div, .reset-form > div {
-    background-color: #efeafc;
+    -webkit-box-shadow: 0px 0px 50px #ffffff;
+    -moz-box-shadow: 0px 0px 50px #ffffff;
     box-shadow: 0px 0px 50px #ffffff;
+    background-color: #efeafc;
     border-radius: 5px;
     padding: 10px;
     margin: 15px;
@@ -29,10 +31,11 @@ h1, h2 {
 .register-form input[type="email"] {
     border: 1px solid #90ace7;
     vertical-align: middle;
-    border-radius: 3px;
     width: 300px;
     height: 30px;
     float: left;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
 }
 
 .reset-form input[type="submit"],
@@ -41,10 +44,11 @@ h1, h2 {
 .reset-form input[type="email"] {
     border: 1px solid #90ace7;
     vertical-align: middle;
-    border-radius: 3px;
     width: 300px;
     height: 30px;
     float: left;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
 }
 
 .input-description {
@@ -57,8 +61,8 @@ h1, h2 {
 }
 
 .register-button:hover, .reset-button:hover {
-    text-decoration: none;
     text-shadow: 0px 0px 5px #ffffff;
+    text-decoration: none;
     color: white;
     cursor: pointer;
 }
