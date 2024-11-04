@@ -210,37 +210,47 @@ input:focus {
     margin-bottom: 20px;
     padding: 5.5px;
     max-height: 18px;
-    display: flex;
-    justify-content: space-between;
+    display: block;
 }
 
 .search-container {
-    display: flex;
+    display: inline;
     max-height: 18px;
     margin-left: 45px;
+    vertical-align: top;
 }
 
 .search-form {
-    display: flex;
-    width: 35%;
+    display: inline;
 }
 
 .nav-search {
-    border-radius: 3px 3px 3px 3px;
+    border-radius: 3px;
     font-size: 85%;
     margin-left: 5px;
     margin-right: 5px;
     border-color: beige;
-    width: 80%;
+    width: 100px;
+    height: 13px;
+    vertical-align: top;
 }
 
 .login-container {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: box;
     display: flex;
     text-align: right;
-    justify-content: center;
     align-items: center;
     font-size: 90%;
     padding-right: 5px;
+    float: right;
+    height: 20px;
+    /* Center alignment workaround */
+    -webkit-box-align: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
 }
 
 .login-container i {
