@@ -51,6 +51,7 @@ a:visited {
 }
 
 html {
+    background: -webkit-linear-gradient(#686fc1, #a9a9ff 20%);
     background: linear-gradient(#686fc1, #a9a9ff 20%);
     background-attachment: fixed;
 }
