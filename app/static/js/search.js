@@ -82,14 +82,16 @@ function getBeatmapsets() {
                 var beatmapsetDiv = document.createElement("div");
                 beatmapsetDiv.classList.add("beatmapset");
 
+                var imageUrl = 'url("' + staticBaseurl + '/mt/' + beatmapset.id + '")';
+                
+                // Use http for images if the page is not secure
+                if (window.location.protocol != "https:") {
+                    imageUrl = imageUrl.replace("https://", "http://");
+                }
+
                 var beatmapImage = document.createElement("div");
                 beatmapImage.classList.add("beatmap-image");
-                beatmapImage.style.backgroundImage = 'url("' + staticBaseurl + '/mt/' + beatmapset.id + '")';
-
-                // If no https image can be loaded, use http
-                if (window.location.protocol !== "https:") {
-                    beatmapImage.style.backgroundImage = beatmapImage.style.backgroundImage.replace("https://", "http://");
-                }
+                beatmapImage.style.backgroundImage = imageUrl;
 
                 var playIcon = document.createElement("i");
                 playIcon.classList.add("fa-solid", "fa-play");
