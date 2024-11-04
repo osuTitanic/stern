@@ -42,7 +42,7 @@ var Mods = {
     getMembers: function() {
         var memberList = [];
         for (var mod in Mods) {
-            if (Mods[mod] === (Mods[mod] & this[mod])) {
+            if (Mods.hasOwnProperty(mod) && Mods[mod] === (Mods[mod] & this[mod])) {
                 memberList.push(mod);
             }
         }
@@ -50,32 +50,31 @@ var Mods = {
     },
 
     getString: function(value) {
-        var modMap = {
-            0: "NM",
-            1: "NF",
-            2: "EZ",
-            3: "HD",
-            4: "HR",
-            5: "SD",
-            6: "DT",
-            7: "RX",
-            8: "HT",
-            9: "NC",
-            10: "FL",
-            11: "AT",
-            12: "SO",
-            13: "AP",
-            14: "PF",
-            15: "K4",
-            16: "K5",
-            17: "K6",
-            18: "K7",
-            19: "K8"
-        };
+        var modMap = {};
+        modMap[Mods.NoMod] = "NM";
+        modMap[Mods.NoFail] = "NF";
+        modMap[Mods.Easy] = "EZ";
+        modMap[Mods.Hidden] = "HD";
+        modMap[Mods.HardRock] = "HR";
+        modMap[Mods.SuddenDeath] = "SD";
+        modMap[Mods.DoubleTime] = "DT";
+        modMap[Mods.Relax] = "RX";
+        modMap[Mods.HalfTime] = "HT";
+        modMap[Mods.Nightcore] = "NC";
+        modMap[Mods.Flashlight] = "FL";
+        modMap[Mods.Autoplay] = "AT";
+        modMap[Mods.SpunOut] = "SO";
+        modMap[Mods.Autopilot] = "AP";
+        modMap[Mods.Perfect] = "PF";
+        modMap[Mods.Key4] = "K4";
+        modMap[Mods.Key5] = "K5";
+        modMap[Mods.Key6] = "K6";
+        modMap[Mods.Key7] = "K7";
+        modMap[Mods.Key8] = "K8";
 
         var members = [];
         for (var mod in Mods) {
-            if (Mods[mod] !== 0 && (value & Mods[mod]) === Mods[mod]) {
+            if (Mods.hasOwnProperty(mod) && Mods[mod] !== 0 && (value & Mods[mod]) === Mods[mod]) {
                 members.push(mod);
             }
         }
@@ -84,9 +83,11 @@ var Mods = {
             members.splice(members.indexOf("DT"), 1);
         }
 
-        return members.map(function(mod) {
-            return modMap[Mods[mod]];
-        }).join("");
+        var result = [];
+        for (var i = 0; i < members.length; i++) {
+            result.push(modMap[Mods[members[i]]]);
+        }
+        return result.join("");
     }
 };
 
@@ -174,14 +175,14 @@ function createScoreElement(score, index, type) {
 
   var modsText = document.createElement("b");
   if (score.mods > 0) {
-    modsText.textContent = "+" + Mods.getString(score.mods); // Changed from template literals
+    modsText.textContent = "+" + Mods.getString(score.mods);
   }
 
   var scoreInfo = document.createElement("b");
   scoreInfo.appendChild(beatmapInfo);
   scoreInfo.appendChild(modsText);
 
-  var accuracyText = document.createTextNode("(" + (score.acc * 100).toFixed(2) + "%)"); // Changed from template literals
+  var accuracyText = document.createTextNode("(" + (score.acc * 100).toFixed(2) + "%)");
 
   // Parse date to a format that timeago can understand
   var scoreDate = new Date(score.submitted_at);
