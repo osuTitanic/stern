@@ -70,8 +70,7 @@
 
 #beatmap-list {
     margin-bottom: 5px;
-    display: flex;
-    flex-wrap: wrap;
+    overflow: hidden;
 }
 
 #loading-text {
@@ -87,6 +86,7 @@
     border: solid 1px #dad7fb;
     width: 415px;
     height: 65;
+    float: left;
 }
 
 .beatmapset:hover {
