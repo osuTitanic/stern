@@ -86,6 +86,11 @@ function getBeatmapsets() {
                 beatmapImage.classList.add("beatmap-image");
                 beatmapImage.style.backgroundImage = 'url("' + staticBaseurl + '/mt/' + beatmapset.id + '")';
 
+                // If no https image can be loaded, use http
+                beatmapImage.onerror = function() {
+                    beatmapImage.style.backgroundImage = beatmapImage.style.backgroundImage.replace("https://", "http://");
+                };
+
                 var playIcon = document.createElement("i");
                 playIcon.classList.add("fa-solid", "fa-play");
                 playIcon.onclick = function(e) {
