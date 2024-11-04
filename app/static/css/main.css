@@ -51,6 +51,7 @@ a:visited {
 }
 
 html {
+    background-color: #a9a9ff; /* Fallback normal color */
     background: -webkit-linear-gradient(#686fc1, #a9a9ff 20%);
     background: -moz-linear-gradient(#686fc1, #a9a9ff 20%);
     background: -ms-linear-gradient(#686fc1, #a9a9ff 20%);
