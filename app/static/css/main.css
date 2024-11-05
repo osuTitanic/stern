@@ -40,6 +40,12 @@ a {
     color: rgb(0, 102, 204);
 }
 
+a img {
+    /* grrr.. internet explorer!! */
+    border: none;
+    outline: none;
+}
+
 a:hover {
     text-decoration: underline;
     color: rgb(0, 102, 204);
