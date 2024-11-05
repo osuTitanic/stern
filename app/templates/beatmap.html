@@ -699,17 +699,17 @@
 </div>
 <script>
     // osu.ppy.sh spoilerbox conversion
-    var spoilerBoxes = document.querySelectorAll('.js-spoilerbox');
+    var spoilerBoxes = document.querySelectorAll('.bbcode-spoilerbox');
     for (var i = 0; i < spoilerBoxes.length; i++) {
         spoilerBoxes[i].classList.add('spoiler');
     }
 
-    var spoilerBoxContents = document.querySelectorAll('.js-spoilerbox__body');
+    var spoilerBoxContents = document.querySelectorAll('.bbcode-spoilerbox__body');
     for (var i = 0; i < spoilerBoxContents.length; i++) {
         spoilerBoxContents[i].classList.add('spoiler-body');
     }
 
-    var spoilerBoxHeads = document.querySelectorAll('.js-spoilerbox__link');
+    var spoilerBoxHeads = document.querySelectorAll('.bbcode-spoilerbox__link');
     for (var i = 0; i < spoilerBoxHeads.length; i++) {
         var spoilerBox = spoilerBoxHeads[i];
         
