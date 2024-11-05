@@ -699,67 +699,84 @@
 </div>
 <script>
     // osu.ppy.sh spoilerbox conversion
-    spoilerBoxes = document.querySelectorAll('.js-spoilerbox')
-    spoilerBoxes.forEach(spoilerBox => {
-        spoilerBox.classList.add('spoiler')
-    })
+    var spoilerBoxes = document.querySelectorAll('.js-spoilerbox');
+    for (var i = 0; i < spoilerBoxes.length; i++) {
+        spoilerBoxes[i].classList.add('spoiler');
+    }
 
-    spoilerBoxContents = document.querySelectorAll('.js-spoilerbox__body')
-    spoilerBoxContents.forEach(spoilerBox => {
-        spoilerBox.classList.add('spoiler-body')
-    })
+    var spoilerBoxContents = document.querySelectorAll('.js-spoilerbox__body');
+    for (var i = 0; i < spoilerBoxContents.length; i++) {
+        spoilerBoxContents[i].classList.add('spoiler-body');
+    }
 
-    spoilerBoxHeads = document.querySelectorAll('.js-spoilerbox__link')
-    spoilerBoxHeads.forEach(spoilerBox => {
-        // Change element type to div
-        spoilerBox.tagName = 'div'
-        spoilerBox.addEventListener('click', () => {
-            return toggleSpoiler(spoilerBox)
-        })
-        spoilerBox.classList.add('spoiler-head')
-    })
+    var spoilerBoxHeads = document.querySelectorAll('.js-spoilerbox__link');
+    for (var i = 0; i < spoilerBoxHeads.length; i++) {
+        var spoilerBox = spoilerBoxHeads[i];
+        
+        // Change element type to div (in older versions of Chrome, use workarounds if necessary)
+        var newSpoilerBox = document.createElement('div');
+        newSpoilerBox.className = spoilerBox.className + ' spoiler-head';
+        newSpoilerBox.innerHTML = spoilerBox.innerHTML;
+        spoilerBox.parentNode.replaceChild(newSpoilerBox, spoilerBox);
+        
+        newSpoilerBox.onclick = function () {
+            toggleSpoiler(this);
+        };
+    }
 
     // Set volume of beatmap preview to 0.5
-    var beatmapPreview = document.getElementById('beatmap-preview')
-    beatmapPreview.volume = 0.5
+    var beatmapPreview = document.getElementById('beatmap-preview');
+    if (beatmapPreview) {
+        beatmapPreview.volume = 0.5;
+    }
 
     function addFavorite(beatmapset_id) {
-        fetch(`/api/profile/${currentUser}/favourites/add?set_id=${beatmapset_id}`)
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                }
-                throw new Error('Failed to add favourite');
-            })
-            .then(data => {
-                const favourites = document.getElementById('favourites-button');
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "/api/profile/" + currentUser + "/favourites/add?set_id=" + beatmapset_id, true);
+        
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                var favourites = document.getElementById('favourites-button');
                 favourites.innerHTML = '(Remove Favourite)';
                 favourites.style.color = 'red';
-                favourites.onclick = () => removeFavorite(beatmapset_id);
-            })
-            .catch(error => {
-                console.error(error);
-            });
+                favourites.onclick = function () {
+                    removeFavorite(beatmapset_id);
+                };
+            } else {
+                console.error("Failed to add favourite");
+            }
+        };
+        
+        xhr.onerror = function () {
+            console.error("Request error occurred");
+        };
+        
+        xhr.send();
     }
-
+    
     function removeFavorite(beatmapset_id) {
-        fetch(`/api/profile/${currentUser}/favourites/delete?set_id=${beatmapset_id}`)
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                }
-                throw new Error('Failed to remove favourite');
-            })
-            .then(data => {
-                const favourites = document.getElementById('favourites-button');
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "/api/profile/" + currentUser + "/favourites/delete?set_id=" + beatmapset_id, true);
+        
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                var favourites = document.getElementById('favourites-button');
                 favourites.innerHTML = '(Add Favourite)';
                 favourites.style.color = 'green';
-                favourites.onclick = () => addFavorite(beatmapset_id);
-            })
-            .catch(error => {
-                console.error(error);
-            });
-    }
+                favourites.onclick = function () {
+                    addFavorite(beatmapset_id);
+                };
+            } else {
+                console.error("Failed to remove favourite");
+            }
+        };
+        
+        xhr.onerror = function () {
+            console.error("Request error occurred");
+        };
+        
+        xhr.send();
+    }    
 </script>
 {# TODO: Beatmap Comments #}
 {% endblock content %}
