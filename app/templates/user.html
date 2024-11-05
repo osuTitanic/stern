@@ -748,13 +748,13 @@
     </table>
 </div>
 <script>
-    const userId = {{ user.id }};
-    const mode = {{ mode }};
-    const modeName = '{{ constants.GameMode(mode).alias }}';
-    const scoreRank = {{ score_rank }};
-    const globalRank = {{ pp_rank }};
-    const countryRank = {{ pp_rank_country }};
-    const ppv1Rank = {{ ppv1_rank }};
+    var userId = {{ user.id }};
+    var mode = {{ mode }};
+    var modeName = '{{ constants.GameMode(mode).alias }}';
+    var scoreRank = {{ score_rank }};
+    var globalRank = {{ pp_rank }};
+    var countryRank = {{ pp_rank_country }};
+    var ppv1Rank = {{ ppv1_rank }};
 </script>
 <link rel="stylesheet" href="/lib/nv.d3.min.css">
 <script src="/lib/d3.v3.js"></script> 

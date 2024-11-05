@@ -120,7 +120,7 @@ document.addEventListener("DOMContentLoaded", function() {
     $(".timeago").timeago();
 });
 
-const params = new URLSearchParams(location.search);
+var params = new URLSearchParams(location.search);
 
 if (params.get('wait') && location.pathname == '/')
 {

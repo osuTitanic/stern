@@ -31,11 +31,11 @@
     <link rel="stylesheet" href="/lib/fontawesome.brands.min.css">
     {% if canonical_url %}<link rel="canonical" href="{{ canonical_url }}">{% endif %}
     <script>
-        const osuBaseurl = "{{ config.OSU_BASEURL }}";
-        const staticBaseurl = "{{ config.STATIC_BASEURL }}";
-        const currentUser = {{ current_user.id if current_user.is_authenticated else 'null' }};
-        const approvedRewards = {{ config.APPROVED_MAP_REWARDS|lower }};
-        const csrfToken = "{{ csrf_token() }}";
+        var osuBaseurl = "{{ config.OSU_BASEURL }}";
+        var staticBaseurl = "{{ config.STATIC_BASEURL }}";
+        var currentUser = {{ current_user.id if current_user.is_authenticated else 'null' }};
+        var approvedRewards = {{ config.APPROVED_MAP_REWARDS|lower }};
+        var csrfToken = "{{ csrf_token() }}";
     </script>
 </head>
 <body>
