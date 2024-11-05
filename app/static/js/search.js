@@ -326,6 +326,9 @@ function setOrder(element) {
     for (var i = 0; i < searchParams.length; i++) {
         var param = searchParams[i].split("=");
         if (param[0] !== "sort" && param[0] !== "page" && param[0] !== "order") {
+            if (param[1] === undefined) {
+                continue;
+            }
             query.push(param[0] + "=" + param[1]);
         }
     }
