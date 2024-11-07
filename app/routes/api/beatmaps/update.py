@@ -5,6 +5,7 @@ from app.common.database import beatmapsets, beatmaps
 from flask import Blueprint, abort, redirect, request
 from flask_login import current_user, login_required
 
+import hashlib
 import app
 
 router = Blueprint('beatmap-updates', __name__)
@@ -72,14 +73,14 @@ def update_hashes(set_id: int):
 
         try:
             for beatmap in beatmapset.beatmaps:
-                response = app.session.requests.get(f'https://osu.direct/api/b/{beatmap.id}')
-                response.raise_for_status()
+                beatmap_file = app.session.storage.get_beatmap(beatmap.id)
 
-                beatmap_hash = response.json()['FileMD5']
+                if not beatmap_file:
+                    continue
 
                 beatmaps.update(
                     beatmap.id,
-                    updates={'md5': beatmap_hash},
+                    updates={'md5': hashlib.md5(beatmap_file).hexdigest()},
                     session=session
                 )
         except Exception as e:
