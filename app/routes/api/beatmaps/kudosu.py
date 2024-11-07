@@ -63,7 +63,7 @@ def get_kudosu_by_post(set_id: int, post_id: int):
             for k in kudosu
         ]
 
-@router.get(f'/<set_id>/kudosu/<post_id>/reward')
+@router.post(f'/<set_id>/kudosu/<post_id>/reward')
 @login_required
 @validate()
 def reward_kudosu(set_id: int, post_id: int):
@@ -155,7 +155,7 @@ def reward_kudosu(set_id: int, post_id: int):
         return KudosuModel.model_validate(kudosu, from_attributes=True) \
                           .model_dump()
 
-@router.get(f'/<set_id>/kudosu/<post_id>/revoke')
+@router.post(f'/<set_id>/kudosu/<post_id>/revoke')
 @login_required
 @validate()
 def revoke_kudosu(set_id: int, post_id: int):
@@ -237,7 +237,7 @@ def revoke_kudosu(set_id: int, post_id: int):
         return KudosuModel.model_validate(kudosu, from_attributes=True) \
                           .model_dump()
 
-@router.get(f'/<set_id>/kudosu/<post_id>/reset')
+@router.post(f'/<set_id>/kudosu/<post_id>/reset')
 @login_required
 @validate()
 def reset_kudosu(set_id: int, post_id: int):

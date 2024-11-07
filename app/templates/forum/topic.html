@@ -402,7 +402,9 @@
     
     function giveKudos(postId, beatmapsetId) {
         var xhr = new XMLHttpRequest();
-        xhr.open("GET", "/api/beatmaps/" + beatmapsetId + "/kudosu/" + postId + "/reward", true);
+        xhr.open("POST", "/api/beatmaps/" + beatmapsetId + "/kudosu/" + postId + "/reward", true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.send('csrf_token=' + csrfToken);
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4) {
                 var data = JSON.parse(xhr.responseText);
@@ -428,7 +430,9 @@
     
     function revokeKudos(postId, beatmapsetId) {
         var xhr = new XMLHttpRequest();
-        xhr.open("GET", "/api/beatmaps/" + beatmapsetId + "/kudosu/" + postId + "/revoke", true);
+        xhr.open("POST", "/api/beatmaps/" + beatmapsetId + "/kudosu/" + postId + "/revoke", true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.send('csrf_token=' + csrfToken);
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4) {
                 var data = JSON.parse(xhr.responseText);
@@ -454,7 +458,9 @@
     
     function resetKudos(postId, beatmapsetId) {
         var xhr = new XMLHttpRequest();
-        xhr.open("GET", "/api/beatmaps/" + beatmapsetId + "/kudosu/" + postId + "/reset", true);
+        xhr.open("POST", "/api/beatmaps/" + beatmapsetId + "/kudosu/" + postId + "/reset", true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.send('csrf_token=' + csrfToken);
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4) {
                 var data = JSON.parse(xhr.responseText);
