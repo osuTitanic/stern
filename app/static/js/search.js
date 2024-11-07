@@ -272,14 +272,14 @@ function reloadInput() {
         var dataValue = selectedElement ? selectedElement.getAttribute("data-id") : "";
 
         if (dataValue.length > 0) {
-            query.push(dataName + "=" + encodeURIComponent(dataValue));
+            query.push(dataName + "=" + dataValue);
         }
     }
 
     // Keep search input from previous request
     var searchParams = new RegExp('[?&]query=([^&#]*)').exec(window.location.search);
     var search = searchParams ? searchParams[1] : null;
-    if (search) query.push("query=" + encodeURIComponent(search));
+    if (search) query.push("query=" + search);
 
     // Keep sort from previous request
     var sortParams = new RegExp('[?&]sort=([^&#]*)').exec(window.location.search);
