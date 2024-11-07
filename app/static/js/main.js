@@ -89,9 +89,13 @@ function loadBBCodePreview(element) {
     return false;
 }
 
-function confirmRedirect(url, promptText) {
+function confirmAction(promptText) {
     if (promptText === undefined) promptText = 'Are you sure?';
-    var do_redirect = confirm(promptText);
+    return confirm(promptText);
+}
+
+function confirmRedirect(url, promptText) {
+    var do_redirect = confirmAction(promptText);
 
     if (!do_redirect)
         return;
