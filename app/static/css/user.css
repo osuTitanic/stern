@@ -479,6 +479,14 @@
     color: #8684c9;
 }
 
+.score-replay i {
+    color: #8684c9;
+}
+
+.score-replay i:hover {
+    color: #3843a6;
+}
+
 .show-more {
     font-size: 90%;
 }

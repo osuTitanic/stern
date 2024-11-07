@@ -288,6 +288,19 @@ function createScoreElement(score, index, type) {
 
     iconContainer.appendChild(pinIcon);
   }
+  else {
+    var replayLink = document.createElement("a");
+    replayLink.href = "/scores/" + score.id + "/download";
+    replayLink.className = "score-replay";
+    replayLink.title = "Download Replay";
+    replayLink.target = "_blank";
+
+    var replayIcon = document.createElement("i");
+    replayIcon.className = "fa-regular fa-star";
+    replayLink.appendChild(replayIcon);
+
+    iconContainer.appendChild(replayLink);
+  }
 
   ppWeight.appendChild(iconContainer);
   leftColumn.appendChild(scoreInfoDiv);
