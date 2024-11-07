@@ -93,7 +93,7 @@ var Mods = {
 
 function pinScore(scoreId, userId) {
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", "/api/profile/" + userId + "/pinned/add/" + scoreId, true);
+    xhr.open("GET", "/api/profile/" + userId + "/pinned/add/" + scoreId, true);
     xhr.onload = function() {
         loadPinnedScores(userId, modeName);
     };
@@ -102,7 +102,7 @@ function pinScore(scoreId, userId) {
 
 function unpinScore(scoreId, userId) {
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", "/api/profile/" + userId + "/pinned/remove/" + scoreId, true);
+    xhr.open("GET", "/api/profile/" + userId + "/pinned/remove/" + scoreId, true);
     xhr.onload = function() {
         loadPinnedScores(userId, modeName);
     };
