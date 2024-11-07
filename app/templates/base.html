@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="description" content="{{ description or 'Titanic » A private server for osu! that lets you experience the early days of the game.' }}">
     <meta name="keywords" content="osu, lekuru, server, titanic, titanic, private server, old osu, nostalgia, 2013, 2012, 2011, 2010, 2009, 2008, 2007, ouendan, elite, beat, agents, windows, game, taiko, tatsujin, simulator, sim, xna, ddr, beatmania, osu!, osume" />
-    <meta name="viewport" content="width=865, user-scalable=yes"/>
+    <meta name="viewport" content="width=1050, user-scalable=yes"/>
     <meta name="msapplication-TileColor" content="#603cba">
     <meta name="theme-color" content="#ffffff">
     <meta property="og:site_name" content="Titanic!">
@@ -20,6 +20,7 @@
     <title>{{ title or 'Titanic!' }}</title>
     <script src="/lib/jquery.min.js"></script>
     <script src="/lib/jquery.timeago.js"></script>
+    <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js"></script>
     <link rel="prefetch" href="/images/logo/main-vector.min.svg" as="image">
     <link rel="prefetch" href="/images/logo/main-low.png">
     <link rel="prefetch" href="/css/{{ css or 'main.css' }}">
@@ -30,11 +31,11 @@
     <link rel="stylesheet" href="/lib/fontawesome.brands.min.css">
     {% if canonical_url %}<link rel="canonical" href="{{ canonical_url }}">{% endif %}
     <script>
-        const osuBaseurl = "{{ config.OSU_BASEURL }}";
-        const staticBaseurl = "{{ config.STATIC_BASEURL }}";
-        const currentUser = {{ current_user.id if current_user.is_authenticated else 'null' }};
-        const approvedRewards = {{ config.APPROVED_MAP_REWARDS|lower }};
-        const csrfToken = "{{ csrf_token() }}";
+        var osuBaseurl = "{{ config.OSU_BASEURL }}";
+        var staticBaseurl = "{{ config.STATIC_BASEURL }}";
+        var currentUser = {{ current_user.id if current_user.is_authenticated else 'null' }};
+        var approvedRewards = {{ config.APPROVED_MAP_REWARDS|lower }};
+        var csrfToken = "{{ csrf_token() }}";
     </script>
 </head>
 <body>
@@ -48,7 +49,11 @@
     {% endif %}
     <div class="main">
         <a href="/">
-            <img src="/images/logo/main-vector.min.svg" class="logo" loading="preload" alt="">
+            <img src="/images/logo/main-vector.min.svg"
+                 onerror="this.src='/images/logo/main-low.png';"
+                 class="logo"
+                 loading="preload"
+                 alt="">
         </a>
         <div class="nav">
             {% include "navigation.html" %}
@@ -60,11 +65,11 @@
         <div class="content">
             <div class="top">
                 <div class="search-container">
-                    <form class="search-form" onsubmit="return beatmapSearch()">
-                        <input class="nav-search" type="text" id="beatmap-search" name="beatmaps" placeholder="Beatmap" autocomplete="off">
-                    </form>
                     <form class="search-form" onsubmit="return userSearch()">
                         <input class="nav-search" type="text" id="user-search" name="users" placeholder="User" autocomplete="off">
+                    </form>
+                    <form class="search-form" onsubmit="return beatmapSearch()">
+                        <input class="nav-search" type="text" id="beatmap-search" name="beatmaps" placeholder="Beatmap" autocomplete="off">
                     </form>
                 </div>
                 <div class="login-container">

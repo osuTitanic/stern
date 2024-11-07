@@ -9,11 +9,14 @@ router = Blueprint("status", __name__)
 @router.get('/<user_id>/status')
 @validate()
 def get_status(user_id: int) -> dict:
-    if not (user_status := status.get(int(user_id))):
+    if not (stats := status.get(user_id)):
         return {
             'error': 404,
             'details': 'The requested user could not be found.'
         }, 404
+    
+    user_status = stats.status
+    mode = user_status.mode.value
 
     return {
         'action': user_status.action.value,
@@ -24,9 +27,17 @@ def get_status(user_id: int) -> dict:
         'beatmap_text': user_status.text,
         'version': status.version(user_id),
         'rankings': {
-            'global': leaderboards.global_rank(user_id, user_status.mode.value),
-            'ppv1': leaderboards.ppv1_rank(user_id, user_status.mode.value),
-            'score': leaderboards.score_rank(user_id, user_status.mode.value),
-            'total_score': leaderboards.total_score_rank(user_id, user_status.mode.value)
+            'global': leaderboards.global_rank(user_id, mode),
+            'ppv1': leaderboards.ppv1_rank(user_id, mode),
+            'score': leaderboards.score_rank(user_id, mode),
+            'total_score': leaderboards.total_score_rank(user_id, mode)
+        },
+        'stats': {
+            'rscore': stats.rscore,
+            'tscore': stats.tscore,
+            'accuracy': stats.accuracy,
+            'playcount': stats.playcount,
+            'rank': stats.rank,
+            'pp': stats.pp
         }
     }

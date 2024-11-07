@@ -1,76 +1,104 @@
-function loadManifest()
-{
-  const manifestUrl = `${window.location.protocol}//${window.location.host}/api/clients`;
-  const container = document.getElementById('client-container');
+function loadManifest() {
+  var manifestUrl = '/api/clients/';
+  var container = document.getElementById('client-container');
 
   console.info('Loading clients...');
 
-  fetch(manifestUrl)
-    .then(response => {
-      if (!response.ok) {
-        const errorText = document.createElement('b');
-        errorText.textContent = 'Failed to load clients. Please contact an administrator!';
-        container.appendChild(errorText);
-        throw new Error(`Error: ${response.status}`);
-      }
-      return response.json();
-    })
-    .then(manifest => {
-      // Create client div's for each entry in manifest
-      manifest.forEach(client => {
-          if (!client.supported)
-            return;
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', manifestUrl, true);
+  xhr.onreadystatechange = handleManifestResponse;
+  xhr.send();
 
-          if (!client.recommended)
-            return;
-          
-          const div = document.createElement('div');
-          div.style.maxWidth = client.screenshots[0].width;
-          div.style.maxHeight = client.screenshots[0].height;
-          div.classList.add('client');
+  function handleManifestResponse() {
+      if (xhr.readyState !== 4) return;
 
-          if (client.known_bugs) {
-            const bugs = document.createElement('div');
-            bugs.classList.add('known-bugs');
-            bugs.title = client.known_bugs;
-            const icon = document.createElement('a');
-            icon.classList.add("fa-solid");
-            icon.classList.add('fa-triangle-exclamation');
-            icon.style.color = '#c40900';
-            bugs.appendChild(icon);
-            div.appendChild(bugs);
+      if (xhr.status === 200) {
+          try {
+              var manifest = JSON.parse(xhr.responseText);
+              displayClients(manifest);
+          } catch (e) {
+              displayError('Failed to parse client data. Please contact an administrator!');
+              console.error('Error parsing client manifest:', e);
           }
+      } else {
+          displayError('Failed to load clients. Please contact an administrator!');
+          console.error('Error loading client manifest:', xhr.status);
+      }
+  }
 
-          const version = document.createElement('p');
-          version.textContent = client.name;
-          version.classList.add('version')
-          const description = document.createElement('p');
-          description.textContent = client.description;
-          description.classList.add('description')
+  function displayClients(manifest) {
+      for (var i = 0; i < manifest.length; i++) {
+          var client = manifest[i];
 
-          const screenshot = document.createElement('img');
-          screenshot.src = client.screenshots[0].src;
+          if (!client.supported || !client.recommended) continue;
 
-          const downloadLink = document.createElement('a');
-          downloadLink.classList.add('download-link');
-          downloadLink.setAttribute('target', '_blank');
-          downloadLink.textContent = 'Download';
-          downloadLink.href = client.downloads[0];
+          var clientDiv = createClientDiv(client);
+          container.appendChild(clientDiv);
+      }
+  }
 
-          div.appendChild(version);
-          div.appendChild(description);
-          div.appendChild(screenshot);
-          div.appendChild(downloadLink);
+  function createClientDiv(client) {
+      var div = document.createElement('div');
+      div.style.maxWidth = client.screenshots[0].width + 'px';
+      div.style.maxHeight = client.screenshots[0].height + 'px';
+      div.className = 'client';
 
-          container.appendChild(div);
-      });
-    })
-    .catch(error => {
-      const errorText = document.createElement('b');
-      errorText.textContent = 'Failed to load clients. Please contact an administrator!';
+      if (client.known_bugs) {
+          var bugsDiv = createBugsDiv(client.known_bugs);
+          div.appendChild(bugsDiv);
+      }
+
+      div.appendChild(createTextElement('p', client.name, 'version'));
+      div.appendChild(createTextElement('p', client.description, 'description'));
+      div.appendChild(createImageElement(client.screenshots[0].src));
+      div.appendChild(createDownloadLink(client.downloads[0]));
+
+      return div;
+  }
+
+  function createBugsDiv(knownBugs) {
+      var bugsDiv = document.createElement('div');
+      bugsDiv.className = 'known-bugs';
+      bugsDiv.title = knownBugs;
+
+      var icon = document.createElement('a');
+      icon.className = 'fa-solid fa-triangle-exclamation';
+      icon.style.color = '#c40900';
+      bugsDiv.appendChild(icon);
+
+      return bugsDiv;
+  }
+
+  function createTextElement(tag, text, className) {
+      var element = document.createElement(tag);
+      element.textContent = text;
+      element.className = className;
+      return element;
+  }
+
+  function createImageElement(src) {
+      var imgContainer = document.createElement('div');
+      imgContainer.style.textAlign = 'center';
+      var img = document.createElement('img');
+      img.src = src;
+      imgContainer.appendChild(img);
+      return imgContainer;
+  }
+
+  function createDownloadLink(href) {
+      var link = document.createElement('a');
+      link.className = 'download-link';
+      link.target = '_blank';
+      link.textContent = 'Download';
+      link.href = href;
+      return link;
+  }
+
+  function displayError(message) {
+      var errorText = document.createElement('b');
+      errorText.textContent = message;
       container.appendChild(errorText);
-      console.error('Error loading client manifest:', error);
-    });
+  }
 }
 
 window.addEventListener('load', loadManifest);

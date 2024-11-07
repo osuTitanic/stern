@@ -1,4 +1,4 @@
-const Genres = {
+var Genres = {
     Any: 0,
     Unspecified: 1,
     Video_Game: 2,
@@ -14,10 +14,18 @@ const Genres = {
     Folk: 13,
     Jazz: 14,
 
-    get: function(value) {return Object.keys(this).find(key => this[key] === value)}
+    get: function(value) {
+        var keys = Object.keys(this);
+        for (var i = 0; i < keys.length; i++) {
+            if (this[keys[i]] === value) {
+                return keys[i];
+            }
+        }
+        return undefined;
+    }
 };
 
-const Languages = {
+var Languages = {
     Any: 0,
     Unspecified: 1,
     English: 2,
@@ -34,52 +42,67 @@ const Languages = {
     Polish: 13,
     Other: 14,
 
-    get: function(value) {return Object.keys(this).find(key => this[key] === value)}
+    get: function(value) {
+        var keys = Object.keys(this);
+        for (var i = 0; i < keys.length; i++) {
+            if (this[keys[i]] === value) {
+                return keys[i];
+            }
+        }
+        return undefined;
+    }
 };
 
-function getBeatmapsets()
-{
-    const beatmapContainer = document.getElementById("beatmap-list");
-    const url = "/api/beatmaps/search" + window.location.search
+function getBeatmapsets() {
+    var beatmapContainer = document.getElementById("beatmap-list");
+    var url = "/api/beatmaps/search" + window.location.search;
 
-    fetch(url)
-        .then(response => {
-            if (!response.ok)
-                throw new Error(`${response.status}`);
-            return response.json();
-        })
-        .then(beatmapsets => {
-            const loadingText = document.getElementById("loading-text");
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", url, true);
+    xhr.onload = function() {
+        if (xhr.status >= 200 && xhr.status < 300) {
+            var beatmapsets = JSON.parse(xhr.responseText);
+            var loadingText = document.getElementById("loading-text");
 
-            if (loadingText)
+            if (loadingText) {
                 loadingText.remove();
+            }
 
             beatmapContainer.innerHTML = ""; // Remove child elements
 
-            if (beatmapsets.length <= 0)
-            {
+            if (beatmapsets.length <= 0) {
                 var noMapsText = document.createElement("h3");
-                noMapsText.textContent = "Nothing found... :("
+                noMapsText.textContent = "Nothing found... :(";
                 noMapsText.style.margin = "0 auto";
+                noMapsText.style.textAlign = "center";
                 beatmapContainer.appendChild(noMapsText);
                 return;
             }
 
-            beatmapsets.forEach(beatmapset => {
+            beatmapsets.forEach(function(beatmapset) {
                 var beatmapsetDiv = document.createElement("div");
                 beatmapsetDiv.classList.add("beatmapset");
 
+                var imageUrl = 'url("' + staticBaseurl + '/mt/' + beatmapset.id + '")';
+                
+                // Use http for images if the page is not secure
+                if (window.location.protocol != "https:") {
+                    imageUrl = imageUrl.replace("https://", "http://");
+                }
+
                 var beatmapImage = document.createElement("div");
                 beatmapImage.classList.add("beatmap-image");
-                beatmapImage.style.backgroundImage = `url("${staticBaseurl}/mt/${beatmapset.id}")`;
+                beatmapImage.style.backgroundImage = imageUrl;
 
                 var playIcon = document.createElement("i");
                 playIcon.classList.add("fa-solid", "fa-play");
-                playIcon.onclick = (e) => {
-                    document.querySelectorAll('[id^="beatmap-preview-"]').forEach(element => {
+                playIcon.onclick = function(e) {
+                    var beatmapPreviewElements = document.querySelectorAll('[id^="beatmap-preview-"]');
+                    for (var i = 0; i < beatmapPreviewElements.length; i++) {
+                        element = beatmapPreviewElements[i];
+
                         // Disable other active audios
-                        if (!element.paused && element.id != `beatmap-preview-${beatmapset.id}`)
-                        {
+                        if (!element.paused && element.id !== 'beatmap-preview-' + beatmapset.id) {
                             element.pause();
                             element.currentTime = 0;
 
@@ -87,29 +110,25 @@ function getBeatmapsets()
                             audioPlayIcon.classList.remove("fa-pause");
                             audioPlayIcon.classList.add("fa-play");
                         }
-                    });
+                    };
 
-                    resetOrPlayAudio(`beatmap-preview-${beatmapset.id}`);
+                    resetOrPlayAudio('beatmap-preview-' + beatmapset.id);
+                    var audio = document.getElementById('beatmap-preview-' + beatmapset.id);
 
-                    var audio = document.getElementById(`beatmap-preview-${beatmapset.id}`);
-
-                    if (audio.paused)
-                    {
+                    if (audio.paused) {
                         playIcon.classList.remove("fa-pause");
                         playIcon.classList.add("fa-play");
-                    }
-                    else
-                    {
+                    } else {
                         playIcon.classList.remove("fa-play");
                         playIcon.classList.add("fa-pause");
                     }
                 };
 
                 var beatmapAudio = document.createElement("audio");
-                beatmapAudio.src = `${staticBaseurl}/mp3/preview/${beatmapset.id}`;
-                beatmapAudio.id = `beatmap-preview-${beatmapset.id}`;
+                beatmapAudio.src = staticBaseurl + '/mp3/preview/' + beatmapset.id;
+                beatmapAudio.id = 'beatmap-preview-' + beatmapset.id;
                 beatmapAudio.volume = 0.5;
-                beatmapAudio.onended = () => {
+                beatmapAudio.onended = function() {
                     playIcon.classList.remove("fa-pause");
                     playIcon.classList.add("fa-play");
                 };
@@ -123,8 +142,8 @@ function getBeatmapsets()
 
                 var beatmapLink = document.createElement("a");
                 beatmapLink.classList.add("beatmap-link");
-                beatmapLink.href = `/s/${beatmapset.id}`;
-                beatmapLink.textContent = `${beatmapset.artist} - ${beatmapset.title}`;
+                beatmapLink.href = '/s/' + beatmapset.id;
+                beatmapLink.textContent = beatmapset.artist + ' - ' + beatmapset.title;
 
                 var videoIcon = document.createElement("i");
                 videoIcon.classList.add("fa-solid", "fa-film");
@@ -132,21 +151,26 @@ function getBeatmapsets()
                 var imageIcon = document.createElement("i");
                 imageIcon.classList.add("fa-regular", "fa-image");
 
-                if (beatmapset.has_video)
+                if (beatmapset.has_video) {
                     beatmapInfoLeft.appendChild(videoIcon);
+                }
 
-                if (beatmapset.has_storyboard)
+                if (beatmapset.has_storyboard) {
                     beatmapInfoLeft.appendChild(imageIcon);
+                }
 
-                beatmapCreator = document.createElement("span");
+                var beatmapCreator = document.createElement("span");
                 beatmapCreator.textContent = "mapped by ";
 
-                beatmapCreatorLink = document.createElement("a");
+                var beatmapCreatorLink = document.createElement("a");
                 beatmapCreatorLink.textContent = beatmapset.creator;
-                if (beatmapset.server == 0) beatmapCreatorLink.href = `https://osu.ppy.sh/u/${beatmapset.creator}`
-                else beatmapCreatorLink.href = `/u/${beatmapset.creator_id}`
+                if (beatmapset.server === 0) {
+                    beatmapCreatorLink.href = 'https://osu.ppy.sh/u/' + beatmapset.creator;
+                } else {
+                    beatmapCreatorLink.href = '/u/' + beatmapset.creator_id;
+                }
 
-                beatmapCreatorDiv = document.createElement("div");
+                var beatmapCreatorDiv = document.createElement("div");
                 beatmapCreatorDiv.appendChild(beatmapCreator);
                 beatmapCreatorDiv.appendChild(beatmapCreatorLink);
                 beatmapCreatorDiv.classList.add("beatmap-creator");
@@ -159,28 +183,26 @@ function getBeatmapsets()
                 var beatmapTagsDiv = document.createElement("div");
                 beatmapTagsDiv.classList.add("beatmap-tags");
 
-                if (beatmapset.language_id > 0)
-                {
+                if (beatmapset.language_id > 0) {
                     var query = new URLSearchParams(location.search);
                     query.set("language", beatmapset.language_id);
                     var languageTag = document.createElement("a");
                     languageTag.textContent = Languages.get(beatmapset.language_id).toString();
-                    languageTag.href = `?${query.toString()}`
+                    languageTag.href = '?' + query.toString();
                     beatmapTagsDiv.appendChild(languageTag);
                 }
 
-                if (beatmapset.genre_id > 0)
-                {
+                if (beatmapset.genre_id > 0) {
                     var query = new URLSearchParams(location.search);
                     query.set("genre", beatmapset.genre_id);
                     var genreTag = document.createElement("a");
                     genreTag.textContent = Genres.get(beatmapset.genre_id).toString().replace("_", " ");
-                    genreTag.href = `?${query.toString()}`
+                    genreTag.href = '?' + query.toString();
                     beatmapTagsDiv.appendChild(genreTag);
                 }
 
                 var ratingBar = document.createElement("div");
-                ratingBar.style.width = `${100 - ((beatmapset.ratings / 10) * 100)}%`;
+                ratingBar.style.width = (100 - ((beatmapset.ratings / 10) * 100)) + '%';
                 ratingBar.classList.add("beatmap-rating-bar");
 
                 var beatmapRating = document.createElement("div");
@@ -194,11 +216,15 @@ function getBeatmapsets()
                 playsIcon.classList.add("fa-solid", "fa-play");
 
                 var totalPlays = beatmapset.beatmaps
-                            .map((item) => item.playcount)
-                            .reduce((prev, next) => prev + next);
+                    .map(function(item) {
+                        return item.playcount;
+                    })
+                    .reduce(function(prev, next) {
+                        return prev + next;
+                    });
 
                 var detailsDiv = document.createElement("div");
-                detailsDiv.classList.add("beatmap-details")
+                detailsDiv.classList.add("beatmap-details");
                 detailsDiv.appendChild(heartIcon);
                 detailsDiv.appendChild(document.createTextNode(beatmapset.favourites));
                 detailsDiv.appendChild(playsIcon);
@@ -215,168 +241,200 @@ function getBeatmapsets()
 
                 $(".pagination").css("display", "block");
             });
-        })
-        .catch(error => {
-            // TODO
-            throw error;
-        });
+        } else {
+            console.error('Error loading beatmapsets: ' + xhr.statusText);
+        }
+    };
+
+    xhr.onerror = function() {
+        console.error('Network Error');
+    };
+
+    xhr.send();
 }
 
-function reloadInput()
-{
-    const dataElements = document.querySelectorAll(".beatmap-options dl");
-    var query = new URLSearchParams();
+function reloadInput() {
+    var dataElements = document.querySelectorAll(".beatmap-options dl");
+    var query = [];
 
-    dataElements.forEach(item => {
+    for (var i = 0; i < dataElements.length; i++) {
+        var item = dataElements[i];
         var dataName = item.getAttribute("data-name");
 
-        // Element has no "data-name"
-        // Multiple selections can be made
-        if (!dataName)
-        {
-            item.querySelectorAll(".selected")
-                .forEach(selectedElement => {
-                    query.set(selectedElement.getAttribute("data-name"), "true");
-                });
-            return;
+        if (!dataName) {
+            var selectedElements = item.querySelectorAll(".selected");
+            for (var j = 0; j < selectedElements.length; j++) {
+                query.push(selectedElements[j].getAttribute("data-name") + "=true");
+            }
+            continue;
         }
 
         var selectedElement = item.querySelector(".selected");
-        var dataValue = selectedElement.getAttribute("data-id");
+        var dataValue = selectedElement ? selectedElement.getAttribute("data-id") : "";
 
-        // Don't set parameter if "data-id" is empty
-        if (dataValue.length > 0)
-            query.set(dataName, dataValue);
-    });
+        if (dataValue.length > 0) {
+            query.push(dataName + "=" + dataValue);
+        }
+    }
 
     // Keep search input from previous request
-    var search = new URLSearchParams(location.search).get("query");
-    if (search) query.set("query", search);
+    var searchParams = new RegExp('[?&]query=([^&#]*)').exec(window.location.search);
+    var search = searchParams ? searchParams[1] : null;
+    if (search) query.push("query=" + search);
 
-    // Browser will reload
-    location.search = query.toString();
+    // Keep sort from previous request
+    var sortParams = new RegExp('[?&]sort=([^&#]*)').exec(window.location.search);
+    var sort = sortParams ? sortParams[1] : null;
+    if (sort) query.push("sort=" + sort);
+
+    // Keep order from previous request
+    var orderParams = new RegExp('[?&]order=([^&#]*)').exec(window.location.search);
+    var order = orderParams ? orderParams[1] : null;
+    if (order) query.push("order=" + order);
+
+    location.search = "?" + query.join("&");
 }
 
-function setElement(element)
-{
-    const dataName = element.parentNode.parentNode.getAttribute("data-name");
-    const elements = element.parentNode.querySelectorAll("a");
+function setElement(element) {
+    var dataName = element.parentNode.parentNode.getAttribute("data-name");
+    var elements = element.parentNode.querySelectorAll("a");
 
-    if (!dataName)
-    {
+    if (!dataName) {
         element.classList.toggle("selected");
         reloadInput();
         return;
     }
 
-    elements.forEach(dataElement => {
-        if (dataElement !== element)
-            dataElement.classList.remove("selected");
-    });
+    for (var i = 0; i < elements.length; i++) {
+        if (elements[i] !== element) {
+            elements[i].classList.remove("selected");
+        }
+    }
 
     element.classList.toggle("selected");
 
-    // Select default/first element if no element was selected
-    if (!element.parentNode.querySelector(".selected"))
+    if (!element.parentNode.querySelector(".selected")) {
         elements[0].classList.add("selected");
+    }
 
     reloadInput();
 }
 
-function setOrder(element)
-{
-    const query = new URLSearchParams(location.search);
-    query.set("sort", element.getAttribute("data-id"));
-    query.delete("page");
+function setOrder(element) {
+    var query = [];
+    var searchParams = location.search.substring(1).split("&");
 
-    if (element.classList.contains("selected"))
-    {
-        // 0 - Descending
-        // 1 - Ascending
-        const currentOrder = query.get("order") || 0;
-        query.set("order", (currentOrder == 0 ? 1 : 0));
+    for (var i = 0; i < searchParams.length; i++) {
+        var param = searchParams[i].split("=");
+        if (param[0] !== "sort" && param[0] !== "page" && param[0] !== "order") {
+            if (param[1] === undefined) {
+                continue;
+            }
+            query.push(param[0] + "=" + param[1]);
+        }
     }
 
-    // Browser will reload
-    location.search = query.toString();
+    query.push("sort=" + element.getAttribute("data-id"));
+
+    if (element.classList.contains("selected")) {
+        var currentOrder = 0;
+        for (var i = 0; i < searchParams.length; i++) {
+            var param = searchParams[i].split("=");
+            if (param[0] === "order") {
+                currentOrder = parseInt(param[1]);
+                break;
+            }
+        }
+        query.push("order=" + (currentOrder == 0 ? 1 : 0));
+    }
+
+    location.search = "?" + query.join("&");
 }
 
-document.querySelectorAll(".beatmap-options a")
-        .forEach(selectableElement => {
-            selectableElement.addEventListener("click", (event) => {
-                event.preventDefault();
-                setElement(event.target);
-            })
-        });
+var beatmapOptionsLinks = document.querySelectorAll(".beatmap-options a");
+for (var i = 0; i < beatmapOptionsLinks.length; i++) {
+    beatmapOptionsLinks[i].addEventListener("click", function (event) {
+        event.preventDefault();
+        setElement(event.target);
+    });
+}
 
-document.querySelectorAll(".beatmap-order-select a")
-        .forEach(selectableElement => {
-            selectableElement.addEventListener("click", (event) => {
-                event.preventDefault();
-                setOrder(event.target);
-            })
-        });
+var beatmapOrderSelectLinks = document.querySelectorAll(".beatmap-order-select a");
+for (var i = 0; i < beatmapOrderSelectLinks.length; i++) {
+    beatmapOrderSelectLinks[i].addEventListener("click", function (event) {
+        event.preventDefault();
+        setOrder(event.target);
+    });
+}
 
-window.addEventListener('load', () => {
-    const dataElements = document.querySelectorAll(".beatmap-options dl");
-    const query = new URLSearchParams(location.search);
+window.addEventListener('load', function () {
+    var dataElements = document.querySelectorAll(".beatmap-options dl");
+    var searchParams = location.search.substring(1).split("&");
+    var query = {};
 
-    const beatmapOrder = query.get("order") || 0;
-    const beatmapSort = query.get("sort") || 0;
+    for (var i = 0; i < searchParams.length; i++) {
+        var param = searchParams[i].split("=");
+        query[param[0]] = param[1];
+    }
 
-    const orderElement = document.querySelector(`.beatmap-order-select a[data-id="${beatmapSort}"]`);
-    orderElement.classList.add("selected");
+    var beatmapOrder = query["order"] || 0;
+    var beatmapSort = query["sort"] || 0;
 
-    // Reset "selected" class based on query
-    dataElements.forEach(item => {
+    var orderElement = document.querySelector('.beatmap-order-select a[data-id="' + beatmapSort + '"]');
+    if (orderElement) {
+        orderElement.classList.add("selected");
+    }
+
+    for (var i = 0; i < dataElements.length; i++) {
+        var item = dataElements[i];
         var dataName = item.getAttribute("data-name");
 
-        if (!dataName)
-        {
-            // Element has no "data-name"
-            // Multiple selections can be made
-            item.querySelectorAll("a").forEach(element => {
-                const elementDataName = element.getAttribute("data-name");
-
-                if (elementDataName) {
-                    const queryValue = query.get(elementDataName);
-                    element.classList.toggle("selected", queryValue === "true");
+        if (!dataName) {
+            var elements = item.querySelectorAll("a");
+            for (var j = 0; j < elements.length; j++) {
+                var element = elements[j];
+                var elementDataName = element.getAttribute("data-name");
+                if (elementDataName && query[elementDataName] === "true") {
+                    element.classList.add("selected");
                 }
-            })
-            return;
+            }
+            continue;
         }
 
-        const queryValue = query.get(dataName);
-
-        if (queryValue)
-        {
-            item.querySelectorAll(".selected").forEach(selectedElement => {
-                selectedElement.classList.remove("selected");
-            });
-
-            const selectedItem = item.querySelector(`a[data-id="${queryValue}"]`);
+        var queryValue = query[dataName];
+        if (queryValue) {
+            var selectedItems = item.querySelectorAll(".selected");
+            for (var j = 0; j < selectedItems.length; j++) {
+                selectedItems[j].classList.remove("selected");
+            }
+            var selectedItem = item.querySelector('a[data-id="' + queryValue + '"]');
             if (selectedItem) {
                 selectedItem.classList.add("selected");
             }
         }
-    });
+    }
 
-    // Load beatmapsets
     getBeatmapsets();
 });
 
 var input = document.getElementById("search-input");
 var timeout = null;
 
-// Event listener for search query input
-input.addEventListener("keyup", (e) => {
+input.addEventListener("keyup", function (e) {
     var input = document.getElementById("search-input");
-    var query = new URLSearchParams(location.search);
+    var query = [];
+    var searchParams = location.search.substring(1).split("&");
+
+    for (var i = 0; i < searchParams.length; i++) {
+        var param = searchParams[i].split("=");
+        if (param[0] !== "query") {
+            query.push(param[0] + "=" + param[1]);
+        }
+    }
 
     clearTimeout(timeout);
-
-    timeout = setTimeout(() => {
-        query.set("query", input.value);
-        location.search = query.toString();
+    timeout = setTimeout(function () {
+        query.push("query=" + encodeURIComponent(input.value));
+        location.search = "?" + query.join("&");
     }, 500);
 });

@@ -45,8 +45,8 @@
             {% endif %}
         </h1>
         <div class="user-title">
-            {% if user.userpage_title %}
-            {{ user.userpage_title }}
+            {% if user.title %}
+            {{ user.title }}
             {% endif %}
         </div>
         {% if user.restricted %}
@@ -77,34 +77,34 @@
     </div>
     <div class="left-bottom">
         <div class="userpage-social">
-            {% if user.userpage_location %}
+            {% if user.location %}
             <div title="Location" class="activity">
                 <i class="fa-sharp fa-solid fa-location-dot" style="color: #76777b;"></i>
-                <p>{{ user.userpage_location }}</p>
+                <p>{{ user.location }}</p>
             </div>
             {% endif %}
-            {% if user.userpage_interests %}
+            {% if user.interests %}
             <div title="Interests" class="activity">
                 <i class="fa-regular fa-heart" style="color: #76777b;"></i>
-                <p>{{ user.userpage_interests }}</p>
+                <p>{{ user.interests }}</p>
             </div>
             {% endif %}
-            {% if user.userpage_website %}
+            {% if user.website %}
             <div title="Website" class="activity">
                 <i class="fa-solid fa-earth-americas" style="color: #76777b;"></i>
-                <a href="{{ user.userpage_website }}">{{ user.userpage_website|domain }}</a>
+                <a href="{{ user.website }}">{{ user.website|domain }}</a>
             </div>
             {% endif %}
-            {% if user.userpage_twitter %}
+            {% if user.twitter %}
             <div title="Twitter" class="activity">
                 <i class="fa-brands fa-twitter" style="color: #76777b;"></i>
-                <a href="{{ user.userpage_twitter }}">{{ user.userpage_twitter|twitter_handle }}</a>
+                <a href="{{ user.twitter }}">{{ user.twitter|twitter_handle }}</a>
             </div>
             {% endif %}
-            {% if user.userpage_discord %}
+            {% if user.discord %}
             <div title="Discord" class="activity">
                 <i class="fa-brands fa-discord" style="color: #76777b;"></i>
-                <p>{{ user.userpage_discord }}</p>
+                <p>{{ user.discord }}</p>
             </div>
             {% endif %}
         </div>
@@ -186,18 +186,18 @@
 </div>
 <div class="profile-right">
     {% if current_user.id == user.id %}
-        {% if user.userpage_about %}
+        {% if user.userpage %}
             <a class="edit-button" href="/account/settings/profile#userpage">Edit</a>
             <br>
             <div class="userpage">
-                {{ user.userpage_about|bbcode|safe }}
+                {{ user.userpage|bbcode|safe }}
             </div>
         {% else %}
             <a href="/account/settings/profile#userpage">Click to make your user page!</a>
             <br>
         {% endif %}
     {% else %}
-        {% if user.userpage_about %}
+        {% if user.userpage %}
         {% if current_user.is_moderator and current_user.id != user.id %}
             <a class="edit-button" onclick="show('admin-userpage-controls')">Edit</a>
             <br>
@@ -205,7 +205,7 @@
                 <div onclick="hide('admin-userpage-controls')" class="popup-close">x</div>
                 <form class="section" action="/account/settings/profile/userpage" method="post">
                     {% with context = {
-                        "current": user.userpage_about,
+                        "current": user.userpage,
                         "submit-text": "Update",
                         "min-height": "140px",
                         "user-id": user.id
@@ -217,7 +217,7 @@
             </div>
         {% endif %}
         <div class="userpage">
-            {{ user.userpage_about|bbcode|safe }}
+            {{ user.userpage|bbcode|safe }}
         </div>
         {% endif %}
     {% endif %}
@@ -748,13 +748,13 @@
     </table>
 </div>
 <script>
-    const userId = {{ user.id }};
-    const mode = {{ mode }};
-    const modeName = '{{ constants.GameMode(mode).alias }}';
-    const scoreRank = {{ score_rank }};
-    const globalRank = {{ pp_rank }};
-    const countryRank = {{ pp_rank_country }};
-    const ppv1Rank = {{ ppv1_rank }};
+    var userId = {{ user.id }};
+    var mode = {{ mode }};
+    var modeName = '{{ constants.GameMode(mode).alias }}';
+    var scoreRank = {{ score_rank }};
+    var globalRank = {{ pp_rank }};
+    var countryRank = {{ pp_rank_country }};
+    var ppv1Rank = {{ ppv1_rank }};
 </script>
 <link rel="stylesheet" href="/lib/nv.d3.min.css">
 <script src="/lib/d3.v3.js"></script> 

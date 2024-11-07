@@ -1,10 +1,10 @@
 @import url('main.css');
 
 .page h1 {
-    color: var(--header);
+    color: #e15fac;
     font-weight: normal;
     font-size: 160%;
-    text-shadow: var(--text-shadow) 0px 0px 10px;
+    text-shadow: #efcfe1 0px 0px 10px;
 }
 
 #info-text {

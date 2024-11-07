@@ -1,9 +1,9 @@
 function beatmapSearch()
 {
-    const inputValue = document.getElementById("beatmap-search").value.trim();
+    var inputValue = document.getElementById("beatmap-search").value.trim();
 
     if (inputValue !== '') {
-        window.location.href = `/beatmapsets?query=${encodeURIComponent(inputValue)}`;
+        window.location.href = '/beatmapsets?query=' + encodeURIComponent(inputValue);
         return false;
     }
     return true;
@@ -11,19 +11,21 @@ function beatmapSearch()
 
 function userSearch()
 {
-    const inputValue = document.getElementById("user-search").value.trim();
+    var inputValue = document.getElementById("user-search").value.trim();
 
     if (inputValue !== '') {
-        window.location.href = `/u/${encodeURIComponent(inputValue)}`;
+        window.location.href = '/u/' + encodeURIComponent(inputValue);
         return false;
     }
     return true;
 }
 
 function resetOrPlayAudio(element) {
-    var audio = document.getElementById(element)
+    var audio = document.getElementById(element);
 
-    if (audio.paused) return audio.play();
+    if (audio.paused) {
+        return audio.play();
+    }
 
     audio.pause();
     audio.currentTime = 0;
@@ -34,27 +36,24 @@ function showLoginForm() {
     $("#username-field").select();
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-    $(".timeago").timeago();
-});
-
 function toggleSpoiler(root) {
     var spoiler = $(root).parents(".spoiler");
-	spoiler.children(".spoiler-body").slideToggle("fast");
-	spoiler.find('img').trigger('unveil');
-	return false;
+    spoiler.children(".spoiler-body").slideToggle("fast");
+    spoiler.find('img').trigger('unveil');
+    return false;
 }
 
 function loadBBCodePreview(element) {
-    const bbcodeWrapper = element.parentElement.parentElement;
-    const bbcodeEditor = bbcodeWrapper.querySelector('textarea');
-    const form = new FormData();
-    form.set('bbcode', bbcodeEditor.value);
-    form.set('csrf_token', csrfToken);
+    var bbcodeWrapper = element.parentElement.parentElement;
+    var bbcodeEditor = bbcodeWrapper.querySelector('textarea');
+    var form = new FormData();
+    form.append('bbcode', bbcodeEditor.value);
+    form.append('csrf_token', csrfToken);
 
     // Remove old previews
-    document.querySelectorAll('.bbcode-preview').forEach(element => {
-        element.remove();
+    var previews = document.querySelectorAll('.bbcode-preview');
+    Array.prototype.forEach.call(previews, function(element) {
+        element.parentNode.removeChild(element);
     });
 
     fetch('/api/bbcode/preview', {
@@ -62,37 +61,41 @@ function loadBBCodePreview(element) {
         cache: "no-cache",
         body: form
     })
-    .then(response => {
+    .then(function(response) {
         if (!response.ok)
-            throw new Error(`${response.status}: "${response.statusText}"`);
+            throw new Error(response.status + ': "' + response.statusText + '"');
         return response.text();
     })
-    .then(htmlPreview => {
+    .then(function(htmlPreview) {
         if (!htmlPreview)
             return;
 
-        const previewContainer = document.createElement('div');
-        previewContainer.classList.add('bbcode-preview', 'bbcode');
+        var previewContainer = document.createElement('div');
+        previewContainer.className = 'bbcode-preview bbcode';
         previewContainer.innerHTML = htmlPreview;
 
         bbcodeWrapper.appendChild(previewContainer);
     })
-    .catch(error => {
-        const previewContainer = document.createElement('div');
-        previewContainer.classList.add('bbcode-preview', 'bbcode');
+    .catch(function(error) {
+        var previewContainer = document.createElement('div');
+        previewContainer.className = 'bbcode-preview bbcode';
         previewContainer.appendChild(
             document.createTextNode('Failed to load bbcode preview :(')
         );
         bbcodeWrapper.appendChild(previewContainer);
         console.error(error);
-    })
+    });
 
     return false;
 }
 
-function confirmRedirect(url, prompt='Are you sure?')
-{
-    do_redirect = confirm(prompt);
+function confirmAction(promptText) {
+    if (promptText === undefined) promptText = 'Are you sure?';
+    return confirm(promptText);
+}
+
+function confirmRedirect(url, promptText) {
+    var do_redirect = confirmAction(promptText);
 
     if (!do_redirect)
         return;
@@ -101,13 +104,27 @@ function confirmRedirect(url, prompt='Are you sure?')
     return false;
 }
 
-function cookieExists(name) { return document.cookie.indexOf(`${name}=`); }
-function isLoggedIn() { return cookieExists('session'); }
+function cookieExists(name) {
+    return document.cookie.indexOf(name + "=") !== -1;
+}
 
-function show(id) { $(`#${id}`).show(); }
-function hide(id) { $(`#${id}`).hide(); }
+function isLoggedIn() {
+    return document.getElementById('welcome-text').textContent != 'Welcome, guest!'
+}
 
-const params = new URLSearchParams(location.search);
+function show(id) {
+    $('#' + id).show();
+}
+
+function hide(id) {
+    $('#' + id).hide();
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    $(".timeago").timeago();
+});
+
+var params = new URLSearchParams(location.search);
 
 if (params.get('wait') && location.pathname == '/')
 {

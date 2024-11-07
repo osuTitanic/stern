@@ -105,11 +105,11 @@ def update_profile_settings():
         return error
 
     updates = {
-        'userpage_interests': interests,
-        'userpage_location': location,
-        'userpage_website': website,
-        'userpage_discord': discord,
-        'userpage_twitter': f'https://twitter.com/{app.get_handle(twitter)}' \
+        'interests': interests,
+        'location': location,
+        'website': website,
+        'discord': discord,
+        'twitter': f'https://twitter.com/{app.get_handle(twitter)}' \
             if twitter else None
     }
 
@@ -145,11 +145,11 @@ def update_userpage():
     # Update database
     users.update(
         user_id,
-        {'userpage_about': bbcode}
+        {'userpage': bbcode}
     )
 
     # Update user object
-    current_user.userpage_about = bbcode
+    current_user.userpage = bbcode
 
     if user_id != current_user.id:
         return redirect(f'/u/{user_id}')
@@ -173,11 +173,11 @@ def update_signature():
     # Update database
     users.update(
         user_id,
-        {'userpage_signature': bbcode}
+        {'signature': bbcode}
     )
 
     # Update user object
-    current_user.userpage_signature = bbcode
+    current_user.signature = bbcode
 
     if user_id != current_user.id:
         return redirect(f'/u/{user_id}')

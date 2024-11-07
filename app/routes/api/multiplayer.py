@@ -2,8 +2,8 @@
 from app.common.database.repositories import matches, events
 from app.models import MatchModel, MatchEventModel
 
+from datetime import datetime, timezone
 from flask import Blueprint, request
-from datetime import datetime
 
 import app
 
@@ -33,8 +33,11 @@ def get_events(id: int):
         start_time = match.created_at
 
         if after_timestamp := request.args.get('after', None, type=int):
-            # Fetch events aftet the given timestamp
-            start_time = datetime.utcfromtimestamp(after_timestamp / 1000)
+            # Fetch events after the given timestamp
+            start_time = datetime.fromtimestamp(
+                after_timestamp / 1000,
+                timezone.utc
+            )
 
         match_events = events.fetch_all_after_time(
             match.id,

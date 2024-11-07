@@ -71,27 +71,27 @@
             <dl>
                 <div class="inner-section">
                     <dt><label for="website">Website:</label></dt>
-                    <dd><input name="website" type="url" value="{{ current_user.userpage_website or '' }}"></dd>
+                    <dd><input name="website" type="url" value="{{ current_user.website or '' }}"></dd>
                 </div>
 
                 <div class="inner-section">
                     <dt><label for="discord">Discord:</label></dt>
-                    <dd><input name="discord" type="text" value="{{ current_user.userpage_discord or '' }}"></dd>
+                    <dd><input name="discord" type="text" value="{{ current_user.discord or '' }}"></dd>
                 </div>
 
                 <div class="inner-section">
                     <dt><label for="twitter">Twitter:</label></dt>
-                    <dd><input name="twitter" type="text" value="{{ current_user.userpage_twitter or '' }}"></dd>
+                    <dd><input name="twitter" type="text" value="{{ current_user.twitter or '' }}"></dd>
                 </div>
 
                 <div class="inner-section">
                     <dt><label for="location">Location:</label></dt>
-                    <dd><input name="location" type="text" value="{{ current_user.userpage_location or '' }}"></dd>
+                    <dd><input name="location" type="text" value="{{ current_user.location or '' }}"></dd>
                 </div>
 
                 <div class="inner-section">
                     <dt><label for="interests">Interests:</label></dt>
-                    <dd><input name="interests" type="text" value="{{ current_user.userpage_interests or '' }}"></dd>
+                    <dd><input name="interests" type="text" value="{{ current_user.interests or '' }}"></dd>
                 </div>
 
                 <dd><input class="submit-button" type="submit" name="submit" value="Save"></dd>
@@ -103,7 +103,7 @@
         <h2>Edit Userpage</h2>
         <form class="section" action="/account/settings/profile/userpage" method="post">
             {% with context = {
-                "current": current_user.userpage_about,
+                "current": current_user.userpage,
                 "submit-text": "Update",
                 "min-height": "140px",
                 "user-id": current_user.id,
@@ -118,7 +118,7 @@
         <h2>Edit Signature</h2>
         <form class="section" action="/account/settings/profile/signature" method="post">
             {% with context = {
-                "current": current_user.userpage_signature,
+                "current": current_user.signature,
                 "submit-text": "Update",
                 "min-height": "140px",
                 "user-id": current_user.id,
