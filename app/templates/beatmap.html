@@ -442,7 +442,7 @@
     </div>
     <div class="score-header">
     {% if not scores %}
-        <b>No records have been set for this game mode yet!</b>
+        <b class="no-records">No records have been set for this game mode yet!</b>
     {% else %}
         {% set leader_score = scores[0] %}
         <table class="leader">
