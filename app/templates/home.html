@@ -118,17 +118,17 @@
                     {% else %}
                         <tr class="dark-row">
                     {% endif %}
-                        <td>{{ plays.count }}</th>
+                        <td>{{ plays['count'] }}</th>
                         <td>
-                            <a href="/b/{{ plays.beatmap_id }}">
-                                <img src="{{ config.STATIC_BASEURL }}/mt/{{ plays.beatmapset.id }}" loading="lazy" alt="image"/>
-                                {{ plays.beatmapset.artist }} - {{ plays.beatmapset.title }} [{{ plays.beatmap.version }}]
+                            <a href="/b/{{ plays['id'] }}">
+                                <img src="{{ config.STATIC_BASEURL }}/mt/{{ plays['set_id'] }}" loading="lazy" alt="image"/>
+                                {{ plays['artist'] }} - {{ plays['title'] }} [{{ plays['version'] }}]
                             </a>
                         </td>
-                    {% if plays.beatmapset.server == 0 %}
-                        <td><a href="https://osu.ppy.sh/u/{{ plays.beatmapset.creator }}">{{ plays.beatmapset.creator }}</a></td>
+                    {% if plays['server'] == 0 %}
+                        <td><a href="https://osu.ppy.sh/u/{{ plays['creator'] }}">{{ plays['creator'] }}</a></td>
                     {% else %}
-                        <td><a href="/u/{{ plays.beatmapset.creator_id }}">{{ plays.beatmapset.creator }}</a></td>
+                        <td><a href="/u/{{ plays['creator_id'] }}">{{ plays['creator'] }}</a></td>
                     {% endif %}
                     </tr>
                 {% endfor %}
