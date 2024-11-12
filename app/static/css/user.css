@@ -29,8 +29,6 @@
     justify-content: center;
     align-items: center;
     overflow-wrap: anywhere;
-    padding-left: 35px;
-    padding-right: 35px;
 }
 
 .left-top h1 {
@@ -57,13 +55,9 @@
 
 .user-title {
     margin: 0px auto 5px auto;
+    text-align: center;
     font-size: 80%;
 }
-
-/* .user-header {
-    padding-left: 15px;
-    padding-right: 15px;
-} */
 
 #banned-image {
     display: block;
