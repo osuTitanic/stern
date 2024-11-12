@@ -353,6 +353,11 @@
     font-size: 95%;
     margin-top: 10px;
     margin-bottom: 10px;
+    display: block;
+}
+
+.profile-graph svg {
+    height: 160px;
 }
 
 .profile-stats-element {
