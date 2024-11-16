@@ -57,7 +57,11 @@
                 {% endif %}
                     <td style="width: 60%">
                         <a onclick="expandBeatmapPack({{ pack.id }})">{{ pack.name }}</a>
+                        {% if pack.download_link %}
                         (<a href="{{ pack.download_link }}" target="_blank">Download</a>)
+                        {% else %}
+                        (Download not available)
+                        {% endif %}
                     </td>
                     <td style="text-align: center">{{ pack.created_at.strftime('%b %d, %Y %H:%M:%S') }}</td>
                     <td><a href="/u/{{ pack.creator.id }}">{{ pack.creator.name }}</a></td>
