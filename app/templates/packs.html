@@ -1,0 +1,184 @@
+{# templates/beatmap_packs.html #}
+
+{% extends "base.html" %}
+
+{% block content %}
+<h1>
+    Beatmap Pack Listing
+</h1>
+<div class="pack-container">
+    <div>
+        <h2>
+            Before Downloading
+        </h2>
+        <p>
+            Installation: Once a pack has been downloaded, extract the .rar into your osu! Songs directory.
+            All songs are still .zip'd and/or .osz'd inside the pack, so osu! will need to extract the beatmaps itself the next time you go into Play mode.
+            Do <b>NOT</b> extract the zip's/osz's yourself, or the beatmaps will display incorrectly in osu and will not function properly.
+        </p>
+        <br>
+        <p>
+            Also note that it is highly recommended to <b>download the packs from latest to earliest</b>, since the oldest maps are of much lower quality than most recent maps.
+        </p>
+    </div>
+    {% if not categories %}
+    <br>
+    <b>
+        It seems like no beatmap packs currently exist. Please check back later!
+    </b>
+    {% else %}
+    <br>
+    <div class="pack-categories">
+        <ul>
+            {% for entry in categories %}
+            <li class="category-item">
+                <a href="/beatmapsets/packs/?category={{ entry }}"
+                   class="{{ 'active' if entry == category }}">
+                    {{ entry }}
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <table class="pack-listing" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Pack</th>
+                <th>Date</th>
+                <th>Uploaded by</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pack in beatmap_packs %}
+                {% if loop.index0 % 2 %}
+                <tr class="dark-row" onclick="expandBeatmapPack({{ pack.id }})">
+                {% else %}
+                <tr class="light-row" onclick="expandBeatmapPack({{ pack.id }})">
+                {% endif %}
+                    <td style="width: 60%">
+                        <a onclick="expandBeatmapPack({{ pack.id }})">{{ pack.name }}</a>
+                        {% if pack.download_link %}
+                        (<a href="{{ pack.download_link }}" target="_blank">Download</a>)
+                        {% else %}
+                        (Download not available)
+                        {% endif %}
+                    </td>
+                    <td style="text-align: center">{{ pack.created_at.strftime('%b %d, %Y %H:%M:%S') }}</td>
+                    <td><a href="/u/{{ pack.creator.id }}">{{ pack.creator.name }}</a></td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <div id="pack-{{ pack.id }}"></div>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <script>
+        var currentCategory = "{{ category }}";
+
+        function expandBeatmapPack(id) {
+            if (id === null || id === undefined) return;
+            var element = document.getElementById("pack-" + id);
+
+            if (element.className.indexOf("expanded") !== -1) {
+                element.classList.remove("expanded");
+                slideUp(element);
+                return;
+            }
+
+            if (element.className.indexOf("loaded") !== -1) {
+                element.classList.add("expanded");
+                slideDown(element);
+                return;
+            }
+
+            element.innerHTML = "<center>Loading...</center>";
+            element.classList.add("expanded");
+            slideDown(element);
+            loadBeatmapPackInfo(id);
+        }
+
+        function loadBeatmapPackInfo(id) {
+            var element = document.getElementById("pack-" + id);
+            var url = '/api/beatmaps/packs/' + currentCategory + '/' + id;
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", url, true);
+
+            xhr.onreadystatechange = function() {
+                try {
+                    if (xhr.readyState !== 4) return;
+    
+                    if (xhr.status >= 400) {
+                        element.innerHTML = "<center>Failed to load beatmap pack info.</center>";
+                        console.error("Failed to load beatmap pack info: " + xhr.responseText);
+                        return;
+                    }
+    
+                    var info = JSON.parse(xhr.responseText);
+                    var heading = document.createElement("h2");
+                    heading.innerHTML = info.name;
+                    heading.style.marginTop = "10px";
+    
+                    var creatorLink = document.createElement("a");
+                    creatorLink.href = "/u/" + info.creator.id;
+                    creatorLink.innerText = info.creator.name;
+    
+                    var uploadedDate = new Date(info.created_at);
+                    var uploadedDateString = uploadedDate.toLocaleDateString("de-DE", {
+                        year: "numeric",
+                        month: "numeric",
+                        day: "numeric",
+                        hour: "numeric",
+                        minute: "numeric",
+                        second: "numeric",
+                    });
+    
+                    var uploadedDateInfo = document.createElement("time");
+                    uploadedDateInfo.setAttribute("datetime", uploadedDateString);
+                    uploadedDateInfo.textContent = info.created_at;
+    
+                    var uploadedInfo = document.createElement("p");
+                    uploadedInfo.appendChild(document.createTextNode("Created by "));
+                    uploadedInfo.appendChild(creatorLink);
+                    uploadedInfo.appendChild(document.createTextNode(" on "));
+                    uploadedInfo.appendChild(uploadedDateInfo);
+    
+                    var description = document.createElement("p");
+                    description.innerText = info.description;
+    
+                    var beatmapList = document.createElement("ul");
+                    beatmapList.style.marginTop = "10px";
+    
+                    for (var i = 0; i < info.entries.length; i++) {
+                        var beatmapset = info.entries[i].beatmapset;
+                        var beatmapLink = document.createElement("a");
+                        beatmapLink.href = "/s/" + beatmapset.id;
+                        beatmapLink.innerText = beatmapset.artist + " - " + beatmapset.title + " (" + beatmapset.creator + ")";
+    
+                        var beatmapItem = document.createElement("li");
+                        beatmapItem.appendChild(beatmapLink);
+                        beatmapList.appendChild(beatmapItem);
+                    }
+    
+                    element.classList.add("loaded");
+                    element.innerHTML = "";
+                    element.appendChild(heading);
+                    element.appendChild(uploadedInfo);
+                    element.appendChild(description);
+                    element.appendChild(beatmapList);
+                    element.appendChild(document.createElement("br"));
+                    slideDown(element);
+                }
+                catch (e) {
+                    element.innerHTML = "<center>Failed to load beatmap pack info.</center>";
+                    console.error("Failed to load beatmap pack info: " + e);
+                }
+            }
+
+            xhr.send();
+        }
+    </script>
+    {% endif %}
+</div>
+{% endblock content %}
