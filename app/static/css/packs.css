@@ -8,15 +8,14 @@
     font-size: 150%;
     margin-bottom: 15px;
     text-shadow: #efcfe1 0px 0px 10px;
+    font-weight: 100;
+    color: #e15fac;
 }
 
 .page h2 {
     font-size: 120%;
     margin-bottom: 11px;
     text-shadow: #efcfe1 0px 0px 2px;
-}
-
-.header-text {
     font-weight: 100;
     color: #e15fac;
 }
@@ -97,5 +96,13 @@
 }
 
 .pack-listing [id^="pack-"] {
-    height: 2px;
+    height: 0px;
+    transition: all .5s ease;
+    overflow: hidden;
+    z-index: 0;
+}
+
+.pack-listing .expanded {
+    transition: all .5s ease;
+    position: relative;
 }

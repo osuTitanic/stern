@@ -3,12 +3,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1 class="header-text">
+<h1>
     Beatmap Pack Listing
 </h1>
 <div class="pack-container">
     <div>
-        <h2 class="header-text">
+        <h2>
             Before Downloading
         </h2>
         <p>
@@ -51,22 +51,49 @@
         <tbody>
             {% for pack in beatmap_packs %}
                 {% if loop.index0 % 2 %}
-                <tr class="dark-row">
+                <tr class="dark-row" onclick="expandBeatmapPack({{ pack.id }})">
                 {% else %}
-                <tr class="light-row">
+                <tr class="light-row" onclick="expandBeatmapPack({{ pack.id }})">
                 {% endif %}
                     <td style="width: 60%">
-                        <a href="#">{{ pack.name }}</a>
+                        <a onclick="expandBeatmapPack({{ pack.id }})">{{ pack.name }}</a>
                         (<a href="{{ pack.download_link }}" target="_blank">Download</a>)
                     </td>
                     <td style="text-align: center">{{ pack.created_at.strftime('%b %d, %Y %H:%M:%S') }}</td>
                     <td>{{ pack.creator.name }}</td>
                 </tr>
-                <tr colspan="2" id="pack-{{ pack.id }}">
+                <tr>
+                    <td colspan="3">
+                        <div id="pack-{{ pack.id }}"></div>
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
+    <script>
+        function expandBeatmapPack(id) {
+            if (id === null || id === undefined) return;
+            element = document.getElementById("pack-" + id);
+
+            if (element.className.indexOf("expanded") !== -1) {
+                element.classList.remove("expanded");
+                slideUp(element);
+                return;
+            }
+
+            if (element.className.indexOf("loaded") !== -1) {
+                slideDown(element);
+                return;
+            }
+
+            element.innerHTML = "<center>Loading...</center>";
+            element.classList.add("expanded");
+            slideDown(element);
+            loadBeatmapPackInfo(id);
+        }
+
+        function loadBeatmapPackInfo(id) { } // TODO
+    </script>
     {% endif %}
 </div>
 {% endblock content %}
