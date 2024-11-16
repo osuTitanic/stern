@@ -1,14 +1,28 @@
 @import url("main.css");
 
-.page {
-    margin: 0;
+.page p {
+    font-size: 90%;
+}
+
+.page h1 {
+    font-size: 150%;
+    margin-bottom: 15px;
+    text-shadow: #efcfe1 0px 0px 10px;
+}
+
+.page h2 {
+    font-size: 120%;
+    margin-bottom: 11px;
+    text-shadow: #efcfe1 0px 0px 2px;
 }
 
 .header-text {
-    font-size: 150%;
     font-weight: 100;
-    margin-left: 10px;
-    margin-bottom: 22px;
     color: #e15fac;
-    text-shadow: #efcfe1 0px 0px 10px;
+}
+
+.pack-container {
+    background: #f9f7fe;
+    border: 1px solid #e1dfe7;
+    padding: 10px;
 }
