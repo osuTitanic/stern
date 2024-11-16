@@ -1,5 +1,6 @@
 
 from app.common.constants import regexes
+from urllib.parse import unquote
 from .parser import Parser
 import config
 
@@ -74,7 +75,8 @@ def render_profile(tag_name, value, options, parent, context):
 
 @parser.formatter('url')
 def render_link(tag_name, value, options, parent, context):
-    return '<a href="%s" target="_blank">%s</a>' % (options.get('url', ''), value)
+    url = '<a href="%s" target="_blank">%s</a>' % (unquote(options.get('url', '')), value)
+    return url
 
 @parser.formatter('quote')
 def render_quote(tag_name, value, options, parent, context):
