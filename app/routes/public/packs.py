@@ -1,5 +1,6 @@
 
 from flask import Blueprint, Response, abort
+from app.common.database import packs
 
 import utils
 import app
@@ -13,5 +14,6 @@ def pack_listing():
         css='packs.css',
         site_description="Titanic » Beatmap Packs",
         site_title="Beatmap Packs",
-        title="Beatmap Packs - Titanic"
+        title="Beatmap Packs - Titanic",
+        categories=packs.fetch_categories(),
     )
