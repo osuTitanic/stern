@@ -71,9 +71,11 @@
         </tbody>
     </table>
     <script>
+        var currentCategory = "{{ category }}";
+
         function expandBeatmapPack(id) {
             if (id === null || id === undefined) return;
-            element = document.getElementById("pack-" + id);
+            var element = document.getElementById("pack-" + id);
 
             if (element.className.indexOf("expanded") !== -1) {
                 element.classList.remove("expanded");
@@ -82,6 +84,7 @@
             }
 
             if (element.className.indexOf("loaded") !== -1) {
+                element.classList.add("expanded");
                 slideDown(element);
                 return;
             }
@@ -92,7 +95,34 @@
             loadBeatmapPackInfo(id);
         }
 
-        function loadBeatmapPackInfo(id) { } // TODO
+        function loadBeatmapPackInfo(id) {
+            var element = document.getElementById("pack-" + id);
+            var url = '/api/beatmaps/packs/' + currentCategory + '/' + id;
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", url, true);
+
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState !== 4) return;
+
+                if (xhr.status >= 400) {
+                    element.innerHTML = "<center>Failed to load beatmap pack info.</center>";
+                    console.error("Failed to load beatmap pack info: " + xhr.responseText);
+                    return;
+                }
+
+                var info = JSON.parse(xhr.responseText);
+                var heading = document.createElement("h2");
+                heading.innerHTML = info.name;
+                heading.style.marginTop = "10px";
+
+                element.classList.add("loaded");
+                element.innerHTML = "";
+                element.appendChild(heading);
+                slideDown(element);
+            }
+
+            xhr.send();
+        }
     </script>
     {% endif %}
 </div>
