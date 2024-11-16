@@ -40,7 +40,7 @@
             {% endfor %}
         </ul>
     </div>
-    <table class="pack-listing">
+    <table class="pack-listing" cellspacing="0">
         <thead>
             <tr>
                 <th>Pack</th>
@@ -50,15 +50,20 @@
         </thead>
         <tbody>
             {% for pack in beatmap_packs %}
-            <tr>
-                <td style="width: 60%">
-                    <a href="#">{{ pack.name }}</a>
-                    (<a href="{{ pack.download_link }}" target="_blank">Download</a>)
-                </td>
-                <td style="text-align: center">{{ pack.created_at.strftime('%b %d, %Y %H:%M:%S') }}</td>
-                <td>{{ pack.creator.name }}</td>
-            </tr>
-            <tr colspan="2"></tr>
+                {% if loop.index0 % 2 %}
+                <tr class="dark-row">
+                {% else %}
+                <tr class="light-row">
+                {% endif %}
+                    <td style="width: 60%">
+                        <a href="#">{{ pack.name }}</a>
+                        (<a href="{{ pack.download_link }}" target="_blank">Download</a>)
+                    </td>
+                    <td style="text-align: center">{{ pack.created_at.strftime('%b %d, %Y %H:%M:%S') }}</td>
+                    <td>{{ pack.creator.name }}</td>
+                </tr>
+                <tr colspan="2" id="pack-{{ pack.id }}">
+                </tr>
             {% endfor %}
         </tbody>
     </table>

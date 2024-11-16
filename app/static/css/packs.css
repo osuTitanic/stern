@@ -77,3 +77,25 @@
     width: 100%;
     font-size: 80%;
 }
+
+.pack-listing thead {
+    padding: 0;
+    margin: 0;
+}
+
+.pack-listing th {
+    background: #d7d2fb;
+    border-bottom: 1px solid #a79ef3;
+}
+
+.dark-row {
+    background-color: #e3e1fa;
+}
+
+.light-row {
+    background-color: #edebfa;
+}
+
+.pack-listing [id^="pack-"] {
+    height: 2px;
+}
