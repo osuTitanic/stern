@@ -2,14 +2,6 @@ var activeTab = window.location.hash !== "" ? window.location.hash.replace("#", 
 var topLeaderOffset = 0;
 var topScoreOffset = 0;
 
-function slideDown(elem) {
-    elem.style.height = elem.scrollHeight + "px";
-}
-
-function slideUp(elem) {
-    elem.style.height = "0px";
-}
-
 var Mods = {
     NoMod: 0,
     NoFail: 1 << 0,
