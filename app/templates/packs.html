@@ -30,14 +30,34 @@
     <div class="pack-categories">
         <ul>
             {% for entry in categories %}
-            <li>
+            <li class="category-item">
                 <a href="/beatmapsets/packs/?category={{ entry }}"
                    class="{{ 'active' if entry == category }}">
+                    {{ entry }}
                 </a>
             </li>
             {% endfor %}
         </ul>
     </div>
+    <table class="pack-listing">
+        <thead>
+            <tr>
+                <th>Pack</th>
+                <th>Date</th>
+                <th>Uploaded by</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pack in beatmap_packs %}
+            <tr>
+                <td>{{ pack.name }}</td>
+                <td style="width: 15%">{{ pack.created_at }}</td>
+                <td style="width: 15%">{{ pack.creator.name }}</td>
+            </tr>
+            <tr colspan="2"></tr>
+            {% endfor %}
+        </tbody>
+    </table>
     {% endif %}
 </div>
 {% endblock content %}
