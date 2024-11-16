@@ -33,7 +33,6 @@
     border-bottom: 1px solid #cfc1ef;
     width: 100%;
     float: left;
-    margin-top: 10px;
     padding: 0;
 }
 
@@ -72,4 +71,9 @@
 .category-item a:hover {
     background-color: white;
     text-decoration: none;
+}
+
+.pack-listing {
+    width: 100%;
+    font-size: 80%;
 }

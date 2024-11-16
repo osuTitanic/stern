@@ -27,6 +27,7 @@
         It seems like no beatmap packs currently exist. Please check back later!
     </b>
     {% else %}
+    <br>
     <div class="pack-categories">
         <ul>
             {% for entry in categories %}
@@ -50,9 +51,12 @@
         <tbody>
             {% for pack in beatmap_packs %}
             <tr>
-                <td>{{ pack.name }}</td>
-                <td style="width: 15%">{{ pack.created_at }}</td>
-                <td style="width: 15%">{{ pack.creator.name }}</td>
+                <td style="width: 60%">
+                    <a href="#">{{ pack.name }}</a>
+                    (<a href="{{ pack.download_link }}" target="_blank">Download</a>)
+                </td>
+                <td style="text-align: center">{{ pack.created_at.strftime('%b %d, %Y %H:%M:%S') }}</td>
+                <td>{{ pack.creator.name }}</td>
             </tr>
             <tr colspan="2"></tr>
             {% endfor %}
