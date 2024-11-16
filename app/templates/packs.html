@@ -60,7 +60,7 @@
                         (<a href="{{ pack.download_link }}" target="_blank">Download</a>)
                     </td>
                     <td style="text-align: center">{{ pack.created_at.strftime('%b %d, %Y %H:%M:%S') }}</td>
-                    <td>{{ pack.creator.name }}</td>
+                    <td><a href="/u/{{ pack.creator.id }}">{{ pack.creator.name }}</a></td>
                 </tr>
                 <tr>
                     <td colspan="3">
