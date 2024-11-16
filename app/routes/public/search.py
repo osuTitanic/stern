@@ -2,6 +2,7 @@
 from flask import Blueprint, Response, request, redirect, abort
 from app.common.constants import BeatmapSortBy, BeatmapOrder
 from app.common.database.repositories import beatmapsets
+from . import packs
 
 import flask_login
 import unicodedata
@@ -10,6 +11,7 @@ import app
 import re
 
 router = Blueprint('beatmapsets', __name__)
+router.register_blueprint(packs.router, url_prefix='/packs')
 
 @router.get('/')
 def search_beatmap():

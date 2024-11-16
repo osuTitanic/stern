@@ -1,0 +1,14 @@
+@import url("main.css");
+
+.page {
+    margin: 0;
+}
+
+.header-text {
+    font-size: 150%;
+    font-weight: 100;
+    margin-left: 10px;
+    margin-bottom: 22px;
+    color: #e15fac;
+    text-shadow: #efcfe1 0px 0px 10px;
+}
