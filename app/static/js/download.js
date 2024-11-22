@@ -61,7 +61,7 @@ function loadManifest() {
       bugsDiv.className = 'known-bugs';
       bugsDiv.title = knownBugs;
 
-      var icon = document.createElement('a');
+      var icon = document.createElement('i');
       icon.className = 'fa-solid fa-triangle-exclamation';
       icon.style.color = '#c40900';
       bugsDiv.appendChild(icon);
