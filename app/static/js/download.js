@@ -81,6 +81,7 @@ function loadManifest() {
       imgContainer.style.textAlign = 'center';
       var img = document.createElement('img');
       img.src = src;
+      img.alt = 'Client Screenshot';
       imgContainer.appendChild(img);
       return imgContainer;
   }
