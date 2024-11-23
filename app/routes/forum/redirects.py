@@ -156,3 +156,57 @@ def quick_reply_redirect():
     return redirect(
         f"/forum/{topic.forum_id}/t/{topic.id}/post"
     )
+
+@router.get('/viewtopic.php')
+def viewtopic_redirect():
+    topic_id = request.args.get('t', type=int)
+    post_id = request.args.get('p', type=int)
+
+    if post_id:
+        post = posts.fetch_one(post_id)
+
+        if not post:
+            return abort(
+                code=404,
+                description=app.constants.POST_NOT_FOUND
+            )
+        
+        return redirect(
+            f"/forum/t/{post.topic_id}/p/{post.id}"
+        )
+
+    if topic_id:
+        topic = topics.fetch_one(topic_id)
+
+        if not topic:
+            return abort(
+                code=404,
+                description=app.constants.TOPIC_NOT_FOUND
+            )
+
+        return redirect(
+            f"/forum/t/{topic.id}"
+        )
+    
+    return abort(
+        code=404,
+        description=app.constants.TOPIC_NOT_FOUND
+    )
+
+@router.get('/viewforum.php')
+def viewforum_redirect():
+    forum_id = request.args.get('f', type=int)
+
+    if not forum_id:
+        return abort(
+            code=404,
+            description=app.constants.FORUM_NOT_FOUND
+        )
+
+    return redirect(
+        f"/forum/{forum_id}"
+    )
+
+@router.get('/index.php')
+def index_redirect():
+    return redirect('/forum')
