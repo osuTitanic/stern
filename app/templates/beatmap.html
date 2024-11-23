@@ -219,6 +219,7 @@
                         <p><a href="/forum/t/{{ beatmapset.topic_id }}">Modding / Discussion</a></p>
                         {% endif %}
                     {% endif %}
+                    <p><a setid="{{ beatmapset.id }}" onclick="copySetId(this)">Copy Beatmapset ID</a></p>
                 </td>
                 {% endif %}
             </tr>
@@ -776,7 +777,23 @@
         };
         
         xhr.send();
-    }    
+    }
+
+    function copySetId(element) {
+        var set_id = element.getAttribute('setid');
+        navigator.clipboard.writeText(set_id).then(function () {
+            element.innerHTML = 'Copied!';
+            element.style.color = 'green';
+        }, function () {
+            element.innerHTML = 'Failed to copy!';
+            element.style.color = 'red';
+        });
+
+        setTimeout(function () {
+            element.innerHTML = 'Copy Beatmapset ID';
+            element.style.color = 'rgb(0, 102, 204)';
+        }, 1500);
+    }
 </script>
 {# TODO: Beatmap Comments #}
 {% endblock content %}
