@@ -2,16 +2,24 @@
 @import url("main.css");
 
 .heading {
-    margin-bottom: 16px;
-    margin-left: 10px;
+    margin-bottom: 12px;
+    margin-left: 5px;
 }
 
 .heading h2 {
     text-shadow: #efcfe1 0px 0px 10px;
+    color: #e04aa4;
+    font-weight: normal;
+    font-size: 160%;
+    margin-bottom: 2.5px;
+}
+
+.category {
+    text-shadow: #f3c8e0 0px 0px 10px;
     color: #e15fac;
     font-weight: normal;
-    font-size: 130%;
-    margin-bottom: 2.5px;
+    font-size: 140%;
+    padding: 5px 5px 0 5px;
 }
 
 #client-container {
@@ -20,6 +28,7 @@
     background-color: #ffdef5;
     padding: 5px;
     margin: 5px;
+    margin-bottom: 10px;
     border-radius: 5px;
 }
 
