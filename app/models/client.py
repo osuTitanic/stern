@@ -6,6 +6,7 @@ from datetime import datetime
 class Client(BaseModel):
     name: str
     description: str
+    category: str
     known_bugs: Optional[str]
     supported: bool
     recommended: bool
