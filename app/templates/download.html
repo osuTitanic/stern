@@ -12,6 +12,14 @@
     <h2 class="category">{{ category }}</h2>
     <div id="client-container">
     {% for client in clients %}
+        {% set display_client = (
+            client.supported and
+            client.recommended and
+            client.downloads and
+            not client.preview
+        ) %}
+
+        {% if display_client %}
         <div class="client">
             {% if client.known_bugs %}
             <div class="known-bugs" title="{{ client.known_bugs }}">
@@ -27,6 +35,7 @@
             </div>
             <a class="download-link" href="{{ client.downloads[0] }}">Download</a>
         </div>
+        {% endif %}
     {% endfor %}
     </div>
 {% endfor %}
