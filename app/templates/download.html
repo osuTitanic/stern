@@ -8,7 +8,23 @@
     <p>Please choose a version that you want to play on! (Scroll to view more)</p>
 </div>
 <div id="client-container">
-    <noscript>Please enable javascript to load this page!</noscript>
+    {% for client in releases %}
+    <div class="client">
+        {% if client.known_bugs %}
+        <div class="known-bugs" title="{{ client.known_bugs }}">
+            <i class="fa-solid fa-triangle-exclamation" style="color: rgb(196, 9, 0);"></i>
+        </div>
+        {% endif %}
+        <p class="version">{{ client.name }}</p>
+        <p class="description">{{ client.description }}</p>
+        <div style="text-align: center">
+            {% if client.screenshots %}
+            <img src="{{ (client.screenshots|first)['src'] }}" alt="">
+            {% endif %}
+        </div>
+        <a class="download-link" href="{{ client.downloads[0] }}">Download</a>
+    </div>
+    {% endfor %}
 </div>
 <div class="bottom-text">
     <p>
@@ -19,5 +35,4 @@
         Looking for modded clients? Check out the <a href="/forum/23">modding forum</a>.
     </p>
 </div>
-<script src="/js/download.js"></script>
 {% endblock content %}
