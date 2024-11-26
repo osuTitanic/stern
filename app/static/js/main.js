@@ -1,3 +1,11 @@
+function slideDown(elem) {
+    elem.style.height = elem.scrollHeight + "px";
+}
+
+function slideUp(elem) {
+    elem.style.height = "0px";
+}
+
 function beatmapSearch()
 {
     var inputValue = document.getElementById("beatmap-search").value.trim();

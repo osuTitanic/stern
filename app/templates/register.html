@@ -14,7 +14,7 @@
     <div>
         <input type="email" name="email" autocomplete="off" autocapitalize="none" placeholder="Email Address" class="validate" required>
         <div class="input-description">
-            Will be used for notifications, account verification and in the case you forget your password. No spam, ever.
+            Will be used for account verification and in the case you forget your password. No spam, ever.
         </div>
     </div>
     <div>
@@ -38,7 +38,10 @@
             Please be aware that creating more than one account per person may result in <strong>permanent deactivation of all accounts</strong>.
         </div>
     </div>
-    <div style="display: block;">
+    <div style="display: block; line-height: 18px; text-align: center">
+        We <b>strongly</b> recommend to choose a different password than the one you are using for <a href="https://osu.ppy.sh">osu.ppy.sh</a>, due to the
+        unencrypted traffic on older clients and our responsibility to protect your data in the event of a breach.
+        <br><br>
         Need further assistance? Contact us on our <a href="https://discord.gg/qupv72e7YH">Discord</a> or via <a href="mailto:{{ config.EMAIL }}">Email</a>.
     </div>
     <input type="hidden" name="recaptcha_response" id="recaptcha-response">

@@ -8,6 +8,7 @@ from app.common.database import (
     beatmapsets,
     beatmaps,
     topics,
+    scores,
     posts
 )
 
@@ -360,6 +361,12 @@ def handle_pending_status(beatmapset: DBBeatmapset, session: Session):
             beatmapset.id,
             session=session
         )
+
+        for beatmap in beatmapset.beatmaps:
+            scores.delete_by_beatmap_id(
+                beatmap.id,
+                session=session
+            )
 
     update_beatmap_icon(
         beatmapset,

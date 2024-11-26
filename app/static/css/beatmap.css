@@ -38,7 +38,7 @@
     text-shadow: #efcfe1 0px 0px 10px;
 }
 
-h2 {
+.page h2 {
     text-shadow: #efcfe1 0px 0px 10px;
     color: #cc2e8a;
     font-weight: normal;
@@ -72,6 +72,7 @@ h2 {
     line-height: 15px;
     color: #5e5e5e;
     background-color: #e7e2f3;
+    display: inline-block; /* Use this as backup */
     display: flex;
 }
 
@@ -197,18 +198,23 @@ h2 {
 
 .score-header {
     width: 100%;
-    display: flex;
     text-align: left;
     min-height: 100px;
-    justify-content: center;
-    align-items: center;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.no-records {
+    display: block;
+    padding-top: 42px;
 }
 
 .leader {
+    display: inline-block;
+    text-align: left;
     border: 1px solid black;
-    min-width: 380px;
     font-size: 80%;
-    margin: auto 5px;
+    margin: auto 5px auto;
     margin-top: 25px;
     margin-bottom: 25px;
     border-spacing: 0;
@@ -219,9 +225,14 @@ h2 {
     color: #fdbf2a;
 }
 
+.leader .row-grade {
+    min-width: 135px;
+}
+
 .leader td {
     padding: 3px;
     font-size: 95%;
+    min-width: 115px;
 }
 
 .leader .row-title {

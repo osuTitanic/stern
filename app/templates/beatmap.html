@@ -219,6 +219,7 @@
                         <p><a href="/forum/t/{{ beatmapset.topic_id }}">Modding / Discussion</a></p>
                         {% endif %}
                     {% endif %}
+                    <p><a setid="{{ beatmapset.id }}" onclick="copySetId(this)">Copy Beatmapset ID</a></p>
                 </td>
                 {% endif %}
             </tr>
@@ -442,7 +443,7 @@
     </div>
     <div class="score-header">
     {% if not scores %}
-        <b>No records have been set for this game mode yet!</b>
+        <b class="no-records">No records have been set for this game mode yet!</b>
     {% else %}
         {% set leader_score = scores[0] %}
         <table class="leader">
@@ -776,7 +777,23 @@
         };
         
         xhr.send();
-    }    
+    }
+
+    function copySetId(element) {
+        var set_id = element.getAttribute('setid');
+        navigator.clipboard.writeText(set_id).then(function () {
+            element.innerHTML = 'Copied!';
+            element.style.color = 'green';
+        }, function () {
+            element.innerHTML = 'Failed to copy!';
+            element.style.color = 'red';
+        });
+
+        setTimeout(function () {
+            element.innerHTML = 'Copy Beatmapset ID';
+            element.style.color = 'rgb(0, 102, 204)';
+        }, 1500);
+    }
 </script>
 {# TODO: Beatmap Comments #}
 {% endblock content %}

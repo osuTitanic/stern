@@ -1,18 +1,19 @@
-
 @import url('main.css');
 
 .page {
-    display: flex;
+    display: inline-block;
+    margin-top: 0;
 }
 
 .profile-left {
     background-color: #dad7fb;
     width: 200px;
-    height: 100%;
+    min-height: 100%;
     padding: 5px;
     padding-top: 15px;
     border-radius: 5px;
     position: sticky;
+    float: left;
     top: 0;
 }
 
@@ -54,19 +55,22 @@
 
 .user-title {
     margin: 0px auto 5px auto;
+    text-align: center;
     font-size: 80%;
 }
 
 #banned-image {
-    display: flex;
+    display: block;
     margin: 10px auto 15px auto;
 }
 
 .groups {
     display: flex;
     justify-content: center;
-    overflow-wrap: break-word;
     flex-wrap: wrap;
+    display: block;
+    text-align: center;
+    overflow-wrap: break-word;
 }
 
 .group {
@@ -77,7 +81,7 @@
     padding-left: 5px;
     padding-right: 5px;
     line-height: 18px;
-    display: inline;
+    display: inline-block;
     text-align: center;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
 }
@@ -93,7 +97,7 @@
     margin: auto;
     margin-bottom: 10px;
     padding: 2px;
-    display: inline;
+    display: inline-block;
     justify-content: center;
     align-items: center;
     height: 120px;
@@ -229,7 +233,8 @@
     height: 35px;
     margin: 10px auto;
     text-align: center;
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
 }
 
 .gamemode-button {
@@ -237,7 +242,7 @@
     border: solid 2px #978cd0;
     border-radius: 5px;
     font-size: 110%;
-    width: 140px;
+    width: 136px;
     height: 30px;
     line-height: 30px;
     margin: 5px;
@@ -349,6 +354,11 @@
     font-size: 95%;
     margin-top: 10px;
     margin-bottom: 10px;
+    display: block;
+}
+
+.profile-graph svg {
+    height: 160px;
 }
 
 .profile-stats-element {

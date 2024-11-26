@@ -14,7 +14,7 @@
             <img src="/a/{{ user.id }}?h=120" alt="">
             {% endif %}
         </div>
-        <h1>
+        <h1 class="user-header">
             <a class="flag" href="/rankings/{{ constants.GameMode(mode).alias }}/performance?country={{ user.country|lower }}">
                 <img src="/images/flags/{{ user.country|lower }}.gif" alt="{{ user.country|upper }}">
             </a>
@@ -757,7 +757,7 @@
     var ppv1Rank = {{ ppv1_rank }};
 </script>
 <link rel="stylesheet" href="/lib/nv.d3.min.css">
-<script src="/lib/d3.v3.js"></script> 
-<script src="/lib/nv.d3.js"></script>
+<script src="/lib/d3.v3.min.js"></script> 
+<script src="/lib/nv.d3.min.js"></script>
 <script src="/js/user.js" async></script>
 {% endblock content %}

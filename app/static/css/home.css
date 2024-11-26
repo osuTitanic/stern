@@ -14,8 +14,8 @@
 
 .left-side {
     float: left;
-    height: 890px;
     width: 56%;
+    min-height: 890px;
     overflow: hidden;
 }
 

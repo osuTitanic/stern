@@ -6,12 +6,12 @@
     margin: 0;
 }
 
-h1 {
+.page h1 {
     font-size: 180%;
     text-align: center;
 }
 
-h2 {
+.page h2 {
     font-size: 125%;
     margin-bottom: 10px;
     text-shadow: #efcfe1 0px 0px 10px;
@@ -104,7 +104,6 @@ h2 {
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
     background-color: white;
     border: 1px solid #ddd;
-    margin: auto;
     margin-bottom: 10px;
     padding: 2px;
     height: 120px;
