@@ -114,6 +114,8 @@
     vertical-align: middle;
     display: flex;
     margin: 0 auto;
+    width: 120px;
+    height: 120px;
 }
 
 .notifications {
