@@ -69,4 +69,7 @@ def update_avatar():
         f'{current_user.name} changed their avatar.'
     )
 
-    return redirect('/account/settings/profile')
+    # Set cookie to refresh the avatar (cloudflare cache)
+    response = redirect('/account/settings/profile')
+    response.set_cookie('refresh_avatar', '1', max_age=60)
+    return response
