@@ -6,6 +6,7 @@ from . import resources
 from . import beatmap
 from . import kudosu
 from . import update
+from . import scores
 from . import search
 from . import status
 from . import packs
@@ -17,6 +18,7 @@ router.register_blueprint(resources.router)
 router.register_blueprint(beatmap.router)
 router.register_blueprint(kudosu.router)
 router.register_blueprint(update.router)
+router.register_blueprint(scores.router)
 router.register_blueprint(search.router)
 router.register_blueprint(status.router)
 router.register_blueprint(packs.router)
