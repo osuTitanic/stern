@@ -10,7 +10,7 @@ class ScoreModel(BaseModel):
     user_id: int
     submitted_at: datetime
     mode: int
-    status: int
+    status_pp: int
     client_version: int
     pp: float
     acc: float
