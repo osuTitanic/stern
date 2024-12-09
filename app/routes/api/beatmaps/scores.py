@@ -1,5 +1,5 @@
 
-from app.models import ScoreModelWithoutBeatmap, BeatmapModel
+from app.models import ScoreModelWithoutBeatmap, ScoreModel, BeatmapModel
 from app.common.database import beatmaps, scores
 from app.common.constants import GameMode
 
@@ -88,8 +88,5 @@ def get_beatmap_user_score(id: int, user_id: int):
                 'error': 404,
                 'details': 'The user could not be found or has not set a score on this beatmap.'
             }, 404
-        
-        return {
-            'beatmap': BeatmapModel.model_validate(beatmap, from_attributes=True).model_dump(),
-            'score': ScoreModelWithoutBeatmap.model_validate(score, from_attributes=True).model_dump()
-        }
+
+        return ScoreModel.model_validate(score, from_attributes=True).model_dump()
