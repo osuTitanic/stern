@@ -1,12 +1,12 @@
 
-
 from matplotlib.backends.backend_agg import FigureCanvasAgg
-from flask import Blueprint, send_file, abort
+from flask import Blueprint, Response, send_file, abort
 from datetime import datetime, timedelta
 from io import BytesIO
 
 from app.common.database.repositories import usercount
 from app.common.database import DBUserCount
+from app.common.helpers import caching
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -29,11 +29,8 @@ def calculate_peak_x(
         )
     )
 
-@router.get('/')
-def user_activity_chart(
-    width: int = 600,
-    height: int = 90
-):
+@caching.ttl_cache(ttl=60)
+def generate_activity_chart(width: int, height: int) -> bytes:
     usercounts = usercount.fetch_range(
         datetime.now() - timedelta(hours=24),
         datetime.now()
@@ -111,9 +108,15 @@ def user_activity_chart(
         bbox_inches='tight'
     )
     buffer.seek(0)
+    return buffer.read()
 
+@router.get('/image')
+def user_activity_chart(
+    width: int = 600,
+    height: int = 90
+) -> Response:
     return send_file(
-        buffer,
+        BytesIO(generate_activity_chart(width, height)),
         mimetype='image/png',
         as_attachment=False,
         download_name='useractivity.png'
