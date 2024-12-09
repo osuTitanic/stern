@@ -13,12 +13,12 @@ RUN pip install --upgrade pip
 
 WORKDIR /stern
 
+# Install pyuwsgi for deployment
+RUN pip install pyuwsgi
+
 # Install python dependencies
 COPY requirements.txt ./
 RUN pip install -r requirements.txt
-
-# Install pyuwsgi for deployment
-RUN pip install pyuwsgi
 
 # Copy source code
 COPY . .
