@@ -1,6 +1,5 @@
 
 from __future__ import annotations
-
 from sqlalchemy.orm import Session
 from datetime import datetime, timedelta
 from flask import render_template as _render_template
@@ -8,10 +7,10 @@ from flask import request
 from PIL import Image
 
 from app.common.database.repositories import wrapper
-from app.common.helpers import caching, analytics, ip
 from app.common.database import DBUser, DBBeatmapset
-from app.common.cache import leaderboards, status
 from app.common.helpers.external import location
+from app.common.cache import leaderboards
+from app.common.helpers import caching
 from app.common import constants
 
 from app.common.database import (
