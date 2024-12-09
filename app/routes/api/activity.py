@@ -110,6 +110,24 @@ def generate_activity_chart(width: int, height: int) -> bytes:
     buffer.seek(0)
     return buffer.read()
 
+@router.get('/')
+def user_activity_api() -> dict:
+    usercounts = usercount.fetch_range(
+        datetime.now() - timedelta(hours=24),
+        datetime.now()
+    )
+
+    if not usercounts:
+        return abort(500, 'User activity is empty. Please contact an administrator!')
+
+    return [
+        {
+            'time': uc.time,
+            'count': uc.count
+        }
+        for uc in usercounts
+    ]
+
 @router.get('/image')
 def user_activity_chart(
     width: int = 600,
