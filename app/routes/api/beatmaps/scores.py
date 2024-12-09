@@ -1,6 +1,6 @@
 
+from app.models import ScoreModelWithoutBeatmap, BeatmapModel
 from app.common.database import beatmaps, scores
-from app.models import ScoreModel, BeatmapModel
 from app.common.constants import GameMode
 
 from flask import Blueprint, request
@@ -46,7 +46,50 @@ def get_beatmap_scores(id: int):
         return {
             'beatmap': BeatmapModel.model_validate(beatmap, from_attributes=True).model_dump(),
             'scores': [
-                ScoreModel.model_validate(score, from_attributes=True).model_dump()
+                ScoreModelWithoutBeatmap.model_validate(score, from_attributes=True).model_dump()
                 for score in top_scores
             ]
+        }
+
+@router.get('/<id>/scores/users/<user_id>')
+@validate()
+def get_beatmap_user_score(id: int, user_id: int):
+    with app.session.database.managed_session() as session:
+        if not (beatmap := beatmaps.fetch_by_id(id, session=session)):
+            return {
+                'error': 404,
+                'details': 'The requested beatmap could not be found.'
+            }, 404
+
+        mode = request.args.get('mode')
+        valid_modes = GameMode._member_map_.values()
+
+        if mode and not mode.isdigit():
+            return {
+                'error': 400,
+                'details': 'Invalid mode parameter.'
+            }, 400
+        
+        if mode and int(mode) not in valid_modes:
+            return {
+                'error': 400,
+                'details': 'Invalid mode.'
+            }, 400
+        
+        score = scores.fetch_personal_best(
+            beatmap.id,
+            user_id,
+            mode=int(mode or beatmap.mode),
+            session=session
+        )
+
+        if not score:
+            return {
+                'error': 404,
+                'details': 'The user could not be found or has not set a score on this beatmap.'
+            }, 404
+        
+        return {
+            'beatmap': BeatmapModel.model_validate(beatmap, from_attributes=True).model_dump(),
+            'score': ScoreModelWithoutBeatmap.model_validate(score, from_attributes=True).model_dump()
         }
