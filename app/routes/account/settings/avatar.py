@@ -42,8 +42,8 @@ def update_avatar():
     avatar.stream.seek(0, io.SEEK_END)
     size = avatar.stream.tell()
 
-    if size > 1250**2: # Approx 1.5mb
-        return get_profile_page('This image is too large. Please upload an image below 1.5mb!')
+    if size > 2.5 * 1024 * 1024:
+        return get_profile_page('This image is too large. Please upload an image below 2.5mb!')
 
     try:
         image = Image.open(avatar)
@@ -58,6 +58,7 @@ def update_avatar():
         return get_profile_page('This image is too large. Please lower the resolution!')
 
     buffer = io.BytesIO()
+    image = image.resize((256, 256))
     image.save(buffer, format='PNG')
 
     app.session.storage.upload_avatar(

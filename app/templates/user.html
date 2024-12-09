@@ -8,10 +8,10 @@
         <div class="avatar-box">
             {% if current_user.id == user.id %}
             <a href="/account/settings/profile#picture">
-                <img src="/a/{{ user.id }}?h=120" alt="">
+                <img src="/a/{{ user.id }}" alt="">
             </a>
             {% else %}
-            <img src="/a/{{ user.id }}?h=120" alt="">
+            <img src="/a/{{ user.id }}" alt="">
             {% endif %}
         </div>
         <h1 class="user-header">
@@ -759,5 +759,5 @@
 <link rel="stylesheet" href="/lib/nv.d3.min.css">
 <script src="/lib/d3.v3.min.js"></script> 
 <script src="/lib/nv.d3.min.js"></script>
-<script src="/js/user.js" async></script>
+<script src="/js/user.js" defer></script>
 {% endblock content %}

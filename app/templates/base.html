@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="{{ description or 'Titanic » A private server for osu! that lets you experience the early days of the game.' }}">
-    <meta name="keywords" content="osu, lekuru, server, titanic, titanic, private server, old osu, nostalgia, 2013, 2012, 2011, 2010, 2009, 2008, 2007, ouendan, elite, beat, agents, windows, game, taiko, tatsujin, simulator, sim, xna, ddr, beatmania, osu!, osume" />
+    <meta name="keywords" content="osu, titanic, private, server, lekuru, old osu, nostalgia, ouendan, elite, beat, agents, rhythm, windows, game, taiko, tatsujin, simulator, sim, xna, ddr, beatmania" />
     <meta name="viewport" content="width=1050, user-scalable=yes"/>
     <meta name="msapplication-TileColor" content="#603cba">
     <meta name="theme-color" content="#ffffff">
@@ -18,9 +18,6 @@
     {% if site_url %}<meta property="og:url" content="{{ site_url }}">{% endif %}
     {% if config.ENABLE_SSL %}<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">{% endif %}
     <title>{{ title or 'Titanic!' }}</title>
-    <script src="/lib/jquery.min.js"></script>
-    <script src="/lib/jquery.timeago.js"></script>
-    <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js"></script>
     <link rel="prefetch" href="/images/logo/main-vector.min.svg" as="image">
     <link rel="prefetch" href="/images/logo/main-low.png">
     <link rel="prefetch" href="/css/{{ css or 'main.css' }}">
@@ -29,7 +26,10 @@
     <link rel="stylesheet" href="/lib/fontawesome.min.css">
     <link rel="stylesheet" href="/lib/fontawesome.solid.min.css">
     <link rel="stylesheet" href="/lib/fontawesome.brands.min.css">
-    {% if canonical_url %}<link rel="canonical" href="{{ canonical_url }}">{% endif %}
+    {% if canonical_url %}
+    <link rel="canonical" href="{{ canonical_url }}">
+    {% endif %}
+    <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js" defer></script>
     <script>
         var osuBaseurl = "{{ config.OSU_BASEURL }}";
         var staticBaseurl = "{{ config.STATIC_BASEURL }}";
@@ -78,7 +78,7 @@
                         Welcome, <a href="/u/{{ current_user.id }}">{{ current_user.name }}</a>
                     </p>
                     <a href="/account/settings/profile#avatar">
-                        <img class="small-avatar" src="/a/{{ current_user.id }}?h=25" alt="" height="25px">
+                        <img class="small-avatar" src="/a/{{ current_user.id }}?s=25" alt="" height="25px">
                     </a>
                     <a href="/account/settings"><i class="fa-solid fa-gear" style="color: #808080;"></i> Settings</a>
                     <a href="/account/settings#notifications">
@@ -136,6 +136,8 @@
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                 </form>
             </div>
+            <script src="/lib/jquery.min.js"></script>
+            <script src="/lib/jquery.timeago.js"></script>
             <div class="page">
                 {# Page Content #}
                 {% block content %}
