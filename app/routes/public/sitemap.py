@@ -112,7 +112,7 @@ def get_most_played_beatmaps() -> List[SitemapEntry]:
     most_played_beatmaps = [
         beatmapset.id
         for beatmapset in beatmapsets.search_extended(
-            None, None, None, None, None, None,
+            None, None, None, None, None, None, None, None, None,
             sort=BeatmapSortBy.Plays,
             order=BeatmapOrder.Descending,
             category=BeatmapCategory.Leaderboard,
@@ -132,7 +132,7 @@ def get_recent_beatmaps() -> List[SitemapEntry]:
     recent_beatmaps = [
         beatmapset.id
         for beatmapset in beatmapsets.search_extended(
-            None, None, None, None, None, None,
+            None, None, None, None, None, None, None, None, None,
             sort=BeatmapSortBy.Created,
             order=BeatmapOrder.Descending,
             category=BeatmapCategory.Leaderboard,
