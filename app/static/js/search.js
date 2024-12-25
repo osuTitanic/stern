@@ -298,6 +298,14 @@ function reloadInput() {
 function setElement(element) {
     var dataName = element.parentNode.parentNode.getAttribute("data-name");
     var elements = element.parentNode.querySelectorAll("a");
+    var removes = element.getAttribute("removes")
+
+    if (removes) {
+        var removeElement = document.querySelector('[data-name="' + removes + '"]');
+        if (removeElement) {
+            removeElement.classList.remove("selected");
+        }
+    }
 
     if (!dataName) {
         element.classList.toggle("selected");

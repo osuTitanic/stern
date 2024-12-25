@@ -15,6 +15,9 @@ class SearchRequest(BaseModel):
     language: Optional[BeatmapLanguage] = None
     genre: Optional[BeatmapGenre] = None
     mode: Optional[GameMode] = None
+    uncleared: Optional[bool] = None
+    unplayed: Optional[bool] = None
+    cleared: Optional[bool] = None
     played: Optional[bool] = None
     query: Optional[str] = None
     category: BeatmapCategory = BeatmapCategory.Leaderboard

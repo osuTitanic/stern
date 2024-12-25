@@ -249,7 +249,7 @@
             <td>
                 <div id="general" class="tab-content" style="opacity: 1; filter: none; display: none; height: 0px;">
                     <div class="tab-spacing">
-                    {% if current_stats and current_stats.playcount > 0 %}
+                    {% if current_stats and current_stats.playcount > 0 and not user.restricted %}
                         <div class="profile-performance">
                             <h2>
                                 <strong>
