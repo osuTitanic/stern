@@ -11,6 +11,7 @@ class ScoreModel(BaseModel):
     submitted_at: datetime
     mode: int
     status_pp: int
+    status_score: int
     client_version: int
     pp: float
     acc: float
@@ -35,6 +36,7 @@ class ScoreModelWithoutBeatmap(BaseModel):
     submitted_at: datetime
     mode: int
     status_pp: int
+    status_score: int
     client_version: int
     pp: float
     acc: float
