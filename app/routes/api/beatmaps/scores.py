@@ -76,7 +76,7 @@ def get_beatmap_user_score(id: int, user_id: int):
                 'details': 'Invalid mode.'
             }, 400
         
-        score = scores.fetch_personal_best(
+        score = scores.fetch_personal_best_score(
             beatmap.id,
             user_id,
             mode=int(mode or beatmap.mode),

@@ -40,7 +40,7 @@ def get_beatmap(id: int):
         personal_best_rank = None
 
         if current_user.is_authenticated:
-            personal_best = scores.fetch_personal_best(
+            personal_best = scores.fetch_personal_best_score(
                 beatmap.id,
                 current_user.id,
                 int(mode),
