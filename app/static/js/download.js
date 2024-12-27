@@ -1,4 +1,3 @@
-
 var versionRegex = (
     /^b(\d{1,8})(?:(?!dev|tourney|test|peppy|arcade|ubertest\b)\w+\b)?(?:\.(\d{1,2}|))?(dev|tourney|test|peppy|arcade|cuttingedge|beta|ubertest)?$/
 );
@@ -41,15 +40,18 @@ async function mergePackages(osx, game, filename) {
     var osxFiles = osx.files;
     var gameFiles = game.files;
     var zip = new JSZip();
-    Object.keys(osxFiles).forEach(function(file) {
+    Object.keys(osxFiles).forEach(function (file) {
         if (file.startsWith('osu!.app/')) {
             zip.file(file, osxFiles[file].async('blob'));
         }
     });
-    Object.keys(gameFiles).forEach(function(file) {
+    Object.keys(gameFiles).forEach(function (file) {
         zip.file(`osu!.app/Contents/Resources/drive_c/osu!/${file}`, gameFiles[file].async('blob'));
     });
-    var content = await zip.generateAsync({ type: 'blob', platform: 'UNIX' });
+    var content = await zip.generateAsync({
+        type: 'blob',
+        platform: 'UNIX'
+    });
     saveBlob(content, filename);
 }
 
@@ -64,7 +66,9 @@ function saveBlob(blob, filename) {
 
 function onPackageLoaded(xhr) {
     var responseBlob = xhr.response;
-    return JSZip.loadAsync(responseBlob, { platform: 'UNIX' });
+    return JSZip.loadAsync(responseBlob, {
+        platform: 'UNIX'
+    });
 }
 
 function getPackageType(client) {

@@ -6,8 +6,7 @@ function slideUp(elem) {
     elem.style.height = "0px";
 }
 
-function beatmapSearch()
-{
+function beatmapSearch() {
     var inputValue = document.getElementById("beatmap-search").value.trim();
 
     if (inputValue !== '') {
@@ -17,8 +16,7 @@ function beatmapSearch()
     return true;
 }
 
-function userSearch()
-{
+function userSearch() {
     var inputValue = document.getElementById("user-search").value.trim();
 
     if (inputValue !== '') {
@@ -60,39 +58,39 @@ function loadBBCodePreview(element) {
 
     // Remove old previews
     var previews = document.querySelectorAll('.bbcode-preview');
-    Array.prototype.forEach.call(previews, function(element) {
+    Array.prototype.forEach.call(previews, function (element) {
         element.parentNode.removeChild(element);
     });
 
     fetch('/api/bbcode/preview', {
-        method: "POST",
-        cache: "no-cache",
-        body: form
-    })
-    .then(function(response) {
-        if (!response.ok)
-            throw new Error(response.status + ': "' + response.statusText + '"');
-        return response.text();
-    })
-    .then(function(htmlPreview) {
-        if (!htmlPreview)
-            return;
+            method: "POST",
+            cache: "no-cache",
+            body: form
+        })
+        .then(function (response) {
+            if (!response.ok)
+                throw new Error(response.status + ': "' + response.statusText + '"');
+            return response.text();
+        })
+        .then(function (htmlPreview) {
+            if (!htmlPreview)
+                return;
 
-        var previewContainer = document.createElement('div');
-        previewContainer.className = 'bbcode-preview bbcode';
-        previewContainer.innerHTML = htmlPreview;
+            var previewContainer = document.createElement('div');
+            previewContainer.className = 'bbcode-preview bbcode';
+            previewContainer.innerHTML = htmlPreview;
 
-        bbcodeWrapper.appendChild(previewContainer);
-    })
-    .catch(function(error) {
-        var previewContainer = document.createElement('div');
-        previewContainer.className = 'bbcode-preview bbcode';
-        previewContainer.appendChild(
-            document.createTextNode('Failed to load bbcode preview :(')
-        );
-        bbcodeWrapper.appendChild(previewContainer);
-        console.error(error);
-    });
+            bbcodeWrapper.appendChild(previewContainer);
+        })
+        .catch(function (error) {
+            var previewContainer = document.createElement('div');
+            previewContainer.className = 'bbcode-preview bbcode';
+            previewContainer.appendChild(
+                document.createTextNode('Failed to load bbcode preview :(')
+            );
+            bbcodeWrapper.appendChild(previewContainer);
+            console.error(error);
+        });
 
     return false;
 }
@@ -128,13 +126,12 @@ function hide(id) {
     $('#' + id).hide();
 }
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     $(".timeago").timeago();
 });
 
 var params = new URLSearchParams(location.search);
 
-if (params.get('wait') && location.pathname == '/')
-{
+if (params.get('wait') && location.pathname == '/') {
     alert('Too many login attempts. Please wait a minute and try again!');
 }

@@ -84,7 +84,7 @@ function getBeatmapsets() {
                 beatmapsetDiv.classList.add("beatmapset");
 
                 var imageUrl = 'url("' + staticBaseurl + '/mt/' + beatmapset.id + '")';
-                
+
                 // Use http for images if the page is not secure
                 if (window.location.protocol != "https:") {
                     imageUrl = imageUrl.replace("https://", "http://");
