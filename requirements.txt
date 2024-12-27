@@ -7,12 +7,12 @@ flask-login==0.6.3
 flask-pydantic==0.12.0
 flask-wtf==1.2.2
 geoip2==4.8.1
-jinja2==3.1.4
-matplotlib==3.9.3
-numpy==2.2.0
+jinja2==3.1.5
+matplotlib==3.10.0
+numpy==2.2.1
 pillow==11.0.0
 psycopg2-binary==2.9.10
-pydantic==2.10.3
+pydantic==2.10.4
 pyparsing==3.2.0
 python-dotenv==1.0.1
 redis==5.2.1
