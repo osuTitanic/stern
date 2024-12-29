@@ -27,7 +27,9 @@
             </div>
             {% endif %}
             <p class="version">{{ client.name }}</p>
+            {% if client.description %}
             <p class="description">{{ client.description }}</p>
+            {% endif %}
             <div style="text-align: center">
                 {% if client.screenshots %}
                 <img src="{{ (client.screenshots|first)['src'] }}" alt="">
