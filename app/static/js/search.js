@@ -69,7 +69,7 @@ function getBeatmapIcon(beatmap) {
         difficulty = "insane";
     }
 
-    return `/images/beatmap/difficulties/${difficulty}-${beatmap.mode}.png`
+    return "/images/beatmap/difficulties/" + difficulty + "-" + beatmap.mode + ".png";
 }
 
 function getBeatmapsets() {
