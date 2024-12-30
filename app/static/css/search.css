@@ -142,6 +142,7 @@
 .beatmap-link, .beatmap-link:visited {
     color: #0c0c0c;
     width: 100%;
+    font-size: 105%;
 }
 
 .beatmap-link:hover {
