@@ -165,7 +165,7 @@
     min-height: 12px;
     white-space: nowrap;
     font-size: 80%;
-    max-width: 10px;
+    overflow: hidden;
     color: grey;
 }
 
@@ -176,12 +176,13 @@
 .beatmapset .hidden-elements {
     display: none;
     position: relative;
-    width: 80%;
+    width: 75%;
     margin-top: 12px;
 }
 
 .beatmapset .beatmap-icon {
     margin: 2px;
+    width: 16px;
 }
 
 .beatmap-stats {
