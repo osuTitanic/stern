@@ -62,36 +62,42 @@ function loadBBCodePreview(element) {
         element.parentNode.removeChild(element);
     });
 
-    fetch('/api/bbcode/preview', {
-            method: "POST",
-            cache: "no-cache",
-            body: form
-        })
-        .then(function (response) {
-            if (!response.ok)
-                throw new Error(response.status + ': "' + response.statusText + '"');
-            return response.text();
-        })
-        .then(function (htmlPreview) {
-            if (!htmlPreview)
-                return;
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/api/bbcode/preview", true);
+    xhr.setRequestHeader("Cache-Control", "no-cache");
+
+    xhr.onload = function() {
+        if (xhr.status >= 200 && xhr.status < 300) {
+            var htmlPreview = xhr.responseText;
+            if (!htmlPreview) return;
 
             var previewContainer = document.createElement('div');
             previewContainer.className = 'bbcode-preview bbcode';
             previewContainer.innerHTML = htmlPreview;
 
             bbcodeWrapper.appendChild(previewContainer);
-        })
-        .catch(function (error) {
+        } else {
             var previewContainer = document.createElement('div');
             previewContainer.className = 'bbcode-preview bbcode';
             previewContainer.appendChild(
                 document.createTextNode('Failed to load bbcode preview :(')
             );
             bbcodeWrapper.appendChild(previewContainer);
-            console.error(error);
-        });
+            console.error(xhr.status + ': "' + xhr.statusText + '"');
+        }
+    };
 
+    xhr.onerror = function() {
+        var previewContainer = document.createElement('div');
+        previewContainer.className = 'bbcode-preview bbcode';
+        previewContainer.appendChild(
+            document.createTextNode('Failed to load bbcode preview :(')
+        );
+        bbcodeWrapper.appendChild(previewContainer);
+        console.error('BBCode request failed');
+    };
+
+    xhr.send(form);
     return false;
 }
 
