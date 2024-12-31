@@ -136,6 +136,7 @@
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                 </form>
             </div>
+            <script src="/js/main.js"></script>
             <script src="/lib/jquery.min.js"></script>
             <script src="/lib/jquery.timeago.js"></script>
             <script src="/lib/jquery.marquee.js"></script>
@@ -147,14 +148,9 @@
             <div class="gradient"></div>
         </div>
     </div>
-    <script src="/js/main.js"></script>
     <script>
-        {% if show_login %}
-        showLoginForm();
-        {% endif %}
-        {% if alert %}
-        alert("{{ alert }}");
-        {% endif %}
+        {% if show_login %} showLoginForm(); {% endif %}
+        {% if alert %} alert("{{ alert }}"); {% endif %}
     </script>
 </body>
 </html>
