@@ -1,9 +1,11 @@
-function slideDown(elem) {
-    elem.style.height = elem.scrollHeight + "px";
-}
-
-function slideUp(elem) {
-    elem.style.height = "0px";
+function addEvent(eventName, targetElement, func) {
+    if (targetElement.addEventListener) {
+        return targetElement.addEventListener(eventName, func, false);
+    }
+    if (targetElement.attachEvent) {
+       return targetElement.attachEvent("on" + eventName, func);
+    }
+    targetElement["on"+eventName] = func;
 }
 
 function beatmapSearch() {
@@ -47,6 +49,14 @@ function toggleSpoiler(root) {
     spoiler.children(".spoiler-body").slideToggle("fast");
     spoiler.find('img').trigger('unveil');
     return false;
+}
+
+function slideDown(elem) {
+    elem.style.height = elem.scrollHeight + "px";
+}
+
+function slideUp(elem) {
+    elem.style.height = "0px";
 }
 
 function loadBBCodePreview(element) {
