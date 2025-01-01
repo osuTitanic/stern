@@ -1,0 +1,79 @@
+{# templates/overview/security.html #}
+
+{% extends "base.html" %}
+
+{% block content %}
+{% include "settings/sidebar.html" %}
+<div class="main-settings">
+    <h1>Security</h1>
+    {% if error %}
+    <div><div id="error" class="section">{{ error }}</div></div>
+    {% endif %}
+    {% if info %}
+    <div><div id="info" class="section">{{ info }}</div></div>
+    {% endif %}
+    <div id="edit">
+        <h2>Personal Details</h2>
+        <form class="profile-section section" action="/account/settings/security" method="post">
+            <dl>
+                <div class="inner-section">
+                    <dt><label for="new-password">New Password:</label></dt>
+                    <dd><input name="new-password" type="password"></dd>
+                </div>
+
+                <div class="inner-section">
+                    <dt><label for="password-confirm">Confirm Password:</label></dt>
+                    <dd><input name="password-confirm" type="password"></dd>
+                </div>
+
+                <div class="inner-section">
+                    <dt><label for="current-password">Current Password:</label></dt>
+                    <dd><input name="current-password" type="password" required></dd>
+                </div>
+
+                <dd><input class="submit-button" type="submit" name="submit" value="Update"></dd>
+            </dl>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        </form>
+        <form class="profile-section section" action="/account/settings/security" method="post">
+            <dl>
+                <div class="inner-section">
+                    <dt><label for="new-email">E-Mail Address:</label></dt>
+                    <dd><input name="new-email" type="email"></dd>
+                </div>
+
+                <div class="inner-section">
+                    <dt><label for="email-confirm">Confirm E-Mail Address:</label></dt>
+                    <dd><input name="email-confirm" type="email"></dd>
+                </div>
+
+                <div class="inner-section">
+                    <dt><label for="current-password">Current Password:</label></dt>
+                    <dd><input name="current-password" type="password" required></dd>
+                </div>
+
+                <div class="inner-section" style="margin: 14px 4px;">
+                    By changing your email address, you will be required to verify the new email address.
+                    You will not be able to use this account, until you have verified it.
+                </div>
+
+                <dd><input class="submit-button" type="submit" name="submit" value="Update"></dd>
+            </dl>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        </form>
+    </div>
+    <div id="logins">
+        <h2>Previous Logins</h2>
+        <dl class="login-details section">
+            {% if logins %}
+                {% for login in logins %}
+                <dt>{{ login.time|strftime }}</dt>
+                <dd>Login from {{ location.fetch_geolocation(login.ip).country_name }} ({{ login.ip }}) with {{ login.version }}</dd>
+                {% endfor %}
+            {% else %}
+                You have not logged in yet
+            {% endif %}
+        </dl>
+    </div>
+</div>
+{% endblock content %}

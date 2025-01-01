@@ -1,7 +1,5 @@
 
-from app.common.database import users, logins, notifications
-
-from datetime import datetime, timedelta
+from app.common.database import users, notifications
 from flask_login import login_required
 from flask import Blueprint
 
@@ -24,12 +22,8 @@ def settings_overview():
         return utils.render_template(
             'settings/overview.html',
             css='settings.css',
-            logins=logins.fetch_many(
-               flask_login.current_user.id,
-               limit=5
-            ),
+            notifications=new_notifications,
             total_posts=users.fetch_post_count(
                 flask_login.current_user.id
-            ),
-            notifications=new_notifications
+            )
         )

@@ -6,14 +6,12 @@ from flask_login import login_required, current_user
 from flask import Blueprint, request, redirect
 from datetime import datetime
 
-from . import account
 from . import avatar
 
 import utils
 import app
 
 router = Blueprint('profile-settings', __name__)
-router.register_blueprint(account.router, url_prefix='/profile')
 router.register_blueprint(avatar.router, url_prefix='/profile')
 
 @router.get('/profile')
