@@ -33,5 +33,5 @@ startup_time = time.time()
 storage = Storage()
 requests = Session()
 requests.headers = {
-    'User-Agent': 'osuTitanic/stern'
+    'User-Agent': f'osuTitanic/stern ({config.DOMAIN_NAME})'
 }

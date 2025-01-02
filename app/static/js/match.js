@@ -1,4 +1,3 @@
-
 const matchId = window.location.pathname.split("/")[2];
 const refreshRate = 8000;
 
@@ -39,50 +38,50 @@ const Mods = {
     FreeModAllowed: (1 << 0) | (1 << 1) | (1 << 3) | (1 << 4) | (1 << 5) | (1 << 10) | (1 << 20) | (1 << 7) | (1 << 13) | (1 << 12) | (1 << 15) | (1 << 16) | (1 << 17) | (1 << 18) | (1 << 19),
     SpeedMods: (1 << 6) | (1 << 8) | (1 << 9),
 
-    getMembers: function() {
-      let memberList = [];
-      for (const mod in Mods) {
-        if (Mods[mod] === (Mods[mod] & this[mod])) {
-          memberList.push(mod);
+    getMembers: function () {
+        let memberList = [];
+        for (const mod in Mods) {
+            if (Mods[mod] === (Mods[mod] & this[mod])) {
+                memberList.push(mod);
+            }
         }
-      }
-      return memberList;
+        return memberList;
     },
 
-    getString: function(value) {
-      if (value === 0) return "NM";
+    getString: function (value) {
+        if (value === 0) return "NM";
 
-      const modMap = {
-        [Mods.NoMod]: "NM",
-        [Mods.NoFail]: "NF",
-        [Mods.Easy]: "EZ",
-        [Mods.Hidden]: "HD",
-        [Mods.HardRock]: "HR",
-        [Mods.SuddenDeath]: "SD",
-        [Mods.DoubleTime]: "DT",
-        [Mods.Relax]: "RX",
-        [Mods.HalfTime]: "HT",
-        [Mods.Nightcore]: "NC",
-        [Mods.Flashlight]: "FL",
-        [Mods.Autoplay]: "AT",
-        [Mods.SpunOut]: "SO",
-        [Mods.Autopilot]: "AP",
-        [Mods.Perfect]: "PF",
-        [Mods.Key4]: "K4",
-        [Mods.Key5]: "K5",
-        [Mods.Key6]: "K6",
-        [Mods.Key7]: "K7",
-        [Mods.Key8]: "K8",
-      };
+        const modMap = {
+            [Mods.NoMod]: "NM",
+            [Mods.NoFail]: "NF",
+            [Mods.Easy]: "EZ",
+            [Mods.Hidden]: "HD",
+            [Mods.HardRock]: "HR",
+            [Mods.SuddenDeath]: "SD",
+            [Mods.DoubleTime]: "DT",
+            [Mods.Relax]: "RX",
+            [Mods.HalfTime]: "HT",
+            [Mods.Nightcore]: "NC",
+            [Mods.Flashlight]: "FL",
+            [Mods.Autoplay]: "AT",
+            [Mods.SpunOut]: "SO",
+            [Mods.Autopilot]: "AP",
+            [Mods.Perfect]: "PF",
+            [Mods.Key4]: "K4",
+            [Mods.Key5]: "K5",
+            [Mods.Key6]: "K6",
+            [Mods.Key7]: "K7",
+            [Mods.Key8]: "K8",
+        };
 
-      const members = [];
-      for (const mod in Mods) {
-        if (Mods[mod] !== 0 && (value & Mods[mod]) === Mods[mod]) {
-          members.push(mod);
+        const members = [];
+        for (const mod in Mods) {
+            if (Mods[mod] !== 0 && (value & Mods[mod]) === Mods[mod]) {
+                members.push(mod);
+            }
         }
-      }
 
-      return members.map(mod => modMap[Mods[mod]]).join("");
+        return members.map(mod => modMap[Mods[mod]]).join("");
     }
 };
 
@@ -112,8 +111,7 @@ const Team = {
     2: "Red"
 };
 
-function generateResultsTable(results, matchMods=0)
-{
+function generateResultsTable(results, matchMods = 0) {
     const table = document.createElement("table");
     const headerWrapper = document.createElement("thead");
     const header = document.createElement("tr");
@@ -188,8 +186,7 @@ function generateResultsTable(results, matchMods=0)
         const score = document.createElement("td");
         score.innerHTML = result.score.score.toLocaleString();
 
-        if (result.score.failed)
-        {
+        if (result.score.failed) {
             const failed = document.createElement("span");
             failed.style.color = "#ff0000";
             failed.innerHTML = " FAIL";
@@ -236,13 +233,11 @@ function generateResultsTable(results, matchMods=0)
     return table;
 }
 
-function getTeamWinner(results, condition)
-{
+function getTeamWinner(results, condition) {
     var teamResults = document.createElement("div");
     teamResults.classList.add("team-results");
 
-    switch (condition)
-    {
+    switch (condition) {
         case 0:
             // Score
             var blueScore = 0;
@@ -272,18 +267,13 @@ function getTeamWinner(results, condition)
             winner.classList.add("winner");
             winner.style.fontWeight = "bold";
 
-            if (blueScore > redScore)
-            {
+            if (blueScore > redScore) {
                 winner.style.color = "#0000ff";
                 winner.innerHTML = "Blue";
-            }
-            else if (redScore > blueScore)
-            {
+            } else if (redScore > blueScore) {
                 winner.style.color = "#ff0000";
                 winner.innerHTML = "Red";
-            }
-            else
-            {
+            } else {
                 winner.style.color = "#000000";
                 winner.innerHTML = "Draw";
             }
@@ -327,18 +317,13 @@ function getTeamWinner(results, condition)
             winner.classList.add("winner");
             winner.style.fontWeight = "bold";
 
-            if (blueAcc > redAcc)
-            {
+            if (blueAcc > redAcc) {
                 winner.style.color = "#0000ff";
                 winner.innerHTML = "Blue";
-            }
-            else if (redAcc > blueAcc)
-            {
+            } else if (redAcc > blueAcc) {
                 winner.style.color = "#ff0000";
                 winner.innerHTML = "Red";
-            }
-            else
-            {
+            } else {
                 winner.style.color = "#000000";
                 winner.innerHTML = "Draw";
             }
@@ -379,18 +364,13 @@ function getTeamWinner(results, condition)
             winner.classList.add("winner");
             winner.style.fontWeight = "bold";
 
-            if (blueCombo > redCombo)
-            {
+            if (blueCombo > redCombo) {
                 winner.style.color = "#0000ff";
                 winner.innerHTML = "Blue";
-            }
-            else if (redCombo > blueCombo)
-            {
+            } else if (redCombo > blueCombo) {
                 winner.style.color = "#ff0000";
                 winner.innerHTML = "Red";
-            }
-            else
-            {
+            } else {
                 winner.style.color = "#000000";
                 winner.innerHTML = "Draw";
             }
@@ -404,8 +384,7 @@ function getTeamWinner(results, condition)
     }
 }
 
-function loadMatchEvents(id, after=undefined)
-{
+function loadMatchEvents(id, after = undefined) {
     const statusText = document.getElementById("status-text");
     const container = document.getElementById("match-events");
     let args = "";
@@ -432,8 +411,7 @@ function loadMatchEvents(id, after=undefined)
                 timeElement.classList.add("event-time");
                 timeElement.innerHTML = `${eventDate.getHours()}:${eventDate.getMinutes()}`;
 
-                switch (event.type)
-                {
+                switch (event.type) {
                     case 0:
                         if (!event.data.name)
                             throw `Invalid api response: ${event.data}`;
@@ -547,16 +525,13 @@ function loadMatchEvents(id, after=undefined)
                         beatmapTitle.innerHTML = "Beatmap: ";
                         beatmapDetails.appendChild(beatmapTitle);;
 
-                        if (event.data.beatmap_id != 0)
-                        {
+                        if (event.data.beatmap_id != 0) {
                             var beatmapLink = document.createElement("a");
                             beatmapLink.href = `/b/${event.data.beatmap_id}`;
                             beatmapLink.appendChild(beatmapDetails);
                             beatmapLink.innerHTML = event.data.beatmap_text;
                             beatmapDetails.appendChild(beatmapLink);
-                        }
-                        else
-                        {
+                        } else {
                             beatmapDetails.appendChild(
                                 document.createTextNode(event.data.beatmap_text)
                             );
@@ -577,8 +552,7 @@ function loadMatchEvents(id, after=undefined)
                         matchResults.appendChild(resultsTable);
                         eventElement.appendChild(matchResults);
 
-                        if (event.data.team_mode == 2 || event.data.team_mode == 3)
-                        {
+                        if (event.data.team_mode == 2 || event.data.team_mode == 3) {
                             var teamResults = getTeamWinner(event.data.results, event.data.scoring_mode);
                             eventElement.appendChild(teamResults);
                         }

@@ -1,13 +1,14 @@
-function slideDown(elem) {
-    elem.style.height = elem.scrollHeight + "px";
+function addEvent(eventName, targetElement, func) {
+    if (targetElement.addEventListener) {
+        return targetElement.addEventListener(eventName, func, false);
+    }
+    if (targetElement.attachEvent) {
+       return targetElement.attachEvent("on" + eventName, func);
+    }
+    targetElement["on"+eventName] = func;
 }
 
-function slideUp(elem) {
-    elem.style.height = "0px";
-}
-
-function beatmapSearch()
-{
+function beatmapSearch() {
     var inputValue = document.getElementById("beatmap-search").value.trim();
 
     if (inputValue !== '') {
@@ -17,8 +18,7 @@ function beatmapSearch()
     return true;
 }
 
-function userSearch()
-{
+function userSearch() {
     var inputValue = document.getElementById("user-search").value.trim();
 
     if (inputValue !== '') {
@@ -51,6 +51,14 @@ function toggleSpoiler(root) {
     return false;
 }
 
+function slideDown(elem) {
+    elem.style.height = elem.scrollHeight + "px";
+}
+
+function slideUp(elem) {
+    elem.style.height = "0px";
+}
+
 function loadBBCodePreview(element) {
     var bbcodeWrapper = element.parentElement.parentElement;
     var bbcodeEditor = bbcodeWrapper.querySelector('textarea');
@@ -60,40 +68,46 @@ function loadBBCodePreview(element) {
 
     // Remove old previews
     var previews = document.querySelectorAll('.bbcode-preview');
-    Array.prototype.forEach.call(previews, function(element) {
+    Array.prototype.forEach.call(previews, function (element) {
         element.parentNode.removeChild(element);
     });
 
-    fetch('/api/bbcode/preview', {
-        method: "POST",
-        cache: "no-cache",
-        body: form
-    })
-    .then(function(response) {
-        if (!response.ok)
-            throw new Error(response.status + ': "' + response.statusText + '"');
-        return response.text();
-    })
-    .then(function(htmlPreview) {
-        if (!htmlPreview)
-            return;
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/api/bbcode/preview", true);
+    xhr.setRequestHeader("Cache-Control", "no-cache");
 
-        var previewContainer = document.createElement('div');
-        previewContainer.className = 'bbcode-preview bbcode';
-        previewContainer.innerHTML = htmlPreview;
+    xhr.onload = function() {
+        if (xhr.status >= 200 && xhr.status < 300) {
+            var htmlPreview = xhr.responseText;
+            if (!htmlPreview) return;
 
-        bbcodeWrapper.appendChild(previewContainer);
-    })
-    .catch(function(error) {
+            var previewContainer = document.createElement('div');
+            previewContainer.className = 'bbcode-preview bbcode';
+            previewContainer.innerHTML = htmlPreview;
+
+            bbcodeWrapper.appendChild(previewContainer);
+        } else {
+            var previewContainer = document.createElement('div');
+            previewContainer.className = 'bbcode-preview bbcode';
+            previewContainer.appendChild(
+                document.createTextNode('Failed to load bbcode preview :(')
+            );
+            bbcodeWrapper.appendChild(previewContainer);
+            console.error(xhr.status + ': "' + xhr.statusText + '"');
+        }
+    };
+
+    xhr.onerror = function() {
         var previewContainer = document.createElement('div');
         previewContainer.className = 'bbcode-preview bbcode';
         previewContainer.appendChild(
             document.createTextNode('Failed to load bbcode preview :(')
         );
         bbcodeWrapper.appendChild(previewContainer);
-        console.error(error);
-    });
+        console.error('BBCode request failed');
+    };
 
+    xhr.send(form);
     return false;
 }
 
@@ -128,13 +142,12 @@ function hide(id) {
     $('#' + id).hide();
 }
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     $(".timeago").timeago();
 });
 
 var params = new URLSearchParams(location.search);
 
-if (params.get('wait') && location.pathname == '/')
-{
+if (params.get('wait') && location.pathname == '/') {
     alert('Too many login attempts. Please wait a minute and try again!');
 }

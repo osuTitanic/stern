@@ -86,8 +86,9 @@
     background-color: #e7e4fc;
     border: solid 1px #dad7fb;
     width: 415px;
-    height: 65;
+    max-height: 75px;
     float: left;
+    overflow: hidden;
 }
 
 .beatmapset:hover {
@@ -99,8 +100,8 @@
     background-repeat: no-repeat;
     background-size: cover;
     float: left;
-    height: 70px;
-    width: 90px;
+    height: 75px;
+    width: 95px;
     margin-right: 5px;
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
@@ -142,6 +143,7 @@
 .beatmap-link, .beatmap-link:visited {
     color: #0c0c0c;
     width: 100%;
+    font-size: 105%;
 }
 
 .beatmap-link:hover {
@@ -151,7 +153,6 @@
 
 .beatmap-creator {
     font-size: 80%;
-    float: left;
     white-space: nowrap;
     max-width: 10px;
 }
@@ -160,8 +161,32 @@
     color: grey;
 }
 
+.beatmap-source {
+    min-height: 12px;
+    white-space: nowrap;
+    font-size: 80%;
+    overflow: hidden;
+    color: grey;
+}
+
+.beatmap-source span {
+    color: black;
+}
+
+.beatmapset .hidden-elements {
+    display: none;
+    position: relative;
+    width: 75%;
+    margin-top: 12px;
+}
+
+.beatmapset .beatmap-icon {
+    margin: 2px;
+    width: 16px;
+}
+
 .beatmap-stats {
-    padding: 5px;
+    padding-right: 5px;
     text-align: right;
     float: right;
 }

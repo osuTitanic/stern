@@ -55,6 +55,7 @@
 
 .description {
     max-width: 350px;
+    margin-top: 5px;
 }
 
 .client img {
@@ -96,7 +97,6 @@
     font-weight: bold;
     font-size: large;
     filter: drop-shadow(2px 2px 1px #d6d6d6);
-    margin-bottom: 5px;
 }
 
 .bottom-text {

@@ -83,7 +83,9 @@ function validateAll(event) {
     }
 
     Promise.all(promises).then(function (results) {
-        var allValid = results.every(function (valid) { return valid; });
+        var allValid = results.every(function (valid) {
+            return valid;
+        });
         if (allValid) {
             event.target.submit();
         }
