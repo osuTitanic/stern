@@ -271,17 +271,22 @@ def reset_kudosu(set_id: int, post_id: int):
                 'error': 400,
                 'details': 'You cannot reset kudosu on your own post.'
             }, 400
+        
+        total_entries = modding.total_entries(
+            post_id,
+            session=session
+        )
+
+        if total_entries == 0:
+            return {
+                'error': 404,
+                'details': 'This post has no kudosu exchanges.'
+            }, 404
 
         total_kudosu = modding.total_amount(
             post.id,
             session=session
         )
-
-        if total_kudosu == 0:
-            return {
-                'error': 404,
-                'details': 'This post has no kudosu exchanges.'
-            }, 404
 
         modding.delete_by_post(
             post_id,
