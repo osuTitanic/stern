@@ -77,6 +77,7 @@ def forum_view(forum_id: int):
             title=f"{forum.name} - Titanic",
             site_title=f"Titanic » Forums » {forum.name}",
             site_description=forum.description,
+            canonical_url=request.base_url,
             forum=forum,
             sub_forums=sub_forums,
             subforum_stats={
