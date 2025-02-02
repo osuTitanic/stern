@@ -25,27 +25,27 @@
                     {% if map.diff < 2.7 %}
                         <img
                             src="/images/beatmap/difficulties/easy-{{map.mode}}.png"
-                            alt=""
+                            alt="Easy"
                         >
                     {% elif map.diff < 3.7 %}
                         <img
                             src="/images/beatmap/difficulties/normal-{{map.mode}}.png"
-                            alt=""
+                            alt="Normal"
                         >
                     {% elif map.diff < 4.5 %}
                         <img
                             src="/images/beatmap/difficulties/hard-{{map.mode}}.png"
-                            alt=""
+                            alt="Hard"
                         >
                     {% elif map.diff < 5.5 %}
                         <img
                             src="/images/beatmap/difficulties/insane-{{map.mode}}.png"
-                            alt=""
+                            alt="Insane"
                         >
                     {% else %}
                         <img
                             src="/images/beatmap/difficulties/expert-{{map.mode}}.png"
-                            alt=""
+                            alt="Expert"
                         >
                     {% endif %}
                     <span>{{map.version}}</span>
@@ -399,7 +399,7 @@
         <div class="beatmap-description">
             <div title="Play Song">
                 <a onclick="resetOrPlayAudio('beatmap-preview')" class="beatmap-preview-link">
-                    <img src="{{ config.STATIC_BASEURL }}/mt/{{ beatmapset.id }}l" alt="">
+                    <img src="{{ config.STATIC_BASEURL }}/mt/{{ beatmapset.id }}l" alt="Beatmap Thumbnail">
                     <audio id="beatmap-preview"
                            src="{{ config.STATIC_BASEURL }}/mp3/preview/{{ beatmapset.id }}.mp3"
                            preload="auto">
@@ -451,7 +451,10 @@
                 <tr>
                     <td class="row-title" colspan="3">
                         <a href="/rankings/{{ constants.GameMode(beatmap.mode).alias }}/performance?country={{ leader_score.user.country }}">
-                            <img src="/images/flags/{{ leader_score.user.country|lower }}.gif" loading="lazy" alt="" class="flag">
+                            <img src="/images/flags/{{ leader_score.user.country|lower }}.gif"
+                                 alt="{{ leader_score.user.country }} Flag"
+                                 loading="lazy"
+                                 class="flag">
                         </a>
                         <a href="/u/{{ leader_score.user.id }}">{{ leader_score.user.name }}</a> is in the lead!
                         ({{ leader_score.submitted_at|timeago }})
@@ -462,7 +465,7 @@
                         <td><strong>Score</strong></td>
                         <td>{{ "{:,}".format(leader_score.total_score) }} ({{ (leader_score.acc * 100)|round(2) }}%)</td>
                         <td class="row-grade" colspan="1" rowspan="13">
-                            <img src="/images/grades/{{ leader_score.grade|upper }}.png" loading="lazy" alt="">
+                            <img src="/images/grades/{{ leader_score.grade|upper }}.png" loading="lazy" alt="Grade {{ leader_score.grade|upper }}">
                         </td>
                     </tr>
                 </tr>
@@ -532,7 +535,7 @@
                         <td><strong>Score</strong></td>
                         <td>{{ "{:,}".format(personal_best.total_score) }} ({{ (personal_best.acc * 100)|round(2) }}%)</td>
                         <td class="row-grade" colspan="1" rowspan="13">
-                            <img src="/images/grades/{{ personal_best.grade|upper }}.png" loading="lazy" alt="">
+                            <img src="/images/grades/{{ personal_best.grade|upper }}.png" loading="lazy" alt="Grade {{ personal_best.grade|upper }}">
                         </td>
                     </tr>
                 </tr>
@@ -643,7 +646,7 @@
             <tr class="row-dark" id="{{ score.id }}">
             {% endif %}
                 <td><a href="#{{ loop.index0+1 }}">#{{ loop.index0+1 }}</a></td>
-                <td><img src="/images/grades/{{ score.grade|upper }}_small.png" loading="lazy" alt="{{ score.grade|upper }}"></td>
+                <td><img src="/images/grades/{{ score.grade|upper }}_small.png" loading="lazy" alt="Grade {{ score.grade|upper }}"></td>
                 <td>
                     {% if loop.index0 == 0 %}
                     <strong>{{ "{:,}".format(score.total_score) }}</strong>
@@ -660,7 +663,7 @@
                 </td>
                 <td>
                     <a href="/rankings/{{ constants.GameMode(beatmap.mode).alias }}/performance?country={{ score.user.country }}">
-                        <img src="/images/flags/{{ score.user.country|lower }}.gif" loading="lazy" alt="" class="flag">
+                        <img src="/images/flags/{{ score.user.country|lower }}.gif" loading="lazy" alt="{{ score.user.country }} Flag" class="flag">
                     </a>
                     <a href="/u/{{ score.user.id }}">{{ score.user.name }}</a>
                 </td>

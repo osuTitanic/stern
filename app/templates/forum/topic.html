@@ -115,7 +115,7 @@
                         </div>
                         <a href="/u/{{ post.user.id }}">
                             <div class="post-avatar">
-                                <img src="/a/{{ post.user_id }}" alt="" loading="lazy">
+                                <img src="/a/{{ post.user_id }}" alt="Avatar" loading="lazy">
                             </div>
                         </a>
                         <div>
@@ -135,7 +135,7 @@
                                 {{ repositories.users.fetch_post_count(post.user.id, session=session) }} posts
                             </div>
                             <div>
-                                <img src="/images/flags/{{ post.user.country|lower }}.gif" alt="" class="flag">
+                                <img src="/images/flags/{{ post.user.country|lower }}.gif" alt="{{ post.user.country }} Flag" class="flag">
                             </div>
                         </div>
                         <br>

@@ -11,7 +11,7 @@
 {% block content %}
 <div class="error">
     {% set image = error_images[code] or default_image %}
-    <img src="{{ image }}" alt="">
+    <img src="{{ image }}" alt="Error Image">
     <div class="description">
         {{ content|safe }}
     </div>

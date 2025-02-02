@@ -14,7 +14,7 @@ parser.add_simple_formatter('centre', '<center>%(value)s</center>')
 
 parser.add_simple_formatter(
     'img',
-    '<img src="%(value)s" alt="" loading="lazy">',
+    '<img src="%(value)s" alt="Forum Image" loading="lazy">',
     replace_links=False
 )
 

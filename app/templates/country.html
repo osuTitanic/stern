@@ -89,7 +89,7 @@
                 <b>#{{ rank_offset + loop.index0 + 1 }}</b>
             </td>
             <td>
-                <img src="/images/flags/{{ country['name']|lower }}.gif" class="flag" alt="">
+                <img src="/images/flags/{{ country['name']|lower }}.gif" class="flag" alt="{{ country['name'] }} Flag">
                 <a href="/rankings/{{ constants.GameMode(mode).alias }}/performance?country={{ country['name'] }}">
                     {{ constants.COUNTRIES[country['name']|upper] }}
                 </a>

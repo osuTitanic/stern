@@ -32,7 +32,7 @@
             {% endif %}
             <div style="text-align: center">
                 {% if client.screenshots %}
-                <img src="{{ (client.screenshots|first)['src'] }}" alt="">
+                <img src="{{ (client.screenshots|first)['src'] }}" alt="{{ client.name }} Preview">
                 {% endif %}
             </div>
             <a class="download-link" href="{{ client.downloads[0] }}">Download</a>

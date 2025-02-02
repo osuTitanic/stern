@@ -17,11 +17,11 @@
                 <div class="username-wrapper">
                     <div class="username">{{ user.name }}</div>
                     <div class="flag">
-                        <img src="/images/flags/{{ user.country|lower }}.gif" loading="lazy" alt="">
+                        <img src="/images/flags/{{ user.country|lower }}.gif" loading="lazy" alt="{{ user.country }} Flag">
                     </div>
                 </div>
                 <div class="avatar">
-                    <img src="/a/{{ user.id }}" alt="">
+                    <img src="/a/{{ user.id }}" alt="Avatar">
                 </div>
                 {% if user.title %}
                 <div class="user-title">{{ user.title }}</div>
