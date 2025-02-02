@@ -381,25 +381,27 @@
     </div>
     <div class="padding">
         <div class="beatmap-download">
-            {% if current_user.id %}
-                <a href="/beatmapsets/download/{{ beatmapset.id }}" target="_blank">
-                    <img src="/images/beatmap/osu-download-beatmap.png" alt="Download">
-                </a>
-                {% if beatmapset.has_video %}
-                    <a href="/beatmapsets/download/{{ beatmapset.id }}?novideo=True" target="_blank">
-                        <img src="/images/beatmap/osu-download-beatmap-novid.png" alt="Download without Video">
+            {% if beatmapset.available %}
+                {% if current_user.id %}
+                    <a href="/beatmapsets/download/{{ beatmapset.id }}" target="_blank">
+                        <img src="/images/beatmap/osu-download-beatmap.png" alt="Download">
+                    </a>
+                    {% if beatmapset.has_video %}
+                        <a href="/beatmapsets/download/{{ beatmapset.id }}?novideo=True" target="_blank">
+                            <img src="/images/beatmap/osu-download-beatmap-novid.png" alt="Download without Video">
+                        </a>
+                    {% endif %}
+                {% else %}
+                    <a href="#" onclick='return showLoginForm();'>
+                        <img src="/images/beatmap/osu-download-login.png" alt="Login to download Beatmaps"/>
                     </a>
                 {% endif %}
-            {% else %}
-                <a href="#" onclick='return showLoginForm();'>
-                    <img src="/images/beatmap/osu-download-login.png" alt="Login to download Beatmaps"/>
-                </a>
             {% endif %}
         </div>
         <div class="beatmap-description">
             <div title="Play Song">
                 <a onclick="resetOrPlayAudio('beatmap-preview')" class="beatmap-preview-link">
-                    <img src="{{ config.STATIC_BASEURL }}/mt/{{ beatmapset.id }}l" alt="Beatmap Thumbnail">
+                    <img src="{{ config.STATIC_BASEURL }}/mt/{{ beatmapset.id }}l" alt="">
                     <audio id="beatmap-preview"
                            src="{{ config.STATIC_BASEURL }}/mp3/preview/{{ beatmapset.id }}.mp3"
                            preload="auto">
