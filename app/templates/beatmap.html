@@ -596,7 +596,7 @@
     {% endif %}
     </div>
     {% if scores %}
-    <h2>Top 50 Scoreboard</h2>
+    <h2>Top {{ config.SCORE_RESPONSE_LIMIT or 50 }} Scoreboard</h2>
     <table class="scores">
         <thead class="scores-header">
             <tr>
