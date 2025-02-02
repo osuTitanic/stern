@@ -62,6 +62,9 @@ def download_beatmapset(id: int):
     if not (set := beatmapsets.fetch_one(id)):
         return abort(code=404)
 
+    if not set.available:
+        return abort(code=451)
+
     no_video = request.args.get(
         'novideo',
         default=False,
