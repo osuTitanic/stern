@@ -86,7 +86,11 @@ def root():
         return utils.render_template(
             "home.html",
             css="home.css",
-            description="Titanic » A private server for osu! that lets you experience the early days of the game.",
+            title="Titanic! - Reviving old osu!",
+            site_title="Titanic! - Reviving old osu!",
+            site_description="Relive the early days of osu! with Titanic.",
+            site_image=f"{app.config.OSU_BASEURL}/images/logo/main-low.png",
+            site_url=app.config.OSU_BASEURL,
             news=[
                 format_announcement(announcement, session=session)
                 for announcement in announcements
