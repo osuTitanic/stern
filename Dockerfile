@@ -13,6 +13,10 @@ RUN pip install --upgrade pip
 
 WORKDIR /stern
 
+# Somehow this doesn't work as a command-line argument, so
+# we have to write it to a configuration file...
+RUN echo "[uwsgi]max-requests-delta = 1000" > uwsgi.ini
+
 # Install uwsgi for deployment
 RUN pip install uwsgi
 
@@ -26,10 +30,6 @@ COPY . .
 # Get config for deployment
 ARG FRONTEND_WORKERS=4
 ENV FRONTEND_WORKERS $FRONTEND_WORKERS
-
-# Somehow this doesn't work as a command-line argument, so
-# we have to write it to a configuration file...
-RUN echo "[uwsgi]max-requests-delta = 1000" > uwsgi.ini
 
 CMD uwsgi --http 0.0.0.0:80 \
           --ini uwsgi.ini \
