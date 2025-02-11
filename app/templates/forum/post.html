@@ -33,7 +33,7 @@
 </h1>
 <form action="/forum/{{ forum.id }}/t/{{ topic.id }}/post"
       method="post">
-    <div>
+    <div style="padding-left: 5px; padding-right: 5px;">
         {% if can_edit_icon %}
         <div class="icon-selection">
             <input type="radio" name="icon" value="-1" {% if not topic_icon %} checked {% endif %}>
