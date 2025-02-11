@@ -1,13 +1,30 @@
 {# templates/editor.html #}
 
-<p id="bbcode-help">
-    This section is formatted in bbcode. Learn more about it <a href="https://osu.ppy.sh/wiki/en/BBCode">here</a>!
-</p>
-<textarea class="bbcode-editor" name="bbcode" style="resize: {{ context['resize'] or 'none' }}; min-height: {{ context['min-height'] }};">
-{%- if context['current'] -%}
-    {{ context['current'] | replace('\\r\\n', '\n') | replace('\\n', '\\n') }}
-{%- endif -%}
-</textarea><br>
+<div id="editor-wrapper">
+    <div id="bbcode-toolbar">
+        <button data-bbcode-tag="b"><b>B</b></button>
+        <button data-bbcode-tag="i"><i>i</i></button>
+        <button data-bbcode-tag="u"><u>u</u></button>
+        <button data-bbcode-tag="centre"><p>Centre</p></button>
+        <button data-bbcode-tag="strike"><p>Strike</p></button>
+        <button data-bbcode-tag="heading"><p>Heading</p></button>
+        <button data-bbcode-tag="code"><p>Code</p></button>
+        <button data-bbcode-tag="img" data-property=""><p>Image</p></button>
+        <button data-bbcode-tag="url" data-property=""><u>URL</u></button>
+        <button data-bbcode-tag="profile" data-property="user-id"><p>Profile</p></button>
+        <button data-bbcode-tag="list"><p>Unordered List</p></button>
+        <button data-bbcode-tag="list" data-property=""><p>Ordered List</p></button>
+        <button data-bbcode-tag="*" data-no-close><p>[*]</p></button>
+    </div>
+    <p id="bbcode-help">
+        This section is formatted in bbcode. Learn more about it <a href="https://osu.ppy.sh/wiki/en/BBCode">here</a>!
+    </p>
+    <textarea class="bbcode-editor" name="bbcode" style="resize: {{ context['resize'] or 'none' }}; min-height: {{ context['min-height'] }};">
+    {%- if context['current'] -%}
+        {{ context['current'] | replace('\\r\\n', '\n') | replace('\\n', '\\n') }}
+    {%- endif -%}
+    </textarea><br>
+</div>
 
 {% if context['forum-controls'] %}
 <div style="margin: 12px; float: right; text-align: right; font-size: 90%">
