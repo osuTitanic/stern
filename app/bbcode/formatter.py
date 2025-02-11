@@ -73,6 +73,31 @@ def render_color(tag_name, value, options, parent, context):
 def render_profile(tag_name, value, options, parent, context):
     return '<a href="%s/u/%s">%s</a>' % (config.OSU_BASEURL, options.get('profile', value), value)
 
+@parser.formatter('youtube')
+def render_youtube_embed(tag_name, value, options, parent, context):
+    # Formatter may convert youtube links to url tags
+    value = value.replace('</a>', '')
+
+    # Filter out video ID
+    value = (
+        value.split('/')[-1]
+        if '/' in value else value
+    )
+
+    # Remove watch?v=
+    value = value.replace('watch?v=', '')
+
+    return (
+        '<iframe width="373" height="210" src="https://www.youtube.com/embed/%s"'
+        'title="YouTube Video Player" frameborder="0" allow="accelerometer; autoplay;'
+        'clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"'
+        'referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' % value
+    )
+
+@parser.formatter('google')
+def render_google(tag_name, value, options, parent, context):
+    return '<a href="https://letmegooglethat.com/?q=%s" target="_blank">%s</a>' % (value, value)
+
 @parser.formatter('url')
 def render_link(tag_name, value, options, parent, context):
     return '<a href="%s" target="_blank">%s</a>' % (unquote(options.get('url', '')), value)
