@@ -609,10 +609,10 @@
 
 #admin-userpage-controls {
     width: 600px;
-    height: 380px;
+    min-height: 380px;
     top: 50%;
     left: 50%;
-    margin-top: -190px; /* Negative half of height. */
+    margin-top: -290px; /* Negative half of height. */
     margin-left: -300px; /* Negative half of width. */
 }
 
