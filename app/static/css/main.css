@@ -448,7 +448,7 @@ input[type="submit"]:hover {
     margin-bottom: 5px;
     text-align: center;
     background-color: white;
-    padding: 1px 8px 1px 8px;
+    padding: 0px 8px 0px 8px;
     transition-duration: 0.06s;
     border: 1.5px solid #8f8f9d;
     border-radius: 4px;
