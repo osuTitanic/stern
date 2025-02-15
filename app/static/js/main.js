@@ -1,3 +1,65 @@
+function slideDown(elem) {
+    elem.style.height = elem.scrollHeight + "px";
+}
+
+function slideUp(elem) {
+    elem.style.height = "0px";
+}
+
+function cookieExists(name) {
+    return document.cookie.indexOf(name + "=") !== -1;
+}
+
+function isLoggedIn() {
+    return document.getElementById('welcome-text').textContent != 'Welcome, guest!'
+}
+
+function show(id) {
+    $('#' + id).show();
+}
+
+function hide(id) {
+    $('#' + id).hide();
+}
+
+function confirmAction(promptText) {
+    if (promptText === undefined) promptText = 'Are you sure?';
+    return confirm(promptText);
+}
+
+function confirmRedirect(url, promptText) {
+    var do_redirect = confirmAction(promptText);
+
+    if (!do_redirect)
+        return;
+
+    window.location.href = url;
+    return false;
+}
+
+function resetOrPlayAudio(element) {
+    var audio = document.getElementById(element);
+
+    if (audio.paused) {
+        return audio.play();
+    }
+
+    audio.pause();
+    audio.currentTime = 0;
+}
+
+function showLoginForm() {
+    $(".login-dropdown").slideToggle(100);
+    $("#username-field").select();
+}
+
+function toggleSpoiler(root) {
+    var spoiler = $(root).parents(".spoiler");
+    spoiler.children(".spoiler-body").slideToggle("fast");
+    spoiler.find('img').trigger('unveil');
+    return false;
+}
+
 function addEvent(eventName, targetElement, func) {
     if (targetElement.addEventListener) {
         // DOM Level 2 (modern browsers)
@@ -36,37 +98,6 @@ function userSearch() {
         return false;
     }
     return true;
-}
-
-function resetOrPlayAudio(element) {
-    var audio = document.getElementById(element);
-
-    if (audio.paused) {
-        return audio.play();
-    }
-
-    audio.pause();
-    audio.currentTime = 0;
-}
-
-function showLoginForm() {
-    $(".login-dropdown").slideToggle(100);
-    $("#username-field").select();
-}
-
-function toggleSpoiler(root) {
-    var spoiler = $(root).parents(".spoiler");
-    spoiler.children(".spoiler-body").slideToggle("fast");
-    spoiler.find('img').trigger('unveil');
-    return false;
-}
-
-function slideDown(elem) {
-    elem.style.height = elem.scrollHeight + "px";
-}
-
-function slideUp(elem) {
-    elem.style.height = "0px";
 }
 
 function loadBBCodePreview(element) {
@@ -120,37 +151,6 @@ function loadBBCodePreview(element) {
 
     xhr.send(form);
     return false;
-}
-
-function confirmAction(promptText) {
-    if (promptText === undefined) promptText = 'Are you sure?';
-    return confirm(promptText);
-}
-
-function confirmRedirect(url, promptText) {
-    var do_redirect = confirmAction(promptText);
-
-    if (!do_redirect)
-        return;
-
-    window.location.href = url;
-    return false;
-}
-
-function cookieExists(name) {
-    return document.cookie.indexOf(name + "=") !== -1;
-}
-
-function isLoggedIn() {
-    return document.getElementById('welcome-text').textContent != 'Welcome, guest!'
-}
-
-function show(id) {
-    $('#' + id).show();
-}
-
-function hide(id) {
-    $('#' + id).hide();
 }
 
 addEvent("DOMContentLoaded", document, function(event) {
