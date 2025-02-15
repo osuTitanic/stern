@@ -20,7 +20,7 @@
     <div class="tab-list">
         <ul>
             {% for map in beatmapset.beatmaps %}
-            <li class="tab-item">
+            <li class="tab-item difficulty-icon">
                 <a href="/b/{{ map.id }}" class="tab-link {{ 'active' if map.id == beatmap.id }}">
                     {% if map.diff < 2.7 %}
                         <img

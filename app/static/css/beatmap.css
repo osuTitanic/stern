@@ -103,6 +103,11 @@
     background-color: #bfa8f8;
 }
 
+.difficulty-icon img {
+    width: 16px;
+    height: 16px;
+}
+
 .beatmap-stats {
     clear: both;
     background-color: #e7e2f3;
