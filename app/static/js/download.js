@@ -3,7 +3,7 @@ var versionRegex = (
 );
 
 function downloadWineskinPackage(type) {
-    var url = `https://cdn.lekuru.xyz/public/osx-${type}.base.zip`;
+    var url = `https://cdn.lekuru.xyz/public/osx/osx-${type}.base.zip`;
     var xhr = new XMLHttpRequest();
     xhr.open('GET', url, true);
     xhr.responseType = 'blob';
