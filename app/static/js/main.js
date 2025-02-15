@@ -1,10 +1,13 @@
 function addEvent(eventName, targetElement, func) {
+    if (targetElement.attachEvent) {
+        // Older IE (IE8 and earlier)
+        return targetElement.attachEvent("on" + eventName, func);
+    }
     if (targetElement.addEventListener) {
+        // DOM Level 2 (modern browsers)
         return targetElement.addEventListener(eventName, func, false);
     }
-    if (targetElement.attachEvent) {
-       return targetElement.attachEvent("on" + eventName, func);
-    }
+    // Fallback to DOM Level 0 (very old browsers)
     targetElement["on"+eventName] = func;
 }
 
@@ -142,7 +145,7 @@ function hide(id) {
     $('#' + id).hide();
 }
 
-document.addEventListener("DOMContentLoaded", function () {
+addEvent("DOMContentLoaded", document, function() {
     $(".timeago").timeago();
 });
 
