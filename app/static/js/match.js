@@ -609,7 +609,7 @@ function loadMatchEventsLoop() {
 
 // TODO: Add option for displaying chat
 
-addEvent("DOMContentLoaded", document, function() {
+addEvent("DOMContentLoaded", document, function(event) {
     loadMatchEvents(matchId);
     loadMatchEventsLoop();
 });

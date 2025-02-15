@@ -1288,7 +1288,7 @@ function reviveBeatmap(setId) {
     xhr.send();
 }
 
-addEvent('DOMContentLoaded', document, function() {
+addEvent('DOMContentLoaded', document, function(event) {
     expandProfileTab(activeTab);
     loadPinnedScores(userId, modeName);
     loadTopPlays(userId, modeName, 5, 0);

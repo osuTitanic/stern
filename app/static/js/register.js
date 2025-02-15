@@ -97,7 +97,7 @@ var timeout = null;
 var validationFields = document.querySelectorAll(".validate");
 for (var j = 0; j < validationFields.length; j++) {
     (function (element) {
-        addEvent("keyup", element, function() {
+        addEvent("keyup", element, function(event) {
             clearTimeout(timeout);
 
             timeout = setTimeout(function() {
@@ -105,7 +105,7 @@ for (var j = 0; j < validationFields.length; j++) {
             }, 500);
         });
 
-        addEvent("blur", element, function() {
+        addEvent("blur", element, function(event) {
             validateField(element);
         });
     })(validationFields[j]);
