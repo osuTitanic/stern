@@ -1,7 +1,7 @@
 function validateField(element) {
     var type = element.getAttribute("name");
     var value = element.value;
-    var descriptionField = element.parentElement.querySelector(".input-description");
+    var descriptionField = getParentElement(element).querySelector(".input-description");
 
     if (!value) return;
 
@@ -32,7 +32,7 @@ function validateField(element) {
 }
 
 function isValid(element) {
-    var descriptionField = element.parentElement.querySelector(".input-description");
+    var descriptionField = getParentElement(element).querySelector(".input-description");
     var type = element.getAttribute("name");
     var value = element.value;
 

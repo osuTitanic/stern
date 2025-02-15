@@ -11,6 +11,11 @@ function addEvent(eventName, targetElement, func) {
     targetElement["on"+eventName] = func;
 }
 
+function getParentElement(element) {
+    // IE8 and earlier doesn't support parentElement, so we use parentNode instead.
+    return element.parentElement || (element.parentNode && element.parentNode.nodeType === 1 ? element.parentNode : null);
+}
+
 function beatmapSearch() {
     var inputValue = document.getElementById("beatmap-search").value.trim();
 
@@ -63,7 +68,8 @@ function slideUp(elem) {
 }
 
 function loadBBCodePreview(element) {
-    var bbcodeWrapper = element.parentElement.parentElement;
+    var parentElement = getParentElement(element);
+    var bbcodeWrapper = getParentElement(parentElement);
     var bbcodeEditor = bbcodeWrapper.querySelector('textarea');
     var form = new FormData();
     form.append('bbcode', bbcodeEditor.value);
