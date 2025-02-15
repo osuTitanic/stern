@@ -29,6 +29,7 @@
     <link rel="canonical" href="{{ canonical_url }}">
     {% endif %}
     <script>
+        var apiBaseurl = "{{ config.API_BASEURL }}";
         var osuBaseurl = "{{ config.OSU_BASEURL }}";
         var staticBaseurl = "{{ config.STATIC_BASEURL }}";
         var currentUser = {{ current_user.id if current_user.is_authenticated else 'null' }};
