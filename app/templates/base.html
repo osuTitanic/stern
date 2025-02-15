@@ -28,7 +28,6 @@
     {% if canonical_url %}
     <link rel="canonical" href="{{ canonical_url }}">
     {% endif %}
-    <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js" defer></script>
     <script>
         var osuBaseurl = "{{ config.OSU_BASEURL }}";
         var staticBaseurl = "{{ config.STATIC_BASEURL }}";
@@ -136,22 +135,23 @@
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                 </form>
             </div>
-            <script src="/js/main.js"></script>
+            <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js"></script>
             <script src="/lib/jquery.min.js"></script>
             <script src="/lib/jquery.timeago.js"></script>
             <script src="/lib/jquery.marquee.js"></script>
+            <script src="/js/main.js"></script>
             <div class="page">
                 {# Page Content #}
                 {% block content %}
                 {% endblock content %}
             </div>
             <div class="gradient"></div>
+            <script src="/js/editor.js" defer></script>
+            <script>
+                {% if show_login %} showLoginForm(); {% endif %}
+                {% if alert %} alert("{{ alert }}"); {% endif %}
+            </script>
         </div>
     </div>
-    <script src="/js/editor.js" defer></script>
-    <script>
-        {% if show_login %} showLoginForm(); {% endif %}
-        {% if alert %} alert("{{ alert }}"); {% endif %}
-    </script>
 </body>
 </html>
