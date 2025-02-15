@@ -861,11 +861,11 @@ function loadUserPerformanceGraph(userId, mode) {
                 // Calculate the relative min/max user rank to display on y axis
                 var ranks = [];
 
-                rankData.forEach(function(axis) {
-                    axis.values.forEach(function(value) {
-                        ranks.push(-value.y);
-                    });
-                });
+                for (var i = 0; i < rankData.length; i++) {
+                    for (var j = 0; j < rankData[i].values.length; j++) {
+                        ranks.push(-rankData[i].values[j].y);
+                    }
+                }
 
                 var minRank = Math.min.apply(null, ranks);
                 var maxRank = Math.max.apply(null, ranks);
@@ -899,10 +899,11 @@ function loadUserPerformanceGraph(userId, mode) {
                 });
 
                 // Reset "dy" value
-                document.querySelectorAll('.nv-noData')
-                    .forEach(function(textElement) {
-                        textElement.setAttribute('dy', 0);
-                    });
+                var noDataElements = document.querySelectorAll('.nv-noData');
+
+                for (var i = 0; i < noDataElements.length; i++) {
+                    noDataElements[i].setAttribute('dy', 0);
+                }
 
                 return chart;
             });
@@ -993,10 +994,11 @@ function loadUserPlaysGraph(userId, mode) {
             });
 
             // Reset "dy" value
-            document.querySelectorAll('.nv-noData')
-                .forEach(function(textElement) {
-                    textElement.setAttribute('dy', 0);
-                });
+            var noDataElements = document.querySelectorAll('.nv-noData');
+
+            for (var i = 0; i < noDataElements.length; i++) {
+                noDataElements[i].setAttribute('dy', 0);
+            }
 
             return chart;
         });
