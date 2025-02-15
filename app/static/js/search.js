@@ -445,7 +445,7 @@ function setOrder(element) {
 
 var beatmapOptionsLinks = document.querySelectorAll(".beatmap-options a");
 for (var i = 0; i < beatmapOptionsLinks.length; i++) {
-    beatmapOptionsLinks[i].addEventListener("click", function (event) {
+    addEvent("click", beatmapOptionsLinks[i], function() {
         event.preventDefault();
         setElement(event.target);
     });
@@ -453,13 +453,13 @@ for (var i = 0; i < beatmapOptionsLinks.length; i++) {
 
 var beatmapOrderSelectLinks = document.querySelectorAll(".beatmap-order-select a");
 for (var i = 0; i < beatmapOrderSelectLinks.length; i++) {
-    beatmapOrderSelectLinks[i].addEventListener("click", function (event) {
+    addEvent("click", beatmapOrderSelectLinks[i], function() {
         event.preventDefault();
         setOrder(event.target);
     });
 }
 
-window.addEventListener('load', function () {
+addEvent('load', window, function() {
     var dataElements = document.querySelectorAll(".beatmap-options dl");
     var searchParams = location.search.substring(1).split("&");
     var query = {};
@@ -512,7 +512,7 @@ window.addEventListener('load', function () {
 var input = document.getElementById("search-input");
 var timeout = null;
 
-input.addEventListener("keyup", function (e) {
+addEvent("keyup", input, function() {
     var input = document.getElementById("search-input");
     var query = [];
     var searchParams = location.search.substring(1).split("&");
@@ -525,7 +525,7 @@ input.addEventListener("keyup", function (e) {
     }
 
     clearTimeout(timeout);
-    timeout = setTimeout(function () {
+    timeout = setTimeout(function() {
         query.push("query=" + encodeURIComponent(input.value));
         location.search = "?" + query.join("&");
     }, 500);

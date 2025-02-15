@@ -495,7 +495,7 @@
         }
     }
 
-    document.addEventListener('keydown', function(event) {
+    addEvent('keydown', document, function () {
         if (event.ctrlKey && event.key === 'Enter') {
             var form = document.querySelector('.quick-reply');
             var textarea = form.querySelector('textarea');

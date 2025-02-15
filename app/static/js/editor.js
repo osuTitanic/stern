@@ -41,5 +41,5 @@ function insertBBCode(event) {
 elements = document.querySelectorAll('#bbcode-toolbar')
 
 for (var i = 0; i < elements.length; i++) {
-    elements[i].addEventListener('click', insertBBCode);
+    addEvent('click', elements[i], function() { insertBBCode(event) });
 }
