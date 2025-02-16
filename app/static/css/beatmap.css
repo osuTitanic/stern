@@ -174,6 +174,17 @@
     margin-bottom: 4px;
 }
 
+.description-editor {
+    width: 462.5px;
+    height: 88px;
+    max-width: 462.5px;
+    max-height: 88px;
+    min-width: 462.5px;
+    min-height: 15px;
+    font-size: 90%;
+    margin: 0 0 4px 0;
+}
+
 .beatmap-preview-link {
     float: left;
     width: 160px;

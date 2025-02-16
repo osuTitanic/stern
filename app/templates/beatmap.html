@@ -799,6 +799,45 @@
             element.style.color = 'rgb(0, 102, 204)';
         }, 1500);
     }
+
+    {% if beatmapset.server != 0 and beatmapset.creator_id == current_user.id %}
+    function editBeatmapDescription() {
+        var description = document.querySelector('.beatmap-description .bbcode');
+        if (!description) { return; }
+
+        var form = document.createElement('form');
+        form.action = '/api/beatmaps/update/{{ beatmapset.id }}/description';
+        form.method = 'post';
+
+        var textarea = document.createElement('textarea');
+        textarea.className = 'description-editor bbcode-editor';
+        textarea.value = bbcodeDescription;
+        textarea.name = 'description';
+        form.appendChild(textarea);
+
+        var csrfToken = document.createElement('input');
+        csrfToken.type = 'hidden';
+        csrfToken.name = 'csrf_token';
+        csrfToken.value = '{{ csrf_token() }}';
+        form.appendChild(csrfToken);
+
+        var submitButton = document.createElement('input');
+        submitButton.type = 'submit';
+        submitButton.value = 'Save';
+        form.appendChild(submitButton);
+
+        description.replaceWith(form);
+    }
+
+    var descriptionElements = document.querySelectorAll('.beatmap-description, .beatmap-description *');
+    var bbcodeDescription = `{{ beatmapset.description }}`;
+
+    for (var i = 0; i < descriptionElements.length; i++) {
+        addEvent('dblclick', descriptionElements[i], function(event) {
+            editBeatmapDescription();
+        });
+    }
+    {% endif %}
 </script>
 {# TODO: Beatmap Comments #}
 {% endblock content %}
