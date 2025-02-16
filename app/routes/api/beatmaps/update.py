@@ -1,6 +1,6 @@
 
+from app.common.database import beatmapsets, beatmaps, topics, posts
 from app.common.constants import BeatmapLanguage, BeatmapGenre
-from app.common.database import beatmapsets, beatmaps
 
 from flask import Blueprint, abort, redirect, request
 from flask_login import current_user, login_required
@@ -111,6 +111,31 @@ def update_description(set_id: int):
 
         app.session.logger.info(
             f'{current_user.name} updated description for "{beatmapset.full_name}".'
+        )
+
+        beatmap_topic = topics.fetch_one(
+            beatmapset.topic_id,
+            session=session
+        )
+
+        if not beatmap_topic:
+            return redirect(f'/s/{set_id}')
+
+        initial_post = posts.fetch_initial_post(
+            beatmap_topic.id,
+            session=session
+        )
+
+        if '---------------' not in initial_post.content.splitlines():
+            return redirect(f'/s/{set_id}')
+
+        metadata, _ = initial_post.content.split('---------------', 1)
+
+        # Update forum topic content with new description
+        posts.update(
+            initial_post.id,
+            {'content': f'{metadata}---------------\n{description}'},
+            session=session
         )
 
     return redirect(f'/s/{set_id}')
