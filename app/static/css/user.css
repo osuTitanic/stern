@@ -65,16 +65,18 @@
 }
 
 .groups {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
     display: block;
     text-align: center;
     overflow-wrap: break-word;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
 .group {
-    margin: 8px;
+    margin: 4px;
+    margin-left: 6px;
+    margin-right: 6px;
     background-color: #e3e0f1;
     border-radius: 2.5px;
     padding: 2.5px;
