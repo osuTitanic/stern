@@ -97,6 +97,7 @@ def rankings(mode: str, order_type: str):
             max_page_display=max_page_display,
             min_page_display=min_page_display,
             items_per_page=items_per_page,
+            canonical_url=request.base_url,
             order_name=order_name,
             site_title=(
                 f'{order_name} Rankings'
