@@ -103,6 +103,11 @@
     background-color: #bfa8f8;
 }
 
+.difficulty-icon img {
+    width: 16px;
+    height: 16px;
+}
+
 .beatmap-stats {
     clear: both;
     background-color: #e7e2f3;
@@ -154,7 +159,7 @@
     padding: 7px;
     margin: 5px;
     height: 124px;
-    max-width: 650px;
+    max-width: 825px;
 }
 
 .beatmap-description .bbcode {
@@ -167,6 +172,17 @@
 
 .beatmap-description .bbcode--normal-line-height br {
     margin-bottom: 4px;
+}
+
+.description-editor {
+    width: 462.5px;
+    height: 88px;
+    max-width: 462.5px;
+    max-height: 88px;
+    min-width: 462.5px;
+    min-height: 15px;
+    font-size: 90%;
+    margin: 0 0 4px 0;
 }
 
 .beatmap-preview-link {

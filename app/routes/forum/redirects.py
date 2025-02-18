@@ -207,6 +207,18 @@ def viewforum_redirect():
         f"/forum/{forum_id}"
     )
 
+@router.get('/ucp.php')
+def user_control_panel():
+    redirect_map = {
+        'register': '/account/register',
+        'sendpassword': '/account/reset',
+        'avatar': '/account/settings/profile#avatar',
+    }
+
+    return redirect(
+        redirect_map.get(request.args.get('mode'), '/account/settings')
+    )
+
 @router.get('/index.php')
 def index_redirect():
     return redirect('/forum')

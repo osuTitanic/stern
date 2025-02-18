@@ -417,12 +417,49 @@ input[type="submit"]:hover {
     border-radius: 2.5px;
     border: 1.5px solid rgb(50, 50, 50, 0.45);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 110%;
+    font-size: 105%;
+}
+
+#editor-wrapper {
+    background-color: #e3e1fa;
+    border-radius: 5px;
+    padding: 8px;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 #bbcode-help {
     font-size: 80%;
     color: #999999;
+}
+
+#bbcode-toolbar {
+    margin-bottom: 4px;
+    display: flex;
+    font-size: 90%;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+#bbcode-toolbar button {
+    height: 20px;
+    min-width: 40px;
+    margin-right: 2.5px;
+    margin-bottom: 5px;
+    text-align: center;
+    background-color: white;
+    padding: 0px 8px 0px 8px;
+    transition-duration: 0.06s;
+    border: 1.5px solid #8f8f9d;
+    border-radius: 4px;
+}
+
+#bbcode-toolbar button:hover {
+    background-color: rgb(205, 205, 240);
+}
+
+#bbcode-toolbar button:active {
+    background-color: rgb(184, 184, 218);
 }
 
 .bbcode-preview-button {

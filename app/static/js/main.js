@@ -1,31 +1,40 @@
-function addEvent(eventName, targetElement, func) {
-    if (targetElement.addEventListener) {
-        return targetElement.addEventListener(eventName, func, false);
-    }
-    if (targetElement.attachEvent) {
-       return targetElement.attachEvent("on" + eventName, func);
-    }
-    targetElement["on"+eventName] = func;
+function slideDown(elem) {
+    elem.style.height = elem.scrollHeight + "px";
 }
 
-function beatmapSearch() {
-    var inputValue = document.getElementById("beatmap-search").value.trim();
-
-    if (inputValue !== '') {
-        window.location.href = '/beatmapsets?query=' + encodeURIComponent(inputValue);
-        return false;
-    }
-    return true;
+function slideUp(elem) {
+    elem.style.height = "0px";
 }
 
-function userSearch() {
-    var inputValue = document.getElementById("user-search").value.trim();
+function cookieExists(name) {
+    return document.cookie.indexOf(name + "=") !== -1;
+}
 
-    if (inputValue !== '') {
-        window.location.href = '/u/' + encodeURIComponent(inputValue);
-        return false;
-    }
-    return true;
+function isLoggedIn() {
+    return document.getElementById('welcome-text').textContent != 'Welcome, guest!'
+}
+
+function show(id) {
+    $('#' + id).show();
+}
+
+function hide(id) {
+    $('#' + id).hide();
+}
+
+function confirmAction(promptText) {
+    if (promptText === undefined) promptText = 'Are you sure?';
+    return confirm(promptText);
+}
+
+function confirmRedirect(url, promptText) {
+    var do_redirect = confirmAction(promptText);
+
+    if (!do_redirect)
+        return;
+
+    window.location.href = url;
+    return false;
 }
 
 function resetOrPlayAudio(element) {
@@ -51,16 +60,49 @@ function toggleSpoiler(root) {
     return false;
 }
 
-function slideDown(elem) {
-    elem.style.height = elem.scrollHeight + "px";
+function addEvent(eventName, targetElement, func) {
+    if (targetElement.addEventListener) {
+        // DOM Level 2 (modern browsers)
+        return targetElement.addEventListener(eventName, func, false);
+    }
+    if (targetElement.attachEvent) {
+        // Older IE (IE8 and earlier)
+        return targetElement.attachEvent("on" + eventName, function() {
+            return func.call(targetElement, window.event);
+        });
+    }
+    // Fallback to DOM Level 0 (very old browsers)
+    targetElement["on"+eventName] = func;
 }
 
-function slideUp(elem) {
-    elem.style.height = "0px";
+function getParentElement(element) {
+    // IE8 and earlier doesn't support parentElement, so we use parentNode instead.
+    return element.parentElement || (element.parentNode && element.parentNode.nodeType === 1 ? element.parentNode : null);
+}
+
+function beatmapSearch() {
+    var inputValue = document.getElementById("beatmap-search").value.trim();
+
+    if (inputValue !== '') {
+        window.location.href = '/beatmapsets?query=' + encodeURIComponent(inputValue);
+        return false;
+    }
+    return true;
+}
+
+function userSearch() {
+    var inputValue = document.getElementById("user-search").value.trim();
+
+    if (inputValue !== '') {
+        window.location.href = '/u/' + encodeURIComponent(inputValue);
+        return false;
+    }
+    return true;
 }
 
 function loadBBCodePreview(element) {
-    var bbcodeWrapper = element.parentElement.parentElement;
+    var parentElement = getParentElement(element);
+    var bbcodeWrapper = getParentElement(parentElement);
     var bbcodeEditor = bbcodeWrapper.querySelector('textarea');
     var form = new FormData();
     form.append('bbcode', bbcodeEditor.value);
@@ -111,38 +153,7 @@ function loadBBCodePreview(element) {
     return false;
 }
 
-function confirmAction(promptText) {
-    if (promptText === undefined) promptText = 'Are you sure?';
-    return confirm(promptText);
-}
-
-function confirmRedirect(url, promptText) {
-    var do_redirect = confirmAction(promptText);
-
-    if (!do_redirect)
-        return;
-
-    window.location.href = url;
-    return false;
-}
-
-function cookieExists(name) {
-    return document.cookie.indexOf(name + "=") !== -1;
-}
-
-function isLoggedIn() {
-    return document.getElementById('welcome-text').textContent != 'Welcome, guest!'
-}
-
-function show(id) {
-    $('#' + id).show();
-}
-
-function hide(id) {
-    $('#' + id).hide();
-}
-
-document.addEventListener("DOMContentLoaded", function () {
+addEvent("DOMContentLoaded", document, function(event) {
     $(".timeago").timeago();
 });
 

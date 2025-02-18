@@ -13,8 +13,12 @@ RUN pip install --upgrade pip
 
 WORKDIR /stern
 
-# Install pyuwsgi for deployment
-RUN pip install pyuwsgi
+# Somehow this doesn't work as a command-line argument, so
+# we have to write it to a configuration file...
+RUN echo "[uwsgi]max-requests-delta = 1000" > uwsgi.ini
+
+# Install uwsgi for deployment
+RUN pip install uwsgi
 
 # Install python dependencies
 COPY requirements.txt ./
@@ -28,8 +32,9 @@ ARG FRONTEND_WORKERS=4
 ENV FRONTEND_WORKERS $FRONTEND_WORKERS
 
 CMD uwsgi --http 0.0.0.0:80 \
+          --ini uwsgi.ini \
           -p ${FRONTEND_WORKERS} \
           -w app:flask \
-          --max-requests 200000 \
+          --max-requests 180000 \
           --enable-threads \
           --lazy-apps

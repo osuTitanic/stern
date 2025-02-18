@@ -128,6 +128,7 @@ def userpage(query: str):
             site_description=f"Rank ({GameMode(int(mode)).formatted}): Global: #{pp_rank} | Country: #{pp_rank_country}",
             site_image=f"{config.OSU_BASEURL}/a/{user.id}_000.png",
             site_url=f"{config.OSU_BASEURL}/u/{user.id}",
+            canonical_url=f"/u/{user.id}",
             beatmapset_categories=beatmapset_categories,
             pp_rank=pp_rank,
             pp_rank_country=pp_rank_country,

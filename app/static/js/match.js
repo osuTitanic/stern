@@ -1,7 +1,7 @@
-const matchId = window.location.pathname.split("/")[2];
-const refreshRate = 8000;
+var matchId = window.location.pathname.split("/")[2];
+var refreshRate = 8000;
 
-const Mods = {
+var Mods = {
     NoMod: 0,
     NoFail: 1 << 0,
     Easy: 1 << 1,
@@ -38,9 +38,19 @@ const Mods = {
     FreeModAllowed: (1 << 0) | (1 << 1) | (1 << 3) | (1 << 4) | (1 << 5) | (1 << 10) | (1 << 20) | (1 << 7) | (1 << 13) | (1 << 12) | (1 << 15) | (1 << 16) | (1 << 17) | (1 << 18) | (1 << 19),
     SpeedMods: (1 << 6) | (1 << 8) | (1 << 9),
 
-    getMembers: function () {
-        let memberList = [];
-        for (const mod in Mods) {
+    get: function(value) {
+        var keys = Object.keys(this);
+        for (var i = 0; i < keys.length; i++) {
+            if (this[keys[i]] === value) {
+                return keys[i];
+            }
+        }
+        return undefined;
+    },
+
+    getMembers: function() {
+        var memberList = [];
+        for (var mod in Mods) {
             if (Mods[mod] === (Mods[mod] & this[mod])) {
                 memberList.push(mod);
             }
@@ -48,10 +58,10 @@ const Mods = {
         return memberList;
     },
 
-    getString: function (value) {
+    getString: function(value) {
         if (value === 0) return "NM";
 
-        const modMap = {
+        var modMap = {
             [Mods.NoMod]: "NM",
             [Mods.NoFail]: "NF",
             [Mods.Easy]: "EZ",
@@ -74,8 +84,8 @@ const Mods = {
             [Mods.Key8]: "K8",
         };
 
-        const members = [];
-        for (const mod in Mods) {
+        var members = [];
+        for (var mod in Mods) {
             if (Mods[mod] !== 0 && (value & Mods[mod]) === Mods[mod]) {
                 members.push(mod);
             }
@@ -85,56 +95,56 @@ const Mods = {
     }
 };
 
-const Mode = {
+var Mode = {
     0: "osu!",
     1: "Taiko",
     2: "Catch the Beat",
     3: "osu!Mania"
 };
 
-const ScoringType = {
+var ScoringType = {
     0: "Score",
     1: "Accuracy",
     2: "Combo"
 };
 
-const TeamType = {
+var TeamType = {
     0: "Head to Head",
     1: "Tag Co-op",
     2: "Team VS",
     3: "Tag Team VS"
 };
 
-const Team = {
+var Team = {
     0: "None",
     1: "Blue",
     2: "Red"
 };
 
 function generateResultsTable(results, matchMods = 0) {
-    const table = document.createElement("table");
-    const headerWrapper = document.createElement("thead");
-    const header = document.createElement("tr");
+    var table = document.createElement("table");
+    var headerWrapper = document.createElement("thead");
+    var header = document.createElement("tr");
 
-    const headerPlace = document.createElement("th");
+    var headerPlace = document.createElement("th");
     headerPlace.style.width = "25px";
-    const headerPlayer = document.createElement("th");
+    var headerPlayer = document.createElement("th");
     headerPlayer.innerHTML = "Player";
-    const headerScore = document.createElement("th");
+    var headerScore = document.createElement("th");
     headerScore.innerHTML = "Score";
-    const headerAccuracy = document.createElement("th");
+    var headerAccuracy = document.createElement("th");
     headerAccuracy.innerHTML = "Accuracy";
-    const headerCombo = document.createElement("th");
+    var headerCombo = document.createElement("th");
     headerCombo.innerHTML = "Combo";
-    const headerMods = document.createElement("th");
+    var headerMods = document.createElement("th");
     headerMods.innerHTML = "Mods";
-    const c300 = document.createElement("th");
+    var c300 = document.createElement("th");
     c300.innerHTML = "300s";
-    const c100 = document.createElement("th");
+    var c100 = document.createElement("th");
     c100.innerHTML = "100s";
-    const c50 = document.createElement("th");
+    var c50 = document.createElement("th");
     c50.innerHTML = "50s";
-    const cMiss = document.createElement("th");
+    var cMiss = document.createElement("th");
     cMiss.innerHTML = "Misses";
 
     header.appendChild(headerPlace);
@@ -150,10 +160,10 @@ function generateResultsTable(results, matchMods = 0) {
     headerWrapper.appendChild(header);
     table.appendChild(headerWrapper);
 
-    const tableBody = document.createElement("tbody");
+    var tableBody = document.createElement("tbody");
 
     results.forEach(result => {
-        const row = document.createElement("tr");
+        var row = document.createElement("tr");
 
         if (result.score.failed)
             row.classList.add("fail");
@@ -163,7 +173,7 @@ function generateResultsTable(results, matchMods = 0) {
         else
             row.classList.add("dark-row");
 
-        const place = document.createElement("td");
+        var place = document.createElement("td");
         place.innerHTML = result.place;
 
         if (result.player.team != 0)
@@ -171,48 +181,48 @@ function generateResultsTable(results, matchMods = 0) {
                 result.player.team == 1 ? "team-blue" : "team-red"
             );
 
-        const playerLink = document.createElement("a");
+        var playerLink = document.createElement("a");
         playerLink.innerHTML = result.player.name;
         playerLink.href = `/u/${result.player.id}`;
 
-        const playerFlag = document.createElement("img");
+        var playerFlag = document.createElement("img");
         playerFlag.src = `/images/flags/${result.player.country.toLowerCase()}.gif`;
         playerFlag.classList.add("flag");
 
-        const player = document.createElement("td");
+        var player = document.createElement("td");
         player.appendChild(playerFlag);
         player.appendChild(playerLink);
 
-        const score = document.createElement("td");
+        var score = document.createElement("td");
         score.innerHTML = result.score.score.toLocaleString();
 
         if (result.score.failed) {
-            const failed = document.createElement("span");
+            var failed = document.createElement("span");
             failed.style.color = "#ff0000";
             failed.innerHTML = " FAIL";
             score.style.fontWeight = "bold";
             score.appendChild(failed);
         }
 
-        const accuracy = document.createElement("td");
+        var accuracy = document.createElement("td");
         accuracy.innerHTML = `${result.score.accuracy}%`;
 
-        const combo = document.createElement("td");
+        var combo = document.createElement("td");
         combo.innerHTML = `${result.score.max_combo}`;
 
-        const mods = document.createElement("td");
+        var mods = document.createElement("td");
         mods.innerHTML = Mods.getString(result.player.mods + matchMods);
 
-        const c300 = document.createElement("td");
+        var c300 = document.createElement("td");
         c300.innerHTML = result.score.c300.toLocaleString();
 
-        const c100 = document.createElement("td");
+        var c100 = document.createElement("td");
         c100.innerHTML = result.score.c100.toLocaleString();
 
-        const c50 = document.createElement("td");
+        var c50 = document.createElement("td");
         c50.innerHTML = result.score.c50.toLocaleString();
 
-        const cMiss = document.createElement("td");
+        var cMiss = document.createElement("td");
         cMiss.innerHTML = result.score.cMiss.toLocaleString();
 
         row.appendChild(place);
@@ -385,9 +395,9 @@ function getTeamWinner(results, condition) {
 }
 
 function loadMatchEvents(id, after = undefined) {
-    const statusText = document.getElementById("status-text");
-    const container = document.getElementById("match-events");
-    let args = "";
+    var statusText = document.getElementById("status-text");
+    var container = document.getElementById("match-events");
+    var args = "";
 
     if (after != undefined)
         args = `?after=${after.getTime() - refreshRate}`;
@@ -403,11 +413,11 @@ function loadMatchEvents(id, after = undefined) {
             statusText.innerHTML = "";
 
             events.forEach(event => {
-                const eventDate = new Date(event.time);
-                const eventElement = document.createElement("div");
+                var eventDate = new Date(event.time);
+                var eventElement = document.createElement("div");
                 eventElement.classList.add("event");
 
-                const timeElement = document.createElement("span");
+                var timeElement = document.createElement("span");
                 timeElement.classList.add("event-time");
                 timeElement.innerHTML = `${eventDate.getHours()}:${eventDate.getMinutes()}`;
 
@@ -583,7 +593,7 @@ function loadMatchEvents(id, after = undefined) {
 }
 
 function loadMatchEventsLoop() {
-    setTimeout(() => {
+    setTimeout(function() {
         var events = document.getElementById("match-events").innerHTML;
 
         if (events.includes("disbanded"))
@@ -599,7 +609,7 @@ function loadMatchEventsLoop() {
 
 // TODO: Add option for displaying chat
 
-document.addEventListener("DOMContentLoaded", () => {
+addEvent("DOMContentLoaded", document, function(event) {
     loadMatchEvents(matchId);
     loadMatchEventsLoop();
 });

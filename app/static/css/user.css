@@ -65,16 +65,18 @@
 }
 
 .groups {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
     display: block;
     text-align: center;
     overflow-wrap: break-word;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
 .group {
-    margin: 8px;
+    margin: 4px;
+    margin-left: 6px;
+    margin-right: 6px;
     background-color: #e3e0f1;
     border-radius: 2.5px;
     padding: 2.5px;
@@ -123,7 +125,8 @@
 
 .badge-container img {
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
-    height: 40px;
+    max-height: 50px;
+    max-width: 100px;
 }
 
 .left-bottom {
@@ -157,6 +160,7 @@
 .userpage-social {
     width: 100%;
     margin-bottom: 15px;
+    margin-top: 10px;
     overflow: hidden;
 }
 
@@ -609,10 +613,10 @@
 
 #admin-userpage-controls {
     width: 600px;
-    height: 380px;
+    min-height: 380px;
     top: 50%;
     left: 50%;
-    margin-top: -190px; /* Negative half of height. */
+    margin-top: -290px; /* Negative half of height. */
     margin-left: -300px; /* Negative half of width. */
 }
 

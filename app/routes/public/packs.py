@@ -26,6 +26,7 @@ def pack_listing():
             site_description="Titanic » Beatmap Packs",
             site_title="Beatmap Packs",
             title="Beatmap Packs - Titanic",
+            canonical_url=request.base_url,
             categories=categories,
             category=category,
             beatmap_packs=beatmap_packs

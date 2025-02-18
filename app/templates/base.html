@@ -4,11 +4,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="description" content="{{ description or 'Titanic » A private server for osu! that lets you experience the early days of the game.' }}">
+    <meta name="description" content="{{ description or site_description or 'Titanic! - A private server for osu! that lets you experience the early days of the game.' }}">
     <meta name="keywords" content="osu, titanic, private, server, lekuru, old osu, nostalgia, ouendan, elite, beat, agents, rhythm, windows, game, taiko, tatsujin, simulator, sim, xna, ddr, beatmania" />
     <meta name="viewport" content="width=1050, user-scalable=yes"/>
     <meta name="msapplication-TileColor" content="#603cba">
-    <meta name="theme-color" content="#ffffff">
     <meta property="og:site_name" content="Titanic!">
     <meta property="og:type" content="website">
     <meta name="theme-color" content="#603cba">
@@ -18,10 +17,10 @@
     {% if site_url %}<meta property="og:url" content="{{ site_url }}">{% endif %}
     {% if config.ENABLE_SSL %}<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">{% endif %}
     <title>{{ title or 'Titanic!' }}</title>
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
     <link rel="prefetch" href="/images/logo/main-vector.min.svg" as="image">
     <link rel="prefetch" href="/images/logo/main-low.png">
     <link rel="prefetch" href="/css/{{ css or 'main.css' }}">
-    <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
     <link rel="stylesheet" href="/css/{{ css or 'main.css' }}">
     <link rel="stylesheet" href="/lib/fontawesome.min.css">
     <link rel="stylesheet" href="/lib/fontawesome.solid.min.css">
@@ -29,8 +28,8 @@
     {% if canonical_url %}
     <link rel="canonical" href="{{ canonical_url }}">
     {% endif %}
-    <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js" defer></script>
     <script>
+        var apiBaseurl = "{{ config.API_BASEURL }}";
         var osuBaseurl = "{{ config.OSU_BASEURL }}";
         var staticBaseurl = "{{ config.STATIC_BASEURL }}";
         var currentUser = {{ current_user.id if current_user.is_authenticated else 'null' }};
@@ -49,11 +48,12 @@
     {% endif %}
     <div class="main">
         <a href="/" aria-label="Home">
+            <link rel="prefetch" href="/images/logo/main-vector.min.svg" as="image">
             <img src="/images/logo/main-vector.min.svg"
                  onerror="this.src='/images/logo/main-low.png';"
                  class="logo"
                  loading="preload"
-                 alt="">
+                 alt="Titanic Logo">
         </a>
         <div class="nav">
             {% include "navigation.html" %}
@@ -136,21 +136,23 @@
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                 </form>
             </div>
-            <script src="/js/main.js"></script>
+            <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js"></script>
             <script src="/lib/jquery.min.js"></script>
             <script src="/lib/jquery.timeago.js"></script>
             <script src="/lib/jquery.marquee.js"></script>
+            <script src="/js/main.js"></script>
             <div class="page">
                 {# Page Content #}
                 {% block content %}
                 {% endblock content %}
             </div>
             <div class="gradient"></div>
+            <script src="/js/editor.js" defer></script>
+            <script>
+                {% if show_login %} showLoginForm(); {% endif %}
+                {% if alert %} alert("{{ alert }}"); {% endif %}
+            </script>
         </div>
     </div>
-    <script>
-        {% if show_login %} showLoginForm(); {% endif %}
-        {% if alert %} alert("{{ alert }}"); {% endif %}
-    </script>
 </body>
 </html>

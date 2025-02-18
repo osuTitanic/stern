@@ -20,7 +20,7 @@
     </a>
 </h1>
 <form action="/forum/{{ forum.id }}/create"
-      method="post">
+      method="post" style="padding-left: 5px; padding-right: 5px;">
     <p class="post-subject">
         Subject: <input type="text" name="title" class="nav-search">
     </p>
@@ -51,5 +51,5 @@
         {% endwith %}
     </div>
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-</form>
+</form><br>
 {% endblock content %}
