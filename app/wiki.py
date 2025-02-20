@@ -167,7 +167,7 @@ def update_content(content: DBWikiContent, session: Session) -> DBWikiContent:
         session
     )
 
-    create_outlinks(content_markdown, session)
+    create_outlinks(content.page_id, content_markdown, session)
     content.content = content_markdown
     return content
 
