@@ -59,6 +59,8 @@
 
 .wiki-welcome img {
     float: left;
+    width: 40px !important;
+    height: 40px !important;
 }
 
 .wiki-welcome h2 {
