@@ -6,7 +6,19 @@ import markdown
 import config
 import app
 
-@caching.ttl_cache(ttl=300)
+BASEURL = (
+    f'https://raw.githubusercontent.com'
+    f'/{config.WIKI_REPOSITORY_OWNER}'
+    f'/{config.WIKI_REPOSITORY_NAME}'
+    f'/{config.WIKI_REPOSITORY_BRANCH}'
+    f'/{config.WIKI_REPOSITORY_PATH}'
+)
+
+def fetch_languages() -> Set[str]:
+    """Fetch the list of available languages"""
+    return set(wiki.fetch_languages() + [config.WIKI_DEFAULT_LANGUAGE])
+
+@caching.ttl_cache(ttl=60*5)
 def fetch_markdown(path: str, language: str) -> str | None:
     """Fetch the raw markdown text of a wiki page"""
     response = app.session.requests.get(
