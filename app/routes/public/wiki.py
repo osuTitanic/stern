@@ -5,16 +5,10 @@ from app import wiki
 
 import config
 import utils
+import app
 
 router = Blueprint('wiki', __name__)
-
-valid_languages = (
-    'bg', 'cs', 'de', 'en',
-    'es', 'fr', 'id', 'it',
-    'ja', 'ko', 'pl', 'pt-br',
-    'ro', 'ru', 'sv', 'th',
-    'tr', 'uk', 'vi', 'zh', 'zh-tw'
-)
+valid_languages = wiki.fetch_languages()
 
 @router.get('/')
 def wiki_home_redirect():
@@ -32,7 +26,7 @@ def home_wiki_page(language: str):
         site_title='Titanic! Wiki',
         canonical_url=f'/wiki/',
         current_date=datetime.now(),
-        language=language
+        requested_language=language
     )
 
 @router.get('/<language>/search/')
@@ -49,7 +43,7 @@ def wiki_search_page(language: str):
         title=f'{query or "Search"} - Titanic! Wiki',
         site_title='Titanic! Wiki',
         canonical_url=f'/wiki/en/search',
-        language=language
+        requested_language=language
     )
 
 @router.get('/<language>/<path:path>')
@@ -57,20 +51,20 @@ def wiki_page(path: str, language: str = config.WIKI_DEFAULT_LANGUAGE):
     if language.lower() not in valid_languages:
         return abort(404)
 
-    if not (text := wiki.fetch_markdown(path, language.lower())):
-        return abort(404)
+    with app.session.database.managed_session() as session:
+        if not (result := wiki.fetch_page(path, language.lower(), session)):
+            return abort(404)
 
-    name = (
-        path.strip('/').split('/')[-1]
-    )
+        page, entry = result
 
-    return utils.render_template(
-        f'wiki/content/{language}.html',
-        css='wiki.css',
-        content=wiki.process_markdown(text),
-        title=f'{name} - Titanic! Wiki',
-        site_title=f'{name} - Titanic! Wiki',
-        site_url=f'/wiki/en/{path}',
-        canonical_url=f'/wiki/en/{path}',
-        language=language
-    )
+        return utils.render_template(
+            f'wiki/content/{language}.html',
+            css='wiki.css',
+            content=wiki.process_markdown(entry.content),
+            title=f'{page.name} - Titanic! Wiki',
+            site_title=f'{page.name} - Titanic! Wiki',
+            site_url=f'/wiki/en/{path}',
+            canonical_url=f'/wiki/en/{path}',
+            requested_language=language,
+            language=entry.language
+        )
