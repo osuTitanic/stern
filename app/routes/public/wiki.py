@@ -1,5 +1,5 @@
 
-from flask import Blueprint, request, abort
+from flask import Blueprint, request, abort, redirect
 from datetime import datetime
 from app import wiki
 
@@ -16,8 +16,11 @@ valid_languages = (
     'tr', 'uk', 'vi', 'zh', 'zh-tw'
 )
 
-@router.get('/<language>')
 @router.get('/')
+def wiki_home_redirect():
+    return redirect('/wiki/en/')
+
+@router.get('/<language>/')
 def home_wiki_page(language: str = config.WIKI_DEFAULT_LANGUAGE):
     if language.lower() not in valid_languages:
         return abort(404)
@@ -28,7 +31,8 @@ def home_wiki_page(language: str = config.WIKI_DEFAULT_LANGUAGE):
         title='Home - Titanic! Wiki',
         site_title='Titanic! Wiki',
         canonical_url=f'/wiki/',
-        current_date=datetime.now()
+        current_date=datetime.now(),
+        language=language
     )
 
 @router.get('/<language>/<path:path>')
@@ -50,5 +54,6 @@ def wiki_page(path: str, language: str = config.WIKI_DEFAULT_LANGUAGE):
         title=f'{name} - Titanic! Wiki',
         site_title=f'{name} - Titanic! Wiki',
         site_url=f'/wiki/en/{path}',
-        canonical_url=f'/wiki/en/{path}'
+        canonical_url=f'/wiki/en/{path}',
+        language=language
     )
