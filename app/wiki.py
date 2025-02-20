@@ -204,4 +204,6 @@ def process_markdown(text: str) -> str:
 
 def get_page_name(path: str) -> str:
     """Get the name of the page from the path"""
-    return path.split('/')[-1].removesuffix('.md').replace('_', ' ').title()
+    return path.removesuffix('/').split('/')[-1] \
+               .removesuffix('.md').replace('_', ' ') \
+               .title()
