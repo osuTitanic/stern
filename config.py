@@ -53,6 +53,9 @@ OFFICER_WEBHOOK_URL = os.environ.get('OFFICER_WEBHOOK_URL')
 EVENT_WEBHOOK_URL = os.environ.get('EVENT_WEBHOOK_URL')
 DATA_PATH = os.path.abspath('.data')
 
+WIKI_BASEURL = os.environ.get('WIKI_BASEURL')
+WIKI_DEFAULT_LANGUAGE = os.environ.get('WIKI_DEFAULT_LANGUAGE')
+
 API_BASEURL = f'http{"s" if ENABLE_SSL else ""}://api.{DOMAIN_NAME}'
 OSU_BASEURL = f'http{"s" if ENABLE_SSL else ""}://osu.{DOMAIN_NAME}'
 STATIC_BASEURL = f'http{"s" if ENABLE_SSL else ""}://s.{DOMAIN_NAME}'
