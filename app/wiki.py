@@ -11,7 +11,25 @@ import config
 import app
 import re
 
-BASEURL = (
+GITHUB_BASEURL = (
+    f'https://github.com'
+    f'/{config.WIKI_REPOSITORY_OWNER}'
+    f'/{config.WIKI_REPOSITORY_NAME}'
+)
+
+BLOB_BASEURL = (
+    f'{GITHUB_BASEURL}/blob'
+    f'/{config.WIKI_REPOSITORY_BRANCH}'
+    f'/{config.WIKI_REPOSITORY_PATH}'
+)
+
+HISTORY_BASEURL = (
+    f'{GITHUB_BASEURL}/commits'
+    f'/{config.WIKI_REPOSITORY_BRANCH}'
+    f'/{config.WIKI_REPOSITORY_PATH}'
+)
+
+CONTENT_BASEURL = (
     f'https://raw.githubusercontent.com'
     f'/{config.WIKI_REPOSITORY_OWNER}'
     f'/{config.WIKI_REPOSITORY_NAME}'
@@ -65,7 +83,7 @@ def fetch_languages() -> Set[str]:
 def fetch_markdown(path: str, language: str) -> str | None:
     """Fetch the raw markdown text of a wiki page"""
     response = app.session.requests.get(
-        f'{BASEURL}/{path}/{language}.md',
+        f'{CONTENT_BASEURL}/{path}/{language}.md',
         allow_redirects=True
     )
 
