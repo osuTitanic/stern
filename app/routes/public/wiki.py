@@ -26,6 +26,9 @@ def home_wiki_page(language: str):
         site_title='Titanic! Wiki',
         canonical_url=f'/wiki/',
         current_date=datetime.now(),
+        source_url=wiki.GITHUB_BASEURL,
+        discussion_url=f'{wiki.GITHUB_BASEURL}/pulls',
+        history_url=wiki.HISTORY_BASEURL,
         requested_language=language
     )
 
@@ -66,5 +69,8 @@ def wiki_page(path: str, language: str = config.WIKI_DEFAULT_LANGUAGE):
             site_url=f'/wiki/en/{path}',
             canonical_url=f'/wiki/en/{path}',
             requested_language=language,
-            language=entry.language
+            language=entry.language,
+            source_url=f'{wiki.BLOB_BASEURL}/{path}/{entry.language}.md',
+            history_url=f'{wiki.HISTORY_BASEURL}/{path}/{entry.language}.md',
+            discussion_url=f'{wiki.GITHUB_BASEURL}/pulls?q={page.name}',
         )
