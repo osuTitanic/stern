@@ -26,7 +26,7 @@ LINK_REGEX = re.compile(
 logger = logging.getLogger("wiki")
 
 def fetch_page(path: str, language: str, session: Session) -> Tuple[DBWikiPage, DBWikiContent] | None:
-    """Fetch a wiki page"""
+    """Fetch a wiki page, or create it if it doesn't exist"""
     if not (page := wiki.fetch_page_by_name(get_page_name(path), session)):
         logger.info(f"Page '{path}' not found in database, creating...")
         return create_page(path, language, session)
@@ -70,7 +70,7 @@ def fetch_markdown(path: str, language: str) -> str | None:
     )
 
     if response.ok:
-        logger.info(f"Received markdown response ({len(response.text)} bytes)")
+        logger.debug(f"Received markdown response ({len(response.text)} bytes)")
         return response.text
 
     logger.error(f"Failed to fetch markdown '{response.url}' ({response.status_code})")
@@ -100,7 +100,7 @@ def create_page(path: str, language: str, session: Session) -> Tuple[DBWikiPage,
         f"Page '{path}' created in default language"
     )
 
-    outlinks = create_outlinks(
+    create_outlinks(
         page.id,
         default_content_markdown,
         session=session
@@ -138,7 +138,7 @@ def update_content(content: DBWikiContent, session: Session) -> DBWikiContent:
 
     if not content_markdown:
         return content
-    
+
     if content.content == content_markdown:
         return content
 
