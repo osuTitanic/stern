@@ -41,6 +41,10 @@ LINK_REGEX = re.compile(
     r"\[\[([^|\]]+)(?:\|([^\]]+))?\]\]"
 )
 
+MARKDOWN = markdown.Markdown(
+    extensions=['markdown.extensions.tables']
+)
+
 logger = logging.getLogger("wiki")
 
 def fetch_page(path: str, language: str, session: Session) -> Tuple[DBWikiPage, DBWikiContent] | None:
@@ -197,10 +201,7 @@ def create_outlinks(page_id: int, content: str, session: Session) -> List[DBWiki
 
 def process_markdown(text: str) -> str:
     """Process markdown text into HTML"""
-    return markdown.markdown(
-        text,
-        extensions=['markdown.extensions.tables']
-    )
+    return MARKDOWN.convert(text)
 
 def get_page_name(path: str) -> str:
     """Get the name of the page from the path"""
