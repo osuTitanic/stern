@@ -1,0 +1,34 @@
+{# templates/wiki.html #}
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="wiki-navigation">
+    {# TODO: Navigation Bar (Source, History, Discussion, ...) #}
+    <div class="left-navigation">
+        <a href="#" class="current">Wiki</a>
+        <a href="{{ discussion_url or '#' }}">Talk</a>
+    </div>
+    <div class="right-navigation">
+        <a href="#" class="current">Read</a>
+        <a href="{{ source_url or '#' }}">View Source</a>
+        <a href="{{ history_url or '#' }}">View History</a>
+        <div class="wiki-search">
+            <form>
+                {# TODO #}
+                <input type="text" name="q" placeholder="Search...">
+                <button type="submit">Go!</button>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="wiki-sidebar">
+    {# TODO: Sidebar "Contents" #}
+</div>
+<div class="wiki-content">
+    {% block content_extension %}
+    {% endblock content_extension %}
+    {{ content|safe }}
+    <br>
+</div>
+{% endblock content %}

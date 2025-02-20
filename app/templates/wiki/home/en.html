@@ -1,0 +1,25 @@
+{# templates/wiki_home.html #}
+
+{% extends 'wiki/content/en.html' %}
+
+{% block content_extension %}
+<div class="wiki-content">
+    <span class="wiki-welcome">
+        <h1>Main Page</h1>
+        <img src="/images/logo/main-vector.min.svg" alt="logo" width="40" height="40">
+        <h2><i>Welcome to the Titanic! Wiki, a collaborative compendium of all Titanic! things.</i></h2>
+    </span>
+    <div class="wiki-stats">
+        <span>We currently have <a href="#">0</a> articles and counting!</span>
+        <span>Today is {{ current_date.strftime("%A, %B %d, %Y") }}.</span>
+    </div>
+    <div class="wiki-categories">
+    {% if not categories %}
+        {# TODO #}
+        <span style="text-align: center; display: block; margin-top: 1em;">
+            There currently are no categories available. Please check back later!
+        </span>
+    {% endif %}
+    </div>
+</div>
+{% endblock content_extension %}
