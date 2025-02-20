@@ -1,21 +1,21 @@
-{# templates/content/en.html #}
+{# templates/content/de.html #}
 
 {% extends 'base.html' %}
 
 {% block content %}
 <div class="wiki-navigation">
     <div class="left-navigation">
-        <a href="#" class="current">Page</a>
-        <a href="{{ discussion_url or '#' }}">Talk</a>
+        <a href="#" class="current">Seite</a>
+        <a href="{{ discussion_url or '#' }}">Diskutiere</a>
     </div>
     <div class="right-navigation">
-        <a href="#" class="current">Read</a>
-        <a href="{{ source_url or '#' }}">View Source</a>
-        <a href="{{ history_url or '#' }}">View History</a>
+        <a href="#" class="current">Lese</a>
+        <a href="{{ source_url or '#' }}">Quelle ansehen</a>
+        <a href="{{ history_url or '#' }}">Versionshistorie ansehen</a>
         <div class="wiki-search">
             <form action="/wiki/en/search" method="get">
-                <input type="text" name="query" placeholder="Search...">
-                <button type="submit">Go!</button>
+                <input type="text" name="query" placeholder="Suche...">
+                <button type="submit">Los!</button>
             </form>
         </div>
     </div>

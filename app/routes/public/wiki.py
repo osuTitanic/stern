@@ -49,7 +49,7 @@ def wiki_search_page(language: str):
         requested_language=language
     )
 
-@router.get('/<language>/<path:path>')
+@router.get('/<language>/<path>')
 def wiki_page(path: str, language: str = config.WIKI_DEFAULT_LANGUAGE):
     if language.lower() not in valid_languages:
         return abort(404)

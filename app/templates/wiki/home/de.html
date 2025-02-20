@@ -1,0 +1,27 @@
+{# templates/home/de.html #}
+
+{% extends 'wiki/content/de.html' %}
+
+{% block content_extension %}
+<div class="wiki-content">
+    <span class="wiki-welcome">
+        <h1>Hauptseite</h1>
+        <img src="/images/logo/main-vector.min.svg" alt="logo" width="40" height="40">
+        <h2 style="font-size: 1.15em">
+            <i>Willkommen bei der Titanic! Wiki, einem kollaborativen Kompendium für alles rund um Titanic!</i>
+        </h2>
+    </span>
+    <div class="wiki-stats">
+        <span>Momentan haben wir <a href="#">0</a> Artikel, und es werden immer mehr!</span>
+        <span>Es ist {{ current_date.strftime("%A, %B %d, %Y") }}.</span>
+    </div>
+    <div class="wiki-categories">
+    {% if not categories %}
+        {# TODO #}
+        <span style="text-align: center; display: block; margin-top: 1em;">
+            Es sind noch keine Kategorien vorhanden, versuche es später nochmal!
+        </span>
+    {% endif %}
+    </div>
+</div>
+{% endblock content_extension %}

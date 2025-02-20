@@ -1,0 +1,25 @@
+{# templates/home/ru.html #}
+
+{% extends 'wiki/content/ru.html' %}
+
+{% block content_extension %}
+<div class="wiki-content">
+    <span class="wiki-welcome">
+        <h1>Главная страница</h1>
+        <img src="/images/logo/main-vector.min.svg" alt="logo" width="40" height="40">
+        <h2><i>Добро пожаловать на Titanic! Wiki, совместный сборник всего, что связано с Titanic!</i></h2>
+    </span>
+    <div class="wiki-stats">
+        <span>На данный момент у нас <a href="#">0</a> статей и их число растёт!</span>
+        <span>Сегодня {{ current_date.strftime("%A, %B %d, %Y") }}.</span>
+    </div>
+    <div class="wiki-categories">
+    {% if not categories %}
+        {# TODO #}
+        <span style="text-align: center; display: block; margin-top: 1em;">
+            В настоящее время нет доступных категорий. Пожалуйста, зайдите позже!
+        </span>
+    {% endif %}
+    </div>
+</div>
+{% endblock content_extension %}
