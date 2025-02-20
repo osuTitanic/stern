@@ -21,7 +21,7 @@ def wiki_home_redirect():
     return redirect('/wiki/en/')
 
 @router.get('/<language>/')
-def home_wiki_page(language: str = config.WIKI_DEFAULT_LANGUAGE):
+def home_wiki_page(language: str):
     if language.lower() not in valid_languages:
         return abort(404)
 
@@ -32,6 +32,23 @@ def home_wiki_page(language: str = config.WIKI_DEFAULT_LANGUAGE):
         site_title='Titanic! Wiki',
         canonical_url=f'/wiki/',
         current_date=datetime.now(),
+        language=language
+    )
+
+@router.get('/<language>/search/')
+def wiki_search_page(language: str):
+    if language.lower() not in valid_languages:
+        return abort(404)
+
+    query = request.args.get('query', None)
+
+    # TODO: Implement search functionality
+    return utils.render_template(
+        f'wiki/search/{language.lower()}.html',
+        css='wiki.css',
+        title=f'{query or "Search"} - Titanic! Wiki',
+        site_title='Titanic! Wiki',
+        canonical_url=f'/wiki/en/search',
         language=language
     )
 

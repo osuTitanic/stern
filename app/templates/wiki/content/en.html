@@ -14,9 +14,9 @@
         <a href="{{ source_url or '#' }}">View Source</a>
         <a href="{{ history_url or '#' }}">View History</a>
         <div class="wiki-search">
-            <form>
+            <form action="/wiki/{{ language }}/search" method="get">
                 {# TODO #}
-                <input type="text" name="q" placeholder="Search...">
+                <input type="text" name="query" placeholder="Search...">
                 <button type="submit">Go!</button>
             </form>
         </div>
