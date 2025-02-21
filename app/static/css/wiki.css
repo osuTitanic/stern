@@ -94,21 +94,6 @@
     font-size: 0.95em;
 }
 
-.wiki-categories th {
-    margin-top: 10px;
-}
-
-.wiki-categories tr > th {
-    background-color: #bbf;
-    padding: 2.5px;
-}
-
-.wiki-categories tr > td {
-    font-size: 0.95em;
-    padding: 5px;
-    padding-bottom: 15px;
-}
-
 .wiki-content {
     padding-top: 5px;
     padding-left: 15px;
@@ -223,4 +208,43 @@
     padding-left: 8px;
     padding-right: 8px;
     border: 1px solid #aaa;
+}
+
+.wiki-categories table {
+    border-collapse: separate;
+    margin-bottom: 0;
+    background-color: transparent;
+    border: none;
+}
+
+.wiki-categories table th {
+    background-color: transparent;
+    padding: 0;
+}
+
+.wiki-categories table tr {
+    padding: 0;
+    border: none;
+}
+
+.wiki-categories table td {
+    padding: 0;
+    border: none;
+}
+
+.wiki-categories table th {
+    background-color: initial;
+    margin-top: 10px;
+    padding: 0;
+}
+
+.wiki-categories table tr > th {
+    background-color: #bbf;
+    padding: 2.5px;
+}
+
+.wiki-categories table tr > td {
+    font-size: 0.95em;
+    padding: 5px;
+    padding-bottom: 15px;
 }
