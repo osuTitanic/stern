@@ -48,7 +48,8 @@ def wiki_search_page(language: str):
         site_title='Titanic! Wiki',
         canonical_url=f'/wiki/en/search',
         requested_language=language,
-        language=language
+        language=language,
+        search_query=query
     )
 
 @router.get('/<language>/<path>')
