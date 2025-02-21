@@ -56,7 +56,7 @@ def wiki_search_page(language: str):
         search_query=query
     )
 
-@router.get('/<language>/<path>')
+@router.get('/<language>/<path:path>')
 def wiki_page(path: str, language: str = config.WIKI_DEFAULT_LANGUAGE):
     if language.lower() not in wiki.LANGUAGES:
         return abort(404)
