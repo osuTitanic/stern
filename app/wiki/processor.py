@@ -1,5 +1,5 @@
 
-from app.wiki.extensions.wikilinks import WikiLinks
+from app.wiki.extensions import WikiLinks
 from markdown import Markdown
 
 MarkdownInstance = Markdown(
@@ -17,7 +17,6 @@ MarkdownInstance = Markdown(
         'markdown.extensions.toc': {
             'title': 'Contents',
             'marker': '[TOC]',
-            'toc_depth': '2-6',
         },
         'markdown.extensions.footnotes': {
             'PLACE_MARKER': '// Footnotes //',
