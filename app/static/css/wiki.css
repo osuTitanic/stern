@@ -75,6 +75,7 @@
     padding: 10px;
     display: flex;
     justify-content: space-around;
+    margin-bottom: 15px !important;
 }
 
 .wiki-warning {
@@ -86,6 +87,26 @@
     background-color: #f78ecd;
     border-bottom: 1px solid #62b5c4;
     font-size: 0.9em;
+}
+
+.wiki-categories {
+    text-align: center;
+    font-size: 0.95em;
+}
+
+.wiki-categories th {
+    margin-top: 10px;
+}
+
+.wiki-categories tr > th {
+    background-color: #bbf;
+    padding: 2.5px;
+}
+
+.wiki-categories tr > td {
+    font-size: 0.95em;
+    padding: 5px;
+    padding-bottom: 15px;
 }
 
 .wiki-content {

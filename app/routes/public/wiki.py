@@ -28,6 +28,7 @@ def home_wiki_page(language: str):
         source_url=wiki.GITHUB_BASEURL,
         discussion_url=f'{wiki.GITHUB_BASEURL}/pulls',
         history_url=wiki.HISTORY_BASEURL,
+        available_languages=wiki.LANGUAGE_NAMES,
         requested_language=language,
         language=language
     )

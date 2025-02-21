@@ -9,7 +9,8 @@ __all__ = [
     'CREATE_BASEURL',
     'CONTENT_BASEURL',
     'LINK_REGEX',
-    'LANGUAGES'
+    'LANGUAGES',
+    'LANGUAGE_NAMES'
 ]
 
 GITHUB_BASEURL = (
@@ -51,3 +52,10 @@ LINK_REGEX = re.compile(
 LANGUAGES = (
     'en', 'ru', 'de', 'pl'
 )
+
+LANGUAGE_NAMES = {
+    'en': 'English',
+    'ru': 'Русский',
+    'de': 'Deutsch',
+    'pl': 'Polski'
+}
