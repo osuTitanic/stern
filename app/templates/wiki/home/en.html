@@ -27,17 +27,31 @@
                     If you're passionate about the project, use your account to start contributing today!
                 </td>
             </tr>
+        </tbody>
+    </table>
+    <table width="50%" style="float: right;">
+        <tbody>
             <tr>
                 <th>Other Languages</th>
             </tr>
             <tr>
                 <td>
-                    <ul>
                     {% for code, language in available_languages.items() %}
                     <a href="/wiki/{{ code }}">{{ language }}</a>
                     {% if not loop.last %}<b>•</b>{% endif %}
                     {% endfor %}
-                    </ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table width="50%" style="float: left;">
+        <tbody>
+            <tr>
+                <th>Categories</th>
+            </tr>
+            <tr>
+                <td>
+                    There currently are no categories available. Please check back later!
                 </td>
             </tr>
         </tbody>
