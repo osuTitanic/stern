@@ -33,10 +33,3 @@ MarkdownInstance = Markdown(
 def process_markdown(text: str) -> str:
     """Process markdown text into HTML"""
     return MarkdownInstance.convert(text)
-
-def insert_toc(text: str) -> str:
-    """Insert a table of contents into the text"""
-    lines = text.split('\n')
-    header = lines[0]
-    toc = "[TOC]\n"
-    return '\n'.join([header, toc] + lines[1:])
