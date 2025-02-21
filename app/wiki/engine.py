@@ -121,6 +121,10 @@ def update_content(content: DBWikiContent, session: Session) -> DBWikiContent:
     )
 
     if not content_markdown:
+        # Content was deleted -> remove entry & page
+        wiki.delete_outlinks(content.page_id, session)
+        wiki.delete_content(content.page_id, session)
+        wiki.delete_page(content.page_id, session)
         return content
 
     if content.content == content_markdown:
