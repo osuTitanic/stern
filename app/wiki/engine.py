@@ -21,7 +21,7 @@ def fetch_page(path: str, language: str, session: Session) -> Tuple[DBWikiPage, 
     default_content = wiki.fetch_content(
         page.id,
         config.WIKI_DEFAULT_LANGUAGE,
-        session
+        session=session
     )
 
     if language == config.WIKI_DEFAULT_LANGUAGE:
@@ -128,18 +128,20 @@ def update_content(content: DBWikiContent, session: Session) -> DBWikiContent:
         wiki.delete_page(content.page_id, session)
         return content
 
-    if content.content == content_markdown:
-        return content
-
     wiki.update_content(
         content.page_id,
         content.language,
         content_markdown,
         parse_title(content_markdown),
-        session
+        session=session
     )
 
-    create_outlinks(content.page_id, content_markdown, session)
+    create_outlinks(
+        content.page_id,
+        content_markdown,
+        session=session
+    )
+
     content.content = content_markdown
     return content
 

@@ -18,7 +18,7 @@ def wiki_home_redirect():
 def home_wiki_page(language: str):
     if language.lower() not in wiki.LANGUAGES:
         return abort(404)
-    
+
     available_languages = copy(wiki.LANGUAGE_NAMES)
     available_languages.pop(language.lower())
 
