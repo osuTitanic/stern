@@ -29,6 +29,12 @@ HISTORY_BASEURL = (
     f'/{config.WIKI_REPOSITORY_PATH}'
 )
 
+CREATE_BASEURL = (
+    f'{GITHUB_BASEURL}/new'
+    f'/{config.WIKI_REPOSITORY_BRANCH}'
+    f'/{config.WIKI_REPOSITORY_PATH}'
+)
+
 CONTENT_BASEURL = (
     f'https://raw.githubusercontent.com'
     f'/{config.WIKI_REPOSITORY_OWNER}'

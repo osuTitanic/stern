@@ -23,6 +23,14 @@
 <div class="wiki-sidebar">
     {# TODO: Sidebar "Contents" #}
 </div>
+{% if language != requested_language %}
+<div class="wiki-warning">
+    <p>
+        Эта страница недоступна на вашем языке.
+        Вы можете <a href="{{ translation_url }}">перевести</a> её, чтобы сделать её доступной.
+    </p>
+</div>
+{% endif %}
 <div class="wiki-content">
     {% block content_extension %}
     {% endblock content_extension %}
