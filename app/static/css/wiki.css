@@ -161,18 +161,22 @@
 }
 
 .wiki-content h3 {
-    font-size: 1.3em;
+    font-size: 1.25em;
     margin-top: 0.7em;
     margin-bottom: 0.4em;
     color: #cc2e8a;
     font-weight: normal;
+    padding-left: 2px;
+    padding-right: 2px;
 }
 
 .wiki-content h4 {
-    font-size: 1.2em;
+    font-size: 1em;
     margin-top: 0.7em;
     margin-bottom: 0.4em;
     font-weight: normal;
+    padding-left: 4px;
+    padding-right: 4px;
 }
 
 .wiki-content hr {
