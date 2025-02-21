@@ -33,4 +33,5 @@ MarkdownInstance = Markdown(
 
 def process_markdown(text: str) -> str:
     """Process markdown text into HTML"""
+    MarkdownInstance.reset()
     return MarkdownInstance.convert(text)
