@@ -8,7 +8,6 @@ import utils
 import app
 
 router = Blueprint('wiki', __name__)
-valid_languages = wiki.fetch_languages()
 
 @router.get('/')
 def wiki_home_redirect():
@@ -16,7 +15,7 @@ def wiki_home_redirect():
 
 @router.get('/<language>/')
 def home_wiki_page(language: str):
-    if language.lower() not in valid_languages:
+    if language.lower() not in wiki.LANGUAGES:
         return abort(404)
 
     return utils.render_template(
@@ -35,7 +34,7 @@ def home_wiki_page(language: str):
 
 @router.get('/<language>/search/')
 def wiki_search_page(language: str):
-    if language.lower() not in valid_languages:
+    if language.lower() not in wiki.LANGUAGES:
         return abort(404)
 
     query = request.args.get('query', None)
@@ -54,7 +53,7 @@ def wiki_search_page(language: str):
 
 @router.get('/<language>/<path>')
 def wiki_page(path: str, language: str = config.WIKI_DEFAULT_LANGUAGE):
-    if language.lower() not in valid_languages:
+    if language.lower() not in wiki.LANGUAGES:
         return abort(404)
 
     with app.session.database.managed_session() as session:

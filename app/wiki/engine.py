@@ -1,55 +1,14 @@
 
 from __future__ import annotations
 from app.common.database import DBWikiPage, DBWikiContent, wiki
+from app.wiki.constants import CONTENT_BASEURL, LINK_REGEX
 from app.common.helpers import caching
 from typing import Set, Tuple, List
 from sqlalchemy.orm import Session
 
-import markdown
 import logging
 import config
 import app
-import re
-
-GITHUB_BASEURL = (
-    f'https://github.com'
-    f'/{config.WIKI_REPOSITORY_OWNER}'
-    f'/{config.WIKI_REPOSITORY_NAME}'
-)
-
-BLOB_BASEURL = (
-    f'{GITHUB_BASEURL}/blob'
-    f'/{config.WIKI_REPOSITORY_BRANCH}'
-    f'/{config.WIKI_REPOSITORY_PATH}'
-)
-
-HISTORY_BASEURL = (
-    f'{GITHUB_BASEURL}/commits'
-    f'/{config.WIKI_REPOSITORY_BRANCH}'
-    f'/{config.WIKI_REPOSITORY_PATH}'
-)
-
-CREATE_BASEURL = (
-    f'{GITHUB_BASEURL}/new'
-    f'/{config.WIKI_REPOSITORY_BRANCH}'
-    f'/{config.WIKI_REPOSITORY_PATH}'
-)
-
-CONTENT_BASEURL = (
-    f'https://raw.githubusercontent.com'
-    f'/{config.WIKI_REPOSITORY_OWNER}'
-    f'/{config.WIKI_REPOSITORY_NAME}'
-    f'/{config.WIKI_REPOSITORY_BRANCH}'
-    f'/{config.WIKI_REPOSITORY_PATH}'
-)
-
-LINK_REGEX = re.compile(
-    r"\[\[([^|\]]+)(?:\|([^\]]+))?\]\]"
-)
-
-MARKDOWN = markdown.Markdown(
-    extensions=['markdown.extensions.tables']
-)
 
 logger = logging.getLogger("wiki")
 
@@ -84,10 +43,6 @@ def fetch_page(path: str, language: str, session: Session) -> Tuple[DBWikiPage, 
         return page, content
     
     return page, update_content(content, session)
-
-def fetch_languages() -> Set[str]:
-    """Get a list of available languages"""
-    return ('en', 'ru', 'de', 'pl')
 
 @caching.ttl_cache(ttl=60*5)
 def fetch_markdown(path: str, language: str) -> str | None:
@@ -205,10 +160,6 @@ def create_outlinks(page_id: int, content: str, session: Session) -> List[DBWiki
         )
 
     return pages
-
-def process_markdown(text: str) -> str:
-    """Process markdown text into HTML"""
-    return MARKDOWN.convert(text)
 
 def get_page_name(path: str) -> str:
     """Get the name of the page from the path"""

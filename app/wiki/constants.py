@@ -1,0 +1,53 @@
+
+import config
+import re
+
+__all__ = [
+    'GITHUB_BASEURL',
+    'BLOB_BASEURL',
+    'HISTORY_BASEURL',
+    'CREATE_BASEURL',
+    'CONTENT_BASEURL',
+    'LINK_REGEX',
+    'LANGUAGES'
+]
+
+GITHUB_BASEURL = (
+    f'https://github.com'
+    f'/{config.WIKI_REPOSITORY_OWNER}'
+    f'/{config.WIKI_REPOSITORY_NAME}'
+)
+
+BLOB_BASEURL = (
+    f'{GITHUB_BASEURL}/blob'
+    f'/{config.WIKI_REPOSITORY_BRANCH}'
+    f'/{config.WIKI_REPOSITORY_PATH}'
+)
+
+HISTORY_BASEURL = (
+    f'{GITHUB_BASEURL}/commits'
+    f'/{config.WIKI_REPOSITORY_BRANCH}'
+    f'/{config.WIKI_REPOSITORY_PATH}'
+)
+
+CREATE_BASEURL = (
+    f'{GITHUB_BASEURL}/new'
+    f'/{config.WIKI_REPOSITORY_BRANCH}'
+    f'/{config.WIKI_REPOSITORY_PATH}'
+)
+
+CONTENT_BASEURL = (
+    f'https://raw.githubusercontent.com'
+    f'/{config.WIKI_REPOSITORY_OWNER}'
+    f'/{config.WIKI_REPOSITORY_NAME}'
+    f'/{config.WIKI_REPOSITORY_BRANCH}'
+    f'/{config.WIKI_REPOSITORY_PATH}'
+)
+
+LINK_REGEX = re.compile(
+    r"\[\[([^|\]]+)(?:\|([^\]]+))?\]\]"
+)
+
+LANGUAGES = (
+    'en', 'ru', 'de', 'pl'
+)
