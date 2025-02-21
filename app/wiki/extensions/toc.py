@@ -11,7 +11,12 @@ class Treeprocessor(TocTreeprocessor):
 
         # Remove first element of toc_list, to
         # remove the title of the article
-        toc_list.pop(0)
+        element = toc_list.pop(0)
+
+        # Append remaining children to toc_list
+        toc_list.extend(element['children'])
+
+        # Continue with the original method
         return super().build_toc_div(toc_list)
 
 TocExtension.TreeProcessorClass = Treeprocessor
