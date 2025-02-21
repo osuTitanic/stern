@@ -24,6 +24,12 @@ def fetch_page(path: str, language: str, session: Session) -> Tuple[DBWikiPage, 
         session=session
     )
 
+    if not default_content:
+        logger.error(f"Default content for page '{path}' not found, recreating...")
+        wiki.delete_outlinks(page.id, session)
+        wiki.delete_page(page.id, session)
+        return create_page(path, language, session)
+
     if language == config.WIKI_DEFAULT_LANGUAGE:
         return page, update_content(default_content, session)
 
