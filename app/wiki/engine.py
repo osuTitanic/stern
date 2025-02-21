@@ -36,6 +36,7 @@ def fetch_page(path: str, language: str, session: Session) -> Tuple[DBWikiPage, 
         
         content = wiki.create_content_entry(
             page.id,
+            parse_title(content_markdown),
             content_markdown,
             language,
             session=session
@@ -105,7 +106,7 @@ def create_page(path: str, language: str, session: Session) -> Tuple[DBWikiPage,
 
     content = wiki.create_content_entry(
         page.id,
-        page.name,
+        parse_title(content_markdown),
         content_markdown,
         language,
         session=session
@@ -134,6 +135,7 @@ def update_content(content: DBWikiContent, session: Session) -> DBWikiContent:
         content.page_id,
         content.language,
         content_markdown,
+        parse_title(content_markdown),
         session
     )
 
@@ -177,3 +179,7 @@ def sanitize_markdown(text: str) -> str:
         .strip(b'\xef\xbb\xbf') \
         .strip(b'\ufeff').strip(b'\n') \
         .decode('utf-8')
+
+def parse_title(text: str) -> str:
+    """Parse the title of a wiki page"""
+    return text.split('\n')[0].lstrip('#').strip()
