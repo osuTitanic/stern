@@ -188,7 +188,6 @@
 }
 
 .wiki-content img {
-    width: 90%;
-    height: 100%;
+    max-width: 600px;
     text-decoration: none;
 }
