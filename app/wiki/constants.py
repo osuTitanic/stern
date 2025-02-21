@@ -40,7 +40,7 @@ CREATE_BASEURL = (
 CONTENT_BASEURL = (
     f'https://raw.githubusercontent.com'
     f'/{config.WIKI_REPOSITORY_OWNER}'
-    f'/{config.WIKI_REPOSITORY_NAME}'
+    f'/{config.WIKI_REPOSITORY_NAME}/refs/heads'
     f'/{config.WIKI_REPOSITORY_BRANCH}'
     f'/{config.WIKI_REPOSITORY_PATH}'
 )

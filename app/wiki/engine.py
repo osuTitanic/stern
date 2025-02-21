@@ -114,36 +114,39 @@ def create_page(path: str, language: str, session: Session) -> Tuple[DBWikiPage,
 
     return page, content
 
-def update_content(content: DBWikiContent, session: Session) -> DBWikiContent:
+def update_content(entry: DBWikiContent, session: Session) -> DBWikiContent:
     """Update the content of a wiki page"""
     content_markdown = fetch_markdown(
-        content.page.name,
-        content.language
+        entry.page.name,
+        entry.language
     )
 
     if not content_markdown:
         # Content was deleted -> remove entry & page
-        wiki.delete_outlinks(content.page_id, session)
-        wiki.delete_content(content.page_id, session)
-        wiki.delete_page(content.page_id, session)
-        return content
+        wiki.delete_outlinks(entry.page_id, session)
+        wiki.delete_content(entry.page_id, session)
+        wiki.delete_page(entry.page_id, session)
+        return entry
+
+    if content_markdown == entry.content:
+        return entry
 
     wiki.update_content(
-        content.page_id,
-        content.language,
+        entry.page_id,
+        entry.language,
         content_markdown,
         parse_title(content_markdown),
         session=session
     )
 
     create_outlinks(
-        content.page_id,
+        entry.page_id,
         content_markdown,
         session=session
     )
 
-    content.content = content_markdown
-    return content
+    entry.content = content_markdown
+    return entry
 
 def create_outlinks(page_id: int, content: str, session: Session) -> List[DBWikiPage]:
     """Scan for outlinks, and return associated pages"""
