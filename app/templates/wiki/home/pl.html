@@ -1,0 +1,25 @@
+{# templates/home/pl.html #}
+
+{% extends 'wiki/content/pl.html' %}
+
+{% block content_extension %}
+<div class="wiki-content">
+    <span class="wiki-welcome">
+        <h1>Strona główna</h1>
+        <img src="/images/logo/main-vector.min.svg" alt="logo" width="40" height="40">
+        <h2><i>Witamy na Titanic! Wiki, wspólnym kompendium wszystkiego o serwerze Titanic!</i></h2>
+    </span>
+    <div class="wiki-stats">
+        <span>Obecnie mamy <a href="#">0</a> artykułów i ich liczba ciągle rośnie!</span>
+        <span>Dzisiaj jest {{ current_date.strftime("%A, %B %d, %Y") }}.</span>
+    </div>
+    <div class="wiki-categories">
+    {% if not categories %}
+        {# TODO #}
+        <span style="text-align: center; display: block; margin-top: 1em;">
+            Obecnie nie ma dostępnych kategorii. Sprawdź później!
+        </span>
+    {% endif %}
+    </div>
+</div>
+{% endblock content_extension %}

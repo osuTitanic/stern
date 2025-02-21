@@ -14,7 +14,7 @@
         <a href="{{ history_url or '#' }}">Посмотреть историю</a>
         <div class="wiki-search">
             <form action="/wiki/ru/search" method="get">
-                <input type="text" name="query" placeholder="Найти...">
+                <input type="text" name="query" placeholder="Найти..." {% if search_query %}value="{{ search_query }}"{% endif %}>
                 <button type="submit">Идти!</button>
             </form>
         </div>

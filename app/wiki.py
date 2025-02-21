@@ -87,7 +87,7 @@ def fetch_page(path: str, language: str, session: Session) -> Tuple[DBWikiPage, 
 
 def fetch_languages() -> Set[str]:
     """Get a list of available languages"""
-    return ('en', 'ru', 'de')
+    return ('en', 'ru', 'de', 'pl')
 
 @caching.ttl_cache(ttl=60*5)
 def fetch_markdown(path: str, language: str) -> str | None:

@@ -13,8 +13,8 @@
         <a href="{{ source_url or '#' }}">Quelltext</a>
         <a href="{{ history_url or '#' }}">Versionshistorie</a>
         <div class="wiki-search">
-            <form action="/wiki/en/search" method="get">
-                <input type="text" name="query" placeholder="Suche...">
+            <form action="/wiki/de/search" method="get">
+                <input type="text" name="query" placeholder="Suche..." {% if search_query %}value="{{ search_query }}"{% endif %}>
                 <button type="submit">Los!</button>
             </form>
         </div>

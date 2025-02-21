@@ -14,7 +14,7 @@
         <a href="{{ history_url or '#' }}">View History</a>
         <div class="wiki-search">
             <form action="/wiki/en/search" method="get">
-                <input type="text" name="query" placeholder="Search...">
+                <input type="text" name="query" placeholder="Search..." {% if search_query %}value="{{ search_query }}"{% endif %}>
                 <button type="submit">Go!</button>
             </form>
         </div>
