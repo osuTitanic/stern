@@ -20,6 +20,7 @@ MarkdownInstance = Markdown(
         },
         'markdown.extensions.footnotes': {
             'PLACE_MARKER': '// Footnotes //',
+            'UNIQUE_IDS': True,
         },
         'app.wiki.extensions.wikilinks': {
             'base_url': '/wiki/',
