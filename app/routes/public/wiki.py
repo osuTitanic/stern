@@ -1,6 +1,7 @@
 
 from flask import Blueprint, request, abort, redirect
 from datetime import datetime
+from copy import copy
 from app import wiki
 
 import config
@@ -17,6 +18,9 @@ def wiki_home_redirect():
 def home_wiki_page(language: str):
     if language.lower() not in wiki.LANGUAGES:
         return abort(404)
+    
+    available_languages = copy(wiki.LANGUAGE_NAMES)
+    available_languages.pop(language.lower())
 
     return utils.render_template(
         f'wiki/home/{language.lower()}.html',
@@ -28,7 +32,7 @@ def home_wiki_page(language: str):
         source_url=wiki.GITHUB_BASEURL,
         discussion_url=f'{wiki.GITHUB_BASEURL}/pulls',
         history_url=wiki.HISTORY_BASEURL,
-        available_languages=wiki.LANGUAGE_NAMES,
+        available_languages=available_languages,
         requested_language=language,
         language=language
     )

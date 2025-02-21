@@ -14,12 +14,48 @@
         <span>Сегодня {{ current_date.strftime("%A, %B %d, %Y") }}.</span>
     </div>
     <div class="wiki-categories">
-    {% if not categories %}
-        {# TODO #}
-        <span style="text-align: center; display: block; margin-top: 1em;">
-            В настоящее время нет доступных категорий. Пожалуйста, зайдите позже!
-        </span>
-    {% endif %}
+        <table>
+            <tbody>
+                <tr>
+                    <th>Общее описание</th>
+                </tr>
+                <tr>
+                    <td>
+                        Titanic! Wiki — это проект, созданный сообществом преданных участников Titanic!.
+                        Наша цель — создать лучший источник информации обо всём, что связано с Titanic!.
+                        Однако мы не справимся в одиночку — <b>нам нужна ваша помощь!</b>
+                        Если вы увлечены этим проектом, используйте свои знания и начните вносить вклад уже сегодня!
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <table width="50%" style="float: right;">
+            <tbody>
+                <tr>
+                    <th>Другие языки</th>
+                </tr>
+                <tr>
+                    <td>
+                        {% for code, language in available_languages.items() %}
+                            <a href="/wiki/{{ code }}">{{ language }}</a>
+                            {% if not loop.last %}<b>•</b>{% endif %}
+                        {% endfor %}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <table width="50%" style="float: left;">
+            <tbody>
+                <tr>
+                    <th>Категории</th>
+                </tr>
+                <tr>
+                    <td>
+                        В настоящее время нет доступных категорий. Пожалуйста, зайдите позже!
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 {% endblock content_extension %}
