@@ -103,9 +103,20 @@
     border: 1px solid #aaa;
     background-color: #f9f9f9;
     padding: 5px;
-    width: 40%;
+    max-width: 40%;
+    min-width: 30%;
     margin-top: 10px;
     margin-bottom: 10px;
+    font-size: 0.9em;
+}
+
+.wiki-content .toctitle {
+    color: #cc2e8a;
+    text-align: center;
+    padding: 2.5px;
+    display: block;
+    text-shadow: #efcfe1 0px 0px 10px;
+    font-size: 1.1em;
 }
 
 .wiki-content .toc ul {

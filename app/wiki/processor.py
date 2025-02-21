@@ -7,7 +7,12 @@ MARKDOWN = markdown.Markdown(
         'markdown.extensions.fenced_code',
         'markdown.extensions.codehilite',
         'markdown.extensions.toc',
-    ]
+    ],
+    extension_configs={
+        'markdown.extensions.toc': {
+            'title': 'Contents',
+        }
+    }
 )
 
 def process_markdown(text: str) -> str:
