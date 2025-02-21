@@ -189,9 +189,38 @@
 .wiki-content p {
     font-size: 0.85em;
     padding: 1px;
+    overflow: hidden;
 }
 
 .wiki-content img {
     max-width: 600px;
     text-decoration: none;
+}
+
+.wiki-content table {
+    border-collapse: collapse;
+    margin-bottom: 15px;
+    background-color: #f9f9f9;
+    border: 1px solid #aaa;
+}
+
+.wiki-content table th {
+    background-color: #f2f2f2;
+    padding: 2.5px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.wiki-content table tr {
+    padding: 5px;
+    padding-left: 8px;
+    padding-right: 8px;
+    border: 1px solid #aaa;
+}
+
+.wiki-content table td {
+    padding: 5px;
+    padding-left: 8px;
+    padding-right: 8px;
+    border: 1px solid #aaa;
 }
