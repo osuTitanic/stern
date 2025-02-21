@@ -84,6 +84,8 @@
     padding-bottom: 5px;
     text-align: center;
     background-color: #f78ecd;
+    border-bottom: 1px solid #62b5c4;
+    font-size: 0.9em;
 }
 
 .wiki-content {
