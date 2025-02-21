@@ -48,13 +48,13 @@ def fetch_page(path: str, language: str, session: Session) -> Tuple[DBWikiPage, 
 def fetch_markdown(path: str, language: str) -> str | None:
     """Fetch the raw markdown text of a wiki page"""
     response = app.session.requests.get(
-        f'{CONTENT_BASEURL}/{path}/{language}.md',
+        f'{CONTENT_BASEURL}/{path.replace(" ", "_")}/{language}.md',
         allow_redirects=True
     )
 
     if response.ok:
         logger.debug(f"Received markdown response ({len(response.text)} bytes)")
-        return response.text
+        return sanitize_markdown(response.text)
 
     logger.error(f"Failed to fetch markdown '{response.url}' ({response.status_code})")
     return None
@@ -170,3 +170,10 @@ def get_page_name(path: str) -> str:
     return path.removesuffix('/').split('/')[-1] \
                .removesuffix('.md').replace('_', ' ') \
                .title()
+
+def sanitize_markdown(text: str) -> str:
+    """Sanitize markdown text"""
+    return text.encode().strip() \
+        .strip(b'\xef\xbb\xbf') \
+        .strip(b'\ufeff').strip(b'\n') \
+        .decode('utf-8')
