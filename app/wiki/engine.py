@@ -29,7 +29,7 @@ def fetch_page(path: str, language: str, session: Session) -> Tuple[DBWikiPage, 
 
     if not (content := wiki.fetch_content(page.id, language, session)):
         # Try to create content in the requested language
-        content_markdown = fetch_markdown(path, language)
+        content_markdown = fetch_markdown_cached(path, language)
 
         if not content_markdown:
             return page, default_content
@@ -46,6 +46,10 @@ def fetch_page(path: str, language: str, session: Session) -> Tuple[DBWikiPage, 
     return page, update_content(content, session)
 
 @caching.ttl_cache(ttl=60*5)
+def fetch_markdown_cached(path: str, language: str) -> str | None:
+    """Fetch the raw markdown text of a wiki page, with caching"""
+    return fetch_markdown(path, language)
+
 def fetch_markdown(path: str, language: str) -> str | None:
     """Fetch the raw markdown text of a wiki page"""
     response = app.session.requests.get(
@@ -65,7 +69,7 @@ def create_page(path: str, language: str, session: Session) -> Tuple[DBWikiPage,
     logger.info(f"Creating page '{path}' in language '{language}'")
 
     # Check if page is available in default language
-    default_content_markdown = fetch_markdown(
+    default_content_markdown = fetch_markdown_cached(
         path, config.WIKI_DEFAULT_LANGUAGE
     )
 
@@ -94,7 +98,7 @@ def create_page(path: str, language: str, session: Session) -> Tuple[DBWikiPage,
         return page, default_content
 
     # Check if page is available in requested language
-    content_markdown = fetch_markdown(path, language)
+    content_markdown = fetch_markdown_cached(path, language)
 
     if not content_markdown:
         logger.info(f"Page '{path}' is only available in default language")
@@ -114,9 +118,14 @@ def create_page(path: str, language: str, session: Session) -> Tuple[DBWikiPage,
 
     return page, content
 
-def update_content(entry: DBWikiContent, session: Session) -> DBWikiContent:
+def update_content(entry: DBWikiContent, session: Session, no_cache: bool = False) -> DBWikiContent:
     """Update the content of a wiki page"""
-    content_markdown = fetch_markdown(
+    markdown_resolver = (
+        fetch_markdown_cached
+        if not no_cache else fetch_markdown
+    )
+
+    content_markdown = markdown_resolver(
         entry.page.name,
         entry.language
     )
