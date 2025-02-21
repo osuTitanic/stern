@@ -1,0 +1,226 @@
+@import url('main.css');
+
+.top {
+    margin-bottom: 0px;
+}
+
+.page {
+    margin: 0;
+    padding: 0;
+}
+
+.wiki-navigation {
+    border-bottom: 1px solid #62b5c4;
+    background-color: #f5f5ff;
+    padding-left: 40px;
+    padding-right: 10px;
+    height: 30px;
+    font-size: 0.75em;
+}
+
+.wiki-navigation a {
+    background: linear-gradient(to bottom, #f9f9ff 10%, #e8e8ff 100%);
+    display: inline-block;
+    border: 1px solid #62b5c4;
+    border-top: none;
+    border-bottom: none;
+    height: 30px;
+    line-height: 35px;
+    padding-left: 5px;
+    padding-right: 5px;
+    color: #0645ad;
+}
+
+.wiki-navigation .current {
+    background: white;
+    background-color: white;
+    height: 30px;
+    color: black;
+}
+
+.wiki-navigation .left-navigation {
+    margin-left: 15px;
+    float: left;
+}
+
+.wiki-navigation .right-navigation {
+    text-align: right;
+}
+
+.wiki-search {
+    float: right;
+    line-height: 32px;
+    margin-left: 8px;
+}
+
+.wiki-welcome {
+    font-size: 1.2em !important;
+}
+
+.wiki-welcome img {
+    float: left;
+    width: 40px !important;
+    height: 40px !important;
+}
+
+.wiki-welcome h2 {
+    color: black !important;
+    text-align: center !important;
+    line-height: 45px !important;
+}
+
+.wiki-stats {
+    font-size: 0.85em;
+    border-bottom: 3px double #cccccc;
+    padding: 10px;
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 15px !important;
+}
+
+.wiki-warning {
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 10px;
+    padding-bottom: 5px;
+    text-align: center;
+    background-color: #f78ecd;
+    border-bottom: 1px solid #62b5c4;
+    font-size: 0.9em;
+}
+
+.wiki-categories {
+    text-align: center;
+    font-size: 0.95em;
+}
+
+.wiki-categories th {
+    margin-top: 10px;
+}
+
+.wiki-categories tr > th {
+    background-color: #bbf;
+    padding: 2.5px;
+}
+
+.wiki-categories tr > td {
+    font-size: 0.95em;
+    padding: 5px;
+    padding-bottom: 15px;
+}
+
+.wiki-content {
+    padding-top: 5px;
+    padding-left: 15px;
+    padding-right: 15px;
+    font-size: 0.9em;
+}
+
+.wiki-content * {
+    margin-bottom: 4px;
+}
+
+.wiki-content .toc {
+    border: 1px solid #aaa;
+    background-color: #f9f9f9;
+    padding: 5px;
+    max-width: 40%;
+    min-width: 30%;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    font-size: 0.9em;
+}
+
+.wiki-content .toctitle {
+    color: #cc2e8a;
+    text-align: center;
+    padding: 2.5px;
+    display: block;
+    text-shadow: #efcfe1 0px 0px 10px;
+    font-size: 1.1em;
+}
+
+.wiki-content .toc ul {
+    margin-left: -15px;
+}
+
+.wiki-content h1 {
+    font-size: 1.6em;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    color: #cc2e8a;
+    font-weight: normal;
+}
+
+.wiki-content h2 {
+    font-size: 1.4em;
+    margin-top: 0.7em;
+    margin-bottom: 0.4em;
+    color: #cc2e8a;
+    font-weight: normal;
+}
+
+.wiki-content h3 {
+    font-size: 1.25em;
+    margin-top: 0.7em;
+    margin-bottom: 0.4em;
+    color: #cc2e8a;
+    font-weight: normal;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+.wiki-content h4 {
+    font-size: 1em;
+    margin-top: 0.7em;
+    margin-bottom: 0.4em;
+    font-weight: normal;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+.wiki-content hr {
+    margin-top: 1em;
+    margin-bottom: 1em;
+    border: 0;
+    border-top: 1px solid #ccc;
+}
+
+.wiki-content p {
+    font-size: 0.85em;
+    padding: 1px;
+    overflow: hidden;
+}
+
+.wiki-content img {
+    max-width: 600px;
+    text-decoration: none;
+}
+
+.wiki-content table {
+    border-collapse: collapse;
+    margin-bottom: 15px;
+    background-color: #f9f9f9;
+    border: 1px solid #aaa;
+}
+
+.wiki-content table th {
+    background-color: #f2f2f2;
+    padding: 2.5px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.wiki-content table tr {
+    padding: 5px;
+    padding-left: 8px;
+    padding-right: 8px;
+    border: 1px solid #aaa;
+}
+
+.wiki-content table td {
+    padding: 5px;
+    padding-left: 8px;
+    padding-right: 8px;
+    border: 1px solid #aaa;
+}

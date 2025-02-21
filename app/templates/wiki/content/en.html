@@ -1,0 +1,40 @@
+{# templates/content/en.html #}
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="wiki-navigation">
+    <div class="left-navigation">
+        <a href="#" class="current">Page</a>
+        <a href="{{ discussion_url or '#' }}">Talk</a>
+    </div>
+    <div class="right-navigation">
+        <a href="#" class="current">Read</a>
+        <a href="{{ source_url or '#' }}">View Source</a>
+        <a href="{{ history_url or '#' }}">View History</a>
+        <div class="wiki-search">
+            <form action="/wiki/en/search" method="get">
+                <input type="text" name="query" placeholder="Search..." {% if search_query %}value="{{ search_query }}"{% endif %}>
+                <button type="submit">Go!</button>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="wiki-sidebar">
+    {# TODO: Sidebar "Contents" #}
+</div>
+{% if language != requested_language %}
+<div class="wiki-warning">
+    <p>
+        This page is not available in your language.
+        You can <a href="{{ translation_url }}">translate it</a> to make it available.
+    </p>
+</div>
+{% endif %}
+<div class="wiki-content">
+    {% block content_extension %}
+    {% endblock content_extension %}
+    {{ content|safe }}
+    <br>
+</div>
+{% endblock content %}

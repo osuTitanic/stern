@@ -1,0 +1,63 @@
+{# templates/home/de.html #}
+
+{% extends 'wiki/content/de.html' %}
+
+{% block content_extension %}
+<div class="wiki-content">
+    <span class="wiki-welcome">
+        <h1>Hauptseite</h1>
+        <img src="/images/logo/main-vector.min.svg" alt="logo" width="40" height="40">
+        <h2 style="font-size: 1.15em">
+            <i>Willkommen bei der Titanic! Wiki, einem kollaborativen Kompendium für alles rund um Titanic!</i>
+        </h2>
+    </span>
+    <div class="wiki-stats">
+        <span>Momentan haben wir <a href="#">0</a> Artikel, und es werden immer mehr!</span>
+        <span>Es ist {{ current_date.strftime("%A, %B %d, %Y") }}.</span>
+    </div>
+    <div class="wiki-categories">
+        <table>
+            <tbody>
+                <tr>
+                    <th>Allgemeine Informationen</th>
+                </tr>
+                <tr>
+                    <td>
+                        Die Titanic! Wiki ist ein gemeinschaftsbasiertes Projekt, das von engagierten Mitwirkenden aus Titanic! erstellt wird.
+                        Unser Ziel ist es, die ultimative Informationsquelle für alles rund um Titanic! zu schaffen.
+                        Doch das schaffen wir nicht allein – <b>wir brauchen deine Hilfe!</b>
+                        Wenn du dich für das Projekt begeisterst, nutze dein Wissen und trage noch heute dazu bei!
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <table width="50%" style="float: right;">
+            <tbody>
+                <tr>
+                    <th>Andere Sprachen</th>
+                </tr>
+                <tr>
+                    <td>
+                        {% for code, language in available_languages.items() %}
+                            <a href="/wiki/{{ code }}">{{ language }}</a>
+                            {% if not loop.last %}<b>•</b>{% endif %}
+                        {% endfor %}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <table width="50%" style="float: left;">
+            <tbody>
+                <tr>
+                    <th>Kategorien</th>
+                </tr>
+                <tr>
+                    <td>
+                        Es sind noch keine Kategorien vorhanden, versuche es später nochmal!
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock content_extension %}

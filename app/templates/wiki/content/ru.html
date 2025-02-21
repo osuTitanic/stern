@@ -1,0 +1,40 @@
+{# templates/content/ru.html #}
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="wiki-navigation">
+    <div class="left-navigation">
+        <a href="#" class="current">Страница</a>
+        <a href="{{ discussion_url or '#' }}">Обсудить</a>
+    </div>
+    <div class="right-navigation">
+        <a href="#" class="current">Читать</a>
+        <a href="{{ source_url or '#' }}">Просмотреть источник</a>
+        <a href="{{ history_url or '#' }}">Посмотреть историю</a>
+        <div class="wiki-search">
+            <form action="/wiki/ru/search" method="get">
+                <input type="text" name="query" placeholder="Найти..." {% if search_query %}value="{{ search_query }}"{% endif %}>
+                <button type="submit">Идти!</button>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="wiki-sidebar">
+    {# TODO: Sidebar "Contents" #}
+</div>
+{% if language != requested_language %}
+<div class="wiki-warning">
+    <p>
+        Эта страница недоступна на вашем языке.
+        Вы можете <a href="{{ translation_url }}">перевести</a> её, чтобы сделать её доступной.
+    </p>
+</div>
+{% endif %}
+<div class="wiki-content">
+    {% block content_extension %}
+    {% endblock content_extension %}
+    {{ content|safe }}
+    <br>
+</div>
+{% endblock content %}

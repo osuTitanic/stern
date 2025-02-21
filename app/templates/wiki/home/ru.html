@@ -1,0 +1,61 @@
+{# templates/home/ru.html #}
+
+{% extends 'wiki/content/ru.html' %}
+
+{% block content_extension %}
+<div class="wiki-content">
+    <span class="wiki-welcome">
+        <h1>Главная страница</h1>
+        <img src="/images/logo/main-vector.min.svg" alt="logo" width="40" height="40">
+        <h2><i>Добро пожаловать на Titanic! Wiki, совместный сборник всего, что связано с Titanic!</i></h2>
+    </span>
+    <div class="wiki-stats">
+        <span>На данный момент у нас <a href="#">0</a> статей и их число растёт!</span>
+        <span>Сегодня {{ current_date.strftime("%A, %B %d, %Y") }}.</span>
+    </div>
+    <div class="wiki-categories">
+        <table>
+            <tbody>
+                <tr>
+                    <th>Общее описание</th>
+                </tr>
+                <tr>
+                    <td>
+                        Titanic! Wiki — это проект, созданный сообществом преданных участников Titanic!.
+                        Наша цель — создать лучший источник информации обо всём, что связано с Titanic!.
+                        Однако мы не справимся в одиночку — <b>нам нужна ваша помощь!</b>
+                        Если вы увлечены этим проектом, используйте свои знания и начните вносить вклад уже сегодня!
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <table width="50%" style="float: right;">
+            <tbody>
+                <tr>
+                    <th>Другие языки</th>
+                </tr>
+                <tr>
+                    <td>
+                        {% for code, language in available_languages.items() %}
+                            <a href="/wiki/{{ code }}">{{ language }}</a>
+                            {% if not loop.last %}<b>•</b>{% endif %}
+                        {% endfor %}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <table width="50%" style="float: left;">
+            <tbody>
+                <tr>
+                    <th>Категории</th>
+                </tr>
+                <tr>
+                    <td>
+                        В настоящее время нет доступных категорий. Пожалуйста, зайдите позже!
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock content_extension %}
