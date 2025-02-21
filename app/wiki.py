@@ -150,6 +150,7 @@ def create_page(path: str, language: str, session: Session) -> Tuple[DBWikiPage,
 
     content = wiki.create_content_entry(
         page.id,
+        page.name,
         content_markdown,
         language,
         session=session
