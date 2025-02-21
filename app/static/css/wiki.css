@@ -99,6 +99,19 @@
     margin-bottom: 4px;
 }
 
+.wiki-content .toc {
+    border: 1px solid #aaa;
+    background-color: #f9f9f9;
+    padding: 5px;
+    width: 40%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.wiki-content .toc ul {
+    margin-left: -15px;
+}
+
 .wiki-content h1 {
     font-size: 1.6em;
     margin-top: 0.5em;

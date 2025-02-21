@@ -6,6 +6,7 @@ MARKDOWN = markdown.Markdown(
         'markdown.extensions.tables',
         'markdown.extensions.fenced_code',
         'markdown.extensions.codehilite',
+        'markdown.extensions.toc',
     ]
 )
 
