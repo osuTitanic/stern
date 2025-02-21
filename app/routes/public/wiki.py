@@ -29,7 +29,8 @@ def home_wiki_page(language: str):
         source_url=wiki.GITHUB_BASEURL,
         discussion_url=f'{wiki.GITHUB_BASEURL}/pulls',
         history_url=wiki.HISTORY_BASEURL,
-        requested_language=language
+        requested_language=language,
+        language=language
     )
 
 @router.get('/<language>/search/')
@@ -46,7 +47,8 @@ def wiki_search_page(language: str):
         title=f'{query or "Search"} - Titanic! Wiki',
         site_title='Titanic! Wiki',
         canonical_url=f'/wiki/en/search',
-        requested_language=language
+        requested_language=language,
+        language=language
     )
 
 @router.get('/<language>/<path>')
@@ -73,5 +75,5 @@ def wiki_page(path: str, language: str = config.WIKI_DEFAULT_LANGUAGE):
             translation_url=f'{wiki.CREATE_BASEURL}/{path}',
             source_url=f'{wiki.BLOB_BASEURL}/{path}/{entry.language}.md',
             history_url=f'{wiki.HISTORY_BASEURL}/{path}/{entry.language}.md',
-            discussion_url=f'{wiki.GITHUB_BASEURL}/pulls?q={page.name}',
+            discussion_url=f'{wiki.GITHUB_BASEURL}/pulls?q={page.name}'
         )
