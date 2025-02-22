@@ -3,6 +3,8 @@ from .common.cache.events import EventQueue
 from .common.database import Postgres
 from .common.storage import Storage
 
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 from requests import Session
 from redis import Redis
 
@@ -32,6 +34,13 @@ startup_time = time.time()
 
 storage = Storage()
 requests = Session()
-requests.headers = {
-    'User-Agent': f'osuTitanic/stern ({config.DOMAIN_NAME})'
-}
+requests.headers = {'User-Agent': f'osuTitanic/stern ({config.DOMAIN_NAME})'}
+
+retries = Retry(
+    total=4,
+    backoff_factor=0.3,
+    status_forcelist=[500, 502, 503, 504]
+)
+
+requests.mount('http://', HTTPAdapter(max_retries=retries))
+requests.mount('https://', HTTPAdapter(max_retries=retries))
