@@ -46,7 +46,11 @@
     {% endif %}
     <div class="main">
         <a href="/" aria-label="Home">
-            <img src="/images/logo/main-vector.min.svg"
+            <img {% if not is_ie %}
+                 src="/images/logo/main-vector.min.svg"
+                 {% else %}
+                 src="/images/logo/main-low.png"
+                 {% endif %}
                  onerror="this.src='/images/logo/main-low.png';"
                  class="logo"
                  loading="eager"
