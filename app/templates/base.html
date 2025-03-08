@@ -18,8 +18,6 @@
     {% if config.ENABLE_SSL %}<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">{% endif %}
     <title>{{ title or 'Titanic!' }}</title>
     <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
-    <link rel="prefetch" href="/images/logo/main-vector.min.svg" as="image">
-    <link rel="prefetch" href="/images/logo/main-low.png">
     <link rel="prefetch" href="/css/{{ css or 'main.css' }}">
     <link rel="stylesheet" href="/css/{{ css or 'main.css' }}">
     <link rel="stylesheet" href="/lib/fontawesome.min.css">
