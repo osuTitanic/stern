@@ -44,10 +44,9 @@ def render_template(template_name: str, **context) -> str:
         )
 
     context.update(
+        is_ie=request.user_agent.browser == 'msie' or 'Trident/' in request.user_agent.string,
         is_compact=request.args.get('compact', 0, type=int) == 1,
         show_login=request.args.get('login', False, type=bool),
-        is_edge=request.user_agent.browser == 'edge',
-        is_ie=request.user_agent.browser == 'msie',
         total_scores=total_scores,
         online_users=online_users,
         total_users=total_users,
