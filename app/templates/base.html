@@ -48,10 +48,10 @@
         <a href="/" aria-label="Home">
             <img {% if not is_ie %}
                  src="/images/logo/main-vector.min.svg"
+                 onerror="this.src='/images/logo/main-low.png';"
                  {% else %}
                  src="/images/logo/main-low.png"
                  {% endif %}
-                 onerror="this.src='/images/logo/main-low.png';"
                  class="logo"
                  loading="eager"
                  alt="Titanic Logo">
