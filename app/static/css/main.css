@@ -91,6 +91,7 @@ input:focus {
     top: -82px;
     left: -88px;
     width: 140px;
+    height: 140px;
     transform: rotate(-2.5deg);
     z-index: 10;
     filter: drop-shadow(5px 2px 0.2rem #0000001c);
