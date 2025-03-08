@@ -82,33 +82,35 @@ def on_sync_ranks_fail(e: Exception) -> None:
 
 @wrapper.exception_wrapper(on_sync_ranks_fail)
 @wrapper.session_wrapper
-def sync_ranks(user: DBUser, session: Session | None = None) -> None:
+def sync_ranks(user: DBUser, mode: int, session: Session = ...) -> None:
     """Sync cached rank with database"""
-    for user_stats in user.stats:
-        if user_stats.playcount <= 0:
-            continue
+    user.stats.sort(key=lambda s:s.mode)
+    user_stats = user.stats[mode]
 
-        global_rank = leaderboards.global_rank(
+    if user_stats.playcount <= 0:
+        return
+
+    global_rank = leaderboards.global_rank(
+        user.id,
+        user_stats.mode
+    )
+
+    if user_stats.rank != global_rank:
+        # Database rank desynced from redis
+        stats.update(
             user.id,
-            user_stats.mode
+            user_stats.mode,
+            {'rank': global_rank},
+            session=session
         )
+        user_stats.rank = global_rank
 
-        if user_stats.rank != global_rank:
-            # Database rank desynced from redis
-            stats.update(
-                user.id,
-                user_stats.mode,
-                {'rank': global_rank},
-                session=session
-            )
-            user_stats.rank = global_rank
-
-            # Update rank history
-            histories.update_rank(
-                user_stats,
-                user.country,
-                session=session
-            )
+        # Update rank history
+        histories.update_rank(
+            user_stats,
+            user.country,
+            session=session
+        )
 
 def required_nominations(beatmapset: DBBeatmapset) -> bool:
     beatmap_modes = len(

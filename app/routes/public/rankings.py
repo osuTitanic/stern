@@ -8,6 +8,7 @@ from flask import Blueprint, abort, request
 
 import utils
 import math
+import app
 
 router = Blueprint('rankings', __name__)
 
@@ -28,104 +29,106 @@ def rankings(mode: str, order_type: str):
 
     if country == 'xx':
         return abort(404)
+    
+    with app.session.database.managed_session() as session:
+        if order_type != 'country':
+            leaderboard = leaderboards.top_players(
+                mode.value,
+                offset=(page - 1) * items_per_page,
+                range=items_per_page,
+                type=order_type,
+                country=country
+            )
 
-    if order_type != 'country':
-        leaderboard = leaderboards.top_players(
-            mode.value,
-            offset=(page - 1) * items_per_page,
-            range=items_per_page,
-            type=order_type,
-            country=country
-        )
+            # Fetch all users from leaderboard
+            users_db = users.fetch_many(
+                tuple([user[0] for user in leaderboard]),
+                DBUser.stats,
+                session=session
+            )
 
-        # Fetch all users from leaderboard
-        users_db = users.fetch_many(
-            tuple([user[0] for user in leaderboard]),
-            DBUser.stats
-        )
+            # Sort users based on redis leaderboard
+            sorted_users = [
+                next(filter(lambda user: id == user.id, users_db))
+                for id, score in leaderboard
+                if score > 0
+            ]
 
-        # Sort users based on redis leaderboard
-        sorted_users = [
-            next(filter(lambda user: id == user.id, users_db))
-            for id, score in leaderboard
-            if score > 0
-        ]
+            for user in sorted_users:
+                if not user.stats:
+                    # Create stats if they don't exist
+                    user.stats = [
+                        stats.create(user.id, 0, session),
+                        stats.create(user.id, 1, session),
+                        stats.create(user.id, 2, session),
+                        stats.create(user.id, 3, session)
+                    ]
 
-        for user in sorted_users:
-            if not user.stats:
-                # Create stats if they don't exist
-                user.stats = [
-                    stats.create(user.id, 0),
-                    stats.create(user.id, 1),
-                    stats.create(user.id, 2),
-                    stats.create(user.id, 3)
-                ]
+                user.stats.sort(key=lambda s:s.mode)
+                utils.sync_ranks(user, mode.value, session)
 
-            user.stats.sort(key=lambda s:s.mode)
-            utils.sync_ranks(user)
+            player_count = leaderboards.player_count(mode.value, order_type, country)
+            total_pages = max(1, min(10000, math.ceil(player_count / items_per_page)))
 
-        player_count = leaderboards.player_count(mode.value, order_type, country)
-        total_pages = max(1, min(10000, math.ceil(player_count / items_per_page)))
+            # Get min/max pages to display for pagination
+            max_page_display = max(page, min(total_pages, page + 8))
+            min_page_display = max(1, min(total_pages, max_page_display - 9))
+
+            # Fetch top countries for country selection
+            top_countries = leaderboards.top_countries(mode)
+
+            order_name = {
+                'rscore': 'Ranked Score',
+                'tscore': 'Total Score',
+                'performance': 'Performance',
+                'ppv1': 'PPv1',
+                'clears': 'Clears'
+            }[order_type.lower()]
+
+            return utils.render_template(
+                'rankings.html',
+                css='rankings.css',
+                title=f'{order_name} Rankings - Titanic',
+                total_beatmaps=beatmaps.fetch_count_with_leaderboards(mode, session),
+                mode=mode,
+                page=page,
+                country=country,
+                order_type=order_type,
+                total_pages=total_pages,
+                leaderboard=sorted_users,
+                top_countries=top_countries,
+                max_page_display=max_page_display,
+                min_page_display=min_page_display,
+                items_per_page=items_per_page,
+                canonical_url=request.base_url,
+                order_name=order_name,
+                site_title=(
+                    f'{order_name} Rankings'
+                    f'{f" for {COUNTRIES[country.upper()]}" if country else ""}'
+                )
+            )
+
+        # Get country ranking
+        leaderboard = [country for country in leaderboards.top_countries(mode) if country['name'] != 'xx']
+        leaderboard = leaderboard[(page - 1)*items_per_page:(page - 1)*items_per_page + items_per_page]
+
+        country_count = len(leaderboard)
+        total_pages = max(1, min(10000, math.ceil(country_count / items_per_page)))
 
         # Get min/max pages to display for pagination
         max_page_display = max(page, min(total_pages, page + 8))
         min_page_display = max(1, min(total_pages, max_page_display - 9))
 
-        # Fetch top countries for country selection
-        top_countries = leaderboards.top_countries(mode)
-
-        order_name = {
-            'rscore': 'Ranked Score',
-            'tscore': 'Total Score',
-            'performance': 'Performance',
-            'ppv1': 'PPv1',
-            'clears': 'Clears'
-        }[order_type.lower()]
-
         return utils.render_template(
-            'rankings.html',
-            css='rankings.css',
-            title=f'{order_name} Rankings - Titanic',
-            total_beatmaps=beatmaps.fetch_count_with_leaderboards(mode),
+            'country.html',
+            css='country.css',
+            title='Country Rankings - Titanic',
             mode=mode,
             page=page,
-            country=country,
-            order_type=order_type,
             total_pages=total_pages,
-            leaderboard=sorted_users,
-            top_countries=top_countries,
+            leaderboard=leaderboard,
             max_page_display=max_page_display,
             min_page_display=min_page_display,
             items_per_page=items_per_page,
-            canonical_url=request.base_url,
-            order_name=order_name,
-            site_title=(
-                f'{order_name} Rankings'
-                f'{f" for {COUNTRIES[country.upper()]}" if country else ""}'
-            )
+            site_title='Country Rankings'
         )
-
-    # Get country ranking
-    leaderboard = [country for country in leaderboards.top_countries(mode) if country['name'] != 'xx']
-    leaderboard = leaderboard[(page - 1)*items_per_page:(page - 1)*items_per_page + items_per_page]
-
-    country_count = len(leaderboard)
-    total_pages = max(1, min(10000, math.ceil(country_count / items_per_page)))
-
-    # Get min/max pages to display for pagination
-    max_page_display = max(page, min(total_pages, page + 8))
-    min_page_display = max(1, min(total_pages, max_page_display - 9))
-
-    return utils.render_template(
-        'country.html',
-        css='country.css',
-        title='Country Rankings - Titanic',
-        mode=mode,
-        page=page,
-        total_pages=total_pages,
-        leaderboard=leaderboard,
-        max_page_display=max_page_display,
-        min_page_display=min_page_display,
-        items_per_page=items_per_page,
-        site_title='Country Rankings'
-    )

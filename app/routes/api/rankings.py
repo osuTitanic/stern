@@ -115,18 +115,15 @@ def rankings(
             if not user.stats:
                 # Create stats if they don't exist
                 user.stats = [
-                    stats.create(user.id, 0, session=session),
-                    stats.create(user.id, 1, session=session),
-                    stats.create(user.id, 2, session=session),
-                    stats.create(user.id, 3, session=session)
+                    stats.create(user.id, 0, session),
+                    stats.create(user.id, 1, session),
+                    stats.create(user.id, 2, session),
+                    stats.create(user.id, 3, session)
                 ]
 
-            user.stats.sort(key=lambda s:s.mode)
-            utils.sync_ranks(user, session=session)
+            utils.sync_ranks(user, mode.value, session)
 
         return format_response(
-            leaderboard,
-            sorted_users,
-            mode,
-            offset
+            leaderboard, sorted_users,
+            mode, offset
         )
