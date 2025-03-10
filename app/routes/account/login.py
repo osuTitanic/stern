@@ -33,7 +33,7 @@ def login():
     app.session.redis.expire(f'logins:{ip}', time=30)
 
     with app.session.database.managed_session() as session:
-        if not (user := users.fetch_by_name(username, session=session)):
+        if not (user := users.fetch_by_name_extended(username, session=session)):
             return redirect(redirect_url or '/')
 
         md5_password = hashlib.md5(password.encode()).hexdigest()
