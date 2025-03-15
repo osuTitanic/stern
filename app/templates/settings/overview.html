@@ -41,6 +41,26 @@
             {% endif %}
         </div>
     </div>
+    <div id="bookmarks">
+        <h2>Bookmarks</h2>
+        <div class="section">
+            {% if not bookmarks %}
+            You have no bookmarks
+            {% else %}
+            <div class="bookmarks">
+                {% for bookmark in bookmarks %}
+                <div class="bookmark" id="bookmark-{{ bookmark.topic_id }}">
+                    <div class="bookmark-link">
+                        <a href="/forum/{{ bookmark.topic.forum_id }}">{{ bookmark.topic.forum.name }}</a> »
+                        <a href="/forum/{{ bookmark.topic.forum_id }}/topics/{{ bookmark.topic.id }}">{{ bookmark.topic.title }}</a>
+                    </div>
+                    <a class="delete-link" onclick="return removeBookmark({{ bookmark.topic_id }})">Delete</a>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
 </div>
 <script>
     function confirmNotification(element) {
@@ -78,6 +98,30 @@
         };
     
         xhr.send();
+    }
+    
+    function removeBookmark(topicId) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "/api/forum/bookmarks/remove?topic_id=" + topicId, true);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    var data = JSON.parse(xhr.responseText);
+                    var bookmark = document.getElementById('bookmark-' + topicId);
+                    bookmark.parentNode.removeChild(bookmark);
+
+                    var totalBookmarks = document.querySelectorAll('.bookmark').length;
+                    if (totalBookmarks === 0) {
+                        var bookmarks = document.querySelector('.bookmarks');
+                        bookmarks.innerHTML = 'You have no bookmarks';
+                    }
+                } else {
+                    console.error('Failed to remove bookmark.');
+                }
+            }
+        };
+        xhr.send();
+        return false;
     }
 </script>
 {% endblock content %}
