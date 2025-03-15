@@ -14,6 +14,7 @@ from app.common.database.repositories import (
 
 from flask import Blueprint, request, redirect
 from typing import Optional
+from app import accounts
 
 import flask_login
 import hashlib
@@ -201,9 +202,8 @@ def registration_request():
 
         if not config.EMAILS_ENABLED:
             # Verification is disabled
-            flask_login.login_user(user)
             app.session.logger.info('Registration finished.')
-            return redirect(f'/u/{user.id}')
+            return accounts.perform_login(user)
 
         app.session.logger.info('Sending verification email...')
 
@@ -220,7 +220,6 @@ def registration_request():
         )
 
         app.session.logger.info('Registration finished.')
-
         return redirect(f'/account/verification?id={verification.id}')
 
 @router.get('/register/check')

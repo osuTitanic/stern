@@ -1,14 +1,13 @@
 
 from app.common.database.repositories import users, verifications
 from app.common import mail, officer, helpers
+from app.accounts import perform_login
 
 from flask import Blueprint, request, redirect
 from datetime import datetime
 
-import flask_login
 import hashlib
 import bcrypt
-import utils
 import app
 
 router = Blueprint('login', __name__)
@@ -89,5 +88,6 @@ def login():
             # Redirect to verification page
             return redirect(f'/account/verification?id={verification.id}')
 
-        flask_login.login_user(user, remember)
-        return redirect(redirect_url or f'/u/{user.id}')
+        response = redirect(redirect_url or f'/u/{user.id}')
+        response = perform_login(user, remember, response)
+        return response

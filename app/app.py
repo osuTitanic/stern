@@ -1,14 +1,15 @@
 
-from app.common.database import DBUser, DBForum, DBForumTopic
 from app.common.database.repositories import users
+from app.common.database import DBUser
 
-from flask import Flask, Request, jsonify, redirect, request
+from flask import Flask, Request, Response, jsonify, redirect, request
 from flask_pydantic.exceptions import ValidationError
+from flask_login import LoginManager, current_user
 from flask_wtf.csrf import CSRFProtect
-from flask_login import LoginManager
 from typing import Tuple, Optional
 from werkzeug.exceptions import *
 
+from . import accounts
 from . import common
 from . import routes
 from . import bbcode
@@ -34,9 +35,71 @@ login_manager.init_app(flask)
 csrf = CSRFProtect()
 csrf.init_app(flask)
 
+@login_manager.request_loader
+def request_loader(request: Request):
+    token = (
+        request.cookies.get('access_token') or
+        request.cookies.get('refresh_token')
+    )
+
+    if not token:
+        return None
+
+    data = accounts.validate_token(token)
+
+    if not data:
+        return None
+
+    return user_loader(data['id'])
+
+@flask.after_request
+def refresh_access_token(response: Response) -> Response:
+    if request.cookies.get('access_token'):
+        return response
+    
+    if not (refresh_token := request.cookies.get('refresh_token')):
+        return response
+
+    data = accounts.validate_token(refresh_token)
+
+    if not data:
+        return response
+
+    return accounts.perform_login(
+        current_user,
+        response=response
+    )
+
+@login_manager.user_loader
+def user_loader(user_id: int) -> Optional[DBUser]:
+    try:
+        user = users.fetch_by_id(
+            user_id,
+            DBUser.groups,
+            DBUser.relationships
+        )
+
+        if not user:
+            return
+
+        return user
+    except Exception as e:
+        flask.logger.error(f'Failed to load user: {e}', exc_info=e)
+        return None
+
+@login_manager.unauthorized_handler
+def unauthorized_user():
+    if request.path.startswith('/api'):
+        return jsonify(
+            error=403,
+            details='You are not authorized to perform this action.'
+        ), 403
+
+    return redirect('/?login=True')
+
 @flask.errorhandler(HTTPException)
 def on_http_exception(error: HTTPException) -> Tuple[str, int]:
-    if '/api' in request.base_url:
+    if request.path.startswith('/api'):
         return jsonify(
             error=error.code,
             details=error.description or error.name
@@ -65,7 +128,7 @@ def on_http_exception(error: HTTPException) -> Tuple[str, int]:
 def on_exception(error: Exception) -> Tuple[str, int]:
     traceback.print_exc()
 
-    if '/api' in request.base_url:
+    if request.path.startswith('/api'):
         return jsonify(
             error=500,
             details=InternalServerError.description
@@ -101,35 +164,3 @@ def on_validation_error(error: ValidationError) -> Tuple[str, int]:
             }
         }
     ), 400
-
-@login_manager.user_loader
-def user_loader(user_id: int) -> Optional[DBUser]:
-    try:
-        user = users.fetch_by_id(
-            user_id,
-            DBUser.groups,
-            DBUser.relationships
-        )
-
-        if not user:
-            return
-
-        return user
-    except Exception as e:
-        flask.logger.error(f'Failed to load user: {e}', exc_info=e)
-        return None
-
-@login_manager.request_loader
-def request_loader(request: Request):
-    user_id = request.form.get('id')
-    return user_loader(user_id)
-
-@login_manager.unauthorized_handler
-def unauthorized_user():
-    if request.path.startswith('/api'):
-        return jsonify(
-            error=403,
-            details='You are not authorized to perform this action.'
-        ), 403
-
-    return redirect('/?login=True')

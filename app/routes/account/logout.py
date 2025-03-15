@@ -12,5 +12,7 @@ def logout():
         return redirect('/')
 
     redirect_url = request.args.get('redirect', '/')
-    flask_login.logout_user()
-    return redirect(redirect_url)
+    response = redirect(redirect_url)
+    response.delete_cookie('access_token')
+    response.delete_cookie('refresh_token')
+    return response
