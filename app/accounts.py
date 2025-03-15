@@ -20,14 +20,16 @@ def perform_login(
 
     access_token = generate_token(user, expiry)
     refresh_token = generate_token(user, expiry_refresh)
+
     domain = resolve_domain_name()
+    use_ssl = config.ENABLE_SSL and not config.ALLOW_INSECURE_COOKIES
 
     response.set_cookie(
         'access_token',
         access_token,
         domain=domain,
+        secure=use_ssl,
         httponly=True,
-        secure=config.ENABLE_SSL,
         max_age=config.FRONTEND_TOKEN_EXPIRY
     )
 
@@ -36,8 +38,8 @@ def perform_login(
             'refresh_token',
             refresh_token,
             domain=domain,
+            secure=use_ssl,
             httponly=True,
-            secure=config.ENABLE_SSL,
             max_age=config.FRONTEND_REFRESH_EXPIRY
         )
 
