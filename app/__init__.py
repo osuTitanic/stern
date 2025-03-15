@@ -8,7 +8,8 @@ from . import common
 from . import routes
 from . import wiki
 
-from .app import flask, get_handle
+from .app import flask
+from .filters import get_handle
 
 import logging
 import config
