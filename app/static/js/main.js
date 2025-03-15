@@ -100,6 +100,26 @@ function userSearch() {
     return true;
 }
 
+function performApiRequest(method, url, data, callbackSuccess, callbackError) {
+    var xhr = new XMLHttpRequest();
+    xhr.open(method, apiBaseurl + url, true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.setRequestHeader("Cache-Control", "no-cache");
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+            if (xhr.status >= 200 && xhr.status < 300) {
+                console.log(xhr.status + ': "' + xhr.statusText + '"');
+                if (callbackSuccess) callbackSuccess(xhr);
+            } else {
+                console.error(xhr.status + ': "' + xhr.statusText + '"');
+                if (callbackError) callbackError(xhr);
+            }
+        }
+    };
+    xhr.send(JSON.stringify(data));
+    return xhr;
+}
+
 function loadBBCodePreview(element) {
     var parentElement = getParentElement(element);
     var bbcodeWrapper = getParentElement(parentElement);
