@@ -52,7 +52,7 @@
                 <div class="bookmark" id="bookmark-{{ bookmark.topic_id }}">
                     <div class="bookmark-link">
                         <a href="/forum/{{ bookmark.topic.forum_id }}">{{ bookmark.topic.forum.name }}</a> »
-                        <a href="/forum/{{ bookmark.topic.forum_id }}/topics/{{ bookmark.topic.id }}">{{ bookmark.topic.title }}</a>
+                        <a href="/forum/{{ bookmark.topic.forum_id }}/t/{{ bookmark.topic_id }}">{{ bookmark.topic.title }}</a>
                     </div>
                     <a class="delete-link" onclick="return removeBookmark({{ bookmark.topic_id }})">Delete</a>
                 </div>
