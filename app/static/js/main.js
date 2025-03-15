@@ -124,9 +124,6 @@ function loadBBCodePreview(element) {
     var parentElement = getParentElement(element);
     var bbcodeWrapper = getParentElement(parentElement);
     var bbcodeEditor = bbcodeWrapper.querySelector('textarea');
-    var form = new FormData();
-    form.append('bbcode', bbcodeEditor.value);
-    form.append('csrf_token', csrfToken);
 
     // Remove old previews
     var previews = document.querySelectorAll('.bbcode-preview');
@@ -134,42 +131,24 @@ function loadBBCodePreview(element) {
         element.parentNode.removeChild(element);
     });
 
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "/api/bbcode/preview", true);
-    xhr.setRequestHeader("Cache-Control", "no-cache");
+    performApiRequest("POST", "/forum/bbcode", { "input": bbcodeEditor.value }, function(xhr) {
+        var htmlPreview = xhr.responseText;
+        if (!htmlPreview) return;
 
-    xhr.onload = function() {
-        if (xhr.status >= 200 && xhr.status < 300) {
-            var htmlPreview = xhr.responseText;
-            if (!htmlPreview) return;
+        var previewContainer = document.createElement('div');
+        previewContainer.className = 'bbcode-preview bbcode';
+        previewContainer.innerHTML = htmlPreview;
 
-            var previewContainer = document.createElement('div');
-            previewContainer.className = 'bbcode-preview bbcode';
-            previewContainer.innerHTML = htmlPreview;
-
-            bbcodeWrapper.appendChild(previewContainer);
-        } else {
-            var previewContainer = document.createElement('div');
-            previewContainer.className = 'bbcode-preview bbcode';
-            previewContainer.appendChild(
-                document.createTextNode('Failed to load bbcode preview :(')
-            );
-            bbcodeWrapper.appendChild(previewContainer);
-            console.error(xhr.status + ': "' + xhr.statusText + '"');
-        }
-    };
-
-    xhr.onerror = function() {
+        bbcodeWrapper.appendChild(previewContainer);
+    }, function(xhr) {
         var previewContainer = document.createElement('div');
         previewContainer.className = 'bbcode-preview bbcode';
         previewContainer.appendChild(
             document.createTextNode('Failed to load bbcode preview :(')
         );
         bbcodeWrapper.appendChild(previewContainer);
-        console.error('BBCode request failed');
-    };
-
-    xhr.send(form);
+        console.error(xhr.status + ': "' + xhr.statusText + '"');
+    });
     return false;
 }
 
