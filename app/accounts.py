@@ -22,7 +22,7 @@ def perform_login(
     refresh_token = generate_token(user, expiry_refresh)
 
     domain = resolve_domain_name()
-    use_ssl = config.ENABLE_SSL and not config.ALLOW_INSECURE_COOKIES
+    use_ssl = request.is_secure or not config.ALLOW_INSECURE_COOKIES
 
     response.set_cookie(
         'access_token',
