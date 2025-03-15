@@ -22,3 +22,4 @@ sqlalchemy==2.0.39
 timeago==1.0.16
 titanic-pp-py==0.0.7
 markdown==3.7
+pyjwt==2.10.1
