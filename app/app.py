@@ -2,7 +2,7 @@
 from app.common.database.repositories import users
 from app.common.database import DBUser
 
-from flask import Flask, Request, Response, jsonify, redirect, request
+from flask import Flask, Request, Response, jsonify, redirect, request, session
 from flask_pydantic.exceptions import ValidationError
 from flask_login import LoginManager, current_user
 from flask_wtf.csrf import CSRFProtect
@@ -57,7 +57,7 @@ def refresh_access_token(response: Response) -> Response:
     if request.cookies.get('access_token'):
         return response
 
-    if request.cookies.get('session'):
+    if "_user_id" in session:
         return accounts.perform_login_migration(response)
     
     if not (refresh_token := request.cookies.get('refresh_token')):
