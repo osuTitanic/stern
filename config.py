@@ -59,6 +59,10 @@ WIKI_REPOSITORY_BRANCH = os.environ.get('WIKI_REPOSITORY_BRANCH', 'main')
 WIKI_REPOSITORY_PATH = os.environ.get('WIKI_REPOSITORY_PATH', 'wiki')
 WIKI_DEFAULT_LANGUAGE = os.environ.get('WIKI_DEFAULT_LANGUAGE', 'en')
 
-API_BASEURL = f'http{"s" if ENABLE_SSL else ""}://api.{DOMAIN_NAME}'
-OSU_BASEURL = f'http{"s" if ENABLE_SSL else ""}://osu.{DOMAIN_NAME}'
-STATIC_BASEURL = f'http{"s" if ENABLE_SSL else ""}://s.{DOMAIN_NAME}'
+DEFAULT_API_BASEURL = f'http{"s" if ENABLE_SSL else ""}://api.{DOMAIN_NAME}'
+DEFAULT_OSU_BASEURL = f'http{"s" if ENABLE_SSL else ""}://osu.{DOMAIN_NAME}'
+DEFAULT_STATIC_BASEURL = f'http{"s" if ENABLE_SSL else ""}://s.{DOMAIN_NAME}'
+
+API_BASEURL = os.environ.get('API_BASEURL', DEFAULT_API_BASEURL)
+OSU_BASEURL = os.environ.get('OSU_BASEURL', DEFAULT_OSU_BASEURL)
+STATIC_BASEURL = os.environ.get('STATIC_BASEURL', DEFAULT_STATIC_BASEURL)
