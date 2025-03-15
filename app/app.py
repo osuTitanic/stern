@@ -34,38 +34,6 @@ login_manager.init_app(flask)
 csrf = CSRFProtect()
 csrf.init_app(flask)
 
-@login_manager.user_loader
-def user_loader(user_id: int) -> Optional[DBUser]:
-    try:
-        user = users.fetch_by_id(
-            user_id,
-            DBUser.groups,
-            DBUser.relationships
-        )
-
-        if not user:
-            return
-
-        return user
-    except Exception as e:
-        flask.logger.error(f'Failed to load user: {e}', exc_info=e)
-        return None
-
-@login_manager.request_loader
-def request_loader(request: Request):
-    user_id = request.form.get('id')
-    return user_loader(user_id)
-
-@login_manager.unauthorized_handler
-def unauthorized_user():
-    if '/api' in request.base_url:
-        return jsonify(
-            error=403,
-            details='You are not authorized to perform this action.'
-        ), 403
-
-    return redirect('/?login=True')
-
 @flask.errorhandler(HTTPException)
 def on_http_exception(error: HTTPException) -> Tuple[str, int]:
     if '/api' in request.base_url:
@@ -133,3 +101,35 @@ def on_validation_error(error: ValidationError) -> Tuple[str, int]:
             }
         }
     ), 400
+
+@login_manager.user_loader
+def user_loader(user_id: int) -> Optional[DBUser]:
+    try:
+        user = users.fetch_by_id(
+            user_id,
+            DBUser.groups,
+            DBUser.relationships
+        )
+
+        if not user:
+            return
+
+        return user
+    except Exception as e:
+        flask.logger.error(f'Failed to load user: {e}', exc_info=e)
+        return None
+
+@login_manager.request_loader
+def request_loader(request: Request):
+    user_id = request.form.get('id')
+    return user_loader(user_id)
+
+@login_manager.unauthorized_handler
+def unauthorized_user():
+    if request.path.startswith('/api'):
+        return jsonify(
+            error=403,
+            details='You are not authorized to perform this action.'
+        ), 403
+
+    return redirect('/?login=True')
