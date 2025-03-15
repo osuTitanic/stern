@@ -20,13 +20,14 @@ def perform_login(
 
     access_token = generate_token(user, expiry)
     refresh_token = generate_token(user, expiry_refresh)
-    domain = f".{config.DOMAIN_NAME}" if not config.DEBUG else None
+    domain = resolve_domain_name()
 
     response.set_cookie(
         'access_token',
         access_token,
-        httponly=True,
         domain=domain,
+        httponly=True,
+        secure=config.ENABLE_SSL,
         max_age=config.FRONTEND_TOKEN_EXPIRY
     )
 
@@ -34,17 +35,20 @@ def perform_login(
         response.set_cookie(
             'refresh_token',
             refresh_token,
-            httponly=True,
             domain=domain,
+            httponly=True,
+            secure=config.ENABLE_SSL,
             max_age=config.FRONTEND_REFRESH_EXPIRY
         )
 
     return response
 
 def perform_logout(response: Response | None = None) -> Response:
+    domain = resolve_domain_name()
     response = response or redirect('/')
-    response.delete_cookie('access_token')
-    response.delete_cookie('refresh_token')
+    response.delete_cookie('access_token', domain=domain)
+    response.delete_cookie('refresh_token', domain=domain)
+    flask_login.logout_user()
     return response
 
 def perform_login_migration(response: Response | None = None) -> Response:
@@ -90,3 +94,9 @@ def validate_token(token: str) -> dict | None:
         return
 
     return data
+
+def resolve_domain_name() -> str | None:
+    if config.DOMAIN_NAME == 'localhost' or config.DEBUG:
+        return None
+
+    return f'.{config.DOMAIN_NAME}'
