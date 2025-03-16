@@ -155,9 +155,3 @@ function loadBBCodePreview(element) {
 addEvent("DOMContentLoaded", document, function(event) {
     $(".timeago").timeago();
 });
-
-var params = new URLSearchParams(location.search);
-
-if (params.get('wait') && location.pathname == '/') {
-    alert('Too many login attempts. Please wait a minute and try again!');
-}
