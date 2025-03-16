@@ -1,3 +1,13 @@
+if (!window.console) {
+    // Console polyfill for ~IE8 and earlier
+    console = {
+        log: function() {},
+        info: function() {},
+        warn: function() {},
+        error: function() {}
+    };
+}
+
 function slideDown(elem) {
     elem.style.height = elem.scrollHeight + "px";
 }
