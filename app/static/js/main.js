@@ -103,6 +103,7 @@ function userSearch() {
 function performApiRequest(method, url, data, callbackSuccess, callbackError) {
     var xhr = new XMLHttpRequest();
     xhr.open(method, apiBaseurl + url, true);
+    xhr.setRequestHeader("Access-Control-Allow-Credentials", true);
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.setRequestHeader("Cache-Control", "no-cache");
     xhr.onreadystatechange = function() {
