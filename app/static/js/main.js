@@ -101,22 +101,44 @@ function userSearch() {
 }
 
 function performApiRequest(method, url, data, callbackSuccess, callbackError) {
-    var xhr = new XMLHttpRequest();
+    var xhr;
+
+    // Use XMLHttpRequest if available; otherwise, try ActiveX for older IE versions
+    if (window.XMLHttpRequest) {
+        xhr = new XMLHttpRequest();
+    } else {
+        try {
+            xhr = new ActiveXObject("Microsoft.XMLHTTP");
+        } catch (e) {
+            throw new Error("This browser does not support AJAX requests.");
+        }
+    }
+
+    try {
+        xhr.withCredentials = true;
+    } catch (e) {
+        console.warn("This browser does not support ajax credentials.");
+    }
+
     xhr.open(method, apiBaseurl + url, true);
-    xhr.withCredentials = true;
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.setRequestHeader("Cache-Control", "no-cache");
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4) {
             if (xhr.status >= 200 && xhr.status < 300) {
                 console.log(xhr.status + ': "' + xhr.statusText + '"');
-                if (callbackSuccess) callbackSuccess(xhr);
+                if (callbackSuccess) {
+                    callbackSuccess(xhr);
+                }
             } else {
                 console.error(xhr.status + ': "' + xhr.statusText + '"');
-                if (callbackError) callbackError(xhr);
+                if (callbackError) {
+                    callbackError(xhr);
+                }
             }
         }
     };
+
     xhr.send(JSON.stringify(data));
     return xhr;
 }
