@@ -98,6 +98,9 @@ input:focus {
 }
 
 .nav {
+    -webkit-border-radius: 5px;
+    -khtml-border-radius: 5px;
+    -moz-border-radius: 5px;
     background-color: #ffd6f3;
     border-radius: 5px 5px 0px 0px;
     min-height: 22.5px;
@@ -190,8 +193,11 @@ input:focus {
     padding: 5px;
     padding-left: 10px;
     padding-top: 6px;
-    border-radius: 5px 5px 0px 0px;
     letter-spacing: 0.4px;
+    border-radius: 5px 5px 0px 0px;
+    -webkit-border-radius: 5px 5px 0px 0px;
+    -khtml-border-radius: 5px 5px 0px 0px;
+    -moz-border-radius: 5px 5px 0px 0px;
 }
 
 .content {
@@ -199,8 +205,11 @@ input:focus {
     min-height: 500px;
     border-style: solid;
     border-color: #5c559c;
-    border-radius: 0px 5px 5px 5px;
     border-width: 2px;
+    border-radius: 0px 5px 5px 5px;
+    -webkit-border-radius: 0px 5px 5px 5px;
+    -khtml-border-radius: 0px 5px 5px 5px;
+    -moz-border-radius: 0px 5px 5px 5px;
 }
 
 .gradient {
@@ -216,6 +225,9 @@ input:focus {
     width: 99.5%;
     position: absolute;
     border-radius: 0px 0px 5px 5px;
+    -webkit-border-radius: 0px 0px 5px 5px;
+    -khtml-border-radius: 0px 0px 5px 5px;
+    -moz-border-radius: 0px 0px 5px 5px;
 }
 
 .top {
@@ -240,6 +252,9 @@ input:focus {
 }
 
 .nav-search {
+    -webkit-border-radius: 3px;
+    -khtml-border-radius: 3px;
+    -moz-border-radius: 3px;
     border-radius: 3px;
     font-size: 85%;
     margin-left: 5px;
@@ -305,6 +320,9 @@ input:focus {
 }
 
 input[type="submit"] {
+    -webkit-border-radius: 4px;
+    -khtml-border-radius: 4px;
+    -moz-border-radius: 4px;
     background-color: white;
     border: 1.5px solid #8f8f9d;
     border-radius: 4px;
@@ -336,8 +354,11 @@ input[type="submit"]:hover {
 }
 
 .login-dropdown input[type="submit"] {
-    background-color: #5b5399;
+    -webkit-border-radius: 2px;
+    -khtml-border-radius: 2px;
+    -moz-border-radius: 2px;
     border-radius: 2px;
+    background-color: #5b5399;
     font-size: 15px;
     color: white;
     margin: 5px;
