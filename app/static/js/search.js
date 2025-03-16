@@ -55,6 +55,7 @@ var Languages = {
 
 var currentPage = 0;
 var totalBeatmaps = 0;
+var busy = false;
 
 function endsWith(str, suffix) {
     return str.indexOf(suffix, str.length - suffix.length) !== -1;
@@ -120,6 +121,10 @@ function getSearchInput() {
 function getBeatmapsets(clear) {
     var beatmapContainer = document.getElementById("beatmap-list");
 
+    if (busy) {
+        return;
+    }
+
     if (clear) {
         var input = document.getElementById("beatmap-list");
         input.innerHTML = "";
@@ -130,6 +135,8 @@ function getBeatmapsets(clear) {
     if (totalBeatmaps > 0 && totalBeatmaps % 50 !== 0) {
         return;
     }
+
+    busy = true;
 
     performApiRequest("POST", "/beatmapsets/search", getSearchInput(), function(xhr) {
         var beatmapsets = JSON.parse(xhr.responseText);
@@ -367,6 +374,7 @@ function getBeatmapsets(clear) {
 
         totalBeatmaps += beatmapsets.length;
         currentPage++;
+        busy = false;
 
         $(".beatmapset").hover(
             function() {
