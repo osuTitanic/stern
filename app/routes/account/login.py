@@ -20,7 +20,7 @@ def login_page():
         # User has already logged in
         return redirect(f'/u/{current_user.id}')
 
-    return render_login_page()
+    return render_login_page(redirect=request.args.get('redirect', None))
 
 @router.post('/login')
 def login():

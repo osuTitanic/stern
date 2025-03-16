@@ -98,7 +98,7 @@ def unauthorized_user():
             details='You are not authorized to perform this action.'
         ), 403
 
-    return redirect('/?login=True')
+    return redirect(f'/account/login?redirect={request.path}')
 
 @flask.errorhandler(HTTPException)
 def on_http_exception(error: HTTPException) -> Tuple[str, int]:
