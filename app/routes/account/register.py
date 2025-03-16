@@ -25,72 +25,13 @@ import app
 
 router = Blueprint('register', __name__)
 
-def return_to_register_page(error: Optional[str] = None) -> str:
-    return utils.render_template(
-        'register.html',
-        css='register.css',
-        error=error,
-        title='Register - Titanic!'
-    )
-
-def get_hashed_password(password: str) -> str:
-    return bcrypt.hashpw(
-        password=hashlib.md5(password.encode()) \
-                        .hexdigest() \
-                        .encode(),
-        salt=bcrypt.gensalt()
-    ).decode()
-
-def validate_username(username: str) -> Optional[str]:
-    username = username.strip()
-
-    if len(username) < 3:
-        return "Your username is too short."
-
-    if len(username) > 25:
-        return "Your username is too long."
-
-    if not USERNAME.match(username):
-        return "Your username contains invalid characters."
-
-    if any(word in username.lower() for word in BAD_WORDS):
-        return "Your username contains offensive words."
-
-    if username.lower().startswith('deleteduser'):
-        return "This username is not allowed."
-
-    if username.lower().endswith('_old'):
-        return "This username is not allowed."
-
-    safe_name = username.lower().replace(' ', '_')
-
-    if users.fetch_by_safe_name(safe_name):
-        return "This username is already in use!"
-
-    if names.fetch_by_name_extended(username):
-        return "This username is already in use!"
-
-def validate_email(email: str) -> Optional[str]:
-    if not EMAIL.match(email):
-        return "Please enter a valid email address!"
-
-    if users.fetch_by_email(email.lower()):
-        # TODO: Forgot username/password link
-        return "This email address is already in use."
-
 @router.get('/register')
-def register():
+def register_page():
     if not flask_login.current_user.is_anonymous:
         # User has already logged in
         return redirect(f'/u/{flask_login.current_user.id}')
 
-    return utils.render_template(
-        'register.html',
-        css='register.css',
-        title='Register - Titanic!',
-        site_title='Register',
-        site_description='Create your account and start playing today!'
-    )
+    return render_register_page()
 
 @router.post('/register')
 def registration_request():
@@ -98,16 +39,16 @@ def registration_request():
 
     try:
         if validate_email(email := request.form.get('email')):
-            return return_to_register_page('Please enter a valid email!')
+            return render_register_page('Please enter a valid email!')
 
         if validate_username(username := request.form.get('username')):
-            return return_to_register_page('Please enter a valid username!')
+            return render_register_page('Please enter a valid username!')
 
         if not (password := request.form.get('password')):
-            return return_to_register_page('Please enter a valid password!')
+            return render_register_page('Please enter a valid password!')
 
         if len(password) <= 7:
-            return return_to_register_page('Please enter a password with at least 8 characters!')
+            return render_register_page('Please enter a password with at least 8 characters!')
     except Exception as e:
         app.session.logger.error(
             f'Failed to verify registration request: {e}',
@@ -117,7 +58,7 @@ def registration_request():
             f'Failed to verify registration request from IP ({ip}): {e}',
             exc_info=e
         )
-        return return_to_register_page('Failed to process your request. Please try again!')
+        return render_register_page('Failed to process your request. Please try again!')
 
     registration_count = app.session.redis.get(f'registrations:{ip}') or 0
 
@@ -125,13 +66,13 @@ def registration_request():
         officer.call(
             f'Failed to register: Too many registrations from IP ({ip})'
         )
-        return return_to_register_page('There have been too many registrations from this ip. Please try again later!')
+        return render_register_page('There have been too many registrations from this ip. Please try again later!')
 
     if config.RECAPTCHA_SECRET_KEY and config.RECAPTCHA_SITE_KEY:
         client_response = request.form.get('recaptcha_response')
 
         if not client_response:
-            return return_to_register_page('Invalid captcha response!')
+            return render_register_page('Invalid captcha response!')
 
         response = app.session.requests.post(
             'https://www.google.com/recaptcha/api/siteverify',
@@ -143,10 +84,10 @@ def registration_request():
         )
 
         if not response.ok:
-            return return_to_register_page('Failed to verify captcha response!')
+            return render_register_page('Failed to verify captcha response!')
 
         if not response.json().get('success', False):
-            return return_to_register_page('Captcha verification failed!')
+            return render_register_page('Captcha verification failed!')
 
     with app.session.database.managed_session() as session:
         app.session.logger.info(
@@ -177,7 +118,7 @@ def registration_request():
 
         if not user:
             officer.call(f'Failed to register user "{username}".')
-            return return_to_register_page('An error occured on the server side. Please try again!')
+            return render_register_page('An error occured on the server side. Please try again!')
 
         app.session.logger.info(f'User "{username}" with id "{user.id}" was created.')
 
@@ -239,3 +180,58 @@ def input_validation():
         return ''
 
     return validator(value) or ''
+
+def render_register_page(error: Optional[str] = None) -> str:
+    return utils.render_template(
+        'register.html',
+        css='account.css',
+        title='Register - Titanic!',
+        site_title='Register',
+        site_description='Create your account and start playing today!',
+        error=error
+    )
+
+def get_hashed_password(password: str) -> str:
+    return bcrypt.hashpw(
+        password=hashlib.md5(password.encode()) \
+                        .hexdigest() \
+                        .encode(),
+        salt=bcrypt.gensalt()
+    ).decode()
+
+def validate_username(username: str) -> Optional[str]:
+    username = username.strip()
+
+    if len(username) < 3:
+        return "Your username is too short."
+
+    if len(username) > 25:
+        return "Your username is too long."
+
+    if not USERNAME.match(username):
+        return "Your username contains invalid characters."
+
+    if any(word in username.lower() for word in BAD_WORDS):
+        return "Your username contains offensive words."
+
+    if username.lower().startswith('deleteduser'):
+        return "This username is not allowed."
+
+    if username.lower().endswith('_old'):
+        return "This username is not allowed."
+
+    safe_name = username.lower().replace(' ', '_')
+
+    if users.fetch_by_safe_name(safe_name):
+        return "This username is already in use!"
+
+    if names.fetch_by_name_extended(username):
+        return "This username is already in use!"
+
+def validate_email(email: str) -> Optional[str]:
+    if not EMAIL.match(email):
+        return "Please enter a valid email address!"
+
+    if users.fetch_by_email(email.lower()):
+        # TODO: Forgot username/password link
+        return "This email address is already in use."

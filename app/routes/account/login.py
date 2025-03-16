@@ -4,13 +4,23 @@ from app.common import mail, officer, helpers
 from app.accounts import perform_login
 
 from flask import Blueprint, request, redirect
+from flask_login import current_user
 from datetime import datetime
 
 import hashlib
 import bcrypt
+import utils
 import app
 
 router = Blueprint('login', __name__)
+
+@router.get('/login')
+def login_page():
+    if not current_user.is_anonymous:
+        # User has already logged in
+        return redirect(f'/u/{current_user.id}')
+
+    return render_login_page()
 
 @router.post('/login')
 def login():
@@ -26,19 +36,28 @@ def login():
     if int(login_attempts) > 30:
         # Tell user to slow down
         officer.call(f'Too many login requests from ip! ({ip})')
-        return redirect('/?wait=true')
+        return render_login_page(
+            error="Too many login attempts. Please wait a minute and try again!",
+            redirect=redirect_url
+        )
 
     app.session.redis.incr(f'logins:{ip}')
     app.session.redis.expire(f'logins:{ip}', time=30)
 
     with app.session.database.managed_session() as session:
         if not (user := users.fetch_by_name_extended(username, session=session)):
-            return redirect(redirect_url or '/')
+            return render_login_page(
+                error="The specified username or password is incorrect.",
+                redirect=redirect_url
+            )
 
         md5_password = hashlib.md5(password.encode()).hexdigest()
 
         if not bcrypt.checkpw(md5_password.encode(), user.bcrypt.encode()):
-            return redirect(redirect_url or '/')
+            return render_login_page(
+                error="The specified username or password is incorrect.",
+                redirect=redirect_url
+            )
 
         if not user.activated:
             # Get pending verifications
@@ -91,3 +110,17 @@ def login():
         response = redirect(redirect_url or f'/u/{user.id}')
         response = perform_login(user, remember, response)
         return response
+
+def render_login_page(
+    error: str | None = None,
+    redirect: str | None = None
+) -> str:
+    return utils.render_template(
+        'login.html',
+        css='account.css',
+        error=error,
+        redirect=redirect,
+        title='Login - Titanic!',
+        site_title='Login',
+        site_description='Log in to your account and start playing today!'
+    )

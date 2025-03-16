@@ -9,8 +9,12 @@ h1, h2 {
     font-size: 120%;
 }
 
-.register-form, .reset-form {
+.register-form, .reset-form, .login-form {
     padding: 10px;
+}
+
+.login-form {
+    text-align: center;
 }
 
 .register-form > div, .reset-form > div {
@@ -51,6 +55,15 @@ h1, h2 {
     -webkit-border-radius: 3px;
 }
 
+.login-form input[type="text"],
+.login-form input[type="password"],
+.login-form input[type="email"] {
+    -webkit-border-radius: 3px;
+    border: 1px solid #90ace7;
+    border-radius: 3px;
+    width: 300px;
+}
+
 .input-description {
     display: inline-block;
     line-height: 18px;
@@ -72,4 +85,20 @@ h1, h2 {
     transition: all 200ms ease-in-out;
     border-radius: 5px !important;
     color: white;
+}
+
+.login-form h1 {
+    margin-bottom: 5px;
+}
+
+.login-form div input[type="submit"] {
+    line-height: 21px;
+    margin-top: 8px;
+    width: 90px;
+}
+
+.login-form .error {
+    color: red;
+    font-size: 90%;
+    margin-top: 14px;
 }
