@@ -75,9 +75,9 @@
                 </div>
                 <div class="login-container">
                 {% if current_user.id %}
-                    <p class="nav-login" id="welcome-text">
+                    <span class="nav-login" id="welcome-text">
                         Welcome, <a href="/u/{{ current_user.id }}">{{ current_user.name }}</a>
-                    </p>
+                    </span>
                     <a href="/account/settings/profile#avatar">
                         <img class="small-avatar" src="/a/{{ current_user.id }}?s=25" alt="" height="25px">
                     </a>
@@ -101,7 +101,7 @@
                     {% endif %}
                 {% else %}
                     {% if not disable_login_modal %}
-                    <p class="nav-login" id="welcome-text">Welcome, guest!</p>
+                    <span class="nav-login" id="welcome-text">Welcome, guest!</span>
                     <a onclick="showLoginForm()" class="nav-login" id="login-text">Login</a>
                     <a href="/account/register" class="nav-login" id="register-text">I'm new!</a>
                     {% endif %}
