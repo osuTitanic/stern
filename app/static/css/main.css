@@ -108,13 +108,14 @@ input:focus {
 .nav-list {
     list-style: none;
     position: absolute;
-    left: -8px;
+    left: 5px;
     display: inline-block;
     margin-left: 30px;
+    min-height: 25px;
 }
 
 .nav-element {
-    display: inline-block;
+    float: left;
 }
 
 .nav-element a,
@@ -135,6 +136,7 @@ input:focus {
     color: white;
     background: #f375c5;
     text-decoration: none;
+    transition: all 0.15s;
 }
 
 .nav-dropdown {
