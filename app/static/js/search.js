@@ -154,6 +154,7 @@ function getBeatmapsets(clear) {
                 noMapsText.style.textAlign = "center";
                 beatmapContainer.appendChild(noMapsText);
             }
+            busy = false;
             return;
         }
 
