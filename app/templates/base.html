@@ -100,9 +100,11 @@
                     </a>
                     {% endif %}
                 {% else %}
+                    {% if not disable_login_modal %}
                     <p class="nav-login" id="welcome-text">Welcome, guest!</p>
                     <a onclick="showLoginForm()" class="nav-login" id="login-text">Login</a>
                     <a href="/account/register" class="nav-login" id="register-text">I'm new!</a>
+                    {% endif %}
                 {% endif %}
                 </div>
             </div>

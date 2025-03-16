@@ -120,6 +120,7 @@ def render_login_page(
         css='account.css',
         error=error,
         redirect=redirect,
+        disable_login_modal=True,
         title='Login - Titanic!',
         site_title='Login',
         site_description='Log in to your account and start playing today!'
