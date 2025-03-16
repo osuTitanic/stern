@@ -118,24 +118,33 @@ function getSearchInput() {
     return json;
 }
 
-function getBeatmapsets(clear) {
-    var beatmapContainer = document.getElementById("beatmap-list");
-
+function getBeatmapsets(clear) {    
     if (busy) {
         return;
     }
-
+    
     if (clear) {
+        // Clear current beatmaps
         var input = document.getElementById("beatmap-list");
         input.innerHTML = "";
         totalBeatmaps = 0;
         currentPage = 0;
+
+        // Create loading text
+        var loadingText = document.createElement("h3");
+        loadingText.textContent = "Loading...";
+        loadingText.style.margin = "0 auto";
+        loadingText.style.textAlign = "center";
+        loadingText.id = "loading-text";
+        input.appendChild(loadingText);
     }
 
     if (totalBeatmaps > 0 && totalBeatmaps % 50 !== 0) {
+        // No more beatmaps to load
         return;
     }
 
+    var beatmapContainer = document.getElementById("beatmap-list");
     busy = true;
 
     performApiRequest("POST", "/beatmapsets/search", getSearchInput(), function(xhr) {
@@ -373,10 +382,6 @@ function getBeatmapsets(clear) {
             beatmapContainer.appendChild(beatmapsetDiv);
         });
 
-        totalBeatmaps += beatmapsets.length;
-        currentPage++;
-        busy = false;
-
         $(".beatmapset").hover(
             function() {
                 $(this).find(".beatmap-info").marquee({ speed: 50 });
@@ -387,6 +392,23 @@ function getBeatmapsets(clear) {
                 $(this).find(".hidden-elements").fadeOut(400);
             }
         );
+
+        totalBeatmaps += beatmapsets.length;
+        currentPage++;
+        busy = false;
+    }, function(xhr) {
+        var errorText = document.createElement("h3");
+        errorText.textContent = "An error occurred while loading beatmaps.";
+        errorText.style.margin = "0 auto";
+        errorText.style.textAlign = "center";
+        errorText.id = "loading-text";
+
+        if (loadingText) {
+            loadingText.remove();
+        }
+
+        beatmapContainer.appendChild(errorText);
+        busy = false;
     });
 }
 
