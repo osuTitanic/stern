@@ -110,8 +110,8 @@
             </div>
             <div class="login-dropdown" style="display: none;">
                 <form action="/account/login" method="post">
-                    {% if request.view_args %}
-                        <input type="hidden" name="redirect" value="{{ url_for(request.endpoint, **request.view_args) }}">
+                    {% if request.path %}
+                        <input type="hidden" name="redirect" value="{{ request.path }}">
                     {% else %}
                         <input type="hidden" name="redirect" value="/">
                     {% endif %}
