@@ -103,6 +103,7 @@ input:focus {
     min-height: 22.5px;
     max-width: 630px;
     padding-left: 50px;
+    height: 22px;
 }
 
 .nav-list {
@@ -222,8 +223,8 @@ input:focus {
     filter: drop-shadow(0px 1px 2px #d6d2df);
     margin-bottom: 20px;
     padding: 5.5px;
-    max-height: 18px;
     display: block;
+    height: 18px;
 }
 
 .search-container {
@@ -231,6 +232,7 @@ input:focus {
     max-height: 18px;
     margin-left: 45px;
     vertical-align: top;
+    float: left;
 }
 
 .search-form {
