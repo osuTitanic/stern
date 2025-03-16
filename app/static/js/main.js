@@ -100,7 +100,7 @@ function userSearch() {
     return true;
 }
 
-function performApiRequest(method, url, data, callbackSuccess, callbackError) {
+function performApiRequest(method, path, data, callbackSuccess, callbackError) {
     var xhr;
 
     // Use XMLHttpRequest if available; otherwise, try ActiveX for older IE versions
@@ -120,7 +120,13 @@ function performApiRequest(method, url, data, callbackSuccess, callbackError) {
         console.warn("This browser does not support ajax credentials.");
     }
 
-    xhr.open(method, apiBaseurl + url, true);
+    url = apiBaseurl + path;
+
+    // Use the current site protocol
+    url = url.replace(/^https?:\/\//, '');
+    url = location.protocol + '//' + url
+
+    xhr.open(method, url, true);
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.setRequestHeader("Cache-Control", "no-cache");
     xhr.onreadystatechange = function() {
