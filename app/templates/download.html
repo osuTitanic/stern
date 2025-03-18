@@ -4,13 +4,19 @@
 
 {% block content %}
 <div class="heading">
-    <h2>Let's get you started!</h2>
-    <p>Please choose a version that you want to play on! (Scroll to view more)</p>
+    <h2>Let's get you started</h2>
+    <p>Start by choosing a category below!</p>
 </div>
-<div>
+<div class="category-wrapper">
 {% for (category, clients) in releases.items() %}
-    <h2 class="category">{{ category }}</h2>
-    <div id="client-container">
+    {% if category.isdigit() %}
+    <a class="category" onclick="displayCategory('{{ category }}')">{{ category }}</a>
+    {% endif %}
+{% endfor %}
+</div>
+<div class="client-wrapper">
+{% for (category, clients) in releases.items() %}
+    <div class="client-container" style="display: none;" id="{{ category }}">
     {% for client in clients %}
         {% set display_client = (
             client.supported and
@@ -32,7 +38,7 @@
             {% endif %}
             <div style="text-align: center">
                 {% if client.screenshots %}
-                <img src="{{ (client.screenshots|first)['src'] }}" alt="{{ client.name }} Preview">
+                <img src="{{ (client.screenshots|first)['src'] }}" alt="{{ client.name }} Preview" loading="lazy">
                 {% endif %}
             </div>
             <a class="download-link" href="{{ client.downloads[0] }}">Download</a>
@@ -51,4 +57,5 @@
         Looking for modded clients? Check out the <a href="/forum/23">modding forum</a>.
     </p>
 </div>
+<script src="/js/download.js"></script>
 {% endblock content %}

@@ -91,3 +91,36 @@ async function downloadOsxPackage(client) {
             console.error('Error downloading packages:', error);
         });
 }
+
+function displayCategory(category) {
+    document.querySelectorAll(".client-container").forEach(function(client) {
+        wasEnabled = client.style.display == 'block';
+
+        if (wasEnabled)
+        {
+            client.style.display = 'none';
+            return;
+        }
+
+        if (client.id == category)
+        {
+            client.style.display = 'block';
+        }
+        else
+        { 
+            client.style.display = 'none';
+        }
+    });
+
+    document.querySelectorAll(".category").forEach(function(categoryLink) {
+        if (categoryLink.textContent == category)
+        {
+            categoryLink.classList.add('selected');
+        }
+        else
+        {
+            categoryLink.classList.remove('selected');
+
+        }
+    });
+}
