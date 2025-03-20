@@ -10,13 +10,14 @@
 <div class="category-wrapper">
 {% for (category, clients) in releases.items() %}
     {% if category.isdigit() %}
-    <a class="category" onclick="displayCategory('{{ category }}')">{{ category }}</a>
+    <a class="category {{ 'selected' if loop.index0 == 0 else '' }}"
+       onclick="displayCategory('{{ category }}')">{{ category }}</a>
     {% endif %}
 {% endfor %}
 </div>
 <div class="client-wrapper">
 {% for (category, clients) in releases.items() %}
-    <div class="client-container" style="display: none;" id="{{ category }}">
+    <div class="client-container" style="{{ 'display: none' if loop.index0 != 0 else 'display: block' }}" id="{{ category }}">
     {% for client in clients %}
         {% set display_client = (
             client.supported and
