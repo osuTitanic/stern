@@ -131,11 +131,12 @@ function getBeatmapsets(clear) {
         currentPage = 0;
 
         // Create loading text
+        clearStatusText();
         var loadingText = document.createElement("h3");
         loadingText.textContent = "Loading...";
         loadingText.style.margin = "0 auto";
         loadingText.style.textAlign = "center";
-        loadingText.id = "loading-text";
+        loadingText.id = "status-text";
         input.appendChild(loadingText);
     }
 
@@ -149,7 +150,7 @@ function getBeatmapsets(clear) {
 
     performApiRequest("POST", "/beatmapsets/search", getSearchInput(), function(xhr) {
         var beatmapsets = JSON.parse(xhr.responseText);
-        var loadingText = document.getElementById("loading-text");
+        var loadingText = document.getElementById("status-text");
 
         if (loadingText) {
             loadingText.remove();
@@ -397,19 +398,24 @@ function getBeatmapsets(clear) {
         currentPage++;
         busy = false;
     }, function(xhr) {
+        clearStatusText();
         var errorText = document.createElement("h3");
         errorText.textContent = "An error occurred while loading beatmaps.";
         errorText.style.margin = "0 auto";
         errorText.style.textAlign = "center";
-        errorText.id = "loading-text";
-
-        if (loadingText) {
-            loadingText.remove();
-        }
+        errorText.id = "status-text";
 
         beatmapContainer.appendChild(errorText);
         busy = false;
     });
+}
+
+function clearStatusText() {
+    var loadingTexts = document.querySelectorAll("#status-text");
+
+    for (var i = 0; i < loadingTexts.length; i++) {
+        loadingTexts[i].remove();
+    }
 }
 
 function setElement(element) {
