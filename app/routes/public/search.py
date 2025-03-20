@@ -22,7 +22,8 @@ def search_beatmap():
         site_title="Beatmaps Listing",
         site_description="Search for beatmaps",
         canonical_url=request.base_url,
-        page=request.args.get('page', default=0, type=int)
+        page=request.args.get('page', default=0, type=int),
+        category=request.args.get('category', default=None, type=int),
     )
 
 def secure_filename(filename: str) -> str:

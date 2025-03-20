@@ -20,15 +20,15 @@
         <dl data-name="category">
             <dt>Category:</dt>
             <dd>
-                <a data-id="" class="selected">Has Leaderboard</a>
-                <a data-id="2">Ranked</a>
-                <a data-id="3">Qualified</a>
-                <a data-id="4">Loved</a>
-                <a data-id="5">Approved</a>
-                <a data-id="6">Pending</a>
-                <a data-id="7">WIP</a>
-                <a data-id="8">Graveyard</a>
-                <a data-id="0">All</a>
+                <a data-id="" class="{{ 'selected' if not category else '' }}">Has Leaderboard</a>
+                <a data-id="2" class="{{ 'selected' if category == 2 else '' }}">Ranked</a>
+                <a data-id="3" class="{{ 'selected' if category == 3 else '' }}">Qualified</a>
+                <a data-id="4" class="{{ 'selected' if category == 4 else '' }}">Loved</a>
+                <a data-id="5" class="{{ 'selected' if category == 5 else '' }}">Approved</a>
+                <a data-id="6" class="{{ 'selected' if category == 6 else '' }}">Pending</a>
+                <a data-id="7" class="{{ 'selected' if category == 7 else '' }}">WIP</a>
+                <a data-id="8" class="{{ 'selected' if category == 8 else '' }}">Graveyard</a>
+                <a data-id="0" class="{{ 'selected' if category == 0 else '' }}">All</a>
             </dd>
         </dl>
         <dl data-name="genre">
