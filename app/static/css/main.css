@@ -92,8 +92,8 @@ input:focus {
     left: -88px;
     width: 140px;
     height: 140px;
-    transform: rotate(-2.5deg);
     z-index: 10;
+    transform: rotate(-2.5deg);
     filter: drop-shadow(5px 2px 0.2rem #0000001c);
 }
 
@@ -107,19 +107,21 @@ input:focus {
     max-width: 630px;
     padding-left: 50px;
     height: 22px;
+    z-index: -1;
 }
 
 .nav-list {
     list-style: none;
     position: absolute;
-    left: 5px;
     display: inline-block;
     margin-left: 30px;
     min-height: 25px;
+    left: 5px;
 }
 
 .nav-element {
     float: left;
+    min-height: 25px;
 }
 
 .nav-element a,
@@ -132,7 +134,7 @@ input:focus {
     font-size: 11px;
     color: #4e2151;
     display: block;
-    line-height: 20.5px;
+    line-height: 20.4px;
     margin-bottom: -4px;
 }
 
@@ -185,9 +187,9 @@ input:focus {
     background-color: #5b5399;
     min-width: 200px;
     height: 30px;
-    margin-top: -38px;
-    margin-right: 25px;
-    right: 0;
+    top: -15px;
+    right: 25px;
+    z-index: 0;
     color: white;
     font-size: 11px;
     padding: 5px;
@@ -237,6 +239,7 @@ input:focus {
     padding: 5.5px;
     display: block;
     height: 18px;
+    z-index: 1;
 }
 
 .search-container {
