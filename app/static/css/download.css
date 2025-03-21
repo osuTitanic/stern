@@ -79,6 +79,8 @@
     margin-top: 8px;
     border-radius: 2px;
     max-height: 200px;
+    min-height: 200px;
+    min-width: 250px;
     color: grey;
 }
 
