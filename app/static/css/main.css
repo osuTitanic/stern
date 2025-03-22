@@ -146,6 +146,7 @@ input:focus {
 }
 
 .nav-dropdown {
+    z-index: 2;
     display: none;
     visibility: hidden;
     position: absolute;
