@@ -138,7 +138,7 @@ function getBeatmapsets(clear) {
         // Create loading text
         clearStatusText();
         var loadingText = document.createElement("h3");
-        loadingText.textContent = "Loading...";
+        loadingText.innerText = "Loading...";
         loadingText.style.margin = "0 auto";
         loadingText.style.textAlign = "center";
         loadingText.id = "status-text";
@@ -164,7 +164,7 @@ function getBeatmapsets(clear) {
         if (beatmapsets.length <= 0) {
             if (totalBeatmaps <= 0) {
                 var noMapsText = document.createElement("h3");
-                noMapsText.textContent = "Nothing found... :(";
+                noMapsText.innerText = "Nothing found... :(";
                 noMapsText.style.margin = "0 auto";
                 noMapsText.style.textAlign = "center";
                 beatmapContainer.appendChild(noMapsText);
@@ -235,11 +235,11 @@ function getBeatmapsets(clear) {
             beatmapInfoLeft.classList.add("beatmap-info");
 
             var beatmapArtist = document.createElement("span");
-            beatmapArtist.textContent = beatmapset.artist;
+            beatmapArtist.innerText = beatmapset.artist;
             beatmapArtist.style.color = "#555555";
 
             var beatmapTitle = document.createElement("span");
-            beatmapTitle.textContent = beatmapset.title;
+            beatmapTitle.innerText = beatmapset.title;
 
             var beatmapLink = document.createElement("a");
             beatmapLink.classList.add("beatmap-link");
@@ -266,10 +266,10 @@ function getBeatmapsets(clear) {
             }
 
             var beatmapCreator = document.createElement("span");
-            beatmapCreator.textContent = "mapped by ";
+            beatmapCreator.innerText = "mapped by ";
 
             var beatmapCreatorLink = document.createElement("a");
-            beatmapCreatorLink.textContent = beatmapset.creator;
+            beatmapCreatorLink.innerText = beatmapset.creator;
             if (beatmapset.server === 0) {
                 beatmapCreatorLink.href = 'https://osu.ppy.sh/u/' + beatmapset.creator;
             } else {
@@ -290,7 +290,7 @@ function getBeatmapsets(clear) {
             hiddenElementsContainer.appendChild(beatmapSource);
 
             if (beatmapset.source) {
-                beatmapSourceContent.textContent = beatmapset.source;
+                beatmapSourceContent.innerText = beatmapset.source;
                 beatmapSource.appendChild(document.createTextNode("from "));
                 beatmapSource.appendChild(beatmapSourceContent);
             }
@@ -332,13 +332,13 @@ function getBeatmapsets(clear) {
 
             if (beatmapset.language_id > 0) {
                 var languageTag = document.createElement("a");
-                languageTag.textContent = Languages.get(beatmapset.language_id).toString();
+                languageTag.innerText = Languages.get(beatmapset.language_id).toString();
                 beatmapTagsDiv.appendChild(languageTag);
             }
 
             if (beatmapset.genre_id > 0) {
                 var genreTag = document.createElement("a");
-                genreTag.textContent = Genres.get(beatmapset.genre_id).toString().replace("_", " ");
+                genreTag.innerText = Genres.get(beatmapset.genre_id).toString().replace("_", " ");
                 beatmapTagsDiv.appendChild(genreTag);
             }
 
@@ -399,7 +399,7 @@ function getBeatmapsets(clear) {
     }, function(xhr) {
         clearStatusText();
         var errorText = document.createElement("h3");
-        errorText.textContent = "An error occurred while loading beatmaps.";
+        errorText.innerText = "An error occurred while loading beatmaps.";
         errorText.style.margin = "0 auto";
         errorText.style.textAlign = "center";
         errorText.id = "status-text";
