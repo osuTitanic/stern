@@ -209,17 +209,23 @@ function userSearch() {
 function performApiRequest(method, path, data, callbackSuccess, callbackError) {
     var xhr;
 
-    // Use XMLHttpRequest if available; otherwise, try ActiveX for older IE versions
-    if (window.XMLHttpRequest) {
-        xhr = new XMLHttpRequest();
-    } else {
-        try {
+    // Use XMLHttpRequest or XDomainRequest if available
+    // otherwise, try ActiveX for older IE versions
+    try {
+        if (window.XDomainRequest) {
+            // IE8 and IE9
+            xhr = new XDomainRequest();
+        } else if (window.XMLHttpRequest) {
+            // Modern browsers
+            xhr = new XMLHttpRequest();
+        } else {
+            // IE6 and IE7
             xhr = new ActiveXObject("Microsoft.XMLHTTP");
-        } catch (e) {
-            throw new Error("This browser does not support AJAX requests.");
         }
+    } catch (e) {
+        throw new Error("This browser does not support AJAX requests.");
     }
-
+            
     try {
         xhr.withCredentials = true;
     } catch (e) {
@@ -232,18 +238,44 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
     url = url.replace(/^https?:\/\//, '');
     url = location.protocol + '//' + url
 
+    // Open the request
     xhr.open(method, url, true);
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.setRequestHeader("Cache-Control", "no-cache");
+    
+    try {
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.setRequestHeader("Cache-Control", "no-cache");
+    } catch (e) {
+        console.warn("This browser does not support setting headers.");
+    }
+
+    if (xhr.onreadystatechange === undefined) {
+        xhr.onload = function() {
+            if (callbackSuccess) {
+                console.log("Request successful: " + method + " " + path);
+                callbackSuccess(xhr);
+            }
+        }
+
+        xhr.onerror = function() {
+            console.error("An error occurred during " + method + " request to " + path);
+            if (callbackError) {
+                callbackError(xhr);
+            }
+        }
+
+        xhr.send(JSON.stringify(data));
+        return xhr;
+    }
+
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4) {
             if (xhr.status >= 200 && xhr.status < 300) {
-                console.log(xhr.status + ': "' + xhr.statusText + '"');
+                console.log("[" + xhr.status + "] Request successful: " + method + " " + path);
                 if (callbackSuccess) {
                     callbackSuccess(xhr);
                 }
             } else {
-                console.error(xhr.status + ': "' + xhr.statusText + '"');
+                console.error("[" + xhr.status + "] An error occurred during " + method + " request to " + path);
                 if (callbackError) {
                     callbackError(xhr);
                 }
