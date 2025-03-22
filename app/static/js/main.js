@@ -38,7 +38,7 @@ var Mods = {
     getMembers: function() {
         var memberList = [];
         for (var mod in Mods) {
-            if (Mods.hasOwnProperty(mod) && Mods[mod] === (Mods[mod] & this[mod])) {
+            if (Object.prototype.hasOwnProperty.call(mod) && Mods[mod] === (Mods[mod] & this[mod])) {
                 memberList.push(mod);
             }
         }

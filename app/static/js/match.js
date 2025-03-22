@@ -103,27 +103,32 @@ function generateResultsTable(results, matchMods) {
             score.style.fontWeight = "bold";
             score.appendChild(failed);
         }
-
+        
+        var c300 = document.createElement("td");
+        c300.innerHTML = result.score.c300.toLocaleString();
+        
+        var c100 = document.createElement("td");
+        c100.innerHTML = result.score.c100.toLocaleString();
+        
+        var c50 = document.createElement("td");
+        c50.innerHTML = result.score.c50.toLocaleString();
+        
+        var cMiss = document.createElement("td");
+        cMiss.innerHTML = result.score.cMiss.toLocaleString();
+        
         var accuracy = document.createElement("td");
         accuracy.innerHTML = result.score.accuracy + "%";
-
+    
         var combo = document.createElement("td");
         combo.innerHTML = result.score.max_combo;
 
-        var mods = document.createElement("td");
-        mods.innerHTML = Mods.getString(result.player.mods + matchMods);
-
-        var c300 = document.createElement("td");
-        c300.innerHTML = result.score.c300.toLocaleString();
-
-        var c100 = document.createElement("td");
-        c100.innerHTML = result.score.c100.toLocaleString();
-
-        var c50 = document.createElement("td");
-        c50.innerHTML = result.score.c50.toLocaleString();
-
-        var cMiss = document.createElement("td");
-        cMiss.innerHTML = result.score.cMiss.toLocaleString();
+        try {
+            var mods = document.createElement("td");
+            mods.innerHTML = Mods.getString(result.player.mods + matchMods);
+        } catch (e) {
+            console.warn("Failed to parse mods: " + result.player.mods);
+            mods.innerHTML = "??";
+        }
 
         row.appendChild(place);
         row.appendChild(player);
