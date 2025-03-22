@@ -81,6 +81,11 @@ function getBeatmapIcon(beatmap) {
 }
 
 function getSearchInput() {
+    if (document.querySelectorAll === undefined) {
+        // lets not even attempt this
+        return {};
+    }
+
     var dataElements = document.querySelectorAll(".beatmap-options dl");
     var json = {};
 
@@ -89,7 +94,7 @@ function getSearchInput() {
         var dataName = item.getAttribute("data-name");
 
         if (!dataName) {
-            var selectedElements = item.querySelectorAll(".selected");
+            var selectedElements = item.getElementsByClassName("selected");
             for (var j = 0; j < selectedElements.length; j++) {
                 json[selectedElements[j].getAttribute("data-name")] = true;
             }
@@ -405,6 +410,15 @@ function getBeatmapsets(clear) {
 }
 
 function clearStatusText() {
+    if (document.querySelectorAll == undefined) {
+        var loadingText = document.getElementById("status-text");
+
+        if (!loadingText)
+            return;
+
+        return loadingText.remove();
+    }
+
     var loadingTexts = document.querySelectorAll("#status-text");
 
     for (var i = 0; i < loadingTexts.length; i++) {
@@ -465,20 +479,22 @@ function setOrder(element) {
     getBeatmapsets(true);
 }
 
-var beatmapOptionsLinks = document.querySelectorAll(".beatmap-options a");
-for (var i = 0; i < beatmapOptionsLinks.length; i++) {
-    addEvent("click", beatmapOptionsLinks[i], function(event) {
-        event.preventDefault();
-        setElement(event.target);
-    });
-}
-
-var beatmapOrderSelectLinks = document.querySelectorAll(".beatmap-order-select a");
-for (var i = 0; i < beatmapOrderSelectLinks.length; i++) {
-    addEvent("click", beatmapOrderSelectLinks[i], function(event) {
-        event.preventDefault();
-        setOrder(event.target);
-    });
+if (document.querySelectorAll !== undefined) {
+    var beatmapOptionsLinks = document.querySelectorAll(".beatmap-options a");
+    for (var i = 0; i < beatmapOptionsLinks.length; i++) {
+        addEvent("click", beatmapOptionsLinks[i], function(event) {
+            event.preventDefault();
+            setElement(event.target);
+        });
+    }
+    
+    var beatmapOrderSelectLinks = document.querySelectorAll(".beatmap-order-select a");
+    for (var i = 0; i < beatmapOrderSelectLinks.length; i++) {
+        addEvent("click", beatmapOrderSelectLinks[i], function(event) {
+            event.preventDefault();
+            setOrder(event.target);
+        });
+    }
 }
 
 var input = document.getElementById("search-input");
