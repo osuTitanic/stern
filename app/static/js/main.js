@@ -208,11 +208,6 @@ function userSearch() {
 
 function performApiRequest(method, path, data, callbackSuccess, callbackError) {    
     var url = apiBaseurl + path;
-
-    // Use the current site protocol
-    url = url.replace(/^https?:\/\//, '');
-    url = location.protocol + '//' + url
-
     var xhr;
 
     // Use XMLHttpRequest or XDomainRequest if available
@@ -228,17 +223,21 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
             // IE6 and IE7
             xhr = new ActiveXObject("Microsoft.XMLHTTP");
             // Rewrite url to use /api/v2/ as fallback, due to cors limitations
-            url = "/api/v2" + path;
+            url = osuBaseurl + "/api/v2" + path;
         }
     } catch (e) {
         throw new Error("This browser does not support AJAX requests.");
     }
-            
+
     try {
         xhr.withCredentials = true;
     } catch (e) {
         console.warn("This browser does not support ajax credentials.");
     }
+
+    // Use the current site protocol
+    url = url.replace(/^https?:\/\//, '');
+    url = location.protocol + '//' + url
 
     try {
         // Open the request
