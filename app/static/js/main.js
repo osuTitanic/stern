@@ -39,7 +39,7 @@ var Mods = {
         var memberList = [];
         for (var mod in Mods) {
             if (Object.prototype.hasOwnProperty.call(mod) && Mods[mod] === (Mods[mod] & this[mod])) {
-                memberList.push(mod);
+                memberList[memberList.length] = mod;
             }
         }
         return memberList;
@@ -71,7 +71,7 @@ var Mods = {
         var members = [];
         for (var mod in Mods) {
             if (Mods.hasOwnProperty(mod) && Mods[mod] !== 0 && (value & Mods[mod]) === Mods[mod]) {
-                members.push(mod);
+                members[members.length] = mod;
             }
         }
 
@@ -81,7 +81,7 @@ var Mods = {
 
         var result = [];
         for (var i = 0; i < members.length; i++) {
-            result.push(modMap[Mods[members[i]]]);
+            result[result.length] = modMap[Mods[members[i]]];
         }
         return result.join("");
     }
