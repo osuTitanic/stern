@@ -240,7 +240,6 @@ input:focus {
     padding: 5.5px;
     display: block;
     height: 18px;
-    z-index: 1;
 }
 
 .search-container {
