@@ -219,7 +219,7 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
             // Modern browsers
             xhr = new XMLHttpRequest();
         } else {
-            // IE6 and IE7
+            // IE6 and IE7 (will most likely fail, due to CORS)
             xhr = new ActiveXObject("Microsoft.XMLHTTP");
         }
     } catch (e) {
@@ -238,8 +238,16 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
     url = url.replace(/^https?:\/\//, '');
     url = location.protocol + '//' + url
 
-    // Open the request
-    xhr.open(method, url, true);
+    try {
+        // Open the request
+        xhr.open(method, url, true);
+    } catch (e) {
+        if (callbackError) {
+            callbackError(xhr);
+        }
+        console.error("An error occurred while opening the request: " + e);
+        return;
+    }
     
     try {
         xhr.setRequestHeader("Content-Type", "application/json");
