@@ -326,7 +326,7 @@ function loadMatchEvents(id, after) {
                 switch (event.type) {
                     case 0:
                         if (!event.data.name)
-                            throw "Invalid api response: " + event.data;
+                            throw new Error("Invalid api response: " + event.data);
 
                         var userElement = document.createElement("a");
                         userElement.innerHTML = event.data.name;
@@ -341,7 +341,7 @@ function loadMatchEvents(id, after) {
 
                     case 1:
                         if (!event.data.name)
-                            throw "Invalid api response: " + event.data;
+                            throw new Error("Invalid api response: " + event.data);
 
                         var userElement = document.createElement("a");
                         userElement.innerHTML = event.data.name;
@@ -356,7 +356,7 @@ function loadMatchEvents(id, after) {
 
                     case 2:
                         if (!event.data.name)
-                            throw "Invalid api response: " + event.data;
+                            throw new Error("Invalid api response: " + event.data);
 
                         var userElement = document.createElement("a");
                         userElement.innerHTML = event.data.name;
@@ -370,14 +370,14 @@ function loadMatchEvents(id, after) {
                         break;
 
                     case 3:
-                        if (!event.data.new)
-                            throw "Invalid api response: " + event.data;
+                        if (!event.data["new"])
+                            throw new Error("Invalid api response: " + event.data);
 
                         var userElement = document.createElement("a");
-                        userElement.innerHTML = event.data.new.name;
-                        userElement.href = "/u/" + event.data.new.id;
+                        userElement.innerHTML = event.data["new"].name;
+                        userElement.href = "/u/" + event.data["new"].id;
                         var descriptionElement = document.createElement("span");
-                        descriptionElement.classList.add("event-description");
+                        descriptionElement.className = "event-description";
                         descriptionElement.appendChild(userElement);
                         descriptionElement.appendChild(document.createTextNode(" has become the host."));
                         eventElement.appendChild(timeElement);
