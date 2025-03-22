@@ -1,5 +1,6 @@
 var matchId = window.location.pathname.split("/")[2];
-var refreshRate = 8000;
+var lastEventTime = undefined;
+var refreshRate = 6000;
 
 var ScoringType = {
     0: "Score",
@@ -299,12 +300,19 @@ function loadMatchEvents(id, after) {
     var args = "";
 
     if (after != undefined)
-        args = "?after=" + (after.getTime() - refreshRate);
+    {
+        args = "?after=" + after;
+    }
 
     performApiRequest("GET", "/multiplayer/" + id + "/events" + args, null,
         function(xhr) {
             var events = JSON.parse(xhr.responseText);
             statusText.innerHTML = "";
+
+            if (events.length > 0)
+            {
+                lastEventTime = events[events.length - 1].time;
+            }
 
             events.forEach(function(event) {
                 var eventDate = new Date(event.time);
@@ -497,7 +505,7 @@ function loadMatchEventsLoop() {
         if (events.includes("closed"))
             return;
 
-        loadMatchEvents(matchId, new Date());
+        loadMatchEvents(matchId, lastEventTime);
         loadMatchEventsLoop();
     }, refreshRate);
 }
