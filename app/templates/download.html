@@ -21,7 +21,6 @@
     {% for client in clients %}
         {% set display_client = (
             client.supported and
-            client.recommended and
             client.downloads and
             not client.preview
         ) %}
@@ -39,7 +38,7 @@
             {% endif %}
             <div style="text-align: center">
                 {% if client.screenshots %}
-                <img src="{{ (client.screenshots|first)['src'] }}" alt="{{ client.name }} Preview" loading="lazy">
+                <img src="{{ client.screenshots|first }}" alt="" loading="lazy">
                 {% endif %}
             </div>
             <a class="download-link" href="{{ client.downloads[0] }}">Download</a>
