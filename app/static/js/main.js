@@ -1,3 +1,99 @@
+var Mods = {
+    NoMod: 0,
+    NoFail: 1 << 0,
+    Easy: 1 << 1,
+    NoVideo: 1 << 2,
+    Hidden: 1 << 3,
+    HardRock: 1 << 4,
+    SuddenDeath: 1 << 5,
+    DoubleTime: 1 << 6,
+    Relax: 1 << 7,
+    HalfTime: 1 << 8,
+    Nightcore: 1 << 9,
+    Flashlight: 1 << 10,
+    Autoplay: 1 << 11,
+    SpunOut: 1 << 12,
+    Autopilot: 1 << 13,
+    Perfect: 1 << 14,
+    Key4: 1 << 15,
+    Key5: 1 << 16,
+    Key6: 1 << 17,
+    Key7: 1 << 18,
+    Key8: 1 << 19,
+    FadeIn: 1 << 20,
+    Random: 1 << 21,
+    Cinema: 1 << 22,
+    Target: 1 << 23,
+    Key9: 1 << 24,
+    KeyCoop: 1 << 25,
+    Key1: 1 << 26,
+    Key3: 1 << 27,
+    Key2: 1 << 28,
+    ScoreV2: 1 << 29,
+    Mirror: 1 << 30,
+    KeyMod: (1 << 15) | (1 << 16) | (1 << 17) | (1 << 18) | (1 << 19) | (1 << 24) | (1 << 25) | (1 << 26) | (1 << 27) | (1 << 28),
+    FreeModAllowed: (1 << 0) | (1 << 1) | (1 << 3) | (1 << 4) | (1 << 5) | (1 << 10) | (1 << 20) | (1 << 7) | (1 << 13) | (1 << 12) | (1 << 15) | (1 << 16) | (1 << 17) | (1 << 18) | (1 << 19),
+    SpeedMods: (1 << 6) | (1 << 8) | (1 << 9),
+
+    getMembers: function() {
+        var memberList = [];
+        for (var mod in Mods) {
+            if (Mods.hasOwnProperty(mod) && Mods[mod] === (Mods[mod] & this[mod])) {
+                memberList.push(mod);
+            }
+        }
+        return memberList;
+    },
+
+    getString: function(value) {
+        var modMap = {};
+        modMap[Mods.NoMod] = "NM";
+        modMap[Mods.NoFail] = "NF";
+        modMap[Mods.Easy] = "EZ";
+        modMap[Mods.Hidden] = "HD";
+        modMap[Mods.HardRock] = "HR";
+        modMap[Mods.SuddenDeath] = "SD";
+        modMap[Mods.DoubleTime] = "DT";
+        modMap[Mods.Relax] = "RX";
+        modMap[Mods.HalfTime] = "HT";
+        modMap[Mods.Nightcore] = "NC";
+        modMap[Mods.Flashlight] = "FL";
+        modMap[Mods.Autoplay] = "AT";
+        modMap[Mods.SpunOut] = "SO";
+        modMap[Mods.Autopilot] = "AP";
+        modMap[Mods.Perfect] = "PF";
+        modMap[Mods.Key4] = "K4";
+        modMap[Mods.Key5] = "K5";
+        modMap[Mods.Key6] = "K6";
+        modMap[Mods.Key7] = "K7";
+        modMap[Mods.Key8] = "K8";
+
+        var members = [];
+        for (var mod in Mods) {
+            if (Mods.hasOwnProperty(mod) && Mods[mod] !== 0 && (value & Mods[mod]) === Mods[mod]) {
+                members.push(mod);
+            }
+        }
+
+        if (members.indexOf("DT") !== -1 && members.indexOf("NC") !== -1) {
+            members.splice(members.indexOf("DT"), 1);
+        }
+
+        var result = [];
+        for (var i = 0; i < members.length; i++) {
+            result.push(modMap[Mods[members[i]]]);
+        }
+        return result.join("");
+    }
+};
+
+var Mode = {
+    0: "osu!",
+    1: "Taiko",
+    2: "Catch the Beat",
+    3: "osu!Mania"
+};
+
 if (!window.console) {
     // Console polyfill for ~IE8 and earlier
     console = {
