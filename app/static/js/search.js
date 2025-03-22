@@ -416,7 +416,8 @@ function clearStatusText() {
         if (!loadingText)
             return;
 
-        return loadingText.remove();
+        loadingText.parentNode.removeChild(loadingText);
+        return;
     }
 
     var loadingTexts = document.querySelectorAll("#status-text");
