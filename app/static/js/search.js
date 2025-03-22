@@ -94,7 +94,7 @@ function getSearchInput() {
         var dataName = item.getAttribute("data-name");
 
         if (!dataName) {
-            var selectedElements = item.getElementsByClassName("selected");
+            var selectedElements = item.querySelectorAll("selected");
             for (var j = 0; j < selectedElements.length; j++) {
                 json[selectedElements[j].getAttribute("data-name")] = true;
             }
