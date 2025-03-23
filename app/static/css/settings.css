@@ -167,6 +167,28 @@
     color: black;
 }
 
+.bookmark {
+    color: #868686;
+    font-size: 95%;
+    display: block;
+    min-height: 18px;
+}
+
+.bookmark-link {
+    max-width: 90%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+    float: left;
+}
+
+.delete-link {
+    color: red !important;
+    float: right;
+    text-align: right;
+}
+
 .friends-heading {
     text-align: center;
     margin-bottom: 15px;

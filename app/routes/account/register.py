@@ -14,6 +14,7 @@ from app.common.database.repositories import (
 
 from flask import Blueprint, request, redirect
 from typing import Optional
+from app import accounts
 
 import flask_login
 import hashlib
@@ -24,12 +25,170 @@ import app
 
 router = Blueprint('register', __name__)
 
-def return_to_register_page(error: Optional[str] = None) -> str:
+@router.get('/register')
+def register_page():
+    if not flask_login.current_user.is_anonymous:
+        # User has already logged in
+        return redirect(f'/u/{flask_login.current_user.id}')
+
+    return render_register_page()
+
+@router.post('/register')
+def registration_request():
+    ip = helpers.ip.resolve_ip_address_flask(request)
+
+    try:
+        if validate_email(email := request.form.get('email')):
+            return render_register_page('Please enter a valid email!')
+
+        if validate_username(username := request.form.get('username')):
+            return render_register_page('Please enter a valid username!')
+
+        if not (password := request.form.get('password')):
+            return render_register_page('Please enter a valid password!')
+
+        if len(password) <= 7:
+            return render_register_page('Please enter a password with at least 8 characters!')
+    except Exception as e:
+        app.session.logger.error(
+            f'Failed to verify registration request: {e}',
+            exc_info=e
+        )
+        officer.call(
+            f'Failed to verify registration request from IP ({ip}): {e}',
+            exc_info=e
+        )
+        return render_register_page('Failed to process your request. Please try again!')
+
+    registration_count = app.session.redis.get(f'registrations:{ip}') or 0
+
+    if int(registration_count) > 2:
+        officer.call(
+            f'Failed to register: Too many registrations from IP ({ip})'
+        )
+        return render_register_page('There have been too many registrations from this ip. Please try again later!')
+
+    if config.RECAPTCHA_SECRET_KEY and config.RECAPTCHA_SITE_KEY:
+        client_response = request.form.get('recaptcha_response')
+
+        if not client_response:
+            return render_register_page('Invalid captcha response!')
+
+        response = app.session.requests.post(
+            'https://www.google.com/recaptcha/api/siteverify',
+            data={
+                'secret': config.RECAPTCHA_SECRET_KEY,
+                'response': client_response,
+                'remoteip': ip
+            }
+        )
+
+        if not response.ok:
+            return render_register_page('Failed to verify captcha response!')
+
+        if not response.json().get('success', False):
+            return render_register_page('Captcha verification failed!')
+
+    with app.session.database.managed_session() as session:
+        app.session.logger.info(
+            f'Starting registration process for "{username}" ({email}) ({ip})...'
+        )
+
+        geolocation = location.fetch_web(ip)
+        country = geolocation.country_code.upper() if geolocation else 'XX'
+
+        cf_country = request.headers.get('CF-IPCountry', 'XX')
+
+        if cf_country not in ('XX', 'T1'):
+            country = cf_country.upper()
+
+        hashed_password = get_hashed_password(password)
+        username = username.strip()
+        safe_name = username.lower().replace(' ', '_')
+
+        user = users.create(
+            username=username,
+            safe_name=safe_name,
+            email=email.lower(),
+            pw_bcrypt=hashed_password,
+            country=country,
+            activated=False if config.EMAILS_ENABLED else True,
+            session=session
+        )
+
+        if not user:
+            officer.call(f'Failed to register user "{username}".')
+            return render_register_page('An error occured on the server side. Please try again!')
+
+        app.session.logger.info(f'User "{username}" with id "{user.id}" was created.')
+
+        # Send welcome notification
+        notifications.create(
+            user.id,
+            NotificationType.Welcome.value,
+            'Welcome!',
+            'Welcome aboard! '
+            f'Get started by downloading one of our builds [here]({config.OSU_BASEURL}/download). '
+            'Enjoy your journey!',
+            session=session
+        )
+
+        # Add user to players & supporters group
+        groups.create_entry(user.id, 999, session=session)
+        groups.create_entry(user.id, 1000, session=session)
+
+        # Increment registration count
+        app.session.redis.incr(f'registrations:{ip}')
+        app.session.redis.expire(f'registrations:{ip}', 3600 * 24)
+
+        if not config.EMAILS_ENABLED:
+            # Verification is disabled
+            app.session.logger.info('Registration finished.')
+            return accounts.perform_login(user)
+
+        app.session.logger.info('Sending verification email...')
+
+        verification = verifications.create(
+            user.id,
+            type=0,
+            token_size=32,
+            session=session
+        )
+
+        mail.send_welcome_email(
+            verification,
+            user
+        )
+
+        app.session.logger.info('Registration finished.')
+        return redirect(f'/account/verification?id={verification.id}')
+
+@router.get('/register/check')
+def input_validation():
+    if not (type := request.args.get('type')):
+        return ''
+
+    if not (value := request.args.get('value')):
+        return ''
+
+    validators = {
+        'username': validate_username,
+        'email': validate_email
+    }
+
+    if not (validator := validators.get(type)):
+        return ''
+
+    return validator(value) or ''
+
+def render_register_page(error: Optional[str] = None) -> str:
     return utils.render_template(
         'register.html',
-        css='register.css',
-        error=error,
-        title='Register - Titanic!'
+        css='account.css',
+        title='Register - Titanic!',
+        site_title='Register',
+        site_description='Create your account and start playing today!',
+        error=error
     )
 
 def get_hashed_password(password: str) -> str:
@@ -76,167 +235,3 @@ def validate_email(email: str) -> Optional[str]:
     if users.fetch_by_email(email.lower()):
         # TODO: Forgot username/password link
         return "This email address is already in use."
-
-@router.get('/register')
-def register():
-    if not flask_login.current_user.is_anonymous:
-        # User has already logged in
-        return redirect(f'/u/{flask_login.current_user.id}')
-
-    return utils.render_template(
-        'register.html',
-        css='register.css',
-        title='Register - Titanic!',
-        site_title='Register',
-        site_description='Create your account and start playing today!'
-    )
-
-@router.post('/register')
-def registration_request():
-    ip = helpers.ip.resolve_ip_address_flask(request)
-
-    try:
-        if validate_email(email := request.form.get('email')):
-            return return_to_register_page('Please enter a valid email!')
-
-        if validate_username(username := request.form.get('username')):
-            return return_to_register_page('Please enter a valid username!')
-
-        if not (password := request.form.get('password')):
-            return return_to_register_page('Please enter a valid password!')
-
-        if len(password) <= 7:
-            return return_to_register_page('Please enter a password with at least 8 characters!')
-    except Exception as e:
-        app.session.logger.error(
-            f'Failed to verify registration request: {e}',
-            exc_info=e
-        )
-        officer.call(
-            f'Failed to verify registration request from IP ({ip}): {e}',
-            exc_info=e
-        )
-        return return_to_register_page('Failed to process your request. Please try again!')
-
-    registration_count = app.session.redis.get(f'registrations:{ip}') or 0
-
-    if int(registration_count) > 2:
-        officer.call(
-            f'Failed to register: Too many registrations from IP ({ip})'
-        )
-        return return_to_register_page('There have been too many registrations from this ip. Please try again later!')
-
-    if config.RECAPTCHA_SECRET_KEY and config.RECAPTCHA_SITE_KEY:
-        client_response = request.form.get('recaptcha_response')
-
-        if not client_response:
-            return return_to_register_page('Invalid captcha response!')
-
-        response = app.session.requests.post(
-            'https://www.google.com/recaptcha/api/siteverify',
-            data={
-                'secret': config.RECAPTCHA_SECRET_KEY,
-                'response': client_response,
-                'remoteip': ip
-            }
-        )
-
-        if not response.ok:
-            return return_to_register_page('Failed to verify captcha response!')
-
-        if not response.json().get('success', False):
-            return return_to_register_page('Captcha verification failed!')
-
-    with app.session.database.managed_session() as session:
-        app.session.logger.info(
-            f'Starting registration process for "{username}" ({email}) ({ip})...'
-        )
-
-        geolocation = location.fetch_web(ip)
-        country = geolocation.country_code.upper() if geolocation else 'XX'
-
-        cf_country = request.headers.get('CF-IPCountry', 'XX')
-
-        if cf_country not in ('XX', 'T1'):
-            country = cf_country.upper()
-
-        hashed_password = get_hashed_password(password)
-        username = username.strip()
-        safe_name = username.lower().replace(' ', '_')
-
-        user = users.create(
-            username=username,
-            safe_name=safe_name,
-            email=email.lower(),
-            pw_bcrypt=hashed_password,
-            country=country,
-            activated=False if config.EMAILS_ENABLED else True,
-            session=session
-        )
-
-        if not user:
-            officer.call(f'Failed to register user "{username}".')
-            return return_to_register_page('An error occured on the server side. Please try again!')
-
-        app.session.logger.info(f'User "{username}" with id "{user.id}" was created.')
-
-        # Send welcome notification
-        notifications.create(
-            user.id,
-            NotificationType.Welcome.value,
-            'Welcome!',
-            'Welcome aboard! '
-            f'Get started by downloading one of our builds [here]({config.OSU_BASEURL}/download). '
-            'Enjoy your journey!',
-            session=session
-        )
-
-        # Add user to players & supporters group
-        groups.create_entry(user.id, 999, session=session)
-        groups.create_entry(user.id, 1000, session=session)
-
-        # Increment registration count
-        app.session.redis.incr(f'registrations:{ip}')
-        app.session.redis.expire(f'registrations:{ip}', 3600 * 24)
-
-        if not config.EMAILS_ENABLED:
-            # Verification is disabled
-            flask_login.login_user(user)
-            app.session.logger.info('Registration finished.')
-            return redirect(f'/u/{user.id}')
-
-        app.session.logger.info('Sending verification email...')
-
-        verification = verifications.create(
-            user.id,
-            type=0,
-            token_size=32,
-            session=session
-        )
-
-        mail.send_welcome_email(
-            verification,
-            user
-        )
-
-        app.session.logger.info('Registration finished.')
-
-        return redirect(f'/account/verification?id={verification.id}')
-
-@router.get('/register/check')
-def input_validation():
-    if not (type := request.args.get('type')):
-        return ''
-
-    if not (value := request.args.get('value')):
-        return ''
-
-    validators = {
-        'username': validate_username,
-        'email': validate_email
-    }
-
-    if not (validator := validators.get(type)):
-        return ''
-
-    return validator(value) or ''

@@ -9,10 +9,8 @@ class Client(BaseModel):
     category: str
     known_bugs: Optional[str]
     supported: bool
-    recommended: bool
     preview: bool
     downloads: List[str]
+    screenshots: List[str]
     hashes: List[dict]
-    screenshots: List[dict]
-    actions: List[dict]
     created_at: datetime

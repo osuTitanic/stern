@@ -15,33 +15,16 @@ router.register_blueprint(packs.router, url_prefix='/packs')
 
 @router.get('/')
 def search_beatmap():
-    page = request.args.get('page', default=0, type=int)
-    max_page_display = max(page, min(page, page + 8))
-    min_page_display = max(0, min(page, max_page_display - 9))
-
-    arguments = '&'.join([
-        f'{key}={value}'
-        for key, value in
-        request.args.items()
-        if key != 'page'
-    ])
-
-    if page > 1000: return redirect(f'?page=1000&{arguments}')
-    elif page < 0: return redirect(f'?page=0&{arguments}')
-
     return utils.render_template(
         'search.html',
         css='search.css',
         title="Beatmap Listing - Titanic",
-        query=request.args.get('query', default=''),
-        sort=request.args.get('sort', default=BeatmapSortBy.Ranked.value, type=int),
-        order=request.args.get('order', default=BeatmapOrder.Descending.value, type=int),
         site_title="Beatmaps Listing",
-        max_page_display=max_page_display,
-        min_page_display=min_page_display,
+        site_description="Search for beatmaps",
         canonical_url=request.base_url,
-        arguments=arguments,
-        page=page
+        page=request.args.get('page', default=0, type=int),
+        query=request.args.get('query', default="", type=str),
+        category=request.args.get('category', default=None, type=int),
     )
 
 def secure_filename(filename: str) -> str:

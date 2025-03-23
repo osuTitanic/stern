@@ -1,5 +1,6 @@
 
 from flask import Blueprint, request, redirect
+from app import accounts
 
 import flask_login
 import utils
@@ -12,5 +13,4 @@ def logout():
         return redirect('/')
 
     redirect_url = request.args.get('redirect', '/')
-    flask_login.logout_user()
-    return redirect(redirect_url)
+    return accounts.perform_logout(redirect(redirect_url))

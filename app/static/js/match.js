@@ -1,106 +1,6 @@
 var matchId = window.location.pathname.split("/")[2];
-var refreshRate = 8000;
-
-var Mods = {
-    NoMod: 0,
-    NoFail: 1 << 0,
-    Easy: 1 << 1,
-    NoVideo: 1 << 2,
-    Hidden: 1 << 3,
-    HardRock: 1 << 4,
-    SuddenDeath: 1 << 5,
-    DoubleTime: 1 << 6,
-    Relax: 1 << 7,
-    HalfTime: 1 << 8,
-    Nightcore: 1 << 9,
-    Flashlight: 1 << 10,
-    Autoplay: 1 << 11,
-    SpunOut: 1 << 12,
-    Autopilot: 1 << 13,
-    Perfect: 1 << 14,
-    Key4: 1 << 15,
-    Key5: 1 << 16,
-    Key6: 1 << 17,
-    Key7: 1 << 18,
-    Key8: 1 << 19,
-    FadeIn: 1 << 20,
-    Random: 1 << 21,
-    Cinema: 1 << 22,
-    Target: 1 << 23,
-    Key9: 1 << 24,
-    KeyCoop: 1 << 25,
-    Key1: 1 << 26,
-    Key3: 1 << 27,
-    Key2: 1 << 28,
-    ScoreV2: 1 << 29,
-    Mirror: 1 << 30,
-    KeyMod: (1 << 15) | (1 << 16) | (1 << 17) | (1 << 18) | (1 << 19) | (1 << 24) | (1 << 25) | (1 << 26) | (1 << 27) | (1 << 28),
-    FreeModAllowed: (1 << 0) | (1 << 1) | (1 << 3) | (1 << 4) | (1 << 5) | (1 << 10) | (1 << 20) | (1 << 7) | (1 << 13) | (1 << 12) | (1 << 15) | (1 << 16) | (1 << 17) | (1 << 18) | (1 << 19),
-    SpeedMods: (1 << 6) | (1 << 8) | (1 << 9),
-
-    get: function(value) {
-        var keys = Object.keys(this);
-        for (var i = 0; i < keys.length; i++) {
-            if (this[keys[i]] === value) {
-                return keys[i];
-            }
-        }
-        return undefined;
-    },
-
-    getMembers: function() {
-        var memberList = [];
-        for (var mod in Mods) {
-            if (Mods[mod] === (Mods[mod] & this[mod])) {
-                memberList.push(mod);
-            }
-        }
-        return memberList;
-    },
-
-    getString: function(value) {
-        if (value === 0) return "NM";
-
-        var modMap = {
-            [Mods.NoMod]: "NM",
-            [Mods.NoFail]: "NF",
-            [Mods.Easy]: "EZ",
-            [Mods.Hidden]: "HD",
-            [Mods.HardRock]: "HR",
-            [Mods.SuddenDeath]: "SD",
-            [Mods.DoubleTime]: "DT",
-            [Mods.Relax]: "RX",
-            [Mods.HalfTime]: "HT",
-            [Mods.Nightcore]: "NC",
-            [Mods.Flashlight]: "FL",
-            [Mods.Autoplay]: "AT",
-            [Mods.SpunOut]: "SO",
-            [Mods.Autopilot]: "AP",
-            [Mods.Perfect]: "PF",
-            [Mods.Key4]: "K4",
-            [Mods.Key5]: "K5",
-            [Mods.Key6]: "K6",
-            [Mods.Key7]: "K7",
-            [Mods.Key8]: "K8",
-        };
-
-        var members = [];
-        for (var mod in Mods) {
-            if (Mods[mod] !== 0 && (value & Mods[mod]) === Mods[mod]) {
-                members.push(mod);
-            }
-        }
-
-        return members.map(mod => modMap[Mods[mod]]).join("");
-    }
-};
-
-var Mode = {
-    0: "osu!",
-    1: "Taiko",
-    2: "Catch the Beat",
-    3: "osu!Mania"
-};
+var lastEventTime = undefined;
+var refreshRate = 6000;
 
 var ScoringType = {
     0: "Score",
@@ -121,7 +21,7 @@ var Team = {
     2: "Red"
 };
 
-function generateResultsTable(results, matchMods = 0) {
+function generateResultsTable(results, matchMods) {
     var table = document.createElement("table");
     var headerWrapper = document.createElement("thead");
     var header = document.createElement("tr");
@@ -162,7 +62,7 @@ function generateResultsTable(results, matchMods = 0) {
 
     var tableBody = document.createElement("tbody");
 
-    results.forEach(result => {
+    results.forEach(function(result) {
         var row = document.createElement("tr");
 
         if (result.score.failed)
@@ -183,10 +83,10 @@ function generateResultsTable(results, matchMods = 0) {
 
         var playerLink = document.createElement("a");
         playerLink.innerHTML = result.player.name;
-        playerLink.href = `/u/${result.player.id}`;
+        playerLink.href = "/u/" + result.player.id;
 
         var playerFlag = document.createElement("img");
-        playerFlag.src = `/images/flags/${result.player.country.toLowerCase()}.gif`;
+        playerFlag.src = "/images/flags/" + result.player.country.toLowerCase() + ".gif";
         playerFlag.classList.add("flag");
 
         var player = document.createElement("td");
@@ -203,27 +103,32 @@ function generateResultsTable(results, matchMods = 0) {
             score.style.fontWeight = "bold";
             score.appendChild(failed);
         }
-
-        var accuracy = document.createElement("td");
-        accuracy.innerHTML = `${result.score.accuracy}%`;
-
-        var combo = document.createElement("td");
-        combo.innerHTML = `${result.score.max_combo}`;
-
-        var mods = document.createElement("td");
-        mods.innerHTML = Mods.getString(result.player.mods + matchMods);
-
+        
         var c300 = document.createElement("td");
         c300.innerHTML = result.score.c300.toLocaleString();
-
+        
         var c100 = document.createElement("td");
         c100.innerHTML = result.score.c100.toLocaleString();
-
+        
         var c50 = document.createElement("td");
         c50.innerHTML = result.score.c50.toLocaleString();
-
+        
         var cMiss = document.createElement("td");
         cMiss.innerHTML = result.score.cMiss.toLocaleString();
+        
+        var accuracy = document.createElement("td");
+        accuracy.innerHTML = result.score.accuracy + "%";
+    
+        var combo = document.createElement("td");
+        combo.innerHTML = result.score.max_combo;
+
+        try {
+            var mods = document.createElement("td");
+            mods.innerHTML = Mods.getString(result.player.mods + matchMods);
+        } catch (e) {
+            console.warn("Failed to parse mods: " + result.player.mods);
+            mods.innerHTML = "??";
+        }
 
         row.appendChild(place);
         row.appendChild(player);
@@ -253,7 +158,7 @@ function getTeamWinner(results, condition) {
             var blueScore = 0;
             var redScore = 0;
 
-            results.forEach(result => {
+            results.forEach(function(result) {
                 if (result.player.team == 1)
                     blueScore += result.score.score;
                 else if (result.player.team == 2)
@@ -262,11 +167,11 @@ function getTeamWinner(results, condition) {
 
             var teamBlue = document.createElement("span");
             teamBlue.style.color = "#0000ff";
-            teamBlue.innerHTML = `${blueScore.toLocaleString()}`;
+            teamBlue.innerHTML = blueScore.toLocaleString();
 
             var teamRed = document.createElement("span");
             teamRed.style.color = "#ff0000";
-            teamRed.innerHTML = `${redScore.toLocaleString()}`;
+            teamRed.innerHTML = redScore.toLocaleString();
 
             teamResults.appendChild(teamBlue);
             teamResults.appendChild(document.createTextNode(" vs. "));
@@ -300,23 +205,23 @@ function getTeamWinner(results, condition) {
             var blueAccs = [];
             var redAccs = [];
 
-            results.forEach(result => {
+            results.forEach(function(result) {
                 if (result.player.team == 1)
                     blueAccs.push(result.score.accuracy);
                 else if (result.player.team == 2)
                     redAccs.push(result.score.accuracy);
             });
 
-            var blueAcc = blueAccs.reduce((a, b) => a + b, 0) / blueAccs.length || 0;
-            var redAcc = redAccs.reduce((a, b) => a + b, 0) / redAccs.length || 0;
+            var blueAcc = blueAccs.length > 0 ? blueAccs.reduce(function(a, b) { return a + b; }, 0) / blueAccs.length : 0;
+            var redAcc = redAccs.length > 0 ? redAccs.reduce(function(a, b) { return a + b; }, 0) / redAccs.length : 0;
 
             var teamBlue = document.createElement("span");
             teamBlue.style.color = "#0000ff";
-            teamBlue.innerHTML = `${blueAcc.toFixed(2)}%`;
+            teamBlue.innerHTML = blueAcc.toFixed(2) + "%";
 
             var teamRed = document.createElement("span");
             teamRed.style.color = "#ff0000";
-            teamRed.innerHTML = `${redAcc.toFixed(2)}%`;
+            teamRed.innerHTML = redAcc.toFixed(2) + "%";
 
             teamResults.appendChild(teamBlue);
             teamResults.appendChild(document.createTextNode(" vs. "));
@@ -350,7 +255,7 @@ function getTeamWinner(results, condition) {
             var blueCombo = 0;
             var redCombo = 0;
 
-            results.forEach(result => {
+            results.forEach(function(result) {
                 if (result.player.team == 1)
                     blueCombo += result.score.max_combo;
                 else if (result.player.team == 2)
@@ -359,11 +264,11 @@ function getTeamWinner(results, condition) {
 
             var teamBlue = document.createElement("span");
             teamBlue.style.color = "#0000ff";
-            teamBlue.innerHTML = `${blueCombo.toLocaleString()}`;
+            teamBlue.innerHTML = blueCombo.toLocaleString();
 
             var teamRed = document.createElement("span");
             teamRed.style.color = "#ff0000";
-            teamRed.innerHTML = `${redCombo.toLocaleString()}`;
+            teamRed.innerHTML = redCombo.toLocaleString();
 
             teamResults.appendChild(teamBlue);
             teamResults.appendChild(document.createTextNode(" vs. "));
@@ -394,41 +299,43 @@ function getTeamWinner(results, condition) {
     }
 }
 
-function loadMatchEvents(id, after = undefined) {
+function loadMatchEvents(id, after) {
     var statusText = document.getElementById("status-text");
     var container = document.getElementById("match-events");
     var args = "";
 
     if (after != undefined)
-        args = `?after=${after.getTime() - refreshRate}`;
+    {
+        args = "?after=" + after;
+    }
 
-    fetch(`/api/multiplayer/match/${id}/events${args}`)
-        .then(response => {
-            if (response.error)
-                throw response.error;
-
-            return response.json();
-        })
-        .then(events => {
+    performApiRequest("GET", "/multiplayer/" + id + "/events" + args, null,
+        function(xhr) {
+            var events = JSON.parse(xhr.responseText);
             statusText.innerHTML = "";
 
-            events.forEach(event => {
+            if (events.length > 0)
+            {
+                lastEventTime = events[events.length - 1].time;
+            }
+
+            events.forEach(function(event) {
                 var eventDate = new Date(event.time);
                 var eventElement = document.createElement("div");
                 eventElement.classList.add("event");
 
                 var timeElement = document.createElement("span");
                 timeElement.classList.add("event-time");
-                timeElement.innerHTML = `${eventDate.getHours()}:${eventDate.getMinutes()}`;
+                timeElement.innerHTML = eventDate.getHours() + ":" + eventDate.getMinutes();
 
                 switch (event.type) {
                     case 0:
                         if (!event.data.name)
-                            throw `Invalid api response: ${event.data}`;
+                            throw new Error("Invalid api response: " + event.data);
 
                         var userElement = document.createElement("a");
                         userElement.innerHTML = event.data.name;
-                        userElement.href = `/u/${event.data.user_id}`;
+                        userElement.href = "/u/" + event.data.user_id;
                         var descriptionElement = document.createElement("span");
                         descriptionElement.classList.add("event-description");
                         descriptionElement.appendChild(userElement);
@@ -439,11 +346,11 @@ function loadMatchEvents(id, after = undefined) {
 
                     case 1:
                         if (!event.data.name)
-                            throw `Invalid api response: ${event.data}`;
+                            throw new Error("Invalid api response: " + event.data);
 
                         var userElement = document.createElement("a");
                         userElement.innerHTML = event.data.name;
-                        userElement.href = `/u/${event.data.user_id}`;
+                        userElement.href = "/u/" + event.data.user_id;
                         var descriptionElement = document.createElement("span");
                         descriptionElement.classList.add("event-description");
                         descriptionElement.appendChild(userElement);
@@ -454,11 +361,11 @@ function loadMatchEvents(id, after = undefined) {
 
                     case 2:
                         if (!event.data.name)
-                            throw `Invalid api response: ${event.data}`;
+                            throw new Error("Invalid api response: " + event.data);
 
                         var userElement = document.createElement("a");
                         userElement.innerHTML = event.data.name;
-                        userElement.href = `/u/${event.data.user_id}`;
+                        userElement.href = "/u/" + event.data.user_id;
                         var descriptionElement = document.createElement("span");
                         descriptionElement.classList.add("event-description");
                         descriptionElement.appendChild(userElement);
@@ -468,14 +375,14 @@ function loadMatchEvents(id, after = undefined) {
                         break;
 
                     case 3:
-                        if (!event.data.new)
-                            throw `Invalid api response: ${event.data}`;
+                        if (!event.data["new"])
+                            throw new Error("Invalid api response: " + event.data);
 
                         var userElement = document.createElement("a");
-                        userElement.innerHTML = event.data.new.name;
-                        userElement.href = `/u/${event.data.new.id}`;
+                        userElement.innerHTML = event.data["new"].name;
+                        userElement.href = "/u/" + event.data["new"].id;
                         var descriptionElement = document.createElement("span");
-                        descriptionElement.classList.add("event-description");
+                        descriptionElement.className = "event-description";
                         descriptionElement.appendChild(userElement);
                         descriptionElement.appendChild(document.createTextNode(" has become the host."));
                         eventElement.appendChild(timeElement);
@@ -499,7 +406,9 @@ function loadMatchEvents(id, after = undefined) {
                         var startTime = new Date(event.data.start_time);
                         var endTime = new Date(event.data.end_time);
                         var duration = endTime - startTime;
-                        var durationString = `${Math.floor(duration / 1000 / 60)}m ${Math.floor(duration / 1000 % 60)}s`;
+                        var durationMinutes = Math.floor(duration / 1000 / 60);
+                        var durationSecondsRemainder = Math.floor(duration / 1000 % 60);
+                        var durationString = durationMinutes + "m " + durationSecondsRemainder + "s";
 
                         var teamType = TeamType[event.data.team_mode];
                         var scoringType = ScoringType[event.data.scoring_mode];
@@ -512,19 +421,19 @@ function loadMatchEvents(id, after = undefined) {
                         var durationTitle = document.createElement("strong");
                         durationTitle.innerHTML = "Duration: ";
                         durationElement.appendChild(durationTitle);
-                        durationElement.appendChild(document.createTextNode(`${durationString}`));
+                        durationElement.appendChild(document.createTextNode(durationString));
 
                         var gameModeElement = document.createElement("div");
                         var gameModeTitle = document.createElement("strong");
                         gameModeTitle.innerHTML = "Game Mode: ";
                         gameModeElement.appendChild(gameModeTitle);
-                        gameModeElement.appendChild(document.createTextNode(`${mode} (${teamType})`));
+                        gameModeElement.appendChild(document.createTextNode(mode + " (" + teamType + ")"));
 
                         var scoringTypeElement = document.createElement("div");
                         var scoringTypeTitle = document.createElement("strong");
                         scoringTypeTitle.innerHTML = "Scoring Type: ";
                         scoringTypeElement.appendChild(scoringTypeTitle);
-                        scoringTypeElement.appendChild(document.createTextNode(`${scoringType}`));
+                        scoringTypeElement.appendChild(document.createTextNode(scoringType));
 
                         matchDetails.appendChild(durationElement);
                         matchDetails.appendChild(gameModeElement);
@@ -537,7 +446,7 @@ function loadMatchEvents(id, after = undefined) {
 
                         if (event.data.beatmap_id != 0) {
                             var beatmapLink = document.createElement("a");
-                            beatmapLink.href = `/b/${event.data.beatmap_id}`;
+                            beatmapLink.href = "/b/" + event.data.beatmap_id;
                             beatmapLink.appendChild(beatmapDetails);
                             beatmapLink.innerHTML = event.data.beatmap_text;
                             beatmapDetails.appendChild(beatmapLink);
@@ -583,12 +492,11 @@ function loadMatchEvents(id, after = undefined) {
 
                 container.appendChild(eventElement);
             });
-        })
-        .catch(error => {
-            document.querySelectorAll(".event").forEach(element => element.remove());
-            document.querySelectorAll(".game").forEach(element => element.remove());
+        },
+        function(xhr) {
+            document.querySelectorAll(".event").forEach(function(element) { element.remove() });
+            document.querySelectorAll(".game").forEach(function(element) { element.remove() });
             statusText.innerHTML = "Failed to load match. Please try again!";
-            console.error(error);
         });
 }
 
@@ -602,7 +510,7 @@ function loadMatchEventsLoop() {
         if (events.includes("closed"))
             return;
 
-        loadMatchEvents(matchId, new Date());
+        loadMatchEvents(matchId, lastEventTime);
         loadMatchEventsLoop();
     }, refreshRate);
 }
@@ -610,6 +518,6 @@ function loadMatchEventsLoop() {
 // TODO: Add option for displaying chat
 
 addEvent("DOMContentLoaded", document, function(event) {
-    loadMatchEvents(matchId);
+    loadMatchEvents(matchId, undefined);
     loadMatchEventsLoop();
 });

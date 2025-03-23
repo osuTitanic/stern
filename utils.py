@@ -44,8 +44,8 @@ def render_template(template_name: str, **context) -> str:
         )
 
     context.update(
+        is_ie=request.user_agent.browser == 'msie' or 'Trident/' in request.user_agent.string,
         is_compact=request.args.get('compact', 0, type=int) == 1,
-        show_login=request.args.get('login', False, type=bool),
         total_scores=total_scores,
         online_users=online_users,
         total_users=total_users,
@@ -82,33 +82,35 @@ def on_sync_ranks_fail(e: Exception) -> None:
 
 @wrapper.exception_wrapper(on_sync_ranks_fail)
 @wrapper.session_wrapper
-def sync_ranks(user: DBUser, session: Session | None = None) -> None:
+def sync_ranks(user: DBUser, mode: int, session: Session = ...) -> None:
     """Sync cached rank with database"""
-    for user_stats in user.stats:
-        if user_stats.playcount <= 0:
-            continue
+    user.stats.sort(key=lambda s:s.mode)
+    user_stats = user.stats[mode]
 
-        global_rank = leaderboards.global_rank(
+    if user_stats.playcount <= 0:
+        return
+
+    global_rank = leaderboards.global_rank(
+        user.id,
+        user_stats.mode
+    )
+
+    if user_stats.rank != global_rank:
+        # Database rank desynced from redis
+        stats.update(
             user.id,
-            user_stats.mode
+            user_stats.mode,
+            {'rank': global_rank},
+            session=session
         )
+        user_stats.rank = global_rank
 
-        if user_stats.rank != global_rank:
-            # Database rank desynced from redis
-            stats.update(
-                user.id,
-                user_stats.mode,
-                {'rank': global_rank},
-                session=session
-            )
-            user_stats.rank = global_rank
-
-            # Update rank history
-            histories.update_rank(
-                user_stats,
-                user.country,
-                session=session
-            )
+        # Update rank history
+        histories.update_rank(
+            user_stats,
+            user.country,
+            session=session
+        )
 
 def required_nominations(beatmapset: DBBeatmapset) -> bool:
     beatmap_modes = len(

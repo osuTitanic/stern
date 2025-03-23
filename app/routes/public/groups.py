@@ -8,9 +8,12 @@ import app
 router = Blueprint('groups', __name__)
 
 @router.get('/<id>')
-def get_group(id: int):
+def get_group(id: str):
+    if not id.isdigit():
+        return abort(404)
+
     with app.session.database.managed_session() as session:
-        if not (group := groups.fetch_one(id, session)):
+        if not (group := groups.fetch_one(int(id), session)):
             return abort(404)
 
         if group.hidden:

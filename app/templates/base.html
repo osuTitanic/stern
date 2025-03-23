@@ -18,8 +18,6 @@
     {% if config.ENABLE_SSL %}<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">{% endif %}
     <title>{{ title or 'Titanic!' }}</title>
     <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
-    <link rel="prefetch" href="/images/logo/main-vector.min.svg" as="image">
-    <link rel="prefetch" href="/images/logo/main-low.png">
     <link rel="prefetch" href="/css/{{ css or 'main.css' }}">
     <link rel="stylesheet" href="/css/{{ css or 'main.css' }}">
     <link rel="stylesheet" href="/lib/fontawesome.min.css">
@@ -48,11 +46,14 @@
     {% endif %}
     <div class="main">
         <a href="/" aria-label="Home">
-            <link rel="prefetch" href="/images/logo/main-vector.min.svg" as="image">
-            <img src="/images/logo/main-vector.min.svg"
+            <img {% if not is_ie %}
+                 src="/images/logo/main-vector.min.svg"
                  onerror="this.src='/images/logo/main-low.png';"
+                 loading="eager"
+                 {% else %}
+                 src="/images/logo/main-low.png"
+                 {% endif %}
                  class="logo"
-                 loading="preload"
                  alt="Titanic Logo">
         </a>
         <div class="nav">
@@ -74,9 +75,9 @@
                 </div>
                 <div class="login-container">
                 {% if current_user.id %}
-                    <p class="nav-login" id="welcome-text">
+                    <span class="nav-login" id="welcome-text">
                         Welcome, <a href="/u/{{ current_user.id }}">{{ current_user.name }}</a>
-                    </p>
+                    </span>
                     <a href="/account/settings/profile#avatar">
                         <img class="small-avatar" src="/a/{{ current_user.id }}?s=25" alt="" height="25px">
                     </a>
@@ -99,16 +100,18 @@
                     </a>
                     {% endif %}
                 {% else %}
-                    <p class="nav-login" id="welcome-text">Welcome, guest!</p>
+                    {% if not disable_login_modal %}
+                    <span class="nav-login" id="welcome-text">Welcome, guest!</span>
                     <a onclick="showLoginForm()" class="nav-login" id="login-text">Login</a>
                     <a href="/account/register" class="nav-login" id="register-text">I'm new!</a>
+                    {% endif %}
                 {% endif %}
                 </div>
             </div>
             <div class="login-dropdown" style="display: none;">
                 <form action="/account/login" method="post">
-                    {% if request.view_args %}
-                        <input type="hidden" name="redirect" value="{{ url_for(request.endpoint, **request.view_args) }}">
+                    {% if request.path %}
+                        <input type="hidden" name="redirect" value="{{ request.path }}">
                     {% else %}
                         <input type="hidden" name="redirect" value="/">
                     {% endif %}
@@ -119,8 +122,7 @@
                     <input id="password-field" class="post" type="password" name="password" placeholder="Password" tabindex="0" autocomplete="off">
                     <br>
                     <div>
-                        <input id="remember" class="radio" type="checkbox" name="remember">
-                        <label for="remember">Remember Me</label>
+                        <input id="remember" class="radio" type="checkbox" name="remember"><label for="remember">Remember Me</label>
                         <input class="login-button" type="submit" name="login" value="Login" tabindex="5">
                     </div>
                     <div class="login-bottom-text">
@@ -148,10 +150,6 @@
             </div>
             <div class="gradient"></div>
             <script src="/js/editor.js" defer></script>
-            <script>
-                {% if show_login %} showLoginForm(); {% endif %}
-                {% if alert %} alert("{{ alert }}"); {% endif %}
-            </script>
         </div>
     </div>
 </body>

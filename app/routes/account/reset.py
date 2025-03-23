@@ -25,7 +25,7 @@ def get_hashed_password(password: str) -> str:
 def return_to_reset_page(error: Optional[str] = None) -> str:
     return utils.render_template(
         'reset.html',
-        css='register.css',
+        css='account.css',
         error=error,
         title='Password Reset - Titanic!'
     )
@@ -38,7 +38,7 @@ def reset():
 
     return utils.render_template(
         'reset.html',
-        css='register.css',
+        css='account.css',
         title='Password Reset - Titanic!'
     )
 

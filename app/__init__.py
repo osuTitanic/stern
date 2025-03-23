@@ -2,12 +2,15 @@
 from .common.logging import Console, File
 
 from . import constants
+from . import accounts
 from . import session
 from . import bbcode
 from . import common
 from . import routes
+from . import wiki
 
-from .app import flask, get_handle
+from .app import flask
+from .filters import get_handle
 
 import logging
 import config

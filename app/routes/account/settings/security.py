@@ -1,6 +1,7 @@
 
 from app.common.database import users, logins, verifications
 from app.common import mail
+from app import accounts
 
 from flask_login import login_required, current_user
 from flask import Blueprint, request, redirect
@@ -90,8 +91,9 @@ def edit_account_details():
                 current_user
             )
 
-            flask_login.logout_user()
-            return redirect(f'/account/verification?id={verification.id}')
+            response = redirect(f'/account/verification?id={verification.id}')
+            response = accounts.perform_logout(response)
+            return response
 
         new_password = request.form.get('new-password')
         password_confirm = request.form.get('password-confirm')
@@ -109,7 +111,6 @@ def edit_account_details():
 
             users.update(current_user.id, {'bcrypt': hashed_password}, session=session)
             mail.send_password_changed_email(current_user)
-
             return get_security_page(info='Your password was updated.')
 
         return redirect('/account/settings/profile')

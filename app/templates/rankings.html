@@ -60,7 +60,7 @@
     <div class="country-select">
         {% for country in top_countries[:20] %}
             <a href="?country={{ country['name'] }}">
-                <img src="/images/flags/{{ country['name'] }}.gif" alt="">
+                <img src="/images/flags/{{ country['name'] }}.gif" alt="" loading="eager">
             </a>
         {% endfor %}
         <a href="./country">...</a>
@@ -137,7 +137,7 @@
             </td>
             <td>
                 <a href="/rankings/{{ constants.GameMode(mode).alias }}/{{ order_type }}?country={{ player.country|lower }}">
-                    <img src="/images/flags/{{ player.country|lower }}.gif" class="flag" alt="">
+                    <img src="/images/flags/{{ player.country|lower }}.gif" class="flag" alt="" loading="eager">
                 </a>
                 <a href="/u/{{ player.id }}">{{ player.name }}</a>
             </td>

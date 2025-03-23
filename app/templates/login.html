@@ -1,0 +1,32 @@
+{# templates/login.html #}
+
+{% extends "base.html" %}
+
+{% block content %}
+<form action="/account/login" method="post" class="login-form">
+    <h1>Login</h1>
+    <span>
+        <a href="/account/register">I don't have an account</a> |
+        <a href="/account/reset">I forgot my password</a>
+    </span>
+    <br>
+    <br>
+    <label for="username-field"><b>Username:</b></label>
+    <input id="username-field" class="post" type="text" name="username" placeholder="" maxlength="30" value="" tabindex="0" autocomplete="off">
+    <br>
+    <label for="password-field"><b>Password:</b></label>
+    <input id="password-field" class="post" type="password" name="password" placeholder="" tabindex="0" autocomplete="off">
+    <br>
+    {% if error %}
+    <div class="error">{{ error }}</div>
+    {% endif %}
+    <br>
+    <div>
+        <input id="remember" class="radio" type="checkbox" name="remember">
+        <label for="remember">Remember Me</label><br>
+        <input class="login-button" type="submit" name="login" value="Login" tabindex="5">
+    </div>
+    <input type="hidden" name="redirect" value="{{ redirect or '/' }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+</form>
+{% endblock content %}

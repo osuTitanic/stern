@@ -20,15 +20,15 @@
         <dl data-name="category">
             <dt>Category:</dt>
             <dd>
-                <a data-id="" class="selected">Has Leaderboard</a>
-                <a data-id="2">Ranked</a>
-                <a data-id="3">Qualified</a>
-                <a data-id="4">Loved</a>
-                <a data-id="5">Approved</a>
-                <a data-id="6">Pending</a>
-                <a data-id="7">WIP</a>
-                <a data-id="8">Graveyard</a>
-                <a data-id="0">All</a>
+                <a data-id="" class="{{ 'selected' if not category else '' }}">Has Leaderboard</a>
+                <a data-id="2" class="{{ 'selected' if category == 2 else '' }}">Ranked</a>
+                <a data-id="3" class="{{ 'selected' if category == 3 else '' }}">Qualified</a>
+                <a data-id="4" class="{{ 'selected' if category == 4 else '' }}">Loved</a>
+                <a data-id="5" class="{{ 'selected' if category == 5 else '' }}">Approved</a>
+                <a data-id="6" class="{{ 'selected' if category == 6 else '' }}">Pending</a>
+                <a data-id="7" class="{{ 'selected' if category == 7 else '' }}">WIP</a>
+                <a data-id="8" class="{{ 'selected' if category == 8 else '' }}">Graveyard</a>
+                <a data-id="0" class="{{ 'selected' if category == 0 else '' }}">All</a>
             </dd>
         </dl>
         <dl data-name="genre">
@@ -83,120 +83,42 @@
             </dd>
         </dl>
     </div>
-    <div class="pagination" style="display: none;">
-        {# "Previous" Button #}
-        {% if page > 0 %}
-        <a href="?page={{ page - 1 }}&{{ arguments }}">
-            Prev
-        </a>
-        {% if min_page_display != 0 %}...{% endif %}
-        {% endif %}
-        {# Page Numbers (max. 10) #}
-        {% for _page in range(min_page_display, max_page_display+1) %}
-            {% if _page == page %}
-                <b>
-                    {{ _page + 1 }}
-                </b>
-            {% else %}
-                <a href="?page={{ _page }}&{{ arguments }}">
-                    {{ _page + 1 }}
-                </a>
-            {% endif %}
-        {% endfor %}
-        {# "Next" Button #}
-        {% if (page + 1) <= 1000 %}
-        ...
-        <a href="?page={{ page + 1 }}&{{ arguments }}">
-            Next
-        </a>
-        {% endif %}
-    </div>
     <table class="beatmap-order-select">
         <thead>
             <tr>
                 <th>
                     <a data-id="0">Title</a>
-                    {% if sort == 0 %}
-                        <img src="/images/{{ 'down' if order == 0 else 'up' }}.gif" alt="{{ 'Descending' if order == 0 else 'Ascending' }}">
-                    {% endif %}
                 </th>
                 <th>
                     <a data-id="1">Artist</a>
-                    {% if sort == 1 %}
-                        <img src="/images/{{ 'down' if order == 0 else 'up' }}.gif" alt="{{ 'Descending' if order == 0 else 'Ascending' }}">
-                    {% endif %}
                 </th>
                 <th>
                     <a data-id="2">Creator</a>
-                    {% if sort == 2 %}
-                        <img src="/images/{{ 'down' if order == 0 else 'up' }}.gif" alt="{{ 'Descending' if order == 0 else 'Ascending' }}">
-                    {% endif %}
                 </th>
                 <th>
                     <a data-id="3">Difficulty</a>
-                    {% if sort == 3 %}
-                        <img src="/images/{{ 'down' if order == 0 else 'up' }}.gif" alt="{{ 'Descending' if order == 0 else 'Ascending' }}">
-                    {% endif %}
                 </th>
                 <th>
                     <a data-id="4">Ranked</a>
-                    {% if sort == 4 %}
-                        <img src="/images/{{ 'down' if order == 0 else 'up' }}.gif" alt="{{ 'Descending' if order == 0 else 'Ascending' }}">
-                    {% endif %}
+                    <img src="/images/down.gif" alt="Descending">
                 </th>
                 <th>
                     <a data-id="7">Created</a>
-                    {% if sort == 7 %}
-                        <img src="/images/{{ 'down' if order == 0 else 'up' }}.gif" alt="{{ 'Descending' if order == 0 else 'Ascending' }}">
-                    {% endif %}
                 </th>
                 <th>
                     <a data-id="5">Rating</a>
-                    {% if sort == 5 %}
-                        <img src="/images/{{ 'down' if order == 0 else 'up' }}.gif" alt="{{ 'Descending' if order == 0 else 'Ascending' }}">
-                    {% endif %}
                 </th>
                 <th>
                     <a data-id="6">Plays</a>
-                    {% if sort == 6 %}
-                        <img src="/images/{{ 'down' if order == 0 else 'up' }}.gif" alt="{{ 'Descending' if order == 0 else 'Ascending' }}">
-                    {% endif %}
                 </th>
             </tr>
         </thead>
     </table>
     <div id="beatmap-list">
-        <h3 id="loading-text">Loading...</h3>
+        <noscript>
+            <h3 id="status-text">Please enable JavaScript to view the beatmap listing!</h3>
+        </noscript>
         {# TODO - Add beatmap download sidebar #}
-        {# TODO - Show more beatmap information #}
-    </div>
-    <div class="pagination" style="display: none;">
-        {# "Previous" Button #}
-        {% if page > 0 %}
-        <a href="?page={{ page - 1 }}&{{ arguments }}">
-            Prev
-        </a>
-        {% if min_page_display != 0 %}...{% endif %}
-        {% endif %}
-        {# Page Numbers (max. 10) #}
-        {% for _page in range(min_page_display, max_page_display+1) %}
-            {% if _page == page %}
-                <b>
-                    {{ _page + 1 }}
-                </b>
-            {% else %}
-                <a href="?page={{ _page }}&{{ arguments }}">
-                    {{ _page + 1 }}
-                </a>
-            {% endif %}
-        {% endfor %}
-        {# "Next" Button #}
-        {% if (page + 1) <= 1000 %}
-        ...
-        <a href="?page={{ page + 1 }}&{{ arguments }}">
-            Next
-        </a>
-        {% endif %}
     </div>
 </div>
 <script src="/js/search.js"></script>
