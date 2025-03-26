@@ -1028,54 +1028,39 @@ function removeFavourite(setId) {
 
 function deleteBeatmap(setId) {
     var proceed = confirm('Are you sure you want to delete this beatmap?');
+    var url = "/users/" + currentUser + "/beatmapsets/" + setId;
 
     if (!proceed)
         return;
 
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "/api/profile/" + currentUser + "/beatmaps/delete?set_id=" + setId, true);
-    xhr.onload = function() {
-        if (xhr.status !== 200) {
-            console.error("Error: " + xhr.status);
-            return;
-        }
-
-        var data = JSON.parse(xhr.responseText);
-        if (data.error) {
-            alert(data.details);
-            return;
-        }
-
+    performApiRequest("DELETE", url, null, function(xhr) {
         window.location.href = "/u/" + currentUser + "#beatmaps";
         window.location.reload();
-    };
-    xhr.onerror = function() {
-        console.error(xhr.statusText);
-    };
-    xhr.send();
+    }, function(xhr) {
+        try {
+            var data = JSON.parse(xhr.responseText);
+            alert(data.details);
+        } catch (e) {
+            console.error("Failed to revive beatmap:", e);
+            alert("Failed to revive beatmap.");
+        }
+    });
 }
 
 function reviveBeatmap(setId) {
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "/api/profile/" + currentUser + "/beatmaps/revive?set_id=" + setId, true);
-    xhr.onload = function() {
-        if (xhr.status !== 200) {
-            return;
-        }
-
-        var data = JSON.parse(xhr.responseText);
-        if (data.error) {
-            alert(data.details);
-            return;
-        }
-
+    var url = "/users/" + currentUser + "/beatmapsets/" + setId + "/revive";
+    performApiRequest("POST", url, null, function(xhr) {
         window.location.href = "/u/" + currentUser + "#beatmaps";
         window.location.reload();
-    };
-    xhr.onerror = function() {
-        console.error(xhr.statusText);
-    };
-    xhr.send();
+    }, function(xhr) {
+        try {
+            var data = JSON.parse(xhr.responseText);
+            alert(data.details);
+        } catch (e) {
+            console.error("Failed to revive beatmap:", e);
+            alert("Failed to revive beatmap.");
+        }
+    });
 }
 
 addEvent('DOMContentLoaded', document, function(event) {
