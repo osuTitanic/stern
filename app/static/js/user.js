@@ -898,19 +898,16 @@ function loadUserViewsGraph(userId, mode) {
 
 function updatePlaystyleElement(element) {
     var selected = element.classList.contains('playstyle');
+    var url = "/users/" + userId + "/playstyle";
 
     if (selected) {
         element.classList.remove('playstyle');
         element.classList.add('playstyle-hidden');
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", "/api/profile/playstyle/remove?type=" + element.id, true);
-        xhr.send();
+        performApiRequest("DELETE", url, {"playstyle": element.id});
     } else {
         element.classList.add('playstyle');
         element.classList.remove('playstyle-hidden');
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", "/api/profile/playstyle/add?type=" + element.id, true);
-        xhr.send();
+        performApiRequest("POST", url, {"playstyle": element.id});
     }
 }
 
