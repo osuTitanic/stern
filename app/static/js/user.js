@@ -915,13 +915,7 @@ function addFriend() {
     if (!isLoggedIn())
         return;
 
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "/api/profile/friends/add?id=" + userId, true);
-    xhr.onload = function() {
-        if (xhr.status < 200 || xhr.status >= 300) {
-            console.error(xhr.status + ': "' + xhr.statusText + '"');
-            return;
-        }
+    performApiRequest("POST", "/account/friends?id=" + userId, null, function(xhr) {
         var data = JSON.parse(xhr.responseText);
         var friendStatus = document.getElementById('friend-status');
         friendStatus.classList.remove('friend-add');
@@ -934,11 +928,7 @@ function addFriend() {
             friendStatus.innerText = 'Remove Mutual Friend';
         else
             friendStatus.innerText = 'Remove Friend';
-    };
-    xhr.onerror = function() {
-        console.error("Request failed");
-    };
-    xhr.send();
+    });
 
     return false;
 }
@@ -947,13 +937,7 @@ function removeFriend() {
     if (!isLoggedIn())
         return;
 
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "/api/profile/friends/remove?id=" + userId, true);
-    xhr.onload = function() {
-        if (xhr.status < 200 || xhr.status >= 300) {
-            console.error(xhr.status + ': "' + xhr.statusText + '"');
-            return;
-        }
+    performApiRequest("DELETE", "/account/friends?id=" + userId, null, function(xhr) {
         var data = JSON.parse(xhr.responseText);
         var friendStatus = document.getElementById('friend-status');
         friendStatus.classList.remove('friend-remove');
@@ -966,30 +950,19 @@ function removeFriend() {
             friendStatus.innerText = 'Add Mutual Friend';
         else
             friendStatus.innerText = 'Add Friend';
-    };
-    xhr.onerror = function() {
-        console.error("Request failed");
-    };
-    xhr.send();
+    });
 
     return false;
 }
 
 function removeFavourite(setId) {
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "/api/profile/" + currentUser + "/favourites/delete?set_id=" + setId, true);
-    xhr.onload = function() {
-        if (xhr.status < 200 || xhr.status >= 300) {
-            console.error(xhr.status + ': "' + xhr.statusText + '"');
-            return;
-        }
+    var url = "/users/" + currentUser + "/favourites/" + setId;
 
+    performApiRequest("DELETE", url, null, function(xhr) {
         var data = JSON.parse(xhr.responseText);
         var favouritesContainer = document.querySelector(".favourites");
         var container = document.getElementById("favourite-" + setId);
         var beatmapsContainer = document.getElementById("beatmaps");
-
-        console.log(beatmapsContainer.scrollHeight);
 
         if (!container)
             return;
@@ -1010,18 +983,9 @@ function removeFavourite(setId) {
 
         setTimeout(function() {
             slideUp(beatmapsContainer);
-
-            setTimeout(function() {
-                slideDown(beatmapsContainer);
-            }, 150);
+            setTimeout(function() { slideDown(beatmapsContainer) }, 150);
         }, 400);
-    };
-
-    xhr.onerror = function() {
-        console.error("An error occurred during the request");
-    };
-
-    xhr.send();
+    });
 
     return false;
 }
