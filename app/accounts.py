@@ -29,7 +29,7 @@ def perform_login(
         access_token,
         domain=domain,
         secure=use_ssl,
-        httponly=True,
+        httponly=not config.DEBUG,
         max_age=config.FRONTEND_TOKEN_EXPIRY
     )
 

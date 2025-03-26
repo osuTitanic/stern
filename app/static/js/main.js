@@ -112,10 +112,6 @@ function slideUp(elem) {
     elem.style.height = "0px";
 }
 
-function cookieExists(name) {
-    return document.cookie.indexOf(name + "=") !== -1;
-}
-
 function isLoggedIn() {
     return document.getElementById('welcome-text').textContent != 'Welcome, guest!'
 }
@@ -131,6 +127,26 @@ function hide(id) {
 function confirmAction(promptText) {
     if (promptText === undefined) promptText = 'Are you sure?';
     return confirm(promptText);
+}
+
+function cookieExists(name) {
+    return document.cookie.indexOf(name + "=") !== -1;
+}
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
 }
 
 function confirmRedirect(url, promptText) {
@@ -253,6 +269,13 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
     try {
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.setRequestHeader("Cache-Control", "no-cache");
+
+        if (cookieExists('access_token'))
+        {
+            // Set the Authorization header, if the access_token cookie is accessible via. javascript
+            // This will be useful for local development, where the api is located on a different domain
+            xhr.setRequestHeader("Authorization", "Bearer " + getCookie('access_token'));
+        }
     } catch (e) {
         console.warn("This browser does not support setting headers.");
     }
