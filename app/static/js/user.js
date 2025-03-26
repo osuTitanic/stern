@@ -3,21 +3,17 @@ var topLeaderOffset = 0;
 var topScoreOffset = 0;
 
 function pinScore(scoreId, userId) {
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "/api/profile/" + userId + "/pinned/add/" + scoreId, true);
-    xhr.onload = function() {
+    var url = "/users/" + currentUser + "/pinned";
+    performApiRequest("POST", url, {"score_id": scoreId}, function() {
         loadPinnedScores(userId, modeName);
-    };
-    xhr.send();
+    });
 }
 
 function unpinScore(scoreId, userId) {
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "/api/profile/" + userId + "/pinned/remove/" + scoreId, true);
-    xhr.onload = function() {
+    var url = "/users/" + currentUser + "/pinned";
+    performApiRequest("DELETE", url, {"score_id": scoreId}, function() {
         loadPinnedScores(userId, modeName);
-    };
-    xhr.send();
+    });
 }
 
 function expandProfileTab(id, forceExpand) {
