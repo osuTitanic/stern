@@ -1,12 +1,14 @@
 
 from app.common.database.repositories import users, stats, beatmaps
 from app.common.constants import GameMode, COUNTRIES
+from app.common.database import DBUser, DBStats
 from app.common.cache import leaderboards
-from app.common.database import DBUser
 
 from flask import Blueprint, abort, request
+from typing import List
 
 import utils
+import time
 import math
 import app
 
@@ -54,18 +56,9 @@ def rankings(mode: str, order_type: str):
                 if score > 0
             ]
 
-            for user in sorted_users:
-                if not user.stats:
-                    # Create stats if they don't exist
-                    user.stats = [
-                        stats.create(user.id, 0, session),
-                        stats.create(user.id, 1, session),
-                        stats.create(user.id, 2, session),
-                        stats.create(user.id, 3, session)
-                    ]
-
-                user.stats.sort(key=lambda s:s.mode)
-                utils.sync_ranks(user, mode.value, session)
+            if (time.time() - app.session.last_rank_sync) > 10:
+                # Sync ranks from cache to database in background once in a while
+                app.session.executor.submit(sync_ranks, sorted_users, mode)
 
             player_count = leaderboards.player_count(mode.value, order_type, country)
             total_pages = max(1, min(10000, math.ceil(player_count / items_per_page)))
@@ -132,3 +125,18 @@ def rankings(mode: str, order_type: str):
             items_per_page=items_per_page,
             site_title='Country Rankings'
         )
+
+def sync_ranks(users: List[DBUser], mode: GameMode) -> None:
+    with app.session.database.managed_session() as session:
+        for user in users:
+            user.stats = user.stats or create_user_stats(user, session)
+            user.stats.sort(key=lambda s:s.mode)
+            utils.sync_ranks(user, mode.value, session)
+
+def create_user_stats(user: DBUser, session) -> List[DBStats]:
+    return [
+        stats.create(user.id, 0, session),
+        stats.create(user.id, 1, session),
+        stats.create(user.id, 2, session),
+        stats.create(user.id, 3, session)
+    ]

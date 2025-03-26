@@ -108,20 +108,8 @@ def rankings(
         # Sort users based on redis leaderboard
         sorted_users = [
             next(filter(lambda db: db.id == id, user_objects))
-            for id, score in leaderboard
+            for id, _ in leaderboard
         ]
-
-        for user in sorted_users:
-            if not user.stats:
-                # Create stats if they don't exist
-                user.stats = [
-                    stats.create(user.id, 0, session),
-                    stats.create(user.id, 1, session),
-                    stats.create(user.id, 2, session),
-                    stats.create(user.id, 3, session)
-                ]
-
-            utils.sync_ranks(user, mode.value, session)
 
         return format_response(
             leaderboard, sorted_users,
