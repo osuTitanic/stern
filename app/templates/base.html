@@ -34,6 +34,30 @@
         var approvedRewards = {{ config.APPROVED_MAP_REWARDS|lower }};
         var csrfToken = "{{ csrf_token() }}";
     </script>
+    <!-- CSS fixes for Internet Explorer -->
+    <!--[if IE 6]>
+    <style>
+        .nav-element a,
+        .nav-element a:visited {
+            width: 35px !important;
+        }
+        .nav-list {
+            margin-left: 80px !important;
+        }
+        .bancho-stats {
+            width: 220px;
+            top: -17px;
+            right: -1px;
+        }
+    </style>
+    <![endif]-->
+    <!--[if IE 7]>
+    <style>
+        .nav-list {
+            margin-left: 70px !important;
+        }
+    </style>
+    <![endif]-->
 </head>
 <body>
     {% if current_user.restricted %}

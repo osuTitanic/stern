@@ -1,34 +1,3 @@
-:root {
-    --darkreader-bg--nav: #863c86 !important;
-    --darkreader-bg--search: #353232 !important;
-}
-
-html[data-darkreader-mode="dynamic"] .nav-element a,
-html[data-darkreader-mode="dynamic"] .nav-element a:visited {
-    color: #f7ddfd !important;
-}
-
-html[data-darkreader-mode="dynamic"] .nav-search {
-    border-color: #50113c !important;
-}
-
-html[data-darkreader-mode="dynamic"] .top {
-    filter: drop-shadow(0px 1px 2px #000000) !important;
-}
-
-html[data-darkreader-mode="dynamic"] .blurb-box {
-    filter: drop-shadow(0px 1px 2px #242424) !important;
-    border-color: #690c56 !important;
-}
-
-html[data-darkreader-mode="dynamic"] .page h2 {
-    text-shadow: #000000 0px 0px 10px !important;
-}
-
-html[data-darkreader-mode="dynamic"] .nav-dropdown {
-    filter: drop-shadow(0px 1px 2px #000000) !important;
-}
-
 * {
     margin: 0;
     font-family: Tahoma, Helvetica, Arial, sans-serif;
@@ -101,11 +70,10 @@ input:focus {
     -webkit-border-radius: 5px;
     -khtml-border-radius: 5px;
     -moz-border-radius: 5px;
-    background-color: #ffd6f3;
     border-radius: 5px 5px 0px 0px;
-    min-height: 22.5px;
-    max-width: 630px;
+    background-color: #ffd6f3;
     padding-left: 50px;
+    max-width: 630px;
     height: 22px;
     z-index: -1;
 }
@@ -115,13 +83,13 @@ input:focus {
     position: absolute;
     display: inline-block;
     margin-left: 30px;
-    min-height: 25px;
+    height: 100%;
     left: 5px;
 }
 
 .nav-element {
     float: left;
-    min-height: 25px;
+    height: 100%;
 }
 
 .nav-element a,
@@ -136,6 +104,8 @@ input:focus {
     display: block;
     line-height: 20.4px;
     margin-bottom: -4px;
+    height: 20px;
+    max-width: 150px;
 }
 
 .nav-element a:hover {
@@ -265,7 +235,6 @@ input:focus {
     border-color: beige;
     width: 100px;
     height: 13px;
-    vertical-align: top;
 }
 
 .login-container {

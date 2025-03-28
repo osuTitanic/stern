@@ -3,6 +3,20 @@
 {% extends "base.html" %}
 
 {% block content %}
+<!-- CSS fixes for Internet Explorer -->
+<!--[if IE 6]>
+<style>
+    .right-side {
+        margin-right: -60px;
+    }
+    .most-played {
+        width: 81.8%;
+    }
+    .chat-wrapper {
+        width: 182%;
+    }
+</style>
+<![endif]-->
 <div class="content-wrapper">
     <div class="left-side">
         <div class="about-wrapper">
