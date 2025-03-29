@@ -31,7 +31,7 @@ def rankings(mode: str, order_type: str):
 
     if country == 'xx':
         return abort(404)
-    
+
     with app.session.database.managed_session() as session:
         if order_type != 'country':
             leaderboard = leaderboards.top_players(
@@ -82,7 +82,6 @@ def rankings(mode: str, order_type: str):
                 'rankings.html',
                 css='rankings.css',
                 title=f'{order_name} Rankings - Titanic',
-                total_beatmaps=beatmaps.fetch_count_with_leaderboards(mode, session),
                 mode=mode,
                 page=page,
                 country=country,
@@ -95,6 +94,10 @@ def rankings(mode: str, order_type: str):
                 items_per_page=items_per_page,
                 canonical_url=request.base_url,
                 order_name=order_name,
+                total_beatmaps=(
+                    beatmaps.fetch_count_with_leaderboards(mode, session)
+                    if order_type == 'clears' else 0
+                ),
                 site_title=(
                     f'{order_name} Rankings'
                     f'{f" for {COUNTRIES[country.upper()]}" if country else ""}'
