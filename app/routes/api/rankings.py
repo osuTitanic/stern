@@ -100,7 +100,7 @@ def rankings(
 
         # Fetch user info from database
         user_objects = users.fetch_many(
-            tuple([user[0] for user in leaderboard]),
+            [user[0] for user in leaderboard],
             DBUser.stats,
             session=session
         )
