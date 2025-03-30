@@ -70,7 +70,7 @@ def download_beatmapset(id: int):
         response.iter_content(6400),
         mimetype='application/octet-stream',
         headers={
-            'Content-Disposition': f'attachment; filename={osz_filename}',
+            'Content-Disposition': f'attachment; filename="{osz_filename}";',
             'Content-Length': response.headers.get('Content-Length', 0)
         }
     )
