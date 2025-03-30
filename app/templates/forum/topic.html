@@ -28,7 +28,7 @@
     <a href="/forum/{{ forum.id }}">
         {{ forum.name }}
     </a> »
-    <a href="/forum/{{ forum.id }}/t/{{ topic.id }}">
+    <a href="/forum/{{ forum.id }}/t/{{ topic.id }}/">
         {{ topic.title }}
     </a>
 </h1>
@@ -40,9 +40,9 @@
             {# Pagination #}
             {% if current_page > 1 %}
                 {# "Back" button #}
-                <a href="/forum/{{ forum.id }}/t/{{ topic.id }}?page={{ current_page }}">Back</a>
+                <a href="/forum/{{ forum.id }}/t/{{ topic.id }}/?page={{ current_page }}">Back</a>
                 {# First page #}
-                <a href="/forum/{{ forum.id }}/t/{{ topic.id }}?page=1">1</a>
+                <a href="/forum/{{ forum.id }}/t/{{ topic.id }}/?page=1">1</a>
                 ...
             {% endif %}
 
@@ -52,7 +52,7 @@
 
             {% for page in range(page_start, page_end + 1) %}
                 {% if page != current_page %}
-                    <a href="/forum/{{ forum.id }}/t/{{ topic.id }}?page={{ page + 1 }}">{{ page + 1 }}</a>
+                    <a href="/forum/{{ forum.id }}/t/{{ topic.id }}/?page={{ page + 1 }}">{{ page + 1 }}</a>
                 {% else %}
                     <strong>{{ page + 1 }}</strong>
                 {% endif %}
@@ -61,9 +61,9 @@
             {% if page_end < total_pages - 1 %}
                 ...
                 {# Last page after "..." #}
-                <a href="/forum/{{ forum.id }}/t/{{ topic.id }}?page={{ total_pages + 1 }}">{{ total_pages + 1 }}</a>
+                <a href="/forum/{{ forum.id }}/t/{{ topic.id }}/?page={{ total_pages + 1 }}">{{ total_pages + 1 }}</a>
                 {# "Next" button #}
-                <a href="/forum/{{ forum.id }}/t/{{ topic.id }}?page={{ current_page + 2 }}">Next</a>
+                <a href="/forum/{{ forum.id }}/t/{{ topic.id }}/?page={{ current_page + 2 }}">Next</a>
             {% endif %}
         </td>
     </table>
@@ -250,9 +250,9 @@
             {# Pagination #}
             {% if current_page > 1 %}
                 {# "Back" button #}
-                <a href="/forum/{{ forum.id }}/t/{{ topic.id }}?page={{ current_page }}">Back</a>
+                <a href="/forum/{{ forum.id }}/t/{{ topic.id }}/?page={{ current_page }}">Back</a>
                 {# First page #}
-                <a href="/forum/{{ forum.id }}/t/{{ topic.id }}?page=1">1</a>
+                <a href="/forum/{{ forum.id }}/t/{{ topic.id }}/?page=1">1</a>
                 ...
             {% endif %}
 
@@ -262,7 +262,7 @@
 
             {% for page in range(page_start, page_end + 1) %}
                 {% if page != current_page %}
-                    <a href="/forum/{{ forum.id }}/t/{{ topic.id }}?page={{ page + 1 }}">{{ page + 1 }}</a>
+                    <a href="/forum/{{ forum.id }}/t/{{ topic.id }}/?page={{ page + 1 }}">{{ page + 1 }}</a>
                 {% else %}
                     <strong>{{ page + 1 }}</strong>
                 {% endif %}
@@ -271,9 +271,9 @@
             {% if page_end < total_pages - 1 %}
                 ...
                 {# Last page after "..." #}
-                <a href="/forum/{{ forum.id }}/t/{{ topic.id }}?page={{ total_pages + 1 }}">{{ total_pages + 1 }}</a>
+                <a href="/forum/{{ forum.id }}/t/{{ topic.id }}/?page={{ total_pages + 1 }}">{{ total_pages + 1 }}</a>
                 {# "Next" button #}
-                <a href="/forum/{{ forum.id }}/t/{{ topic.id }}?page={{ current_page + 2 }}">Next</a>
+                <a href="/forum/{{ forum.id }}/t/{{ topic.id }}/?page={{ current_page + 2 }}">Next</a>
             {% endif %}
         </td>
         {% if current_user.is_authenticated %}
