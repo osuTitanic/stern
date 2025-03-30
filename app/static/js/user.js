@@ -78,11 +78,11 @@ function createScoreElement(score, index, type) {
 
     var beatmapInfo = document.createElement("a");
     beatmapInfo.href = "/b/" + score.beatmap.id + "?mode=" + score.mode;
-    beatmapInfo.textContent = score.beatmap.beatmapset.artist + " - " + score.beatmap.beatmapset.title + " [" + score.beatmap.version + "]";
+    beatmapInfo.innerText = score.beatmap.beatmapset.artist + " - " + score.beatmap.beatmapset.title + " [" + score.beatmap.version + "]";
 
     var modsText = document.createElement("b");
     if (score.mods > 0) {
-        modsText.textContent = "+" + Mods.getString(score.mods);
+        modsText.innerText = "+" + Mods.getString(score.mods);
     }
 
     var scoreInfo = document.createElement("b");
@@ -107,14 +107,14 @@ function createScoreElement(score, index, type) {
 
     var dateText = document.createElement("time");
     dateText.setAttribute("datetime", scoreDateString);
-    dateText.textContent = score.submitted_at;
+    dateText.innerText = score.submitted_at;
     dateText.className = "timeago";
 
     var rightColumn = document.createElement("td");
     rightColumn.className = 'score-right';
 
     var ppText = document.createElement("b");
-    ppText.textContent = (score.pp.toFixed(0) + "pp");
+    ppText.innerText = (score.pp.toFixed(0) + "pp");
 
     var ppDisplay = document.createElement("div");
     ppDisplay.className = "pp-display";
@@ -260,7 +260,7 @@ function loadPinnedScores(userId, mode) {
         console.error("Error loading pinned scores:", xhr.status);
 
         var errorText = document.createElement("p");
-        errorText.textContent = "Failed to load pinned scores.";
+        errorText.innerText = "Failed to load pinned scores.";
         errorText.classList.add("score");
         scoreContainer.appendChild(errorText);
 
@@ -288,7 +288,7 @@ function loadTopPlays(userId, mode, limit, offset) {
 
         if (scores.length <= 0 && offset <= 0) {
             var noScoresText = document.createElement("p");
-            noScoresText.textContent = "No awesome performance records yet :(";
+            noScoresText.innerText = "No awesome performance records yet :(";
             scoreContainer.appendChild(noScoresText);
             return;
         }
@@ -310,7 +310,7 @@ function loadTopPlays(userId, mode, limit, offset) {
         if (scores.length >= limit) {
             // Create show more text
             var showMoreText = document.createElement("b");
-            showMoreText.textContent = "Show me more!";
+            showMoreText.innerText = "Show me more!";
 
             // Add onclick event
             var showMoreHref = document.createElement("a");
@@ -319,7 +319,7 @@ function loadTopPlays(userId, mode, limit, offset) {
             showMoreHref.appendChild(showMoreText);
             showMoreHref.onclick = function() {
                 var loadingText = document.createElement("p");
-                loadingText.textContent = "Loading...";
+                loadingText.innerText = "Loading...";
                 loadingText.id = "top-scores-loading";
 
                 var showMore = document.getElementById("show-more-top");
@@ -342,7 +342,7 @@ function loadTopPlays(userId, mode, limit, offset) {
     }, function(xhr) {
         console.error("Error loading top scores:", error);
         var errorText = document.createElement("p");
-        errorText.textContent = "Failed to load top plays.";
+        errorText.innerText = "Failed to load top plays.";
         errorText.classList.add("score");
         scoreContainer.appendChild(errorText);
 
@@ -373,7 +373,7 @@ function loadLeaderScores(userId, mode, limit, offset) {
 
         if (scores.length <= 0) {
             var noScoresText = document.createElement("p");
-            noScoresText.textContent = "No first place records currently :(";
+            noScoresText.innerText = "No first place records currently :(";
             scoreContainer.appendChild(noScoresText);
             return;
         }
@@ -389,7 +389,7 @@ function loadLeaderScores(userId, mode, limit, offset) {
 
         if (scores.length >= limit) {
             var showMoreText = document.createElement("b");
-            showMoreText.textContent = "Show me more!";
+            showMoreText.innerText = "Show me more!";
 
             // Add onclick event
             var showMoreHref = document.createElement("a");
@@ -398,7 +398,7 @@ function loadLeaderScores(userId, mode, limit, offset) {
             showMoreHref.appendChild(showMoreText);
             showMoreHref.onclick = function() {
                 var loadingText = document.createElement("p");
-                loadingText.textContent = "Loading...";
+                loadingText.innerText = "Loading...";
                 loadingText.id = "leader-scores-loading";
 
                 var showMore = document.getElementById("show-more-leader");
@@ -421,7 +421,7 @@ function loadLeaderScores(userId, mode, limit, offset) {
     }, function(xhr) {
         console.error("Error loading leader scores:", xhr.status);
         var errorText = document.createElement("p");
-        errorText.textContent = "Failed to load first place ranks.";
+        errorText.innerText = "Failed to load first place ranks.";
         errorText.classList.add("score");
         scoreContainer.appendChild(errorText);
 
@@ -456,7 +456,7 @@ function loadMostPlayed(userId, limit, offset) {
         for (var index = 0; index < plays.length; index++) {
             var item = plays[index];
             var beatmapLink = document.createElement("a");
-            beatmapLink.textContent = item.beatmap.beatmapset.artist + " - " + item.beatmap.beatmapset.title + " [" + item.beatmap.version + "]";
+            beatmapLink.innerText = item.beatmap.beatmapset.artist + " - " + item.beatmap.beatmapset.title + " [" + item.beatmap.version + "]";
             beatmapLink.href = "/b/" + item.beatmap.id;
 
             var playsDiv = document.createElement("div");
@@ -511,11 +511,11 @@ function loadRecentPlays(userId, mode) {
 
             var dateText = document.createElement("time");
             dateText.setAttribute("datetime", scoreDateString);
-            dateText.textContent = score.submitted_at;
+            dateText.innerText = score.submitted_at;
             dateText.className += " timeago";
 
             var beatmapLink = document.createElement("a");
-            beatmapLink.textContent = score.beatmap.beatmapset.artist + " - " + score.beatmap.beatmapset.title + " [" + score.beatmap.version + "]";
+            beatmapLink.innerText = score.beatmap.beatmapset.artist + " - " + score.beatmap.beatmapset.title + " [" + score.beatmap.version + "]";
             beatmapLink.href = "/b/" + score.beatmap.id;
 
             var modsText = "";

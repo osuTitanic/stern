@@ -113,7 +113,7 @@ function slideUp(elem) {
 }
 
 function isLoggedIn() {
-    return document.getElementById('welcome-text').textContent != 'Welcome, guest!'
+    return document.getElementById('welcome-text').innerText != 'Welcome, guest!'
 }
 
 function show(id) {

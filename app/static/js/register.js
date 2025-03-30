@@ -5,7 +5,7 @@ function validateField(element) {
 
     if (!value) return;
 
-    descriptionField.textContent = "Checking...";
+    descriptionField.innerText = "Checking...";
     descriptionField.style.fontWeight = "normal";
 
     var xhr = new XMLHttpRequest();
@@ -13,17 +13,17 @@ function validateField(element) {
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4) {
             if (xhr.status !== 200) {
-                descriptionField.textContent = "Could not verify this field. Please try something else!";
+                descriptionField.innerText = "Could not verify this field. Please try something else!";
                 descriptionField.style.fontWeight = "bold";
                 return;
             }
 
             var validationError = xhr.responseText;
             if (validationError.length === 0) {
-                descriptionField.textContent = "Looking good!";
+                descriptionField.innerText = "Looking good!";
                 descriptionField.style.fontWeight = "normal";
             } else {
-                descriptionField.textContent = validationError;
+                descriptionField.innerText = validationError;
                 descriptionField.style.fontWeight = "bold";
             }
         }
@@ -37,7 +37,7 @@ function isValid(element) {
     var value = element.value;
 
     if (!value) {
-        descriptionField.textContent = "This field is required!";
+        descriptionField.innerText = "This field is required!";
         descriptionField.style.fontWeight = "bold";
         return false;
     }
@@ -47,19 +47,19 @@ function isValid(element) {
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4) {
             if (xhr.status !== 200) {
-                descriptionField.textContent = "Could not verify this field. Please try something else!";
+                descriptionField.innerText = "Could not verify this field. Please try something else!";
                 descriptionField.style.fontWeight = "bold";
                 return false;
             }
 
             var validationError = xhr.responseText;
             if (validationError.length > 0) {
-                descriptionField.textContent = validationError;
+                descriptionField.innerText = validationError;
                 descriptionField.style.fontWeight = "bold";
                 return false;
             }
 
-            descriptionField.textContent = "Looking good!";
+            descriptionField.innerText = "Looking good!";
             descriptionField.style.fontWeight = "normal";
             return true;
         }

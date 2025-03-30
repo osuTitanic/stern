@@ -29,7 +29,7 @@ function selectCategory(category)
     for (var i = 0; i < categoryLinks.length; i++) {
         var categoryLink = categoryLinks[i];
 
-        if (categoryLink.textContent == category) {
+        if (categoryLink.innerText == category) {
             categoryLink.classList.add('selected');
         } else {
             categoryLink.classList.remove('selected');
@@ -44,7 +44,7 @@ function deselectCategory(category)
     for (var i = 0; i < categoryLinks.length; i++) {
         var categoryLink = categoryLinks[i];
         
-        if (categoryLink.textContent == category) {
+        if (categoryLink.innerText == category) {
             categoryLink.classList.remove('selected');
         }
     }
