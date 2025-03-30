@@ -82,7 +82,7 @@ function generateResultsTable(results, matchMods) {
             );
 
         var playerLink = document.createElement("a");
-        playerLink.innerHTML = result.player.name;
+        playerLink.innerText = result.player.name;
         playerLink.href = "/u/" + result.player.id;
 
         var playerFlag = document.createElement("img");
@@ -334,7 +334,7 @@ function loadMatchEvents(id, after) {
                             throw new Error("Invalid api response: " + event.data);
 
                         var userElement = document.createElement("a");
-                        userElement.innerHTML = event.data.name;
+                        userElement.innerText = event.data.name;
                         userElement.href = "/u/" + event.data.user_id;
                         var descriptionElement = document.createElement("span");
                         descriptionElement.classList.add("event-description");
@@ -349,7 +349,7 @@ function loadMatchEvents(id, after) {
                             throw new Error("Invalid api response: " + event.data);
 
                         var userElement = document.createElement("a");
-                        userElement.innerHTML = event.data.name;
+                        userElement.innerText = event.data.name;
                         userElement.href = "/u/" + event.data.user_id;
                         var descriptionElement = document.createElement("span");
                         descriptionElement.classList.add("event-description");
@@ -364,7 +364,7 @@ function loadMatchEvents(id, after) {
                             throw new Error("Invalid api response: " + event.data);
 
                         var userElement = document.createElement("a");
-                        userElement.innerHTML = event.data.name;
+                        userElement.innerText = event.data.name;
                         userElement.href = "/u/" + event.data.user_id;
                         var descriptionElement = document.createElement("span");
                         descriptionElement.classList.add("event-description");
@@ -379,7 +379,7 @@ function loadMatchEvents(id, after) {
                             throw new Error("Invalid api response: " + event.data);
 
                         var userElement = document.createElement("a");
-                        userElement.innerHTML = event.data["new"].name;
+                        userElement.innerText = event.data["new"].name;
                         userElement.href = "/u/" + event.data["new"].id;
                         var descriptionElement = document.createElement("span");
                         descriptionElement.className = "event-description";
@@ -442,13 +442,13 @@ function loadMatchEvents(id, after) {
                         var beatmapDetails = document.createElement("div");
                         var beatmapTitle = document.createElement("strong");
                         beatmapTitle.innerHTML = "Beatmap: ";
-                        beatmapDetails.appendChild(beatmapTitle);;
+                        beatmapDetails.appendChild(beatmapTitle);
 
                         if (event.data.beatmap_id != 0) {
                             var beatmapLink = document.createElement("a");
                             beatmapLink.href = "/b/" + event.data.beatmap_id;
                             beatmapLink.appendChild(beatmapDetails);
-                            beatmapLink.innerHTML = event.data.beatmap_text;
+                            beatmapLink.innerText = event.data.beatmap_text;
                             beatmapDetails.appendChild(beatmapLink);
                         } else {
                             beatmapDetails.appendChild(
