@@ -811,7 +811,7 @@
 
         var textarea = document.createElement('textarea');
         textarea.className = 'description-editor bbcode-editor';
-        textarea.value = bbcodeDescription;
+        textarea.innerHTML = bbcodeDescription;
         textarea.name = 'description';
         form.appendChild(textarea);
 
