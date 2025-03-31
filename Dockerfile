@@ -37,4 +37,4 @@ CMD uwsgi --http 0.0.0.0:80 \
           -p ${FRONTEND_WORKERS} \
           -w app:flask \
           --max-requests 180000 \
-          --enable-threads
+          --lazy-apps
