@@ -10,12 +10,18 @@ def on_startup() -> None:
     # Run a test query
     beatmapsets.search("Nightcore", 0)
 
-try:
+def setup_uwsgi() -> None:
     import uwsgi
 
+    if uwsgi.opt.get("lazy_apps", False):
+        return
+    
     # If uwsgi is available, register the startup hook
     # and re-initialize the database and redis connections
     # to ensure they are available in the worker process.
     uwsgi.post_fork_hook = on_startup
+
+try:
+    setup_uwsgi()
 except ImportError:
     pass
