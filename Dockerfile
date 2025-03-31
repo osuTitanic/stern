@@ -1,8 +1,9 @@
 FROM python:3.11-bullseye
 
 # Installing/Updating system dependencies
-RUN apt update -y
-RUN apt install postgresql git curl -y
+RUN apt update -y && \
+    apt install postgresql git curl -y --no-install-recommends && \
+    rm -rf /var/lib/apt/lists/*
 
 # Install rust toolchain
 RUN curl -sSf https://sh.rustup.rs | sh -s -- -y
@@ -15,7 +16,7 @@ WORKDIR /stern
 
 # Somehow this doesn't work as a command-line argument, so
 # we have to write it to a configuration file...
-RUN echo "[uwsgi]max-requests-delta = 1000" > uwsgi.ini
+RUN echo "[uwsgi]\nmax-requests-delta = 1000" > uwsgi.ini
 
 # Install uwsgi for deployment
 RUN pip install uwsgi
@@ -36,5 +37,4 @@ CMD uwsgi --http 0.0.0.0:80 \
           -p ${FRONTEND_WORKERS} \
           -w app:flask \
           --max-requests 180000 \
-          --enable-threads \
-          --lazy-apps
+          --enable-threads
