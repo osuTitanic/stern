@@ -453,8 +453,15 @@
             </tr>
             <td>
                 <div id="beatmaps" class="tab-content" style="opacity: 1; filter: none; display: none; height: 0px;">
+                    <p>
+                        Click any of the following categories to expand them.
+                    </p>
                     <div class="favourites">
-                        <h2 class="profile-stats-header">Favourite Beatmaps ({{ user.favourites|length }})</h2>
+                        <h2 class="profile-stats-header">
+                            <a onclick="toggleBeatmapContainer(this.parentNode.parentNode)">
+                                Favourite Beatmaps ({{ user.favourites|length }})
+                            </a>
+                        </h2>
                         {% if not user.favourites %}
                             <p style="margin: 5px;">This player has no favourite beatmaps :(</p>
                         {% else %}
@@ -493,7 +500,11 @@
                     {% for category, beatmapsets in beatmapset_categories.items() %}
                     {% if beatmapsets %}
                     <div>
-                        <h2 class="profile-stats-header">{{ category }} Beatmaps ({{ beatmapsets|length }})</h2>
+                        <h2 class="profile-stats-header">
+                            <a onclick="toggleBeatmapContainer(this.parentNode.parentNode)">
+                                {{ category }} Beatmaps ({{ beatmapsets|length }})
+                            </a>
+                        </h2>
                         <div class="profile-beatmaps-container">
                             {% for set in beatmapsets %}
                             <table class="profile-beatmap">
@@ -536,7 +547,11 @@
                     {% endfor %}
                     {% if user.is_bat or nominations %}
                     <div>
-                        <h2 class="profile-stats-header">Nominated Beatmaps ({{ nominations|length }})</h2>
+                        <h2 class="profile-stats-header">
+                            <a onclick="toggleBeatmapContainer(this.parentNode.parentNode)">
+                                Nominated Beatmaps ({{ nominations|length }})
+                            </a>
+                        </h2>
                         {% if not nominations %}
                             <p style="margin: 5px;">This user has not nominated any beatmaps :(</p>
                         {% else %}
@@ -567,6 +582,7 @@
                         {% endif %}
                     </div>
                     {% endif %}
+                    <br>
                 </div>
             </td>
             <tr onclick="expandProfileTab('achievements')">

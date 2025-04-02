@@ -1027,7 +1027,25 @@ function reviveBeatmap(setId) {
     });
 }
 
+function toggleBeatmapContainer(section) {
+    var container = section.querySelector('.profile-beatmaps-container');
+    var beatmapsSection = document.getElementById("beatmaps");
+
+    if (container.style.display === 'none') {
+        container.style.display = 'flex';
+        slideDown(beatmapsSection);
+    } else {
+        container.style.display = 'none';
+        beatmapsSection.style.height = getElementHeight(beatmapsSection) + "px";
+    }
+}
+
 addEvent('DOMContentLoaded', document, function(event) {
+    var beatmapContainers = document.querySelectorAll('.profile-beatmaps-container');
+    for (var i = 0; i < beatmapContainers.length; i++) {
+        beatmapContainers[i].style.display = 'none';
+    }
+
     expandProfileTab(activeTab);
     loadPinnedScores(userId, modeName);
     loadTopPlays(userId, modeName, 5, 0);

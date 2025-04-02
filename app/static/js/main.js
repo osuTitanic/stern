@@ -112,6 +112,14 @@ function slideUp(elem) {
     elem.style.height = "0px";
 }
 
+function getElementHeight(elem) {
+    var totalHeight = 0;
+    for (var i = 0; i < elem.children.length; i++) {
+        totalHeight += elem.children[i].offsetHeight + 10;
+    }
+    return totalHeight;
+}
+
 function isLoggedIn() {
     return document.getElementById('welcome-text').innerText != 'Welcome, guest!'
 }

@@ -332,6 +332,11 @@
     margin-top: 15px;
 }
 
+.profile-stats-header a {
+    color: #5a539a;
+    text-decoration: none;
+}
+
 .profile-achievement-header {
     border-bottom: solid 1px #eacd5b;
     font-weight: bold;
