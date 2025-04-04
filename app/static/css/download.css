@@ -26,6 +26,16 @@
     transition: 0.4s all;
 }
 
+.category:visited {
+    color: #e15fac;
+}
+
+.category:hover {
+    color: #aa156e;
+    text-shadow: #f3c8e0 0px 0px 10px;
+    transition: 0.4s all;
+}
+
 .category-wrapper .selected {
     color: #a5126a !important;
     font-weight: bold;
