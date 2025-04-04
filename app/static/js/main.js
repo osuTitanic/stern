@@ -366,9 +366,10 @@ function loadBBCodePreview(element) {
 function getElementsByClassNamePolyfill(className) {
     var allElements = document.getElementsByTagName('*');
     var matchedElements = [];
+    var pattern = new RegExp('(^|\\s)' + className + '(\\s|$)');
 
     for (var i = 0; i < allElements.length; i++) {
-        if (allElements[i].className.split(' ').indexOf(className) > -1) {
+        if (pattern.test(allElements[i].className)) {
             matchedElements.push(allElements[i]);
         }
     }
