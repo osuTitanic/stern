@@ -120,6 +120,10 @@ function getElementHeight(elem) {
     return totalHeight;
 }
 
+function getText(elem) {
+    return elem.textContent || elem.innerText;
+}
+
 function isLoggedIn() {
     return document.getElementById('welcome-text').innerText != 'Welcome, guest!'
 }
