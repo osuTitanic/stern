@@ -38,8 +38,8 @@ function insertBBCode(event) {
     }
 }
 
-elements = document.querySelectorAll('#bbcode-toolbar')
+var toolbars = document.getElementsByClassName('bbcode-toolbar')
 
-for (var i = 0; i < elements.length; i++) {
-    addEvent('click', elements[i], insertBBCode);
+for (var i = 0; i < toolbars.length; i++) {
+    addEvent('click', toolbars[i], insertBBCode);
 }

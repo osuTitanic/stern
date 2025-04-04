@@ -431,7 +431,7 @@ input[type="submit"]:hover {
     color: #999999;
 }
 
-#bbcode-toolbar {
+.bbcode-toolbar {
     margin-bottom: 4px;
     display: flex;
     font-size: 90%;
@@ -439,7 +439,7 @@ input[type="submit"]:hover {
     justify-content: space-evenly;
 }
 
-#bbcode-toolbar button {
+.bbcode-toolbar button {
     height: 20px;
     min-width: 40px;
     margin-right: 2.5px;
@@ -452,11 +452,11 @@ input[type="submit"]:hover {
     border-radius: 4px;
 }
 
-#bbcode-toolbar button:hover {
+.bbcode-toolbar button:hover {
     background-color: rgb(205, 205, 240);
 }
 
-#bbcode-toolbar button:active {
+.bbcode-toolbar button:active {
     background-color: rgb(184, 184, 218);
 }
 
