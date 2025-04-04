@@ -25,6 +25,9 @@ def search_beatmap():
         page=request.args.get('page', default=0, type=int),
         query=request.args.get('query', default="", type=str),
         category=request.args.get('category', default=None, type=int),
+        language=request.args.get('language', default=None, type=int),
+        genre=request.args.get('genre', default=None, type=int),
+        mode=request.args.get('mode', default=None, type=int),
     )
 
 def secure_filename(filename: str) -> str:
