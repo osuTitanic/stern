@@ -363,6 +363,22 @@ function loadBBCodePreview(element) {
     return false;
 }
 
+function getElementsByClassNamePolyfill(className) {
+    var allElements = document.getElementsByTagName('*');
+    var matchedElements = [];
+
+    for (var i = 0; i < allElements.length; i++) {
+        if (allElements[i].className.split(' ').indexOf(className) > -1) {
+            matchedElements.push(allElements[i]);
+        }
+    }
+    return matchedElements;
+}
+
+if (!document.getElementsByClassName) {
+    document.getElementsByClassName = getElementsByClassNamePolyfill;
+}
+
 addEvent("DOMContentLoaded", document, function(event) {
     $(".timeago").timeago();
 });
