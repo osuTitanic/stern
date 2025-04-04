@@ -19,7 +19,8 @@
 {% for (category, clients) in releases.items() %}
     {% if category.isdigit() %}
     <a class="category {{ 'selected' if loop.index0 == 0 else '' }}"
-       onclick="displayCategory('{{ category }}')">{{ category }}</a>
+       onclick="displayCategory('{{ category }}')"
+       href="javascript:void(0);">{{ category }}</a>
     {% endif %}
 {% endfor %}
 </div>
