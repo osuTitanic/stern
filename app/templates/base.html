@@ -162,11 +162,9 @@
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                 </form>
             </div>
-            {% if is_ie %}
             <!--[if lte IE 8]>
             <script src="https://cdnjs.cloudflare.com/polyfill/v2/polyfill.min.js"></script>
             <![endif]-->
-            {% endif %}
             <!--[if gt IE 7]><!-->
             <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js"></script>
             <!--<![endif]-->
