@@ -536,6 +536,8 @@
     padding: 2.5px;
     width: 49%;
     transition: opacity 0.2s ease-in-out;
+    border-collapse: separate;
+    border-spacing: 1.5px 1.5px;
 }
 
 .profile-beatmap img {
@@ -566,7 +568,8 @@
 }
 
 #account div {
-    margin: 15px; text-align: center;
+    margin: 15px 0px 15px 0px;
+    text-align: center;
 }
 
 #account table {
