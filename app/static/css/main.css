@@ -126,7 +126,7 @@ input[type="text"], input[type="password"], input[type="email"],
 input[type="url"], input[type="search"] {
     padding: 0.5px 2px 0.5px 2px;
     border: 1px solid rgb(185, 197, 236);
-    border-radius: 1px;
+    border-radius: 3px;
 }
 
 .main {
