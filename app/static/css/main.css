@@ -234,17 +234,17 @@ input:focus {
 }
 
 .login-container {
-    display: -webkit-box;
-    display: -moz-box;
-    display: -ms-flexbox;
-    display: box;
-    display: flex;
     text-align: right;
     align-items: center;
     font-size: 90%;
     padding-right: 5px;
     float: right;
-    height: 20px;
+    height: 100%;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: box;
+    display: flex;
     /* Center alignment workaround */
     -webkit-box-align: center;
     -moz-box-align: center;
@@ -257,7 +257,7 @@ input:focus {
 }
 
 .small-avatar {
-    margin-top: 4px;
+    height: 100%;
     margin-left: 3px;
 }
 
