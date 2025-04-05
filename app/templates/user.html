@@ -463,7 +463,9 @@
                             </a>
                         </h2>
                         {% if not user.favourites %}
-                            <p style="margin: 5px;">This player has no favourite beatmaps :(</p>
+                        <div class="profile-beatmaps-container">
+                            <p>This player has no favourite beatmaps :(</p>
+                        </div>
                         {% else %}
                         <div class="profile-beatmaps-container">
                             {% for fav in user.favourites %}
@@ -553,7 +555,9 @@
                             </a>
                         </h2>
                         {% if not nominations %}
-                            <p style="margin: 5px;">This user has not nominated any beatmaps :(</p>
+                        <div class="profile-beatmaps-container">
+                            <p>This user has not nominated any beatmaps :(</p>
+                        </div>
                         {% else %}
                         <div class="profile-beatmaps-container">
                             {% for nomination in nominations %}
