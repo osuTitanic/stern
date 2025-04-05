@@ -451,9 +451,10 @@
 }
 
 .score-right {
-    float: right;
-    text-align: right;
     font-size: 95%;
+    position: absolute;
+    text-align: right;
+    right: 6px;
 }
 
 .score-left {
@@ -461,9 +462,7 @@
     float: left;
     text-align: left;
     overflow: hidden;
-    max-width: 76%;
-    border-spacing: 0px;
-    border-collapse: collapse;
+    max-width: 88%;
 }
 
 .score-left img {
@@ -482,6 +481,8 @@
     color: #9492dc;
     text-shadow: #b5c6cb 2px 0px 3px;
     padding-right: 5px;
+    width: 55px;
+    margin-left: auto;
 }
 
 .score-icon-container {
