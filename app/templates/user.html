@@ -27,11 +27,11 @@
             {% else %}
                 {% set color = '#000000' %}
             {% endif %}
-
+    
             {# Username Size #}
             {% set name_length = user.name|length %}
             {% set name_size = (21 - (name_length - 14) * 1.5)|clamp(12, 25) %}
-
+    
             {% if user.names %}
             {# Name History #}
             {% set names = user.names|map(attribute='name')|reject('equalto', user.name)|unique|join(', ') %}

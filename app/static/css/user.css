@@ -31,13 +31,17 @@
     overflow-wrap: anywhere;
 }
 
-.left-top h1 {
+.user-header {
     font-weight: normal;
     font-size: 145%;
-    display: flex;
+    padding-top: 5px;
     justify-content: center;
     align-items: center;
-    padding-top: 5px;
+    text-align: center;
+    display: flex;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    margin: 0 auto;
 }
 
 .flag {
@@ -45,8 +49,13 @@
     margin-bottom: 2.5px;
 }
 
-.left-top h1 a {
+.user-header a {
     margin-right: 8px;
+}
+
+.user-header img {
+    text-align: center;
+    margin: 0 auto;
 }
 
 .username {
@@ -96,8 +105,8 @@
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
     background-color: white;
     border: 1px solid #ddd;
-    margin: auto;
-    margin-bottom: 10px;
+    margin: 0 auto;
+    margin-bottom: 5px;
     padding: 2px;
     display: inline;
     justify-content: center;
@@ -107,9 +116,8 @@
 }
 
 .avatar-box img {
-    vertical-align: middle;
-    display: flex;
     margin: 0 auto;
+    display: block;
     width: 120px;
     height: 120px;
 }
@@ -151,7 +159,7 @@
     background-color: #dbcaea;
     text-align: center;
     margin: 5px auto;
-    margin-top: 15px;
+    margin-top: 20px;
     margin-bottom: 15px;
     border-radius: 5px;
     min-height: 32px;
@@ -644,4 +652,11 @@
 
 #admin-userpage-controls input[type="submit"] {
     margin: 4px;
+}
+
+@supports (display: flex) {
+    .avatar-box img {
+        display: flex;
+        vertical-align: middle;
+    }
 }
