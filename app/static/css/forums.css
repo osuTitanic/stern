@@ -105,13 +105,13 @@
 
 .page table {
     font-size: 90%;
-    border-collapse: separate;
-    border-spacing: 1px 2px;
 }
 
 .topics-table {
     margin-top: 15px;
     margin-bottom: 5px;
+    border-collapse: separate;
+    border-spacing: 1px 2px;
 }
 
 .topic-header {
@@ -155,7 +155,7 @@
 }
 
 .bar {
-    margin-top: 2.5px;
+    margin-top: 5px;
 }
 
 .bar td {
@@ -300,7 +300,7 @@
     display: flex;
     justify-content: flex-start;
     margin-bottom: 10px;
-    margin-left: 5px;
+    margin-left: 6px;
     padding-bottom: 10px;
 }
 
@@ -424,5 +424,5 @@
 .quick-reply {
     justify-content: center;
     display: flex;
-    margin-bottom: 5px;
+    margin-bottom: 6px;
 }
