@@ -123,6 +123,7 @@
 
 .beatmap-stats td {
     border-bottom: 1px solid #cfc1ef;
+    vertical-align: middle;
     padding: 8px
 }
 

@@ -103,8 +103,10 @@
     color: #4f5355;
 }
 
-table {
+.page table {
     font-size: 90%;
+    border-collapse: separate;
+    border-spacing: 1px 2px;
 }
 
 .topics-table {
@@ -133,6 +135,7 @@ table {
     padding: 2px;
     border: 1px solid #e2dffa;
     border-radius: 2px;
+    vertical-align: middle;
 }
 
 .dark-row {
@@ -144,6 +147,7 @@ table {
     padding: 2px;
     border: 1px solid rgb(206, 215, 250);
     border-radius: 2px;
+    vertical-align: middle;
 }
 
 .light-row img, .dark-row img {
