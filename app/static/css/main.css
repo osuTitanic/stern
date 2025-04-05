@@ -68,7 +68,8 @@ a img {
     outline: none;
 }
 
-ul {
+.page ul {
+    padding-top: 2px;
     padding-left: 2em;
     list-style-type: disc;
 }
