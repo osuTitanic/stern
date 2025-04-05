@@ -1032,7 +1032,7 @@ function toggleBeatmapContainer(section) {
     var beatmapsSection = document.getElementById("beatmaps");
 
     if (container.style.display === 'none') {
-        container.style.display = 'flex';
+        container.style.display = 'block';
         slideDown(beatmapsSection);
     } else {
         container.style.display = 'none';

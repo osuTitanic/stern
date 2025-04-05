@@ -524,9 +524,7 @@
 }
 
 .profile-beatmaps-container {
-    display: flex;
     margin-bottom: 10px;
-    flex-wrap: wrap;
 }
 
 .profile-beatmap {
@@ -538,6 +536,7 @@
     transition: opacity 0.2s ease-in-out;
     border-collapse: separate;
     border-spacing: 1.5px 1.5px;
+    float: left;
 }
 
 .profile-beatmap img {
@@ -580,6 +579,10 @@
     font-weight: bold;
     border-bottom: 1px solid #9492dc;
     background-color: #e7e5fc;
+}
+
+#kudosu {
+    padding-bottom: 5px;
 }
 
 .userpage-stats {
