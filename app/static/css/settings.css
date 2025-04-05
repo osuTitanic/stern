@@ -170,11 +170,19 @@
     color: black;
 }
 
+#notifications .section {
+    padding-top: 5px;
+}
+
 .bookmark {
     color: #868686;
     font-size: 95%;
     display: block;
     min-height: 18px;
+}
+
+#bookmarks .section {
+    padding-top: 5px;
 }
 
 .bookmark-link {

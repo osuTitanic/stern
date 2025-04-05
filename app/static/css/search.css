@@ -232,18 +232,15 @@
     width: 100%;
     border-radius: 5px;
     padding-bottom: 5px;
-    border-spacing: 0;
     font-size: 80%;
     margin: 10px auto 5px auto;
-}
-
-.beatmap-order-select tr {
-    padding: 1.2px;
 }
 
 .beatmap-order-select th {
     padding-left: 10px;
     padding-right: 10px;
+    padding-top: 1px;
+    padding-bottom: 1px;
     background-color: #d7d2fb;
     border-bottom: 1px solid #a79ef3;
 }
