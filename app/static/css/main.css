@@ -68,6 +68,11 @@ a img {
     outline: none;
 }
 
+ul {
+    padding-left: 2em;
+    list-style-type: disc;
+}
+
 a:hover {
     text-decoration: underline;
     color: rgb(0, 102, 204);
