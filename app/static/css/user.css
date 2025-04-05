@@ -273,11 +273,14 @@
 
 .profile-table {
     width: 100%;
+    border-collapse: separate;
+    border-spacing: 1px 2px;
 }
 
 .profile-tabs {
     width: 100%;
     border-spacing: 7px 0;
+    border-collapse: separate;
 }
 
 .profile-tabs td {
@@ -301,6 +304,8 @@
     cursor: pointer;
     font-size: 100%;
     padding-left: 2.5px;
+    padding-bottom: 1px;
+    padding-top: 1px;
     z-index: 1;
     margin-bottom: 5px;
 }
@@ -413,6 +418,12 @@
     padding-bottom: 10px;
 }
 
+#profile-recent-preview tr {
+    display: block;
+    padding-left: 5px;
+    padding-bottom: 4px;
+}
+
 #leader h2 {
     text-shadow: #efcfe1 0px 0px 10px;
     font-weight: normal;
@@ -450,7 +461,7 @@
     float: left;
     text-align: left;
     overflow: hidden;
-    max-width: 80%;
+    max-width: 76%;
     border-spacing: 0px;
     border-collapse: collapse;
 }
