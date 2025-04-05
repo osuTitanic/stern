@@ -95,8 +95,8 @@
                     <span class="nav-login" id="welcome-text">
                         Welcome, <a href="/u/{{ current_user.id }}">{{ current_user.name }}</a>
                     </span>
-                    <a href="/account/settings/profile#avatar">
-                        <img class="small-avatar" src="/a/{{ current_user.id }}?s=25" alt="" height="25px">
+                    <a href="/account/settings/profile#avatar" style="height: 25px">
+                        <img class="small-avatar" src="/a/{{ current_user.id }}?s=25" alt="">
                     </a>
                     <a href="/account/settings"><i class="fa-solid fa-gear" style="color: #808080;"></i> Settings</a>
                     <a href="/account/settings#notifications">
@@ -169,6 +169,7 @@
                 {# Page Content #}
                 {% block content %}
                 {% endblock content %}
+                <div style="clear: both;"></div>
             </div>
             <div class="gradient"></div>
             <script src="/js/editor.js" defer></script>
