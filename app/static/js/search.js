@@ -138,7 +138,7 @@ function getBeatmapsets(clear) {
         // Create loading text
         clearStatusText();
         var loadingText = document.createElement("h3");
-        loadingText.innerText = "Loading...";
+        setText(loadingText, "Loading...");
         loadingText.style.margin = "0 auto";
         loadingText.style.textAlign = "center";
         loadingText.id = "status-text";
@@ -158,13 +158,13 @@ function getBeatmapsets(clear) {
         var loadingText = document.getElementById("status-text");
 
         if (loadingText) {
-            loadingText.remove();
+            loadingText.parentNode.removeChild(loadingText);
         }
 
         if (beatmapsets.length <= 0) {
             if (totalBeatmaps <= 0) {
                 var noMapsText = document.createElement("h3");
-                noMapsText.innerText = "Nothing found... :(";
+                setText(noMapsText, "Nothing found... :(");
                 noMapsText.style.margin = "0 auto";
                 noMapsText.style.textAlign = "center";
                 beatmapContainer.appendChild(noMapsText);
@@ -235,11 +235,11 @@ function getBeatmapsets(clear) {
             beatmapInfoLeft.classList.add("beatmap-info");
 
             var beatmapArtist = document.createElement("span");
-            beatmapArtist.innerText = beatmapset.artist;
+            setText(beatmapArtist, beatmapset.artist);
             beatmapArtist.style.color = "#555555";
 
             var beatmapTitle = document.createElement("span");
-            beatmapTitle.innerText = beatmapset.title;
+            setText(beatmapTitle, beatmapset.title);
 
             var beatmapLink = document.createElement("a");
             beatmapLink.classList.add("beatmap-link");
@@ -266,10 +266,10 @@ function getBeatmapsets(clear) {
             }
 
             var beatmapCreator = document.createElement("span");
-            beatmapCreator.innerText = "mapped by ";
+            setText(beatmapCreator, "mapped by ");
 
             var beatmapCreatorLink = document.createElement("a");
-            beatmapCreatorLink.innerText = beatmapset.creator;
+            setText(beatmapCreatorLink, beatmapset.creator);
             if (beatmapset.server === 0) {
                 beatmapCreatorLink.href = 'https://osu.ppy.sh/u/' + beatmapset.creator;
             } else {
@@ -290,7 +290,7 @@ function getBeatmapsets(clear) {
             hiddenElementsContainer.appendChild(beatmapSource);
 
             if (beatmapset.source) {
-                beatmapSourceContent.innerText = beatmapset.source;
+                setText(beatmapSourceContent, beatmapset.source);
                 beatmapSource.appendChild(document.createTextNode("from "));
                 beatmapSource.appendChild(beatmapSourceContent);
             }
@@ -332,13 +332,13 @@ function getBeatmapsets(clear) {
 
             if (beatmapset.language_id > 0) {
                 var languageTag = document.createElement("a");
-                languageTag.innerText = Languages.get(beatmapset.language_id).toString();
+                setText(languageTag, Languages.get(beatmapset.language_id).toString());
                 beatmapTagsDiv.appendChild(languageTag);
             }
 
             if (beatmapset.genre_id > 0) {
                 var genreTag = document.createElement("a");
-                genreTag.innerText = Genres.get(beatmapset.genre_id).toString().replace("_", " ");
+                setText(genreTag, Genres.get(beatmapset.genre_id).toString().replace("_", " "));
                 beatmapTagsDiv.appendChild(genreTag);
             }
 
@@ -399,7 +399,7 @@ function getBeatmapsets(clear) {
     }, function(xhr) {
         clearStatusText();
         var errorText = document.createElement("h3");
-        errorText.innerText = "An error occurred while loading beatmaps.";
+        setText(errorText, "An error occurred while loading beatmaps.");
         errorText.style.margin = "0 auto";
         errorText.style.textAlign = "center";
         errorText.id = "status-text";
@@ -423,7 +423,7 @@ function clearStatusText() {
     var loadingTexts = document.querySelectorAll("#status-text");
 
     for (var i = 0; i < loadingTexts.length; i++) {
-        loadingTexts[i].remove();
+        loadingTexts[i].parentNode.removeChild(loadingTexts[i]);
     }
 }
 
@@ -465,7 +465,7 @@ function setOrder(element) {
     var currentSortElement = currentOrderSelection.parentNode.querySelector("a");
 
     if (currentSortElement != element) {
-        currentOrderSelection.remove();
+        currentOrderSelection.parentNode.removeChild(currentOrderSelection);
     } else {
         currentOrderSelection.src = endsWith(currentOrderSelection.src, "/images/down.gif") ? "/images/up.gif" : "/images/down.gif";
         currentOrderSelection.alt = endsWith(currentOrderSelection.src, "/images/down.gif") ? "Descending" : "Ascending";

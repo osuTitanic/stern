@@ -124,6 +124,14 @@ function getText(elem) {
     return elem.textContent || elem.innerText;
 }
 
+function setText(elem, text) {
+    if (elem.textContent !== undefined) {
+        elem.textContent = text;
+    } else {
+        elem.innerText = text;
+    }
+}
+
 function isLoggedIn() {
     return document.getElementById('welcome-text').innerText != 'Welcome, guest!'
 }
