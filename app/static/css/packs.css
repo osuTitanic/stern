@@ -75,6 +75,7 @@
 .pack-listing {
     width: 100%;
     font-size: 80%;
+    border-collapse: separate;
 }
 
 .pack-listing thead {
@@ -85,6 +86,10 @@
 .pack-listing th {
     background: #d7d2fb;
     border-bottom: 1px solid #a79ef3;
+}
+
+.pack-listing td {
+    padding: 1.2px;
 }
 
 .dark-row {

@@ -29,6 +29,7 @@
     border-style: ridge;
     border-width: 1.5px;
     margin-left: 15px;
+    font-size: 95%;
 }
 
 .beatmap-options {
@@ -232,7 +233,11 @@
     padding-bottom: 5px;
     border-spacing: 0;
     font-size: 80%;
-    margin: 10px auto 0 auto;
+    margin: 10px auto 5px auto;
+}
+
+.beatmap-order-select tr {
+    padding: 1.2px;
 }
 
 .beatmap-order-select th {

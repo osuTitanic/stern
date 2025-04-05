@@ -105,14 +105,18 @@
     border-spacing: 0;
     font-size: 73%;
     margin-bottom: 5px;
+    border-collapse: separate;
 }
 
 .player-listing th {
     background-color: #d7d2fb;
     border-bottom: 1px solid #a79ef3;
+    vertical-align: middle;
 }
 
 .player-listing td {
     padding-left: 5px;
     padding-right: 5px;
+    padding: 2px 5px 2px 5px;
+    vertical-align: middle;
 }
