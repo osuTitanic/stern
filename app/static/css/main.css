@@ -52,7 +52,7 @@ table td {
 	vertical-align: middle;
 }
 
-textarea {
+textarea, select {
 	font-family: Tahoma, Helvetica, Arial, sans-serif;
 	font-size: 99.5%;
 }
