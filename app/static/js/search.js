@@ -506,7 +506,7 @@ addEvent('load', window, function(event) {
 });
 
 addEvent("scroll", window, function(event) {
-    if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 300) {
         getBeatmapsets(false);
     }
 });
