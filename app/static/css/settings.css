@@ -63,6 +63,10 @@
     margin: 2px;
 }
 
+.section input[type="radio"] {
+    margin-left: 6px;
+}
+
 #userpage .section, #signature .section {
     background-color: inherit;
     padding: 0px;
