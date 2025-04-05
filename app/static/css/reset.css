@@ -52,3 +52,12 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
+
+table td {
+	vertical-align: middle;
+}
+
+textarea {
+	font-family: Tahoma, Helvetica, Arial, sans-serif;
+	font-size: 99.5%;
+}
