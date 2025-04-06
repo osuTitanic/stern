@@ -225,4 +225,18 @@
     </div>
 </div>
 {% endif %}
+<script>
+    function jumpToPlayer() {
+        var player = prompt("Enter the player name to jump to:")
+
+        if (player === null || player === "") {
+            return;
+        }
+
+        var query = new URLSearchParams();
+        query.set("jumpto", player);
+        location.hash = "jumpto";
+        location.search = query.toString();
+    }
+</script>
 {% endblock content %}
