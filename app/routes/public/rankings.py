@@ -132,6 +132,7 @@ def render_rankings_page(
             items_per_page=items_per_page,
             canonical_url=request.base_url,
             order_name=order_name,
+            jumpto=jumpto,
             total_beatmaps=(
                 beatmaps.fetch_count_with_leaderboards(mode, session)
                 if order_type == 'clears' else 0
