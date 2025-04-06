@@ -3,9 +3,9 @@ from __future__ import annotations
 
 from app.common.constants import GameMode
 from app.common.database import (
-    beatmapsets,
     messages,
     topics,
+    plays,
     posts
 )
 
@@ -43,7 +43,7 @@ def root() -> Response:
                 format_announcement(announcement, session=session)
                 for announcement in announcements
             ],
-            most_played=beatmapsets.fetch_most_played(session=session),
+            most_played=plays.fetch_most_played(session=session),
             messages=messages.fetch_recent(session=session)
         )
 
