@@ -9,8 +9,8 @@ from PIL import Image
 from app.common.database.repositories import wrapper
 from app.common.database import DBUser, DBBeatmapset
 from app.common.helpers.external import location
+from app.common.helpers import caching, browsers
 from app.common.cache import leaderboards
-from app.common.helpers import caching
 from app.common import constants
 
 from app.common.database import (
@@ -44,7 +44,8 @@ def render_template(template_name: str, **context) -> str:
         )
 
     context.update(
-        is_ie=request.user_agent.browser == 'msie' or 'Trident/' in request.user_agent.string,
+        is_modern_browser=browsers.is_modern_browser(request.user_agent.string),
+        is_ie=browsers.is_internet_explorer(request.user_agent.string),
         is_compact=request.args.get('compact', 0, type=int) == 1,
         total_scores=total_scores,
         online_users=online_users,
@@ -151,4 +152,3 @@ def empty_image(
 @caching.ttl_cache(ttl=900)
 def fetch_average_topic_views() -> int:
     return int(topics.fetch_average_views())
-
