@@ -62,7 +62,8 @@ def render_template(template_name: str, **context) -> str:
         context.update({
             'notification_count': notifications.fetch_count(
                 flask_login.current_user.id,
-                read=False
+                read=False,
+                session=context.get('session')
             )
         })
 

@@ -130,10 +130,11 @@ def userpage(query: str):
             site_url=f"{config.OSU_BASEURL}/u/{user.id}",
             canonical_url=f"/u/{user.id}",
             beatmapset_categories=beatmapset_categories,
-            pp_rank=pp_rank,
             pp_rank_country=pp_rank_country,
-            score_rank=score_rank,
+            pp_rank=pp_rank,
             score_rank_country=score_rank_country,
+            score_rank=score_rank,
             ppv1_rank=ppv1_rank,
-            infringements=infs
+            infringements=infs,
+            session=session
         )
