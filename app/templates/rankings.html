@@ -191,7 +191,7 @@
 {% if total_pages > 1 %}
 <div class="centered" style="margin: 25px !important;">
     <div class="pagination">
-        Displaying {{ page }} of {{ total_pages }} results.
+        <a href="javascript:void(0);" onclick="jumpToPlayer();">Jump</a> to a player.
         <br>
         {% set country_string = ("country=" + country + "&") if country else '' %}
         {% if total_pages > 1 %}
