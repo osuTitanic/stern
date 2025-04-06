@@ -28,6 +28,8 @@ def search_beatmap():
         language=request.args.get('language', default=None, type=int),
         genre=request.args.get('genre', default=None, type=int),
         mode=request.args.get('mode', default=None, type=int),
+        sort=request.args.get('sort', default=BeatmapSortBy.Ranked, type=int),
+        order=request.args.get('order', default=BeatmapOrder.Descending, type=int)
     )
 
 def secure_filename(filename: str) -> str:
