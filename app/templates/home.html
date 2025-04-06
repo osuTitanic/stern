@@ -119,23 +119,23 @@
                     </tr>
                 </thead>
                 <tbody>
-                {% for plays in most_played %}
+                {% for result in most_played %}
                     {% if loop.index0 % 2 %}
                         <tr class="light-row">
                     {% else %}
                         <tr class="dark-row">
                     {% endif %}
-                        <td>{{ plays['count'] }}</th>
+                        <td>{{ result['playcount'] }}</th>
                         <td>
-                            <a href="/b/{{ plays['beatmap_id'] }}">
-                                <img src="/mt/{{ plays['set_id'] }}" loading="lazy" alt=""/>
-                                {{ plays['artist'] }} - {{ plays['title'] }} [{{ plays['version'] }}]
+                            <a href="/s/{{ result['beatmapset'].id }}">
+                                <img src="/mt/{{ result['beatmapset'].id }}" loading="lazy" alt=""/>
+                                {{ result['beatmapset'].artist }} - {{ result['beatmapset'].title }}
                             </a>
                         </td>
-                    {% if plays['server'] == 0 %}
-                        <td><a href="https://osu.ppy.sh/u/{{ plays['creator'] }}">{{ plays['creator'] }}</a></td>
+                    {% if result['beatmapset'].server == 0 %}
+                        <td><a href="https://osu.ppy.sh/u/{{ result['beatmapset'].creator }}">{{ result['beatmapset'].creator }}</a></td>
                     {% else %}
-                        <td><a href="/u/{{ plays['creator_id'] }}">{{ plays['creator'] }}</a></td>
+                        <td><a href="/u/{{ result['beatmapset'].creator_id }}">{{ result['beatmapset'].creator }}</a></td>
                     {% endif %}
                     </tr>
                 {% endfor %}
