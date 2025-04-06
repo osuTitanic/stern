@@ -186,6 +186,7 @@ def create_post_view(forum_id: str):
             title="Create a Topic - Titanic",
             site_title=f"Titanic » Forums » {forum.name} » Create",
             site_description="Discuss and share your thoughts with the community.",
+            session=session,
             forum=forum,
             icons=forums.fetch_icons(session)
         )

@@ -120,6 +120,7 @@ def post_view(forum_id: str, topic_id: str):
             site_description="Discuss and share your thoughts with the community.",
             current_text=text,
             forum=topic.forum,
+            session=session,
             topic=topic,
             action=action,
             action_id=action_id,

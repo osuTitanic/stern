@@ -25,6 +25,7 @@ def home():
             site_title="Titanic » Forums » Home",
             site_description="Discuss and share your thoughts with the community.",
             forums=forum_dict,
+            session=session,
             forum_stats={
                 forum.id: (
                     forums.fetch_topic_count(forum.id, session),
