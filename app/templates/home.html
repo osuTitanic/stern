@@ -145,18 +145,23 @@
     </div>
 </div>
 <script>
-    // Lazy-load youtube iframe
-    var featuredVideo = document.querySelector('.featured');
-    var iframe = document.createElement('iframe');
-    iframe.title = "Featured";
-    iframe.width = "356";
-    iframe.height = "278";
-    iframe.type = "text/html";
-    iframe.style.border = "0";
-    iframe.src = "https://www.youtube.com/embed?listType=playlist&list=UUir7A_JJa1Vhg_84ejh6Ung&mute=1&autoplay=1&controls=0&rel=0";
-    iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
-    iframe.loading = "lazy";
-    iframe.allowFullscreen = true;
-    featuredVideo.appendChild(iframe);
+    function loadYoutubeIframe() {
+        var featuredVideo = document.querySelector('.featured');
+        var iframe = document.createElement('iframe');
+        iframe.title = "Featured";
+        iframe.width = "356";
+        iframe.height = "278";
+        iframe.type = "text/html";
+        iframe.style.border = "0";
+        iframe.src = "https://www.youtube.com/embed?listType=playlist&list=UUir7A_JJa1Vhg_84ejh6Ung&mute=1&autoplay=1&controls=0&rel=0";
+        iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+        iframe.loading = "lazy";
+        iframe.allowFullscreen = true;
+        featuredVideo.appendChild(iframe);
+    }
+
+    addEvent('load', window, function(e) {
+        loadYoutubeIframe();
+    });
 </script>
 {% endblock content %}
