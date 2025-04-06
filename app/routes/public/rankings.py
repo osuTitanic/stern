@@ -60,6 +60,18 @@ def render_rankings_page(
     items_per_page: int,
 ) -> str:
     with app.session.database.managed_session() as session:
+        jumpto = request.args.get('jumpto', default=None)
+
+        if jumpto and (user := users.fetch_by_name(jumpto, session)):
+            # Change the page to where the user is
+            user_rank = leaderboards.rank(
+                user.id,
+                mode.value,
+                order_type,
+                country
+            )
+            page = math.ceil(user_rank / items_per_page)
+
         leaderboard = leaderboards.top_players(
             mode.value,
             offset=(page - 1) * items_per_page,
