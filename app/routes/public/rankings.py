@@ -37,6 +37,9 @@ def rankings(mode: str, order_type: str):
     if country == 'xx':
         return abort(404)
 
+    if country and country.upper() not in COUNTRIES:
+        return abort(404)
+
     if order_type != 'country':
         return render_rankings_page(
             order_type, country,
@@ -94,11 +97,11 @@ def render_rankings_page(
         top_countries = leaderboards.top_countries(mode)
 
         order_name = {
+            'performance': 'Performance',
             'rscore': 'Ranked Score',
             'tscore': 'Total Score',
-            'performance': 'Performance',
-            'ppv1': 'PPv1',
-            'clears': 'Clears'
+            'clears': 'Clears',
+            'ppv1': 'PPv1'
         }[order_type.lower()]
 
         return utils.render_template(
