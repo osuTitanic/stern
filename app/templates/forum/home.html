@@ -30,7 +30,7 @@
             <td style="text-align: right;" class="subforum-topics">
                 {% set recent = forum_recent[forum.id] %}
                 {% if recent %}
-                    <a href="/forum/{{ forum.id }}/p/{{ recent.id }}">
+                    <a href="/forum/{{ forum.id }}/p/{{ recent.id }}/">
                         {{ recent.topic.title }}
                     </a>
                     <p>

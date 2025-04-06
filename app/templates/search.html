@@ -10,11 +10,11 @@
         <dl data-name="mode">
             <dt>Mode:</dt>
             <dd>
-                <a class="selected" data-id="">Any</a>
-                <a data-id="0">osu!</a>
-                <a data-id="1">osu!taiko</a>
-                <a data-id="2">osu!catch</a>
-                <a data-id="3">osu!mania</a>
+                <a class="{{ 'selected' if mode == None else '' }}" data-id="">Any</a>
+                <a data-id="0" class={{ 'selected' if mode == 0 else '' }} >osu!</a>
+                <a data-id="1" class={{ 'selected' if mode == 1 else '' }} >osu!taiko</a>
+                <a data-id="2" class={{ 'selected' if mode == 2 else '' }} >osu!catch</a>
+                <a data-id="3" class={{ 'selected' if mode == 3 else '' }} >osu!mania</a>
             </dd>
         </dl>
         <dl data-name="category">
@@ -34,38 +34,38 @@
         <dl data-name="genre">
             <dt>Genre:</dt>
             <dd>
-                <a data-id="" class="selected">Any</a>
-                <a data-id="0">Unspecified</a>
-                <a data-id="2">Video Game</a>
-                <a data-id="3">Anime</a>
-                <a data-id="4">Rock</a>
-                <a data-id="5">Pop</a>
-                <a data-id="6">Other</a>
-                <a data-id="7">Novelty</a>
-                <a data-id="9">Hip Hop</a>
-                <a data-id="10">Electronic</a>
-                <a data-id="11">Metal</a>
-                <a data-id="12">Classical</a>
-                <a data-id="13">Folk</a>
-                <a data-id="14">Jazz</a>
+                <a data-id="" class="{{ 'selected' if genre == None else '' }}">Any</a>
+                <a data-id="0" class="{{ 'selected' if genre == 0 else '' }}">Unspecified</a>
+                <a data-id="2" class="{{ 'selected' if genre == 2 else '' }}">Video Game</a>
+                <a data-id="3" class="{{ 'selected' if genre == 3 else '' }}">Anime</a>
+                <a data-id="4" class="{{ 'selected' if genre == 4 else '' }}">Rock</a>
+                <a data-id="5" class="{{ 'selected' if genre == 5 else '' }}">Pop</a>
+                <a data-id="6" class="{{ 'selected' if genre == 6 else '' }}">Other</a>
+                <a data-id="7" class="{{ 'selected' if genre == 7 else '' }}">Novelty</a>
+                <a data-id="9" class="{{ 'selected' if genre == 9 else '' }}">Hip Hop</a>
+                <a data-id="10" class="{{ 'selected' if genre == 10 else '' }}">Electronic</a>
+                <a data-id="11" class="{{ 'selected' if genre == 11 else '' }}">Metal</a>
+                <a data-id="12" class="{{ 'selected' if genre == 12 else '' }}">Classical</a>
+                <a data-id="13" class="{{ 'selected' if genre == 13 else '' }}">Folk</a>
+                <a data-id="14" class="{{ 'selected' if genre == 14 else '' }}">Jazz</a>
             </dd>
         </dl>
         <dl data-name="language">
             <dt>Language:</dt>
             <dd>
-                <a data-id="" class="selected">Any</a>
-                <a data-id="2">English</a>
-                <a data-id="3">Japanese</a>
-                <a data-id="4">Chinese</a>
-                <a data-id="5">Instrumental</a>
-                <a data-id="6">Korean</a>
-                <a data-id="7">French</a>
-                <a data-id="8">German</a>
-                <a data-id="9">Swedish</a>
-                <a data-id="10">Spanish</a>
-                <a data-id="11">Italian</a>
-                <a data-id="12">Russian</a>
-                <a data-id="13">Polish</a>
+                <a data-id="" class="{{ 'selected' if language == None else '' }}">Any</a>
+                <a data-id="2" class="{{ 'selected' if language == 2 else '' }}">English</a>
+                <a data-id="3" class="{{ 'selected' if language == 3 else '' }}">Japanese</a>
+                <a data-id="4" class="{{ 'selected' if language == 4 else '' }}">Chinese</a>
+                <a data-id="5" class="{{ 'selected' if language == 5 else '' }}">Instrumental</a>
+                <a data-id="6" class="{{ 'selected' if language == 6 else '' }}">Korean</a>
+                <a data-id="7" class="{{ 'selected' if language == 7 else '' }}">French</a>
+                <a data-id="8" class="{{ 'selected' if language == 8 else '' }}">German</a>
+                <a data-id="9" class="{{ 'selected' if language == 9 else '' }}">Swedish</a>
+                <a data-id="10" class="{{ 'selected' if language == 10 else '' }}">Spanish</a>
+                <a data-id="11" class="{{ 'selected' if language == 11 else '' }}">Italian</a>
+                <a data-id="12" class="{{ 'selected' if language == 12 else '' }}">Russian</a>
+                <a data-id="13" class="{{ 'selected' if language == 13 else '' }}">Polish</a>
             </dd>
         </dl>
         <dl>
@@ -88,28 +88,83 @@
             <tr>
                 <th>
                     <a data-id="0">Title</a>
+                    {% if sort == 0 %}
+                        {% if order == 0 %}
+                        <img src="/images/down.gif" alt="Descending">
+                        {% else %}
+                        <img src="/images/up.gif" alt="Ascending">
+                        {% endif %}
+                    {% endif %}
                 </th>
                 <th>
                     <a data-id="1">Artist</a>
+                    {% if sort == 1 %}
+                        {% if order == 0 %}
+                        <img src="/images/down.gif" alt="Descending">
+                        {% else %}
+                        <img src="/images/up.gif" alt="Ascending">
+                        {% endif %}
+                    {% endif %}
                 </th>
                 <th>
                     <a data-id="2">Creator</a>
+                    {% if sort == 2 %}
+                        {% if order == 0 %}
+                        <img src="/images/down.gif" alt="Descending">
+                        {% else %}
+                        <img src="/images/up.gif" alt="Ascending">
+                        {% endif %}
+                    {% endif %}
                 </th>
                 <th>
                     <a data-id="3">Difficulty</a>
+                    {% if sort == 3 %}
+                        {% if order == 0 %}
+                        <img src="/images/down.gif" alt="Descending">
+                        {% else %}
+                        <img src="/images/up.gif" alt="Ascending">
+                        {% endif %}
+                    {% endif %}
                 </th>
                 <th>
                     <a data-id="4">Ranked</a>
-                    <img src="/images/down.gif" alt="Descending">
+                    {% if sort == 4 %}
+                        {% if order == 0 %}
+                        <img src="/images/down.gif" alt="Descending">
+                        {% else %}
+                        <img src="/images/up.gif" alt="Ascending">
+                        {% endif %}
+                    {% endif %}
                 </th>
                 <th>
                     <a data-id="7">Created</a>
+                    {% if sort == 7 %}
+                        {% if order == 0 %}
+                        <img src="/images/down.gif" alt="Descending">
+                        {% else %}
+                        <img src="/images/up.gif" alt="Ascending">
+                        {% endif %}
+                    {% endif %}
                 </th>
                 <th>
                     <a data-id="5">Rating</a>
+                    {% if sort == 5 %}
+                        {% if order == 0 %}
+                        <img src="/images/down.gif" alt="Descending">
+                        {% else %}
+                        <img src="/images/up.gif" alt="Ascending">
+                        {% endif %}
+                    {% endif %}
                 </th>
                 <th>
                     <a data-id="6">Plays</a>
+                    {% if sort == 6 %}
+                        {% if order == 0 %}
+                        <img src="/images/down.gif" alt="Descending">
+                        {% else %}
+                        <img src="/images/up.gif" alt="Ascending">
+                        {% endif %}
+                    {% endif %}
                 </th>
             </tr>
         </thead>

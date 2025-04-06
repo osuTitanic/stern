@@ -1,12 +1,12 @@
 
 @import url("main.css");
 
-h1, h2 {
+.page h1, .page h2 {
     color: #cc2e8a;
     text-shadow: #efcfe1 0px 0px 10px;
     overflow: visible;
     font-weight: normal;
-    font-size: 120%;
+    font-size: 125%;
 }
 
 .register-form, .reset-form, .login-form {
@@ -22,11 +22,12 @@ h1, h2 {
     -moz-box-shadow: 0px 0px 50px #ffffff;
     box-shadow: 0px 0px 50px #ffffff;
     background-color: #efeafc;
+    display: inline-block;
     border-radius: 5px;
-    padding: 10px;
-    margin: 15px;
     line-height: 30px;
-    display: flex;
+    padding: 10px;
+    margin: 12px;
+    width: 775px;
 }
 
 .register-form input[type="submit"],
@@ -35,9 +36,9 @@ h1, h2 {
 .register-form input[type="email"] {
     border: 1px solid #90ace7;
     vertical-align: middle;
+    display: inline-block;
     width: 300px;
     height: 30px;
-    float: left;
     border-radius: 3px;
     -webkit-border-radius: 3px;
 }
@@ -65,12 +66,15 @@ h1, h2 {
 }
 
 .input-description {
-    display: inline-block;
-    line-height: 18px;
-    margin-left: 30px;
-    width: 440px;
     vertical-align: middle;
+    line-height: 18px;
     font-size: 95%;
+    float: right;
+    width: 58%;
+}
+
+.register-submit {
+    text-align: center;
 }
 
 .register-button:hover, .reset-button:hover {

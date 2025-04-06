@@ -127,10 +127,14 @@
     <tbody>
         {% set rank_offset = (page - 1) * items_per_page %}
         {% for player in leaderboard %}
-        {% if loop.index0 % 2 %}
-        <tr style="background-color: #e7e4fc;">
+        {% if jumpto == player.name %}
+            <tr style="background-color: #bfa8f8;" id="jumpto">
         {% else %}
-        <tr style="background-color: #dad7fb;">
+            {% if loop.index0 % 2 %}
+            <tr style="background-color: #e7e4fc;">
+            {% else %}
+            <tr style="background-color: #dad7fb;">
+            {% endif %}
         {% endif %}
             <td>
                 <b>#{{ rank_offset + loop.index0 + 1 }}</b>
@@ -187,7 +191,7 @@
 {% if total_pages > 1 %}
 <div class="centered" style="margin: 25px !important;">
     <div class="pagination">
-        Displaying {{ page }} of {{ total_pages }} results.
+        <a href="javascript:void(0);" onclick="jumpToPlayer();">Jump</a> to a player.
         <br>
         {% set country_string = ("country=" + country + "&") if country else '' %}
         {% if total_pages > 1 %}
@@ -221,4 +225,18 @@
     </div>
 </div>
 {% endif %}
+<script>
+    function jumpToPlayer() {
+        var player = prompt("Enter the player name to jump to:")
+
+        if (player === null || player === "") {
+            return;
+        }
+
+        var query = new URLSearchParams();
+        query.set("jumpto", player);
+        location.hash = "jumpto";
+        location.search = query.toString();
+    }
+</script>
 {% endblock content %}

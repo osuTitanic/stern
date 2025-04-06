@@ -7,6 +7,7 @@ from . import session
 from . import bbcode
 from . import common
 from . import routes
+from . import uwsgi
 from . import wiki
 
 from .app import flask

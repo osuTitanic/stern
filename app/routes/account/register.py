@@ -7,12 +7,14 @@ from app.common import mail, officer, helpers
 from app.common.database.repositories import (
     verifications,
     notifications,
+    wrapper,
     groups,
     names,
     users
 )
 
 from flask import Blueprint, request, redirect
+from sqlalchemy.orm import Session
 from typing import Optional
 from app import accounts
 
@@ -35,61 +37,61 @@ def register_page():
 
 @router.post('/register')
 def registration_request():
-    ip = helpers.ip.resolve_ip_address_flask(request)
-
-    try:
-        if validate_email(email := request.form.get('email')):
-            return render_register_page('Please enter a valid email!')
-
-        if validate_username(username := request.form.get('username')):
-            return render_register_page('Please enter a valid username!')
-
-        if not (password := request.form.get('password')):
-            return render_register_page('Please enter a valid password!')
-
-        if len(password) <= 7:
-            return render_register_page('Please enter a password with at least 8 characters!')
-    except Exception as e:
-        app.session.logger.error(
-            f'Failed to verify registration request: {e}',
-            exc_info=e
-        )
-        officer.call(
-            f'Failed to verify registration request from IP ({ip}): {e}',
-            exc_info=e
-        )
-        return render_register_page('Failed to process your request. Please try again!')
-
-    registration_count = app.session.redis.get(f'registrations:{ip}') or 0
-
-    if int(registration_count) > 2:
-        officer.call(
-            f'Failed to register: Too many registrations from IP ({ip})'
-        )
-        return render_register_page('There have been too many registrations from this ip. Please try again later!')
-
-    if config.RECAPTCHA_SECRET_KEY and config.RECAPTCHA_SITE_KEY:
-        client_response = request.form.get('recaptcha_response')
-
-        if not client_response:
-            return render_register_page('Invalid captcha response!')
-
-        response = app.session.requests.post(
-            'https://www.google.com/recaptcha/api/siteverify',
-            data={
-                'secret': config.RECAPTCHA_SECRET_KEY,
-                'response': client_response,
-                'remoteip': ip
-            }
-        )
-
-        if not response.ok:
-            return render_register_page('Failed to verify captcha response!')
-
-        if not response.json().get('success', False):
-            return render_register_page('Captcha verification failed!')
-
     with app.session.database.managed_session() as session:
+        ip = helpers.ip.resolve_ip_address_flask(request)
+
+        try:
+            if validate_email(email := request.form.get('email'), session=session):
+                return render_register_page('Please enter a valid email!')
+
+            if validate_username(username := request.form.get('username'), session=session):
+                return render_register_page('Please enter a valid username!')
+
+            if not (password := request.form.get('password')):
+                return render_register_page('Please enter a valid password!')
+
+            if len(password) <= 7:
+                return render_register_page('Please enter a password with at least 8 characters!')
+        except Exception as e:
+            app.session.logger.error(
+                f'Failed to verify registration request: {e}',
+                exc_info=e
+            )
+            officer.call(
+                f'Failed to verify registration request from IP ({ip}): {e}',
+                exc_info=e
+            )
+            return render_register_page('Failed to process your request. Please try again!')
+
+        registration_count = app.session.redis.get(f'registrations:{ip}') or 0
+
+        if int(registration_count) > 2:
+            officer.call(
+                f'Failed to register: Too many registrations from IP ({ip})'
+            )
+            return render_register_page('There have been too many registrations from this ip. Please try again later!')
+
+        if config.RECAPTCHA_SECRET_KEY and config.RECAPTCHA_SITE_KEY:
+            client_response = request.form.get('recaptcha_response')
+
+            if not client_response:
+                return render_register_page('Invalid captcha response!')
+
+            response = app.session.requests.post(
+                'https://www.google.com/recaptcha/api/siteverify',
+                data={
+                    'secret': config.RECAPTCHA_SECRET_KEY,
+                    'response': client_response,
+                    'remoteip': ip
+                }
+            )
+
+            if not response.ok:
+                return render_register_page('Failed to verify captcha response!')
+
+            if not response.json().get('success', False):
+                return render_register_page('Captcha verification failed!')
+
         app.session.logger.info(
             f'Starting registration process for "{username}" ({email}) ({ip})...'
         )
@@ -97,6 +99,7 @@ def registration_request():
         geolocation = location.fetch_web(ip)
         country = geolocation.country_code.upper() if geolocation else 'XX'
 
+        # Force-override country if cloudflare geolocation is available
         cf_country = request.headers.get('CF-IPCountry', 'XX')
 
         if cf_country not in ('XX', 'T1'):
@@ -199,7 +202,8 @@ def get_hashed_password(password: str) -> str:
         salt=bcrypt.gensalt()
     ).decode()
 
-def validate_username(username: str) -> Optional[str]:
+@wrapper.session_wrapper
+def validate_username(username: str, session: Session = ...) -> Optional[str]:
     username = username.strip()
 
     if len(username) < 3:
@@ -220,18 +224,22 @@ def validate_username(username: str) -> Optional[str]:
     if username.lower().endswith('_old'):
         return "This username is not allowed."
 
+    if users.fetch_by_name_case_insensitive(username, session):
+        return "This username is already in use!"
+
     safe_name = username.lower().replace(' ', '_')
 
-    if users.fetch_by_safe_name(safe_name):
+    if users.fetch_by_safe_name(safe_name, session):
         return "This username is already in use!"
 
-    if names.fetch_by_name_extended(username):
+    if names.fetch_by_name_reserved(username, session):
         return "This username is already in use!"
 
-def validate_email(email: str) -> Optional[str]:
+@wrapper.session_wrapper
+def validate_email(email: str, session: Session = ...) -> Optional[str]:
     if not EMAIL.match(email):
         return "Please enter a valid email address!"
 
-    if users.fetch_by_email(email.lower()):
+    if users.fetch_by_email(email.lower(), session):
         # TODO: Forgot username/password link
         return "This email address is already in use."

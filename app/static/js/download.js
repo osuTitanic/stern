@@ -1,5 +1,5 @@
 function displayCategory(category) {
-    var clients = document.querySelectorAll(".client-container");
+    var clients = document.getElementsByClassName("client-container");
 
     for (var i = 0; i < clients.length; i++) {
         var client = clients[i];
@@ -23,38 +23,41 @@ function displayCategory(category) {
 
 function selectCategory(category)
 {
-    var categoryLinks = document.querySelectorAll(".category");
-    deselectAll();
+    var categoryLinks = document.getElementsByClassName("category");
 
     for (var i = 0; i < categoryLinks.length; i++) {
         var categoryLink = categoryLinks[i];
 
-        if (categoryLink.textContent == category) {
-            categoryLink.classList.add('selected');
+        if (getText(categoryLink) == category) {
+            categoryLink.className = 'category selected';
         } else {
-            categoryLink.classList.remove('selected');
+            categoryLink.className = 'category';
         }
     }
 }
 
 function deselectCategory(category)
 {
-    var categoryLinks = document.querySelectorAll(".category");
+    var categoryLinks = document.getElementsByClassName("category");
     
     for (var i = 0; i < categoryLinks.length; i++) {
         var categoryLink = categoryLinks[i];
         
-        if (categoryLink.textContent == category) {
-            categoryLink.classList.remove('selected');
+        if (getText(categoryLink) == category) {
+            categoryLink.className = 'category';
         }
     }
 }
 
 function deselectAll()
 {
-    var selectedCategories = document.querySelectorAll(".category .selected");
+    var categoryLinks = document.getElementsByClassName("category");
 
-    for (var i = 0; i < selectedCategories.length; i++) {
-        selectedCategories[i].classList.remove('selected');
+    for (var i = 0; i < categoryLinks.length; i++) {
+        var selectedElements = categoryLinks[i].getElementsByClassName("selected")
+
+        for (var j = 0; j < selectedElements.length; j++) {
+            selectedElements[j].className = 'category';
+        }
     }
 }

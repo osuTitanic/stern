@@ -87,6 +87,11 @@
     border-bottom: 1px solid #a79ef3;
 }
 
+.pack-listing td {
+    padding-bottom: 1px;
+    padding-top: 1px;
+}
+
 .dark-row {
     background-color: #e3e1fa;
 }

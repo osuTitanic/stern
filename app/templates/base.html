@@ -34,13 +34,30 @@
         var approvedRewards = {{ config.APPROVED_MAP_REWARDS|lower }};
         var csrfToken = "{{ csrf_token() }}";
     </script>
+    <!-- CSS fixes for Internet Explorer -->
+    <!--[if IE 6]>
+    <style>
+        .nav-element a,
+        .nav-element a:visited {
+            width: 35px;
+        }
+        .nav-list {
+            margin-left: 85px;
+        }
+        .bancho-stats {
+            width: 220px;
+            top: -17px;
+            right: -1px;
+        }
+    </style>
+    <![endif]-->
 </head>
 <body>
     {% if current_user.restricted %}
     <div class="alert-header">
         <h1 style="margin-top: 0px; color: white;">Your account was <strong>restricted</strong>!</h1>
         <div>
-            You won't have be able to engage with other users or submit scores. If you wish to appeal your restriction, please <a href="mailto:{{ config.EMAIL }}" style="color:white; font-weight: bold;">contact the administration team</a>.
+            You won't have be able to engage with other users or submit scores. If you wish to appeal your restriction, please <a href="mailto:{{ config.EMAIL_SENDER }}" style="color:white; font-weight: bold;">contact the administration team</a>.
         </div>
     </div><br>
     {% endif %}
@@ -54,7 +71,7 @@
                  src="/images/logo/main-low.png"
                  {% endif %}
                  class="logo"
-                 alt="Titanic Logo">
+                 alt="">
         </a>
         <div class="nav">
             {% include "navigation.html" %}
@@ -78,8 +95,8 @@
                     <span class="nav-login" id="welcome-text">
                         Welcome, <a href="/u/{{ current_user.id }}">{{ current_user.name }}</a>
                     </span>
-                    <a href="/account/settings/profile#avatar">
-                        <img class="small-avatar" src="/a/{{ current_user.id }}?s=25" alt="" height="25px">
+                    <a href="/account/settings/profile#avatar" style="height: 25px">
+                        <img class="small-avatar" src="/a/{{ current_user.id }}?s=25" alt="">
                     </a>
                     <a href="/account/settings"><i class="fa-solid fa-gear" style="color: #808080;"></i> Settings</a>
                     <a href="/account/settings#notifications">
@@ -138,7 +155,14 @@
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                 </form>
             </div>
+            {% if not is_modern_browser %}
+            <!--[if lte IE 8]>
+            <script src="https://cdnjs.cloudflare.com/polyfill/v2/polyfill.min.js"></script>
+            <![endif]-->
+            <!--[if gt IE 7]><!-->
             <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js"></script>
+            <!--<![endif]-->
+            {% endif %}
             <script src="/lib/jquery.min.js"></script>
             <script src="/lib/jquery.timeago.js"></script>
             <script src="/lib/jquery.marquee.js"></script>
@@ -147,6 +171,7 @@
                 {# Page Content #}
                 {% block content %}
                 {% endblock content %}
+                <div style="clear: both;"></div>
             </div>
             <div class="gradient"></div>
             <script src="/js/editor.js" defer></script>

@@ -117,7 +117,7 @@
     
                     var info = JSON.parse(xhr.responseText);
                     var heading = document.createElement("h2");
-                    heading.innerHTML = info.name;
+                    heading.innerText = info.name;
                     heading.style.marginTop = "10px";
     
                     var creatorLink = document.createElement("a");
@@ -136,7 +136,7 @@
     
                     var uploadedDateInfo = document.createElement("time");
                     uploadedDateInfo.setAttribute("datetime", uploadedDateString);
-                    uploadedDateInfo.textContent = info.created_at;
+                    uploadedDateInfo.innerText = info.created_at;
     
                     var uploadedInfo = document.createElement("p");
                     uploadedInfo.appendChild(document.createTextNode("Created by "));

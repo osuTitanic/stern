@@ -1,38 +1,60 @@
-:root {
-    --darkreader-bg--nav: #863c86 !important;
-    --darkreader-bg--search: #353232 !important;
-}
-
-html[data-darkreader-mode="dynamic"] .nav-element a,
-html[data-darkreader-mode="dynamic"] .nav-element a:visited {
-    color: #f7ddfd !important;
-}
-
-html[data-darkreader-mode="dynamic"] .nav-search {
-    border-color: #50113c !important;
-}
-
-html[data-darkreader-mode="dynamic"] .top {
-    filter: drop-shadow(0px 1px 2px #000000) !important;
-}
-
-html[data-darkreader-mode="dynamic"] .blurb-box {
-    filter: drop-shadow(0px 1px 2px #242424) !important;
-    border-color: #690c56 !important;
-}
-
-html[data-darkreader-mode="dynamic"] .page h2 {
-    text-shadow: #000000 0px 0px 10px !important;
-}
-
-html[data-darkreader-mode="dynamic"] .nav-dropdown {
-    filter: drop-shadow(0px 1px 2px #000000) !important;
-}
-
-* {
-    margin: 0;
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video, input, button {
+	margin: 0;
+	padding: 0;
+	border: 0;
     font-family: Tahoma, Helvetica, Arial, sans-serif;
     font-size: 99.5%;
+	vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+
+body {
+	line-height: 1.24;
+}
+
+ol, ul {
+	list-style: none;
+}
+
+blockquote, q {
+	quotes: none;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+table td {
+	vertical-align: middle;
+}
+
+textarea, select {
+	font-family: Tahoma, Helvetica, Arial, sans-serif;
+	font-size: 99.5%;
 }
 
 a {
@@ -44,6 +66,12 @@ a img {
     /* grrr.. internet explorer!! */
     border: none;
     outline: none;
+}
+
+.page ul {
+    padding-top: 2px;
+    padding-left: 2em;
+    list-style-type: disc;
 }
 
 a:hover {
@@ -78,6 +106,29 @@ input:focus {
     outline: 0;
 }
 
+input[type="submit"] {
+    -webkit-border-radius: 4px;
+    -khtml-border-radius: 4px;
+    -moz-border-radius: 4px;
+    background-color: white;
+    border: 1.5px solid #8f8f9d;
+    border-radius: 4px;
+    padding: 2px 5px 2px 5px;
+    color: black;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover {
+    background-color: rgb(205, 205, 240);
+}
+
+input[type="text"], input[type="password"], input[type="email"],
+input[type="url"], input[type="search"] {
+    padding: 0.5px 2px 0.5px 2px;
+    border: 1px solid rgb(185, 197, 236);
+    border-radius: 3px;
+}
+
 .main {
     margin: auto;
     position: relative;
@@ -101,11 +152,10 @@ input:focus {
     -webkit-border-radius: 5px;
     -khtml-border-radius: 5px;
     -moz-border-radius: 5px;
-    background-color: #ffd6f3;
     border-radius: 5px 5px 0px 0px;
-    min-height: 22.5px;
-    max-width: 630px;
+    background-color: #ffd6f3;
     padding-left: 50px;
+    max-width: 630px;
     height: 22px;
     z-index: -1;
 }
@@ -114,14 +164,14 @@ input:focus {
     list-style: none;
     position: absolute;
     display: inline-block;
-    margin-left: 30px;
-    min-height: 25px;
+    margin-left: 70px;
+    height: 22px;
     left: 5px;
 }
 
 .nav-element {
     float: left;
-    min-height: 25px;
+    height: 100%;
 }
 
 .nav-element a,
@@ -136,6 +186,8 @@ input:focus {
     display: block;
     line-height: 20.4px;
     margin-bottom: -4px;
+    height: 20px;
+    max-width: 150px;
 }
 
 .nav-element a:hover {
@@ -258,28 +310,29 @@ input:focus {
     -webkit-border-radius: 3px;
     -khtml-border-radius: 3px;
     -moz-border-radius: 3px;
+    padding-top: 1.5px !important;
+    padding-bottom: 1.5px !important;
     border-radius: 3px;
+    vertical-align: top;
     font-size: 85%;
     margin-left: 5px;
     margin-right: 5px;
-    border-color: beige;
     width: 100px;
     height: 13px;
-    vertical-align: top;
 }
 
 .login-container {
-    display: -webkit-box;
-    display: -moz-box;
-    display: -ms-flexbox;
-    display: box;
-    display: flex;
     text-align: right;
     align-items: center;
     font-size: 90%;
     padding-right: 5px;
     float: right;
-    height: 20px;
+    height: 100%;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: box;
+    display: flex;
     /* Center alignment workaround */
     -webkit-box-align: center;
     -moz-box-align: center;
@@ -292,7 +345,7 @@ input:focus {
 }
 
 .small-avatar {
-    margin-top: 4px;
+    height: 100%;
     margin-left: 3px;
 }
 
@@ -320,22 +373,6 @@ input:focus {
 #register-text {
     color: #ff64ba;
     font-weight: bold;
-}
-
-input[type="submit"] {
-    -webkit-border-radius: 4px;
-    -khtml-border-radius: 4px;
-    -moz-border-radius: 4px;
-    background-color: white;
-    border: 1.5px solid #8f8f9d;
-    border-radius: 4px;
-    padding: 2px 5px 2px 5px;
-    color: black;
-    cursor: pointer;
-}
-
-input[type="submit"]:hover {
-    background-color: rgb(205, 205, 240);
 }
 
 .login-dropdown {
@@ -462,7 +499,7 @@ input[type="submit"]:hover {
     color: #999999;
 }
 
-#bbcode-toolbar {
+.bbcode-toolbar {
     margin-bottom: 4px;
     display: flex;
     font-size: 90%;
@@ -470,10 +507,10 @@ input[type="submit"]:hover {
     justify-content: space-evenly;
 }
 
-#bbcode-toolbar button {
+.bbcode-toolbar button {
     height: 20px;
     min-width: 40px;
-    margin-right: 2.5px;
+    margin-right: 5px;
     margin-bottom: 5px;
     text-align: center;
     background-color: white;
@@ -483,11 +520,11 @@ input[type="submit"]:hover {
     border-radius: 4px;
 }
 
-#bbcode-toolbar button:hover {
+.bbcode-toolbar button:hover {
     background-color: rgb(205, 205, 240);
 }
 
-#bbcode-toolbar button:active {
+.bbcode-toolbar button:active {
     background-color: rgb(184, 184, 218);
 }
 
@@ -505,7 +542,7 @@ input[type="submit"]:hover {
 }
 
 .bbcode img {
-    max-width: 660px;
+    max-width: 630px;
 }
 
 .bbcode video {

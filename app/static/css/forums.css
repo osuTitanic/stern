@@ -103,13 +103,15 @@
     color: #4f5355;
 }
 
-table {
+.page table {
     font-size: 90%;
 }
 
 .topics-table {
     margin-top: 15px;
     margin-bottom: 5px;
+    border-collapse: separate;
+    border-spacing: 1px 2px;
 }
 
 .topic-header {
@@ -133,6 +135,7 @@ table {
     padding: 2px;
     border: 1px solid #e2dffa;
     border-radius: 2px;
+    vertical-align: middle;
 }
 
 .dark-row {
@@ -144,6 +147,7 @@ table {
     padding: 2px;
     border: 1px solid rgb(206, 215, 250);
     border-radius: 2px;
+    vertical-align: middle;
 }
 
 .light-row img, .dark-row img {
@@ -151,7 +155,7 @@ table {
 }
 
 .bar {
-    margin-top: 2.5px;
+    margin-top: 5px;
 }
 
 .bar td {
@@ -296,7 +300,7 @@ table {
     display: flex;
     justify-content: flex-start;
     margin-bottom: 10px;
-    margin-left: 5px;
+    margin-left: 6px;
     padding-bottom: 10px;
 }
 
@@ -388,7 +392,7 @@ table {
 
 .icon-selection label {
     margin-right: 6px;
-    margin-left: 6px;
+    vertical-align: middle;
 }
 
 .kudosu-box {
@@ -420,5 +424,5 @@ table {
 .quick-reply {
     justify-content: center;
     display: flex;
-    margin-bottom: 5px;
+    margin-bottom: 6px;
 }

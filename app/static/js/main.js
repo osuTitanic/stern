@@ -94,6 +94,8 @@ var Mode = {
     3: "osu!Mania"
 };
 
+var isNavigatingAway = false;
+
 if (!window.console) {
     // Console polyfill for ~IE8 and earlier
     console = {
@@ -112,12 +114,28 @@ function slideUp(elem) {
     elem.style.height = "0px";
 }
 
-function cookieExists(name) {
-    return document.cookie.indexOf(name + "=") !== -1;
+function getElementHeight(elem) {
+    var totalHeight = 0;
+    for (var i = 0; i < elem.children.length; i++) {
+        totalHeight += elem.children[i].offsetHeight + 10;
+    }
+    return totalHeight;
+}
+
+function getText(elem) {
+    return elem.textContent || elem.innerText;
+}
+
+function setText(elem, text) {
+    if (elem.textContent !== undefined) {
+        elem.textContent = text;
+    } else {
+        elem.innerText = text;
+    }
 }
 
 function isLoggedIn() {
-    return document.getElementById('welcome-text').textContent != 'Welcome, guest!'
+    return document.getElementById('welcome-text').innerText != 'Welcome, guest!'
 }
 
 function show(id) {
@@ -131,6 +149,26 @@ function hide(id) {
 function confirmAction(promptText) {
     if (promptText === undefined) promptText = 'Are you sure?';
     return confirm(promptText);
+}
+
+function cookieExists(name) {
+    return document.cookie.indexOf(name + "=") !== -1;
+}
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
 }
 
 function confirmRedirect(url, promptText) {
@@ -253,6 +291,13 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
     try {
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.setRequestHeader("Cache-Control", "no-cache");
+
+        if (cookieExists('access_token'))
+        {
+            // Set the Authorization header, if the access_token cookie is accessible via. javascript
+            // This will be useful for local development, where the api is located on a different domain
+            xhr.setRequestHeader("Authorization", "Bearer " + getCookie('access_token'));
+        }
     } catch (e) {
         console.warn("This browser does not support setting headers.");
     }
@@ -285,7 +330,7 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
                 }
             } else {
                 console.error("[" + xhr.status + "] An error occurred during " + method + " request to " + path);
-                if (callbackError) {
+                if (callbackError && !isNavigatingAway) {
                     callbackError(xhr);
                 }
             }
@@ -328,6 +373,27 @@ function loadBBCodePreview(element) {
     return false;
 }
 
-addEvent("DOMContentLoaded", document, function(event) {
+function getElementsByClassNamePolyfill(className) {
+    var allElements = document.getElementsByTagName('*');
+    var matchedElements = [];
+    var pattern = new RegExp('(^|\\s)' + className + '(\\s|$)');
+
+    for (var i = 0; i < allElements.length; i++) {
+        if (pattern.test(allElements[i].className)) {
+            matchedElements.push(allElements[i]);
+        }
+    }
+    return matchedElements;
+}
+
+if (!document.getElementsByClassName) {
+    document.getElementsByClassName = getElementsByClassNamePolyfill;
+}
+
+addEvent("DOMContentLoaded", document, function(e) {
     $(".timeago").timeago();
+});
+
+addEvent("beforeunload", window, function(e) {
+    isNavigatingAway = true;
 });

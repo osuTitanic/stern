@@ -53,6 +53,7 @@ def update_profile_settings():
     website = request.form.get('website') or None
     discord = request.form.get('discord') or None
     twitter = request.form.get('twitter') or None
+    mode = request.form.get('mode', type=int)
 
     if discord != None:
         discord = discord.removeprefix('@')
@@ -103,6 +104,7 @@ def update_profile_settings():
         return error
 
     updates = {
+        'preferred_mode': mode,
         'interests': interests,
         'location': location,
         'website': website,

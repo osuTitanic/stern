@@ -10,7 +10,7 @@
     <tr class="dark-row">
 {% endif %}
     <td align="center" width="4%">
-        <a href="/forum/{{ forum.id }}/t/{{ topic.id }}">
+        <a href="/forum/{{ forum.id }}/t/{{ topic.id }}/">
             <img src="{{ topic|get_status_icon }}" width="20">
         </a>
     </td>
@@ -28,7 +28,7 @@
             {% if topic.pinned %}
                 <i class="fa-solid fa-star-of-life" style="font-size: 80%; color: #ababab"></i>
             {% endif %}
-            <a href="/forum/{{ forum.id }}/t/{{ topic.id }}">{{ topic.title }}</a>
+            <a href="/forum/{{ forum.id }}/t/{{ topic.id }}/">{{ topic.title }}</a>
             {% if topic.status_text %}
                 <p class="topic-status-text">{{ topic.status_text }}</p>
             {% endif %}
@@ -40,14 +40,14 @@
                 {% if page_count <= 4 %}
                     {# Display all pages #}
                     {% for page in range(page_count) %}
-                        <a href="/forum/{{ forum.id }}/t/{{ topic.id }}?page={{ page + 1 }}">{{ page + 1 }}</a>{% if page != page_count-1 %},{% endif %}
+                        <a href="/forum/{{ forum.id }}/t/{{ topic.id }}/?page={{ page + 1 }}">{{ page + 1 }}</a>{% if page != page_count-1 %},{% endif %}
                     {% endfor %}
                 {% else %}
                     {# Display the first, and last 3 pages #}
-                    <a href="/forum/{{ forum.id }}/t/{{ topic.id }}?page=1">1</a>,
+                    <a href="/forum/{{ forum.id }}/t/{{ topic.id }}/?page=1">1</a>,
                     ...
                     {% for page in range(page_count-3, page_count) %}
-                        <a href="/forum/{{ forum.id }}/t/{{ topic.id }}?page={{ page + 1 }}">{{ page + 1 }}</a>{% if page != page_count-1 %},{% endif %}
+                        <a href="/forum/{{ forum.id }}/t/{{ topic.id }}/?page={{ page + 1 }}">{{ page + 1 }}</a>{% if page != page_count-1 %},{% endif %}
                     {% endfor %}
                 {% endif %}
             </div>
@@ -69,7 +69,7 @@
                 <a href="/u/{{ last_post.user.id }}" style="color: {{ last_post.user|user_color }}">
                     {{ last_post.user.name }}
                 </a>
-                <a href="/forum/{{ forum.id }}/p/{{ last_post.id }}">
+                <a href="/forum/{{ forum.id }}/p/{{ last_post.id }}/">
                     <i class="fa-solid fa-arrow-right" style="color: #ababab"></i>
                 </a>
             </p>

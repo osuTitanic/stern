@@ -21,7 +21,7 @@
         </div>
         <div>
             Feel free to contact our support on the <a href="https://discord.gg/qupv72e7YH">discord server</a>
-            or via. <a href="mailto:{{ config.EMAIL }}">email</a>, if you have any issues.
+            or via. <a href="mailto:{{ config.EMAIL_SENDER }}">email</a>, if you have any issues.
         </div>
     {% endif %}
 {% else %}
@@ -46,7 +46,7 @@
             </div>
             <input name="token" type="hidden" value="{{ verification.token }}">
             <div style="display: block;">
-                Need further assistance? Contact us on our <a href="https://discord.gg/qupv72e7YH">discord</a> or via <a href="mailto:{{ config.EMAIL }}">email</a>.
+                Need further assistance? Contact us on our <a href="https://discord.gg/qupv72e7YH">discord</a> or via <a href="mailto:{{ config.EMAIL_SENDER }}">email</a>.
                 Please don't forget your password this time!
             </div>
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
@@ -61,7 +61,7 @@
         {% if not reset %}
             <div>
                 If you can't access your email or have forgotten what you used, please send an email to
-                <a href="mailto:{{ config.EMAIL }}">{{ config.EMAIL }}</a> to recover your account.
+                <a href="mailto:{{ config.EMAIL_SENDER }}">{{ config.EMAIL_SENDER }}</a> to recover your account.
             </div>
         {% endif %}
         {% if error %}

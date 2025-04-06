@@ -12,7 +12,14 @@ function insertBBCode(event) {
     var noClose = element.getAttribute('data-no-close');
 
     var parent = element.parentElement;
-    var editor = parent.parentElement.querySelector('textarea');
+    var textAreas = parent.parentElement.getElementsByTagName('textarea');
+    
+    if (textAreas.length === 0) {
+        console.warn("No text area found in the parent element.");
+        return;
+    }
+
+    var editor = textAreas[0];
 
     if (editor && bbcodeTag) {
         var start = editor.selectionStart;
@@ -38,8 +45,8 @@ function insertBBCode(event) {
     }
 }
 
-elements = document.querySelectorAll('#bbcode-toolbar')
+var toolbars = document.getElementsByClassName('bbcode-toolbar')
 
-for (var i = 0; i < elements.length; i++) {
-    addEvent('click', elements[i], insertBBCode);
+for (var i = 0; i < toolbars.length; i++) {
+    addEvent('click', toolbars[i], insertBBCode);
 }

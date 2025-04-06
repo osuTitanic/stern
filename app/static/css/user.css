@@ -31,13 +31,17 @@
     overflow-wrap: anywhere;
 }
 
-.left-top h1 {
+.user-header {
     font-weight: normal;
     font-size: 145%;
-    display: flex;
+    padding-top: 5px;
     justify-content: center;
     align-items: center;
-    padding-top: 5px;
+    text-align: center;
+    display: flex;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    margin: 0 auto;
 }
 
 .flag {
@@ -45,8 +49,13 @@
     margin-bottom: 2.5px;
 }
 
-.left-top h1 a {
+.user-header a {
     margin-right: 8px;
+}
+
+.user-header img {
+    text-align: center;
+    margin: 0 auto;
 }
 
 .username {
@@ -96,8 +105,8 @@
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
     background-color: white;
     border: 1px solid #ddd;
-    margin: auto;
-    margin-bottom: 10px;
+    margin: 0 auto;
+    margin-bottom: 5px;
     padding: 2px;
     display: inline;
     justify-content: center;
@@ -107,9 +116,8 @@
 }
 
 .avatar-box img {
-    vertical-align: middle;
-    display: flex;
     margin: 0 auto;
+    display: block;
     width: 120px;
     height: 120px;
 }
@@ -151,7 +159,7 @@
     background-color: #dbcaea;
     text-align: center;
     margin: 5px auto;
-    margin-top: 15px;
+    margin-top: 20px;
     margin-bottom: 15px;
     border-radius: 5px;
     min-height: 32px;
@@ -273,11 +281,14 @@
 
 .profile-table {
     width: 100%;
+    border-collapse: separate;
+    border-spacing: 1px 2px;
 }
 
 .profile-tabs {
     width: 100%;
     border-spacing: 7px 0;
+    border-collapse: separate;
 }
 
 .profile-tabs td {
@@ -301,6 +312,8 @@
     cursor: pointer;
     font-size: 100%;
     padding-left: 2.5px;
+    padding-bottom: 1px;
+    padding-top: 1px;
     z-index: 1;
     margin-bottom: 5px;
 }
@@ -330,6 +343,11 @@
     font-size: 125%;
     margin-bottom: 5px;
     margin-top: 15px;
+}
+
+.profile-stats-header a {
+    color: #5a539a;
+    text-decoration: none;
 }
 
 .profile-achievement-header {
@@ -408,6 +426,11 @@
     padding-bottom: 10px;
 }
 
+#profile-recent-preview table {
+    border-collapse: separate;
+    border-spacing: 2px 3px;
+}
+
 #leader h2 {
     text-shadow: #efcfe1 0px 0px 10px;
     font-weight: normal;
@@ -435,25 +458,30 @@
 }
 
 .score-right {
-    float: right;
-    text-align: right;
     font-size: 95%;
+    text-align: right;
+    float: right;
+    width: max-content;
+    display: table-cell;
+    vertical-align: bottom;
 }
 
 .score-left {
     font-size: 95%;
-    float: left;
     text-align: left;
     overflow: hidden;
-    max-width: 80%;
-    border-spacing: 0px;
-    border-collapse: collapse;
+    max-width: 88%;
 }
 
 .score-left img {
     width: 12px;
     height: 15px;
     vertical-align: middle;
+}
+
+.score-left div {
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .score-left * {
@@ -466,6 +494,8 @@
     color: #9492dc;
     text-shadow: #b5c6cb 2px 0px 3px;
     padding-right: 5px;
+    width: 55px;
+    margin-left: auto;
 }
 
 .score-icon-container {
@@ -508,9 +538,7 @@
 }
 
 .profile-beatmaps-container {
-    display: flex;
     margin-bottom: 10px;
-    flex-wrap: wrap;
 }
 
 .profile-beatmap {
@@ -520,6 +548,9 @@
     padding: 2.5px;
     width: 49%;
     transition: opacity 0.2s ease-in-out;
+    border-collapse: separate;
+    border-spacing: 1.5px 1.5px;
+    float: left;
 }
 
 .profile-beatmap img {
@@ -550,7 +581,8 @@
 }
 
 #account div {
-    margin: 15px; text-align: center;
+    margin: 15px 0px 15px 0px;
+    text-align: center;
 }
 
 #account table {
@@ -563,6 +595,10 @@
     background-color: #e7e5fc;
 }
 
+#kudosu {
+    padding-bottom: 5px;
+}
+
 .userpage-stats {
     margin-bottom: 10px;
 }
@@ -573,11 +609,11 @@
 }
 
 .friend-add {
-    color: green;
+    color: green !important;
 }
 
 .friend-remove {
-    color: red;
+    color: red !important;
 }
 
 #friend-status {
@@ -622,4 +658,11 @@
 
 #admin-userpage-controls input[type="submit"] {
     margin: 4px;
+}
+
+@supports (display: flex) {
+    .avatar-box img {
+        display: flex;
+        vertical-align: middle;
+    }
 }

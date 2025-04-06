@@ -3,21 +3,17 @@ var topLeaderOffset = 0;
 var topScoreOffset = 0;
 
 function pinScore(scoreId, userId) {
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "/api/profile/" + userId + "/pinned/add/" + scoreId, true);
-    xhr.onload = function() {
+    var url = "/users/" + currentUser + "/pinned";
+    performApiRequest("POST", url, {"score_id": scoreId}, function() {
         loadPinnedScores(userId, modeName);
-    };
-    xhr.send();
+    });
 }
 
 function unpinScore(scoreId, userId) {
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "/api/profile/" + userId + "/pinned/remove/" + scoreId, true);
-    xhr.onload = function() {
+    var url = "/users/" + currentUser + "/pinned";
+    performApiRequest("DELETE", url, {"score_id": scoreId}, function() {
         loadPinnedScores(userId, modeName);
-    };
-    xhr.send();
+    });
 }
 
 function expandProfileTab(id, forceExpand) {
@@ -25,7 +21,7 @@ function expandProfileTab(id, forceExpand) {
     activeTab = id;
 
     if (!tab) {
-        // Tab can be null sometimes?
+        expandProfileTab(id.startsWith("score-top") ? "leader" : "general", forceExpand);
         return;
     }
 
@@ -48,7 +44,7 @@ function expandProfileTab(id, forceExpand) {
 
     if (activeTab === 'general') {
         loadUserPerformanceGraph(userId, modeName);
-    } else {
+    } else if (activeTab === 'history') {
         loadUserPlaysGraph(userId, modeName);
         loadUserViewsGraph(userId, modeName);
     }
@@ -82,11 +78,11 @@ function createScoreElement(score, index, type) {
 
     var beatmapInfo = document.createElement("a");
     beatmapInfo.href = "/b/" + score.beatmap.id + "?mode=" + score.mode;
-    beatmapInfo.textContent = score.beatmap.beatmapset.artist + " - " + score.beatmap.beatmapset.title + " [" + score.beatmap.version + "]";
+    beatmapInfo.innerText = score.beatmap.beatmapset.artist + " - " + score.beatmap.beatmapset.title + " [" + score.beatmap.version + "]";
 
     var modsText = document.createElement("b");
     if (score.mods > 0) {
-        modsText.textContent = "+" + Mods.getString(score.mods);
+        modsText.innerText = "+" + Mods.getString(score.mods);
     }
 
     var scoreInfo = document.createElement("b");
@@ -111,14 +107,14 @@ function createScoreElement(score, index, type) {
 
     var dateText = document.createElement("time");
     dateText.setAttribute("datetime", scoreDateString);
-    dateText.textContent = score.submitted_at;
+    dateText.innerText = score.submitted_at;
     dateText.className = "timeago";
 
     var rightColumn = document.createElement("td");
     rightColumn.className = 'score-right';
 
     var ppText = document.createElement("b");
-    ppText.textContent = (score.pp.toFixed(0) + "pp");
+    ppText.innerText = (score.pp.toFixed(0) + "pp");
 
     var ppDisplay = document.createElement("div");
     ppDisplay.className = "pp-display";
@@ -227,27 +223,10 @@ function createScoreElement(score, index, type) {
 }
 
 function loadPinnedScores(userId, mode) {
-    var url = "/api/profile/" + userId + "/pinned/" + mode;
+    var url = "/users/" + userId + "/pinned/" + mode;
     var scoreContainer = document.getElementById("pinned-scores");
 
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", url, true);
-    xhr.onload = function() {
-        if (xhr.status !== 200) {
-            console.error("Error loading pinned scores:", xhr.status);
-            var errorText = document.createElement("p");
-            errorText.textContent = "Failed to load pinned scores.";
-            errorText.classList.add("score");
-            scoreContainer.appendChild(errorText);
-
-            var loadingText = document.getElementById("pinned-scores-loading");
-            if (loadingText) {
-                loadingText.parentElement.classList.remove("score");
-                loadingText.remove();
-            }
-            return;
-        }
-
+    performApiRequest("GET", url, null, function(xhr) {
         var data = JSON.parse(xhr.responseText);
         var loadingText = document.getElementById("pinned-scores-loading");
         var scores = data.scores;
@@ -277,13 +256,11 @@ function loadPinnedScores(userId, mode) {
         $(".timeago").timeago();
 
         slideDown(document.getElementById("leader"));
-    };
-
-    xhr.onerror = function() {
+    }, function(xhr) {
         console.error("Error loading pinned scores:", xhr.status);
 
         var errorText = document.createElement("p");
-        errorText.textContent = "Failed to load pinned scores.";
+        errorText.innerText = "Failed to load pinned scores.";
         errorText.classList.add("score");
         scoreContainer.appendChild(errorText);
 
@@ -292,33 +269,14 @@ function loadPinnedScores(userId, mode) {
             loadingText.parentElement.classList.remove("score");
             loadingText.remove();
         }
-    };
-
-    xhr.send();
+    });
 }
 
 function loadTopPlays(userId, mode, limit, offset) {
-    var url = "/api/profile/" + userId + "/top/" + mode + "?limit=" + limit + "&offset=" + offset;
+    var url = "/users/" + userId + "/top/" + mode + "?limit=" + limit + "&offset=" + offset;
     var scoreContainer = document.getElementById("top-scores");
 
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", url, true);
-    xhr.onload = function() {
-        if (xhr.status < 200 || xhr.status >= 300) {
-            console.error(xhr.status);
-            var errorText = document.createElement("p");
-            errorText.textContent = "Failed to load top plays.";
-            errorText.classList.add("score");
-            scoreContainer.appendChild(errorText);
-            var loadingText = document.getElementById("top-scores-loading");
-
-            if (loadingText) {
-                loadingText.parentElement.classList.remove("score");
-                loadingText.remove();
-            }
-            return;
-        }
-
+    performApiRequest("GET", url, null, function(xhr) {
         var data = JSON.parse(xhr.responseText);
         var loadingText = document.getElementById("top-scores-loading");
         var scores = data.scores;
@@ -330,7 +288,7 @@ function loadTopPlays(userId, mode, limit, offset) {
 
         if (scores.length <= 0 && offset <= 0) {
             var noScoresText = document.createElement("p");
-            noScoresText.textContent = "No awesome performance records yet :(";
+            noScoresText.innerText = "No awesome performance records yet :(";
             scoreContainer.appendChild(noScoresText);
             return;
         }
@@ -352,7 +310,7 @@ function loadTopPlays(userId, mode, limit, offset) {
         if (scores.length >= limit) {
             // Create show more text
             var showMoreText = document.createElement("b");
-            showMoreText.textContent = "Show me more!";
+            showMoreText.innerText = "Show me more!";
 
             // Add onclick event
             var showMoreHref = document.createElement("a");
@@ -361,7 +319,7 @@ function loadTopPlays(userId, mode, limit, offset) {
             showMoreHref.appendChild(showMoreText);
             showMoreHref.onclick = function() {
                 var loadingText = document.createElement("p");
-                loadingText.textContent = "Loading...";
+                loadingText.innerText = "Loading...";
                 loadingText.id = "top-scores-loading";
 
                 var showMore = document.getElementById("show-more-top");
@@ -381,12 +339,10 @@ function loadTopPlays(userId, mode, limit, offset) {
         }
 
         slideDown(document.getElementById("leader"));
-    };
-
-    xhr.onerror = function() {
+    }, function(xhr) {
         console.error("Error loading top scores:", error);
         var errorText = document.createElement("p");
-        errorText.textContent = "Failed to load top plays.";
+        errorText.innerText = "Failed to load top plays.";
         errorText.classList.add("score");
         scoreContainer.appendChild(errorText);
 
@@ -396,34 +352,16 @@ function loadTopPlays(userId, mode, limit, offset) {
             loadingText.parentElement.classList.remove("score");
             loadingText.remove();
         }
-    };
-
-    xhr.send();
+    });
 
     return false;
 }
 
 function loadLeaderScores(userId, mode, limit, offset) {
-    var url = "/api/profile/" + userId + "/first/" + mode + "?limit=" + limit + "&offset=" + offset;
+    var url = "/users/" + userId + "/first/" + mode + "?limit=" + limit + "&offset=" + offset;
     var scoreContainer = document.getElementById("leader-scores");
 
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", url, true);
-    xhr.onload = function() {
-        if (xhr.status !== 200) {
-            console.error("Error loading leader scores:", xhr.status);
-            var errorText = document.createElement("p");
-            errorText.textContent = "Failed to load first place ranks.";
-            errorText.classList.add("score");
-            scoreContainer.appendChild(errorText);
-            var loadingText = document.getElementById("leader-scores-loading");
-            if (loadingText) {
-                loadingText.parentElement.classList.remove("score");
-                loadingText.remove();
-            }
-            return;
-        }
-
+    performApiRequest("GET", url, null, function(xhr) {
         var data = JSON.parse(xhr.responseText);
         var loadingText = document.getElementById("leader-scores-loading");
         var scores = data.scores;
@@ -435,7 +373,7 @@ function loadLeaderScores(userId, mode, limit, offset) {
 
         if (scores.length <= 0) {
             var noScoresText = document.createElement("p");
-            noScoresText.textContent = "No first place records currently :(";
+            noScoresText.innerText = "No first place records currently :(";
             scoreContainer.appendChild(noScoresText);
             return;
         }
@@ -451,7 +389,7 @@ function loadLeaderScores(userId, mode, limit, offset) {
 
         if (scores.length >= limit) {
             var showMoreText = document.createElement("b");
-            showMoreText.textContent = "Show me more!";
+            showMoreText.innerText = "Show me more!";
 
             // Add onclick event
             var showMoreHref = document.createElement("a");
@@ -460,7 +398,7 @@ function loadLeaderScores(userId, mode, limit, offset) {
             showMoreHref.appendChild(showMoreText);
             showMoreHref.onclick = function() {
                 var loadingText = document.createElement("p");
-                loadingText.textContent = "Loading...";
+                loadingText.innerText = "Loading...";
                 loadingText.id = "leader-scores-loading";
 
                 var showMore = document.getElementById("show-more-leader");
@@ -480,11 +418,10 @@ function loadLeaderScores(userId, mode, limit, offset) {
         }
 
         slideDown(document.getElementById("leader"));
-    };
-    xhr.onerror = function() {
+    }, function(xhr) {
         console.error("Error loading leader scores:", xhr.status);
         var errorText = document.createElement("p");
-        errorText.textContent = "Failed to load first place ranks.";
+        errorText.innerText = "Failed to load first place ranks.";
         errorText.classList.add("score");
         scoreContainer.appendChild(errorText);
 
@@ -493,8 +430,7 @@ function loadLeaderScores(userId, mode, limit, offset) {
             loadingText.parentElement.classList.remove("score");
             loadingText.remove();
         }
-    };
-    xhr.send();
+    });
 
     return false;
 }
@@ -505,15 +441,10 @@ function loadMostPlayed(userId, limit, offset) {
     if (!loadingText)
         return;
 
-    var url = "/api/profile/" + userId + "/plays?limit=" + limit + "&offset=" + offset;
+    var url = "/users/" + userId + "/plays" + "?limit=" + limit + "&offset=" + offset;
     var playsContainer = document.getElementById("plays-container");
 
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", url, true);
-    xhr.onload = function() {
-        if (xhr.status !== 200)
-            throw new Error(xhr.status);
-
+    performApiRequest("GET", url, null, function(xhr) {
         var plays = JSON.parse(xhr.responseText);
         if (plays.length <= 0) {
             playsContainer.appendChild(
@@ -525,7 +456,7 @@ function loadMostPlayed(userId, limit, offset) {
         for (var index = 0; index < plays.length; index++) {
             var item = plays[index];
             var beatmapLink = document.createElement("a");
-            beatmapLink.textContent = item.beatmap.beatmapset.artist + " - " + item.beatmap.beatmapset.title + " [" + item.beatmap.version + "]";
+            beatmapLink.innerText = item.beatmap.beatmapset.artist + " - " + item.beatmap.beatmapset.title + " [" + item.beatmap.version + "]";
             beatmapLink.href = "/b/" + item.beatmap.id;
 
             var playsDiv = document.createElement("div");
@@ -540,11 +471,7 @@ function loadMostPlayed(userId, limit, offset) {
         }
 
         slideDown(document.getElementById("history"));
-    };
-    xhr.onerror = function() {
-        console.error("Request failed");
-    };
-    xhr.send();
+    });
 
     loadingText.remove();
 }
@@ -555,15 +482,10 @@ function loadRecentPlays(userId, mode) {
     if (!loadingText)
         return;
 
-    var url = "/api/profile/" + userId + "/recent/" + mode;
+    var url = "/users/" + userId + "/recent/" + mode;
     var playsContainer = document.getElementById("recent-container");
 
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", url, true);
-    xhr.onload = function() {
-        if (xhr.status !== 200) {
-            throw new Error(xhr.status);
-        }
+    performApiRequest("GET", url, null, function(xhr) {
         var scores = JSON.parse(xhr.responseText);
         if (scores.length <= 0) {
             playsContainer.appendChild(
@@ -571,8 +493,6 @@ function loadRecentPlays(userId, mode) {
             );
             return;
         }
-
-        // TODO: I would like to refactor this in the future...
 
         for (var i = 0; i < scores.length; i++) {
             var score = scores[i];
@@ -591,11 +511,11 @@ function loadRecentPlays(userId, mode) {
 
             var dateText = document.createElement("time");
             dateText.setAttribute("datetime", scoreDateString);
-            dateText.textContent = score.submitted_at;
+            dateText.innerText = score.submitted_at;
             dateText.className += " timeago";
 
             var beatmapLink = document.createElement("a");
-            beatmapLink.textContent = score.beatmap.beatmapset.artist + " - " + score.beatmap.beatmapset.title + " [" + score.beatmap.version + "]";
+            beatmapLink.innerText = score.beatmap.beatmapset.artist + " - " + score.beatmap.beatmapset.title + " [" + score.beatmap.version + "]";
             beatmapLink.href = "/b/" + score.beatmap.id;
 
             var modsText = "";
@@ -618,11 +538,7 @@ function loadRecentPlays(userId, mode) {
 
         // Slide down tab
         slideDown(document.getElementById("history"));
-    };
-    xhr.onerror = function() {
-        console.error("Request failed");
-    };
-    xhr.send();
+    });
 
     loadingText.parentNode.removeChild(loadingText);
 }
@@ -728,102 +644,90 @@ function processRankHistory(entries) {
 }
 
 function loadUserPerformanceGraph(userId, mode) {
-    var url = '/api/profile/' + userId + '/history/rank/' + mode;
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", url, true);
+    var url = '/users/' + userId + '/history/rank/' + mode;
 
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState !== 4) return;
+    performApiRequest("GET", url, null, function(xhr) {
+        var entries = JSON.parse(xhr.responseText);
+        var rankData = processRankHistory(entries);
 
-        if (xhr.status >= 200 && xhr.status < 300) {
-            var entries = JSON.parse(xhr.responseText);
-            var rankData = processRankHistory(entries);
+        nv.addGraph(function() {
+            var chart = nv.models.lineChart()
+                .margin({
+                    left: 80,
+                    bottom: 20,
+                    right: 50
+                })
+                .useInteractiveGuideline(true)
+                .transitionDuration(250)
+                .interpolate("step")
+                .showLegend(true)
+                .showYAxis(true)
+                .showXAxis(true);
 
-            nv.addGraph(function() {
-                var chart = nv.models.lineChart()
-                    .margin({
-                        left: 80,
-                        bottom: 20,
-                        right: 50
-                    })
-                    .useInteractiveGuideline(true)
-                    .transitionDuration(250)
-                    .interpolate("step")
-                    .showLegend(true)
-                    .showYAxis(true)
-                    .showXAxis(true);
-
-                chart.xAxis
-                    .axisLabel("Days")
-                    .tickFormat(function(days) {
-                        if (days == 0) return "now";
-                        if (days > 0) return (days != 1) ? 'In ' + days + ' days' : 'In ' + days + ' day';
-                        return (days != -1) ? (-days) + ' days ago' : (-days) + ' day ago';
-                    });
-
-                chart.yAxis
-                    .axisLabel("Rank")
-                    .tickFormat(function(rank) {
-                        rank = Math.round(rank);
-                        if (rank >= 0) return "";
-                        return '#' + (-rank);
-                    });
-
-                // Calculate the relative min/max user rank to display on y axis
-                var ranks = [];
-
-                for (var i = 0; i < rankData.length; i++) {
-                    for (var j = 0; j < rankData[i].values.length; j++) {
-                        ranks.push(-rankData[i].values[j].y);
-                    }
-                }
-
-                var minRank = Math.min.apply(null, ranks);
-                var maxRank = Math.max.apply(null, ranks);
-                var userDigits = (maxRank.toString().length - 1);
-
-                var minRankDigits = '1' + ((userDigits > 0) ? (userDigits) * '0' : '');
-                var relativeMinRank = Math.round(minRank / (minRankDigits)) * minRankDigits;
-
-                var maxRankDigits = '1' + (userDigits * '0');
-                var relativeMaxRank = Math.round(maxRank / (maxRankDigits)) * maxRankDigits;
-
-                var betweenRank = (relativeMaxRank - relativeMaxRank / 2);
-
-                chart.yScale(d3.scale.linear().domain([-relativeMinRank - 1, -relativeMaxRank]));
-                chart.xScale(d3.scale.linear().domain([-90, 0]));
-
-                // Force chart to show range of x, y values
-                // chart.forceX([-90, 0]);
-                chart.forceY([-relativeMinRank - 1, -relativeMaxRank]);
-
-                // Only display certain tick values
-                chart.xAxis.tickValues([-90, -60, -30, 0]);
-                chart.yAxis.tickValues([-relativeMaxRank, -betweenRank, -relativeMinRank]);
-
-                d3.select("#rank-graph svg")
-                    .datum(rankData)
-                    .call(chart);
-
-                nv.utils.windowResize(function() {
-                    chart.update();
+            chart.xAxis
+                .axisLabel("Days")
+                .tickFormat(function(days) {
+                    if (days == 0) return "now";
+                    if (days > 0) return (days != 1) ? 'In ' + days + ' days' : 'In ' + days + ' day';
+                    return (days != -1) ? (-days) + ' days ago' : (-days) + ' day ago';
                 });
 
-                // Reset "dy" value
-                var noDataElements = document.querySelectorAll('.nv-noData');
+            chart.yAxis
+                .axisLabel("Rank")
+                .tickFormat(function(rank) {
+                    rank = Math.round(rank);
+                    if (rank >= 0) return "";
+                    return '#' + (-rank);
+                });
 
-                for (var i = 0; i < noDataElements.length; i++) {
-                    noDataElements[i].setAttribute('dy', 0);
+            // Calculate the relative min/max user rank to display on y axis
+            var ranks = [];
+
+            for (var i = 0; i < rankData.length; i++) {
+                for (var j = 0; j < rankData[i].values.length; j++) {
+                    ranks.push(-rankData[i].values[j].y);
                 }
+            }
 
-                return chart;
+            var minRank = Math.min.apply(null, ranks);
+            var maxRank = Math.max.apply(null, ranks);
+            var userDigits = (maxRank.toString().length - 1);
+
+            var minRankDigits = '1' + ((userDigits > 0) ? (userDigits) * '0' : '');
+            var relativeMinRank = Math.round(minRank / (minRankDigits)) * minRankDigits;
+
+            var maxRankDigits = '1' + (userDigits * '0');
+            var relativeMaxRank = Math.round(maxRank / (maxRankDigits)) * maxRankDigits;
+
+            var betweenRank = (relativeMaxRank - relativeMaxRank / 2);
+
+            chart.yScale(d3.scale.linear().domain([-relativeMinRank - 1, -relativeMaxRank]));
+            chart.xScale(d3.scale.linear().domain([-90, 0]));
+
+            // Force chart to show range of x, y values
+            chart.forceY([-relativeMinRank - 1, -relativeMaxRank]);
+
+            // Only display certain tick values
+            chart.xAxis.tickValues([-90, -60, -30, 0]);
+            chart.yAxis.tickValues([-relativeMaxRank, -betweenRank, -relativeMinRank]);
+
+            d3.select("#rank-graph svg")
+                .datum(rankData)
+                .call(chart);
+
+            nv.utils.windowResize(function() {
+                chart.update();
             });
-        } else {
-            console.error(xhr.status);
-        }
-    };
 
-    xhr.send();
+            // Reset "dy" value
+            var noDataElements = document.querySelectorAll('.nv-noData');
+            for (var i = 0; i < noDataElements.length; i++) {
+                noDataElements[i].setAttribute('dy', 0);
+            }
+
+            return chart;
+        });
+    });
 }
 
 function processPlayHistory(entries) {
@@ -855,14 +759,9 @@ function processPlayHistory(entries) {
 }
 
 function loadUserPlaysGraph(userId, mode) {
-    var url = "/api/profile/" + userId + "/history/plays/" + mode;
+    var url = "/users/" + userId + "/history/plays/" + mode;
 
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", url, true);
-    xhr.onload = function() {
-        if (xhr.status !== 200) {
-            throw new Error(xhr.status);
-        }
+    performApiRequest("GET", url, null, function(xhr) {
         var entries = JSON.parse(xhr.responseText);
         var playData = processPlayHistory(entries);
 
@@ -913,13 +812,7 @@ function loadUserPlaysGraph(userId, mode) {
 
             return chart;
         });
-    };
-
-    xhr.onerror = function() {
-        console.error("Request failed");
-    };
-
-    xhr.send();
+    });
 }
 
 function processViewsHistory(entries) {
@@ -949,16 +842,9 @@ function processViewsHistory(entries) {
 }
 
 function loadUserViewsGraph(userId, mode) {
-    var url = "/api/profile/" + userId + "/history/views/" + mode;
+    var url = "/users/" + userId + "/history/views/" + mode;
 
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", url, true);
-    xhr.onload = function() {
-        if (xhr.status !== 200) {
-            console.error(xhr.status);
-            return;
-        }
-
+    performApiRequest("GET", url, null, function(xhr) {
         var entries = JSON.parse(xhr.responseText);
         var viewsData = processViewsHistory(entries);
 
@@ -1007,28 +893,21 @@ function loadUserViewsGraph(userId, mode) {
 
             return chart;
         });
-    };
-    xhr.onerror = function() {
-        console.error("Request failed");
-    };
-    xhr.send();
+    });
 }
 
 function updatePlaystyleElement(element) {
     var selected = element.classList.contains('playstyle');
+    var url = "/users/" + userId + "/playstyle";
 
     if (selected) {
         element.classList.remove('playstyle');
         element.classList.add('playstyle-hidden');
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", "/api/profile/playstyle/remove?type=" + element.id, true);
-        xhr.send();
+        performApiRequest("DELETE", url, {"playstyle": element.id});
     } else {
         element.classList.add('playstyle');
         element.classList.remove('playstyle-hidden');
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", "/api/profile/playstyle/add?type=" + element.id, true);
-        xhr.send();
+        performApiRequest("POST", url, {"playstyle": element.id});
     }
 }
 
@@ -1036,13 +915,7 @@ function addFriend() {
     if (!isLoggedIn())
         return;
 
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "/api/profile/friends/add?id=" + userId, true);
-    xhr.onload = function() {
-        if (xhr.status < 200 || xhr.status >= 300) {
-            console.error(xhr.status + ': "' + xhr.statusText + '"');
-            return;
-        }
+    performApiRequest("POST", "/account/friends?id=" + userId, null, function(xhr) {
         var data = JSON.parse(xhr.responseText);
         var friendStatus = document.getElementById('friend-status');
         friendStatus.classList.remove('friend-add');
@@ -1055,11 +928,7 @@ function addFriend() {
             friendStatus.innerText = 'Remove Mutual Friend';
         else
             friendStatus.innerText = 'Remove Friend';
-    };
-    xhr.onerror = function() {
-        console.error("Request failed");
-    };
-    xhr.send();
+    });
 
     return false;
 }
@@ -1068,13 +937,7 @@ function removeFriend() {
     if (!isLoggedIn())
         return;
 
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "/api/profile/friends/remove?id=" + userId, true);
-    xhr.onload = function() {
-        if (xhr.status < 200 || xhr.status >= 300) {
-            console.error(xhr.status + ': "' + xhr.statusText + '"');
-            return;
-        }
+    performApiRequest("DELETE", "/account/friends?id=" + userId, null, function(xhr) {
         var data = JSON.parse(xhr.responseText);
         var friendStatus = document.getElementById('friend-status');
         friendStatus.classList.remove('friend-remove');
@@ -1087,30 +950,19 @@ function removeFriend() {
             friendStatus.innerText = 'Add Mutual Friend';
         else
             friendStatus.innerText = 'Add Friend';
-    };
-    xhr.onerror = function() {
-        console.error("Request failed");
-    };
-    xhr.send();
+    });
 
     return false;
 }
 
 function removeFavourite(setId) {
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "/api/profile/" + currentUser + "/favourites/delete?set_id=" + setId, true);
-    xhr.onload = function() {
-        if (xhr.status < 200 || xhr.status >= 300) {
-            console.error(xhr.status + ': "' + xhr.statusText + '"');
-            return;
-        }
+    var url = "/users/" + currentUser + "/favourites/" + setId;
 
+    performApiRequest("DELETE", url, null, function(xhr) {
         var data = JSON.parse(xhr.responseText);
         var favouritesContainer = document.querySelector(".favourites");
         var container = document.getElementById("favourite-" + setId);
         var beatmapsContainer = document.getElementById("beatmaps");
-
-        console.log(beatmapsContainer.scrollHeight);
 
         if (!container)
             return;
@@ -1131,75 +983,69 @@ function removeFavourite(setId) {
 
         setTimeout(function() {
             slideUp(beatmapsContainer);
-
-            setTimeout(function() {
-                slideDown(beatmapsContainer);
-            }, 150);
+            setTimeout(function() { slideDown(beatmapsContainer) }, 150);
         }, 400);
-    };
-
-    xhr.onerror = function() {
-        console.error("An error occurred during the request");
-    };
-
-    xhr.send();
+    });
 
     return false;
 }
 
 function deleteBeatmap(setId) {
     var proceed = confirm('Are you sure you want to delete this beatmap?');
+    var url = "/users/" + currentUser + "/beatmapsets/" + setId;
 
     if (!proceed)
         return;
 
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "/api/profile/" + currentUser + "/beatmaps/delete?set_id=" + setId, true);
-    xhr.onload = function() {
-        if (xhr.status !== 200) {
-            console.error("Error: " + xhr.status);
-            return;
-        }
-
-        var data = JSON.parse(xhr.responseText);
-        if (data.error) {
-            alert(data.details);
-            return;
-        }
-
+    performApiRequest("DELETE", url, null, function(xhr) {
         window.location.href = "/u/" + currentUser + "#beatmaps";
         window.location.reload();
-    };
-    xhr.onerror = function() {
-        console.error(xhr.statusText);
-    };
-    xhr.send();
+    }, function(xhr) {
+        try {
+            var data = JSON.parse(xhr.responseText);
+            alert(data.details);
+        } catch (e) {
+            console.error("Failed to revive beatmap:", e);
+            alert("Failed to revive beatmap.");
+        }
+    });
 }
 
 function reviveBeatmap(setId) {
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "/api/profile/" + currentUser + "/beatmaps/revive?set_id=" + setId, true);
-    xhr.onload = function() {
-        if (xhr.status !== 200) {
-            return;
-        }
-
-        var data = JSON.parse(xhr.responseText);
-        if (data.error) {
-            alert(data.details);
-            return;
-        }
-
+    var url = "/users/" + currentUser + "/beatmapsets/" + setId + "/revive";
+    performApiRequest("POST", url, null, function(xhr) {
         window.location.href = "/u/" + currentUser + "#beatmaps";
         window.location.reload();
-    };
-    xhr.onerror = function() {
-        console.error(xhr.statusText);
-    };
-    xhr.send();
+    }, function(xhr) {
+        try {
+            var data = JSON.parse(xhr.responseText);
+            alert(data.details);
+        } catch (e) {
+            console.error("Failed to revive beatmap:", e);
+            alert("Failed to revive beatmap.");
+        }
+    });
+}
+
+function toggleBeatmapContainer(section) {
+    var container = section.querySelector('.profile-beatmaps-container');
+    var beatmapsSection = document.getElementById("beatmaps");
+
+    if (container.style.display === 'none') {
+        container.style.display = 'block';
+        slideDown(beatmapsSection);
+    } else {
+        container.style.display = 'none';
+        beatmapsSection.style.height = getElementHeight(beatmapsSection) + "px";
+    }
 }
 
 addEvent('DOMContentLoaded', document, function(event) {
+    var beatmapContainers = document.querySelectorAll('.profile-beatmaps-container');
+    for (var i = 0; i < beatmapContainers.length; i++) {
+        beatmapContainers[i].style.display = 'none';
+    }
+
     expandProfileTab(activeTab);
     loadPinnedScores(userId, modeName);
     loadTopPlays(userId, modeName, 5, 0);

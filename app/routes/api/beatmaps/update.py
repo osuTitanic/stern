@@ -126,6 +126,9 @@ def update_description(set_id: int):
             session=session
         )
 
+        if not initial_post:
+            return redirect(f'/s/{set_id}')
+
         if '---------------' not in initial_post.content.splitlines():
             return redirect(f'/s/{set_id}')
 
