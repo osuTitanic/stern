@@ -459,14 +459,15 @@
 
 .score-right {
     font-size: 95%;
-    position: absolute;
     text-align: right;
-    right: 6px;
+    float: right;
+    width: max-content;
+    display: table-cell;
+    vertical-align: bottom;
 }
 
 .score-left {
     font-size: 95%;
-    float: left;
     text-align: left;
     overflow: hidden;
     max-width: 88%;
@@ -476,6 +477,11 @@
     width: 12px;
     height: 15px;
     vertical-align: middle;
+}
+
+.score-left div {
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .score-left * {
