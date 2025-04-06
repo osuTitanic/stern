@@ -94,6 +94,8 @@ var Mode = {
     3: "osu!Mania"
 };
 
+var isNavigatingAway = false;
+
 if (!window.console) {
     // Console polyfill for ~IE8 and earlier
     console = {
@@ -328,7 +330,7 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
                 }
             } else {
                 console.error("[" + xhr.status + "] An error occurred during " + method + " request to " + path);
-                if (callbackError) {
+                if (callbackError && !isNavigatingAway) {
                     callbackError(xhr);
                 }
             }
@@ -388,6 +390,10 @@ if (!document.getElementsByClassName) {
     document.getElementsByClassName = getElementsByClassNamePolyfill;
 }
 
-addEvent("DOMContentLoaded", document, function(event) {
+addEvent("DOMContentLoaded", document, function(e) {
     $(".timeago").timeago();
+});
+
+addEvent("beforeunload", window, function(e) {
+    isNavigatingAway = true;
 });
