@@ -320,7 +320,8 @@
                                     Update status to "Loved"
                                 </a><br>
                                 {% if beatmapset.server != 0 %}
-                                <a onclick="confirmRedirect('/api/beatmaps/{{ beatmapset.id }}/nuke')" style="color: red">
+                                <a onclick="confirmRedirect('/api/beatmaps/{{ beatmapset.id }}/nuke', 'This will fully delete the beatmap, are you sure you want to proceed?')"
+                                   style="color: red">
                                     Nuke this beatmap
                                 </a><br>
                                 {% endif %}
