@@ -94,7 +94,10 @@ def render_rankings_page(
             if score > 0
         ]
 
-        if (time.time() - app.session.last_rank_sync) > 10:
+        # Ensure all users have stats & they are sorted
+        ensure_user_stats(sorted_users, session)
+
+        if (time.time() - app.session.last_rank_sync) > 30:
             # Sync ranks from cache to database in background once in a while
             app.session.executor.submit(sync_ranks, sorted_users, mode)
             app.session.last_rank_sync = time.time()
@@ -174,11 +177,14 @@ def render_country_page(
         site_title='Country Rankings'
     )
 
+def ensure_user_stats(users: List[DBUser], session: Session) -> None:
+    for user in users:
+        user.stats = user.stats or create_user_stats(user, session)
+        user.stats.sort(key=lambda s:s.mode)
+
 def sync_ranks(users: List[DBUser], mode: GameMode) -> None:
     with app.session.database.managed_session() as session:
         for user in users:
-            user.stats = user.stats or create_user_stats(user, session)
-            user.stats.sort(key=lambda s:s.mode)
             utils.sync_ranks(user, mode.value, session)
 
 def create_user_stats(user: DBUser, session) -> List[DBStats]:
