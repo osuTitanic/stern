@@ -132,6 +132,13 @@ def handle_legacy_redirects(page: str, request: Request) -> Response | None:
             if argument_string else ""
         )
 
+        # Preserve the hash in the URL
+        location = request.full_path.split("#")
+        query_string += (
+            "&" + location[-1]
+            if len(location) > 1 and location[-1] else ""
+        )
+
         return redirect(f'/rankings/{mode_string}/performance{query_string}')
 
     elif page == 'beatmaplist':
