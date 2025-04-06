@@ -57,6 +57,7 @@ def redirect_index(extension: Optional[str] = None) -> Response:
     return redirect(f'/?{request.query_string.decode()}')
 
 @router.get('/p/<page>')
+@router.get('/p/<page>/')
 def redirect_page(page: str) -> Response:
     return handle_legacy_redirects(page, request)
 
