@@ -97,6 +97,7 @@ def render_rankings_page(
         if (time.time() - app.session.last_rank_sync) > 10:
             # Sync ranks from cache to database in background once in a while
             app.session.executor.submit(sync_ranks, sorted_users, mode)
+            app.session.last_rank_sync = time.time()
 
         player_count = leaderboards.player_count(mode.value, order_type, country)
         total_pages = max(1, min(10000, math.ceil(player_count / items_per_page)))
