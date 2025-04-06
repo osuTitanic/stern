@@ -71,6 +71,10 @@
     padding: 0px;
 }
 
+#userpage .bbcode-toolbar, #signature .bbcode-toolbar {
+    font-size: 85%;
+}
+
 .activity-details dd {
     color: #536482;
     margin-bottom: 5px;
