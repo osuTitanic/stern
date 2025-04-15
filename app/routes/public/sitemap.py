@@ -96,7 +96,7 @@ def get_top_users() -> List[SitemapEntry]:
     ]
 
     return [
-        SitemapEntry(f'/u/{user_id}', 0.5, 'hourly')
+        SitemapEntry(f'/u/{user_id}', 0.3, 'daily')
         for user_id in top_users
     ]
 
@@ -126,7 +126,7 @@ def get_most_played_beatmaps() -> List[SitemapEntry]:
     ]
 
     return [
-        SitemapEntry(f'/s/{beatmapset_id}', 0.4, 'hourly')
+        SitemapEntry(f'/s/{beatmapset_id}', 0.3, 'weekly')
         for beatmapset_id in most_played_beatmaps
     ]
 
@@ -146,7 +146,7 @@ def get_recent_beatmaps() -> List[SitemapEntry]:
     ]
 
     return [
-        SitemapEntry(f'/s/{beatmapset_id}', 0.3, 'hourly')
+        SitemapEntry(f'/s/{beatmapset_id}', 0.3, 'daily')
         for beatmapset_id in recent_beatmaps
     ]
 
