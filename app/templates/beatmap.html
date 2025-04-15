@@ -310,13 +310,13 @@
                                 </a>
                             </div><br>
                             <div>
-                                <a onclick="confirmRedirect('/api/beatmaps/status/{{ beatmapset.id }}/update?status=3')">
+                                <a onclick="setBeatmapStatus({{ beatmapset.id }}, 3, 'Are you sure you want to update the status to Qualified?')">
                                     Update status to "Qualified"
                                 </a><br>
-                                <a onclick="confirmRedirect('/api/beatmaps/status/{{ beatmapset.id }}/update?status=2')">
+                                <a onclick="setBeatmapStatus({{ beatmapset.id }}, 2, 'Are you sure you want to update the status to Approved?')">
                                     Update status to "Approved"
                                 </a><br>
-                                <a onclick="confirmRedirect('/api/beatmaps/status/{{ beatmapset.id }}/update?status=4')">
+                                <a onclick="setBeatmapStatus({{ beatmapset.id }}, 4, 'Are you sure you want to update the status to Loved?')">
                                     Update status to "Loved"
                                 </a><br>
                                 {% if beatmapset.server != 0 %}
@@ -328,19 +328,19 @@
                             </div><br>
                             {% elif beatmapset.status in (1, 2) %}
                             <div>
-                                <a onclick="confirmRedirect('/api/beatmaps/status/{{ beatmapset.id }}/update?status=0')" style="color: red;">
+                                <a onclick="setBeatmapStatus({{ beatmapset.id }}, 0)" style="color: red;">
                                     Unrank this beatmap
                                 </a>
                             </div>
                             {% elif beatmapset.status == 3 %}
                             <div>
-                                <a onclick="confirmRedirect('/api/beatmaps/status/{{ beatmapset.id }}/update?status=0')" style="color: red;">
+                                <a onclick="setBeatmapStatus({{ beatmapset.id }}, 0)" style="color: red;">
                                     Disqualify this beatmap
                                 </a>
                             </div>
                             {% elif beatmapset.status == 4 %}
                             <div>
-                                <a onclick="confirmRedirect('/api/beatmaps/status/{{ beatmapset.id }}/update?status=0')" style="color: red;">
+                                <a onclick="setBeatmapStatus({{ beatmapset.id }}, 0)" style="color: red;">
                                     Remove from "Loved" category
                                 </a>
                             </div>
@@ -783,6 +783,25 @@
     for (var i = 0; i < descriptionElements.length; i++) {
         addEvent('dblclick', descriptionElements[i], function(event) {
             editBeatmapDescription();
+        });
+    }
+    {% endif %}
+
+    {% if current_user.is_bat %}
+    function setBeatmapStatus(beatmapsetId, status, promptText) {
+        if (promptText === undefined) {
+            promptText = "Are you sure?";
+        }
+
+        if (!confirm(promptText)) {
+            return;
+        }
+
+        performApiRequest("PATCH", "/beatmapsets/" + beatmapsetId + "/status?status=" + status, null, function(xhr) {
+            location.reload();
+        }, function(xhr) {
+            var response = JSON.parse(xhr.responseText);
+            alert(response.details);
         });
     }
     {% endif %}
