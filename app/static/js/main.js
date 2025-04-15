@@ -417,7 +417,10 @@ if (!document.getElementsByClassName) {
 }
 
 addEvent("DOMContentLoaded", document, function(e) {
-    $(".timeago").timeago();
+    var times = $('.timeago');
+    for (let i = 0; i < times.length; i++) {
+        times[i].innerText = jQuery.timeago(times[i].title);
+    }
 });
 
 addEvent("beforeunload", window, function(e) {
