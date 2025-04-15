@@ -75,15 +75,17 @@ class Sitemap:
 def get_main_sites() -> List[SitemapEntry]:
     return [
         SitemapEntry('/', 1.0),
-        SitemapEntry('/download/', 1.0),
-        SitemapEntry('/beatmapsets/', 1.0),
-        SitemapEntry('/forum/', 1.0),
-        SitemapEntry('/rankings/osu/performance', 1.0),
-        SitemapEntry('/rankings/osu/country', 0.9),
-        SitemapEntry('/rankings/osu/rscore', 0.9),
-        SitemapEntry('/rankings/osu/tscore', 0.9),
-        SitemapEntry('/rankings/osu/ppv1', 0.9),
-        SitemapEntry('/rankings/osu/clears', 0.9),
+        SitemapEntry('/download/', 0.9),
+        SitemapEntry('/beatmapsets/', 0.9),
+        SitemapEntry('/forum/', 0.9),
+        SitemapEntry('/account/register', 0.8),
+        SitemapEntry('/account/login', 0.8),
+        SitemapEntry('/rankings/osu/performance', 0.8),
+        SitemapEntry('/rankings/osu/country', 0.7),
+        SitemapEntry('/rankings/osu/rscore', 0.6),
+        SitemapEntry('/rankings/osu/tscore', 0.5),
+        SitemapEntry('/rankings/osu/ppv1', 0.4),
+        SitemapEntry('/rankings/osu/clears', 0.4),
     ]
 
 def get_top_users() -> List[SitemapEntry]:
