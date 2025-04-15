@@ -304,9 +304,14 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
 
     if (xhr.onreadystatechange === undefined) {
         xhr.onload = function() {
+            console.log("Request successful: " + method + " " + path);
             if (callbackSuccess) {
-                console.log("Request successful: " + method + " " + path);
-                callbackSuccess(xhr);
+                try {
+                    callbackSuccess(xhr);
+                } catch (e) {
+                    console.error("An error occurred while processing the response: " + e);
+                    callbackError(xhr);
+                }
             }
         }
 
@@ -326,7 +331,12 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
             if (xhr.status >= 200 && xhr.status < 300) {
                 console.log("[" + xhr.status + "] Request successful: " + method + " " + path);
                 if (callbackSuccess) {
-                    callbackSuccess(xhr);
+                    try {
+                        callbackSuccess(xhr);
+                    } catch (e) {
+                        console.error("An error occurred while processing the response: " + e);
+                        callbackError(xhr);
+                    }
                 }
             } else {
                 console.error("[" + xhr.status + "] An error occurred during " + method + " request to " + path);
