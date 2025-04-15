@@ -49,7 +49,7 @@ class Sitemap:
             datetime.now() - self.last_modified
         )
 
-        if time_since_refresh > self.refresh_interval and self.entries:
+        if time_since_refresh < self.refresh_interval and self.entries:
             return
 
         self.entries = self.generator()
@@ -152,6 +152,14 @@ def get_recent_beatmaps() -> List[SitemapEntry]:
 
 router = Blueprint('sitemap', __name__)
 
+def register_sitemap_url(entry: Sitemap) -> None:
+    view_func = lambda entry=entry: Response(entry.render(), mimetype='application/xml')
+    view_func.__name__ = f'sitemap_{entry.generator.__name__}'
+    router.add_url_rule(
+        entry.location,
+        view_func=view_func
+    )
+
 popular_beatmaps_sitemap = Sitemap('/sitemap/beatmaps/popular.xml', get_most_played_beatmaps)
 recent_beatmaps_sitemap = Sitemap('/sitemap/beatmaps/recent.xml', get_recent_beatmaps)
 forum_sitemap = Sitemap('/sitemap/forum.xml', get_forums)
@@ -169,13 +177,7 @@ index_sitemap = SitemapIndex(
 
 if config.DOMAIN_NAME in ('titanic.sh', 'localhost'):
     for entry in index_sitemap.sitemaps:
-        view_func = lambda entry=entry: Response(entry.render(), mimetype='application/xml')
-        view_func.__name__ = f'sitemap_{entry.generator.__name__}'
-
-        router.add_url_rule(
-            entry.location,
-            view_func=view_func
-        )
+        register_sitemap_url(entry)
 
     @router.get('/sitemap.xml')
     def sitemap_xml():
