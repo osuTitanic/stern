@@ -7,12 +7,12 @@ from .objects import TagOptions
 from .parser import Parser
 
 import urllib.parse
-import re
+import regex
 
 def url_hotfix(input_text: str) -> str:
     """Fix the formatting of various URLs"""
     pattern = r'\[url=(?P<url>.*?)\](?P<name>.*?)\[/url\]'
-    matches = re.finditer(pattern, input_text)
+    matches = regex.finditer(pattern, input_text, timeout=0.5)
 
     for match in matches:
         url = match.group('url')

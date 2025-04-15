@@ -23,3 +23,4 @@ timeago==1.0.16
 titanic-pp-py==0.0.7
 markdown==3.7
 pyjwt==2.10.1
+regex==2024.11.6

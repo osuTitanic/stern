@@ -2,8 +2,8 @@
 from .objects import TagOptions, CaseInsensitiveDict
 from .regexes import _domain_re, _url_re
 
+import regex
 import sys
-import re
 
 class Parser:
 
@@ -392,7 +392,7 @@ class Parser:
             # careful to pull them out before doing any escaping or cosmetic replacement.
             pos = 0
             while True:
-                match = _url_re.search(data, pos)
+                match = _url_re.search(data, pos, timeout=0.2)
                 if not match:
                     break
                 # Replace any link with a token that we can substitute back in after replacements.
