@@ -91,7 +91,7 @@ def get_main_sites() -> List[SitemapEntry]:
 def get_top_users() -> List[SitemapEntry]:
     top_users = [
         user.id
-        for user in users.fetch_top(1000)
+        for user in users.fetch_recent(2000)
         if user.activated
     ]
 
@@ -106,7 +106,7 @@ def get_forums() -> List[SitemapEntry]:
         site_forums.sort()
 
     return [
-        SitemapEntry(f'/forum/{forum_id}', 0.8, 'hourly')
+        SitemapEntry(f'/forum/{forum_id}', 0.7, 'hourly')
         for forum_id in site_forums
     ]
 
