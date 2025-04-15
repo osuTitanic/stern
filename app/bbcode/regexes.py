@@ -14,3 +14,8 @@ _url_re = regex.compile(
 _domain_re = regex.compile(
     r"(?im)(?:www\d{0,3}[.]|[a-z0-9.\-]+[.](?:com|net|org|edu|biz|gov|mil|info|io|name|me|tv|us|uk|mobi))"
 )
+
+# Used to match the URL tag, which has the form [url=URL]...[/url].
+_bbcode_url_re = regex.compile(
+    r'\[url=(?P<url>.*?)\](?P<name>.*?)\[/url\]'
+)
