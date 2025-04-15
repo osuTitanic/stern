@@ -705,88 +705,35 @@
     {% endif %}
 </div>
 <script>
-    // osu.ppy.sh spoilerbox conversion
-    var spoilerBoxes = document.querySelectorAll('.bbcode-spoilerbox');
-    for (var i = 0; i < spoilerBoxes.length; i++) {
-        spoilerBoxes[i].classList.add('spoiler');
-    }
+    function addFavorite(beatmapsetId) {
+        var url = "/users/" + currentUser + "/favourites";
 
-    var spoilerBoxContents = document.querySelectorAll('.bbcode-spoilerbox__body');
-    for (var i = 0; i < spoilerBoxContents.length; i++) {
-        spoilerBoxContents[i].classList.add('spoiler-body');
-    }
-
-    var spoilerBoxHeads = document.querySelectorAll('.bbcode-spoilerbox__link');
-    for (var i = 0; i < spoilerBoxHeads.length; i++) {
-        var spoilerBox = spoilerBoxHeads[i];
-        
-        // Change element type to div (in older versions of Chrome, use workarounds if necessary)
-        var newSpoilerBox = document.createElement('div');
-        newSpoilerBox.className = spoilerBox.className + ' spoiler-head';
-        newSpoilerBox.innerHTML = spoilerBox.innerHTML;
-        spoilerBox.parentNode.replaceChild(newSpoilerBox, spoilerBox);
-        
-        newSpoilerBox.onclick = function () {
-            toggleSpoiler(this);
-        };
-    }
-
-    // Set volume of beatmap preview to 0.5
-    var beatmapPreview = document.getElementById('beatmap-preview');
-    if (beatmapPreview) {
-        beatmapPreview.volume = 0.5;
-    }
-
-    function addFavorite(beatmapset_id) {
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", "/api/profile/" + currentUser + "/favourites/add?set_id=" + beatmapset_id, true);
-        
-        xhr.onload = function () {
-            if (xhr.status === 200) {
-                var favourites = document.getElementById('favourites-button');
-                favourites.innerHTML = '(Remove Favourite)';
-                favourites.style.color = 'red';
-                favourites.onclick = function () {
-                    removeFavorite(beatmapset_id);
-                };
-            } else {
-                console.error("Failed to add favourite");
-            }
-        };
-        
-        xhr.onerror = function () {
-            console.error("Request error occurred");
-        };
-        
-        xhr.send();
+        performApiRequest("POST", url, {"set_id": beatmapsetId}, function(xhr) {
+            var favourites = document.getElementById('favourites-button');
+            favourites.innerHTML = '(Remove Favourite)';
+            favourites.style.color = 'red';
+            favourites.onclick = function () {
+                removeFavorite(beatmapsetId);
+            };
+        });
     }
     
-    function removeFavorite(beatmapset_id) {
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", "/api/profile/" + currentUser + "/favourites/delete?set_id=" + beatmapset_id, true);
-        
-        xhr.onload = function () {
-            if (xhr.status === 200) {
-                var favourites = document.getElementById('favourites-button');
-                favourites.innerHTML = '(Add Favourite)';
-                favourites.style.color = 'green';
-                favourites.onclick = function () {
-                    addFavorite(beatmapset_id);
-                };
-            } else {
-                console.error("Failed to remove favourite");
-            }
-        };
-        
-        xhr.onerror = function () {
-            console.error("Request error occurred");
-        };
-        
-        xhr.send();
+    function removeFavorite(beatmapsetId) {
+        var url = "/users/" + currentUser + "/favourites/" + beatmapsetId;
+
+        performApiRequest("DELETE", url, null, function(xhr) {
+            var favourites = document.getElementById('favourites-button');
+            favourites.innerHTML = '(Add Favourite)';
+            favourites.style.color = 'green';
+            favourites.onclick = function () {
+                addFavorite(beatmapsetId);
+            };
+        });
     }
 
     function copySetId(element) {
         var set_id = element.getAttribute('setid');
+
         navigator.clipboard.writeText(set_id).then(function () {
             element.innerHTML = 'Copied!';
             element.style.color = 'green';
@@ -839,6 +786,38 @@
         });
     }
     {% endif %}
+
+    // osu.ppy.sh spoilerbox conversion
+    var spoilerBoxes = document.querySelectorAll('.bbcode-spoilerbox');
+    for (var i = 0; i < spoilerBoxes.length; i++) {
+        spoilerBoxes[i].classList.add('spoiler');
+    }
+
+    var spoilerBoxContents = document.querySelectorAll('.bbcode-spoilerbox__body');
+    for (var i = 0; i < spoilerBoxContents.length; i++) {
+        spoilerBoxContents[i].classList.add('spoiler-body');
+    }
+
+    var spoilerBoxHeads = document.querySelectorAll('.bbcode-spoilerbox__link');
+    for (var i = 0; i < spoilerBoxHeads.length; i++) {
+        var spoilerBox = spoilerBoxHeads[i];
+        
+        // Change element type to div (in older versions of Chrome, use workarounds if necessary)
+        var newSpoilerBox = document.createElement('div');
+        newSpoilerBox.className = spoilerBox.className + ' spoiler-head';
+        newSpoilerBox.innerHTML = spoilerBox.innerHTML;
+        spoilerBox.parentNode.replaceChild(newSpoilerBox, spoilerBox);
+        
+        newSpoilerBox.onclick = function () {
+            toggleSpoiler(this);
+        };
+    }
+
+    // Set volume of beatmap preview to 0.5
+    var beatmapPreview = document.getElementById('beatmap-preview');
+    if (beatmapPreview) {
+        beatmapPreview.volume = 0.5;
+    }
 </script>
 {# TODO: Beatmap Comments #}
 {% endblock content %}
