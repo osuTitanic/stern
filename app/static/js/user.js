@@ -511,7 +511,7 @@ function loadRecentPlays(userId, mode) {
             });
 
             var dateText = document.createElement("time");
-            dateText.setAttribute("datetime", scoreDateString);
+            dateText.setAttribute("datetime", score.submitted_at);
             dateText.innerText = score.submitted_at;
             dateText.title = scoreDateString;
             dateText.className += " timeago";
