@@ -399,6 +399,13 @@ function loadBBCodePreview(element) {
     return false;
 }
 
+function renderTimeagoElements() {
+    var times = document.getElementsByClassName('timeago');
+    for (let i = 0; i < times.length; i++) {
+        times[i].innerText = jQuery.timeago(times[i].getAttribute('datetime'));
+    }
+}
+
 function getElementsByClassNamePolyfill(className) {
     var allElements = document.getElementsByTagName('*');
     var matchedElements = [];
@@ -417,10 +424,7 @@ if (!document.getElementsByClassName) {
 }
 
 addEvent("DOMContentLoaded", document, function(e) {
-    var times = $('.timeago');
-    for (let i = 0; i < times.length; i++) {
-        times[i].innerText = jQuery.timeago(times[i].title);
-    }
+    renderTimeagoElements();
 });
 
 addEvent("beforeunload", window, function(e) {

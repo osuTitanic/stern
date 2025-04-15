@@ -106,8 +106,9 @@ function createScoreElement(score, index, type) {
     );
 
     var dateText = document.createElement("time");
-    dateText.setAttribute("datetime", scoreDateString);
+    dateText.setAttribute("datetime", score.submitted_at);
     dateText.innerText = score.submitted_at;
+    dateText.title = scoreDateString;
     dateText.className = "timeago";
 
     var rightColumn = document.createElement("td");
@@ -253,7 +254,7 @@ function loadPinnedScores(userId, mode) {
         }
 
         // Render timeago elements
-        $(".timeago").timeago();
+        renderTimeagoElements();
 
         slideDown(document.getElementById("leader"));
     }, function(xhr) {
@@ -305,7 +306,7 @@ function loadTopPlays(userId, mode, limit, offset) {
         topScoreOffset += scores.length;
 
         // Render timeago elements
-        $(".timeago").timeago();
+        renderTimeagoElements();
 
         if (scores.length >= limit) {
             // Create show more text
@@ -385,7 +386,7 @@ function loadLeaderScores(userId, mode, limit, offset) {
         topLeaderOffset += scores.length;
 
         // Render timeago elements
-        $(".timeago").timeago();
+        renderTimeagoElements();
 
         if (scores.length >= limit) {
             var showMoreText = document.createElement("b");
@@ -512,6 +513,7 @@ function loadRecentPlays(userId, mode) {
             var dateText = document.createElement("time");
             dateText.setAttribute("datetime", scoreDateString);
             dateText.innerText = score.submitted_at;
+            dateText.title = scoreDateString;
             dateText.className += " timeago";
 
             var beatmapLink = document.createElement("a");
@@ -534,7 +536,7 @@ function loadRecentPlays(userId, mode) {
         }
 
         // Render timeago elements
-        $(".timeago").timeago();
+        renderTimeagoElements();
 
         // Slide down tab
         slideDown(document.getElementById("history"));
