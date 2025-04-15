@@ -391,10 +391,9 @@ if (!document.getElementsByClassName) {
 }
 
 addEvent("DOMContentLoaded", document, function(e) {
-    var $times = $('.timeago');
-    for (let i=0; i<$times.length; i++) {
-        var times_i = $times[i];
-        times_i.innerText = jQuery.timeago(times_i.title);
+    var times = $('.timeago');
+    for (let i = 0; i < times.length; i++) {
+        times[i].innerText = jQuery.timeago(times[i].title);
     }
 });
 
