@@ -107,15 +107,15 @@
                         No notifications
                         {% endif %}
                     </a>
-                    {% if request.view_args %}
-                    <a href="/account/logout?redirect={{ url_for(request.endpoint, **request.view_args) }}">
+                    <a href="#" onclick="document.getElementById('logout-form').submit()" class="nav-login" id="logout-text">
                         <i class="fa-solid fa-power-off" style="color: #808080;"></i> Logout
                     </a>
-                    {% else %}
-                    <a href="/account/logout">
-                        <i class="fa-solid fa-power-off" style="color: #808080;"></i> Logout
-                    </a>
-                    {% endif %}
+                    <form action="/account/logout" id="logout-form" method="post" style="display: inline;">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                        {% if request.view_args %}
+                        <input type="hidden" name="redirect" value="{{ url_for(request.endpoint, **request.view_args) }}"/>
+                        {% endif %}
+                    </form>
                 {% else %}
                     {% if not disable_login_modal %}
                     <span class="nav-login" id="welcome-text">Welcome, guest!</span>

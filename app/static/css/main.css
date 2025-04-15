@@ -370,6 +370,10 @@ input[type="url"], input[type="search"] {
     font-weight: bold;
 }
 
+#logout-form {
+    display: none;
+}
+
 #register-text {
     color: #ff64ba;
     font-weight: bold;
