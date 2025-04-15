@@ -11,8 +11,11 @@ import regex
 
 def url_hotfix(input_text: str) -> str:
     """Fix the formatting of various URLs"""
-    pattern = r'\[url=(?P<url>.*?)\](?P<name>.*?)\[/url\]'
-    matches = regex.finditer(pattern, input_text, timeout=0.5)
+    try:
+        pattern = r'\[url=(?P<url>.*?)\](?P<name>.*?)\[/url\]'
+        matches = regex.finditer(pattern, input_text, timeout=0.2)
+    except TimeoutError:
+        return input_text
 
     for match in matches:
         url = match.group('url')
