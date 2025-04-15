@@ -351,6 +351,22 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
     return xhr;
 }
 
+function convertFormToJson(formElement) {
+    var formData = new FormData(formElement);
+    var jsonData = {};
+
+    for (var [key, value] of formData.entries()) {
+        if (jsonData[key] === undefined) {
+            jsonData[key] = value;
+        } else if (Array.isArray(jsonData[key])) {
+            jsonData[key].push(value);
+        } else {
+            jsonData[key] = [jsonData[key], value];
+        }
+    }
+    return jsonData;
+}
+
 function loadBBCodePreview(element) {
     var parentElement = getParentElement(element);
     var bbcodeWrapper = getParentElement(parentElement);
