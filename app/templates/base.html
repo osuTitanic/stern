@@ -77,8 +77,8 @@
             {% include "navigation.html" %}
         </div>
         <div class="bancho-stats">
-            <b>{{ total_users }}</b> users, <b>{{ online_users }}</b> online now.<br>
-            A total of <b>{{ total_scores }}</b> plays!
+            <b>{{ "{:,}".format(total_users) }}</b> users, <b>{{ "{:,}".format(online_users) }}</b> online now.<br>
+            A total of <b>{{ "{:,}".format(total_scores) }}</b> plays!
         </div>
         <div class="content">
             <div class="top">
