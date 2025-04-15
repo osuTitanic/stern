@@ -634,6 +634,17 @@ def do_post(forum_id: str, topic_id: str):
         action = request.form.get('action', default='post')
         action_id = request.form.get('id', type=int)
 
+        content = request.form.get(
+            'bbcode',
+            type=str
+        )
+
+        if len(content) > 2**14 and not current_user.is_moderator:
+            return abort(
+                code=400,
+                description=app.constants.POST_TOO_LONG
+            )
+
         actions = {
             'edit': handle_post_edit,
             'quote': handle_post,
