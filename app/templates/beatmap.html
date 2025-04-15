@@ -245,7 +245,7 @@
                     </thead>
                     <tbody>
                         <td style="width: 50%">
-                            <form action="/api/beatmaps/update" method="post">
+                            <form action="/api/beatmaps/update" method="post" onsubmit="updateBeatmapsetMetadata(event)">
                                 <dl>
                                     <dt>Offset:</dt>
                                     <dd>
@@ -278,7 +278,6 @@
                                 </dl>
                                 <input type="submit" value="Save">
                                 <input type="hidden" name="beatmapset_id" value="{{ beatmapset.id }}">
-                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                             </form>
                         </td>
                         <td>
@@ -797,6 +796,20 @@
         }
 
         performApiRequest("PATCH", "/beatmapsets/" + beatmapsetId + "/status?status=" + status, null, function(xhr) {
+            location.reload();
+        }, function(xhr) {
+            var response = JSON.parse(xhr.responseText);
+            alert(response.details);
+        });
+    }
+
+    function updateBeatmapsetMetadata(event) {
+        event.preventDefault();
+
+        var data = convertFormToJson(event.target);
+        var url = "/beatmapsets/" + data.beatmapset_id;
+
+        performApiRequest("PATCH", url, data, function(xhr) {
             location.reload();
         }, function(xhr) {
             var response = JSON.parse(xhr.responseText);
