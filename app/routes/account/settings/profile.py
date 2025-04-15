@@ -176,6 +176,13 @@ def update_signature():
 
     if error := check_account_status():
         return error
+    
+    if len(bbcode) > 2**13:
+        return utils.render_template(
+            'settings/profile.html',
+            css='settings.css',
+            error='Your signature is too long!'
+        )
 
     # Update database
     users.update(
