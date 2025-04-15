@@ -27,34 +27,16 @@
     function removeFriend(element) {
         if (!isLoggedIn())
             return;
-    
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", "/api/profile/friends/remove?id=" + element.id, true);
-    
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState !== 4) {
-                return;
-            }
-            
-            if (xhr.status !== 200) {
-                console.error(xhr.status + ': "' + xhr.statusText + '"');
-                return;
-            }
 
-            try {
-                var data = JSON.parse(xhr.responseText);
-                var friendContainer = element.parentElement.parentElement;
-                friendContainer.style.opacity = 0;
+        performApiRequest("DELETE", "/account/friends?id=" + element.id, null, function(xhr) {
+            var data = JSON.parse(xhr.responseText);
+            var friendContainer = element.parentElement.parentElement;
+            friendContainer.style.opacity = 0;
     
-                setTimeout(function () {
-                    friendContainer.parentNode.removeChild(friendContainer);
-                }, 350);
-            } catch (e) {
-                console.error("Failed to parse response:", e);
-            }
-        };
-        
-        xhr.send();
+            setTimeout(function () {
+                friendContainer.parentNode.removeChild(friendContainer);
+            }, 350);
+        });
         return false;
     }
 </script>
