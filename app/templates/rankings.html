@@ -146,7 +146,7 @@
                 <a href="/u/{{ player.id }}">{{ player.name }}</a>
             </td>
             <td>
-                {{ (player.stats[mode].acc * 100)|round(2) }}%
+                {{ "{:,.2f}".format(player.stats[mode].acc * 100) }}%
             </td>
             <td>
                 <span>{{ "{:,}".format(player.stats[mode].playcount) }} (lv.{{ player.stats[mode].tscore|get_level }})</span>
