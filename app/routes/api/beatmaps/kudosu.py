@@ -65,236 +65,25 @@ def get_kudosu_by_post(set_id: int, post_id: int):
 @login_required
 @validate()
 def reward_kudosu(set_id: int, post_id: int):
-    with app.session.database.managed_session() as session:
-        if not (beatmapset := beatmapsets.fetch_one(set_id, session)):
-            return {
-                'error': 404,
-                'details': 'The requested beatmapset could not be found.'
-            }, 404
-
-        if not beatmapset.topic_id:
-            return {
-                'error': 400,
-                'details': 'This beatmapset is not linked to a forum topic.'
-            }, 400
-
-        if current_user.id != beatmapset.creator_id and not current_user.is_bat:
-            return {
-                'error': 403,
-                'details': 'You are not authorized to perform this action.'
-            }, 403
-
-        if beatmapset.status >= DatabaseStatus.Ranked:
-            return {
-                'error': 400,
-                'details': 'This beatmapset is already ranked.'
-            }, 400
-
-        if not (post := posts.fetch_one(post_id, session)):
-            return {
-                'error': 404,
-                'details': 'The requested post could not be found.'
-            }, 404
-
-        if post.user_id == current_user.id:
-            return {
-                'error': 400,
-                'details': 'You cannot reward kudosu on your own post.'
-            }, 400
-
-        existing_mod = modding.fetch_by_post_and_sender(
-            post_id,
-            current_user.id,
-            session=session
-        )
-
-        if existing_mod:
-            return {
-                'error': 400,
-                'details': 'Kudosu was already rewarded to this post.'
-            }, 400
-
-        previous_post = posts.fetch_previous(
-            post_id,
-            beatmapset.topic_id,
-            session=session
-        )
-
-        if not previous_post:
-            return {
-                'error': 400,
-                'details': 'This post is the first post in the topic.'
-            }, 400
-
-        delta = (
-            post.created_at - previous_post.created_at
-        )
-
-        kudosu_amount = (
-            1 if delta < timedelta(days=7)
-            else 2
-        )
-
-        kudosu = modding.create(
-            target_id=post.user_id,
-            sender_id=current_user.id,
-            set_id=set_id,
-            post_id=post_id,
-            amount=kudosu_amount,
-            session=session
-        )
-
-        beatmapsets.update(
-            beatmapset.id,
-            {'star_priority': max(beatmapset.star_priority + kudosu_amount, 0)},
-            session=session
-        )
-
-        return KudosuModel.model_validate(kudosu, from_attributes=True) \
-                          .model_dump()
+    return {
+        'error': 501,
+        'details': 'This endpoint is deprecated, please use the new API instead.'
+    }
 
 @router.post(f'/<set_id>/kudosu/<post_id>/revoke')
 @login_required
 @validate()
 def revoke_kudosu(set_id: int, post_id: int):
-    with app.session.database.managed_session() as session:
-        if not (beatmapset := beatmapsets.fetch_one(set_id, session)):
-            return {
-                'error': 404,
-                'details': 'The requested beatmapset could not be found.'
-            }, 404
-
-        if not beatmapset.topic_id:
-            return {
-                'error': 400,
-                'details': 'This beatmapset is not linked to a forum topic.'
-            }, 400
-
-        if not current_user.is_bat:
-            return {
-                'error': 403,
-                'details': 'You are not authorized to perform this action.'
-            }, 403
-
-        if beatmapset.status >= DatabaseStatus.Ranked:
-            return {
-                'error': 400,
-                'details': 'This beatmapset is already ranked.'
-            }, 400
-
-        if not (post := posts.fetch_one(post_id, session)):
-            return {
-                'error': 404,
-                'details': 'The requested post could not be found.'
-            }, 404
-
-        if post.user_id == current_user.id:
-            return {
-                'error': 400,
-                'details': 'You cannot revoke kudosu on your own post.'
-            }, 400
-
-        total_kudosu = modding.total_amount(
-            post_id=post.id,
-            session=session
-        )
-
-        if total_kudosu < 0:
-            return {
-                'error': 400,
-                'details': 'This post has already been revoked.'
-            }, 400
-
-        existing_mod = modding.fetch_by_post_and_sender(
-            post_id,
-            beatmapset.creator_id,
-            session=session
-        )
-
-        if existing_mod:
-            modding.delete(
-                existing_mod.id,
-                session=session
-            )
-
-        kudosu = modding.create(
-            target_id=post.user_id,
-            sender_id=current_user.id,
-            set_id=set_id,
-            post_id=post_id,
-            amount=min(-1, -total_kudosu),
-            session=session
-        )
-
-        beatmapsets.update(
-            beatmapset.id,
-            {'star_priority': max(beatmapset.star_priority + kudosu.amount, 0)},
-            session=session
-        )
-
-        return KudosuModel.model_validate(kudosu, from_attributes=True) \
-                          .model_dump()
+    return {
+        'error': 501,
+        'details': 'This endpoint is deprecated, please use the new API instead.'
+    }
 
 @router.post(f'/<set_id>/kudosu/<post_id>/reset')
 @login_required
 @validate()
 def reset_kudosu(set_id: int, post_id: int):
-    with app.session.database.managed_session() as session:
-        if not (beatmapset := beatmapsets.fetch_one(set_id, session)):
-            return {
-                'error': 404,
-                'details': 'The requested beatmapset could not be found.'
-            }, 404
-
-        if not beatmapset.topic_id:
-            return {
-                'error': 400,
-                'details': 'This beatmapset is not linked to a forum topic.'
-            }, 400
-
-        if not current_user.is_bat:
-            return {
-                'error': 403,
-                'details': 'You are not authorized to perform this action.'
-            }, 403
-
-        if not (post := posts.fetch_one(post_id, session)):
-            return {
-                'error': 404,
-                'details': 'The requested post could not be found.'
-            }, 404
-
-        if post.user_id == current_user.id:
-            return {
-                'error': 400,
-                'details': 'You cannot reset kudosu on your own post.'
-            }, 400
-        
-        total_entries = modding.total_entries(
-            post_id,
-            session=session
-        )
-
-        if total_entries == 0:
-            return {
-                'error': 404,
-                'details': 'This post has no kudosu exchanges.'
-            }, 404
-
-        total_kudosu = modding.total_amount(
-            post.id,
-            session=session
-        )
-
-        modding.delete_by_post(
-            post_id,
-            session=session
-        )
-
-        beatmapsets.update(
-            beatmapset.id,
-            {'star_priority': max(beatmapset.star_priority - total_kudosu, 0)},
-            session=session
-        )
-
-        return {'success': True}
+    return {
+        'error': 501,
+        'details': 'This endpoint is deprecated, please use the new API instead.'
+    }
