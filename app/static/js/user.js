@@ -246,10 +246,10 @@ function loadPinnedScores(userId, mode) {
             );
             return;
         }
-        else {
-            var heading = document.getElementById('pinned-scores').getElementsByTagName('h2')[0];
-            heading.innerHTML = 'Pinned Scores (' + data.total.toLocaleString() + ')'
-        }
+
+        // Update total score count
+        var heading = document.getElementById('pinned-scores').getElementsByTagName('h2')[0];
+        heading.innerHTML = 'Pinned Scores (' + data.total.toLocaleString() + ')'
 
         for (var index = 0; index < scores.length; index++) {
             var score = scores[index];
@@ -295,10 +295,10 @@ function loadTopPlays(userId, mode, limit, offset) {
             scoreContainer.appendChild(noScoresText);
             return;
         }
-        else {
-            var heading = document.getElementById('top-scores').getElementsByTagName('h2')[0];
-            heading.innerHTML = 'Best Performance (' + data.total.toLocaleString() + ')';
-        }
+
+        // Update total score count
+        var heading = document.getElementById('top-scores').getElementsByTagName('h2')[0];
+        heading.innerHTML = 'Best Performance (' + data.total.toLocaleString() + ')';
 
         for (var index = 0; index < scores.length; index++) {
             var score = scores[index];
@@ -383,10 +383,10 @@ function loadLeaderScores(userId, mode, limit, offset) {
             scoreContainer.appendChild(noScoresText);
             return;
         }
-        else {
-            var heading = document.getElementById('leader-scores').getElementsByTagName('h2')[0]
-            heading.innerText = 'First Place Ranks (' + data.total.toLocaleString() + ')';
-        }
+
+        // Update total score count
+        var heading = document.getElementById('leader-scores').getElementsByTagName('h2')[0]
+        heading.innerText = 'First Place Ranks (' + data.total.toLocaleString() + ')';
 
         for (var i = 0; i < scores.length; i++) {
             var scoreDiv = createScoreElement(scores[i], i, "leader");
