@@ -296,78 +296,38 @@
 </div>
 <script>
     function addSubscription(topicId) {
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", "/api/forum/subscriptions/add?topic_id=" + topicId, true);
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4) {
-                if (xhr.status === 200) {
-                    var data = JSON.parse(xhr.responseText);
-                    var button = document.getElementById('subscribe-button');
-                    button.onclick = function() { removeSubscription(topicId); };
-                    button.innerText = 'Unsubscribe topic';
-                } else {
-                    console.error('Failed to add subscription.');
-                }
-            }
-        };
-        xhr.send();
+        performApiRequest("POST", "/forum/subscriptions", {"topic_id": topicId}, function(xhr) {
+            var button = document.getElementById('subscribe-button');
+            button.onclick = function() { removeSubscription(topicId); };
+            button.innerText = 'Unsubscribe topic';
+        });
         return false;
     }
-    
+
     function removeSubscription(topicId) {
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", "/api/forum/subscriptions/remove?topic_id=" + topicId, true);
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4) {
-                if (xhr.status === 200) {
-                    var data = JSON.parse(xhr.responseText);
-                    var button = document.getElementById('subscribe-button');
-                    button.onclick = function() { addSubscription(topicId); };
-                    button.innerText = 'Subscribe topic';
-                } else {
-                    console.error('Failed to remove subscription.');
-                }
-            }
-        };
-        xhr.send();
+        performApiRequest("DELETE", "/forum/subscriptions/" + topicId, null, function(xhr) {
+            var button = document.getElementById('subscribe-button');
+            button.onclick = function() { addSubscription(topicId); };
+            button.innerText = 'Subscribe topic';
+        });
         return false;
     }
-    
+
     function addBookmark(topicId) {
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", "/api/forum/bookmarks/add?topic_id=" + topicId, true);
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4) {
-                if (xhr.status === 200) {
-                    var data = JSON.parse(xhr.responseText);
-                    var button = document.getElementById('bookmark-button');
-                    button.onclick = function() { removeBookmark(topicId); };
-                    button.innerText = 'Remove Bookmark';
-                } else {
-                    console.error('Failed to add bookmark.');
-                }
-            }
-        };
-        xhr.send();
+        performApiRequest("POST", "/forum/bookmarks", {"topic_id": topicId}, function(xhr) {
+            var button = document.getElementById('bookmark-button');
+            button.onclick = function() { removeBookmark(topicId); };
+            button.innerText = 'Remove Bookmark';
+        });
         return false;
     }
     
     function removeBookmark(topicId) {
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", "/api/forum/bookmarks/remove?topic_id=" + topicId, true);
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4) {
-                if (xhr.status === 200) {
-                    var data = JSON.parse(xhr.responseText);
-                    var button = document.getElementById('bookmark-button');
-                    button.onclick = function() { addBookmark(topicId); };
-                    button.innerText = 'Bookmark topic';
-                } else {
-                    console.error('Failed to remove bookmark.');
-                }
-            }
-        };
-        xhr.send();
+        performApiRequest("DELETE", "/forum/bookmarks/" + topicId, null, function(xhr) {
+            var button = document.getElementById('bookmark-button');
+            button.onclick = function() { addBookmark(topicId); };
+            button.innerText = 'Bookmark topic';
+        });
         return false;
     }
     
