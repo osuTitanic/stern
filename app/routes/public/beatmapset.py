@@ -2,6 +2,7 @@
 from app.common.database.repositories import beatmapsets
 from flask import Blueprint, abort, redirect, request
 
+import utils
 import app
 
 router = Blueprint('beatmapset', __name__)
@@ -9,23 +10,14 @@ router = Blueprint('beatmapset', __name__)
 @router.get('/<id>')
 def get_beatmapset(id: int):
     if not id.isdigit():
-        return abort(
-            code=404,
-            description=app.constants.BEATMAP_NOT_FOUND
-        )
+        return utils.render_error(404, 'beatmap_not_found')
 
     with app.session.database.managed_session() as session:
         if not (set := beatmapsets.fetch_one(id, session=session)):
-            return abort(
-                code=404,
-                description=app.constants.BEATMAP_NOT_FOUND
-            )
+            return utils.render_error(404, 'beatmap_not_found')
 
         if not set.beatmaps:
-            return abort(
-                code=404,
-                description=app.constants.BEATMAP_NOT_FOUND
-            )
+            return utils.render_error(404, 'beatmap_not_found')
 
         if mode := request.args.get('mode', ''):
             mode = f'?mode={mode}'

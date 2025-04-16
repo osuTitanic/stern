@@ -1,0 +1,20 @@
+{# templates/errors/custom/forum_not_found.html #}
+
+{% set title = "Forum Not Found - Titanic!" %}
+{% set site_title = "Forum Not Found - Titanic!" %}
+
+{% extends 'errors/base.html' %}
+
+{% block error_content %}
+<img src="/images/art/ffffff.png" alt="Error Image">
+<div class="description">
+    <h1>The forum you are looking for was not found!</h1>
+    
+    There are a few possible reasons for this:
+    <ul>
+        <li>The forum does not exist.</li>
+        <li>The forum may have been removed by an admin.</li>
+        <li>You may have made a typo!</li>
+    </ul>
+</div>
+{% endblock error_content %}

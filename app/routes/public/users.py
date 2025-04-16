@@ -35,13 +35,13 @@ def userpage(query: str):
             if name := names.fetch_by_name_extended(query, session):
                 return redirect(f'/u/{name.user_id}')
 
-            return abort(404)
+            return utils.render_error(404, 'user_not_found')
 
         if not (user := users.fetch_by_id(int(query), session=session)):
-            return abort(404)
+            return utils.render_error(404, 'user_not_found')
 
         if not user.activated:
-            return abort(404)
+            return utils.render_error(404, 'user_not_found')
 
         if not (mode := request.args.get('mode')):
             mode = user.preferred_mode

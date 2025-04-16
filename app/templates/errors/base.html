@@ -1,0 +1,14 @@
+{# templates/base.html #}
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="error">
+    {% block error_content %}
+    <img src="/images/art/ffffff.png" alt="Error Image">
+    <div class="description">
+        {{ content|safe }}
+    </div>
+    {% endblock error_content %}
+</div>
+{% endblock content %}

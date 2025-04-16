@@ -1,0 +1,20 @@
+{# templates/errors/custom/post_not_found.html #}
+
+{% set title = "Post Not Found - Titanic!" %}
+{% set site_title = "Post Not Found - Titanic!" %}
+
+{% extends 'errors/base.html' %}
+
+{% block error_content %}
+<img src="/images/art/ffffff.png" alt="Error Image">
+<div class="description">
+    <h1>The post you are looking for was not found!</h1>
+
+    There are a few possible reasons for this:
+    <ul>
+        <li>The post does not exist.</li>
+        <li>The post may have been deleted.</li>
+        <li>You may have made a typo!</li>
+    </ul>
+</div>
+{% endblock error_content %}

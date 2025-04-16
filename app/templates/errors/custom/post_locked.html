@@ -1,0 +1,13 @@
+{# templates/errors/custom/post_locked.html #}
+
+{% set title = "Post Locked - Titanic!" %}
+{% set site_title = "Post Locked - Titanic!" %}
+
+{% extends 'errors/base.html' %}
+
+{% block error_content %}
+<img src="/images/art/ffffff.png" alt="Error Image">
+<div class="description">
+    <h1>The post you are trying to edit is locked!</h1>
+</div>
+{% endblock error_content %}

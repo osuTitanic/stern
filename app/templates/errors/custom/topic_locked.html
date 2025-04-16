@@ -1,0 +1,13 @@
+{# templates/errors/custom/topic_locked.html #}
+
+{% set title = "Topic Locked - Titanic!" %}
+{% set site_title = "Topic Locked - Titanic!" %}
+
+{% extends 'errors/base.html' %}
+
+{% block error_content %}
+<img src="/images/art/ffffff.png" alt="Error Image">
+<div class="description">
+    <h1>The topic you are trying to post in is locked!</h1>
+</div>
+{% endblock error_content %}

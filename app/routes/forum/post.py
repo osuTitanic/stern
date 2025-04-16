@@ -54,23 +54,14 @@ def send_post_webhook(
 @login_required
 def post_view(forum_id: str, topic_id: str):
     if not forum_id.isdigit():
-        return abort(
-            code=404,
-            description=app.constants.FORUM_NOT_FOUND
-        )
+        return utils.render_error(404, 'forum_not_found')
 
     if not topic_id.isdigit():
-        return abort(
-            code=404,
-            description=app.constants.TOPIC_NOT_FOUND
-        )
+        return utils.render_error(404, 'topic_not_found')
 
     with app.session.database.managed_session() as session:
         if not (topic := topics.fetch_one(topic_id, session=session)):
-            return abort(
-                code=404,
-                description=app.constants.TOPIC_NOT_FOUND
-            )
+            return utils.render_error(404, 'topic_not_found')
 
         if topic.forum_id != int(forum_id):
             return redirect(
@@ -386,10 +377,7 @@ def notify_subscribers(post: DBForumPost, topic: DBForumTopic, session: Session)
 
 def handle_post(topic: DBForumTopic, _: int, session: Session) -> Response:
     if topic.locked_at and not current_user.is_moderator:
-        return abort(
-            403,
-            description=app.constants.TOPIC_LOCKED
-        )
+        return utils.render_error(403, 'topic_locked')
 
     content = request.form.get(
         'bbcode',
@@ -501,16 +489,10 @@ def handle_post(topic: DBForumTopic, _: int, session: Session) -> Response:
 
 def handle_post_edit(topic: DBForumTopic, post_id: int, session: Session) -> Response:
     if topic.locked_at and not current_user.is_moderator:
-        return abort(
-            403,
-            description=app.constants.TOPIC_LOCKED
-        )
+        return utils.render_error(403, 'topic_locked')
 
     if not (post := posts.fetch_one(post_id, session=session)):
-        return abort(
-            404,
-            description=app.constants.POST_NOT_FOUND
-        )
+        return utils.render_error(404, 'post_not_found')
 
     is_priviliged = (
         current_user.is_bat or
@@ -518,10 +500,7 @@ def handle_post_edit(topic: DBForumTopic, post_id: int, session: Session) -> Res
     )
 
     if post.edit_locked and not is_priviliged:
-        return abort(
-            403,
-            description=app.constants.POST_LOCKED
-        )
+        return utils.render_error(403, 'post_locked')
 
     if current_user.id != post.user_id and not is_priviliged:
         return abort(403)
@@ -595,41 +574,23 @@ def handle_post_edit(topic: DBForumTopic, post_id: int, session: Session) -> Res
 @login_required
 def do_post(forum_id: str, topic_id: str):
     if not forum_id.isdigit():
-        return abort(
-            code=404,
-            description=app.constants.FORUM_NOT_FOUND
-        )
+        return utils.render_error(404, 'forum_not_found')
 
     if not topic_id.isdigit():
-        return abort(
-            code=404,
-            description=app.constants.TOPIC_NOT_FOUND
-        )
+        return utils.render_error(404, 'topic_not_found')
 
     with app.session.database.managed_session() as session:
         if not (topic := topics.fetch_one(topic_id, session=session)):
-            return abort(
-                code=404,
-                description=app.constants.TOPIC_NOT_FOUND
-            )
+            return utils.render_error(404, 'topic_not_found')
 
         if topic.forum_id != int(forum_id):
-            return abort(
-                code=404,
-                description=app.constants.FORUM_NOT_FOUND
-            )
+            return utils.render_error(404, 'forum_not_found')
 
         if current_user.silence_end:
-            return abort(
-                code=403,
-                description=app.constants.USER_SILENCED
-            )
+            return utils.render_error(403, 'user_silenced')
 
         if current_user.restricted:
-            return abort(
-                code=403,
-                description=app.constants.USER_RESTRICTED
-            )
+            return utils.render_error(403, 'user_restricted')
 
         action = request.form.get('action', default='post')
         action_id = request.form.get('id', type=int)
@@ -640,10 +601,7 @@ def do_post(forum_id: str, topic_id: str):
         )
 
         if len(content) > 2**14 and not current_user.is_moderator:
-            return abort(
-                code=400,
-                description=app.constants.POST_TOO_LONG
-            )
+            return utils.render_error(400, 'post_too_long')
 
         actions = {
             'edit': handle_post_edit,

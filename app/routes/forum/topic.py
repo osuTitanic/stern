@@ -65,29 +65,17 @@ def send_topic_webhook(
 @router.get('/<forum_id>/t/<id>/')
 def topic(forum_id: str, id: str):
     if not forum_id.isdigit():
-        return abort(
-            code=404,
-            description=app.constants.FORUM_NOT_FOUND
-        )
+        return utils.render_error(404, 'forum_not_found')
 
     if not id.isdigit():
-        return abort(
-            code=404,
-            description=app.constants.TOPIC_NOT_FOUND
-        )
+        return utils.render_error(404, 'topic_not_found')
 
     with app.session.database.managed_session() as session:
         if not (topic := topics.fetch_one(id, session=session)):
-            return abort(
-                code=404,
-                description=app.constants.TOPIC_NOT_FOUND
-            )
+            return utils.render_error(404, 'topic_not_found')
 
         if topic.hidden:
-            return abort(
-                code=404,
-                description=app.constants.TOPIC_NOT_FOUND
-            )
+            return utils.render_error(404, 'topic_not_found')
 
         if topic.forum_id != int(forum_id):
             return redirect(
@@ -168,17 +156,11 @@ def topic(forum_id: str, id: str):
 @login_required
 def create_post_view(forum_id: str):
     if not forum_id.isdigit():
-        return abort(
-            code=404,
-            description=app.constants.FORUM_NOT_FOUND
-        )
+        return utils.render_error(404, 'forum_not_found')
 
     with app.session.database.managed_session() as session:
         if not (forum := forums.fetch_by_id(forum_id, session=session)):
-            return abort(
-                code=404,
-                description=app.constants.FORUM_NOT_FOUND
-            )
+            return utils.render_error(404, 'forum_not_found')
 
         return utils.render_template(
             "forum/create.html",
@@ -247,35 +229,20 @@ def get_type_dict() -> dict:
 @login_required
 def create_post_action(forum_id: str):
     if not forum_id.isdigit():
-        return abort(
-            code=404,
-            description=app.constants.FORUM_NOT_FOUND
-        )
+        return utils.render_error(404, 'forum_not_found')
     
     with app.session.database.managed_session() as session:
         if not (forum := forums.fetch_by_id(forum_id, session=session)):
-            return abort(
-                code=404,
-                description=app.constants.FORUM_NOT_FOUND
-            )
+            return utils.render_error(404, 'forum_not_found')
 
         if forum.hidden:
-            return abort(
-                code=404,
-                description=app.constants.FORUM_NOT_FOUND
-            )
+            return utils.render_error(404, 'forum_not_found')
 
         if current_user.silence_end:
-            return abort(
-                code=403,
-                description=app.constants.USER_SILENCED
-            )
+            return utils.render_error(403, 'user_silenced')
 
         if current_user.restricted:
-            return abort(
-                code=403,
-                description=app.constants.USER_RESTRICTED
-            )
+            return utils.render_error(403, 'user_restricted')
 
         title = request.form.get('title')
         content = request.form.get('bbcode')
