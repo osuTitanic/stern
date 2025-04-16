@@ -345,6 +345,10 @@
     margin-top: 15px;
 }
 
+.profile-stats-header:before {
+    content: "\25BC";
+}
+
 .profile-stats-header a {
     color: #5a539a;
     text-decoration: none;
