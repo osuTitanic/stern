@@ -2,6 +2,7 @@
 from flask import Blueprint, redirect, abort, request
 from app.common.database import topics, posts
 
+import utils
 import app
 
 router = Blueprint("forum-redirects", __name__)
@@ -9,31 +10,19 @@ router = Blueprint("forum-redirects", __name__)
 @router.get('/<forum_id>/t/<topic_id>/p/<post_id>/')
 def get_topic_by_post_and_topic(forum_id: str, topic_id: str, post_id: str):
     if not forum_id.isdigit():
-        return abort(
-            code=404,
-            description=app.constants.FORUM_NOT_FOUND
-        )
+        return utils.render_error(404, 'forum_not_found')
 
     if not topic_id.isdigit():
-        return abort(
-            code=404,
-            description=app.constants.TOPIC_NOT_FOUND
-        )
+        return utils.render_error(404, 'topic_not_found')
 
     if not post_id.isdigit():
-        return abort(
-            code=404,
-            description=app.constants.POST_NOT_FOUND
-        )
+        return utils.render_error(404, 'post_not_found')
 
     with app.session.database.managed_session() as session:
         post = posts.fetch_one(post_id, session=session)
 
         if not post:
-            return abort(
-                code=404,
-                description=app.constants.POST_NOT_FOUND
-            )
+            return utils.render_error(404, 'post_not_found')
 
         page_count = posts.fetch_count_before_post(
             post_id,
@@ -50,25 +39,16 @@ def get_topic_by_post_and_topic(forum_id: str, topic_id: str, post_id: str):
 @router.get('/<forum_id>/p/<post_id>/')
 def get_topic_by_post(forum_id: str, post_id: str):
     if not forum_id.isdigit():
-        return abort(
-            code=404,
-            description=app.constants.FORUM_NOT_FOUND
-        )
+        return utils.render_error(404, 'forum_not_found')
 
     if not post_id.isdigit():
-        return abort(
-            code=404,
-            description=app.constants.POST_NOT_FOUND
-        )
+        return utils.render_error(404, 'post_not_found')
 
     with app.session.database.managed_session() as session:
         post = posts.fetch_one(post_id, session=session)
 
         if not post:
-            return abort(
-                code=404,
-                description=app.constants.POST_NOT_FOUND
-            )
+            return utils.render_error(404, 'post_not_found')
 
         return redirect(
             f"/forum/{forum_id}/t/{post.topic_id}/p/{post.id}/"
@@ -77,17 +57,11 @@ def get_topic_by_post(forum_id: str, post_id: str):
 @router.get('/t/<id>/')
 def topic_redirect(id: str):
     if not id.isdigit():
-        return abort(
-            code=404,
-            description=app.constants.TOPIC_NOT_FOUND
-        )
+        return utils.render_error(404, 'topic_not_found')
 
     with app.session.database.managed_session() as session:
         if not (topic := topics.fetch_one(id, session=session)):
-            return abort(
-                code=404,
-                description=app.constants.TOPIC_NOT_FOUND
-            )
+            return utils.render_error(404, 'topic_not_found')
 
         return redirect(
             f"/forum/{topic.forum_id}/t/{topic.id}/"
@@ -96,23 +70,14 @@ def topic_redirect(id: str):
 @router.get('/t/<topic_id>/p/<post_id>/')
 def topic_post_redirect(topic_id: str, post_id: str):
     if not topic_id.isdigit():
-        return abort(
-            code=404,
-            description=app.constants.TOPIC_NOT_FOUND
-        )
+        return utils.render_error(404, 'topic_not_found')
 
     if not post_id.isdigit():
-        return abort(
-            code=404,
-            description=app.constants.POST_NOT_FOUND
-        )
+        return utils.render_error(404, 'post_not_found')
 
     with app.session.database.managed_session() as session:
         if not (post := posts.fetch_one(post_id, session=session)):
-            return abort(
-                code=404,
-                description=app.constants.POST_NOT_FOUND
-            )
+            return utils.render_error(404, 'post_not_found')
 
         return redirect(
             f"/forum/{post.topic.forum_id}/t/{post.topic_id}/p/{post.id}/"
@@ -121,17 +86,11 @@ def topic_post_redirect(topic_id: str, post_id: str):
 @router.get('/p/<post_id>/')
 def post_redirect(post_id: str):
     if not post_id.isdigit():
-        return abort(
-            code=404,
-            description=app.constants.POST_NOT_FOUND
-        )
+        return utils.render_error(404, 'post_not_found')
 
     with app.session.database.managed_session() as session:
         if not (post := posts.fetch_one(post_id, session=session)):
-            return abort(
-                code=404,
-                description=app.constants.POST_NOT_FOUND
-            )
+            return utils.render_error(404, 'post_not_found')
 
         return redirect(
             f"/forum/{post.topic.forum_id}/t/{post.topic_id}/p/{post.id}/"
@@ -142,16 +101,10 @@ def quick_reply_redirect():
     topic_id = request.args.get('t', type=int)
 
     if not topic_id:
-        return abort(
-            code=404,
-            description=app.constants.TOPIC_NOT_FOUND
-        )
+        return utils.render_error(404, 'topic_not_found')
 
     if not (topic := topics.fetch_one(topic_id)):
-        return abort(
-            code=404,
-            description=app.constants.TOPIC_NOT_FOUND
-        )
+        return utils.render_error(404, 'topic_not_found')
 
     return redirect(
         f"/forum/{topic.forum_id}/t/{topic.id}/post"
@@ -166,10 +119,7 @@ def viewtopic_redirect():
         post = posts.fetch_one(post_id)
 
         if not post:
-            return abort(
-                code=404,
-                description=app.constants.POST_NOT_FOUND
-            )
+            return utils.render_error(404, 'post_not_found')
         
         return redirect(
             f"/forum/t/{post.topic_id}/p/{post.id}"
@@ -179,29 +129,20 @@ def viewtopic_redirect():
         topic = topics.fetch_one(topic_id)
 
         if not topic:
-            return abort(
-                code=404,
-                description=app.constants.TOPIC_NOT_FOUND
-            )
+            return utils.render_error(404, 'topic_not_found')
 
         return redirect(
             f"/forum/t/{topic.id}"
         )
     
-    return abort(
-        code=404,
-        description=app.constants.TOPIC_NOT_FOUND
-    )
+    return utils.render_error(404, 'topic_not_found')
 
 @router.get('/viewforum.php')
 def viewforum_redirect():
     forum_id = request.args.get('f', type=int)
 
     if not forum_id:
-        return abort(
-            code=404,
-            description=app.constants.FORUM_NOT_FOUND
-        )
+        return utils.render_error(404, 'forum_not_found')
 
     return redirect(
         f"/forum/{forum_id}"

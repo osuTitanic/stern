@@ -101,82 +101,69 @@
 
         function loadBeatmapPackInfo(id) {
             var element = document.getElementById("pack-" + id);
-            var url = '/api/beatmaps/packs/' + currentCategory + '/' + id;
-            var xhr = new XMLHttpRequest();
-            xhr.open("GET", url, true);
+            var url = '/beatmapsets/packs/' + currentCategory + '/' + id;
 
-            xhr.onreadystatechange = function() {
-                try {
-                    if (xhr.readyState !== 4) return;
+            performApiRequest("GET", url, null, function(xhr) {
+                var info = JSON.parse(xhr.responseText);
+                var heading = document.createElement("h2");
+                heading.innerText = info.name;
+                heading.style.marginTop = "10px";
     
-                    if (xhr.status >= 400) {
-                        element.innerHTML = "<center>Failed to load beatmap pack info.</center>";
-                        console.error("Failed to load beatmap pack info: " + xhr.responseText);
-                        return;
-                    }
+                var creatorLink = document.createElement("a");
+                creatorLink.href = "/u/" + info.creator.id;
+                creatorLink.innerText = info.creator.name;
     
-                    var info = JSON.parse(xhr.responseText);
-                    var heading = document.createElement("h2");
-                    heading.innerText = info.name;
-                    heading.style.marginTop = "10px";
+                var uploadedDate = new Date(info.created_at);
+                var uploadedDateString = uploadedDate.toLocaleDateString("de-DE", {
+                    year: "numeric",
+                    month: "numeric",
+                    day: "numeric",
+                    hour: "numeric",
+                    minute: "numeric",
+                    second: "numeric",
+                });
     
-                    var creatorLink = document.createElement("a");
-                    creatorLink.href = "/u/" + info.creator.id;
-                    creatorLink.innerText = info.creator.name;
+                var uploadedDateInfo = document.createElement("time");
+                uploadedDateInfo.setAttribute("datetime", uploadedDateString);
+                uploadedDateInfo.innerText = info.created_at;
     
-                    var uploadedDate = new Date(info.created_at);
-                    var uploadedDateString = uploadedDate.toLocaleDateString("de-DE", {
-                        year: "numeric",
-                        month: "numeric",
-                        day: "numeric",
-                        hour: "numeric",
-                        minute: "numeric",
-                        second: "numeric",
-                    });
+                var uploadedInfo = document.createElement("p");
+                uploadedInfo.appendChild(document.createTextNode("Created by "));
+                uploadedInfo.appendChild(creatorLink);
+                uploadedInfo.appendChild(document.createTextNode(" on "));
+                uploadedInfo.appendChild(uploadedDateInfo);
     
-                    var uploadedDateInfo = document.createElement("time");
-                    uploadedDateInfo.setAttribute("datetime", uploadedDateString);
-                    uploadedDateInfo.innerText = info.created_at;
+                var description = document.createElement("p");
+                description.innerText = info.description;
     
-                    var uploadedInfo = document.createElement("p");
-                    uploadedInfo.appendChild(document.createTextNode("Created by "));
-                    uploadedInfo.appendChild(creatorLink);
-                    uploadedInfo.appendChild(document.createTextNode(" on "));
-                    uploadedInfo.appendChild(uploadedDateInfo);
+                var beatmapList = document.createElement("ul");
+                beatmapList.style.marginTop = "10px";
     
-                    var description = document.createElement("p");
-                    description.innerText = info.description;
+                for (var i = 0; i < info.entries.length; i++) {
+                    var beatmapset = info.entries[i].beatmapset;
+                    var beatmapLink = document.createElement("a");
+                    beatmapLink.href = "/s/" + beatmapset.id;
+                    beatmapLink.innerText = beatmapset.artist + " - " + beatmapset.title + " (" + beatmapset.creator + ")";
     
-                    var beatmapList = document.createElement("ul");
-                    beatmapList.style.marginTop = "10px";
-    
-                    for (var i = 0; i < info.entries.length; i++) {
-                        var beatmapset = info.entries[i].beatmapset;
-                        var beatmapLink = document.createElement("a");
-                        beatmapLink.href = "/s/" + beatmapset.id;
-                        beatmapLink.innerText = beatmapset.artist + " - " + beatmapset.title + " (" + beatmapset.creator + ")";
-    
-                        var beatmapItem = document.createElement("li");
-                        beatmapItem.appendChild(beatmapLink);
-                        beatmapList.appendChild(beatmapItem);
-                    }
-    
-                    element.classList.add("loaded");
-                    element.innerHTML = "";
-                    element.appendChild(heading);
-                    element.appendChild(uploadedInfo);
-                    element.appendChild(description);
-                    element.appendChild(beatmapList);
-                    element.appendChild(document.createElement("br"));
-                    slideDown(element);
+                    var beatmapItem = document.createElement("li");
+                    beatmapItem.appendChild(beatmapLink);
+                    beatmapList.appendChild(beatmapItem);
                 }
-                catch (e) {
-                    element.innerHTML = "<center>Failed to load beatmap pack info.</center>";
-                    console.error("Failed to load beatmap pack info: " + e);
-                }
-            }
-
-            xhr.send();
+    
+                element.classList.add("loaded");
+                element.innerHTML = "";
+                element.appendChild(heading);
+                element.appendChild(uploadedInfo);
+                element.appendChild(description);
+                element.appendChild(beatmapList);
+                element.appendChild(document.createElement("br"));
+                slideDown(element);
+            },
+            function(xhr) {
+                element.innerHTML = "<center>Failed to load beatmap pack info.</center>";
+                console.error("Failed to load beatmap pack info: " + xhr.responseText);
+                return;
+            });
         }
     </script>
     {% endif %}

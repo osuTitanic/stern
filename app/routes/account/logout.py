@@ -7,10 +7,10 @@ import utils
 
 router = Blueprint('logout', __name__)
 
-@router.get('/logout')
+@router.post('/logout')
 def logout():
     if flask_login.current_user.is_anonymous:
         return redirect('/')
 
-    redirect_url = request.args.get('redirect', '/')
+    redirect_url = request.form.get('redirect', '/')
     return accounts.perform_logout(redirect(redirect_url))

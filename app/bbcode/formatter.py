@@ -63,15 +63,17 @@ def render_box(tag_name, value, options, parent, context):
     return '<div class="spoiler">' \
            '<div class="spoiler-head" onclick="return toggleSpoiler(this);">%s</div>' \
            '<div class="spoiler-body">%s</div>' \
-           '</div>' % (options.get('box', ''), value)
+           '</div>' % (sanitize_input(options.get('box', '')), value)
 
 @parser.formatter('color')
 def render_color(tag_name, value, options, parent, context):
-    return '<span style="color:%s;">%s</span>' % (options.get('color', ''), value)
+    color = sanitize_input(options.get('color', ''))
+    return '<span style="color:%s;">%s</span>' % (color, value)
 
 @parser.formatter('profile')
 def render_profile(tag_name, value, options, parent, context):
-    return '<a href="%s/u/%s">%s</a>' % (config.OSU_BASEURL, options.get('profile', value), value)
+    profile = sanitize_input(options.get('profile', value))
+    return '<a href="%s/u/%s">%s</a>' % (config.OSU_BASEURL, profile, value)
 
 @parser.formatter('youtube')
 def render_youtube_embed(tag_name, value, options, parent, context):
@@ -100,7 +102,8 @@ def render_google(tag_name, value, options, parent, context):
 
 @parser.formatter('url')
 def render_link(tag_name, value, options, parent, context):
-    return '<a href="%s" target="_blank">%s</a>' % (unquote(options.get('url', '')), value)
+    url = sanitize_input(unquote(options.get('url', '')))
+    return '<a href="%s" target="_blank">%s</a>' % (url, value)
 
 @parser.formatter('quote')
 def render_quote(tag_name, value, options, parent, context):
@@ -144,7 +147,7 @@ def render_list(tag_name, value, options, parent, context):
 
 @parser.formatter('email')
 def render_email(tag_name, value, options, parent, context):
-    email = (
+    email = sanitize_input(
         options.get('email')
         if 'email' in options
         else value
@@ -154,3 +157,9 @@ def render_email(tag_name, value, options, parent, context):
         return value
 
     return '<a href="mailto:%s">%s</a>' % (email, value)
+
+def sanitize_input(text: str) -> str:
+    for sequence, replace in Parser.REPLACE_ESCAPE:
+        text = text.replace(sequence, replace)
+
+    return text

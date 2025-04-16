@@ -304,9 +304,15 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
 
     if (xhr.onreadystatechange === undefined) {
         xhr.onload = function() {
+            console.log("Request successful: " + method + " " + path);
             if (callbackSuccess) {
-                console.log("Request successful: " + method + " " + path);
-                callbackSuccess(xhr);
+                try {
+                    callbackSuccess(xhr);
+                } catch (e) {
+                    console.error("An error occurred while processing the response: " + e);
+                    callbackError(xhr);
+                    throw e;
+                }
             }
         }
 
@@ -326,7 +332,13 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
             if (xhr.status >= 200 && xhr.status < 300) {
                 console.log("[" + xhr.status + "] Request successful: " + method + " " + path);
                 if (callbackSuccess) {
-                    callbackSuccess(xhr);
+                    try {
+                        callbackSuccess(xhr);
+                    } catch (e) {
+                        console.error("An error occurred while processing the response: " + e);
+                        callbackError(xhr);
+                        throw e;
+                    }
                 }
             } else {
                 console.error("[" + xhr.status + "] An error occurred during " + method + " request to " + path);
@@ -339,6 +351,22 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
 
     xhr.send(JSON.stringify(data));
     return xhr;
+}
+
+function convertFormToJson(formElement) {
+    var formData = new FormData(formElement);
+    var jsonData = {};
+
+    for (var [key, value] of formData.entries()) {
+        if (jsonData[key] === undefined) {
+            jsonData[key] = value;
+        } else if (Array.isArray(jsonData[key])) {
+            jsonData[key].push(value);
+        } else {
+            jsonData[key] = [jsonData[key], value];
+        }
+    }
+    return jsonData;
 }
 
 function loadBBCodePreview(element) {
@@ -373,6 +401,13 @@ function loadBBCodePreview(element) {
     return false;
 }
 
+function renderTimeagoElements() {
+    var times = document.getElementsByClassName('timeago');
+    for (let i = 0; i < times.length; i++) {
+        times[i].innerText = jQuery.timeago(times[i].getAttribute('datetime'));
+    }
+}
+
 function getElementsByClassNamePolyfill(className) {
     var allElements = document.getElementsByTagName('*');
     var matchedElements = [];
@@ -391,10 +426,7 @@ if (!document.getElementsByClassName) {
 }
 
 addEvent("DOMContentLoaded", document, function(e) {
-    var times = $('.timeago');
-    for (let i = 0; i < times.length; i++) {
-        times[i].innerText = jQuery.timeago(times[i].title);
-    }
+    renderTimeagoElements();
 });
 
 addEvent("beforeunload", window, function(e) {

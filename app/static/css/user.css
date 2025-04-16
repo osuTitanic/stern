@@ -97,6 +97,16 @@
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
 }
 
+.group:hover,
+.group:focus,
+.group:active {
+    text-decoration: none;
+    background-color: #f0ecfa;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.20);
+    text-shadow: 0 0 0.6px;
+    transition: all 0.1s ease-in-out;
+}
+
 .group a:hover {
     text-decoration: none;
 }
@@ -253,6 +263,7 @@
 
 .gamemode-button {
     display: inline-block;
+    background: #e7e4fc;
     border: solid 2px #978cd0;
     border-radius: 5px;
     font-size: 110%;
@@ -345,6 +356,10 @@
     margin-top: 15px;
 }
 
+.profile-stats-header:before {
+    content: "\25BC";
+}
+
 .profile-stats-header a {
     color: #5a539a;
     text-decoration: none;
@@ -412,6 +427,7 @@
     font-weight: bold;
     box-shadow: 0 0 40px 5px #ffda00;
     border-right: 2px solid #ffa10d;
+    text-align: right;
 }
 
 .profile-ranks {

@@ -26,6 +26,7 @@ def get_group(id: str):
             css='group.css',
             group=group,
             users=users,
+            session=session,
             site_title=group.name,
             site_description=group.description,
         )

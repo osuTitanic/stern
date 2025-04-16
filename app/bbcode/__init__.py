@@ -3,16 +3,19 @@
 # https://github.com/dcwatson/bbcode/blob/master/bbcode.py
 
 from .formatter import parser as formatter
+from .regexes import _bbcode_url_re
 from .objects import TagOptions
 from .parser import Parser
 
 import urllib.parse
-import re
+import regex
 
 def url_hotfix(input_text: str) -> str:
     """Fix the formatting of various URLs"""
-    pattern = r'\[url=(?P<url>.*?)\](?P<name>.*?)\[/url\]'
-    matches = re.finditer(pattern, input_text)
+    try:
+        matches = _bbcode_url_re.finditer(input_text, timeout=0.2)
+    except TimeoutError:
+        return input_text
 
     for match in matches:
         url = match.group('url')

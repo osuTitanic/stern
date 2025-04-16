@@ -1,0 +1,17 @@
+{# templates/errors/user_not_found.html #}
+
+{% set title = "User Not Found - Titanic!" %}
+{% set site_title = "User Not Found - Titanic!" %}
+
+{% extends 'errors/base.html' %}
+
+{% block error_content %}
+<div>
+    <h1>The user you are looking for was not found!</h1>
+    <p>There are a couple of possible reasons for this:</p>
+    <ul>
+        <li>The user may have been banned for unethical behaviour (cheating / multi-accounting / abusing others).</li>
+        <li>You may have made a typo!</li>
+    </ul>
+</div>
+{% endblock error_content %}

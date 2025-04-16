@@ -108,21 +108,17 @@ def on_http_exception(error: HTTPException) -> Tuple[str, int]:
             details=error.description or error.name
         ), error.code
 
-    custom_description = getattr(
-        error,
-        'html_description',
-        error.description or error.name
-    )
-
-    if error.description.startswith('<'):
-        # Okay, I know this solution is bad, but I'm
-        # too lazy to find a better one right now.
-        custom_description = error.description
+    if utils.template_exists(f'errors/default/{error.code}.html'):
+        # Use error page override for this status code
+        return utils.render_error(
+            code=error.code,
+            description=error.description
+        )
 
     return utils.render_template(
-        content=custom_description,
+        template_name='errors/base.html',
+        content=error.description,
         code=error.code,
-        template_name='error.html',
         css='error.css',
         title=f'{error.name} - Titanic!'
     ), error.code
@@ -137,13 +133,7 @@ def on_exception(error: Exception) -> Tuple[str, int]:
             details=InternalServerError.description
         ), 500
 
-    return utils.render_template(
-        content=InternalServerError.html_description,
-        code=500,
-        template_name='error.html',
-        css='error.css',
-        title=f'Internal Server Error - Titanic!'
-    ), 500
+    return utils.render_error(500, description='Internal Server Error')
 
 @flask.errorhandler(ValidationError)
 def on_validation_error(error: ValidationError) -> Tuple[str, int]:

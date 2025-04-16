@@ -245,7 +245,7 @@
                     </thead>
                     <tbody>
                         <td style="width: 50%">
-                            <form action="/api/beatmaps/update" method="post">
+                            <form method="post" onsubmit="updateBeatmapsetMetadata(event)">
                                 <dl>
                                     <dt>Offset:</dt>
                                     <dd>
@@ -278,7 +278,6 @@
                                 </dl>
                                 <input type="submit" value="Save">
                                 <input type="hidden" name="beatmapset_id" value="{{ beatmapset.id }}">
-                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                             </form>
                         </td>
                         <td>
@@ -294,7 +293,7 @@
                             {# Beatmap is not ranked #}
                             <div>
                                 {% if not bat_nomination %}
-                                <a href="/api/beatmaps/nominations/{{ beatmapset.id }}/add" style="color: green;">
+                                <a href="#" onclick="addNomination({{ beatmapset.id }})" style="color: green;">
                                     Nominate this beatmap
                                     (Bubble)
                                 </a><br>
@@ -304,42 +303,42 @@
                                     (Bubbled)
                                 </p>
                                 {% endif %}
-                                <a onclick="confirmRedirect('/api/beatmaps/nominations/{{ beatmapset.id }}/reset')" style="color: red;">
+                                <a href="#" onclick="resetNominations({{ beatmapset.id }})" style="color: red;">
                                     Remove all nominations from this beatmap
                                     (Pop Bubble)
                                 </a>
                             </div><br>
                             <div>
-                                <a onclick="confirmRedirect('/api/beatmaps/status/{{ beatmapset.id }}/update?status=3')">
+                                <a onclick="setBeatmapsetStatus({{ beatmapset.id }}, 3, 'Are you sure you want to update the status to Qualified?')">
                                     Update status to "Qualified"
                                 </a><br>
-                                <a onclick="confirmRedirect('/api/beatmaps/status/{{ beatmapset.id }}/update?status=2')">
+                                <a onclick="setBeatmapsetStatus({{ beatmapset.id }}, 2, 'Are you sure you want to update the status to Approved?')">
                                     Update status to "Approved"
                                 </a><br>
-                                <a onclick="confirmRedirect('/api/beatmaps/status/{{ beatmapset.id }}/update?status=4')">
+                                <a onclick="setBeatmapsetStatus({{ beatmapset.id }}, 4, 'Are you sure you want to update the status to Loved?')">
                                     Update status to "Loved"
                                 </a><br>
                                 {% if beatmapset.server != 0 %}
-                                <a onclick="confirmRedirect('/api/beatmaps/{{ beatmapset.id }}/nuke')" style="color: red">
+                                <a onclick="nukeBeatmapset({{ beatmapset.id }})" style="color: red">
                                     Nuke this beatmap
                                 </a><br>
                                 {% endif %}
                             </div><br>
                             {% elif beatmapset.status in (1, 2) %}
                             <div>
-                                <a onclick="confirmRedirect('/api/beatmaps/status/{{ beatmapset.id }}/update?status=0')" style="color: red;">
+                                <a onclick="setBeatmapsetStatus({{ beatmapset.id }}, 0)" style="color: red;">
                                     Unrank this beatmap
                                 </a>
                             </div>
                             {% elif beatmapset.status == 3 %}
                             <div>
-                                <a onclick="confirmRedirect('/api/beatmaps/status/{{ beatmapset.id }}/update?status=0')" style="color: red;">
+                                <a onclick="setBeatmapsetStatus({{ beatmapset.id }}, 0)" style="color: red;">
                                     Disqualify this beatmap
                                 </a>
                             </div>
                             {% elif beatmapset.status == 4 %}
                             <div>
-                                <a onclick="confirmRedirect('/api/beatmaps/status/{{ beatmapset.id }}/update?status=0')" style="color: red;">
+                                <a onclick="setBeatmapsetStatus({{ beatmapset.id }}, 0)" style="color: red;">
                                     Remove from "Loved" category
                                 </a>
                             </div>
@@ -351,13 +350,13 @@
                             {% endif %}
                             <details>
                                 <summary>Difficulty Status Updates</summary><br>
-                                <form action="/api/beatmaps/status/difficulty" method="post">
+                                <form method="post" onsubmit="updateBeatmapStatuses(event)">
                                     <div class="bat-diffs">
                                         {% for beatmap in beatmapset.beatmaps %}
                                         <div>
                                             <dt>{{ beatmap.version }}</dt>
                                             <dd>
-                                                <select name="status-{{ beatmap.id }}">
+                                                <select name="{{ beatmap.id }}">
                                                     {% for status in constants.DatabaseStatus.values() %}
                                                     <option value="{{ status }}" {% if beatmap.status == status %}selected{% endif %}>{{ constants.DatabaseStatus(status).name }}</option>
                                                     {% endfor %}
@@ -368,7 +367,6 @@
                                     </div>
                                     <input type="submit" value="Update">
                                     <input type="hidden" name="beatmapset_id" value="{{ beatmapset.id }}">
-                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                                 </form>
                             </details>
                         </td>
@@ -400,7 +398,7 @@
         </div>
         <div class="beatmap-description">
             <div title="Play Song">
-                <a onclick="resetOrPlayAudio('beatmap-preview')" class="beatmap-preview-link">
+                <a onclick="resetOrPlayAudio('beatmap-preview')" class="beatmap-preview-link" href="javascript:void(0);">
                     <img src="/mt/{{ beatmapset.id }}l" alt="">
                     <audio id="beatmap-preview"
                            src="/mp3/preview/{{ beatmapset.id }}.mp3"
@@ -704,88 +702,35 @@
     {% endif %}
 </div>
 <script>
-    // osu.ppy.sh spoilerbox conversion
-    var spoilerBoxes = document.querySelectorAll('.bbcode-spoilerbox');
-    for (var i = 0; i < spoilerBoxes.length; i++) {
-        spoilerBoxes[i].classList.add('spoiler');
-    }
+    function addFavorite(beatmapsetId) {
+        var url = "/users/" + currentUser + "/favourites";
 
-    var spoilerBoxContents = document.querySelectorAll('.bbcode-spoilerbox__body');
-    for (var i = 0; i < spoilerBoxContents.length; i++) {
-        spoilerBoxContents[i].classList.add('spoiler-body');
-    }
-
-    var spoilerBoxHeads = document.querySelectorAll('.bbcode-spoilerbox__link');
-    for (var i = 0; i < spoilerBoxHeads.length; i++) {
-        var spoilerBox = spoilerBoxHeads[i];
-        
-        // Change element type to div (in older versions of Chrome, use workarounds if necessary)
-        var newSpoilerBox = document.createElement('div');
-        newSpoilerBox.className = spoilerBox.className + ' spoiler-head';
-        newSpoilerBox.innerHTML = spoilerBox.innerHTML;
-        spoilerBox.parentNode.replaceChild(newSpoilerBox, spoilerBox);
-        
-        newSpoilerBox.onclick = function () {
-            toggleSpoiler(this);
-        };
-    }
-
-    // Set volume of beatmap preview to 0.5
-    var beatmapPreview = document.getElementById('beatmap-preview');
-    if (beatmapPreview) {
-        beatmapPreview.volume = 0.5;
-    }
-
-    function addFavorite(beatmapset_id) {
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", "/api/profile/" + currentUser + "/favourites/add?set_id=" + beatmapset_id, true);
-        
-        xhr.onload = function () {
-            if (xhr.status === 200) {
-                var favourites = document.getElementById('favourites-button');
-                favourites.innerHTML = '(Remove Favourite)';
-                favourites.style.color = 'red';
-                favourites.onclick = function () {
-                    removeFavorite(beatmapset_id);
-                };
-            } else {
-                console.error("Failed to add favourite");
-            }
-        };
-        
-        xhr.onerror = function () {
-            console.error("Request error occurred");
-        };
-        
-        xhr.send();
+        performApiRequest("POST", url, {"set_id": beatmapsetId}, function(xhr) {
+            var favourites = document.getElementById('favourites-button');
+            favourites.innerHTML = '(Remove Favourite)';
+            favourites.style.color = 'red';
+            favourites.onclick = function () {
+                removeFavorite(beatmapsetId);
+            };
+        });
     }
     
-    function removeFavorite(beatmapset_id) {
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", "/api/profile/" + currentUser + "/favourites/delete?set_id=" + beatmapset_id, true);
-        
-        xhr.onload = function () {
-            if (xhr.status === 200) {
-                var favourites = document.getElementById('favourites-button');
-                favourites.innerHTML = '(Add Favourite)';
-                favourites.style.color = 'green';
-                favourites.onclick = function () {
-                    addFavorite(beatmapset_id);
-                };
-            } else {
-                console.error("Failed to remove favourite");
-            }
-        };
-        
-        xhr.onerror = function () {
-            console.error("Request error occurred");
-        };
-        
-        xhr.send();
+    function removeFavorite(beatmapsetId) {
+        var url = "/users/" + currentUser + "/favourites/" + beatmapsetId;
+
+        performApiRequest("DELETE", url, null, function(xhr) {
+            var favourites = document.getElementById('favourites-button');
+            favourites.innerHTML = '(Add Favourite)';
+            favourites.style.color = 'green';
+            favourites.onclick = function () {
+                addFavorite(beatmapsetId);
+            };
+        });
     }
 
     function copySetId(element) {
         var set_id = element.getAttribute('setid');
+
         navigator.clipboard.writeText(set_id).then(function () {
             element.innerHTML = 'Copied!';
             element.style.color = 'green';
@@ -838,6 +783,120 @@
         });
     }
     {% endif %}
+
+    {% if current_user.is_bat %}
+    function setBeatmapsetStatus(beatmapsetId, status, promptText) {
+        if (promptText === undefined) {
+            promptText = "Are you sure?";
+        }
+
+        if (!confirm(promptText)) {
+            return;
+        }
+
+        performApiRequest("PATCH", "/beatmapsets/" + beatmapsetId + "/status?status=" + status, null, function(xhr) {
+            location.reload();
+        }, function(xhr) {
+            var response = JSON.parse(xhr.responseText);
+            alert(response.details);
+        });
+    }
+
+    function updateBeatmapsetMetadata(event) {
+        event.preventDefault();
+
+        var data = convertFormToJson(event.target);
+        var url = "/beatmapsets/" + data.beatmapset_id;
+
+        performApiRequest("PATCH", url, data, function(xhr) {
+            location.reload();
+        }, function(xhr) {
+            var response = JSON.parse(xhr.responseText);
+            alert(response.details);
+        });
+    }
+
+    function updateBeatmapStatuses(event) {
+        event.preventDefault();
+
+        var data = convertFormToJson(event.target);
+        var url = "/beatmapsets/" + data.beatmapset_id + "/status/beatmaps";
+
+        performApiRequest("PATCH", url, data, function(xhr) {
+            location.reload();
+        }, function(xhr) {
+            var response = JSON.parse(xhr.responseText);
+            alert(response.details);
+        });
+    }
+
+    function nukeBeatmapset(beatmapsetId) {
+        if (!confirm("This will fully delete the beatmap, are you sure you want to proceed?")) {
+            return;
+        }
+
+        performApiRequest("POST", "/beatmapsets/" + beatmapsetId + "/nuke", null, function(xhr) {
+            location.reload();
+        }, function(xhr) {
+            var response = JSON.parse(xhr.responseText);
+            alert(response.details);
+        });
+    }
+
+    function addNomination(beatmapsetId) {
+        var url = "/beatmapsets/" + beatmapsetId + "/nominations";
+
+        performApiRequest("POST", url, null, function(xhr) {
+            location.reload();
+        }, function(xhr) {
+            var response = JSON.parse(xhr.responseText);
+            alert(response.details);
+        });
+    }
+
+    function resetNominations(beatmapsetId) {
+        var url = "/beatmapsets/" + beatmapsetId + "/nominations";
+
+        performApiRequest("DELETE", url, null, function(xhr) {
+            location.reload();
+        }, function(xhr) {
+            var response = JSON.parse(xhr.responseText);
+            alert(response.details);
+        });
+    }
+    {% endif %}
+
+    // osu.ppy.sh spoilerbox conversion
+    var spoilerBoxes = document.querySelectorAll('.bbcode-spoilerbox');
+    for (var i = 0; i < spoilerBoxes.length; i++) {
+        spoilerBoxes[i].classList.add('spoiler');
+    }
+
+    var spoilerBoxContents = document.querySelectorAll('.bbcode-spoilerbox__body');
+    for (var i = 0; i < spoilerBoxContents.length; i++) {
+        spoilerBoxContents[i].classList.add('spoiler-body');
+    }
+
+    var spoilerBoxHeads = document.querySelectorAll('.bbcode-spoilerbox__link');
+    for (var i = 0; i < spoilerBoxHeads.length; i++) {
+        var spoilerBox = spoilerBoxHeads[i];
+        
+        // Change element type to div (in older versions of Chrome, use workarounds if necessary)
+        var newSpoilerBox = document.createElement('div');
+        newSpoilerBox.className = spoilerBox.className + ' spoiler-head';
+        newSpoilerBox.innerHTML = spoilerBox.innerHTML;
+        spoilerBox.parentNode.replaceChild(newSpoilerBox, spoilerBox);
+        
+        newSpoilerBox.onclick = function () {
+            toggleSpoiler(this);
+        };
+    }
+
+    // Set volume of beatmap preview to 0.5
+    var beatmapPreview = document.getElementById('beatmap-preview');
+    if (beatmapPreview) {
+        beatmapPreview.volume = 0.5;
+    }
 </script>
 {# TODO: Beatmap Comments #}
 {% endblock content %}

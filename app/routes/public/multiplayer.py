@@ -17,6 +17,7 @@ def get_match(id: int):
             'match.html',
             css='match.css',
             match=match,
+            session=session,
             site_description=f"Titanic » Matches » {match.name} (#{match.id:02d})",
             site_title=f"{match.name}",
             title=f"{match.name} - Titanic"

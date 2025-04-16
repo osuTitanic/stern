@@ -186,7 +186,7 @@
                     <td class="post-content-wrapper">
                         <div style="background-color: #ebe8ff;">
                             <div class="post-time">
-                                <a href="#" title="{{ post.created_at }}" style="line-height: 18px">
+                                <a href="#post-{{ post.id }}" title="{{ post.created_at }}" style="line-height: 18px">
                                     {{ post.created_at|timeago }}
                                 </a>
                                 {% if post.icon %}
@@ -296,193 +296,118 @@
 </div>
 <script>
     function addSubscription(topicId) {
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", "/api/forum/subscriptions/add?topic_id=" + topicId, true);
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4) {
-                if (xhr.status === 200) {
-                    var data = JSON.parse(xhr.responseText);
-                    var button = document.getElementById('subscribe-button');
-                    button.onclick = function() { removeSubscription(topicId); };
-                    button.innerText = 'Unsubscribe topic';
-                } else {
-                    console.error('Failed to add subscription.');
-                }
-            }
-        };
-        xhr.send();
+        performApiRequest("POST", "/forum/subscriptions", {"topic_id": topicId}, function(xhr) {
+            var button = document.getElementById('subscribe-button');
+            button.onclick = function() { removeSubscription(topicId); };
+            button.innerText = 'Unsubscribe topic';
+        });
         return false;
     }
-    
+
     function removeSubscription(topicId) {
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", "/api/forum/subscriptions/remove?topic_id=" + topicId, true);
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4) {
-                if (xhr.status === 200) {
-                    var data = JSON.parse(xhr.responseText);
-                    var button = document.getElementById('subscribe-button');
-                    button.onclick = function() { addSubscription(topicId); };
-                    button.innerText = 'Subscribe topic';
-                } else {
-                    console.error('Failed to remove subscription.');
-                }
-            }
-        };
-        xhr.send();
+        performApiRequest("DELETE", "/forum/subscriptions/" + topicId, null, function(xhr) {
+            var button = document.getElementById('subscribe-button');
+            button.onclick = function() { addSubscription(topicId); };
+            button.innerText = 'Subscribe topic';
+        });
         return false;
     }
-    
+
     function addBookmark(topicId) {
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", "/api/forum/bookmarks/add?topic_id=" + topicId, true);
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4) {
-                if (xhr.status === 200) {
-                    var data = JSON.parse(xhr.responseText);
-                    var button = document.getElementById('bookmark-button');
-                    button.onclick = function() { removeBookmark(topicId); };
-                    button.innerText = 'Remove Bookmark';
-                } else {
-                    console.error('Failed to add bookmark.');
-                }
-            }
-        };
-        xhr.send();
+        performApiRequest("POST", "/forum/bookmarks", {"topic_id": topicId}, function(xhr) {
+            var button = document.getElementById('bookmark-button');
+            button.onclick = function() { removeBookmark(topicId); };
+            button.innerText = 'Remove Bookmark';
+        });
         return false;
     }
     
     function removeBookmark(topicId) {
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", "/api/forum/bookmarks/remove?topic_id=" + topicId, true);
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4) {
-                if (xhr.status === 200) {
-                    var data = JSON.parse(xhr.responseText);
-                    var button = document.getElementById('bookmark-button');
-                    button.onclick = function() { addBookmark(topicId); };
-                    button.innerText = 'Bookmark topic';
-                } else {
-                    console.error('Failed to remove bookmark.');
-                }
-            }
-        };
-        xhr.send();
+        performApiRequest("DELETE", "/forum/bookmarks/" + topicId, null, function(xhr) {
+            var button = document.getElementById('bookmark-button');
+            button.onclick = function() { addBookmark(topicId); };
+            button.innerText = 'Bookmark topic';
+        });
         return false;
     }
     
     function deletePost(postId) {
         if (!confirm('Are you sure you want to delete this post?'))
             return;
-    
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", "/api/forum/posts/" + postId + "/delete", true);
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4) {
-                var data = JSON.parse(xhr.responseText);
-                if (data.error) {
-                    alert(data.details || "Failed to delete post. (" + data.error + ")");
-                    console.error(data.details || "Failed to delete post. (" + data.error + ")");
-                } else {
-                    var post = document.getElementById("post-" + postId);
-                    post.innerHTML = "[ Deleted ]";
-    
-                    var buttons = post.parentElement.getElementsByClassName("post-buttons");
-                    if (buttons) {
-                        for (var i = 0; i < buttons.length; i++) {
-                            buttons[i].remove();
-                        }
-                    }
+        
+        var url = "/forum/{{ forum.id }}/topics/{{ topic.id }}/posts/" + postId;
+
+        performApiRequest("DELETE", url, null, function(xhr) {
+            var post = document.getElementById("post-" + postId);
+            post.innerHTML = "[ Deleted ]";
+            
+            var buttons = post.parentElement.getElementsByClassName("post-buttons");
+            if (buttons) {
+                for (var i = 0; i < buttons.length; i++) {
+                    buttons[i].remove();
                 }
             }
-        };
-        xhr.send();
+        }, function(xhr) {
+            var data = JSON.parse(xhr.responseText);
+            alert(data.details || "Failed to delete post. (" + data.error + ")");
+        });
         return false;
     }
     
     function giveKudos(postId, beatmapsetId) {
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "/api/beatmaps/" + beatmapsetId + "/kudosu/" + postId + "/reward", true);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.send('csrf_token=' + csrfToken);
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4) {
-                var data = JSON.parse(xhr.responseText);
-                if (data.error) {
-                    alert(data.details || "Failed to give kudosu. (" + data.error + ")");
-                    console.error(data.details || "Failed to give kudosu. (" + data.error + ")");
-                } else {
-                    var kudosuStatus = document.getElementById("kudosu-status-" + postId);
-                    var kudosuActions = kudosuStatus.parentElement.getElementsByTagName("a");
+        performApiRequest("POST", "/beatmapsets/" + beatmapsetId + "/kudosu/" + postId + "/reward", null, function(xhr) {
+            var data = JSON.parse(xhr.responseText);
+            var kudosuStatus = document.getElementById("kudosu-status-" + postId);
+            var kudosuActions = kudosuStatus.parentElement.getElementsByTagName("a");
     
-                    while (kudosuActions[0]) {
-                        kudosuActions[0].parentNode.removeChild(kudosuActions[0]);
-                    }
-    
-                    kudosuStatus.innerText = "Earned " + data.amount + " kudosu.";
-                    kudosuStatus.style.color = "green";
-                }
+            while (kudosuActions[0]) {
+                kudosuActions[0].parentNode.removeChild(kudosuActions[0]);
             }
-        };
-        xhr.send();
+    
+            kudosuStatus.innerText = "Earned " + data.amount + " kudosu.";
+            kudosuStatus.style.color = "green";
+        }, function(xhr) {
+            var data = JSON.parse(xhr.responseText);
+            alert(data.details || "Failed to give kudosu. (" + data.error + ")");
+        });
         return false;
     }
-    
+
     function revokeKudos(postId, beatmapsetId) {
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "/api/beatmaps/" + beatmapsetId + "/kudosu/" + postId + "/revoke", true);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.send('csrf_token=' + csrfToken);
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4) {
-                var data = JSON.parse(xhr.responseText);
-                if (data.error) {
-                    alert(data.details || "Failed to revoke kudosu. (" + data.error + ")");
-                    console.error(data.details || "Failed to revoke kudosu. (" + data.error + ")");
-                } else {
-                    var kudosuStatus = document.getElementById("kudosu-status-" + postId);
-                    var kudosuActions = kudosuStatus.parentElement.getElementsByTagName("a");
+        performApiRequest("POST", "/beatmapsets/" + beatmapsetId + "/kudosu/" + postId + "/revoke", null, function(xhr) {
+            var kudosuStatus = document.getElementById("kudosu-status-" + postId);
+            var kudosuActions = kudosuStatus.parentElement.getElementsByTagName("a");
     
-                    while (kudosuActions[0]) {
-                        kudosuActions[0].parentNode.removeChild(kudosuActions[0]);
-                    }
-    
-                    kudosuStatus.innerText = "Successfully revoked kudosu.";
-                    kudosuStatus.style.color = "red";
-                }
+            while (kudosuActions[0]) {
+                kudosuActions[0].parentNode.removeChild(kudosuActions[0]);
             }
-        };
-        xhr.send();
+    
+            kudosuStatus.innerText = "Successfully revoked kudosu.";
+            kudosuStatus.style.color = "red";
+        }, function(xhr) {
+            var data = JSON.parse(xhr.responseText);
+            alert(data.details || "Failed to revoke kudosu. (" + data.error + ")");
+        });
         return false;
     }
-    
+
     function resetKudos(postId, beatmapsetId) {
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "/api/beatmaps/" + beatmapsetId + "/kudosu/" + postId + "/reset", true);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.send('csrf_token=' + csrfToken);
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4) {
-                var data = JSON.parse(xhr.responseText);
-                if (data.error) {
-                    alert(data.details || "Failed to reset kudosu. (" + data.error + ")");
-                    console.error(data.details || "Failed to reset kudosu. (" + data.error + ")");
-                } else {
-                    var kudosuStatus = document.getElementById("kudosu-status-" + postId);
-                    var kudosuActions = kudosuStatus.parentElement.getElementsByTagName("a");
-    
-                    while (kudosuActions[0]) {
-                        kudosuActions[0].parentNode.removeChild(kudosuActions[0]);
-                    }
-    
-                    kudosuStatus.innerText = "Successfully reset kudosu.";
-                    kudosuStatus.style.color = "blue";
-                }
+        performApiRequest("POST", "/beatmapsets/" + beatmapsetId + "/kudosu/" + postId + "/reset", null, function(xhr) {
+            var kudosuStatus = document.getElementById("kudosu-status-" + postId);
+            var kudosuActions = kudosuStatus.parentElement.getElementsByTagName("a");
+
+            while (kudosuActions[0]) {
+                kudosuActions[0].parentNode.removeChild(kudosuActions[0]);
             }
-        };
-        xhr.send();
+
+            kudosuStatus.innerText = "Successfully reset kudosu.";
+            kudosuStatus.style.color = "blue";
+        }, function (xhr) {
+            var data = JSON.parse(xhr.responseText);
+            alert(data.details || "Failed to reset kudosu. (" + data.error + ")");
+        });
         return false;
-    }    
+    }
 
     function jumpToPage() {
         var page = prompt("Enter the page to jump to:")

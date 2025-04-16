@@ -14,24 +14,15 @@ router = Blueprint('beatmap', __name__)
 @router.get('/<id>')
 def get_beatmap(id: int):
     if not id.isdigit():
-        return abort(
-            code=404,
-            description=app.constants.BEATMAP_NOT_FOUND
-        )
+        return utils.render_error(404, 'beatmap_not_found')
 
     with app.session.database.managed_session() as session:
         if not (beatmap := beatmaps.fetch_by_id(id, session)):
-            return abort(
-                code=404,
-                description=app.constants.BEATMAP_NOT_FOUND
-            )
+            return utils.render_error(404, 'beatmap_not_found')
 
         if beatmap.status <= -3:
             # Beatmap is inactive
-            return abort(
-                code=404,
-                description=app.constants.BEATMAP_NOT_FOUND
-            )
+            return utils.render_error(404, 'beatmap_not_found')
 
         if not (mode := request.args.get('mode')):
             mode = beatmap.mode
@@ -99,5 +90,6 @@ def get_beatmap(id: int):
                 if current_user.is_authenticated else None
             ),
             nominations=nominations.fetch_by_beatmapset(beatmap.set_id, session),
-            canonical_url=f'/s/{beatmap.set_id}'
+            canonical_url=f'/b/{beatmap.beatmapset.beatmaps[0].id}',
+            session=session
         )

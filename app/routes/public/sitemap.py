@@ -49,7 +49,7 @@ class Sitemap:
             datetime.now() - self.last_modified
         )
 
-        if time_since_refresh > self.refresh_interval and self.entries:
+        if time_since_refresh < self.refresh_interval and self.entries:
             return
 
         self.entries = self.generator()
@@ -75,26 +75,28 @@ class Sitemap:
 def get_main_sites() -> List[SitemapEntry]:
     return [
         SitemapEntry('/', 1.0),
-        SitemapEntry('/download/', 1.0),
-        SitemapEntry('/beatmapsets/', 1.0),
-        SitemapEntry('/forum/', 1.0),
-        SitemapEntry('/rankings/osu/performance', 1.0),
-        SitemapEntry('/rankings/osu/country', 0.9),
-        SitemapEntry('/rankings/osu/rscore', 0.9),
-        SitemapEntry('/rankings/osu/tscore', 0.9),
-        SitemapEntry('/rankings/osu/ppv1', 0.9),
-        SitemapEntry('/rankings/osu/clears', 0.9),
+        SitemapEntry('/download/', 0.9),
+        SitemapEntry('/beatmapsets/', 0.9),
+        SitemapEntry('/forum/', 0.9),
+        SitemapEntry('/account/register', 0.8),
+        SitemapEntry('/account/login', 0.8),
+        SitemapEntry('/rankings/osu/performance', 0.8),
+        SitemapEntry('/rankings/osu/country', 0.7),
+        SitemapEntry('/rankings/osu/rscore', 0.6),
+        SitemapEntry('/rankings/osu/tscore', 0.5),
+        SitemapEntry('/rankings/osu/ppv1', 0.4),
+        SitemapEntry('/rankings/osu/clears', 0.4),
     ]
 
 def get_top_users() -> List[SitemapEntry]:
     top_users = [
         user.id
-        for user in users.fetch_top(1000)
+        for user in users.fetch_recent(2000)
         if user.activated
     ]
 
     return [
-        SitemapEntry(f'/u/{user_id}', 0.5, 'hourly')
+        SitemapEntry(f'/u/{user_id}', 0.3, 'daily')
         for user_id in top_users
     ]
 
@@ -104,7 +106,7 @@ def get_forums() -> List[SitemapEntry]:
         site_forums.sort()
 
     return [
-        SitemapEntry(f'/forum/{forum_id}', 0.8, 'hourly')
+        SitemapEntry(f'/forum/{forum_id}', 0.7, 'hourly')
         for forum_id in site_forums
     ]
 
@@ -124,7 +126,7 @@ def get_most_played_beatmaps() -> List[SitemapEntry]:
     ]
 
     return [
-        SitemapEntry(f'/s/{beatmapset_id}', 0.4, 'hourly')
+        SitemapEntry(f'/s/{beatmapset_id}', 0.3, 'weekly')
         for beatmapset_id in most_played_beatmaps
     ]
 
@@ -144,11 +146,19 @@ def get_recent_beatmaps() -> List[SitemapEntry]:
     ]
 
     return [
-        SitemapEntry(f'/s/{beatmapset_id}', 0.3, 'hourly')
+        SitemapEntry(f'/s/{beatmapset_id}', 0.3, 'daily')
         for beatmapset_id in recent_beatmaps
     ]
 
 router = Blueprint('sitemap', __name__)
+
+def register_sitemap_url(entry: Sitemap) -> None:
+    view_func = lambda entry=entry: Response(entry.render(), mimetype='application/xml')
+    view_func.__name__ = f'sitemap_{entry.generator.__name__}'
+    router.add_url_rule(
+        entry.location,
+        view_func=view_func
+    )
 
 popular_beatmaps_sitemap = Sitemap('/sitemap/beatmaps/popular.xml', get_most_played_beatmaps)
 recent_beatmaps_sitemap = Sitemap('/sitemap/beatmaps/recent.xml', get_recent_beatmaps)
@@ -167,13 +177,7 @@ index_sitemap = SitemapIndex(
 
 if config.DOMAIN_NAME in ('titanic.sh', 'localhost'):
     for entry in index_sitemap.sitemaps:
-        view_func = lambda entry=entry: Response(entry.render(), mimetype='application/xml')
-        view_func.__name__ = f'sitemap_{entry.generator.__name__}'
-
-        router.add_url_rule(
-            entry.location,
-            view_func=view_func
-        )
+        register_sitemap_url(entry)
 
     @router.get('/sitemap.xml')
     def sitemap_xml():

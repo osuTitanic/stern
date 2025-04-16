@@ -1,9 +1,12 @@
 
 from __future__ import annotations
-from sqlalchemy.orm import Session
-from datetime import datetime, timedelta
+from typing import Tuple
+
+from flask import request, current_app, abort, Response
 from flask import render_template as _render_template
-from flask import request
+from datetime import datetime, timedelta
+from jinja2 import TemplateNotFound
+from sqlalchemy.orm import Session
 from PIL import Image
 
 from app.common.database.repositories import wrapper
@@ -62,7 +65,8 @@ def render_template(template_name: str, **context) -> str:
         context.update({
             'notification_count': notifications.fetch_count(
                 flask_login.current_user.id,
-                read=False
+                read=False,
+                session=context.get('session')
             )
         })
 
@@ -70,6 +74,44 @@ def render_template(template_name: str, **context) -> str:
         template_name,
         **context
     )
+
+def render_error(
+    code: int,
+    type: str | None = None,
+    description: str | None = None
+) -> Response:
+    """Render error page with custom template if available"""
+    template_name = (
+        f'errors/default/{code}.html' if type is None else
+        f'errors/custom/{type}.html'
+    )
+
+    if not template_exists(template_name):
+        # Render default error page
+        return abort(code)
+
+    content = render_template(
+        template_name,
+        css='error.css',
+        title=f'{description or code} - Titanic!',
+        site_title=f'{description or code} - Titanic!',
+        site_description='An error has occurred.',
+        status_code=code
+    )
+
+    return Response(
+        content,
+        status=code,
+        mimetype='text/html'
+    )
+
+def template_exists(template_name: str) -> bool:
+    """Check if a template exists"""
+    try:
+        current_app.jinja_env.get_template(template_name)
+        return True
+    except TemplateNotFound:
+        return False
 
 @caching.ttl_cache(ttl=900)
 def fetch_average_topic_views() -> int:

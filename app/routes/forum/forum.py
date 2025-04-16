@@ -12,23 +12,14 @@ router = Blueprint("forum", __name__)
 @router.get('/<forum_id>')
 def forum_view(forum_id: int):
     if not forum_id.isdigit():
-        return abort(
-            code=404,
-            description=app.constants.FORUM_NOT_FOUND
-        )
+        return utils.render_error(404, 'forum_not_found')
 
     with app.session.database.managed_session() as session:
         if not (forum := forums.fetch_by_id(forum_id, session)):
-            return abort(
-                code=404,
-                description=app.constants.FORUM_NOT_FOUND
-            )
+            return utils.render_error(404, 'forum_not_found')
 
         if forum.hidden:
-            return abort(
-                code=404,
-                description=app.constants.FORUM_NOT_FOUND
-            )
+            return utils.render_error(404, 'forum_not_found')
 
         if not forum.parent_id:
             # Forum can be viewed on front-page

@@ -35,13 +35,13 @@ def userpage(query: str):
             if name := names.fetch_by_name_extended(query, session):
                 return redirect(f'/u/{name.user_id}')
 
-            return abort(404)
+            return utils.render_error(404, 'user_not_found')
 
         if not (user := users.fetch_by_id(int(query), session=session)):
-            return abort(404)
+            return utils.render_error(404, 'user_not_found')
 
         if not user.activated:
-            return abort(404)
+            return utils.render_error(404, 'user_not_found')
 
         if not (mode := request.args.get('mode')):
             mode = user.preferred_mode
@@ -130,10 +130,11 @@ def userpage(query: str):
             site_url=f"{config.OSU_BASEURL}/u/{user.id}",
             canonical_url=f"/u/{user.id}",
             beatmapset_categories=beatmapset_categories,
-            pp_rank=pp_rank,
             pp_rank_country=pp_rank_country,
-            score_rank=score_rank,
+            pp_rank=pp_rank,
             score_rank_country=score_rank_country,
+            score_rank=score_rank,
             ppv1_rank=ppv1_rank,
-            infringements=infs
+            infringements=infs,
+            session=session
         )

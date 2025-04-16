@@ -44,7 +44,8 @@ def root() -> Response:
                 for announcement in announcements
             ],
             most_played=plays.fetch_most_played(session=session),
-            messages=messages.fetch_recent(session=session)
+            messages=messages.fetch_recent(session=session),
+            session=session
         )
 
 # Redirect index.* to root
