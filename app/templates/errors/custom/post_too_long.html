@@ -1,0 +1,14 @@
+{# templates/errors/custom/post_too_long.html #}
+
+{% set title = "Post too long - Titanic!" %}
+{% set site_title = "Post too long - Titanic!" %}
+
+{% extends 'errors/base.html' %}
+
+{% block error_content %}
+<img src="/images/art/ffffff.png" alt="Error Image">
+<div class="description">
+    <h1>Your post is too long!</h1>
+    Please limit your post to 15000 characters or less.
+</div>
+{% endblock error_content %}

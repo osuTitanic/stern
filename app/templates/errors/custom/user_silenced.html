@@ -1,0 +1,13 @@
+{# templates/errors/custom/user_silenced.html #}
+
+{% set title = "You are silenced - Titanic!" %}
+{% set site_title = "You are silenced - Titanic!" %}
+
+{% extends 'errors/base.html' %}
+
+{% block error_content %}
+<img src="/images/art/ffffff.png" alt="Error Image">
+<div class="description">
+    <h1>You are not allowed to make posts while silenced.</h1>
+</div>
+{% endblock error_content %}
