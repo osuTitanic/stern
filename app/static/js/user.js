@@ -372,11 +372,14 @@ function loadLeaderScores(userId, mode, limit, offset) {
             loadingText.remove();
         }
 
-        if (scores.length <= 0) {
+        if (data.total <= 0) {
             var noScoresText = document.createElement("p");
             noScoresText.innerText = "No first place records currently :(";
             scoreContainer.appendChild(noScoresText);
             return;
+        }
+        else {
+            document.getElementById('leader-scores')[0].innerText = 'First Place Ranks (' + data.total.toLocaleString() + ')';
         }
 
         for (var i = 0; i < scores.length; i++) {
