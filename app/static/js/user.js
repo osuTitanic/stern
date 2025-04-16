@@ -247,7 +247,7 @@ function loadPinnedScores(userId, mode) {
             return;
         }
         else {
-            document.getElementById('pinned-scores')[0].innerText = 'Pinned Scores (' + data.total.toLocaleString() + ')';
+            document.getElementById('pinned-scores').innerHTML = 'Pinned Scores (' + data.total.toLocaleString() + ')';
         }
 
         for (var index = 0; index < scores.length; index++) {
@@ -295,7 +295,7 @@ function loadTopPlays(userId, mode, limit, offset) {
             return;
         }
         else {
-            document.getElementById('top-scores')[0].innerText = 'Best Performance (' + data.total.toLocaleString() + ')';
+            document.getElementById('top-scores').innerText = 'Best Performance (' + data.total.toLocaleString() + ')';
         }
 
         for (var index = 0; index < scores.length; index++) {
@@ -382,7 +382,7 @@ function loadLeaderScores(userId, mode, limit, offset) {
             return;
         }
         else {
-            document.getElementById('leader-scores')[0].innerText = 'First Place Ranks (' + data.total.toLocaleString() + ')';
+            document.getElementById('leader-scores').innerText = 'First Place Ranks (' + data.total.toLocaleString() + ')';
         }
 
         for (var i = 0; i < scores.length; i++) {
