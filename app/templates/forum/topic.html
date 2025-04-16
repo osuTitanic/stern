@@ -334,29 +334,23 @@
     function deletePost(postId) {
         if (!confirm('Are you sure you want to delete this post?'))
             return;
-    
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", "/api/forum/posts/" + postId + "/delete", true);
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4) {
-                var data = JSON.parse(xhr.responseText);
-                if (data.error) {
-                    alert(data.details || "Failed to delete post. (" + data.error + ")");
-                    console.error(data.details || "Failed to delete post. (" + data.error + ")");
-                } else {
-                    var post = document.getElementById("post-" + postId);
-                    post.innerHTML = "[ Deleted ]";
-    
-                    var buttons = post.parentElement.getElementsByClassName("post-buttons");
-                    if (buttons) {
-                        for (var i = 0; i < buttons.length; i++) {
-                            buttons[i].remove();
-                        }
-                    }
+        
+        var url = "/forum/{{ forum.id }}/topics/{{ topic.id }}/posts/" + postId;
+
+        performApiRequest("DELETE", url, null, function(xhr) {
+            var post = document.getElementById("post-" + postId);
+            post.innerHTML = "[ Deleted ]";
+            
+            var buttons = post.parentElement.getElementsByClassName("post-buttons");
+            if (buttons) {
+                for (var i = 0; i < buttons.length; i++) {
+                    buttons[i].remove();
                 }
             }
-        };
-        xhr.send();
+        }, function(xhr) {
+            var data = JSON.parse(xhr.responseText);
+            alert(data.details || "Failed to delete post. (" + data.error + ")");
+        });
         return false;
     }
     
