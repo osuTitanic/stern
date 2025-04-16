@@ -78,7 +78,7 @@ def render_template(template_name: str, **context) -> str:
                 template_name,
                 **context
             ),
-            context.get('status_code', 200)
+            status_code
         )
     else:
         return _render_template(
