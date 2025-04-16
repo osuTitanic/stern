@@ -253,6 +253,7 @@
 
 .gamemode-button {
     display: inline-block;
+    background: #e7e4fc;
     border: solid 2px #978cd0;
     border-radius: 5px;
     font-size: 110%;
