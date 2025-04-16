@@ -26,6 +26,7 @@ def userpage(query: str):
     query = query.strip()
 
     with app.session.database.managed_session() as session:
+        found = True
         if not query.isdigit():
             # Searching for username based on user query
             if user := users.fetch_by_name_extended(query, session):
@@ -35,13 +36,24 @@ def userpage(query: str):
             if name := names.fetch_by_name_extended(query, session):
                 return redirect(f'/u/{name.user_id}')
 
-            return abort(404)
+            found = False
 
-        if not (user := users.fetch_by_id(int(query), session=session)):
-            return abort(404)
+        else if not (user := users.fetch_by_id(int(query), session=session)):
+            found = False
 
-        if not user.activated:
-            return abort(404)
+        else if not user.activated:
+            found = False
+
+        if not found:
+            return utils.render_template(
+                template_name='error-user-not-found.html',
+                css='error-user-not-found.css',
+                title='User not found! - Titanic',
+                site_title='User not found!',
+                site_description='The user searched for was not found.'
+                session=session,
+                status_code=404
+            )
 
         if not (mode := request.args.get('mode')):
             mode = user.preferred_mode
