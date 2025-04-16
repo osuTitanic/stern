@@ -240,12 +240,16 @@ function loadPinnedScores(userId, mode) {
         // Reset container
         scoreContainer.innerHTML = "<h2>Pinned Scores</h2>";
 
-        if (scores.length <= 0) {
+        if (data.total <= 0) {
             scoreContainer.appendChild(
                 document.createTextNode("This player has not pinned any scores yet :(")
             );
             return;
         }
+
+        // Update total score count
+        var heading = document.getElementById('pinned-scores').getElementsByTagName('h2')[0];
+        heading.innerHTML = 'Pinned Scores (' + data.total.toLocaleString() + ')'
 
         for (var index = 0; index < scores.length; index++) {
             var score = scores[index];
@@ -258,8 +262,6 @@ function loadPinnedScores(userId, mode) {
 
         slideDown(document.getElementById("leader"));
     }, function(xhr) {
-        console.error("Error loading pinned scores:", xhr.status);
-
         var errorText = document.createElement("p");
         errorText.innerText = "Failed to load pinned scores.";
         errorText.classList.add("score");
@@ -287,12 +289,16 @@ function loadTopPlays(userId, mode, limit, offset) {
             loadingText.remove();
         }
 
-        if (scores.length <= 0 && offset <= 0) {
+        if (data.total <= 0) {
             var noScoresText = document.createElement("p");
             noScoresText.innerText = "No awesome performance records yet :(";
             scoreContainer.appendChild(noScoresText);
             return;
         }
+
+        // Update total score count
+        var heading = document.getElementById('top-scores').getElementsByTagName('h2')[0];
+        heading.innerHTML = 'Best Performance (' + data.total.toLocaleString() + ')';
 
         for (var index = 0; index < scores.length; index++) {
             var score = scores[index];
@@ -341,7 +347,6 @@ function loadTopPlays(userId, mode, limit, offset) {
 
         slideDown(document.getElementById("leader"));
     }, function(xhr) {
-        console.error("Error loading top scores:", error);
         var errorText = document.createElement("p");
         errorText.innerText = "Failed to load top plays.";
         errorText.classList.add("score");
@@ -372,12 +377,16 @@ function loadLeaderScores(userId, mode, limit, offset) {
             loadingText.remove();
         }
 
-        if (scores.length <= 0) {
+        if (data.total <= 0) {
             var noScoresText = document.createElement("p");
             noScoresText.innerText = "No first place records currently :(";
             scoreContainer.appendChild(noScoresText);
             return;
         }
+
+        // Update total score count
+        var heading = document.getElementById('leader-scores').getElementsByTagName('h2')[0]
+        heading.innerText = 'First Place Ranks (' + data.total.toLocaleString() + ')';
 
         for (var i = 0; i < scores.length; i++) {
             var scoreDiv = createScoreElement(scores[i], i, "leader");
@@ -420,7 +429,6 @@ function loadLeaderScores(userId, mode, limit, offset) {
 
         slideDown(document.getElementById("leader"));
     }, function(xhr) {
-        console.error("Error loading leader scores:", xhr.status);
         var errorText = document.createElement("p");
         errorText.innerText = "Failed to load first place ranks.";
         errorText.classList.add("score");
