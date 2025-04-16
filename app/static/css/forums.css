@@ -255,9 +255,9 @@
 .group:focus,
 .group:active {
     text-decoration: none;
-    background-color: #f5f2ff;
+    background-color: #fefdff;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.20);
-    text-shadow: 0 0 1px;
+    text-shadow: 0 0 0.6px;
     transition: all 0.1s ease-in-out;
 }
 
