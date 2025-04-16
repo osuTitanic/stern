@@ -413,6 +413,7 @@
     font-weight: bold;
     box-shadow: 0 0 40px 5px #ffda00;
     border-right: 2px solid #ffa10d;
+    text-align: right;
 }
 
 .profile-ranks {
