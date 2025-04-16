@@ -93,7 +93,7 @@
                 <div class="login-container">
                 {% if current_user.id %}
                     <span class="nav-login" id="welcome-text">
-                        Welcome, <a href="/u/{{ current_user.id }}">{{ current_user.name }}</a>
+                        Welcome, <b><a href="/u/{{ current_user.id }}">{{ current_user.name }}</a></b>
                     </span>
                     <a href="/account/settings/profile#avatar" style="height: 25px">
                         <img class="small-avatar" src="/a/{{ current_user.id }}?s=25" alt="">
