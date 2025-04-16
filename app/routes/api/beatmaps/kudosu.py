@@ -1,14 +1,12 @@
 
 from __future__ import annotations
-from typing import Tuple
-
 from app.common.database import beatmapsets, posts, modding
 from app.common.constants import DatabaseStatus
 from app.models.kudosu import KudosuModel
 
 from flask_login import current_user, login_required
-from datetime import datetime, timedelta
 from flask_pydantic import validate
+from datetime import timedelta
 from flask import Blueprint
 
 import app

@@ -1,9 +1,7 @@
 
-from app.common.database import beatmapsets, beatmaps, topics, posts
-from app.common.constants import BeatmapLanguage, BeatmapGenre
-
-from flask import Blueprint, abort, redirect, request
+from app.common.database import beatmapsets, beatmaps
 from flask_login import current_user, login_required
+from flask import Blueprint, abort, redirect
 from flask_pydantic import validate
 
 import hashlib
@@ -11,54 +9,7 @@ import app
 
 router = Blueprint('beatmap-updates', __name__)
 
-@router.post('/update/')
-@login_required
-def bat_update():
-    if not current_user.is_bat:
-        return abort(code=401)
-
-    if not (set_id := request.form.get('beatmapset_id')):
-        return abort(code=400)
-
-    with app.session.database.managed_session() as session:
-        if not (beatmapset := beatmapsets.fetch_one(set_id, session)):
-            return redirect(f'/s/{set_id}')
-
-        global_offset = request.form.get('offset', 0, type=int)
-        tags = request.form.get('tags', '')
-
-        language_id = request.form.get('language', type=int) or 1
-        genre_id = request.form.get('genre', type=int) or 1
-
-        display_title = (
-            request.form.get('display_title')
-            or f"[bold:0,size:20]{beatmapset.artist}|[]{beatmapset.title}"
-        )
-
-        if language_id not in BeatmapLanguage.values():
-            return abort(code=400)
-        
-        if genre_id not in BeatmapGenre.values():
-            return abort(code=400)
-
-        beatmapsets.update(
-            beatmapset.id,
-            {
-                'offset': global_offset,
-                'display_title': display_title,
-                'language_id': language_id,
-                'genre_id': genre_id,
-                'tags': tags
-            },
-            session=session
-        )
-
-        app.session.logger.info(
-            f'{current_user.name} updated beatmap metadata for "{beatmapset.full_name}".'
-        )
-
-    return redirect(f'/s/{set_id}')
-
+# TODO: Move hash update endpoint to new API
 @router.get('/update/<set_id>/hashes')
 @login_required
 def update_hashes(set_id: int):
@@ -90,55 +41,19 @@ def update_hashes(set_id: int):
 
     return redirect(f'/s/{beatmapset.id}')
 
+@router.post('/update/')
+@login_required
+def metadata_update():
+    return {
+        'error': 501,
+        'details': 'This endpoint is deprecated, please use the new API instead.'
+    }
+
 @router.post('/update/<set_id>/description')
 @login_required
 @validate()
 def update_description(set_id: int):
-    with app.session.database.managed_session() as session:
-        if not (beatmapset := beatmapsets.fetch_one(set_id, session)):
-            return redirect(f'/s/{set_id}')
-
-        if current_user.id != beatmapset.creator_id:
-            return redirect(f'/s/{set_id}')
-
-        description = request.form.get('description', '')
-
-        beatmapsets.update(
-            beatmapset.id,
-            {'description': description},
-            session=session
-        )
-
-        app.session.logger.info(
-            f'{current_user.name} updated description for "{beatmapset.full_name}".'
-        )
-
-        beatmap_topic = topics.fetch_one(
-            beatmapset.topic_id,
-            session=session
-        )
-
-        if not beatmap_topic:
-            return redirect(f'/s/{set_id}')
-
-        initial_post = posts.fetch_initial_post(
-            beatmap_topic.id,
-            session=session
-        )
-
-        if not initial_post:
-            return redirect(f'/s/{set_id}')
-
-        if '---------------' not in initial_post.content.splitlines():
-            return redirect(f'/s/{set_id}')
-
-        metadata, _ = initial_post.content.split('---------------', 1)
-
-        # Update forum topic content with new description
-        posts.update(
-            initial_post.id,
-            {'content': f'{metadata}---------------\n{description}'},
-            session=session
-        )
-
-    return redirect(f'/s/{set_id}')
+    return {
+        'error': 501,
+        'details': 'This endpoint is deprecated, please use the new API instead.'
+    }

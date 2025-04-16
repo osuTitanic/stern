@@ -7,6 +7,7 @@ router = Blueprint('beatmap-nuking', __name__)
 @router.get('/<set_id>/nuke')
 @login_required
 def nuke_beatmap(set_id: int):
-    # This endpoint is deprecated, please use the new API instead
-    # https://docs.titanic.sh
-    return abort(code=501)
+    return {
+        'error': 501,
+        'details': 'This endpoint is deprecated, please use the new API instead.'
+    }
