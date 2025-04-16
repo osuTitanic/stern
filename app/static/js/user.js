@@ -261,8 +261,6 @@ function loadPinnedScores(userId, mode) {
 
         slideDown(document.getElementById("leader"));
     }, function(xhr) {
-        console.error("Error loading pinned scores:", xhr.status);
-
         var errorText = document.createElement("p");
         errorText.innerText = "Failed to load pinned scores.";
         errorText.classList.add("score");
@@ -347,7 +345,6 @@ function loadTopPlays(userId, mode, limit, offset) {
 
         slideDown(document.getElementById("leader"));
     }, function(xhr) {
-        console.error("Error loading top scores:", error);
         var errorText = document.createElement("p");
         errorText.innerText = "Failed to load top plays.";
         errorText.classList.add("score");
@@ -429,7 +426,6 @@ function loadLeaderScores(userId, mode, limit, offset) {
 
         slideDown(document.getElementById("leader"));
     }, function(xhr) {
-        console.error("Error loading leader scores:", xhr.status);
         var errorText = document.createElement("p");
         errorText.innerText = "Failed to load first place ranks.";
         errorText.classList.add("score");
