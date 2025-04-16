@@ -74,7 +74,7 @@ def render_template(template_name: str, **context) -> str:
             status_code = 200
         
         return make_response(
-            render_template(
+            _render_template(
                 template_name,
                 **context
             ),
