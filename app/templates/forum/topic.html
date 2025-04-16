@@ -186,7 +186,7 @@
                     <td class="post-content-wrapper">
                         <div style="background-color: #ebe8ff;">
                             <div class="post-time">
-                                <a href="#" title="{{ post.created_at }}" style="line-height: 18px">
+                                <a href="#post-{{ post.id }}" title="{{ post.created_at }}" style="line-height: 18px">
                                     {{ post.created_at|timeago }}
                                 </a>
                                 {% if post.icon %}
