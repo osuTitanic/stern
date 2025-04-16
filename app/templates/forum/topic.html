@@ -355,88 +355,59 @@
     }
     
     function giveKudos(postId, beatmapsetId) {
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "/api/beatmaps/" + beatmapsetId + "/kudosu/" + postId + "/reward", true);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.send('csrf_token=' + csrfToken);
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4) {
-                var data = JSON.parse(xhr.responseText);
-                if (data.error) {
-                    alert(data.details || "Failed to give kudosu. (" + data.error + ")");
-                    console.error(data.details || "Failed to give kudosu. (" + data.error + ")");
-                } else {
-                    var kudosuStatus = document.getElementById("kudosu-status-" + postId);
-                    var kudosuActions = kudosuStatus.parentElement.getElementsByTagName("a");
+        performApiRequest("POST", "/beatmapsets/" + beatmapsetId + "/kudosu/" + postId + "/reward", null, function(xhr) {
+            var data = JSON.parse(xhr.responseText);
+            var kudosuStatus = document.getElementById("kudosu-status-" + postId);
+            var kudosuActions = kudosuStatus.parentElement.getElementsByTagName("a");
     
-                    while (kudosuActions[0]) {
-                        kudosuActions[0].parentNode.removeChild(kudosuActions[0]);
-                    }
-    
-                    kudosuStatus.innerText = "Earned " + data.amount + " kudosu.";
-                    kudosuStatus.style.color = "green";
-                }
+            while (kudosuActions[0]) {
+                kudosuActions[0].parentNode.removeChild(kudosuActions[0]);
             }
-        };
-        xhr.send();
+    
+            kudosuStatus.innerText = "Earned " + data.amount + " kudosu.";
+            kudosuStatus.style.color = "green";
+        }, function(xhr) {
+            var data = JSON.parse(xhr.responseText);
+            alert(data.details || "Failed to give kudosu. (" + data.error + ")");
+        });
         return false;
     }
-    
+
     function revokeKudos(postId, beatmapsetId) {
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "/api/beatmaps/" + beatmapsetId + "/kudosu/" + postId + "/revoke", true);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.send('csrf_token=' + csrfToken);
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4) {
-                var data = JSON.parse(xhr.responseText);
-                if (data.error) {
-                    alert(data.details || "Failed to revoke kudosu. (" + data.error + ")");
-                    console.error(data.details || "Failed to revoke kudosu. (" + data.error + ")");
-                } else {
-                    var kudosuStatus = document.getElementById("kudosu-status-" + postId);
-                    var kudosuActions = kudosuStatus.parentElement.getElementsByTagName("a");
+        performApiRequest("POST", "/beatmapsets/" + beatmapsetId + "/kudosu/" + postId + "/revoke", null, function(xhr) {
+            var kudosuStatus = document.getElementById("kudosu-status-" + postId);
+            var kudosuActions = kudosuStatus.parentElement.getElementsByTagName("a");
     
-                    while (kudosuActions[0]) {
-                        kudosuActions[0].parentNode.removeChild(kudosuActions[0]);
-                    }
-    
-                    kudosuStatus.innerText = "Successfully revoked kudosu.";
-                    kudosuStatus.style.color = "red";
-                }
+            while (kudosuActions[0]) {
+                kudosuActions[0].parentNode.removeChild(kudosuActions[0]);
             }
-        };
-        xhr.send();
+    
+            kudosuStatus.innerText = "Successfully revoked kudosu.";
+            kudosuStatus.style.color = "red";
+        }, function(xhr) {
+            var data = JSON.parse(xhr.responseText);
+            alert(data.details || "Failed to revoke kudosu. (" + data.error + ")");
+        });
         return false;
     }
-    
+
     function resetKudos(postId, beatmapsetId) {
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "/api/beatmaps/" + beatmapsetId + "/kudosu/" + postId + "/reset", true);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.send('csrf_token=' + csrfToken);
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4) {
-                var data = JSON.parse(xhr.responseText);
-                if (data.error) {
-                    alert(data.details || "Failed to reset kudosu. (" + data.error + ")");
-                    console.error(data.details || "Failed to reset kudosu. (" + data.error + ")");
-                } else {
-                    var kudosuStatus = document.getElementById("kudosu-status-" + postId);
-                    var kudosuActions = kudosuStatus.parentElement.getElementsByTagName("a");
-    
-                    while (kudosuActions[0]) {
-                        kudosuActions[0].parentNode.removeChild(kudosuActions[0]);
-                    }
-    
-                    kudosuStatus.innerText = "Successfully reset kudosu.";
-                    kudosuStatus.style.color = "blue";
-                }
+        performApiRequest("POST", "/beatmapsets/" + beatmapsetId + "/kudosu/" + postId + "/reset", null, function(xhr) {
+            var kudosuStatus = document.getElementById("kudosu-status-" + postId);
+            var kudosuActions = kudosuStatus.parentElement.getElementsByTagName("a");
+
+            while (kudosuActions[0]) {
+                kudosuActions[0].parentNode.removeChild(kudosuActions[0]);
             }
-        };
-        xhr.send();
+
+            kudosuStatus.innerText = "Successfully reset kudosu.";
+            kudosuStatus.style.color = "blue";
+        }, function (xhr) {
+            var data = JSON.parse(xhr.responseText);
+            alert(data.details || "Failed to reset kudosu. (" + data.error + ")");
+        });
         return false;
-    }    
+    }
 
     function jumpToPage() {
         var page = prompt("Enter the page to jump to:")
