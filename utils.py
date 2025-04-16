@@ -3,6 +3,7 @@ from __future__ import annotations
 from sqlalchemy.orm import Session
 from datetime import datetime, timedelta
 from flask import render_template as _render_template
+from flask import make_response
 from flask import request
 from PIL import Image
 
@@ -67,10 +68,23 @@ def render_template(template_name: str, **context) -> str:
             )
         })
 
-    return _render_template(
-        template_name,
-        **context
-    )
+    if 'status_code' in context:
+        status_code = context.get('status_code', 200)
+        if type(status_code) != int: # Status code must be an int
+            status_code = 200
+        
+        return make_response(
+            render_template(
+                template_name,
+                **context
+            ),
+            context.get('status_code', 200)
+        )
+    else:
+        return _render_template(
+            template_name,
+            **context
+        )
 
 @caching.ttl_cache(ttl=900)
 def fetch_average_topic_views() -> int:
