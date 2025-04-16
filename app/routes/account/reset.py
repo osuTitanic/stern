@@ -92,9 +92,9 @@ def password_reset_request():
     if not (user := users.fetch_by_email(email)):
         return return_to_reset_page('We could not find any user with that email address.')
     
-    lock = app.session.redis.get(f'reset_lock:{user.id}') or 0
+    lock = app.session.redis.get(f'reset_lock:{user.id}') or b'0'
 
-    if lock:
+    if int(lock):
         return return_to_reset_page(
             'You have already requested a password reset recently. '
             'Please check your emails, or try again in a few hours!'
