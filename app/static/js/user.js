@@ -240,11 +240,14 @@ function loadPinnedScores(userId, mode) {
         // Reset container
         scoreContainer.innerHTML = "<h2>Pinned Scores</h2>";
 
-        if (scores.length <= 0) {
+        if (data.total <= 0) {
             scoreContainer.appendChild(
                 document.createTextNode("This player has not pinned any scores yet :(")
             );
             return;
+        }
+        else {
+            document.getElementById('pinned-scores')[0].innerText = 'Pinned Scores (' + data.total.toLocaleString() + ')';
         }
 
         for (var index = 0; index < scores.length; index++) {
@@ -287,7 +290,7 @@ function loadTopPlays(userId, mode, limit, offset) {
             loadingText.remove();
         }
 
-        if (scores.total <= 0) {
+        if (data.total <= 0) {
             var noScoresText = document.createElement("p");
             noScoresText.innerText = "No awesome performance records yet :(";
             scoreContainer.appendChild(noScoresText);
