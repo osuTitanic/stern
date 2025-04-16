@@ -108,6 +108,13 @@ def on_http_exception(error: HTTPException) -> Tuple[str, int]:
             details=error.description or error.name
         ), error.code
 
+    if utils.template_exists(f'errors/default/{error.code}.html'):
+        # Use error page override for this status code
+        return utils.render_error(
+            code=error.code,
+            description=error.description
+        )
+
     return utils.render_template(
         template_name='errors/base.html',
         content=error.description,
