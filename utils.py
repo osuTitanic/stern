@@ -80,6 +80,7 @@ def render_error(
     type: str | None = None,
     description: str | None = None
 ) -> Response:
+    """Render error page with custom template if available"""
     template_name = (
         f'errors/default/{code}.html' if type is None else
         f'errors/custom/{type}.html'
@@ -105,6 +106,7 @@ def render_error(
     )
 
 def template_exists(template_name: str) -> bool:
+    """Check if a template exists"""
     try:
         current_app.jinja_env.get_template(template_name)
         return True
