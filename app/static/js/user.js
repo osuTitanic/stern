@@ -287,11 +287,14 @@ function loadTopPlays(userId, mode, limit, offset) {
             loadingText.remove();
         }
 
-        if (scores.length <= 0 && offset <= 0) {
+        if (scores.total <= 0) {
             var noScoresText = document.createElement("p");
             noScoresText.innerText = "No awesome performance records yet :(";
             scoreContainer.appendChild(noScoresText);
             return;
+        }
+        else {
+            document.getElementById('top-scores')[0].innerText = 'Best Performance (' + data.total.toLocaleString() + ')';
         }
 
         for (var index = 0; index < scores.length; index++) {
