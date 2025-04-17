@@ -1051,7 +1051,7 @@ function toggleBeatmapContainer(section) {
 }
 
 addEvent('DOMContentLoaded', document, function(event) {
-    var beatmapContainers = document.querySelectorAll('.profile-beatmaps-container');
+    var beatmapContainers = document.getElementsByClassName('profile-beatmaps-container');
     for (var i = 0; i < beatmapContainers.length; i++) {
         beatmapContainers[i].style.display = 'none';
     }
