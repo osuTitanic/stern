@@ -56,7 +56,8 @@ parser.add_simple_formatter(
 parser.add_simple_formatter(
     'video',
     '<video src="%(value)s" controls></video>',
-    replace_links=False
+    replace_links=False,
+    render_embedded=False
 )
 
 @parser.formatter('box')
