@@ -77,11 +77,8 @@ def render_profile(tag_name, value, options, parent, context):
     profile = sanitize_input(options.get('profile', value))
     return '<a href="%s/u/%s">%s</a>' % (config.OSU_BASEURL, profile, value)
 
-@parser.formatter('youtube')
+@parser.formatter('youtube', render_embedded=False, replace_links=False)
 def render_youtube_embed(tag_name, value, options, parent, context):
-    # Formatter may convert youtube links to url tags
-    value = value.replace('</a>', '')
-
     # Filter out video ID
     value = (
         value.split('/')[-1]
@@ -98,7 +95,7 @@ def render_youtube_embed(tag_name, value, options, parent, context):
         'referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' % value
     )
 
-@parser.formatter('google')
+@parser.formatter('google', render_embedded=False)
 def render_google(tag_name, value, options, parent, context):
     return '<a href="https://letmegooglethat.com/?q=%s" target="_blank">%s</a>' % (value, value)
 
@@ -147,7 +144,7 @@ def render_list(tag_name, value, options, parent, context):
 
     return '<ul>%s</ul>' % value
 
-@parser.formatter('email')
+@parser.formatter('email', render_embedded=False)
 def render_email(tag_name, value, options, parent, context):
     email = sanitize_input(
         options.get('email')
