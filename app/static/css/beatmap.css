@@ -322,7 +322,7 @@
 .scores .row-dark:hover,
 .scores .row-score-self:hover,
 .scores .row-score-friend:hover {
-    background-color: white;
+    background-color: #e7f6ff;
     cursor: pointer;
 }
 

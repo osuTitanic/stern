@@ -152,12 +152,24 @@ function createScoreElement(score, index, type) {
     var dateDiv = document.createElement("div");
     dateDiv.appendChild(dateText);
 
+    var replayLink = document.createElement("a");
+    replayLink.href = "/scores/" + score.id + "/download";
+    replayLink.className = "score-replay";
+    replayLink.title = "Download Replay";
+    replayLink.target = "_blank";
+
+    var replayIcon = document.createElement("i");
+    replayIcon.className = "fa-regular fa-download";
+    replayLink.appendChild(replayIcon);
+
+    iconContainer.appendChild(replayLink);
+
     if (currentUser === userId) {
         var pinIcon = document.createElement("i");
         pinIcon.className = "fa-regular fa-star score-pin-" + score.id;
 
         if (!score.pinned) {
-            pinIcon.className += " score-pin-icon"; // Append className
+            pinIcon.className += " score-pin-icon";
             pinIcon.title = "Pin Score";
             pinIcon.onclick = function() {
                 var icons = document.querySelectorAll(".score-pin-" + score.id);
@@ -175,7 +187,7 @@ function createScoreElement(score, index, type) {
                 };
             };
         } else {
-            pinIcon.className += " score-pinned-icon"; // Append className
+            pinIcon.className += " score-pinned-icon";
             pinIcon.title = "Unpin Score";
             pinIcon.onclick = function() {
                 var icons = document.querySelectorAll(".score-pin-" + score.id);
@@ -195,18 +207,6 @@ function createScoreElement(score, index, type) {
         }
 
         iconContainer.appendChild(pinIcon);
-    } else {
-        var replayLink = document.createElement("a");
-        replayLink.href = "/scores/" + score.id + "/download";
-        replayLink.className = "score-replay";
-        replayLink.title = "Download Replay";
-        replayLink.target = "_blank";
-
-        var replayIcon = document.createElement("i");
-        replayIcon.className = "fa-regular fa-star";
-        replayLink.appendChild(replayIcon);
-
-        iconContainer.appendChild(replayLink);
     }
 
     ppWeight.appendChild(iconContainer);
