@@ -510,8 +510,10 @@
     color: #9492dc;
     text-shadow: #b5c6cb 2px 0px 3px;
     padding-right: 5px;
-    width: 55px;
+    width: 52px;
     margin-left: auto;
+    padding-bottom: 4px;
+    line-height: 18px;
 }
 
 .score-icon-container {
