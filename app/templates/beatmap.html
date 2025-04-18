@@ -640,15 +640,15 @@
         <tbody>
         {% for score in scores %}
             {% if current_user.is_authenticated %}
-            {% if current_user.id == score.user.id %}
-            <tr class="row-score-self" id="{{ score.id }}">
-            {% elif score.user_id in friends %}
-            <tr class="row-score-friend" id="{{ score.id }}"></tr>
-            {% elif loop.index0 % 2 %}
-            <tr class="row-light" id="{{ score.id }}">
-            {% else %}
-            <tr class="row-dark" id="{{ score.id }}">
-            {% endif %}
+                {% if current_user.id == score.user.id %}
+                <tr class="row-score-self" id="{{ score.id }}">
+                {% elif score.user_id in friends %}
+                <tr class="row-score-friend" id="{{ score.id }}"></tr>
+                {% elif loop.index0 % 2 %}
+                <tr class="row-light" id="{{ score.id }}">
+                {% else %}
+                <tr class="row-dark" id="{{ score.id }}">
+                {% endif %}
             {% elif loop.index0 % 2 %}
             <tr class="row-light" id="{{ score.id }}">
             {% else %}
