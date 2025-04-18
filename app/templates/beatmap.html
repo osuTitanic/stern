@@ -656,9 +656,9 @@
                 </td>
                 <td>
                     {% if score.acc == 1 %}
-                    <strong>{{ (score.acc * 100)|round(2) }}%</strong>
+                    <strong>{{ "{:,.2f}".format(score.acc * 100) }}%</strong>
                     {% else %}
-                    {{ (score.acc * 100)|round(2) }}%
+                    {{ "{:,.2f}".format(score.acc * 100) }}%
                     {% endif %}
                 </td>
                 <td>
