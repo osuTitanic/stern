@@ -46,7 +46,7 @@ def get_beatmap(id: int):
                 session=session
             )
 
-            friends_query = relationships.fetch_target_ids()
+            friends = relationships.fetch_target_ids(current_user.id, session=session)
 
         beatmap.beatmapset.beatmaps.sort(
             key=lambda x: x.diff
