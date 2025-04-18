@@ -29,7 +29,7 @@ def get_beatmap(id: int):
 
         personal_best = None
         personal_best_rank = None
-        friends_ids = []
+        friend_ids = []
 
         if current_user.is_authenticated:
             personal_best = scores.fetch_personal_best_score(
@@ -46,7 +46,7 @@ def get_beatmap(id: int):
                 session=session
             )
 
-            friends_ids = relationships.fetch_target_ids(
+            friend_ids = relationships.fetch_target_ids(
                 current_user.id,
                 session=session
             )
@@ -97,6 +97,6 @@ def get_beatmap(id: int):
             ),
             nominations=nominations.fetch_by_beatmapset(beatmap.set_id, session),
             canonical_url=f'/b/{beatmap.beatmapset.beatmaps[0].id}',
-            friends=friends_ids,
+            friends=friend_ids,
             session=session
         )
