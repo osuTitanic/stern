@@ -268,6 +268,14 @@
     background-color: #e3e1fa;
 }
 
+.row-score-self {
+    background-color: #dcfcb9;
+}
+
+.row-score-friend {
+    background-color: #fdcd9f;
+}
+
 .row-grade {
     text-align: center;
     height: 100%;
@@ -299,16 +307,21 @@
 .scores td {
     height: 15px;
     vertical-align: middle;
-    padding: 2px;
-    padding-top: 2.5px;
+    padding: 2.8px;
 }
 
 .scores img {
-    vertical-align: middle;
+    vertical-align: top;
+}
+
+.scores .flag {
+    vertical-align: baseline;
 }
 
 .scores .row-light:hover,
-.scores .row-dark:hover {
+.scores .row-dark:hover,
+.scores .row-score-self:hover,
+.scores .row-score-friend:hover {
     background-color: #e7f6ff;
     cursor: pointer;
 }

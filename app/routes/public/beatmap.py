@@ -1,8 +1,8 @@
 
+from app.common.database import beatmaps, scores, favourites, nominations, relationships
 from app.common.constants import BeatmapLanguage, BeatmapGenre, DatabaseStatus, Mods
-from app.common.database import beatmaps, scores, favourites, nominations
 
-from flask import Blueprint, request, abort
+from flask import Blueprint, request
 from flask_login import current_user
 
 import config
@@ -29,6 +29,7 @@ def get_beatmap(id: int):
 
         personal_best = None
         personal_best_rank = None
+        friend_ids = []
 
         if current_user.is_authenticated:
             personal_best = scores.fetch_personal_best_score(
@@ -42,6 +43,11 @@ def get_beatmap(id: int):
                 current_user.id,
                 beatmap.id,
                 int(mode),
+                session=session
+            )
+
+            friend_ids = relationships.fetch_target_ids(
+                current_user.id,
                 session=session
             )
 
@@ -91,5 +97,6 @@ def get_beatmap(id: int):
             ),
             nominations=nominations.fetch_by_beatmapset(beatmap.set_id, session),
             canonical_url=f'/b/{beatmap.beatmapset.beatmaps[0].id}',
+            friends=friend_ids,
             session=session
         )
