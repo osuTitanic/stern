@@ -1,8 +1,8 @@
 
+from app.common.database import beatmaps, scores, favourites, nominations, relationships
 from app.common.constants import BeatmapLanguage, BeatmapGenre, DatabaseStatus, Mods
-from app.common.database import beatmaps, scores, favourites, nominations
 
-from flask import Blueprint, request, abort
+from flask import Blueprint, request
 from flask_login import current_user
 
 import config
@@ -46,7 +46,10 @@ def get_beatmap(id: int):
                 session=session
             )
 
-            friends = relationships.fetch_target_ids(current_user.id, session=session)
+            friends = relationships.fetch_target_ids(
+                current_user.id,
+                session=session
+            )
 
         beatmap.beatmapset.beatmaps.sort(
             key=lambda x: x.diff
