@@ -312,7 +312,11 @@
 }
 
 .scores img {
-    vertical-align: middle;
+    vertical-align: top;
+}
+
+.scores .flag {
+    vertical-align: baseline;
 }
 
 .scores .row-light:hover,
