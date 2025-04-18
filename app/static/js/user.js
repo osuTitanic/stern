@@ -162,9 +162,9 @@ function createScoreElement(score, index, type) {
 
     clientTextVersion.innerText = 'Unknown';
     if (typeof(score.client_version) == 'string') {
-        clientTextVersion.innerText = 'Version: ' + score.client_version;
+        clientTextVersion.innerText = 'Version: b' + score.client_version;
     } else if (typeof(score.client_version) == 'number') {
-        clientTextVersion.innerText = 'Version: ' + score.client_version.toString();
+        clientTextVersion.innerText = 'Version: b' + score.client_version.toString();
     }
 
     clientText.appendChild(clientTextVersion);
