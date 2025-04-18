@@ -638,7 +638,6 @@
             </tr>
         </thead>
         <tbody>
-        {# TODO: Highlight row if user is friend #}
         {% for score in scores %}
             {% if current_user.is_authenticated %}
             {% if current_user.id == score.user.id %}
