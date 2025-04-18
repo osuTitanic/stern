@@ -32,13 +32,27 @@ def search_beatmap():
         order=request.args.get('order', default=BeatmapOrder.Descending, type=int)
     )
 
+@router.get('/beatmaps/<id>')
+def redirect_to_map(id: int):
+    return redirect(f'/b/{id}')
+
 @router.get('/beatmapsets/<id>')
 def redirect_to_set(id: int):
     return redirect(f'/s/{id}')
 
-@router.get('/beatmaps/<id>')
-def redirect_to_map(id: int):
-    return redirect(f'/b/{id}')
+@router.get('/beatmapsets/<set_id>/discussion/<map_id>')
+@router.get('/beatmapsets/<set_id>/discussion/')
+def redirect_to_discussion(set_id: int, map_id: int = None):
+    if not set_id.isdigit():
+        return utils.render_error(404, 'beatmap_not_found')
+
+    if not (set := beatmapsets.fetch_one(set_id)):
+        return utils.render_error(404, 'beatmap_not_found')
+
+    if not set.topic_id:
+        return redirect(f'/s/{set.id}')
+
+    return redirect(f'/forum/t/{set.topic_id}')
 
 @router.get('/beatmapsets/download/<id>')
 def download_beatmapset(id: int):
