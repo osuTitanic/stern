@@ -309,7 +309,7 @@
 
 .scores .row-light:hover,
 .scores .row-dark:hover {
-    background-color: white;
+    background-color: #e7f6ff;
     cursor: pointer;
 }
 
