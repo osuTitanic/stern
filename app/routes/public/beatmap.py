@@ -99,7 +99,6 @@ def get_beatmap(id: int):
             ),
             nominations=nominations.fetch_by_beatmapset(beatmap.set_id, session),
             canonical_url=f'/b/{beatmap.beatmapset.beatmaps[0].id}',
-            ,
             friends=friends,
             session=session
         )
