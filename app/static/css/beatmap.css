@@ -313,6 +313,13 @@
     cursor: pointer;
 }
 
+.score-flag-link,
+.score-flag-link:hover,
+.score-flag-link:focus,
+.score-flag-link:active {
+    text-decoration: none;
+}
+
 .bat-controls {
     margin: 5px;
 }
