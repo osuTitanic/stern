@@ -307,8 +307,9 @@
     vertical-align: middle;
 }
 
-.scores tr:hover {
-    background-color: #fde1ff;
+.scores .row-light:hover,
+.scores .row-dark:hover {
+    background-color: #e7f6ff;
     cursor: pointer;
 }
 
