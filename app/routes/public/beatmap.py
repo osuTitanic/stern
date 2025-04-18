@@ -29,6 +29,7 @@ def get_beatmap(id: int):
 
         personal_best = None
         personal_best_rank = None
+        friends = []
 
         if current_user.is_authenticated:
             personal_best = scores.fetch_personal_best_score(
@@ -43,6 +44,10 @@ def get_beatmap(id: int):
                 beatmap.id,
                 int(mode),
                 session=session
+            )
+
+            friends = relationships.fetch_users(
+                flask_login.current_user.id
             )
 
         beatmap.beatmapset.beatmaps.sort(
@@ -91,5 +96,7 @@ def get_beatmap(id: int):
             ),
             nominations=nominations.fetch_by_beatmapset(beatmap.set_id, session),
             canonical_url=f'/b/{beatmap.beatmapset.beatmaps[0].id}',
+            ,
+            friends=friends,
             session=session
         )
