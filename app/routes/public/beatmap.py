@@ -46,9 +46,12 @@ def get_beatmap(id: int):
                 session=session
             )
 
-            friends = relationships.fetch_users(
+            friends_query = relationships.fetch_users(
                 flask_login.current_user.id
             )
+
+            for user in friends_query:
+                friends.append(user.id)
 
         beatmap.beatmapset.beatmaps.sort(
             key=lambda x: x.diff
