@@ -301,12 +301,7 @@ function loadTopPlays(userId, mode, limit, offset) {
         heading.innerHTML = 'Best Performance (' + data.total.toLocaleString() + ')';
 
         for (var index = 0; index < scores.length; index++) {
-            var score = scores[index];
-            if (score.beatmap.status > 2 && !approvedRewards) {
-                continue;
-            }
-
-            var scoreDiv = createScoreElement(score, index, "top");
+            var scoreDiv = createScoreElement(scores[index], index, "top");
             scoreContainer.appendChild(scoreDiv);
         }
         topScoreOffset += scores.length;
