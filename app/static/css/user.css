@@ -514,6 +514,10 @@
     margin-left: auto;
 }
 
+.score-version {
+    display: inline;
+}
+
 .score-icon-container {
     float: right;
     margin-left: 2.5px;
