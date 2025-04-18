@@ -104,7 +104,7 @@
 </div>
 {% endif %}
 
-{% if beatmapset and beatmapset.creator_id != current_user.id %}
+{% if beatmapset and beatmapset.creator_id != current_user.id and beatmapset.status < 1 %}
 <div style="font-size: 90%; padding: 5px; margin-top: 6px">
     You will gain <b>{{ 1 if datetime.now() - topic.last_post_at < timedelta(days=7) else 2 }} kudosu</b>
     for this post if it is deemed as helpful by the map's creator.
