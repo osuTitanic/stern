@@ -144,18 +144,20 @@ function createScoreElement(score, index, type) {
     scoreInfoDiv.appendChild(scoreGrade);
     scoreInfoDiv.appendChild(scoreInfo);
     scoreInfoDiv.appendChild(accuracyText);
+    
+    var scoreBottomDiv = document.createElement("div");
+
+    // Score's Date
+    var dateText = document.createElement("time");
+    dateText.setAttribute("datetime", score.submitted_at);
+    dateText.innerText = score.submitted_at;
+    dateText.title = scoreDateString;
+    dateText.className = "timeago";
 
     // Score's Client Version
-    var scoreBottomDiv = document.createElement("div");
     var clientText = document.createElement('div');
     clientText.classList.add('score-version');
-    
-    var clientTextIcon = document.createElement('i');
-    clientTextIcon.classList.add('fa');
-    clientTextIcon.classList.add('fa-desktop');
-    clientTextIcon.classList.add('score-version-icon');
-
-    clientText.appendChild(clientTextIcon);
+    clientText.innerHTML += ' &mdash; on ';
 
     var clientTextVersion = document.createElement('span');
     clientTextVersion.classList.add('score-version-number');
@@ -168,18 +170,8 @@ function createScoreElement(score, index, type) {
     }
 
     clientText.appendChild(clientTextVersion);
-    clientText.innerHTML += ' &mdash;';
-
-    scoreBottomDiv.appendChild(clientText);
-
-    // Score's Date
-    var dateText = document.createElement("time");
-    dateText.setAttribute("datetime", score.submitted_at);
-    dateText.innerText = score.submitted_at;
-    dateText.title = scoreDateString;
-    dateText.className = "timeago";
-    
     scoreBottomDiv.appendChild(dateText);
+    scoreBottomDiv.appendChild(clientText);
 
     if (currentUser === userId) {
         var pinIcon = document.createElement("i");
