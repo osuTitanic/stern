@@ -154,24 +154,28 @@ function createScoreElement(score, index, type) {
     dateText.title = scoreDateString;
     dateText.className = "timeago";
 
-    // Score's Client Version
-    var clientText = document.createElement('div');
-    clientText.classList.add('score-version');
-    clientText.innerHTML += ' &mdash; on ';
-
-    var clientTextVersion = document.createElement('span');
-    clientTextVersion.classList.add('score-version-number');
-
-    clientTextVersion.innerText = 'Unknown';
-    if (typeof(score.client_version) == 'string') {
-        clientTextVersion.innerText = 'Version: ' + score.client_version;
-    } else if (typeof(score.client_version) == 'number') {
-        clientTextVersion.innerText = 'Version: b' + score.client_version.toString();
-    }
-
-    clientText.appendChild(clientTextVersion);
     scoreBottomDiv.appendChild(dateText);
-    scoreBottomDiv.appendChild(clientText);
+
+    // Score's Client Version
+    var versionText = false;
+    if (typeof(score.client_version) == 'string') {
+        versionText = score.client_version;
+    } else if (typeof(score.client_version) == 'number') {
+        versionText = score.client_version.toString();
+    }
+    
+    if (versionText != false) {
+        var clientText = document.createElement('div');
+        clientText.classList.add('score-version');
+        clientText.innerHTML += ' &mdash; on ';
+    
+        var clientTextVersion = document.createElement('span');
+        clientTextVersion.classList.add('score-version-number');
+        clientTextVersion.innerText = versionText;
+
+        clientText.appendChild(clientTextVersion);
+        scoreBottomDiv.appendChild(clientText);
+    }
 
     if (currentUser === userId) {
         var pinIcon = document.createElement("i");
