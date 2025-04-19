@@ -109,6 +109,12 @@
             {% endif %}
         </div>
         <div class="userpage-stats">
+            {% if followers > 0 %}
+            <div class="activity activity-followers">
+                <i class="fa-solid fa-user" style="color: #76777b;"></i>
+                <p>{{ "{:,}".format(followers) }} followers</p>
+            </div>
+            {% endif %}
             <div title="Arrived ({{ user.created_at.strftime('%Y-%m-%d %H:%M:%S') }})" class="activity">
                 <i class="fa-solid fa-right-to-bracket" style="color: #76777b;"></i>
                 <p>{{ user.created_at|timeago }}</p>

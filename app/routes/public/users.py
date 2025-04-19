@@ -58,6 +58,11 @@ def userpage(query: str):
                 session=session
             )
 
+        followers = relationships.fetch_count_by_target(
+            user.id,
+            session=session
+        )
+
         pp_rank = leaderboards.global_rank(user.id, int(mode))
         pp_rank_country = leaderboards.country_rank(user.id, int(mode), user.country)
         score_rank = leaderboards.score_rank(user.id, int(mode))
@@ -122,6 +127,7 @@ def userpage(query: str):
             nominations=nominations.fetch_by_user(user.id, session=session),
             activity=activities.fetch_recent(user.id, int(mode), session=session),
             current_stats=stats.fetch_by_mode(user.id, int(mode), session=session),
+            followers=followers,
             total_posts=users.fetch_post_count(user.id, session=session),
             groups=groups.fetch_user_groups(user.id, session=session),
             site_title=f"{user.name} - Player Info",
