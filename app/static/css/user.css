@@ -331,15 +331,16 @@
 
 .tab-content {
     transition: all .5s ease;
-    background-color: white;
     overflow: hidden;
+    background-color: white;
     font-size: 80%;
     z-index: 0;
-}
-
-.expanded {
     transition: all .5s ease;
     position: relative;
+}
+
+.tab-content.expanded {
+    overflow: visible;
 }
 
 .tab-spacing {
