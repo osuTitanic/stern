@@ -27,7 +27,6 @@ function expandProfileTab(id, forceExpand) {
 
     // Check for 'expanded' class
     if (tab.className.indexOf("expanded") === -1 || forceExpand) {
-        tab.className += " expanded";
         tab.style.display = "block";
 
         if (tab.style.height === "0px") {
@@ -37,6 +36,9 @@ function expandProfileTab(id, forceExpand) {
         if (forceExpand) {
             window.location.hash = "#" + activeTab;
         }
+
+        // Apply class after slide animation is done
+        setTimeout(function() { tab.className += " expanded" }, 500);
     } else {
         slideUp(tab);
         tab.className = tab.className.replace(/(?:^|\s)expanded(?!\S)/, '');
