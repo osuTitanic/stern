@@ -1,7 +1,7 @@
 
 from app.common.database import forums, topics, posts
-
 from flask import Blueprint, abort, redirect, request
+from datetime import datetime, timedelta
 
 import utils
 import math
@@ -49,11 +49,16 @@ def forum_view(forum_id: int):
             session=session
         )
 
+        pinned_timestamp = datetime.now()
+
         # Merge pinned topics with recent topics and
-        # sort by id in descending order
+        # sort by last post in descending order
         recent_topics = sorted(
             set(pinned_topics + recent_topics),
-            key=lambda topic: math.inf if topic.pinned else topic.last_post_at,
+            key=lambda topic: (
+                pinned_timestamp + topic.last_post_at
+                if topic.pinned else topic.last_post_at
+            ),
             reverse=True
         )
 
