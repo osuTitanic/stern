@@ -140,7 +140,7 @@
                 <b>#{{ rank_offset + loop.index0 + 1 }}</b>
             </td>
             <td>
-                <a href="/rankings/{{ constants.GameMode(mode).alias }}/{{ order_type }}?country={{ player.country|lower }}">
+                <a class="ranking-flag-link" href="/rankings/{{ constants.GameMode(mode).alias }}/{{ order_type }}?country={{ player.country|lower }}">
                     <img src="/images/flags/{{ player.country|lower }}.gif" class="flag" alt="" loading="eager">
                 </a>
                 <a href="/u/{{ player.id }}">{{ player.name }}</a>

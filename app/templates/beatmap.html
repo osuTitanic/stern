@@ -671,7 +671,7 @@
                     {% endif %}
                 </td>
                 <td>
-                    <a href="/rankings/{{ constants.GameMode(beatmap.mode).alias }}/performance?country={{ score.user.country }}">
+                    <a class='score-flag-link' href="/rankings/{{ constants.GameMode(beatmap.mode).alias }}/performance?country={{ score.user.country }}">
                         <img src="/images/flags/{{ score.user.country|lower }}.gif" loading="lazy" alt="{{ score.user.country }} Flag" class="flag">
                     </a>
                     <a href="/u/{{ score.user.id }}">{{ score.user.name }}</a>
