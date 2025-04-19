@@ -161,7 +161,7 @@ function createScoreElement(score, index, type) {
     if (typeof(score.client_version) == 'string') {
         versionText = score.client_version;
     } else if (typeof(score.client_version) == 'number') {
-        versionText = score.client_version.toString();
+        versionText = "b" + score.client_version.toString();
     }
     
     if (versionText != false) {
