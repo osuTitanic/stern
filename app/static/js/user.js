@@ -105,11 +105,7 @@ function createScoreElement(score, index, type) {
         }
     );
 
-    var dateText = document.createElement("time");
-    dateText.setAttribute("datetime", score.submitted_at);
-    dateText.innerText = score.submitted_at;
-    dateText.title = scoreDateString;
-    dateText.className = "timeago";
+    
 
     var rightColumn = document.createElement("td");
     rightColumn.className = 'score-right';
@@ -148,9 +144,38 @@ function createScoreElement(score, index, type) {
     scoreInfoDiv.appendChild(scoreGrade);
     scoreInfoDiv.appendChild(scoreInfo);
     scoreInfoDiv.appendChild(accuracyText);
+    
+    var scoreBottomDiv = document.createElement("div");
 
-    var dateDiv = document.createElement("div");
-    dateDiv.appendChild(dateText);
+    // Score's Date
+    var dateText = document.createElement("time");
+    dateText.setAttribute("datetime", score.submitted_at);
+    dateText.innerText = score.submitted_at;
+    dateText.title = scoreDateString;
+    dateText.className = "timeago";
+
+    scoreBottomDiv.appendChild(dateText);
+
+    // Score's Client Version
+    var versionText = false;
+    if (typeof(score.client_version) == 'string') {
+        versionText = score.client_version;
+    } else if (typeof(score.client_version) == 'number') {
+        versionText = "b" + score.client_version.toString();
+    }
+    
+    if (versionText != false) {
+        var clientText = document.createElement('div');
+        clientText.classList.add('score-version');
+        clientText.innerHTML += ' &mdash; on ';
+    
+        var clientTextVersion = document.createElement('span');
+        clientTextVersion.classList.add('score-version-number');
+        clientTextVersion.innerText = versionText;
+
+        clientText.appendChild(clientTextVersion);
+        scoreBottomDiv.appendChild(clientText);
+    }
 
     var replayLink = document.createElement("a");
     replayLink.href = "/scores/" + score.id + "/download";
@@ -211,7 +236,7 @@ function createScoreElement(score, index, type) {
 
     ppWeight.appendChild(iconContainer);
     leftColumn.appendChild(scoreInfoDiv);
-    leftColumn.appendChild(dateDiv);
+    leftColumn.appendChild(scoreBottomDiv);
     rightColumn.appendChild(ppDisplay);
     rightColumn.appendChild(ppWeight);
     tableRow.appendChild(leftColumn);
