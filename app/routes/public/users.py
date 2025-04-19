@@ -1,5 +1,6 @@
 
 from app.common.database.repositories import (
+    relationships,
     infringements,
     nominations,
     beatmapsets,
@@ -127,7 +128,6 @@ def userpage(query: str):
             nominations=nominations.fetch_by_user(user.id, session=session),
             activity=activities.fetch_recent(user.id, int(mode), session=session),
             current_stats=stats.fetch_by_mode(user.id, int(mode), session=session),
-            followers=followers,
             total_posts=users.fetch_post_count(user.id, session=session),
             groups=groups.fetch_user_groups(user.id, session=session),
             site_title=f"{user.name} - Player Info",
@@ -141,6 +141,7 @@ def userpage(query: str):
             score_rank_country=score_rank_country,
             score_rank=score_rank,
             ppv1_rank=ppv1_rank,
+            followers=followers,
             infringements=infs,
             session=session
         )
