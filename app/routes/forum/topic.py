@@ -127,6 +127,9 @@ def topic(forum_id: str, id: str):
             session=session
         )
 
+        if not initial_post:
+            return utils.render_error(404, 'topic_not_found')
+
         if initial_post in topic_posts:
             # Override icon for initial post
             topic_posts[0].icon = topic.icon
