@@ -162,7 +162,7 @@ function createScoreElement(score, index, type) {
     // Score's Client Version
     var versionText = false;
     if (typeof(score.client_version) == 'string') {
-        versionText = 'b' + score.client_version;
+        versionText = score.client_version; // If it's a string, b will already be prepended
     } else if (typeof(score.client_version) == 'number') {
         versionText = "b" + score.client_version.toString();
     }
