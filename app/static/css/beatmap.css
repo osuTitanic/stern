@@ -353,6 +353,10 @@
     line-height: 25px;
 }
 
+.bat-controls dd textarea {
+    max-width: 400px;
+}
+
 .bat-diffs {
     display: flex;
     flex-wrap: wrap;
