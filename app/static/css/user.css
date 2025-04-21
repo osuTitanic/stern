@@ -517,8 +517,13 @@
     line-height: 18px;
 }
 
+.score-bottom time {
+    margin-right: 0;
+}
+
 .score-version {
     display: inline;
+    margin-left: 0;
 }
 
 .score-icon-container {

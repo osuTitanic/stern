@@ -147,7 +147,8 @@ function createScoreElement(score, index, type) {
     scoreInfoDiv.appendChild(scoreInfo);
     scoreInfoDiv.appendChild(accuracyText);
     
-    var scoreBottomDiv = document.createElement("div");
+    var scoreBottomDiv = document.createElement('div');
+    scoreBottomDiv.classList.add('score-bottom');
 
     // Score's Date
     var dateText = document.createElement("time");
@@ -161,7 +162,7 @@ function createScoreElement(score, index, type) {
     // Score's Client Version
     var versionText = false;
     if (typeof(score.client_version) == 'string') {
-        versionText = score.client_version;
+        versionText = score.client_version; // If it's a string, b will already be prepended
     } else if (typeof(score.client_version) == 'number') {
         versionText = "b" + score.client_version.toString();
     }
@@ -179,7 +180,7 @@ function createScoreElement(score, index, type) {
         scoreBottomDiv.appendChild(clientText);
     }
 
-    var replayLink = document.createElement("a");
+    var replayLink = document.createElement('a');
     replayLink.href = "/scores/" + score.id + "/download";
     replayLink.className = "score-replay";
     replayLink.title = "Download Replay";
