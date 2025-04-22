@@ -315,6 +315,12 @@
     cursor: pointer;
 }
 
+.profile-tabs td:hover,
+.profile-tabs td:focus,
+.profile-tabs td:active {
+    background:#dae4ff;
+}
+
 .tab-heading {
     border-bottom: 1px solid #4a4a4a;
     border-top: 1px solid #4a4a4a;
@@ -517,8 +523,13 @@
     line-height: 18px;
 }
 
+.score-bottom time {
+    margin-right: 0;
+}
+
 .score-version {
     display: inline;
+    margin-left: 0;
 }
 
 .score-icon-container {
