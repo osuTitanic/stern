@@ -730,7 +730,10 @@
                         {% if infringements %}
                         <p style="color: red">
                             {{ user.name }}'s account is not in good standing :(
-                            {# TODO #}
+                            {% if current_user.id == user.id %}
+                            <br/>
+                            <br/>Your account could be permanently disabled if you continue to cause problems. Please make sure to follow the <a href='/wiki/en/Rules'>community rules</a>! Note that infringements will disappear after four weeks of good behaviour.
+                            {% endif %}
                         </p>
                         {% else %}
                         <p>
