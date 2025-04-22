@@ -102,6 +102,7 @@ def render_google(tag_name, value, options, parent, context):
 @parser.formatter('url')
 def render_link(tag_name, value, options, parent, context):
     url = sanitize_input(unquote(options.get('url', '')))
+    url = url.removeprefix('javascript:')
     return '<a href="%s" target="_blank">%s</a>' % (url, value)
 
 @parser.formatter('quote')
