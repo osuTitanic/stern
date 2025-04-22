@@ -283,6 +283,12 @@
                         </div>
                         <div class="profile-graph" id="rank-graph">
                             <svg></svg>
+                            <div class="rank-graph-display-type-settings">
+                                <input type="radio" class="rank-graph-display-type-radio" id="rank-graph-step" name="rank-graph-display-type" value="Step" onchange="onChangeRankGraphDisplayType(this)">
+                                <label class="rank-graph-display-type-label" for="rank-graph-step">Step</label>
+                                <input type="radio" class="rank-graph-display-type-radio" id="rank-graph-linear" name="rank-graph-display-type" value="Linear" onchange="onChangeRankGraphDisplayType(this)">
+                                <label class="rank-graph-display-type-label" for="rank-graph-linear">Linear</label>
+                            </div>
                         </div>
                         <div class="profile-recent">
                             <h3 class="profile-stats-header">Recent Activity</h3>

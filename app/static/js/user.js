@@ -702,6 +702,15 @@ function resetUserPerformanceGraph () {
     $('#rank-graph svg')[0].innerHTML = '';
 }
 
+function onChangeRankGraphDisplayType (sender) {
+    // To-do: cookies, or save it as a user preference.
+    if (sender.value == 'Step') {
+        loadUserPerformanceGraph(userId, mode, false);
+    } else if (sender.value == 'Linear') {
+        loadUserPerformanceGraph(userId, mode, true);
+    }
+}
+
 function loadUserPerformanceGraph(userId, mode, use_linear) {
     if (use_linear == undefined || use_linear == null) {
         use_linear = false;

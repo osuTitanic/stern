@@ -395,10 +395,15 @@
     margin-top: 10px;
     margin-bottom: 10px;
     display: block;
+    text-align: right;
 }
 
 .profile-graph svg {
     height: 160px;
+}
+
+.rank-graph-display-type-settings {
+    padding-right: 42px;
 }
 
 .profile-stats-element {
