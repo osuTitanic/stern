@@ -82,8 +82,7 @@ a:hover {
 }
 
 .avatar img {
-    vertical-align: middle;
-    display: flex;
+    display: block;
     margin: 0 auto;
 }
 
