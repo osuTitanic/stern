@@ -149,6 +149,13 @@
     <table width='100%'>
         <tbody>
             <tr>
+                {% if current_user.is_authenticated %}
+                <td align="left" style="float: left">
+                    <div class="post-buttons-large" style="margin-left: 0;">
+                        <a href="/forum/{{ forum.id }}/create" class="button-blue"><i class="fa fa-edit"></i> New Topic</a>
+                    </div>
+                </td>
+                {% endif %}
                 {% if total_pages > 0 %}
                 <td align="right" style="float: right">
                     <a onclick="jumpToPage();">Jump</a> |
@@ -183,15 +190,6 @@
                 </td>
                 {% endif %}
             </tr>
-            {% if current_user.is_authenticated %}
-            <tr>
-                <td align="left" style="float: left">
-                    <div class="post-buttons-large" style="margin-left: 0;">
-                        <a href="/forum/{{ forum.id }}/create" class="button-blue"><i class="fa fa-edit"></i> New Topic</a>
-                    </div>
-                </td>
-            </tr>
-            {% endif %}
         </tbody>
     </table>
 </div>
