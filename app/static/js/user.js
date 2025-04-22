@@ -579,43 +579,34 @@ function loadRecentPlays(userId, mode) {
     loadingText.parentNode.removeChild(loadingText);
 }
 
-function processRankEntries (entries, var_name, use_linear) {
-    if (use_linear == undefined || use_linear == null) {
-        use_linear = false;
-    }
+function processRankEntries (entries, var_name) {
+    var best_entry_by_date = [];
+    var current_date = null;
+    var best = null;
 
-    var mapped_entry_array = entries;
-    
-    if (use_linear) {
-        var best_entry_by_date = [];
-        var current_date = null;
-        var best = null;
-        for (var i=0; i<entries.length; i++) {
-            var entry = entries[i];
-            var entry_date = new Date(entry.time);
+    for (var i=0; i<entries.length; i++) {
+        var entry = entries[i];
+        var entry_date = new Date(entry.time);
 
-            if (current_date == null) {
-                current_date = entry_date;
-                best = entry
-            } else if (entry_date.getDate() == current_date.getDate() && entry_date.getMonth() && entry_date.getFullYear()) {
-                if (entry[var_name] < best[var_name]) {
-                    best = entry;
-                }
-            } else {
-                best_entry_by_date.push(best);
-                current_date = entry_date;
+        if (current_date == null) {
+            current_date = entry_date;
+            best = entry
+        } else if (entry_date.getDate() == current_date.getDate() && entry_date.getMonth() && entry_date.getFullYear()) {
+            if (entry[var_name] < best[var_name]) {
                 best = entry;
             }
-        }
-
-        if (current_date != null && best != null) {
+        } else {
             best_entry_by_date.push(best);
+            current_date = entry_date;
+            best = entry;
         }
-
-        mapped_entry_array = best_entry_by_date;
     }
 
-    return mapped_entry_array.map(function(entry) {
+    if (current_date != null && best != null) {
+        best_entry_by_date.push(best);
+    }
+
+    return best_entry_by_date.map(function(entry) {
         var difference = (Date.now() - Date.parse(entry.time));
         var elapsedDays = Math.ceil(difference / (1000 * 3600 * 24));
         return {
@@ -625,15 +616,11 @@ function processRankEntries (entries, var_name, use_linear) {
     });
 }
 
-function processRankHistory(entries, use_linear) {
-    if (use_linear == undefined || use_linear == null) {
-        use_linear = false;
-    }
-
-    var globalRankValues = processRankEntries(entries, 'global_rank', use_linear);
-    var scoreRankValues = processRankEntries(entries, 'score_rank', use_linear);
-    var countryRankValues = processRankEntries(entries, 'country_rank', use_linear);
-    var ppv1RankValues = processRankEntries(entries, 'ppv1_rank', use_linear);
+function processRankHistory(entries) {
+    var globalRankValues = processRankEntries(entries, 'global_rank');
+    var scoreRankValues = processRankEntries(entries, 'score_rank');
+    var countryRankValues = processRankEntries(entries, 'country_rank');
+    var ppv1RankValues = processRankEntries(entries, 'ppv1_rank');
 
     if (entries.length > 0) {
         countryRankValues.unshift({
@@ -702,28 +689,14 @@ function resetUserPerformanceGraph () {
     $('#rank-graph svg')[0].innerHTML = '';
 }
 
-function onChangeRankGraphDisplayType (sender) {
-    // To-do: cookies, or save it as a user preference.
-    if (sender.value == 'Step') {
-        loadUserPerformanceGraph(userId, modeName, false);
-    } else if (sender.value == 'Linear') {
-        loadUserPerformanceGraph(userId, modeName, true);
-    }
-}
-
-function loadUserPerformanceGraph(userId, mode, use_linear) {
-    if (use_linear == undefined || use_linear == null) {
-        use_linear = false;
-    }
+function loadUserPerformanceGraph(userId, mode) {
 
     resetUserPerformanceGraph();
-
-    var interpolation = use_linear ? 'linear' : 'step';
     var url = '/users/' + userId + '/history/rank/' + mode;
 
     performApiRequest("GET", url, null, function(xhr) {
         var entries = JSON.parse(xhr.responseText);
-        var rankData = processRankHistory(entries, use_linear);
+        var rankData = processRankHistory(entries);
 
         nv.addGraph(function() {
             var chart = nv.models.lineChart()
@@ -734,7 +707,7 @@ function loadUserPerformanceGraph(userId, mode, use_linear) {
                 })
                 .useInteractiveGuideline(true)
                 .transitionDuration(250)
-                .interpolate(interpolation)
+                .interpolate('linear')
                 .showLegend(true)
                 .showYAxis(true)
                 .showXAxis(true);
