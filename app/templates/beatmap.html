@@ -91,7 +91,7 @@
                         <div class="starfield-selected" style="width: {{ image_width*beatmap.hp }}px"></div>
                     </div>
                 </td>
-                <td><strong>Star Difficulty:</strong></td>
+                <td><b>Star Difficulty:</b></td>
                 <td>
                     <div class="starfield" style="width: {{ image_width*max_stars }}px">
                         <div class="starfield-selected" style="width: {{ image_width*beatmap.diff }}px"></div>
@@ -114,7 +114,7 @@
                         <div class="starfield-selected" style="width: {{ image_width*beatmap.od }}px"></div>
                     </div>
                 </td>
-                <td><strong>Length:</strong></td>
+                <td><b>Length:</b></td>
                 <td>
                     {% set minutes = beatmap.total_length // 60 %}
                     {% set seconds = beatmap.total_length % 60 %}
@@ -135,7 +135,7 @@
                     <a href="/beatmapsets?language={{ beatmapset.language_id }}">({{ Language(beatmapset.language_id).name }})</a>
                     {% endif %}
                 </td>
-                <td><strong>BPM:</strong></td>
+                <td><b>BPM:</b></td>
                 <td>{{ beatmap.bpm|round|int }}</td>
             </tr>
             <tr>
@@ -165,7 +165,7 @@
                     {% endif %}
                 </td>
                 <td>
-                    <strong>Favourited {{ favourites_count }} times</strong> in total
+                    <b>Favourited {{ favourites_count }} times</b> in total
                     {% if current_user.is_authenticated %}
                         <br>
                         {% if favorite %}
@@ -188,7 +188,7 @@
                         </a>
                         {% endfor %}
                         {% if favourites_count > 5 %}
-                        <strong>and many more!</strong>
+                        <b>and many more!</b>
                         {% endif %}
                     {% endif %}
                 </td>
@@ -462,7 +462,7 @@
                 </tr>
                 <tr>
                     <tr class="row-light">
-                        <td><strong>Score</strong></td>
+                        <td><b>Score</b></td>
                         <td>{{ "{:,}".format(leader_score.total_score) }} ({{ "{:,.2f}".format(leader_score.acc * 100) }}%)</td>
                         <td class="row-grade" colspan="1" rowspan="13">
                             <img src="/images/grades/{{ leader_score.grade|upper }}.png" loading="lazy" alt="Grade {{ leader_score.grade|upper }}">
@@ -471,52 +471,52 @@
                 </tr>
                 <tr>
                     <tr class="row-dark">
-                        <td><strong>Max Combo</strong></td>
+                        <td><b>Max Combo</b></td>
                         <td>{{ leader_score.max_combo }}</td>
                     </tr>
                 </tr>
                 {% if mode != 3 %}
                 <tr>
                     <tr class="row-light">
-                        <td><strong>300 / 100 / 50</strong></td>
+                        <td><b>300 / 100 / 50</b></td>
                         <td>{{ leader_score.n300 }} / {{ leader_score.n100 }} / {{ leader_score.n50 }}</td>
                     </tr>
                 </tr>
                 <tr>
                     <tr class="row-dark">
-                        <td><strong>Misses</strong></td>
+                        <td><b>Misses</b></td>
                         <td>{{ leader_score.nMiss }}</td>
                     </tr>
                 </tr>
                 <tr>
                     <tr class="row-light">
-                        <td><strong>Geki (Elite Beat!)</strong></td>
+                        <td><b>Geki (Elite Beat!)</b></td>
                         <td>{{ leader_score.nGeki }}</td>
                     </tr>
                 </tr>
                 <tr>
                     <tr class="row-dark">
-                        <td><strong>{% if mode == 2 %}Droplet misses{% else %}Katu (Beat!){%endif%}</strong></td>
+                        <td><b>{% if mode == 2 %}Droplet misses{% else %}Katu (Beat!){%endif%}</b></td>
                         <td>{{ leader_score.nKatu }}</td>
                     </tr>
                 </tr>
                 {% else %}
                 <tr>
                     <tr class="row-light">
-                        <td><strong>MAX / 300 / 200</strong></td>
+                        <td><b>MAX / 300 / 200</b></td>
                         <td>{{ leader_score.nGeki }} / {{ leader_score.n300 }} / {{ leader_score.nKatu }}</td>
                     </tr>
                 </tr>
                 <tr>
                     <tr class="row-dark">
-                        <td><strong>100 / 50 / Misses</strong></td>
+                        <td><b>100 / 50 / Misses</b></td>
                         <td>{{ leader_score.n100 }} / {{ leader_score.n50 }} / {{ leader_score.nMiss }}</td>
                     </tr>
                 </tr>
                 {% endif %}
                 <tr>
                     <tr class="row-light">
-                        <td><strong>Mods</strong></td>
+                        <td><b>Mods</b></td>
                         <td>{{ leader_score.mods|short_mods }}</td>
                     </tr>
                 </tr>
@@ -532,7 +532,7 @@
                 </tr>
                 <tr>
                     <tr class="row-light">
-                        <td><strong>Score</strong></td>
+                        <td><b>Score</b></td>
                         <td>{{ "{:,}".format(personal_best.total_score) }} ({{ "{:,.2f}".format(personal_best.acc * 100) }}%)</td>
                         <td class="row-grade" colspan="1" rowspan="13">
                             <img src="/images/grades/{{ personal_best.grade|upper }}.png" loading="lazy" alt="Grade {{ personal_best.grade|upper }}">
@@ -541,52 +541,52 @@
                 </tr>
                 <tr>
                     <tr class="row-dark">
-                        <td><strong>Max Combo</strong></td>
+                        <td><b>Max Combo</b></td>
                         <td>{{ personal_best.max_combo }}</td>
                     </tr>
                 </tr>
                 {% if mode != 3 %}
                 <tr>
                     <tr class="row-light">
-                        <td><strong>300 / 100 / 50</strong></td>
+                        <td><b>300 / 100 / 50</b></td>
                         <td>{{ personal_best.n300 }} / {{ personal_best.n100 }} / {{ personal_best.n50 }}</td>
                     </tr>
                 </tr>
                 <tr>
                     <tr class="row-dark">
-                        <td><strong>Misses</strong></td>
+                        <td><b>Misses</b></td>
                         <td>{{ personal_best.nMiss }}</td>
                     </tr>
                 </tr>
                 <tr>
                     <tr class="row-light">
-                        <td><strong>Geki (Elite Beat!)</strong></td>
+                        <td><b>Geki (Elite Beat!)</b></td>
                         <td>{{ personal_best.nGeki }}</td>
                     </tr>
                 </tr>
                 <tr>
                     <tr class="row-dark">
-                        <td><strong>{% if mode == 2 %}Droplet misses{% else %}Katu (Beat!){%endif%}</strong></td>
+                        <td><b>{% if mode == 2 %}Droplet misses{% else %}Katu (Beat!){%endif%}</b></td>
                         <td>{{ personal_best.nKatu }}</td>
                     </tr>
                 </tr>
                 {% else %}
                 <tr>
                     <tr class="row-light">
-                        <td><strong>MAX / 300 / 200</strong></td>
+                        <td><b>MAX / 300 / 200</b></td>
                         <td>{{ personal_best.nGeki }} / {{ personal_best.n300 }} / {{ personal_best.nKatu }}</td>
                     </tr>
                 </tr>
                 <tr>
                     <tr class="row-dark">
-                        <td><strong>100 / 50 / Misses</strong></td>
+                        <td><b>100 / 50 / Misses</b></td>
                         <td>{{ personal_best.n100 }} / {{ personal_best.n50 }} / {{ personal_best.nMiss }}</td>
                     </tr>
                 </tr>
                 {% endif %}
                 <tr>
                     <tr class="row-light">
-                        <td><strong>Mods</strong></td>
+                        <td><b>Mods</b></td>
                         <td>{{ personal_best.mods|short_mods }}</td>
                     </tr>
                 </tr>
@@ -601,35 +601,34 @@
         <thead class="scores-header">
             <tr>
                 <th></th>
-                <th><strong>Rank</strong></th>
-                <th><strong>Score</strong></th>
-                <th><strong>Accuracy</strong></th>
-                <th><strong>Player</strong></th>
-                <th><strong>Max Combo</strong></th>
-                <th><strong>PP</strong></th>
+                <th><b>Rank</b></th>
+                <th><b>Score</b></th>
+                <th><b>Accuracy</b></th>
+                <th><b>Player</b></th>
+                <th><b>Max Combo</b></th>
+                <th><b>PP</b></th>
                 {% if mode != 3 %}
-                <th><strong>300 / 100 / 50</strong></th>
-                <th><strong>Geki</strong>
-                </th>
+                <th><b>300 / 100 / 50</b></th>
+                <th><b>Geki</b></th>
                 <th>
-                    <strong>
+                    <b>
                         {% if mode != 2 %}
                         Katu
                         {% else %}
                         Droplet Miss
                         {% endif %}
-                    </strong>
+                    </b>
                 </th>
                 {% else %}
-                <th><strong>MAX</strong></th>
-                <th><strong>300</strong></th>
-                <th><strong>200</strong></th>
-                <th><strong>100</strong></th>
-                <th><strong>50</strong></th>
+                <th><b>MAX</b></th>
+                <th><b>300</b></th>
+                <th><b>200</b></th>
+                <th><b>100</b></th>
+                <th><b>50</b></th>
                 {% endif %}
-                <th><strong>Misses</strong></th>
-                <th><strong>Mods</strong></th>
-                <th><strong>Version</strong></th>
+                <th><b>Misses</b></th>
+                <th><b>Mods</b></th>
+                <th><b>Version</b></th>
                 {% if current_user.is_authenticated %}
                 {# TODO: Report button #}
                 <th>
@@ -659,14 +658,14 @@
                 <td><img src="/images/grades/{{ score.grade|upper }}_small.png" loading="lazy" alt="Grade {{ score.grade|upper }}"></td>
                 <td>
                     {% if loop.index0 == 0 %}
-                    <strong>{{ "{:,}".format(score.total_score) }}</strong>
+                    <b>{{ "{:,}".format(score.total_score) }}</b>
                     {% else %}
                     {{ "{:,}".format(score.total_score) }}
                     {% endif %}
                 </td>
                 <td>
                     {% if score.acc == 1 %}
-                    <strong>{{ "{:,.2f}".format(score.acc * 100) }}%</strong>
+                    <b>{{ "{:,.2f}".format(score.acc * 100) }}%</b>
                     {% else %}
                     {{ "{:,.2f}".format(score.acc * 100) }}%
                     {% endif %}
@@ -679,7 +678,7 @@
                 </td>
                 <td>
                     {% if score.max_combo == beatmap.max_combo %}
-                    <strong>{{ score.max_combo }}</strong>
+                    <b>{{ score.max_combo }}</b>
                     {% else %}
                     {{ score.max_combo }}
                     {% endif %}
