@@ -18,7 +18,12 @@
         </div>
         <div class="friend-description">
             <p>{{ user.name }}</p>
+            {% set target_friends = user.relationships|get_attributes('target_id') %}
+            {% if current_user.id in target_friends %}
+            <a id="{{ user.id }}" style="color: red;" onclick="return removeFriend(this);">Remove Mutual Friend</a>
+            {% else %}
             <a id="{{ user.id }}" style="color: red;" onclick="return removeFriend(this);">Remove</a>
+            {% endif %}
         </div>
     </div>
     {% endfor %}
