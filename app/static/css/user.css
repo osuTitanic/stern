@@ -401,6 +401,7 @@
     margin-top: 10px;
     margin-bottom: 10px;
     display: block;
+    text-align: right;
 }
 
 .profile-graph svg {
