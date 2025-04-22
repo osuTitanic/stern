@@ -18,6 +18,15 @@
     {# Page count #}
     <table width='100%'>
         <tbody>
+        {% if current_user.is_authenticated %}
+        <tr>
+            <td align="left" style="float: left">
+                <div class="post-buttons-large" style="margin-left: 0;">
+                    <a href="/forum/{{ forum.id }}/create" class="button-blue">Create</a>
+                </div>
+            </td>
+        </tr>
+        {% endif %}
         <tr>
             <td align="left">
                 Page <strong>{{ current_page + 1 }}</strong> of <strong>{{ total_pages + 1 }}</strong>
@@ -171,13 +180,6 @@
                     {# "Next" button #}
                     <a href="/forum/{{ forum.id }}?page={{ current_page + 2 }}">Next</a>
                     {% endif %}
-                </td>
-                {% endif %}
-                {% if current_user.is_authenticated %}
-                <td align="left" style="float: left">
-                    <div class="post-buttons-large" style="margin-left: 0;">
-                        <a href="/forum/{{ forum.id }}/create" class="button-blue">Create</a>
-                    </div>
                 </td>
                 {% endif %}
             </tr>
