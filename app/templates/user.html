@@ -112,7 +112,7 @@
             {% if followers > 0 %}
             <div class="activity activity-followers">
                 <i class="fa-solid fa-user" style="color: #76777b;"></i>
-                <p>{{ "{:,}".format(followers) }} followers</p>
+                <p>{{ "{:,}".format(followers) }} follower{{ 's' if followers != 1 }} </p>
             </div>
             {% endif %}
             <div title="Arrived ({{ user.created_at.strftime('%Y-%m-%d %H:%M:%S') }})" class="activity">
