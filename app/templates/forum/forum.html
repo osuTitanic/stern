@@ -22,7 +22,7 @@
         <tr>
             <td align="left" style="float: left">
                 <div class="post-buttons-large" style="margin-left: 0;">
-                    <a href="/forum/{{ forum.id }}/create" class="button-blue">Create</a>
+                    <a href="/forum/{{ forum.id }}/create" class="button-blue"><i class="fa fa-edit"></i> New Topic</a>
                 </div>
             </td>
         </tr>
@@ -183,6 +183,15 @@
                 </td>
                 {% endif %}
             </tr>
+            {% if current_user.is_authenticated %}
+            <tr>
+                <td align="left" style="float: left">
+                    <div class="post-buttons-large" style="margin-left: 0;">
+                        <a href="/forum/{{ forum.id }}/create" class="button-blue"><i class="fa fa-edit"></i> New Topic</a>
+                    </div>
+                </td>
+            </tr>
+            {% endif %}
         </tbody>
     </table>
 </div>
