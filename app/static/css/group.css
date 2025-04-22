@@ -34,7 +34,7 @@
     min-width: 140px;
     min-height: 130px;
     display: grid;
-    padding: 8px;
+    padding: 9px;
 }
 
 .user a {
@@ -54,6 +54,7 @@ a:hover {
     background-color: #cee2ff;
     border: solid 2px #4bb9ff;
     text-decoration: none;
+    padding: 8px;
 }
 
 .username-wrapper {
