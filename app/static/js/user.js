@@ -705,9 +705,9 @@ function resetUserPerformanceGraph () {
 function onChangeRankGraphDisplayType (sender) {
     // To-do: cookies, or save it as a user preference.
     if (sender.value == 'Step') {
-        loadUserPerformanceGraph(userId, mode, false);
+        loadUserPerformanceGraph(userId, modeName, false);
     } else if (sender.value == 'Linear') {
-        loadUserPerformanceGraph(userId, mode, true);
+        loadUserPerformanceGraph(userId, modeName, true);
     }
 }
 
