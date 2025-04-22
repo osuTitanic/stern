@@ -579,39 +579,39 @@ function loadRecentPlays(userId, mode) {
     loadingText.parentNode.removeChild(loadingText);
 }
 
-function processRankEntries (entries, var_name) {
-    var best_entry_by_date = [];
-    var current_date = null;
+function processRankEntries(entries, rankingType) {
+    var bestEntryByDate = [];
+    var currentDate = null;
     var best = null;
 
     for (var i=0; i<entries.length; i++) {
         var entry = entries[i];
         var entry_date = new Date(entry.time);
 
-        if (current_date == null) {
-            current_date = entry_date;
-            best = entry
-        } else if (entry_date.getDate() == current_date.getDate() && entry_date.getMonth() == current_date.getMonth() && entry_date.getFullYear() == current_date.getFullYear()) {
-            if (entry[var_name] < best[var_name]) {
+        if (currentDate == null) {
+            currentDate = entry_date;
+            best = entry;
+        } else if (entry_date.getDate() == currentDate.getDate() && entry_date.getMonth() == currentDate.getMonth() && entry_date.getFullYear() == currentDate.getFullYear()) {
+            if (entry[rankingType] < best[rankingType]) {
                 best = entry;
             }
         } else {
-            best_entry_by_date.push(best);
-            current_date = entry_date;
+            bestEntryByDate.push(best);
+            currentDate = entry_date;
             best = entry;
         }
     }
 
-    if (current_date != null && best != null) {
-        best_entry_by_date.push(best);
+    if (currentDate != null && best != null) {
+        bestEntryByDate.push(best);
     }
 
-    return best_entry_by_date.map(function(entry) {
+    return bestEntryByDate.map(function(entry) {
         var difference = (Date.now() - Date.parse(entry.time));
         var elapsedDays = Math.ceil(difference / (1000 * 3600 * 24));
         return {
             x: -elapsedDays,
-            y: -entry[var_name]
+            y: -entry[rankingType]
         };
     });
 }
