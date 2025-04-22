@@ -698,17 +698,22 @@ function processRankHistory(entries, use_linear) {
     ];
 }
 
+function resetUserPerformanceGraph () {
+    $('#rank-graph svg')[0].innerHTML = '';
+}
+
 function loadUserPerformanceGraph(userId, mode, use_linear) {
     if (use_linear == undefined || use_linear == null) {
         use_linear = false;
     }
+
+    resetUserPerformanceGraph();
 
     var interpolation = use_linear ? 'linear' : 'step';
     var url = '/users/' + userId + '/history/rank/' + mode;
 
     performApiRequest("GET", url, null, function(xhr) {
         var entries = JSON.parse(xhr.responseText);
-        console.log(entries);
         var rankData = processRankHistory(entries, use_linear);
 
         nv.addGraph(function() {
