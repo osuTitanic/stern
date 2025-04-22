@@ -35,7 +35,7 @@ parser.add_simple_formatter(
     same_tag_closes=True,
     render_embedded=False,
     transform_newlines=True,
-    escape_html=False,
+    escape_html=True,
     replace_links=False
 )
 
