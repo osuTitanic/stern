@@ -591,7 +591,7 @@ function processRankEntries (entries, var_name) {
         if (current_date == null) {
             current_date = entry_date;
             best = entry
-        } else if (entry_date.getDate() == current_date.getDate() && entry_date.getMonth() && entry_date.getFullYear()) {
+        } else if (entry_date.getDate() == current_date.getDate() && entry_date.getMonth() == current_date.getMonth() && entry_date.getFullYear() == current_date.getFullYear()) {
             if (entry[var_name] < best[var_name]) {
                 best = entry;
             }
