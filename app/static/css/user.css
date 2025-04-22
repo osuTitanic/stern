@@ -401,6 +401,7 @@
     margin-top: 10px;
     margin-bottom: 10px;
     display: block;
+    text-align: right;
 }
 
 .profile-graph svg {
@@ -413,6 +414,10 @@
     font-weight: normal;
     font-size: 115%;
     padding: 1px;
+}
+
+.profile-stats-element-rscore {
+    color: #0e3062;
 }
 
 .profile-stats-element b {

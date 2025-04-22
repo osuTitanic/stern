@@ -107,8 +107,6 @@ function createScoreElement(score, index, type) {
         }
     );
 
-    
-
     var rightColumn = document.createElement("td");
     rightColumn.className = 'score-right';
 
@@ -581,42 +579,48 @@ function loadRecentPlays(userId, mode) {
     loadingText.parentNode.removeChild(loadingText);
 }
 
+function processRankEntries(entries, rankingType) {
+    var bestEntryByDate = [];
+    var currentDate = null;
+    var best = null;
+
+    for (var i=0; i<entries.length; i++) {
+        var entry = entries[i];
+        var entry_date = new Date(entry.time);
+
+        if (currentDate == null) {
+            currentDate = entry_date;
+            best = entry;
+        } else if (entry_date.getDate() == currentDate.getDate() && entry_date.getMonth() == currentDate.getMonth() && entry_date.getFullYear() == currentDate.getFullYear()) {
+            if (entry[rankingType] < best[rankingType]) {
+                best = entry;
+            }
+        } else {
+            bestEntryByDate.push(best);
+            currentDate = entry_date;
+            best = entry;
+        }
+    }
+
+    if (currentDate != null && best != null) {
+        bestEntryByDate.push(best);
+    }
+
+    return bestEntryByDate.map(function(entry) {
+        var difference = (Date.now() - Date.parse(entry.time));
+        var elapsedDays = Math.ceil(difference / (1000 * 3600 * 24));
+        return {
+            x: -elapsedDays,
+            y: -entry[rankingType]
+        };
+    });
+}
+
 function processRankHistory(entries) {
-    var globalRankValues = entries.map(function(entry) {
-        var difference = (Date.now() - Date.parse(entry.time));
-        var elapsedDays = Math.ceil(difference / (1000 * 3600 * 24));
-        return {
-            x: -elapsedDays,
-            y: -entry.global_rank
-        };
-    });
-
-    var scoreRankValues = entries.map(function(entry) {
-        var difference = (Date.now() - Date.parse(entry.time));
-        var elapsedDays = Math.ceil(difference / (1000 * 3600 * 24));
-        return {
-            x: -elapsedDays,
-            y: -entry.score_rank
-        };
-    });
-
-    var countryRankValues = entries.map(function(entry) {
-        var difference = (Date.now() - Date.parse(entry.time));
-        var elapsedDays = Math.ceil(difference / (1000 * 3600 * 24));
-        return {
-            x: -elapsedDays,
-            y: -entry.country_rank
-        };
-    });
-
-    var ppv1RankValues = entries.map(function(entry) {
-        var difference = (Date.now() - Date.parse(entry.time));
-        var elapsedDays = Math.ceil(difference / (1000 * 3600 * 24));
-        return {
-            x: -elapsedDays,
-            y: -entry.ppv1_rank
-        };
-    });
+    var globalRankValues = processRankEntries(entries, 'global_rank');
+    var scoreRankValues = processRankEntries(entries, 'score_rank');
+    var countryRankValues = processRankEntries(entries, 'country_rank');
+    var ppv1RankValues = processRankEntries(entries, 'ppv1_rank');
 
     if (entries.length > 0) {
         countryRankValues.unshift({
@@ -681,7 +685,13 @@ function processRankHistory(entries) {
     ];
 }
 
+function resetUserPerformanceGraph () {
+    $('#rank-graph svg')[0].innerHTML = '';
+}
+
 function loadUserPerformanceGraph(userId, mode) {
+
+    resetUserPerformanceGraph();
     var url = '/users/' + userId + '/history/rank/' + mode;
 
     performApiRequest("GET", url, null, function(xhr) {
@@ -697,7 +707,7 @@ function loadUserPerformanceGraph(userId, mode) {
                 })
                 .useInteractiveGuideline(true)
                 .transitionDuration(250)
-                .interpolate("step")
+                .interpolate('linear')
                 .showLegend(true)
                 .showYAxis(true)
                 .showXAxis(true);
