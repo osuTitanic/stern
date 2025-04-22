@@ -130,7 +130,7 @@
             </div>
             <div title="Total Posts" class="activity">
                 <i class="fa-regular fa-pen-to-square" style="color: #76777b;"></i>
-                <p>{{ total_posts }} post{{ 's' if total_posts != 1 }}</p>
+                <p>{{ "{:,}".format(total_posts) }} post{{ 's' if total_posts != 1 }}</p>
             </div>
         </div>
         {% if user.playstyle > 0 or current_user.id == user.id %}
