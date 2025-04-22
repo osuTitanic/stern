@@ -25,7 +25,7 @@ parser.add_simple_formatter(
     same_tag_closes=True,
     render_embedded=False,
     transform_newlines=True,
-    escape_html=False,
+    escape_html=True,
     replace_links=False
 )
 
@@ -35,7 +35,7 @@ parser.add_simple_formatter(
     same_tag_closes=True,
     render_embedded=False,
     transform_newlines=True,
-    escape_html=False,
+    escape_html=True,
     replace_links=False
 )
 
@@ -101,7 +101,7 @@ def render_google(tag_name, value, options, parent, context):
 
 @parser.formatter('url')
 def render_link(tag_name, value, options, parent, context):
-    url = sanitize_input(unquote(options.get('url', '')))
+    url = sanitize_url(unquote(options.get('url', '')))
     return '<a href="%s" target="_blank">%s</a>' % (url, value)
 
 @parser.formatter('quote')
@@ -160,5 +160,13 @@ def render_email(tag_name, value, options, parent, context):
 def sanitize_input(text: str) -> str:
     for sequence, replace in Parser.REPLACE_ESCAPE:
         text = text.replace(sequence, replace)
+
+    return text
+
+def sanitize_url(text: str) -> str:
+    text = sanitize_input(text)
+
+    if not text.startswith('http'):
+        text = 'http://' + text
 
     return text

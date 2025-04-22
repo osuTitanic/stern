@@ -112,7 +112,7 @@
             {% if followers > 0 %}
             <div class="activity activity-followers">
                 <i class="fa-solid fa-user" style="color: #76777b;"></i>
-                <p>{{ "{:,}".format(followers) }} followers</p>
+                <p>{{ "{:,}".format(followers) }} follower{{ 's' if followers != 1 }} </p>
             </div>
             {% endif %}
             <div title="Arrived ({{ user.created_at.strftime('%Y-%m-%d %H:%M:%S') }})" class="activity">
@@ -130,7 +130,7 @@
             </div>
             <div title="Total Posts" class="activity">
                 <i class="fa-regular fa-pen-to-square" style="color: #76777b;"></i>
-                <p>{{ total_posts }} post{{ 's' if total_posts != 1 }}</p>
+                <p>{{ "{:,}".format(total_posts) }} post{{ 's' if total_posts != 1 }}</p>
             </div>
         </div>
         {% if user.playstyle > 0 or current_user.id == user.id %}
@@ -730,7 +730,10 @@
                         {% if infringements %}
                         <p style="color: red">
                             {{ user.name }}'s account is not in good standing :(
-                            {# TODO #}
+                            {% if current_user.id == user.id %}
+                            <br/>
+                            <br/>Your account could be permanently disabled if you continue to cause problems. Please make sure to follow the <a href='/wiki/en/Rules'>community rules</a>! Note that infringements will disappear after four weeks of good behaviour.
+                            {% endif %}
                         </p>
                         {% else %}
                         <p>
