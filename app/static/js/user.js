@@ -685,8 +685,14 @@ function processRankHistory(entries) {
     ];
 }
 
-function resetUserPerformanceGraph () {
-    $('#rank-graph svg')[0].innerHTML = '';
+function resetUserPerformanceGraph() {
+    var rankGraph = document.getElementsByName("rank-graph");
+
+    if (rankGraph.length == 0) {
+        return;
+    }
+
+    rankGraph.getElementsByTagName("svg")[0].innerHTML = '';
 }
 
 function loadUserPerformanceGraph(userId, mode) {
