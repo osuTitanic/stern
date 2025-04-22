@@ -345,7 +345,7 @@
     position: relative;
 }
 
-.tab-content.expanded {
+#general.expanded {
     overflow: visible;
 }
 
