@@ -579,39 +579,54 @@ function loadRecentPlays(userId, mode) {
     loadingText.parentNode.removeChild(loadingText);
 }
 
+function getDaysAgo (date) {
+    var currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+    date.setHours(0, 0, 0, 0);
+
+    var totalDays = Math.ceil((currentDate.valueOf() - date.valueOf()) / 86400 / 1000);
+
+    return totalDays;
+}
+
 function processRankEntries(entries, rankingType) {
     var bestEntryByDate = [];
-    var currentDate = null;
     var best = null;
+    var bestWasLast = false;
 
     for (var i=0; i<entries.length; i++) {
-        var entry = entries[i];
-        var entry_date = new Date(entry.time);
+        var entry = {
+            daysAgo: getDaysAgo(new Date(entries[i].time)),
+            value: entries[i][rankingType]
+        };
 
-        if (currentDate == null) {
-            currentDate = entry_date;
+        if (i == 0) {
             best = entry;
-        } else if (entry_date.getDate() == currentDate.getDate() && entry_date.getMonth() == currentDate.getMonth() && entry_date.getFullYear() == currentDate.getFullYear()) {
-            if (entry[rankingType] < best[rankingType]) {
+        } else if (entry.daysAgo == best.daysAgo) {
+            if (entry.value < best.value) {
                 best = entry;
             }
         } else {
             bestEntryByDate.push(best);
-            currentDate = entry_date;
-            best = entry;
+            bestWasLast = i == (entries.length - 1);
+
+            if (!bestWasLast) {
+                best = entry;
+            }
         }
     }
 
-    if (currentDate != null && best != null) {
-        bestEntryByDate.push(best);
+    if (best != null && !bestWasLast) {
+        bestEntryByDate.push(entry);
     }
 
+    console.log("Result: %o", bestEntryByDate);
+
     return bestEntryByDate.map(function(entry) {
-        var difference = (Date.now() - Date.parse(entry.time));
-        var elapsedDays = Math.ceil(difference / (1000 * 3600 * 24));
+        var daysAgo = entry.daysAgo == 0 ? 0 : (-entry.daysAgo);
         return {
-            x: -elapsedDays,
-            y: -entry[rankingType]
+            x: daysAgo,
+            y: -entry.value
         };
     });
 }
@@ -686,13 +701,12 @@ function processRankHistory(entries) {
 }
 
 function resetUserPerformanceGraph() {
-    var rankGraph = document.getElementsByName("rank-graph");
-
-    if (rankGraph.length == 0) {
+    var $rankGraph = $('#rank-graph svg');
+    if ($rankGraph.length == 0) {
         return;
     }
 
-    rankGraph.getElementsByTagName("svg")[0].innerHTML = '';
+    $rankGraph[0].innerHTML = '';
 }
 
 function loadUserPerformanceGraph(userId, mode) {
