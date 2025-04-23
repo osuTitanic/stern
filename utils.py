@@ -173,6 +173,16 @@ def required_nominations(beatmapset: DBBeatmapset) -> bool:
 
 def resize_image(
     image: bytes,
+    target_size: int | None = None,
+) -> bytes:
+    img = Image.open(io.BytesIO(image))
+    img = img.resize((target_size, target_size))
+    image_buffer = io.BytesIO()
+    img.save(image_buffer, format='PNG')
+    return image_buffer.getvalue()
+
+def resize_and_crop_image(
+    image: bytes,
     target_width: int | None = None,
     target_height: int | None = None
 ) -> bytes:
