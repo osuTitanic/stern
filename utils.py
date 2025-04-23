@@ -25,9 +25,11 @@ from app.common.database import (
 )
 
 import flask_login
+import unicodedata
 import config
 import app
 import io
+import re
 
 def render_template(template_name: str, **context) -> str:
     """This will automatically append the required data to the context for rendering pages"""
@@ -190,6 +192,13 @@ def empty_image(
     img = Image.new('RGB', (width, height), (0, 0, 0))
     img.save(image_buffer, format='JPEG')
     return image_buffer.getvalue()
+
+def secure_filename(filename: str) -> str:
+    filename = unicodedata.normalize("NFKD", filename)
+    filename = filename.encode("ascii", "ignore").decode("ascii")
+    filename = re.compile(r"[^A-Za-z0-9_.-]").sub(" ", filename)
+    filename = re.compile(r"\s+").sub(" ", filename)
+    return filename.strip()
 
 @caching.ttl_cache(ttl=900)
 def fetch_average_topic_views() -> int:
