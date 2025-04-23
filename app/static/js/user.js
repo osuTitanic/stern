@@ -619,9 +619,7 @@ function processRankEntries(entries, rankingType) {
     if (best != null && !bestWasLast) {
         bestEntryByDate.push(entry);
     }
-
-    console.log("Result: %o", bestEntryByDate);
-
+    
     return bestEntryByDate.map(function(entry) {
         var daysAgo = entry.daysAgo == 0 ? 0 : (-entry.daysAgo);
         return {
