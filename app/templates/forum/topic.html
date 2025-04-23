@@ -35,7 +35,7 @@
 <div>
     <table width='100%'>
         <td align="right" style="padding-right: 4px">
-            {{ post_count }} posts |
+            {{ "{:,}".format(post_count) }} posts |
             <a onclick="jumpToPage();">Jump</a> |
             {# Pagination #}
             {% if current_page > 1 %}
@@ -132,7 +132,7 @@
                             </div>
                             {% endif %}
                             <div>
-                                {{ repositories.users.fetch_post_count(post.user.id, session=session) }} posts
+                                {{ "{:,}".format(repositories.users.fetch_post_count(post.user.id, session=session)) }} posts
                             </div>
                             <div>
                                 <img src="/images/flags/{{ post.user.country|lower }}.gif" alt="{{ post.user.country }} Flag" class="flag">
@@ -151,7 +151,7 @@
 
                                 <p style="color: {{ kudosu_status_color }}" id="kudosu-status-{{ post.id }}">
                                     {% if total_kudosu > 0 %}
-                                    Earned {{ total_kudosu }} kudosu.
+                                    Earned {{ "{:,}".format(total_kudosu) }} kudosu.
                                     {% elif total_kudosu == 0 %}
                                     No kudosu yet.
                                     {% else %}
@@ -245,7 +245,7 @@
     {% endif %}
     <table width='100%'>
         <td align="right" style="float: right; padding-right: 4px">
-            {{ post_count }} posts |
+            {{ "{:,}".format(post_count) }} posts |
             <a onclick="jumpToPage();">Jump</a> |
             {# Pagination #}
             {% if current_page > 1 %}
