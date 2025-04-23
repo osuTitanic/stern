@@ -579,20 +579,17 @@ function loadRecentPlays(userId, mode) {
     loadingText.parentNode.removeChild(loadingText);
 }
 
-function getDaysAgo (date) {
+function getDaysAgo(date) {
     var currentDate = new Date();
     currentDate.setHours(0, 0, 0, 0);
     date.setHours(0, 0, 0, 0);
-
-    var totalDays = Math.ceil((currentDate.valueOf() - date.valueOf()) / 86400 / 1000);
-
-    return totalDays;
+    return Math.ceil((currentDate.valueOf() - date.valueOf()) / 86400 / 1000);
 }
 
 function processRankEntries(entries, rankingType) {
     var bestEntryByDate = [];
-    var best = null;
     var bestWasLast = false;
+    var best = null;
 
     for (var i=0; i<entries.length; i++) {
         var entry = {
