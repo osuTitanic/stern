@@ -313,6 +313,7 @@
 
 .scores th {
     border-bottom: 1px solid #a79ef3;
+    padding: 1px 0;
 }
 
 .scores td {
