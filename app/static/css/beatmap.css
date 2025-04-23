@@ -51,7 +51,7 @@
 }
 
 .tab-list {
-    background-color: #e1d6fb;
+    background-color: #ece4fd;
     border-bottom: 1px solid #cfc1ef;
     width: 100%;
     float: left;
@@ -71,14 +71,21 @@
     padding: 7px 8px 7px 8px;
     line-height: 15px;
     color: #5e5e5e;
-    background-color: #e7e2f3;
+    background-color: #e0d6fb;
     display: inline-block; /* Use this as backup */
     display: flex;
 }
 
-.tab-link:hover {
+.tab-link:hover,
+.tab-link:focus,
+.tab-link:active {
     background-color: white;
+    color: #5e5e5e;
     text-decoration: none;
+}
+
+.tab-link:visited {
+    color: #5e5e5e;
 }
 
 .tab-link img {
@@ -95,12 +102,10 @@
     display: block;
 }
 
-.tab-link:visited {
-    color: #5e5e5e;
-}
-
-.active {
-    background-color: #bfa8f8;
+.tab-link.active {
+    background-color: #cab8f7;
+    cursor: default;
+    pointer-events: none;
 }
 
 .difficulty-icon img {
@@ -110,7 +115,7 @@
 
 .beatmap-stats {
     clear: both;
-    background-color: #e7e2f3;
+    background-color: #e1d6fb;
     border-top: 1px solid #cfc1ef;
     border-bottom: 1px solid #8462db;
     padding: 2px;
