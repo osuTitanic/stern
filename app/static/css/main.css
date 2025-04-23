@@ -194,11 +194,20 @@ input[type="url"], input[type="search"] {
     max-width: 150px;
 }
 
-.nav-element a:hover {
-    color: white;
+.nav-element-dropdown:hover > a,
+.nav-element-dropdown:focus-within > a,
+.nav-element a:hover,
+.nav-element a:focus,
+.nav-element a:active {
     background: #f375c5;
     text-decoration: none;
     transition: all 0.15s;
+}
+
+.nav-element a:hover,
+.nav-element a:focus,
+.nav-element a:active {
+    color: white;
 }
 
 .nav-dropdown {
