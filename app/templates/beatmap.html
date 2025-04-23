@@ -60,19 +60,19 @@
         <table>
             <tr>
                 <td>Artist:</td>
-                <td>
+                <td class="beatmap-stats-info">
                 {% if beatmapset.artist %}
                     <a href="/beatmapsets?query={{ beatmapset.artist }}">{{ beatmapset.artist }}</a>
                 {% endif %}
                 </td>
                 <td>Circle Size:</td>
-                <td>
+                <td class="beatmap-stats-info">
                     <div class="starfield" style="width: {{ image_width*max_stars }}px">
                         <div class="starfield-selected" style="width: {{ image_width*beatmap.cs }}px"></div>
                     </div>
                 </td>
                 <td>Approach Rate</td>
-                <td>
+                <td class="beatmap-stats-info">
                     <div class="starfield" style="width: {{ image_width*max_stars }}px">
                         <div class="starfield-selected" style="width: {{ image_width*beatmap.ar }}px"></div>
                     </div>
@@ -80,19 +80,19 @@
             </tr>
             <tr>
                 <td>Title:</td>
-                <td>
+                <td class="beatmap-stats-info">
                 {% if beatmapset.title %}
                     <a href="/beatmapsets?query={{ beatmapset.title }}">{{ beatmapset.title }}</a>
                 {% endif %}
                 </td>
                 <td>HP Drain:</td>
-                <td>
+                <td class="beatmap-stats-info">
                     <div class="starfield" style="width: {{ image_width*max_stars }}px">
                         <div class="starfield-selected" style="width: {{ image_width*beatmap.hp }}px"></div>
                     </div>
                 </td>
                 <td><b>Star Difficulty:</b></td>
-                <td>
+                <td class="beatmap-stats-info">
                     <div class="starfield" style="width: {{ image_width*max_stars }}px">
                         <div class="starfield-selected" style="width: {{ image_width*beatmap.diff }}px"></div>
                     </div>
@@ -101,7 +101,7 @@
             </tr>
             <tr>
                 <td>Creator:</td>
-                <td>
+                <td class="beatmap-stats-info">
                 {% if beatmapset.server == 0 %}
                     <a href="https://osu.ppy.sh/u/{{ beatmapset.creator }}">{{ beatmapset.creator }}</a>
                 {% else %}
@@ -109,13 +109,13 @@
                 {% endif %}
                 </td>
                 <td>Accuracy:</td>
-                <td>
+                <td class="beatmap-stats-info">
                     <div class="starfield" style="width: {{ image_width*max_stars }}px">
                         <div class="starfield-selected" style="width: {{ image_width*beatmap.od }}px"></div>
                     </div>
                 </td>
                 <td><b>Length:</b></td>
-                <td>
+                <td class="beatmap-stats-info">
                     {% set minutes = beatmap.total_length // 60 %}
                     {% set seconds = beatmap.total_length % 60 %}
                     {{ minutes }}:{{ "%02d"|format(seconds) }}
@@ -123,20 +123,20 @@
             </tr>
             <tr>
                 <td>Source:</td>
-                <td>
+                <td class="beatmap-stats-info">
                     {% if beatmapset.source %}
                     <a href="/beatmapsets?query={{ beatmapset.source }}">{{ beatmapset.source }}</a>
                     {% endif %}
                 </td>
                 <td>Genre:</td>
-                <td>
+                <td class="beatmap-stats-info">
                     <a href="/beatmapsets?genre={{ beatmapset.genre_id }}">{{ Genre(beatmapset.genre_id).name }}</a>
                     {% if beatmapset.language_id > 1 %}
                     <a href="/beatmapsets?language={{ beatmapset.language_id }}">({{ Language(beatmapset.language_id).name }})</a>
                     {% endif %}
                 </td>
                 <td><b>BPM:</b></td>
-                <td>{{ beatmap.bpm|round|int }}</td>
+                <td class="beatmap-stats-info">{{ beatmap.bpm|round|int }}</td>
             </tr>
             <tr>
                 <td>
@@ -147,7 +147,7 @@
                     <br>Last Updated:
                     {% endif %}
                 </td>
-                <td>
+                <td class="beatmap-stats-info">
                     {{ beatmapset.created_at.strftime('%b %d, %Y') }}
                     {% if beatmapset.status > 0 and beatmapset.approved_at %}
                     <br>{{ beatmapset.approved_at.strftime('%b %d, %Y') }}
@@ -156,7 +156,7 @@
                     {% endif %}
                 </td>
                 <td>Average Rating:</td>
-                <td>
+                <td class="beatmap-stats-info">
                     {# TODO: Create rating graph #}
                     {% if beatmapset.ratings %}
                     {{ (beatmapset.ratings | sum(attribute='rating') / beatmapset.ratings | count) | round(4) }}
