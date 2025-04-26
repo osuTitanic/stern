@@ -410,3 +410,8 @@
     border: solid 1px #718F0A;
     text-align: left;
 }
+
+.prefers-high-contrast .bm-user-rating-good {
+    background-color: #5B801C;
+    border: solid 1px #3A4906;
+}
