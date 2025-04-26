@@ -69,7 +69,7 @@ def render_box(tag_name, value, options, parent, context):
 
 @parser.formatter('color')
 def render_color(tag_name, value, options, parent, context):
-    color = sanitize_input(options.get('color', ''))
+    color = sanitize_input(options.get('color', '')).replace(";", "")
     return '<span style="color:%s;">%s</span>' % (color, value)
 
 @parser.formatter('profile')
