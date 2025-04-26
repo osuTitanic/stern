@@ -302,6 +302,8 @@
 
 .scores th {
     border-bottom: 1px solid #a79ef3;
+    height: 15px;
+    vertical-align: middle;
 }
 
 .scores td {
