@@ -15,7 +15,10 @@ time, mark, audio, video, input, button {
     margin: 0;
     padding: 0;
     border: 0;
-    font-family: Tahoma, Helvetica, Arial, sans-serif;
+    font-family: 
+        "Arial Grande", /* Mac / iOS */
+        Tahoma, Helvetica, Arial, /* Windows */
+        sans-serif; /* Fallback */
     font-size: 99.5%;
     vertical-align: baseline;
 }
