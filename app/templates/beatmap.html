@@ -645,14 +645,14 @@
                 {% elif score.user_id in friends %}
                 <tr class="row-score-friend" id="{{ score.id }}">
                 {% elif loop.index0 % 2 %}
-                <tr class="row-light" id="{{ score.id }}">
-                {% else %}
                 <tr class="row-dark" id="{{ score.id }}">
+                {% else %}
+                <tr class="row-light" id="{{ score.id }}">
                 {% endif %}
             {% elif loop.index0 % 2 %}
-            <tr class="row-light" id="{{ score.id }}">
-            {% else %}
             <tr class="row-dark" id="{{ score.id }}">
+            {% else %}
+            <tr class="row-light" id="{{ score.id }}">
             {% endif %}
                 <td><a href="#{{ loop.index0+1 }}">#{{ loop.index0+1 }}</a></td>
                 <td><img src="/images/grades/{{ score.grade|upper }}_small.png" loading="lazy" alt="Grade {{ score.grade|upper }}"></td>
