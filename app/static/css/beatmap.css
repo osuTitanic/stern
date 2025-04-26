@@ -308,9 +308,9 @@
 
 .scores td {
     height: 15px;
-    min-width: 24px;
+    min-width: 23px;
     vertical-align: middle;
-    padding: 1px 0px;
+    padding: 1px 8px 0px 0px;
 }
 
 .scores img {
