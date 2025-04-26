@@ -272,11 +272,11 @@
 }
 
 .row-light {
-    background-color: #edebfa;
+    background-color: #e7e4fc;
 }
 
 .row-dark {
-    background-color: #e3e1fa;
+    background-color: #dad7fb;
 }
 
 .row-score-self {
@@ -313,13 +313,15 @@
 
 .scores th {
     border-bottom: 1px solid #a79ef3;
-    padding: 1px 0;
+    height: 15px;
+    vertical-align: middle;
 }
 
 .scores td {
     height: 15px;
+    min-width: 23px;
     vertical-align: middle;
-    padding: 2.8px;
+    padding: 1px 8px 0px 0px;
 }
 
 .scores img {
