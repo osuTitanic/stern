@@ -146,7 +146,6 @@ def topic(forum_id: str, id: str):
             topic=topic,
             posts=topic_posts,
             current_page=(page - 1),
-            total_pages=post_count // 15,
             post_count=post_count,
             beatmapset=beatmapset,
             is_bookmarked=is_bookmarked,
