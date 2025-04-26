@@ -392,3 +392,21 @@
 .bat-diffs dt {
     width: auto;
 }
+
+.bm-user-rating-table {
+    width: 100%;
+    height: 20px;
+    color: #fff;
+}
+
+.bm-user-rating-bad {
+    background-color: #BC2036;
+    border: solid 1px #82000B;
+    text-align: right;
+}
+
+.bm-user-rating-good {
+    background-color: #78AB23;
+    border: solid 1px #718F0A;
+    text-align: left;
+}
