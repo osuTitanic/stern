@@ -34,23 +34,23 @@
         {% endif %}
 
         {# Calculate page range #}
-        {% set page_start = (0, current_page - 1)|max %}
+        {% set page_start = (1, current_page)|max %}
         {% set page_end = (page_count, page_start + 3)|min %}
 
         {% for page in range(page_start, page_end + 1) %}
             {% if page != current_page %}
-                <a href="/forum/{{ forum.id }}/t/{{ topic.id }}/?page={{ page + 1 }}">{{ page + 1 }}</a>
+                <a href="/forum/{{ forum.id }}/t/{{ topic.id }}/?page={{ page }}">{{ page }}</a>
             {% else %}
-                <strong>{{ page + 1 }}</strong>
+                <strong>{{ page }}</strong>
             {% endif %}
         {% endfor %}
 
         {% if page_end < page_count - 1 %}
             ...
             {# Last page after "..." #}
-            <a href="/forum/{{ forum.id }}/t/{{ topic.id }}/?page={{ page_count + 1 }}">{{ page_count + 1 }}</a>
+            <a href="/forum/{{ forum.id }}/t/{{ topic.id }}/?page={{ page_count }}">{{ page_count }}</a>
             {# "Next" button #}
-            <a href="/forum/{{ forum.id }}/t/{{ topic.id }}/?page={{ current_page + 2 }}">Next</a>
+            <a href="/forum/{{ forum.id }}/t/{{ topic.id }}/?page={{ current_page + 1 }}">Next</a>
         {% endif %}
     </td>
 {% endmacro %}

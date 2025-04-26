@@ -145,7 +145,7 @@ def topic(forum_id: str, id: str):
             forum=topic.forum,
             topic=topic,
             posts=topic_posts,
-            current_page=(page - 1),
+            current_page=page,
             post_count=post_count,
             beatmapset=beatmapset,
             is_bookmarked=is_bookmarked,
