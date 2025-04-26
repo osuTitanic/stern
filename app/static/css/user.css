@@ -349,6 +349,10 @@
     overflow: visible;
 }
 
+#history.expanded {
+    overflow: visible;
+}
+
 .tab-spacing {
     margin: 0px 0px 15px 0px;
 }

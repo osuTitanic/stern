@@ -94,7 +94,7 @@ def internal_beatmap_thumbnail(set_id: int):
 
     if large == None:
         # Downscale thumbnail by default
-        mt = utils.resize_image(
+        mt = utils.resize_and_crop_image(
             mt,
             target_width=80,
             target_height=60
