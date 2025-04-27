@@ -704,18 +704,19 @@ function resetUserPerformanceGraph() {
     $rankGraph[0].innerHTML = '';
 }
 
-function getUserPerformanceGraphRange (backupEntries = null, backupEntriesKey = null) {
+function getUserPerformanceGraphRange(backupEntries = null, backupEntriesKey = null) {
     var rankMin = null;
     var rankMax = null;
 
     if (backupEntries == null)
     {
         var legendData = d3.selectAll('.nv-series').data();
-        for (var i=0; i<legendData.length; i++) {
+        for (var i = 0; i < legendData.length; i++) {
             var legendDataI = legendData[i];
             if (legendDataI.disabled != true) {
                 for (var i2=0; i2 < legendDataI.values.length; i2++) {
                     var rankValue = Math.abs(legendDataI.values[i2].y)
+
                     if (rankMin == null) {
                         rankMin = rankValue;
                     } else {
@@ -731,7 +732,7 @@ function getUserPerformanceGraphRange (backupEntries = null, backupEntriesKey = 
             }
         }
     } else {
-        for (var i=0; i<backupEntries.length; i++) {
+        for (var i = 0; i < backupEntries.length; i++) {
             var value = backupEntries[i][backupEntriesKey];
 
             if (rankMin == null) {
@@ -751,9 +752,7 @@ function getUserPerformanceGraphRange (backupEntries = null, backupEntriesKey = 
     return [rankMin, rankMax];
 }
 
-function updateUserPerformanceGraphYAxis (chart, range) {
-    //console.log("Chart: %o", chart);
-    //console.log("Range: %o", range);
+function updateUserPerformanceGraphYAxis(chart, range) {
     var userDigits = (range[1].toString().length - 1);
 
     var minRankDigits = '1' + ((userDigits > 0) ? (userDigits) * '0' : '');
