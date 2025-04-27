@@ -704,8 +704,72 @@ function resetUserPerformanceGraph() {
     $rankGraph[0].innerHTML = '';
 }
 
-function getUserPerformanceGraphRange () {
-    
+function getUserPerformanceGraphRange (backupEntries = null, backupEntriesKey = null) {
+    var rankMin = null;
+    var rankMax = null;
+
+    if (backupEntries == null)
+    {
+        var legendData = d3.selectAll('.nv-series').data();
+        for (var i=0; i<legendData.length; i++) {
+            var legendDataI = legendData[i];
+            if (legendDataI.disabled != true) {
+                for (var i2=0; i2 < legendDataI.values.length; i2++) {
+                    var rankValue = Math.abs(legendDataI.values[i2].y)
+                    if (rankMin == null) {
+                        rankMin = rankValue;
+                    } else {
+                        rankMin = Math.min(rankMin, rankValue);
+                    }
+                    
+                    if (rankMax == null) {
+                        rankMax = rankValue;
+                    } else {
+                        rankMax = Math.max(rankMax, rankValue);
+                    }
+                }
+            }
+        }
+    } else {
+        for (var i=0; i<backupEntries.length; i++) {
+            var value = backupEntries[i][backupEntriesKey];
+
+            if (rankMin == null) {
+                rankMin = value;
+            } else {
+                rankMin = Math.min(rankMin, value);
+            }
+
+            if (rankMax == null) {
+                rankMax = value;
+            } else {
+                rankMax = Math.max(rankMax, value);
+            }
+        }
+    }
+
+    return [rankMin, rankMax];
+}
+
+function updateUserPerformanceGraphYAxis (chart, range) {
+    //console.log("Chart: %o", chart);
+    //console.log("Range: %o", range);
+    var userDigits = (range[1].toString().length - 1);
+
+    var minRankDigits = '1' + ((userDigits > 0) ? (userDigits) * '0' : '');
+    var relativeMinRank = Math.round(range[0] / (minRankDigits)) * minRankDigits;
+
+    var maxRankDigits = '1' + (userDigits * '0');
+    var relativeMaxRank = Math.round(range[1] / (maxRankDigits)) * maxRankDigits;
+
+    var betweenRank = (relativeMaxRank - relativeMaxRank / 2);
+
+    chart.yScale(d3.scale.linear().domain([-relativeMinRank - 1, -relativeMaxRank]));
+
+    // Only display certain tick values
+    chart.xAxis.tickValues([-90, -60, -30, 0]);
+    chart.yAxis.tickValues([-relativeMaxRank, -betweenRank, -relativeMinRank]);
+    chart.forceY([-relativeMinRank[0] - 1, -relativeMaxRank[1]]);
 }
 
 function loadUserPerformanceGraph(userId, mode) {
@@ -716,6 +780,7 @@ function loadUserPerformanceGraph(userId, mode) {
     performApiRequest("GET", url, null, function(xhr) {
         var entries = JSON.parse(xhr.responseText);
         var rankData = processRankHistory(entries);
+        var defaultSelectedRankType = 'global_rank'; /* Used for initial y-axis calculation */
 
         nv.addGraph(function() {
             var chart = nv.models.lineChart()
@@ -748,31 +813,13 @@ function loadUserPerformanceGraph(userId, mode) {
                 });
 
             chart.legend.dispatch.on('legendClick', function (state) {
-                var legendData = d3.selectAll('.nv-series').data();
-                var rankMin = null;
-                var rankMax = null;
-
-                for (var i=0; i<legendData.length; i++) {
-                    var legendDataI = legendData[i];
-                    if (legendDataI.disabled != true) {
-                        for (var i2=0; i2<legendDataI.values; i2++) {
-                            var rankValue = Math.abs(legendDataI.values[i2].y)
-                            if (rankMin == null) {
-                                rankMin = rankValue;
-                            }
-                            else {
-                                rankMin = Math.min(rankMin, rankValue);
-                            }
-                            
-                            
-                        }
-                    }
-                }
-
-
+                setTimeout(function () {
+                    updateUserPerformanceGraphYAxis(chart, getUserPerformanceGraphRange());
+                }, 500);
             });
 
             // Calculate the relative min/max user rank to display on y axis
+            /*
             var ranks = [];
 
             for (var i = 0; i < rankData.length; i++) {
@@ -798,10 +845,13 @@ function loadUserPerformanceGraph(userId, mode) {
 
             // Force chart to show range of x, y values
             //chart.forceY([-relativeMinRank - 1, -relativeMaxRank]);
-
+            
             // Only display certain tick values
             chart.xAxis.tickValues([-90, -60, -30, 0]);
-            chart.yAxis.tickValues([-relativeMaxRank, -betweenRank, -relativeMinRank]);
+            chart.yAxis.tickValues([-relativeMaxRank, -betweenRank, -relativeMinRank]);*/
+
+            updateUserPerformanceGraphYAxis(chart, getUserPerformanceGraphRange(entries, defaultSelectedRankType));
+
 
             d3.select("#rank-graph svg")
                 .datum(rankData)
