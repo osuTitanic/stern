@@ -43,7 +43,7 @@
 
         {% if page_count <= 6 %}
             {% for page in range(page_count) %}
-                {{ topicPagination(page) }}
+                {{ topicPaginationPage(page) }}
             {% endfor %}
         {% else %}
             {# 1 2 3 4 5 ... 22 #}
@@ -63,29 +63,29 @@
             {% set num_pages_left_middle = (3, current_page - 2)|min %}
             {% set num_pages_right_middle = (3, page_count - current_page)|min if current_page != 1 else 4 %}
             
-            {{ topicPagination(1) }}
+            {{ topicPaginationPage(1) }}
 
             {% if use_ellipsis_left %}
             <span class="pagination-ellipsis">...</span>
             {% endif %}
 
             {% for page in range(num_pages_left_middle) %}
-            {{ topicPagination(current_page - num_pages_left_middle + page) }}
+            {{ topicPaginationPage(current_page - num_pages_left_middle + page) }}
             {% endfor %}
 
             {% if current_page != 1 %}
-            {{ topicPagination(current_page) }}
+            {{ topicPaginationPage(current_page) }}
             {% endif %}
 
             {% for page in range(num_pages_right_middle) %}
-            {{ topicPagination(current_page + page + 1) }}
+            {{ topicPaginationPage(current_page + page + 1) }}
             {% endfor %}
 
             {% if use_ellipsis_right %}
             <span class="pagination-ellipsis">...</span>
             {% endif %}
 
-            {{ topicPagination(page_count) }}
+            {{ topicPaginationPage(page_count) }}
         {% endif %}
     </td>
 {% endmacro %}
