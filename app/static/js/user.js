@@ -704,6 +704,10 @@ function resetUserPerformanceGraph() {
     $rankGraph[0].innerHTML = '';
 }
 
+function getUserPerformanceGraphRange () {
+    
+}
+
 function loadUserPerformanceGraph(userId, mode) {
 
     resetUserPerformanceGraph();
@@ -743,6 +747,31 @@ function loadUserPerformanceGraph(userId, mode) {
                     return '#' + (-rank);
                 });
 
+            chart.legend.dispatch.on('legendClick', function (state) {
+                var legendData = d3.selectAll('.nv-series').data();
+                var rankMin = null;
+                var rankMax = null;
+
+                for (var i=0; i<legendData.length; i++) {
+                    var legendDataI = legendData[i];
+                    if (legendDataI.disabled != true) {
+                        for (var i2=0; i2<legendDataI.values; i2++) {
+                            var rankValue = Math.abs(legendDataI.values[i2].y)
+                            if (rankMin == null) {
+                                rankMin = rankValue;
+                            }
+                            else {
+                                rankMin = Math.min(rankMin, rankValue);
+                            }
+                            
+                            
+                        }
+                    }
+                }
+
+
+            });
+
             // Calculate the relative min/max user rank to display on y axis
             var ranks = [];
 
@@ -768,7 +797,7 @@ function loadUserPerformanceGraph(userId, mode) {
             chart.xScale(d3.scale.linear().domain([-90, 0]));
 
             // Force chart to show range of x, y values
-            chart.forceY([-relativeMinRank - 1, -relativeMaxRank]);
+            //chart.forceY([-relativeMinRank - 1, -relativeMaxRank]);
 
             // Only display certain tick values
             chart.xAxis.tickValues([-90, -60, -30, 0]);
