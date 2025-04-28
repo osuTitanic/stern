@@ -708,26 +708,16 @@ function getUserPerformanceGraphRange(backupEntries, backupEntriesKey) {
     var rankMin = null;
     var rankMax = null;
 
-    if (backupEntries == undefined)
-    {
+    if (backupEntries == undefined) {
         var legendData = d3.selectAll('.nv-series').data();
         for (var i = 0; i < legendData.length; i++) {
             var legendDataI = legendData[i];
             if (legendDataI.disabled != true) {
-                for (var i2=0; i2 < legendDataI.values.length; i2++) {
-                    var rankValue = Math.abs(legendDataI.values[i2].y)
+                for (var j = 0; j < legendDataI.values.length; j++) {
+                    var rankValue = Math.abs(legendDataI.values[j].y);
 
-                    if (rankMin == null) {
-                        rankMin = rankValue;
-                    } else {
-                        rankMin = Math.min(rankMin, rankValue);
-                    }
-                    
-                    if (rankMax == null) {
-                        rankMax = rankValue;
-                    } else {
-                        rankMax = Math.max(rankMax, rankValue);
-                    }
+                    rankMin = rankMin == null ? rankValue : Math.min(rankMin, rankValue);
+                    rankMax = rankMax == null ? rankValue : Math.max(rankMax, rankValue);
                 }
             }
         }
@@ -735,17 +725,8 @@ function getUserPerformanceGraphRange(backupEntries, backupEntriesKey) {
         for (var i = 0; i < backupEntries.length; i++) {
             var value = backupEntries[i][backupEntriesKey];
 
-            if (rankMin == null) {
-                rankMin = value;
-            } else {
-                rankMin = Math.min(rankMin, value);
-            }
-
-            if (rankMax == null) {
-                rankMax = value;
-            } else {
-                rankMax = Math.max(rankMax, value);
-            }
+            rankMin = rankMin == null ? value : Math.min(rankMin, value);
+            rankMax = rankMax == null ? value : Math.max(rankMax, value);
         }
     }
 
@@ -817,40 +798,11 @@ function loadUserPerformanceGraph(userId, mode) {
                 }, 500);
             });
 
-            // Calculate the relative min/max user rank to display on y axis
-            /*
-            var ranks = [];
+            // Calculate the range of the y axis
+            var range = getUserPerformanceGraphRange(entries, defaultSelectedRankType);
 
-            for (var i = 0; i < rankData.length; i++) {
-                for (var j = 0; j < rankData[i].values.length; j++) {
-                    ranks.push(-rankData[i].values[j].y);
-                }
-            }
-
-            var minRank = Math.min.apply(null, ranks);
-            var maxRank = Math.max.apply(null, ranks);
-            var userDigits = (maxRank.toString().length - 1);
-
-            var minRankDigits = '1' + ((userDigits > 0) ? (userDigits) * '0' : '');
-            var relativeMinRank = Math.round(minRank / (minRankDigits)) * minRankDigits;
-
-            var maxRankDigits = '1' + (userDigits * '0');
-            var relativeMaxRank = Math.round(maxRank / (maxRankDigits)) * maxRankDigits;
-
-            var betweenRank = (relativeMaxRank - relativeMaxRank / 2);
-
-            chart.yScale(d3.scale.linear().domain([-relativeMinRank - 1, -relativeMaxRank]));
-            chart.xScale(d3.scale.linear().domain([-90, 0]));
-
-            // Force chart to show range of x, y values
-            //chart.forceY([-relativeMinRank - 1, -relativeMaxRank]);
-            
-            // Only display certain tick values
-            chart.xAxis.tickValues([-90, -60, -30, 0]);
-            chart.yAxis.tickValues([-relativeMaxRank, -betweenRank, -relativeMinRank]);*/
-
-            updateUserPerformanceGraphYAxis(chart, getUserPerformanceGraphRange(entries, defaultSelectedRankType));
-
+            // Update the y axis with the calculated range
+            updateUserPerformanceGraphYAxis(chart, range);
 
             d3.select("#rank-graph svg")
                 .datum(rankData)
