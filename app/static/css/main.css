@@ -220,7 +220,7 @@ input[type="url"], input[type="search"] {
     position: absolute;
     list-style: none;
     width: 10em;
-    padding: 4px 0 0 0;
+    padding: 6px 0 0 0;
     filter: drop-shadow(2px 2px 5px rgba(0,0,0,0.15));
     -webkit-box-shadow: 2px 2px 5px rgba(0,0,0,0.15);
     -moz-box-shadow: 2px 2px 5px rgba(0,0,0,0.15);
