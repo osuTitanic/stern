@@ -78,10 +78,8 @@
                         {% else %}
                             <tr class="row-light">
                         {% endif %}
-                            <td style="color: grey; width: 10%">{{ message.time.strftime("%H:%M:%S") }}</th>
-                            <td>
-                                {{ message.sender }}: {{ message.message|format_chat|safe }}
-                            </td>
+                            <td class="chat-time">{{ message.time.strftime("%H:%M:%S") }}</th>
+                            <td>{{ message.sender }}: {{ message.message|format_chat|safe }}</td>
                         </tr>
                     {% endfor %}
                     </tbody>
