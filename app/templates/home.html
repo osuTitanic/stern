@@ -125,7 +125,7 @@
                     {% else %}
                         <tr class="dark-row">
                     {% endif %}
-                        <td>{{ plays['count'] }}</th>
+                        <td>{{ "{:,}".format(plays['count']) }}</th>
                         <td>
                             <a href="/b/{{ plays['beatmap_id'] }}">
                                 <img src="/mt/{{ plays['set_id'] }}" loading="lazy" alt="image"/>
