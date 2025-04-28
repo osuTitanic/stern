@@ -70,7 +70,7 @@
             <div class="chat-wrapper">
                 <h2 class="headers headers-condensed">Game Chat</h2>
                 {# TODO: Format chat links #}
-                <table class="styled-table">
+                <table class="styled-table styled-table-chat">
                     <tbody>
                     {% for message in messages|reverse %}
                         {% if loop.index0 % 2 %}
