@@ -220,8 +220,11 @@ input[type="url"], input[type="search"] {
     position: absolute;
     list-style: none;
     width: 10em;
-    padding: 6px 8px 9px 0;
-    filter: drop-shadow(0 8px 0.55rem rgba(185, 185, 185, 0.5));
+    padding: 6px 0 0 0;
+    filter: drop-shadow(2px 2px 5px rgba(0,0,0,0.15));
+    -webkit-box-shadow: 2px 2px 5px rgba(0,0,0,0.15);
+    -moz-box-shadow: 2px 2px 5px rgba(0,0,0,0.15);
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.15);
 }
 
 .nav-dropdown li {
@@ -591,6 +594,14 @@ input[type="url"], input[type="search"] {
     text-align: right;
     cursor: pointer;
     font-size: 150%;
+}
+
+.row-light {
+    background-color: #e7e4fc;
+}
+
+.row-dark {
+    background-color: #dad7fb;
 }
 
 #error {
