@@ -704,11 +704,11 @@ function resetUserPerformanceGraph() {
     $rankGraph[0].innerHTML = '';
 }
 
-function getUserPerformanceGraphRange(backupEntries = null, backupEntriesKey = null) {
+function getUserPerformanceGraphRange(backupEntries, backupEntriesKey) {
     var rankMin = null;
     var rankMax = null;
 
-    if (backupEntries == null)
+    if (backupEntries == undefined)
     {
         var legendData = d3.selectAll('.nv-series').data();
         for (var i = 0; i < legendData.length; i++) {
