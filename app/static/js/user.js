@@ -711,14 +711,16 @@ function getUserPerformanceGraphRange(backupEntries, backupEntriesKey) {
     if (backupEntries == undefined) {
         var legendData = d3.selectAll('.nv-series').data();
         for (var i = 0; i < legendData.length; i++) {
-            var legendDataI = legendData[i];
-            if (legendDataI.disabled != true) {
-                for (var j = 0; j < legendDataI.values.length; j++) {
-                    var rankValue = Math.abs(legendDataI.values[j].y);
+            var legendElement = legendData[i];
+            if (legendElement.disabled) {
+                continue;
+            }
 
-                    rankMin = rankMin == null ? rankValue : Math.min(rankMin, rankValue);
-                    rankMax = rankMax == null ? rankValue : Math.max(rankMax, rankValue);
-                }
+            for (var j = 0; j < legendElement.values.length; j++) {
+                var rankValue = Math.abs(legendElement.values[j].y);
+
+                rankMin = rankMin == null ? rankValue : Math.min(rankMin, rankValue);
+                rankMax = rankMax == null ? rankValue : Math.max(rankMax, rankValue);
             }
         }
     } else {
@@ -753,14 +755,15 @@ function updateUserPerformanceGraphYAxis(chart, range) {
 }
 
 function loadUserPerformanceGraph(userId, mode) {
-
     resetUserPerformanceGraph();
     var url = '/users/' + userId + '/history/rank/' + mode;
 
     performApiRequest("GET", url, null, function(xhr) {
         var entries = JSON.parse(xhr.responseText);
         var rankData = processRankHistory(entries);
-        var defaultSelectedRankType = 'global_rank'; /* Used for initial y-axis calculation */
+
+        // Used for initial y-axis calculation
+        var defaultSelectedRankType = 'global_rank';
 
         nv.addGraph(function() {
             var chart = nv.models.lineChart()
@@ -825,6 +828,7 @@ function loadUserPerformanceGraph(userId, mode) {
 
 function processPlayHistory(entries) {
     var values = [];
+
     for (var i = 0; i < entries.length; i++) {
         var entry = entries[i];
         var start = new Date();
