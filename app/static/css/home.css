@@ -33,6 +33,10 @@
     margin-top: 10px;
 }
 
+.headers-condensed {
+    margin-bottom: 0px;
+}
+
 .headers span {
     font-size: 50%;
     margin-left: 5px;
@@ -148,12 +152,23 @@
     -webkit-border-radius: 5px;
 }
 
-.dark-row {
-    background-color: #e3e1fa;
+.styled-table-chat {
+    font-size: 8pt;
+    border-spacing: 0px;
 }
 
-.light-row {
-    background-color: #edebfa;
+.styled-table-chat a {
+    vertical-align: top;
+}
+
+.styled-table-chat td {
+    padding: 1px;
+}
+
+.chat-time {
+    color: #585479;
+    padding-right: 10px;
+    font-size: 8pt;
 }
 
 .chat-wrapper {
