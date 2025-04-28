@@ -2,6 +2,9 @@
 
 {% extends "base.html" %}
 
+{% set posts_per_page = 15 %}
+{% set page_count = (post_count / posts_per_page)|ceil %}
+
 {% set is_privileged = (
     current_user.is_moderator or
     current_user.is_admin
@@ -12,6 +15,57 @@
     current_user.id == beatmapset.creator_id or
     current_user.is_bat
 ) %}
+
+{% macro topicPaginationPage(page) %}
+    {% if page != current_page %}
+        <a href="/forum/{{ forum.id }}/t/{{ topic.id }}/?page={{ page }}">{{ page }}</a>
+    {% else %}
+        <strong>{{ page }}</strong>
+    {% endif %}
+{% endmacro %}
+
+{% macro topicPagination(useFloat) %}
+    {% if useFloat %}
+    <td align="right" style="float: right; padding-right: 4px">
+    {% else %}
+    <td align="right" style="padding-right: 4px">
+    {% endif %}
+        {{ "{:,}".format(post_count) }} posts |
+        <a onclick="jumpToPage();">Jump</a> |
+
+        {# Pagination #}
+        {% if page_count <= 6 %}
+            {% for page in range(page_count) %}
+                {{ topicPaginationPage(page) }}
+            {% endfor %}
+        {% else %}
+            {% set use_ellipsis_left = (current_page > 5) %}
+            {% set use_ellipsis_right = (current_page < page_count - 4) %}
+            {% set num_pages_left_middle = (3, current_page - 2)|min if current_page != page_count else 4 %}
+            {% set num_pages_right_middle = (3, page_count - current_page)|min if current_page != 1 else 4 %}
+            {% set total_pages_middle = num_pages_left_middle + 1 + num_pages_right_middle %}
+
+            {{ topicPaginationPage(1) }}
+
+            {% if use_ellipsis_left %}
+            <span class="pagination-ellipsis">...</span>
+            {% endif %}
+
+            {% for page in range(total_pages_middle) %}
+                {% set page_index = current_page - num_pages_left_middle + page %}
+                {% if page_index != page_count %}
+                    {{ topicPaginationPage(page_index) }}
+                {% endif %}
+            {% endfor %}
+
+            {% if use_ellipsis_right %}
+            <span class="pagination-ellipsis">...</span>
+            {% endif %}
+
+            {{ topicPaginationPage(page_count) }}
+        {% endif %}
+    </td>
+{% endmacro %}
 
 {% block content %}
 <style>
@@ -34,38 +88,7 @@
 </h1>
 <div>
     <table width='100%'>
-        <td align="right" style="padding-right: 4px">
-            {{ "{:,}".format(post_count) }} posts |
-            <a onclick="jumpToPage();">Jump</a> |
-            {# Pagination #}
-            {% if current_page > 1 %}
-                {# "Back" button #}
-                <a href="/forum/{{ forum.id }}/t/{{ topic.id }}/?page={{ current_page }}">Back</a>
-                {# First page #}
-                <a href="/forum/{{ forum.id }}/t/{{ topic.id }}/?page=1">1</a>
-                ...
-            {% endif %}
-
-            {# Calculate page range #}
-            {% set page_start = (0, current_page - 1)|max %}
-            {% set page_end = (total_pages, page_start + 3)|min %}
-
-            {% for page in range(page_start, page_end + 1) %}
-                {% if page != current_page %}
-                    <a href="/forum/{{ forum.id }}/t/{{ topic.id }}/?page={{ page + 1 }}">{{ page + 1 }}</a>
-                {% else %}
-                    <strong>{{ page + 1 }}</strong>
-                {% endif %}
-            {% endfor %}
-
-            {% if page_end < total_pages - 1 %}
-                ...
-                {# Last page after "..." #}
-                <a href="/forum/{{ forum.id }}/t/{{ topic.id }}/?page={{ total_pages + 1 }}">{{ total_pages + 1 }}</a>
-                {# "Next" button #}
-                <a href="/forum/{{ forum.id }}/t/{{ topic.id }}/?page={{ current_page + 2 }}">Next</a>
-            {% endif %}
-        </td>
+        {{ topicPagination(False) }}
     </table>
     <table width="100%" cellspacing="0" class="bar">
         <td>
@@ -244,38 +267,7 @@
     </form>
     {% endif %}
     <table width='100%'>
-        <td align="right" style="float: right; padding-right: 4px">
-            {{ "{:,}".format(post_count) }} posts |
-            <a onclick="jumpToPage();">Jump</a> |
-            {# Pagination #}
-            {% if current_page > 1 %}
-                {# "Back" button #}
-                <a href="/forum/{{ forum.id }}/t/{{ topic.id }}/?page={{ current_page }}">Back</a>
-                {# First page #}
-                <a href="/forum/{{ forum.id }}/t/{{ topic.id }}/?page=1">1</a>
-                ...
-            {% endif %}
-
-            {# Calculate page range #}
-            {% set page_start = (0, current_page - 1)|max %}
-            {% set page_end = (total_pages, page_start + 3)|min %}
-
-            {% for page in range(page_start, page_end + 1) %}
-                {% if page != current_page %}
-                    <a href="/forum/{{ forum.id }}/t/{{ topic.id }}/?page={{ page + 1 }}">{{ page + 1 }}</a>
-                {% else %}
-                    <strong>{{ page + 1 }}</strong>
-                {% endif %}
-            {% endfor %}
-
-            {% if page_end < total_pages - 1 %}
-                ...
-                {# Last page after "..." #}
-                <a href="/forum/{{ forum.id }}/t/{{ topic.id }}/?page={{ total_pages + 1 }}">{{ total_pages + 1 }}</a>
-                {# "Next" button #}
-                <a href="/forum/{{ forum.id }}/t/{{ topic.id }}/?page={{ current_page + 2 }}">Next</a>
-            {% endif %}
-        </td>
+        {{ topicPagination(True) }}
         {% if current_user.is_authenticated %}
         <td align="left" style="float: left">
             <div class="post-buttons-large" id="post-bottom">
