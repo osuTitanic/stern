@@ -32,15 +32,8 @@
     {% endif %}
         {{ "{:,}".format(post_count) }} posts |
         <a onclick="jumpToPage();">Jump</a> |
-        {# Pagination #}
-        {% if current_page > 1 %}
-            {# "Back" button #}
-            <a href="/forum/{{ forum.id }}/t/{{ topic.id }}/?page={{ current_page }}">Back</a>
-            {# First page #}
-            <a href="/forum/{{ forum.id }}/t/{{ topic.id }}/?page=1">1</a>
-            ...
-        {% endif %}
 
+        {# Pagination #}
         {% if page_count <= 6 %}
             {% for page in range(page_count) %}
                 {{ topicPaginationPage(page) }}
@@ -51,7 +44,7 @@
             {% set num_pages_left_middle = (3, current_page - 2)|min if current_page != page_count else 4 %}
             {% set num_pages_right_middle = (3, page_count - current_page)|min if current_page != 1 else 4 %}
             {% set total_pages_middle = num_pages_left_middle + 1 + num_pages_right_middle %}
-            
+
             {{ topicPaginationPage(1) }}
 
             {% if use_ellipsis_left %}
@@ -59,9 +52,9 @@
             {% endif %}
 
             {% for page in range(total_pages_middle) %}
-                {% set page_i = current_page - num_pages_left_middle + page %}
-                {% if page_i != page_count %}
-                    {{ topicPaginationPage(page_i) }}
+                {% set page_index = current_page - num_pages_left_middle + page %}
+                {% if page_index != page_count %}
+                    {{ topicPaginationPage(page_index) }}
                 {% endif %}
             {% endfor %}
 
