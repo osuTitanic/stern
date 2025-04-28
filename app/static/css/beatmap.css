@@ -50,65 +50,6 @@
     display: grid;
 }
 
-.tab-list {
-    background-color: #ece4fd;
-    border-bottom: 1px solid #cfc1ef;
-    width: 100%;
-    float: left;
-}
-
-.tab-list ul {
-    display: block;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    border: 0;
-}
-
-.tab-link {
-    text-decoration: none;
-    font-size: 90%;
-    padding: 7px 8px 7px 8px;
-    line-height: 15px;
-    color: #5e5e5e;
-    background-color: #e0d6fb;
-    display: inline-block; /* Use this as backup */
-    display: flex;
-}
-
-.tab-link:hover,
-.tab-link:focus,
-.tab-link:active {
-    background-color: white;
-    color: #5e5e5e;
-    text-decoration: none;
-}
-
-.tab-link:visited {
-    color: #5e5e5e;
-}
-
-.tab-link img {
-    height: 16px;
-    width: 16px;
-    margin: auto;
-    margin-right: 5px;
-}
-
-.tab-item {
-    margin: 0;
-    width: auto;
-    padding-right: 2px;
-    float: left;
-    display: block;
-}
-
-.tab-link.active {
-    background-color: #cab8f7;
-    cursor: default;
-    pointer-events: none;
-}
-
 .difficulty-icon img {
     width: 16px;
     height: 16px;
