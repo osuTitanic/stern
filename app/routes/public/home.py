@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from app.common.constants import GameMode
+from app.common.helpers import caching
 from app.common.database import (
     messages,
     topics,
@@ -40,7 +41,7 @@ def root() -> Response:
             site_image=f"{app.config.OSU_BASEURL}/images/logo/main-low.png",
             site_url=app.config.OSU_BASEURL,
             news=[
-                format_announcement(announcement, session=session)
+                format_announcement(announcement)
                 for announcement in announcements
             ],
             most_played=plays.fetch_most_played(session=session),
@@ -62,8 +63,9 @@ def redirect_index(extension: Optional[str] = None) -> Response:
 def redirect_page(page: str) -> Response:
     return handle_legacy_redirects(page, request)
 
-def format_announcement(announcement: topics.DBForumTopic, session) -> dict:
-    if (post := posts.fetch_initial_post(announcement.id, session=session)):
+@caching.ttl_cache(ttl=60*15)
+def format_announcement(announcement: topics.DBForumTopic) -> dict:
+    if (post := posts.fetch_initial_post(announcement.id)):
         text = post.content.splitlines()[0]
 
     return {
