@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 from app.common.constants import GameMode
-from app.common.helpers import caching
 from app.common.database import (
     messages,
     topics,
@@ -10,6 +9,7 @@ from app.common.database import (
     posts
 )
 
+from sqlalchemy.orm import Session
 from typing import Optional
 from flask import (
     Blueprint,
@@ -41,7 +41,7 @@ def root() -> Response:
             site_image=f"{app.config.OSU_BASEURL}/images/logo/main-low.png",
             site_url=app.config.OSU_BASEURL,
             news=[
-                format_announcement(announcement)
+                format_announcement(announcement, session=session)
                 for announcement in announcements
             ],
             most_played=plays.fetch_most_played(session=session),
@@ -63,9 +63,8 @@ def redirect_index(extension: Optional[str] = None) -> Response:
 def redirect_page(page: str) -> Response:
     return handle_legacy_redirects(page, request)
 
-@caching.ttl_cache(ttl=60*15)
-def format_announcement(announcement: topics.DBForumTopic) -> dict:
-    if (post := posts.fetch_initial_post(announcement.id)):
+def format_announcement(announcement: topics.DBForumTopic, session: Session) -> dict:
+    if (post := posts.fetch_initial_post(announcement.id, session=session)):
         text = post.content.splitlines()[0]
 
     return {
