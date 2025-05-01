@@ -27,7 +27,6 @@ function expandProfileTab(id, forceExpand) {
 
     // Check for 'expanded' class
     if (tab.className.indexOf("expanded") === -1 || forceExpand) {
-        tab.className += " expanded";
         tab.style.display = "block";
 
         if (tab.style.height === "0px") {
@@ -37,6 +36,9 @@ function expandProfileTab(id, forceExpand) {
         if (forceExpand) {
             window.location.hash = "#" + activeTab;
         }
+
+        // Apply class after slide animation is done
+        setTimeout(function() { tab.className += " expanded" }, 500);
     } else {
         slideUp(tab);
         tab.className = tab.className.replace(/(?:^|\s)expanded(?!\S)/, '');
@@ -105,12 +107,6 @@ function createScoreElement(score, index, type) {
         }
     );
 
-    var dateText = document.createElement("time");
-    dateText.setAttribute("datetime", score.submitted_at);
-    dateText.innerText = score.submitted_at;
-    dateText.title = scoreDateString;
-    dateText.className = "timeago";
-
     var rightColumn = document.createElement("td");
     rightColumn.className = 'score-right';
 
@@ -148,16 +144,58 @@ function createScoreElement(score, index, type) {
     scoreInfoDiv.appendChild(scoreGrade);
     scoreInfoDiv.appendChild(scoreInfo);
     scoreInfoDiv.appendChild(accuracyText);
+    
+    var scoreBottomDiv = document.createElement('div');
+    scoreBottomDiv.classList.add('score-bottom');
 
-    var dateDiv = document.createElement("div");
-    dateDiv.appendChild(dateText);
+    // Score's Date
+    var dateText = document.createElement("time");
+    dateText.setAttribute("datetime", score.submitted_at);
+    dateText.innerText = score.submitted_at;
+    dateText.title = scoreDateString;
+    dateText.className = "timeago";
+
+    scoreBottomDiv.appendChild(dateText);
+
+    // Score's Client Version
+    var versionText = false;
+    if (typeof(score.client_version) == 'string') {
+        versionText = score.client_version; // If it's a string, b will already be prepended
+    } else if (typeof(score.client_version) == 'number') {
+        versionText = "b" + score.client_version.toString();
+    }
+    
+    if (versionText != false) {
+        var clientText = document.createElement('div');
+        clientText.classList.add('score-version');
+        clientText.innerHTML += ' &mdash; on ';
+    
+        var clientTextVersion = document.createElement('span');
+        clientTextVersion.classList.add('score-version-number');
+        clientTextVersion.innerText = versionText;
+
+        clientText.appendChild(clientTextVersion);
+        scoreBottomDiv.appendChild(clientText);
+    }
+
+    var replayLink = document.createElement('a');
+    replayLink.href = "/scores/" + score.id + "/download";
+    replayLink.className = "score-replay";
+    replayLink.title = "Download Replay";
+    replayLink.target = "_blank";
+
+    var replayIcon = document.createElement("i");
+    replayIcon.className = "fa-regular fa-download";
+    replayLink.appendChild(replayIcon);
+
+    iconContainer.appendChild(replayLink);
 
     if (currentUser === userId) {
         var pinIcon = document.createElement("i");
         pinIcon.className = "fa-regular fa-star score-pin-" + score.id;
 
         if (!score.pinned) {
-            pinIcon.className += " score-pin-icon"; // Append className
+            pinIcon.className += " score-pin-icon";
             pinIcon.title = "Pin Score";
             pinIcon.onclick = function() {
                 var icons = document.querySelectorAll(".score-pin-" + score.id);
@@ -175,7 +213,7 @@ function createScoreElement(score, index, type) {
                 };
             };
         } else {
-            pinIcon.className += " score-pinned-icon"; // Append className
+            pinIcon.className += " score-pinned-icon";
             pinIcon.title = "Unpin Score";
             pinIcon.onclick = function() {
                 var icons = document.querySelectorAll(".score-pin-" + score.id);
@@ -195,23 +233,11 @@ function createScoreElement(score, index, type) {
         }
 
         iconContainer.appendChild(pinIcon);
-    } else {
-        var replayLink = document.createElement("a");
-        replayLink.href = "/scores/" + score.id + "/download";
-        replayLink.className = "score-replay";
-        replayLink.title = "Download Replay";
-        replayLink.target = "_blank";
-
-        var replayIcon = document.createElement("i");
-        replayIcon.className = "fa-regular fa-star";
-        replayLink.appendChild(replayIcon);
-
-        iconContainer.appendChild(replayLink);
     }
 
     ppWeight.appendChild(iconContainer);
     leftColumn.appendChild(scoreInfoDiv);
-    leftColumn.appendChild(dateDiv);
+    leftColumn.appendChild(scoreBottomDiv);
     rightColumn.appendChild(ppDisplay);
     rightColumn.appendChild(ppWeight);
     tableRow.appendChild(leftColumn);
@@ -553,42 +579,58 @@ function loadRecentPlays(userId, mode) {
     loadingText.parentNode.removeChild(loadingText);
 }
 
+function getDaysAgo(date) {
+    var currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+    date.setHours(0, 0, 0, 0);
+    return Math.ceil((currentDate.valueOf() - date.valueOf()) / 86400 / 1000);
+}
+
+function processRankEntries(entries, rankingType) {
+    var bestEntryByDate = [];
+    var bestWasLast = false;
+    var best = null;
+
+    for (var i=0; i<entries.length; i++) {
+        var entry = {
+            daysAgo: getDaysAgo(new Date(entries[i].time)),
+            value: entries[i][rankingType]
+        };
+
+        if (i == 0) {
+            best = entry;
+        } else if (entry.daysAgo == best.daysAgo) {
+            if (entry.value < best.value) {
+                best = entry;
+            }
+        } else {
+            bestEntryByDate.push(best);
+            bestWasLast = i == (entries.length - 1);
+
+            if (!bestWasLast) {
+                best = entry;
+            }
+        }
+    }
+
+    if (best != null && !bestWasLast) {
+        bestEntryByDate.push(entry);
+    }
+    
+    return bestEntryByDate.map(function(entry) {
+        var daysAgo = entry.daysAgo == 0 ? 0 : (-entry.daysAgo);
+        return {
+            x: daysAgo,
+            y: -entry.value
+        };
+    });
+}
+
 function processRankHistory(entries) {
-    var globalRankValues = entries.map(function(entry) {
-        var difference = (Date.now() - Date.parse(entry.time));
-        var elapsedDays = Math.ceil(difference / (1000 * 3600 * 24));
-        return {
-            x: -elapsedDays,
-            y: -entry.global_rank
-        };
-    });
-
-    var scoreRankValues = entries.map(function(entry) {
-        var difference = (Date.now() - Date.parse(entry.time));
-        var elapsedDays = Math.ceil(difference / (1000 * 3600 * 24));
-        return {
-            x: -elapsedDays,
-            y: -entry.score_rank
-        };
-    });
-
-    var countryRankValues = entries.map(function(entry) {
-        var difference = (Date.now() - Date.parse(entry.time));
-        var elapsedDays = Math.ceil(difference / (1000 * 3600 * 24));
-        return {
-            x: -elapsedDays,
-            y: -entry.country_rank
-        };
-    });
-
-    var ppv1RankValues = entries.map(function(entry) {
-        var difference = (Date.now() - Date.parse(entry.time));
-        var elapsedDays = Math.ceil(difference / (1000 * 3600 * 24));
-        return {
-            x: -elapsedDays,
-            y: -entry.ppv1_rank
-        };
-    });
+    var globalRankValues = processRankEntries(entries, 'global_rank');
+    var scoreRankValues = processRankEntries(entries, 'score_rank');
+    var countryRankValues = processRankEntries(entries, 'country_rank');
+    var ppv1RankValues = processRankEntries(entries, 'ppv1_rank');
 
     if (entries.length > 0) {
         countryRankValues.unshift({
@@ -653,7 +695,18 @@ function processRankHistory(entries) {
     ];
 }
 
+function resetUserPerformanceGraph() {
+    var $rankGraph = $('#rank-graph svg');
+    if ($rankGraph.length == 0) {
+        return;
+    }
+
+    $rankGraph[0].innerHTML = '';
+}
+
 function loadUserPerformanceGraph(userId, mode) {
+
+    resetUserPerformanceGraph();
     var url = '/users/' + userId + '/history/rank/' + mode;
 
     performApiRequest("GET", url, null, function(xhr) {
@@ -669,7 +722,7 @@ function loadUserPerformanceGraph(userId, mode) {
                 })
                 .useInteractiveGuideline(true)
                 .transitionDuration(250)
-                .interpolate("step")
+                .interpolate('linear')
                 .showLegend(true)
                 .showYAxis(true)
                 .showXAxis(true);
@@ -1051,7 +1104,7 @@ function toggleBeatmapContainer(section) {
 }
 
 addEvent('DOMContentLoaded', document, function(event) {
-    var beatmapContainers = document.querySelectorAll('.profile-beatmaps-container');
+    var beatmapContainers = document.getElementsByClassName('profile-beatmaps-container');
     for (var i = 0; i < beatmapContainers.length; i++) {
         beatmapContainers[i].style.display = 'none';
     }

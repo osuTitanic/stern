@@ -1,8 +1,7 @@
 
+from app.common.database import beatmaps, scores, favourites, nominations, relationships
 from app.common.constants import BeatmapLanguage, BeatmapGenre, DatabaseStatus, Mods
-from app.common.database import beatmaps, scores, favourites, nominations
-
-from flask import Blueprint, request, abort
+from flask import Blueprint, request, redirect
 from flask_login import current_user
 
 import config
@@ -11,7 +10,11 @@ import app
 
 router = Blueprint('beatmap', __name__)
 
-@router.get('/<id>')
+@router.get('/beatmaps/<id>')
+def redirect_to_map(id: int):
+    return redirect(f'/b/{id}')
+
+@router.get('/b/<id>')
 def get_beatmap(id: int):
     if not id.isdigit():
         return utils.render_error(404, 'beatmap_not_found')
@@ -29,6 +32,7 @@ def get_beatmap(id: int):
 
         personal_best = None
         personal_best_rank = None
+        friend_ids = []
 
         if current_user.is_authenticated:
             personal_best = scores.fetch_personal_best_score(
@@ -42,6 +46,11 @@ def get_beatmap(id: int):
                 current_user.id,
                 beatmap.id,
                 int(mode),
+                session=session
+            )
+
+            friend_ids = relationships.fetch_target_ids(
+                current_user.id,
                 session=session
             )
 
@@ -91,5 +100,6 @@ def get_beatmap(id: int):
             ),
             nominations=nominations.fetch_by_beatmapset(beatmap.set_id, session),
             canonical_url=f'/b/{beatmap.beatmapset.beatmaps[0].id}',
+            friends=friend_ids,
             session=session
         )

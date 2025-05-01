@@ -127,6 +127,9 @@ def topic(forum_id: str, id: str):
             session=session
         )
 
+        if not initial_post:
+            return utils.render_error(404, 'topic_not_found')
+
         if initial_post in topic_posts:
             # Override icon for initial post
             topic_posts[0].icon = topic.icon
@@ -142,8 +145,7 @@ def topic(forum_id: str, id: str):
             forum=topic.forum,
             topic=topic,
             posts=topic_posts,
-            current_page=(page - 1),
-            total_pages=post_count // 15,
+            current_page=page,
             post_count=post_count,
             beatmapset=beatmapset,
             is_bookmarked=is_bookmarked,

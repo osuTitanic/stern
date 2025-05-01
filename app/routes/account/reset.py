@@ -91,6 +91,14 @@ def password_reset_request():
 
     if not (user := users.fetch_by_email(email)):
         return return_to_reset_page('We could not find any user with that email address.')
+    
+    lock = app.session.redis.get(f'reset_lock:{user.id}') or b'0'
+
+    if int(lock):
+        return return_to_reset_page(
+            'You have already requested a password reset recently. '
+            'Please check your emails, or try again in a few hours!'
+        )
 
     app.session.logger.info('Sending verification email for resetting password...')
 
@@ -104,5 +112,8 @@ def password_reset_request():
         verification,
         user
     )
+
+    # Set a lock for the user to prevent spamming
+    app.session.redis.set(f'reset_lock:{user.id}', 1, ex=3600*12)
 
     return redirect(f'/account/verification?id={verification.id}')

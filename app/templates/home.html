@@ -69,19 +69,16 @@
 
             <div class="chat-wrapper">
                 <h2 class="headers">Chat</h2>
-                {# TODO: Format chat links #}
-                <table class="styled-table">
+                <table class="styled-table styled-table-chat">
                     <tbody>
                     {% for message in messages|reverse %}
                         {% if loop.index0 % 2 %}
-                            <tr class="light-row">
+                            <tr class="row-dark">
                         {% else %}
-                            <tr class="dark-row">
+                            <tr class="row-light">
                         {% endif %}
-                            <td style="color: grey; width: 10%">{{ message.time.strftime("%H:%M:%S") }}</th>
-                            <td>
-                                {{ message.sender }}: {{ message.message|format_chat|safe }}
-                            </td>
+                            <td class="chat-time">{{ message.time.strftime("%H:%M:%S") }}</th>
+                            <td>{{ message.sender }}: {{ message.message|format_chat|safe }}</td>
                         </tr>
                     {% endfor %}
                     </tbody>
@@ -121,11 +118,11 @@
                 <tbody>
                 {% for plays in most_played %}
                     {% if loop.index0 % 2 %}
-                        <tr class="light-row">
+                        <tr class="row-light">
                     {% else %}
-                        <tr class="dark-row">
+                        <tr class="row-dark">
                     {% endif %}
-                        <td>{{ plays['count'] }}</th>
+                        <td>{{ "{:,}".format(plays['count']) }}</th>
                         <td>
                             <a href="/b/{{ plays['beatmap_id'] }}">
                                 <img src="/mt/{{ plays['set_id'] }}" loading="lazy" alt="image"/>

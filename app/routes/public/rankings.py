@@ -62,7 +62,7 @@ def render_rankings_page(
     with app.session.database.managed_session() as session:
         jumpto = request.args.get('jumpto', default=None)
 
-        if jumpto and (user := users.fetch_by_name(jumpto, session)):
+        if jumpto and (user := users.fetch_by_name_case_insensitive(jumpto, session)):
             # Change the page to where the user is
             user_rank = leaderboards.rank(
                 user.id,

@@ -50,59 +50,6 @@
     display: grid;
 }
 
-.tab-list {
-    background-color: #e1d6fb;
-    border-bottom: 1px solid #cfc1ef;
-    width: 100%;
-    float: left;
-}
-
-.tab-list ul {
-    display: block;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    border: 0;
-}
-
-.tab-link {
-    text-decoration: none;
-    font-size: 90%;
-    padding: 7px 8px 7px 8px;
-    line-height: 15px;
-    color: #5e5e5e;
-    background-color: #e7e2f3;
-    display: inline-block; /* Use this as backup */
-    display: flex;
-}
-
-.tab-link:hover {
-    background-color: white;
-    text-decoration: none;
-}
-
-.tab-link img {
-    height: 16px;
-    width: 16px;
-    margin: auto;
-    margin-right: 5px;
-}
-
-.tab-item {
-    margin: 0;
-    width: auto;
-    float: left;
-    display: block;
-}
-
-.tab-link:visited {
-    color: #5e5e5e;
-}
-
-.active {
-    background-color: #bfa8f8;
-}
-
 .difficulty-icon img {
     width: 16px;
     height: 16px;
@@ -110,7 +57,7 @@
 
 .beatmap-stats {
     clear: both;
-    background-color: #e7e2f3;
+    background-color: #e1d6fb;
     border-top: 1px solid #cfc1ef;
     border-bottom: 1px solid #8462db;
     padding: 2px;
@@ -125,6 +72,11 @@
     border-bottom: 1px solid #cfc1ef;
     vertical-align: middle;
     padding: 8px
+}
+
+.beatmap-stats td.beatmap-stats-info {
+    background: #e4dbfb;
+    color: #363143;
 }
 
 .starfield {
@@ -260,12 +212,12 @@
     text-align: left;
 }
 
-.row-light {
-    background-color: #edebfa;
+.row-score-self {
+    background-color: #dcfcb9;
 }
 
-.row-dark {
-    background-color: #e3e1fa;
+.row-score-friend {
+    background-color: #fdcd9f;
 }
 
 .row-grade {
@@ -284,7 +236,7 @@
 }
 
 .scores {
-    font-size: 80%;
+    font-size: 8pt;
     width: 100%;
     margin-bottom: 35px;
     text-align: left;
@@ -294,23 +246,36 @@
 
 .scores th {
     border-bottom: 1px solid #a79ef3;
+    padding: 1px 0;
 }
 
 .scores td {
     height: 15px;
     vertical-align: middle;
-    padding: 2px;
-    padding-top: 2.5px;
+    padding: 2.8px;
 }
 
 .scores img {
-    vertical-align: middle;
+    vertical-align: top;
+}
+
+.scores .flag {
+    vertical-align: baseline;
 }
 
 .scores .row-light:hover,
-.scores .row-dark:hover {
-    background-color: white;
+.scores .row-dark:hover,
+.scores .row-score-self:hover,
+.scores .row-score-friend:hover {
+    background-color: #e7f6ff;
     cursor: pointer;
+}
+
+.score-flag-link,
+.score-flag-link:hover,
+.score-flag-link:focus,
+.score-flag-link:active {
+    text-decoration: none;
 }
 
 .bat-controls {
@@ -331,6 +296,10 @@
     color: #536482;
     margin-bottom: 5px;
     line-height: 25px;
+}
+
+.bat-controls dd textarea {
+    max-width: 400px;
 }
 
 .bat-diffs {

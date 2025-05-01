@@ -11,10 +11,13 @@ router = Blueprint('friend-settings', __name__)
 @router.get('/friends')
 @flask_login.login_required
 def manage_friends():
-    return utils.render_template(
-        'settings/friends.html',
-        css='settings.css',
-        friends=relationships.fetch_users(
-            flask_login.current_user.id
+    with app.session.database.managed_session() as session:
+        return utils.render_template(
+            'settings/friends.html',
+            css='settings.css',
+            session=session,
+            friends=relationships.fetch_users(
+                flask_login.current_user.id,
+                session=session
+            )
         )
-    )

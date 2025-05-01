@@ -1,5 +1,6 @@
 
 from app.common.database.repositories import (
+    relationships,
     infringements,
     nominations,
     beatmapsets,
@@ -57,6 +58,11 @@ def userpage(query: str):
                 user.id,
                 session=session
             )
+
+        followers = relationships.fetch_count_by_target(
+            user.id,
+            session=session
+        )
 
         pp_rank = leaderboards.global_rank(user.id, int(mode))
         pp_rank_country = leaderboards.country_rank(user.id, int(mode), user.country)
@@ -135,6 +141,7 @@ def userpage(query: str):
             score_rank_country=score_rank_country,
             score_rank=score_rank,
             ppv1_rank=ppv1_rank,
+            followers=followers,
             infringements=infs,
             session=session
         )

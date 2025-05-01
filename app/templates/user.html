@@ -109,6 +109,12 @@
             {% endif %}
         </div>
         <div class="userpage-stats">
+            {% if followers > 0 %}
+            <div class="activity activity-followers">
+                <i class="fa-solid fa-user" style="color: #76777b;"></i>
+                <p>{{ "{:,}".format(followers) }} follower{{ 's' if followers != 1 }} </p>
+            </div>
+            {% endif %}
             <div title="Arrived ({{ user.created_at.strftime('%Y-%m-%d %H:%M:%S') }})" class="activity">
                 <i class="fa-solid fa-right-to-bracket" style="color: #76777b;"></i>
                 <p>{{ user.created_at|timeago }}</p>
@@ -124,7 +130,7 @@
             </div>
             <div title="Total Posts" class="activity">
                 <i class="fa-regular fa-pen-to-square" style="color: #76777b;"></i>
-                <p>{{ total_posts }} post{{ 's' if total_posts != 1 }}</p>
+                <p>{{ "{:,}".format(total_posts) }} post{{ 's' if total_posts != 1 }}</p>
             </div>
         </div>
         {% if user.playstyle > 0 or current_user.id == user.id %}
@@ -316,7 +322,7 @@
                         </div>
                         <div class="profile-detailed-stats">
                             <h3 class="profile-stats-header">Detailed Stats</h3>
-                            <h4 class="profile-stats-element" title="Ranked Score consists of all your highest passing scores you have achieved. If you beat a score, only the difference between them will be added.">
+                            <h4 class="profile-stats-element profile-stats-element-rscore" title="Ranked Score consists of all your highest passing scores you have achieved. If you beat a score, only the difference between them will be added.">
                                 <b>Ranked Score</b>: {{ "{:,}".format(current_stats.rscore) }}
                             </h4>
                             <br>
@@ -393,7 +399,7 @@
                         </div>
                     {% else %}
                         <h3 class="profile-stats-header">No information recorded</h3>
-                        This user has not yet played any ranked maps in {{ constants.GameMode(mode).formatted }}.
+                        This user has not yet played any ranked maps in {{ constants.GameMode(mode).formatted }} mode.
                     {% endif %}
                     </div>
                 </div>
@@ -724,7 +730,10 @@
                         {% if infringements %}
                         <p style="color: red">
                             {{ user.name }}'s account is not in good standing :(
-                            {# TODO #}
+                            {% if current_user.id == user.id %}
+                            <br/>
+                            <br/>Your account could be permanently disabled if you continue to cause problems. Please make sure to follow the <a href='/wiki/en/Rules'>community rules</a>! Note that infringements will disappear after four weeks of good behaviour.
+                            {% endif %}
                         </p>
                         {% else %}
                         <p>

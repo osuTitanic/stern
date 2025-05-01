@@ -9,6 +9,7 @@ from app.common.database import (
     posts
 )
 
+from sqlalchemy.orm import Session
 from typing import Optional
 from flask import (
     Blueprint,
@@ -62,7 +63,7 @@ def redirect_index(extension: Optional[str] = None) -> Response:
 def redirect_page(page: str) -> Response:
     return handle_legacy_redirects(page, request)
 
-def format_announcement(announcement: topics.DBForumTopic, session) -> dict:
+def format_announcement(announcement: topics.DBForumTopic, session: Session) -> dict:
     if (post := posts.fetch_initial_post(announcement.id, session=session)):
         text = post.content.splitlines()[0]
 
