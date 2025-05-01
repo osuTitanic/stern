@@ -704,14 +704,66 @@ function resetUserPerformanceGraph() {
     $rankGraph[0].innerHTML = '';
 }
 
-function loadUserPerformanceGraph(userId, mode) {
+function getUserPerformanceGraphRange(backupEntries, backupEntriesKey) {
+    var rankMin = null;
+    var rankMax = null;
 
+    if (backupEntries == undefined) {
+        var legendData = d3.selectAll('.nv-series').data();
+        for (var i = 0; i < legendData.length; i++) {
+            var legendElement = legendData[i];
+            if (legendElement.disabled) {
+                continue;
+            }
+
+            for (var j = 0; j < legendElement.values.length; j++) {
+                var rankValue = Math.abs(legendElement.values[j].y);
+
+                rankMin = rankMin == null ? rankValue : Math.min(rankMin, rankValue);
+                rankMax = rankMax == null ? rankValue : Math.max(rankMax, rankValue);
+            }
+        }
+    } else {
+        for (var i = 0; i < backupEntries.length; i++) {
+            var value = backupEntries[i][backupEntriesKey];
+
+            rankMin = rankMin == null ? value : Math.min(rankMin, value);
+            rankMax = rankMax == null ? value : Math.max(rankMax, value);
+        }
+    }
+
+    return [rankMin, rankMax];
+}
+
+function updateUserPerformanceGraphYAxis(chart, range) {
+    var userDigits = (range[1].toString().length - 1);
+
+    var minRankDigits = '1' + ((userDigits > 0) ? (userDigits) * '0' : '');
+    var relativeMinRank = Math.round(range[0] / (minRankDigits)) * minRankDigits;
+
+    var maxRankDigits = '1' + (userDigits * '0');
+    var relativeMaxRank = Math.round(range[1] / (maxRankDigits)) * maxRankDigits;
+
+    var betweenRank = (relativeMaxRank - relativeMaxRank / 2);
+
+    chart.yScale(d3.scale.linear().domain([-relativeMinRank - 1, -relativeMaxRank]));
+
+    // Only display certain tick values
+    chart.xAxis.tickValues([-90, -60, -30, 0]);
+    chart.yAxis.tickValues([-relativeMaxRank, -betweenRank, -relativeMinRank]);
+    chart.forceY([-relativeMinRank[0] - 1, -relativeMaxRank[1]]);
+}
+
+function loadUserPerformanceGraph(userId, mode) {
     resetUserPerformanceGraph();
     var url = '/users/' + userId + '/history/rank/' + mode;
 
     performApiRequest("GET", url, null, function(xhr) {
         var entries = JSON.parse(xhr.responseText);
         var rankData = processRankHistory(entries);
+
+        // Used for initial y-axis calculation
+        var defaultSelectedRankType = 'global_rank';
 
         nv.addGraph(function() {
             var chart = nv.models.lineChart()
@@ -743,36 +795,17 @@ function loadUserPerformanceGraph(userId, mode) {
                     return '#' + (-rank);
                 });
 
-            // Calculate the relative min/max user rank to display on y axis
-            var ranks = [];
+            chart.legend.dispatch.on('legendClick', function (state) {
+                setTimeout(function () {
+                    updateUserPerformanceGraphYAxis(chart, getUserPerformanceGraphRange());
+                }, 500);
+            });
 
-            for (var i = 0; i < rankData.length; i++) {
-                for (var j = 0; j < rankData[i].values.length; j++) {
-                    ranks.push(-rankData[i].values[j].y);
-                }
-            }
+            // Calculate the range of the y axis
+            var range = getUserPerformanceGraphRange(entries, defaultSelectedRankType);
 
-            var minRank = Math.min.apply(null, ranks);
-            var maxRank = Math.max.apply(null, ranks);
-            var userDigits = (maxRank.toString().length - 1);
-
-            var minRankDigits = '1' + ((userDigits > 0) ? (userDigits) * '0' : '');
-            var relativeMinRank = Math.round(minRank / (minRankDigits)) * minRankDigits;
-
-            var maxRankDigits = '1' + (userDigits * '0');
-            var relativeMaxRank = Math.round(maxRank / (maxRankDigits)) * maxRankDigits;
-
-            var betweenRank = (relativeMaxRank - relativeMaxRank / 2);
-
-            chart.yScale(d3.scale.linear().domain([-relativeMinRank - 1, -relativeMaxRank]));
-            chart.xScale(d3.scale.linear().domain([-90, 0]));
-
-            // Force chart to show range of x, y values
-            chart.forceY([-relativeMinRank - 1, -relativeMaxRank]);
-
-            // Only display certain tick values
-            chart.xAxis.tickValues([-90, -60, -30, 0]);
-            chart.yAxis.tickValues([-relativeMaxRank, -betweenRank, -relativeMinRank]);
+            // Update the y axis with the calculated range
+            updateUserPerformanceGraphYAxis(chart, range);
 
             d3.select("#rank-graph svg")
                 .datum(rankData)
@@ -795,6 +828,7 @@ function loadUserPerformanceGraph(userId, mode) {
 
 function processPlayHistory(entries) {
     var values = [];
+
     for (var i = 0; i < entries.length; i++) {
         var entry = entries[i];
         var start = new Date();
