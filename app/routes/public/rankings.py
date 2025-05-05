@@ -20,6 +20,15 @@ valid_order_types = (
     'ppv1', 'tscore', 'clears', 'leader'
 )
 
+order_name_mapping = {
+    'performance': 'Performance',
+    'rscore': 'Ranked Score',
+    'leader': 'First Places',
+    'tscore': 'Total Score',
+    'clears': 'Clears',
+    'ppv1': 'PPv1'
+}
+
 @router.get('/kudosu')
 def kudosu_rankings():
     with app.session.database.managed_session() as session:
@@ -98,10 +107,13 @@ def render_rankings_page(
         )
 
         # Sort users based on redis leaderboard
-        sorted_users = [
-            next(filter(lambda user: id == user.id, users_db))
+        users_with_score = [
+            (next(filter(lambda user: id == user.id, users_db)), score)
             for id, score in leaderboard
             if score > 0
+        ]
+        sorted_users = [
+            user for user, _ in users_with_score
         ]
 
         # Ensure all users have stats & they are sorted
@@ -121,14 +133,7 @@ def render_rankings_page(
 
         # Fetch top countries for country selection
         top_countries = leaderboards.top_countries(mode)
-
-        order_name = {
-            'performance': 'Performance',
-            'rscore': 'Ranked Score',
-            'tscore': 'Total Score',
-            'clears': 'Clears',
-            'ppv1': 'PPv1'
-        }[order_type.lower()]
+        order_name = order_name_mapping.get(order_type.lower())
 
         return utils.render_template(
             'rankings.html',
@@ -139,7 +144,7 @@ def render_rankings_page(
             country=country,
             order_type=order_type,
             total_pages=total_pages,
-            leaderboard=sorted_users,
+            leaderboard=users_with_score,
             top_countries=top_countries,
             max_page_display=max_page_display,
             min_page_display=min_page_display,
@@ -153,8 +158,8 @@ def render_rankings_page(
                 if order_type == 'clears' else 0
             ),
             site_title=(
-                f'{order_name} Rankings'
-                f'{f" for {COUNTRIES[country.upper()]}" if country else ""}'
+                f'{order_name} Ranking for '
+                f'{f"{COUNTRIES[country.upper()]}" if country else "All Locations"}'
             )
         )
 
