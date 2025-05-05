@@ -1,0 +1,65 @@
+{# templates/kudosu.html #}
+
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Kudosu Ranking</h1>
+<p style="margin: 6px; font-size: 80%;">
+    Kudosu is a system that rewards players for their contributions to the Titanic! community, and
+    can be earned by giving constructive feedback on beatmaps.
+</p>
+<div class="centered">
+    <div class="pagination">
+        Displaying {{ page }} of {{ total_pages }} results.
+        <br>
+        {# TODO: Pagination #}
+    </div>
+</div>
+<table class="player-listing">
+    <thead>
+        <tr>
+            <th>Rank</th>
+            <th>User</th>
+            <th>Earned</th>
+            <th>Spent</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% set rank_offset = (page - 1) * items_per_page %}
+    {% for player, kudosu in leaderboard %}
+        {% if jumpto == player.name %}
+            <tr style="background-color: #fdcd9f;" id="jumpto">
+        {% else %}
+            {% if loop.index0 % 2 %}
+            <tr style="background-color: #e7e4fc;">
+            {% else %}
+            <tr style="background-color: #dad7fb;">
+            {% endif %}
+        {% endif %}
+            <td>
+                <b>#{{ rank_offset + loop.index0 + 1 }}</b>
+            </td>
+            <td>
+                <img src="/images/flags/{{ player.country|lower }}.gif" class="flag" alt="" loading="eager">
+                <a href="/u/{{ player.id }}">{{ player.name }}</a>
+            </td>
+            <td>
+                {{ "{:,}".format(kudosu|int) }}
+            </td>
+            <td>
+                N/A
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% if total_pages > 1 %}
+<div class="centered" style="margin: 25px !important;">
+    <div class="pagination">
+        <a href="javascript:void(0);" onclick="jumpToPlayer();">Jump</a> to a player.
+        <br>
+        {# TODO: Pagination #}
+    </div>
+</div>
+{% endif %}
+{% endblock content %}

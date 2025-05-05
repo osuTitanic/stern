@@ -20,6 +20,15 @@ valid_order_types = (
     'ppv1', 'tscore', 'clears', 'leader'
 )
 
+@router.get('/kudosu')
+def kudosu_rankings():
+    with app.session.database.managed_session() as session:
+        return render_kudosu_page(
+            page=max(1, min(10000, request.args.get('page', default=1, type=int))),
+            items_per_page=50,
+            session=session
+        )
+
 @router.get('/<mode>/<order_type>')
 def rankings(mode: str, order_type: str):
     if (mode := GameMode.from_alias(mode)) == None:
@@ -177,6 +186,50 @@ def render_country_page(
         min_page_display=min_page_display,
         items_per_page=items_per_page,
         site_title='Country Rankings'
+    )
+
+def render_kudosu_page(items_per_page: int, page: int, session: Session) -> str:
+    # Get kudosu ranking
+    leaderboard = leaderboards.top_players(
+        mode=None,
+        offset=(page - 1) * items_per_page,
+        range=items_per_page,
+        type='kudosu'
+    )
+
+    player_count = leaderboards.player_count(mode=None, type='kudosu')
+    total_pages = max(1, min(10000, math.ceil(player_count / items_per_page)))
+
+    # Get min/max pages to display for pagination
+    max_page_display = max(page, min(total_pages, page + 8))
+    min_page_display = max(1, min(total_pages, max_page_display - 9))
+
+    # Fetch all users from leaderboard
+    users_db = users.fetch_many(
+        [user[0] for user in leaderboard],
+        DBUser.stats,
+        session=session
+    )
+
+    # Sort users based on redis leaderboard
+    sorted_users = [
+        (next(filter(lambda user: id == user.id, users_db)), score)
+        for id, score in leaderboard
+        if score > 0
+    ]
+
+    return utils.render_template(
+        'kudosu.html',
+        css='rankings.css',
+        title='Kudosu Rankings - Titanic',
+        site_title='Kudosu Rankings',
+        site_description='Discover who has contributed the most to beatmap modding on Titanic.',
+        page=page,
+        total_pages=total_pages,
+        leaderboard=sorted_users,
+        max_page_display=max_page_display,
+        min_page_display=min_page_display,
+        items_per_page=items_per_page
     )
 
 def ensure_user_stats(users: List[DBUser], session: Session) -> None:
