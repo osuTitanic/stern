@@ -15,14 +15,15 @@ import app
 
 router = Blueprint('rankings', __name__)
 
+valid_order_types = (
+    'performance', 'rscore',  'country',
+    'ppv1', 'tscore', 'clears', 'leader'
+)
+
 @router.get('/<mode>/<order_type>')
 def rankings(mode: str, order_type: str):
     if (mode := GameMode.from_alias(mode)) == None:
         return abort(404)
-
-    valid_order_types = (
-        'performance', 'rscore', 'tscore', 'ppv1', 'country', 'clears'
-    )
 
     if order_type not in valid_order_types:
         return abort(404)
