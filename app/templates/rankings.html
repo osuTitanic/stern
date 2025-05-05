@@ -2,6 +2,41 @@
 
 {% extends "base.html" %}
 
+{% macro rankingsPagination() %}
+    {% set country_string = ("country=" + country + "&") if country else '' %}
+
+    {% if total_pages > 1 %}
+        {# "Previous" Button #}
+        {% if page > 1 %}
+            <a href="?{{ country_string }}page={{ page - 1 }}">
+                Prev
+            </a>
+            {% if min_page_display != 1 %}...{% endif %}
+        {% endif %}
+
+        {# Page Numbers (max. 10) #}
+        {% for page_index in range(min_page_display, max_page_display+1) %}
+            {% if page_index == page %}
+                <b>
+                    {{ page_index }}
+                </b>
+            {% else %}
+                <a href="?{{ country_string }}page={{ page_index }}">
+                    {{ page_index }}
+                </a>
+            {% endif %}
+        {% endfor %}
+
+        {# "Next" Button #}
+        {% if page < total_pages %}
+            {% if max_page_display != total_pages %}...{% endif %}
+            <a href="?{{ country_string }}page={{ page + 1 }}">
+                Next
+            </a>
+        {% endif %}
+    {% endif %}
+{% endmacro %}
+
 {% block content %}
 <h1>
     {{ order_name }} Ranking for {% if country %}{{ constants.COUNTRIES[country|upper] }}{% else %}All Locations{% endif %}
@@ -185,38 +220,3 @@
     }
 </script>
 {% endblock content %}
-
-{% macro rankingsPagination() %}
-    {% set country_string = ("country=" + country + "&") if country else '' %}
-
-    {% if total_pages > 1 %}
-        {# "Previous" Button #}
-        {% if page > 1 %}
-            <a href="?{{ country_string }}page={{ page - 1 }}">
-                Prev
-            </a>
-            {% if min_page_display != 1 %}...{% endif %}
-        {% endif %}
-
-        {# Page Numbers (max. 10) #}
-        {% for page_index in range(min_page_display, max_page_display+1) %}
-            {% if page_index == page %}
-                <b>
-                    {{ page_index }}
-                </b>
-            {% else %}
-                <a href="?{{ country_string }}page={{ page_index }}">
-                    {{ page_index }}
-                </a>
-            {% endif %}
-        {% endfor %}
-
-        {# "Next" Button #}
-        {% if page < total_pages %}
-            {% if max_page_display != total_pages %}...{% endif %}
-            <a href="?{{ country_string }}page={{ page + 1 }}">
-                Next
-            </a>
-        {% endif %}
-    {% endif %}
-{% endmacro %}

@@ -1,6 +1,6 @@
 {# templates/kudosu.html #}
 
-{% extends "base.html" %}
+{% extends "rankings.html" %}
 
 {% block content %}
 <h1>Kudosu Ranking</h1>
@@ -12,7 +12,7 @@
     <div class="pagination">
         Displaying {{ page }} of {{ total_pages }} results.
         <br>
-        {# TODO: Pagination #}
+        {{ rankingsPagination() }}
     </div>
 </div>
 <table class="player-listing">
@@ -58,7 +58,7 @@
     <div class="pagination">
         <a href="javascript:void(0);" onclick="jumpToPlayer();">Jump</a> to a player.
         <br>
-        {# TODO: Pagination #}
+        {{ rankingsPagination() }}
     </div>
 </div>
 {% endif %}
