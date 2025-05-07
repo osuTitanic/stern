@@ -66,7 +66,11 @@ def wiki_page(path: str, language: str = config.WIKI_DEFAULT_LANGUAGE):
         if not (result := wiki.fetch_page(path, language.lower(), session)):
             return abort(404)
 
+        formatted_path = wiki.format_path(path)
         page, entry = result
+
+        if formatted_path != path:
+            return redirect(f'/wiki/{language}/{formatted_path}')
 
         return utils.render_template(
             f'wiki/content/{language}.html',
