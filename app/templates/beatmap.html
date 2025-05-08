@@ -865,6 +865,10 @@
     }
 
     function resetNominations(beatmapsetId) {
+        if (!confirm("This will remove all nominations from this beatmap, are you sure you want to proceed?")) {
+            return;
+        }
+
         var url = "/beatmapsets/" + beatmapsetId + "/nominations";
 
         performApiRequest("DELETE", url, null, function(xhr) {
