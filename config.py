@@ -65,6 +65,7 @@ WIKI_DEFAULT_LANGUAGE = os.environ.get('WIKI_DEFAULT_LANGUAGE', 'en')
 DEFAULT_API_BASEURL = f'http{"s" if ENABLE_SSL else ""}://api.{DOMAIN_NAME}'
 DEFAULT_OSU_BASEURL = f'http{"s" if ENABLE_SSL else ""}://osu.{DOMAIN_NAME}'
 DEFAULT_STATIC_BASEURL = f'http{"s" if ENABLE_SSL else ""}://s.{DOMAIN_NAME}'
+SITEMAP_ENABLED = DOMAIN_NAME in ('titanic.sh', 'localhost')
 
 API_BASEURL = os.environ.get('API_BASEURL', DEFAULT_API_BASEURL)
 OSU_BASEURL = os.environ.get('OSU_BASEURL', DEFAULT_OSU_BASEURL)

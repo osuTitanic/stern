@@ -175,13 +175,12 @@ index_sitemap = SitemapIndex(
     ]
 )
 
-if config.DOMAIN_NAME in ('titanic.sh', 'localhost'):
-    for entry in index_sitemap.sitemaps:
-        register_sitemap_url(entry)
+for entry in index_sitemap.sitemaps:
+    register_sitemap_url(entry)
 
-    @router.get('/sitemap.xml')
-    def sitemap_xml():
-        return Response(
-            index_sitemap.render(),
-            mimetype='application/xml'
-        )
+@router.get('/sitemap.xml')
+def sitemap_xml():
+    return Response(
+        index_sitemap.render(),
+        mimetype='application/xml'
+    )
