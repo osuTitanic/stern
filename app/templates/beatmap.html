@@ -165,7 +165,7 @@
                     {% endif %}
                 </td>
                 <td>
-                    <b>Favourited {{ favourites_count }} times</b> in total
+                    <b>Favourited {{ favourites_count }} time{{ 's' if favourites_count != 1 }}</b> in total
                     {% if current_user.is_authenticated %}
                         <br>
                         {% if favorite %}
