@@ -24,5 +24,4 @@ titanic-pp-py==0.0.7
 markdown==3.7
 pyjwt==2.10.1
 regex==2024.11.6
-flask-minify==0.50
-flask-minify[go]==0.50; platform_system == "Linux"
+flask-squeeze==3.3.4
