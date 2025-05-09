@@ -8,6 +8,7 @@ from flask_login import LoginManager, current_user
 from flask_wtf.csrf import CSRFProtect
 from typing import Tuple, Optional
 from werkzeug.exceptions import *
+from flask_minify import Minify
 
 from . import accounts
 from . import common
@@ -34,6 +35,9 @@ login_manager.init_app(flask)
 
 csrf = CSRFProtect()
 csrf.init_app(flask)
+
+minify = Minify()
+minify.init_app(flask)
 
 @login_manager.request_loader
 def request_loader(request: Request):
