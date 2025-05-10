@@ -161,6 +161,7 @@ def render_rankings_page(
             items_per_page=items_per_page,
             canonical_url=request.base_url,
             order_name=order_name,
+            friends=get_friends(),
             session=session,
             jumpto=jumpto,
             total_beatmaps=(
@@ -244,7 +245,8 @@ def render_kudosu_page(items_per_page: int, page: int, session: Session) -> str:
         leaderboard=sorted_users,
         max_page_display=max_page_display,
         min_page_display=min_page_display,
-        items_per_page=items_per_page
+        items_per_page=items_per_page,
+        friends=get_friends()
     )
 
 def ensure_user_stats(users: List[DBUser], session: Session) -> None:
