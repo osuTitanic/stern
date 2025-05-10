@@ -5,6 +5,7 @@ from app.common.database import DBUser, DBStats
 from app.common.cache import leaderboards
 
 from flask import Blueprint, abort, request
+from flask_login import current_user
 from sqlalchemy.orm import Session
 from typing import List
 
@@ -28,6 +29,15 @@ order_name_mapping = {
     'clears': 'Clears',
     'ppv1': 'PPv1'
 }
+
+def get_friends():
+    friend_ids = []
+    if current_user.is_authenticated:
+        friend_ids = relationships.fetch_target_ids(
+            current_user.id,
+            session=session
+        )
+    return friend_ids
 
 @router.get('/kudosu')
 def kudosu_rankings():
