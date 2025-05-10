@@ -128,10 +128,20 @@
         {% if jumpto == player.name %}
             <tr class="row-jumpto" id="jumpto">
         {% else %}
-            {% if loop.index0 % 2 %}
-            <tr class="row-dark">
+            {% if current_user.is_authenticated %}
+                {% if current_user.id == player.id %}
+                    <tr class="row-self">
+                {% elif player.id in friends %}
+                    <tr class="row-friend">
+                {% elif loop.index0 % 2 %}
+                    <tr class="row-dark">
+                {% else %}
+                    <tr class="row-light">
+                {% endif %}
+            {% elif loop.index0 % 2 %}
+                <tr class="row-dark">
             {% else %}
-            <tr class="row-light">
+                <tr class="row-light">
             {% endif %}
         {% endif %}
             <td>
