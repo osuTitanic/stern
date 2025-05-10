@@ -641,9 +641,9 @@
         {% for score in scores %}
             {% if current_user.is_authenticated %}
                 {% if current_user.id == score.user.id %}
-                <tr class="row-score-self" id="{{ score.id }}">
+                <tr class="row-self" id="{{ score.id }}">
                 {% elif score.user_id in friends %}
-                <tr class="row-score-friend" id="{{ score.id }}">
+                <tr class="row-friend" id="{{ score.id }}">
                 {% elif loop.index0 % 2 %}
                 <tr class="row-dark" id="{{ score.id }}">
                 {% else %}

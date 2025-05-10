@@ -212,14 +212,6 @@
     text-align: left;
 }
 
-.row-score-self {
-    background-color: #dcfcb9;
-}
-
-.row-score-friend {
-    background-color: #fdcd9f;
-}
-
 .row-grade {
     text-align: center;
     height: 100%;
