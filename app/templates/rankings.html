@@ -126,13 +126,16 @@
     {% set rank_offset = (page - 1) * items_per_page %}
     {% for player, score in leaderboard %}
         {% if jumpto == player.name %}
-            <tr style="background-color: #fdcd9f;" id="jumpto">
+            <tr class="row-jumpto" id="jumpto">
         {% else %}
-            {% if loop.index0 % 2 %}
-            <tr style="background-color: #e7e4fc;">
+            {% if current_user.is_authenticated and current_user.id == player.id %}
+                {% set row_class = "row-self" %}
+            {% elif current_user.is_authenticated and player.id in friends %}
+                {% set row_class = "row-friend" %}
             {% else %}
-            <tr style="background-color: #dad7fb;">
+                {% set row_class = "row-dark" if (loop.index0 % 2 == 1) else "row-light" %}
             {% endif %}
+            <tr class="{{ row_class }}">
         {% endif %}
             <td>
                 <b>#{{ rank_offset + loop.index0 + 1 }}</b>
