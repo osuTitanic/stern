@@ -128,12 +128,12 @@
         {% set rank_offset = (page - 1) * items_per_page %}
         {% for player in leaderboard %}
         {% if jumpto == player.name %}
-            <tr style="background-color: #fdcd9f;" id="jumpto">
+            <tr class="row-jumpto" id="jumpto">
         {% else %}
             {% if loop.index0 % 2 %}
-            <tr style="background-color: #e7e4fc;">
+            <tr class="row-light">
             {% else %}
-            <tr style="background-color: #dad7fb;">
+            <tr class="row-dark">
             {% endif %}
         {% endif %}
             <td>
