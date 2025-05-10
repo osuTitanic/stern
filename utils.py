@@ -150,12 +150,13 @@ def sync_ranks(user: DBUser, mode: int, session: Session = ...) -> None:
         )
         user_stats.rank = global_rank
 
-        # Update rank history
-        histories.update_rank(
-            user_stats,
-            user.country,
-            session=session
-        )
+        if not config.FROZEN_RANK_UPDATES:
+            # Update rank history
+            histories.update_rank(
+                user_stats,
+                user.country,
+                session=session
+            )
 
 def required_nominations(beatmapset: DBBeatmapset) -> bool:
     beatmap_modes = len(

@@ -2,54 +2,62 @@
 
 {% extends "base.html" %}
 
+{% macro rankingsPagination() %}
+    {% set country_string = ("country=" + country + "&") if country else '' %}
+
+    {% if total_pages > 1 %}
+        {# "Previous" Button #}
+        {% if page > 1 %}
+            <a href="?{{ country_string }}page={{ page - 1 }}">
+                Prev
+            </a>
+            {% if min_page_display != 1 %}...{% endif %}
+        {% endif %}
+
+        {# Page Numbers (max. 10) #}
+        {% for page_index in range(min_page_display, max_page_display+1) %}
+            {% if page_index == page %}
+                <b>
+                    {{ page_index }}
+                </b>
+            {% else %}
+                <a href="?{{ country_string }}page={{ page_index }}">
+                    {{ page_index }}
+                </a>
+            {% endif %}
+        {% endfor %}
+
+        {# "Next" Button #}
+        {% if page < total_pages %}
+            {% if max_page_display != total_pages %}...{% endif %}
+            <a href="?{{ country_string }}page={{ page + 1 }}">
+                Next
+            </a>
+        {% endif %}
+    {% endif %}
+{% endmacro %}
+
 {% block content %}
 <h1>
-    {{ order_name }} Ranking for {% if country %}{{ constants.COUNTRIES[country|upper] }}{% else %}All Locations{% endif %} ({{ constants.GameMode(mode).formatted }})
+    {{ site_title }}
+    ({{ constants.GameMode(mode).formatted }})
 </h1>
 <p style="margin: 6px; font-size: 80%;">
-    {% if order_type == 'performance' %}
+{% if order_type == 'performance' %}
     Titanic uses a customized <a href="https://osu.ppy.sh/wiki/en/Performance_points/ppv2">ppv2</a>
     system, mostly developed by <a href="/u/39">Adachi</a>,
     which changes the behavior of the relax & autopilot mods and also has some changes regarding combo scaling.
-    {% elif order_type == 'ppv1' %}
+{% elif order_type == 'ppv1' %}
     This is an attempt at recreating the original ppv1 system from back in the day.
     This is in no means accurate to the original, since not a lot is known about it.
     You can find an explanation of the old system <a href="https://raw.githubusercontent.com/willyosu/ClassicPerformance/master/ppv1.png">here</a>.
-    {% endif %}
+{% endif %}
 </p>
 <div class="centered">
     <div class="pagination">
         Displaying {{ page }} of {{ total_pages }} results.
         <br>
-        {% set country_string = ("country=" + country + "&") if country else '' %}
-        {% if total_pages > 1 %}
-            {# "Previous" Button #}
-            {% if page > 1 %}
-                <a href="?{{ country_string }}page={{ page - 1 }}">
-                    Prev
-                </a>
-                {% if min_page_display != 1 %}...{% endif %}
-            {% endif %}
-            {# Page Numbers (max. 10) #}
-            {% for _page in range(min_page_display, max_page_display+1) %}
-                {% if _page == page %}
-                    <b>
-                        {{ _page }}
-                    </b>
-                {% else %}
-                    <a href="?{{ country_string }}page={{ _page }}">
-                        {{ _page }}
-                    </a>
-                {% endif %}
-            {% endfor %}
-            {# "Next" Button #}
-            {% if page < total_pages %}
-                {% if max_page_display != total_pages %}...{% endif %}
-                <a href="?{{ country_string }}page={{ page + 1 }}">
-                    Next
-                </a>
-            {% endif %}
-        {% endif %}
+        {{ rankingsPagination() }}
     </div>
     {% if country %}
     <div class="country">
@@ -99,17 +107,7 @@
             <th>Accuracy</th>
             <th>Play Count</th>
             <th>
-                {% if order_type == 'performance' %}
-                Performance Points
-                {% elif order_type == 'rscore' %}
-                Ranked Score
-                {% elif order_type == 'ppv1' %}
-                Performance Points
-                {% elif order_type == 'tscore' %}
-                Total Score
-                {% else %}
-                Clears
-                {% endif %}
+                {{ order_name }}
             </th>
             <th>
                 <img src="/images/grades/X_small.png" alt="">
@@ -125,8 +123,8 @@
         </tr>
     </thead>
     <tbody>
-        {% set rank_offset = (page - 1) * items_per_page %}
-        {% for player in leaderboard %}
+    {% set rank_offset = (page - 1) * items_per_page %}
+    {% for player, score in leaderboard %}
         {% if jumpto == player.name %}
             <tr class="row-jumpto" id="jumpto">
         {% else %}
@@ -154,15 +152,15 @@
             <td>
                 <span style="font-weight: bold;">
                     {% if order_type == 'performance' %}
-                    {{ "{:,}".format(player.stats[mode].pp|round|int) }}pp
+                        {{ "{:,}".format(player.stats[mode].pp|round|int) }}pp
                     {% elif order_type == 'rscore' %}
-                    {{ "{:,}".format(player.stats[mode].rscore|int) }}
+                        {{ "{:,}".format(player.stats[mode].rscore|int) }}
                     {% elif order_type == 'ppv1' %}
-                    {{ "{:,}".format(player.stats[mode].ppv1|int) }}pp
+                        {{ "{:,}".format(player.stats[mode].ppv1|int) }}pp
                     {% elif order_type == 'tscore' %}
-                    {{ "{:,}".format(player.stats[mode].tscore|int) }}
-                    {% else %}
-                    {{ "{:,}".format([
+                        {{ "{:,}".format(player.stats[mode].tscore|int) }}
+                    {% elif order_type == 'clears' %}
+                        {{ "{:,}".format([
                         player.stats[mode].xh_count,
                         player.stats[mode].x_count,
                         player.stats[mode].sh_count,
@@ -171,7 +169,9 @@
                         player.stats[mode].b_count,
                         player.stats[mode].c_count,
                         player.stats[mode].d_count
-                    ]|sum) }} / {{ total_beatmaps }}
+                        ]|sum) }} / {{ total_beatmaps }}
+                    {% else %}
+                        {{ "{:,}".format(score|int) }}
                     {% endif %}
                 </span>
             </td>
@@ -185,7 +185,7 @@
                 {{ "{:,}".format(player.stats[mode].a_count) }}
             </td>
         </tr>
-        {% endfor %}
+    {% endfor %}
     </tbody>
 </table>
 {% if total_pages > 1 %}
@@ -193,35 +193,7 @@
     <div class="pagination">
         <a href="javascript:void(0);" onclick="jumpToPlayer();">Jump</a> to a player.
         <br>
-        {% set country_string = ("country=" + country + "&") if country else '' %}
-        {% if total_pages > 1 %}
-            {# "Previous" Button #}
-            {% if page > 1 %}
-                <a href="?{{ country_string }}page={{ page - 1 }}">
-                    Prev
-                </a>
-                {% if min_page_display != 1 %}...{% endif %}
-            {% endif %}
-            {# Page Numbers (max. 10) #}
-            {% for _page in range(min_page_display, max_page_display+1) %}
-                {% if _page == page %}
-                    <b>
-                        {{ _page }}
-                    </b>
-                {% else %}
-                    <a href="?{{ country_string }}page={{ _page }}">
-                        {{ _page }}
-                    </a>
-                {% endif %}
-            {% endfor %}
-            {# "Next" Button #}
-            {% if page < total_pages %}
-                {% if max_page_display != total_pages %}...{% endif %}
-                <a href="?{{ country_string }}page={{ page + 1 }}">
-                    Next
-                </a>
-            {% endif %}
-        {% endif %}
+        {{ rankingsPagination() }}
     </div>
 </div>
 {% endif %}
