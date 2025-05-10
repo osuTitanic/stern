@@ -128,21 +128,14 @@
         {% if jumpto == player.name %}
             <tr class="row-jumpto" id="jumpto">
         {% else %}
-            {% if current_user.is_authenticated %}
-                {% if current_user.id == player.id %}
-                    <tr class="row-self">
-                {% elif player.id in friends %}
-                    <tr class="row-friend">
-                {% elif loop.index0 % 2 %}
-                    <tr class="row-dark">
-                {% else %}
-                    <tr class="row-light">
-                {% endif %}
-            {% elif loop.index0 % 2 %}
-                <tr class="row-dark">
+            {% if current_user.is_authenticated and current_user.id == player.id %}
+                {% set row_class = "row-self" %}
+            {% elif current_user.is_authenticated and player.id in friends %}
+                {% set row_class = "row-friend" %}
             {% else %}
-                <tr class="row-light">
+                {% set row_class = "row-dark" if (loop.index0 % 2 == 1) else "row-light" %}
             {% endif %}
+            <tr class="{{ row_class }}">
         {% endif %}
             <td>
                 <b>#{{ rank_offset + loop.index0 + 1 }}</b>
