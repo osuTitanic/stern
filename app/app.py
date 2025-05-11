@@ -80,6 +80,32 @@ def refresh_access_token(response: Response) -> Response:
 @flask.after_request
 def caching_rules(response: Response) -> Response:
     static_paths = (
+        '/images/arrow-white-highlight.png',
+        '/images/arrow-white-normal.png',
+        '/images/signup-multi.png',
+        '/images/playstyles.png',
+        '/images/down.gif',
+        '/images/up.gif',
+        '/images/achivements/',
+        '/images/beatmap/',
+        '/images/clients/',
+        '/images/grades/',
+        '/images/icons/',
+        '/images/flags/',
+        '/images/art/'
+    )
+
+    has_static_path = any(
+        request.path.startswith(path)
+        for path in static_paths
+    )
+
+    if has_static_path:
+        # These resources will most likely never change
+        response.headers['Cache-Control'] = f'public, max-age={ 60*60*24*14 }'
+        return response
+
+    commit_static_paths = (
         '/js/',
         '/css/',
         '/lib/',
@@ -89,7 +115,7 @@ def caching_rules(response: Response) -> Response:
 
     has_static_path = any(
         request.path.startswith(path)
-        for path in static_paths
+        for path in commit_static_paths
     )
 
     if not has_static_path:
