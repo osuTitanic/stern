@@ -30,14 +30,6 @@ order_name_mapping = {
     'ppv1': 'PPv1'
 }
 
-def get_friends():
-    friend_ids = []
-    if current_user.is_authenticated:
-        friend_ids = relationships.fetch_target_ids(
-            current_user.id
-        )
-    return friend_ids
-
 @router.get('/kudosu')
 def kudosu_rankings():
     with app.session.database.managed_session() as session:
@@ -144,6 +136,14 @@ def render_rankings_page(
         top_countries = leaderboards.top_countries(mode)
         order_name = order_name_mapping.get(order_type.lower())
 
+        friend_ids = (
+            relationships.fetch_target_ids(
+                current_user.id,
+                session=session
+            )
+            if current_user.is_authenticated else []
+        )
+
         return utils.render_template(
             'rankings.html',
             css='rankings.css',
@@ -160,7 +160,7 @@ def render_rankings_page(
             items_per_page=items_per_page,
             canonical_url=request.base_url,
             order_name=order_name,
-            friends=get_friends(),
+            friends=friend_ids,
             session=session,
             jumpto=jumpto,
             total_beatmaps=(
@@ -233,6 +233,14 @@ def render_kudosu_page(items_per_page: int, page: int, session: Session) -> str:
         if score > 0
     ]
 
+    friend_ids = (
+        relationships.fetch_target_ids(
+            current_user.id,
+            session=session
+        )
+        if current_user.is_authenticated else []
+    )
+
     return utils.render_template(
         'kudosu.html',
         css='rankings.css',
@@ -245,7 +253,7 @@ def render_kudosu_page(items_per_page: int, page: int, session: Session) -> str:
         max_page_display=max_page_display,
         min_page_display=min_page_display,
         items_per_page=items_per_page,
-        friends=get_friends()
+        friends=friend_ids
     )
 
 def ensure_user_stats(users: List[DBUser], session: Session) -> None:
