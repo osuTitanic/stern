@@ -65,11 +65,11 @@
     <div class="main">
         <a href="/" aria-label="Home">
             <img {% if not is_ie %}
-                 src="/images/logo/main-vector.min.svg"
-                 onerror="this.src='/images/logo/main-low.png';"
+                 src="{{ '/images/logo/main-vector.min.svg'|git_asset_url }}"
+                 onerror="this.src='{{ "/images/logo/main-low.png"|git_asset_url }}';"
                  loading="eager"
                  {% else %}
-                 src="/images/logo/main-low.png"
+                 src="{{ '/images/logo/main-low.png'|git_asset_url }}"
                  {% endif %}
                  class="logo"
                  alt="">

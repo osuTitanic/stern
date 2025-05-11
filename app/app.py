@@ -83,6 +83,7 @@ def caching_rules(response: Response) -> Response:
         '/js/',
         '/css/',
         '/lib/',
+        '/images/',
         '/webfonts/'
     )
 
