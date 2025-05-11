@@ -79,6 +79,9 @@ def refresh_access_token(response: Response) -> Response:
 
 @flask.after_request
 def caching_rules(response: Response) -> Response:
+    if config.DEBUG:
+        return response
+
     static_paths = (
         '/images/arrow-white-highlight.png',
         '/images/arrow-white-normal.png',
