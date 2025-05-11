@@ -16,10 +16,11 @@
     {% if site_image %}<meta property="og:image" content="{{ site_image }}">{% endif %}
     {% if site_url %}<meta property="og:url" content="{{ site_url }}">{% endif %}
     {% if config.ENABLE_SSL %}<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">{% endif %}
+    {% set css_url = ('/css/' + css or 'main.css')|git_asset_url %}
     <title>{{ title or 'Titanic!' }}</title>
     <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
-    <link rel="prefetch" href="{{ ('/css/' + css or 'main.css')|git_asset_url }}">
-    <link rel="stylesheet" href="/css/{{ css or 'main.css' }}">
+    <link rel="prefetch" href="{{ css_url }}">
+    <link rel="stylesheet" href="{{ css_url }}">
     <link rel="stylesheet" href="/lib/fontawesome.min.css">
     <link rel="stylesheet" href="/lib/fontawesome.solid.min.css">
     <link rel="stylesheet" href="/lib/fontawesome.brands.min.css">
@@ -166,7 +167,7 @@
             <script src="/lib/jquery.min.js"></script>
             <script src="/lib/jquery.timeago.js"></script>
             <script src="/lib/jquery.marquee.js"></script>
-            <script src="/js/main.js"></script>
+            <script src="{{ '/js/main.js'|git_asset_url }}"></script>
             <div class="page">
                 {# Page Content #}
                 {% block content %}
@@ -174,7 +175,7 @@
                 <div style="clear: both;"></div>
             </div>
             <div class="gradient"></div>
-            <script src="/js/editor.js" defer></script>
+            <script src="{{ '/js/editor.js'|git_asset_url }}" defer></script>
         </div>
     </div>
 </body>
