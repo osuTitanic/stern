@@ -1,5 +1,5 @@
 
-from app.common.database.repositories import users, stats, beatmaps
+from app.common.database.repositories import users, stats, beatmaps, relationships
 from app.common.constants import GameMode, COUNTRIES
 from app.common.database import DBUser, DBStats
 from app.common.cache import leaderboards
@@ -34,8 +34,7 @@ def get_friends():
     friend_ids = []
     if current_user.is_authenticated:
         friend_ids = relationships.fetch_target_ids(
-            current_user.id,
-            session=session
+            current_user.id
         )
     return friend_ids
 
