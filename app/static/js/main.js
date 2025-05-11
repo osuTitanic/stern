@@ -403,7 +403,7 @@ function loadBBCodePreview(element) {
 
 function renderTimeagoElements() {
     var times = document.getElementsByClassName('timeago');
-    for (let i = 0; i < times.length; i++) {
+    for (var i = 0; i < times.length; i++) {
         times[i].innerText = jQuery.timeago(times[i].getAttribute('datetime'));
     }
 }
