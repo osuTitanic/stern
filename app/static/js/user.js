@@ -80,11 +80,11 @@ function createScoreElement(score, index, type) {
 
     var beatmapInfo = document.createElement("a");
     beatmapInfo.href = "/b/" + score.beatmap.id + "?mode=" + score.mode;
-    beatmapInfo.innerText = score.beatmap.beatmapset.artist + " - " + score.beatmap.beatmapset.title + " [" + score.beatmap.version + "]";
+    setText(beatmapInfo, score.beatmap.beatmapset.artist + " - " + score.beatmap.beatmapset.title + " [" + score.beatmap.version + "]");
 
     var modsText = document.createElement("b");
     if (score.mods > 0) {
-        modsText.innerText = "+" + Mods.getString(score.mods);
+        setText(modsText, "+" + Mods.getString(score.mods));
     }
 
     var scoreInfo = document.createElement("b");
@@ -111,14 +111,14 @@ function createScoreElement(score, index, type) {
     rightColumn.className = 'score-right';
 
     var ppText = document.createElement("b");
-    ppText.innerText = (score.pp.toFixed(0) + "pp");
+    setText(ppText, (score.pp.toFixed(0) + "pp"));
 
     var ppDisplay = document.createElement("div");
     ppDisplay.className = "pp-display";
     ppDisplay.appendChild(ppText);
 
     var ppWeightPercent = document.createElement("b");
-    ppWeightPercent.innerText = (Math.pow(0.95, index + topScoreOffset) * 100).toFixed(0) + "%";
+    setText(ppWeightPercent, (Math.pow(0.95, index + topScoreOffset) * 100).toFixed(0) + "%");
 
     var ppWeight = document.createElement("div");
     ppWeight.className = "pp-display-weight";
@@ -151,7 +151,7 @@ function createScoreElement(score, index, type) {
     // Score's Date
     var dateText = document.createElement("time");
     dateText.setAttribute("datetime", score.submitted_at);
-    dateText.innerText = score.submitted_at;
+    setText(dateText, score.submitted_at);
     dateText.title = scoreDateString;
     dateText.className = "timeago";
 
@@ -172,7 +172,7 @@ function createScoreElement(score, index, type) {
     
         var clientTextVersion = document.createElement('span');
         clientTextVersion.classList.add('score-version-number');
-        clientTextVersion.innerText = versionText;
+        setText(clientTextVersion, versionText);
 
         clientText.appendChild(clientTextVersion);
         scoreBottomDiv.appendChild(clientText);
@@ -289,7 +289,7 @@ function loadPinnedScores(userId, mode) {
         slideDown(document.getElementById("leader"));
     }, function(xhr) {
         var errorText = document.createElement("p");
-        errorText.innerText = "Failed to load pinned scores.";
+        setText(errorText, "Failed to load pinned scores.");
         errorText.classList.add("score");
         scoreContainer.appendChild(errorText);
 
@@ -317,7 +317,7 @@ function loadTopPlays(userId, mode, limit, offset) {
 
         if (data.total <= 0) {
             var noScoresText = document.createElement("p");
-            noScoresText.innerText = "No awesome performance records yet :(";
+            setText(noScoresText, "No awesome performance records yet :(");
             scoreContainer.appendChild(noScoresText);
             return;
         }
@@ -343,7 +343,7 @@ function loadTopPlays(userId, mode, limit, offset) {
         if (scores.length >= limit) {
             // Create show more text
             var showMoreText = document.createElement("b");
-            showMoreText.innerText = "Show me more!";
+            setText(showMoreText, "Show me more!");
 
             // Add onclick event
             var showMoreHref = document.createElement("a");
@@ -352,7 +352,7 @@ function loadTopPlays(userId, mode, limit, offset) {
             showMoreHref.appendChild(showMoreText);
             showMoreHref.onclick = function() {
                 var loadingText = document.createElement("p");
-                loadingText.innerText = "Loading...";
+                setText(loadingText, "Loading...");
                 loadingText.id = "top-scores-loading";
 
                 var showMore = document.getElementById("show-more-top");
@@ -374,7 +374,7 @@ function loadTopPlays(userId, mode, limit, offset) {
         slideDown(document.getElementById("leader"));
     }, function(xhr) {
         var errorText = document.createElement("p");
-        errorText.innerText = "Failed to load top plays.";
+        setText(errorText, "Failed to load top plays.");
         errorText.classList.add("score");
         scoreContainer.appendChild(errorText);
 
@@ -405,14 +405,14 @@ function loadLeaderScores(userId, mode, limit, offset) {
 
         if (data.total <= 0) {
             var noScoresText = document.createElement("p");
-            noScoresText.innerText = "No first place records currently :(";
+            setText(noScoresText, "No first place records currently :(");
             scoreContainer.appendChild(noScoresText);
             return;
         }
 
         // Update total score count
         var heading = document.getElementById('leader-scores').getElementsByTagName('h2')[0]
-        heading.innerText = 'First Place Ranks (' + data.total.toLocaleString() + ')';
+        setText(heading, 'First Place Ranks (' + data.total.toLocaleString() + ')');
 
         for (var i = 0; i < scores.length; i++) {
             var scoreDiv = createScoreElement(scores[i], i, "leader");
@@ -425,7 +425,7 @@ function loadLeaderScores(userId, mode, limit, offset) {
 
         if (scores.length >= limit) {
             var showMoreText = document.createElement("b");
-            showMoreText.innerText = "Show me more!";
+            setText(showMoreText, "Show me more!");
 
             // Add onclick event
             var showMoreHref = document.createElement("a");
@@ -434,7 +434,7 @@ function loadLeaderScores(userId, mode, limit, offset) {
             showMoreHref.appendChild(showMoreText);
             showMoreHref.onclick = function() {
                 var loadingText = document.createElement("p");
-                loadingText.innerText = "Loading...";
+                setText(loadingText, "Loading...");
                 loadingText.id = "leader-scores-loading";
 
                 var showMore = document.getElementById("show-more-leader");
@@ -456,7 +456,7 @@ function loadLeaderScores(userId, mode, limit, offset) {
         slideDown(document.getElementById("leader"));
     }, function(xhr) {
         var errorText = document.createElement("p");
-        errorText.innerText = "Failed to load first place ranks.";
+        setText(errorText, "Failed to load first place ranks.");
         errorText.classList.add("score");
         scoreContainer.appendChild(errorText);
 
@@ -491,7 +491,7 @@ function loadMostPlayed(userId, limit, offset) {
         for (var index = 0; index < plays.length; index++) {
             var item = plays[index];
             var beatmapLink = document.createElement("a");
-            beatmapLink.innerText = item.beatmap.beatmapset.artist + " - " + item.beatmap.beatmapset.title + " [" + item.beatmap.version + "]";
+            setText(beatmapLink, item.beatmap.beatmapset.artist + " - " + item.beatmap.beatmapset.title + " [" + item.beatmap.version + "]");
             beatmapLink.href = "/b/" + item.beatmap.id;
 
             var playsDiv = document.createElement("div");
@@ -546,12 +546,12 @@ function loadRecentPlays(userId, mode) {
 
             var dateText = document.createElement("time");
             dateText.setAttribute("datetime", score.submitted_at);
-            dateText.innerText = score.submitted_at;
+            setText(dateText, score.submitted_at);
             dateText.title = scoreDateString;
             dateText.className += " timeago";
 
             var beatmapLink = document.createElement("a");
-            beatmapLink.innerText = score.beatmap.beatmapset.artist + " - " + score.beatmap.beatmapset.title + " [" + score.beatmap.version + "]";
+            setText(beatmapLink, score.beatmap.beatmapset.artist + " - " + score.beatmap.beatmapset.title + " [" + score.beatmap.version + "]");
             beatmapLink.href = "/b/" + score.beatmap.id;
 
             var modsText = "";
@@ -1022,9 +1022,9 @@ function addFriend() {
         };
 
         if (data.status === 'mutual')
-            friendStatus.innerText = 'Remove Mutual Friend';
+            setText(friendStatus, 'Remove Mutual Friend');
         else
-            friendStatus.innerText = 'Remove Friend';
+            setText(friendStatus, 'Remove Friend');
     });
 
     return false;
@@ -1044,9 +1044,9 @@ function removeFriend() {
         };
 
         if (data.status === 'mutual')
-            friendStatus.innerText = 'Add Mutual Friend';
+            setText(friendStatus, 'Add Mutual Friend');
         else
-            friendStatus.innerText = 'Add Friend';
+            setText(friendStatus, 'Add Friend');
     });
 
     return false;
