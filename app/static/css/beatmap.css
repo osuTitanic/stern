@@ -228,7 +228,7 @@
 }
 
 .scores {
-    font-size: 8pt;
+    font-size: 73.5%;
     width: 100%;
     margin-bottom: 35px;
     text-align: left;
@@ -244,7 +244,7 @@
 .scores td {
     height: 15px;
     vertical-align: middle;
-    padding: 2.6px;
+    padding: 2.25px 5px 2.25px 5px;
 }
 
 .scores img {
