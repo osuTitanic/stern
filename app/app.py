@@ -77,6 +77,29 @@ def refresh_access_token(response: Response) -> Response:
         response=response
     )
 
+@flask.after_request
+def caching_rules(response: Response) -> Response:
+    static_paths = (
+        '/js/',
+        '/css/',
+        '/lib/',
+        '/webfonts/'
+    )
+
+    has_static_path = any(
+        request.path.startswith(path)
+        for path in static_paths
+    )
+
+    if not has_static_path:
+        return response
+
+    if not request.args.get('commit'):
+        return response
+
+    response.headers['Cache-Control'] = f'public, max-age={ 60*60*24*7 }'
+    return response
+
 @login_manager.user_loader
 def user_loader(user_id: int) -> Optional[DBUser]:
     try:

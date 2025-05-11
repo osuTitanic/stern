@@ -194,7 +194,7 @@ def get_required_nominations(beatmapset) -> int:
 @cache
 def git_asset_url(url_path: str) -> str:
     commit = git.fetch_latest_commit_for_file('./app/static' + url_path)
-    return f"{url_path}?v={commit}" if commit else url_path
+    return f"{url_path}?commit={commit}" if commit else url_path
 
 @flask.template_filter('get_status_icon')
 def get_status_icon(topic: DBForumTopic) -> str:
