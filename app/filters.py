@@ -1,9 +1,11 @@
 
 from app.common.database import DBForumTopic, DBForum, DBUser
 from datetime import datetime, timedelta
+from functools import cache
 from .app import flask
 from . import common
 from . import bbcode
+from . import git
 
 import timeago
 import utils
@@ -187,6 +189,12 @@ def ceil(value: float) -> int:
 @flask.template_filter('required_nominations')
 def get_required_nominations(beatmapset) -> int:
     return utils.required_nominations(beatmapset)
+
+@flask.template_filter('git_asset_url')
+@cache
+def git_asset_url(url_path: str) -> str:
+    commit = git.fetch_latest_commit_for_file('./app/static' + url_path)
+    return f"{url_path}?v={commit}" if commit else url_path
 
 @flask.template_filter('get_status_icon')
 def get_status_icon(topic: DBForumTopic) -> str:
