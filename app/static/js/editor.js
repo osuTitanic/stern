@@ -4,15 +4,15 @@ function insertBBCode(event) {
     var element = event.target;
 
     if (element.tagName !== 'BUTTON') {
-        element = element.parentElement // whyyy
+        element = getParentElement(element) // whyyy
     }
 
     var bbcodeTag = element.getAttribute('data-bbcode-tag');
     var property = element.getAttribute('data-property');
     var noClose = element.getAttribute('data-no-close');
 
-    var parent = element.parentElement;
-    var textAreas = parent.parentElement.getElementsByTagName('textarea');
+    var parent = getParentElement(element);
+    var textAreas = getParentElement(parent).getElementsByTagName('textarea');
     
     if (textAreas.length === 0) {
         console.warn("No text area found in the parent element.");

@@ -356,7 +356,7 @@ function loadTopPlays(userId, mode, limit, offset) {
                 loadingText.id = "top-scores-loading";
 
                 var showMore = document.getElementById("show-more-top");
-                showMore.parentElement.appendChild(loadingText);
+                getParentElement(showMore).appendChild(loadingText);
                 showMore.remove();
 
                 loadTopPlays(userId, modeName, 50, topScoreOffset);
@@ -438,7 +438,7 @@ function loadLeaderScores(userId, mode, limit, offset) {
                 loadingText.id = "leader-scores-loading";
 
                 var showMore = document.getElementById("show-more-leader");
-                showMore.parentElement.appendChild(loadingText);
+                getParentElement(showMore).appendChild(loadingText);
                 showMore.remove();
 
                 loadLeaderScores(userId, modeName, 50, topLeaderOffset);
