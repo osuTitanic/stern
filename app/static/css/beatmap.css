@@ -218,7 +218,7 @@
 }
 
 .row-grade img {
-    vertical-align: middle;
+    vertical-align: text-bottom;
     border: 0;
 }
 
@@ -232,7 +232,7 @@
     width: 100%;
     margin-bottom: 35px;
     text-align: left;
-    vertical-align: middle;
+    vertical-align: text-bottom;
     border-spacing: 0;
 }
 
@@ -244,7 +244,7 @@
 .scores td {
     height: 15px;
     vertical-align: middle;
-    padding: 2.8px;
+    padding: 2.6px;
 }
 
 .scores img {
@@ -252,7 +252,7 @@
 }
 
 .scores .flag {
-    vertical-align: baseline;
+    vertical-align: text-top;
 }
 
 .scores .row-light:hover,

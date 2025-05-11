@@ -75,4 +75,5 @@
 .ranking-flag-link:focus,
 .ranking-flag-link:active {
     text-decoration: none;
+    vertical-align: text-bottom;
 }
