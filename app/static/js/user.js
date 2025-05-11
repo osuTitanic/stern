@@ -258,7 +258,7 @@ function loadPinnedScores(userId, mode) {
         var loadingText = document.getElementById("pinned-scores-loading");
         var scores = data.scores;
 
-        if (loadingText) {
+        if (loadingText && loadingText.parentElement) {
             loadingText.parentElement.classList.remove("score");
             loadingText.remove();
         }
@@ -294,7 +294,7 @@ function loadPinnedScores(userId, mode) {
         scoreContainer.appendChild(errorText);
 
         var loadingText = document.getElementById("pinned-scores-loading");
-        if (loadingText) {
+        if (loadingText && loadingText.parentElement) {
             loadingText.parentElement.classList.remove("score");
             loadingText.remove();
         }
@@ -310,7 +310,7 @@ function loadTopPlays(userId, mode, limit, offset) {
         var loadingText = document.getElementById("top-scores-loading");
         var scores = data.scores;
 
-        if (loadingText) {
+        if (loadingText && loadingText.parentElement) {
             loadingText.parentElement.classList.remove("score");
             loadingText.remove();
         }
@@ -380,7 +380,7 @@ function loadTopPlays(userId, mode, limit, offset) {
 
         var loadingText = document.getElementById("top-scores-loading");
 
-        if (loadingText) {
+        if (loadingText && loadingText.parentElement) {
             loadingText.parentElement.classList.remove("score");
             loadingText.remove();
         }
@@ -398,7 +398,7 @@ function loadLeaderScores(userId, mode, limit, offset) {
         var loadingText = document.getElementById("leader-scores-loading");
         var scores = data.scores;
 
-        if (loadingText) {
+        if (loadingText && loadingText.parentElement) {
             loadingText.parentElement.classList.remove("score");
             loadingText.remove();
         }
@@ -461,7 +461,7 @@ function loadLeaderScores(userId, mode, limit, offset) {
         scoreContainer.appendChild(errorText);
 
         var loadingText = document.getElementById("leader-scores-loading");
-        if (loadingText) {
+        if (loadingText && loadingText.parentElement) {
             loadingText.parentElement.classList.remove("score");
             loadingText.remove();
         }
