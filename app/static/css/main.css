@@ -605,11 +605,11 @@ input[type="url"], input[type="search"] {
 }
 
 .row-self {
-    background-color: #e1fdc2;
+    background-color: #dcfcb9;
 }
 
 .row-friend {
-    background-color: #ffd8b4;
+    background-color: #ffd3a6;
 }
 
 .row-jumpto {
