@@ -1,10 +1,11 @@
 
-from app.common.database.repositories import users, stats, beatmaps
+from app.common.database.repositories import users, stats, beatmaps, relationships
 from app.common.constants import GameMode, COUNTRIES
 from app.common.database import DBUser, DBStats
 from app.common.cache import leaderboards
 
 from flask import Blueprint, abort, request
+from flask_login import current_user
 from sqlalchemy.orm import Session
 from typing import List
 
@@ -135,6 +136,14 @@ def render_rankings_page(
         top_countries = leaderboards.top_countries(mode)
         order_name = order_name_mapping.get(order_type.lower())
 
+        friend_ids = (
+            relationships.fetch_target_ids(
+                current_user.id,
+                session=session
+            )
+            if current_user.is_authenticated else []
+        )
+
         return utils.render_template(
             'rankings.html',
             css='rankings.css',
@@ -151,6 +160,7 @@ def render_rankings_page(
             items_per_page=items_per_page,
             canonical_url=request.base_url,
             order_name=order_name,
+            friends=friend_ids,
             session=session,
             jumpto=jumpto,
             total_beatmaps=(
@@ -223,6 +233,14 @@ def render_kudosu_page(items_per_page: int, page: int, session: Session) -> str:
         if score > 0
     ]
 
+    friend_ids = (
+        relationships.fetch_target_ids(
+            current_user.id,
+            session=session
+        )
+        if current_user.is_authenticated else []
+    )
+
     return utils.render_template(
         'kudosu.html',
         css='rankings.css',
@@ -234,7 +252,8 @@ def render_kudosu_page(items_per_page: int, page: int, session: Session) -> str:
         leaderboard=sorted_users,
         max_page_display=max_page_display,
         min_page_display=min_page_display,
-        items_per_page=items_per_page
+        items_per_page=items_per_page,
+        friends=friend_ids
     )
 
 def ensure_user_stats(users: List[DBUser], session: Session) -> None:
