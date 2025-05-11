@@ -314,7 +314,6 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
                     callbackSuccess(xhr);
                 } catch (e) {
                     console.error("An error occurred while processing the response: " + e);
-                    callbackError(xhr);
                     throw e;
                 }
             }
@@ -340,7 +339,6 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
                         callbackSuccess(xhr);
                     } catch (e) {
                         console.error("An error occurred while processing the response: " + e);
-                        callbackError(xhr);
                         throw e;
                     }
                 }
