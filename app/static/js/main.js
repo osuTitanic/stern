@@ -138,6 +138,10 @@ function isLoggedIn() {
     return document.getElementById('welcome-text').innerText != 'Welcome, guest!'
 }
 
+function isArray(obj) {
+    return Object.prototype.toString.call(obj) === '[object Array]';
+}
+
 function show(id) {
     $('#' + id).show();
 }
@@ -354,16 +358,19 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
 }
 
 function convertFormToJson(formElement) {
-    var formData = new FormData(formElement);
+    var formData = formElement.elements;
     var jsonData = {};
 
-    for (var [key, value] of formData.entries()) {
-        if (jsonData[key] === undefined) {
-            jsonData[key] = value;
-        } else if (Array.isArray(jsonData[key])) {
-            jsonData[key].push(value);
-        } else {
-            jsonData[key] = [jsonData[key], value];
+    for (var i = 0; i < formData.length; i++) {
+        var field = formData[i];
+        if (field.name && !field.disabled) {
+            if (jsonData[field.name] === undefined) {
+                jsonData[field.name] = field.value;
+            } else if (isArray(jsonData[field.name])) {
+                jsonData[field.name].push(field.value);
+            } else {
+                jsonData[field.name] = [jsonData[field.name], field.value];
+            }
         }
     }
     return jsonData;
