@@ -605,15 +605,15 @@ input[type="url"], input[type="search"] {
 }
 
 .row-self {
-    background-color: #dcfcb9;
+    background-color: #e1fdc2;
 }
 
 .row-friend {
-    background-color: #fdcd9f;
+    background-color: #ffd8b4;
 }
 
 .row-jumpto {
-    background-color: #fdcd9f;
+    background-color: #ffb5e9;
 }
 
 #error {
