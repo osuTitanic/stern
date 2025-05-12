@@ -1,0 +1,83 @@
+function setBeatmapsetStatus(beatmapsetId, status, promptText) {
+    if (promptText === undefined) {
+        promptText = "Are you sure?";
+    }
+
+    if (!confirm(promptText)) {
+        return;
+    }
+
+    performApiRequest("PATCH", "/beatmapsets/" + beatmapsetId + "/status?status=" + status, null, function(xhr) {
+        location.reload();
+    }, function(xhr) {
+        var response = JSON.parse(xhr.responseText);
+        alert(response.details);
+    });
+}
+
+function updateBeatmapsetMetadata(event) {
+    event.preventDefault();
+
+    var data = convertFormToJson(event.target);
+    var url = "/beatmapsets/" + data.beatmapset_id;
+
+    performApiRequest("PATCH", url, data, function(xhr) {
+        location.reload();
+    }, function(xhr) {
+        var response = JSON.parse(xhr.responseText);
+        alert(response.details);
+    });
+}
+
+function updateBeatmapStatuses(event) {
+    event.preventDefault();
+
+    var data = convertFormToJson(event.target);
+    var url = "/beatmapsets/" + data.beatmapset_id + "/status/beatmaps";
+
+    performApiRequest("PATCH", url, data, function(xhr) {
+        location.reload();
+    }, function(xhr) {
+        var response = JSON.parse(xhr.responseText);
+        alert(response.details);
+    });
+}
+
+function nukeBeatmapset(beatmapsetId) {
+    if (!confirm("This will fully delete the beatmap, are you sure you want to proceed?")) {
+        return;
+    }
+
+    performApiRequest("POST", "/beatmapsets/" + beatmapsetId + "/nuke", null, function(xhr) {
+        location.reload();
+    }, function(xhr) {
+        var response = JSON.parse(xhr.responseText);
+        alert(response.details);
+    });
+}
+
+function addNomination(beatmapsetId) {
+    var url = "/beatmapsets/" + beatmapsetId + "/nominations";
+
+    performApiRequest("POST", url, null, function(xhr) {
+        location.reload();
+    }, function(xhr) {
+        var response = JSON.parse(xhr.responseText);
+        alert(response.details);
+    });
+}
+
+function resetNominations(beatmapsetId) {
+    if (!confirm("This will remove all nominations from this beatmap, are you sure you want to proceed?")) {
+        return;
+    }
+
+    var url = "/beatmapsets/" + beatmapsetId + "/nominations";
+
+    performApiRequest("DELETE", url, null, function(xhr) {
+        location.reload();
+    }, function(xhr) {
+        var response = JSON.parse(xhr.responseText);
+        alert(response.details);
+    });
+}
