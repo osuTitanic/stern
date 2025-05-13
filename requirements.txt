@@ -1,7 +1,7 @@
 bcrypt==4.3.0
 boto3<2
 boto3-type-annotations-with-docs==0.3.1
-flask==3.1.0
+flask==3.1.1
 flask-assets==2.1.0
 flask-login==0.6.3
 flask-pydantic==0.12.0
