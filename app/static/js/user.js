@@ -800,7 +800,8 @@ function loadPerformanceGraph(userId, mode) {
             chart.legend.dispatch.on('legendClick', function (state) {
                 setTimeout(function () {
                     updatePerformanceGraphYAxis(chart, getPerformanceGraphRange());
-                }, 500);
+                    chart.update();
+                }, 0);
             });
 
             // Calculate the range of the y axis
