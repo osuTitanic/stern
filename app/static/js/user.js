@@ -45,10 +45,10 @@ function expandProfileTab(id, forceExpand) {
     }
 
     if (activeTab === 'general') {
-        loadUserPerformanceGraph(userId, modeName);
+        loadPerformanceGraph(userId, modeName);
     } else if (activeTab === 'history') {
-        loadUserPlaysGraph(userId, modeName);
-        loadUserViewsGraph(userId, modeName);
+        loadPlaysGraph(userId, modeName);
+        loadViewsGraph(userId, modeName);
     }
 }
 
@@ -616,7 +616,7 @@ function processRankEntries(entries, rankingType) {
     if (best != null && !bestWasLast) {
         bestEntryByDate.push(entry);
     }
-    
+
     return bestEntryByDate.map(function(entry) {
         var daysAgo = entry.daysAgo == 0 ? 0 : (-entry.daysAgo);
         return {
@@ -695,7 +695,7 @@ function processRankHistory(entries) {
     ];
 }
 
-function resetUserPerformanceGraph() {
+function resetPerformanceGraph() {
     var $rankGraph = $('#rank-graph svg');
     if ($rankGraph.length == 0) {
         return;
@@ -704,7 +704,7 @@ function resetUserPerformanceGraph() {
     $rankGraph[0].innerHTML = '';
 }
 
-function getUserPerformanceGraphRange(backupEntries, backupEntriesKey) {
+function getPerformanceGraphRange(backupEntries, backupEntriesKey) {
     var rankMin = null;
     var rankMax = null;
 
@@ -735,7 +735,7 @@ function getUserPerformanceGraphRange(backupEntries, backupEntriesKey) {
     return [rankMin, rankMax];
 }
 
-function updateUserPerformanceGraphYAxis(chart, range) {
+function updatePerformanceGraphYAxis(chart, range) {
     var userDigits = (range[1].toString().length - 1);
 
     var minRankDigits = '1' + ((userDigits > 0) ? (userDigits) * '0' : '');
@@ -754,8 +754,8 @@ function updateUserPerformanceGraphYAxis(chart, range) {
     chart.forceY([-relativeMinRank[0] - 1, -relativeMaxRank[1]]);
 }
 
-function loadUserPerformanceGraph(userId, mode) {
-    resetUserPerformanceGraph();
+function loadPerformanceGraph(userId, mode) {
+    resetPerformanceGraph();
     var url = '/users/' + userId + '/history/rank/' + mode;
 
     performApiRequest("GET", url, null, function(xhr) {
@@ -797,15 +797,15 @@ function loadUserPerformanceGraph(userId, mode) {
 
             chart.legend.dispatch.on('legendClick', function (state) {
                 setTimeout(function () {
-                    updateUserPerformanceGraphYAxis(chart, getUserPerformanceGraphRange());
+                    updatePerformanceGraphYAxis(chart, getPerformanceGraphRange());
                 }, 500);
             });
 
             // Calculate the range of the y axis
-            var range = getUserPerformanceGraphRange(entries, defaultSelectedRankType);
+            var range = getPerformanceGraphRange(entries, defaultSelectedRankType);
 
             // Update the y axis with the calculated range
-            updateUserPerformanceGraphYAxis(chart, range);
+            updatePerformanceGraphYAxis(chart, range);
 
             d3.select("#rank-graph svg")
                 .datum(rankData)
@@ -855,7 +855,7 @@ function processPlayHistory(entries) {
     }];
 }
 
-function loadUserPlaysGraph(userId, mode) {
+function loadPlaysGraph(userId, mode) {
     var url = "/users/" + userId + "/history/plays/" + mode;
 
     performApiRequest("GET", url, null, function(xhr) {
@@ -902,7 +902,6 @@ function loadUserPlaysGraph(userId, mode) {
 
             // Reset "dy" value
             var noDataElements = document.querySelectorAll('.nv-noData');
-
             for (var i = 0; i < noDataElements.length; i++) {
                 noDataElements[i].setAttribute('dy', 0);
             }
@@ -938,7 +937,7 @@ function processViewsHistory(entries) {
     }];
 }
 
-function loadUserViewsGraph(userId, mode) {
+function loadViewsGraph(userId, mode) {
     var url = "/users/" + userId + "/history/views/" + mode;
 
     performApiRequest("GET", url, null, function(xhr) {
