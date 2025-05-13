@@ -751,7 +751,9 @@ function updatePerformanceGraphYAxis(chart, range) {
     // Only display certain tick values
     chart.xAxis.tickValues([-90, -60, -30, 0]);
     chart.yAxis.tickValues([-relativeMaxRank, -betweenRank, -relativeMinRank]);
-    chart.forceY([-relativeMinRank[0] - 1, -relativeMaxRank[1]]);
+
+    // Force chart to show range between min/max ranks
+    chart.forceY([-range[1] + 1, -range[0] - 1]);
 }
 
 function loadPerformanceGraph(userId, mode) {
