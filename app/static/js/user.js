@@ -799,6 +799,7 @@ function loadPerformanceGraph(userId, mode) {
 
             chart.legend.dispatch.on('legendClick', function (state) {
                 setTimeout(function () {
+                    resetPerformanceGraph();
                     updatePerformanceGraphYAxis(chart, getPerformanceGraphRange());
                 }, 500);
             });
