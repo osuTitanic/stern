@@ -2,6 +2,17 @@
 
 {% extends "base.html" %}
 
+{% macro bmUserRating() %}
+<table class="bm-user-rating-table" role="presentation">
+    <tbody>
+        <tr>
+            <td class="bm-user-rating-bad" width="{{ ratings_bad_perc }}">{{ "{:,}".format(ratings_bad) }}</td>
+            <td class="bm-user-rating-good" width="{{ ratings_good_perc }}">{{ "{:,}".format(ratings_good) }}</td>
+        </tr>
+    </tbody>
+</table>
+{% endmacro %}
+
 {% block content %}
 <h1 class="header-text">
     <a href="/beatmapsets">Beatmap Listing</a> »
