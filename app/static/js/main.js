@@ -271,18 +271,10 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
         throw new Error("This browser does not support AJAX requests.");
     }
 
-    if (cookieExists('access_token')) {
-        // Add authorization header if the access_token
-        // cookie is accessible via. javascript
-        xhr.setRequestHeader("Authorization", "Bearer " + getCookie('access_token'));
-    } else {
-        // If the access_token cookie is not accessible via. javascript,
-        // we assume that the browser contains the cookie in the request
-        try {
-            xhr.withCredentials = true;
-        } catch (e) {
-            console.warn("This browser does not support ajax credentials.");
-        }
+    try {
+        xhr.withCredentials = true;
+    } catch (e) {
+        console.warn("This browser does not support ajax credentials.");
     }
 
     // Use the current site protocol
@@ -299,7 +291,7 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
         console.error("An error occurred while opening the request: " + e);
         return;
     }
-    
+
     try {
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.setRequestHeader("Cache-Control", "no-cache");
