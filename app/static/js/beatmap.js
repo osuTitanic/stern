@@ -46,7 +46,7 @@ function editBeatmapDescription() {
     if (!description) { return; }
 
     var form = document.createElement('form');
-    form.action = '/api/beatmaps/update/{{ beatmapset.id }}/description';
+    form.action = '/api/beatmaps/update/' + beatmapsetId + '/description';
     form.method = 'post';
 
     var textarea = document.createElement('textarea');
@@ -55,11 +55,11 @@ function editBeatmapDescription() {
     textarea.name = 'description';
     form.appendChild(textarea);
 
-    var csrfToken = document.createElement('input');
-    csrfToken.type = 'hidden';
-    csrfToken.name = 'csrf_token';
-    csrfToken.value = '{{ csrf_token() }}';
-    form.appendChild(csrfToken);
+    var csrfTokenInput = document.createElement('input');
+    csrfTokenInput.type = 'hidden';
+    csrfTokenInput.name = 'csrf_token';
+    csrfTokenInput.value = csrfToken;
+    form.appendChild(csrfTokenInput);
 
     var submitButton = document.createElement('input');
     submitButton.type = 'submit';

@@ -713,6 +713,7 @@
 </div>
 {# TODO: Beatmap Comments #}
 <script>
+    var beatmapsetId = {{ beatmapset.id }};
     var isBeatmapsetOwner = {{ (beatmapset.server != 0 and beatmapset.creator_id == current_user.id)|lower }};
     var bbcodeDescription = `{{ beatmapset.description }}`;
 </script>
