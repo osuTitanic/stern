@@ -208,10 +208,8 @@
                     {% endif %}
                 </td>
                 {% endif %}
-                {% if beatmapset.server == 1 %}
                 <td>Options:</td>
                 <td {% if not nominations or beatmapset.status > 0 %} colspan="5" {% endif %}>
-                    <a href="/api/beatmaps/osu/{{ beatmap.id }}">Grab latest .osu file</a>
                     {% if beatmapset.server == 0 %}
                     <p><a href="https://osu.ppy.sh/beatmapsets/{{ beatmapset.id }}/discussion">Modding / Discussion</a></p>
                     {% else %}
@@ -221,7 +219,6 @@
                     {% endif %}
                     <p><a setid="{{ beatmapset.id }}" onclick="copySetId(this)">Copy Beatmapset ID</a></p>
                 </td>
-                {% endif %}
             </tr>
         </table>
         {% if current_user.is_bat %}
