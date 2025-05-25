@@ -16,7 +16,7 @@
     {% if site_image %}<meta property="og:image" content="{{ site_image }}">{% endif %}
     {% if site_url %}<meta property="og:url" content="{{ site_url }}">{% endif %}
     {% if config.ENABLE_SSL %}<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">{% endif %}
-    {% set css_url = ('/css/' + css or 'main.css')|git_asset_url %}
+    {% set css_url = ('/css/' + (css or 'main.css'))|git_asset_url %}
     <title>{{ title or 'Titanic!' }}</title>
     <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
     <link rel="prefetch" href="{{ css_url }}">
