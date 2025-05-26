@@ -45,10 +45,10 @@ function expandProfileTab(id, forceExpand) {
     }
 
     if (activeTab === 'general') {
-        loadUserPerformanceGraph(userId, modeName);
+        loadPerformanceGraph(userId, modeName);
     } else if (activeTab === 'history') {
-        loadUserPlaysGraph(userId, modeName);
-        loadUserViewsGraph(userId, modeName);
+        loadPlaysGraph(userId, modeName);
+        loadViewsGraph(userId, modeName);
     }
 }
 
@@ -80,11 +80,11 @@ function createScoreElement(score, index, type) {
 
     var beatmapInfo = document.createElement("a");
     beatmapInfo.href = "/b/" + score.beatmap.id + "?mode=" + score.mode;
-    beatmapInfo.innerText = score.beatmap.beatmapset.artist + " - " + score.beatmap.beatmapset.title + " [" + score.beatmap.version + "]";
+    setText(beatmapInfo, score.beatmap.beatmapset.artist + " - " + score.beatmap.beatmapset.title + " [" + score.beatmap.version + "]");
 
     var modsText = document.createElement("b");
     if (score.mods > 0) {
-        modsText.innerText = "+" + Mods.getString(score.mods);
+        setText(modsText, "+" + Mods.getString(score.mods));
     }
 
     var scoreInfo = document.createElement("b");
@@ -111,14 +111,14 @@ function createScoreElement(score, index, type) {
     rightColumn.className = 'score-right';
 
     var ppText = document.createElement("b");
-    ppText.innerText = (score.pp.toFixed(0) + "pp");
+    setText(ppText, (score.pp.toFixed(0) + "pp"));
 
     var ppDisplay = document.createElement("div");
     ppDisplay.className = "pp-display";
     ppDisplay.appendChild(ppText);
 
     var ppWeightPercent = document.createElement("b");
-    ppWeightPercent.innerText = (Math.pow(0.95, index + topScoreOffset) * 100).toFixed(0) + "%";
+    setText(ppWeightPercent, (Math.pow(0.95, index + topScoreOffset) * 100).toFixed(0) + "%");
 
     var ppWeight = document.createElement("div");
     ppWeight.className = "pp-display-weight";
@@ -151,7 +151,7 @@ function createScoreElement(score, index, type) {
     // Score's Date
     var dateText = document.createElement("time");
     dateText.setAttribute("datetime", score.submitted_at);
-    dateText.innerText = score.submitted_at;
+    setText(dateText, score.submitted_at);
     dateText.title = scoreDateString;
     dateText.className = "timeago";
 
@@ -172,7 +172,7 @@ function createScoreElement(score, index, type) {
     
         var clientTextVersion = document.createElement('span');
         clientTextVersion.classList.add('score-version-number');
-        clientTextVersion.innerText = versionText;
+        setText(clientTextVersion, versionText);
 
         clientText.appendChild(clientTextVersion);
         scoreBottomDiv.appendChild(clientText);
@@ -259,7 +259,7 @@ function loadPinnedScores(userId, mode) {
         var scores = data.scores;
 
         if (loadingText) {
-            loadingText.parentElement.classList.remove("score");
+            getParentElement(loadingText).classList.remove("score");
             loadingText.remove();
         }
 
@@ -289,13 +289,13 @@ function loadPinnedScores(userId, mode) {
         slideDown(document.getElementById("leader"));
     }, function(xhr) {
         var errorText = document.createElement("p");
-        errorText.innerText = "Failed to load pinned scores.";
+        setText(errorText, "Failed to load pinned scores.");
         errorText.classList.add("score");
         scoreContainer.appendChild(errorText);
 
         var loadingText = document.getElementById("pinned-scores-loading");
         if (loadingText) {
-            loadingText.parentElement.classList.remove("score");
+            getParentElement(loadingText).classList.remove("score");
             loadingText.remove();
         }
     });
@@ -311,13 +311,13 @@ function loadTopPlays(userId, mode, limit, offset) {
         var scores = data.scores;
 
         if (loadingText) {
-            loadingText.parentElement.classList.remove("score");
+            getParentElement(loadingText).classList.remove("score");
             loadingText.remove();
         }
 
         if (data.total <= 0) {
             var noScoresText = document.createElement("p");
-            noScoresText.innerText = "No awesome performance records yet :(";
+            setText(noScoresText, "No awesome performance records yet :(");
             scoreContainer.appendChild(noScoresText);
             return;
         }
@@ -343,7 +343,7 @@ function loadTopPlays(userId, mode, limit, offset) {
         if (scores.length >= limit) {
             // Create show more text
             var showMoreText = document.createElement("b");
-            showMoreText.innerText = "Show me more!";
+            setText(showMoreText, "Show me more!");
 
             // Add onclick event
             var showMoreHref = document.createElement("a");
@@ -352,11 +352,11 @@ function loadTopPlays(userId, mode, limit, offset) {
             showMoreHref.appendChild(showMoreText);
             showMoreHref.onclick = function() {
                 var loadingText = document.createElement("p");
-                loadingText.innerText = "Loading...";
+                setText(loadingText, "Loading...");
                 loadingText.id = "top-scores-loading";
 
                 var showMore = document.getElementById("show-more-top");
-                showMore.parentElement.appendChild(loadingText);
+                getParentElement(showMore).appendChild(loadingText);
                 showMore.remove();
 
                 loadTopPlays(userId, modeName, 50, topScoreOffset);
@@ -374,14 +374,14 @@ function loadTopPlays(userId, mode, limit, offset) {
         slideDown(document.getElementById("leader"));
     }, function(xhr) {
         var errorText = document.createElement("p");
-        errorText.innerText = "Failed to load top plays.";
+        setText(errorText, "Failed to load top plays.");
         errorText.classList.add("score");
         scoreContainer.appendChild(errorText);
 
         var loadingText = document.getElementById("top-scores-loading");
 
         if (loadingText) {
-            loadingText.parentElement.classList.remove("score");
+            getParentElement(loadingText).classList.remove("score");
             loadingText.remove();
         }
     });
@@ -399,20 +399,20 @@ function loadLeaderScores(userId, mode, limit, offset) {
         var scores = data.scores;
 
         if (loadingText) {
-            loadingText.parentElement.classList.remove("score");
+            getParentElement(loadingText).classList.remove("score");
             loadingText.remove();
         }
 
         if (data.total <= 0) {
             var noScoresText = document.createElement("p");
-            noScoresText.innerText = "No first place records currently :(";
+            setText(noScoresText, "No first place records currently :(");
             scoreContainer.appendChild(noScoresText);
             return;
         }
 
         // Update total score count
         var heading = document.getElementById('leader-scores').getElementsByTagName('h2')[0]
-        heading.innerText = 'First Place Ranks (' + data.total.toLocaleString() + ')';
+        setText(heading, 'First Place Ranks (' + data.total.toLocaleString() + ')');
 
         for (var i = 0; i < scores.length; i++) {
             var scoreDiv = createScoreElement(scores[i], i, "leader");
@@ -425,7 +425,7 @@ function loadLeaderScores(userId, mode, limit, offset) {
 
         if (scores.length >= limit) {
             var showMoreText = document.createElement("b");
-            showMoreText.innerText = "Show me more!";
+            setText(showMoreText, "Show me more!");
 
             // Add onclick event
             var showMoreHref = document.createElement("a");
@@ -434,11 +434,11 @@ function loadLeaderScores(userId, mode, limit, offset) {
             showMoreHref.appendChild(showMoreText);
             showMoreHref.onclick = function() {
                 var loadingText = document.createElement("p");
-                loadingText.innerText = "Loading...";
+                setText(loadingText, "Loading...");
                 loadingText.id = "leader-scores-loading";
 
                 var showMore = document.getElementById("show-more-leader");
-                showMore.parentElement.appendChild(loadingText);
+                getParentElement(showMore).appendChild(loadingText);
                 showMore.remove();
 
                 loadLeaderScores(userId, modeName, 50, topLeaderOffset);
@@ -456,13 +456,13 @@ function loadLeaderScores(userId, mode, limit, offset) {
         slideDown(document.getElementById("leader"));
     }, function(xhr) {
         var errorText = document.createElement("p");
-        errorText.innerText = "Failed to load first place ranks.";
+        setText(errorText, "Failed to load first place ranks.");
         errorText.classList.add("score");
         scoreContainer.appendChild(errorText);
 
         var loadingText = document.getElementById("leader-scores-loading");
         if (loadingText) {
-            loadingText.parentElement.classList.remove("score");
+            getParentElement(loadingText).classList.remove("score");
             loadingText.remove();
         }
     });
@@ -491,7 +491,7 @@ function loadMostPlayed(userId, limit, offset) {
         for (var index = 0; index < plays.length; index++) {
             var item = plays[index];
             var beatmapLink = document.createElement("a");
-            beatmapLink.innerText = item.beatmap.beatmapset.artist + " - " + item.beatmap.beatmapset.title + " [" + item.beatmap.version + "]";
+            setText(beatmapLink, item.beatmap.beatmapset.artist + " - " + item.beatmap.beatmapset.title + " [" + item.beatmap.version + "]");
             beatmapLink.href = "/b/" + item.beatmap.id;
 
             var playsDiv = document.createElement("div");
@@ -546,12 +546,12 @@ function loadRecentPlays(userId, mode) {
 
             var dateText = document.createElement("time");
             dateText.setAttribute("datetime", score.submitted_at);
-            dateText.innerText = score.submitted_at;
+            setText(dateText, score.submitted_at);
             dateText.title = scoreDateString;
             dateText.className += " timeago";
 
             var beatmapLink = document.createElement("a");
-            beatmapLink.innerText = score.beatmap.beatmapset.artist + " - " + score.beatmap.beatmapset.title + " [" + score.beatmap.version + "]";
+            setText(beatmapLink, score.beatmap.beatmapset.artist + " - " + score.beatmap.beatmapset.title + " [" + score.beatmap.version + "]");
             beatmapLink.href = "/b/" + score.beatmap.id;
 
             var modsText = "";
@@ -616,7 +616,7 @@ function processRankEntries(entries, rankingType) {
     if (best != null && !bestWasLast) {
         bestEntryByDate.push(entry);
     }
-    
+
     return bestEntryByDate.map(function(entry) {
         var daysAgo = entry.daysAgo == 0 ? 0 : (-entry.daysAgo);
         return {
@@ -695,7 +695,7 @@ function processRankHistory(entries) {
     ];
 }
 
-function resetUserPerformanceGraph() {
+function resetPerformanceGraph() {
     var $rankGraph = $('#rank-graph svg');
     if ($rankGraph.length == 0) {
         return;
@@ -704,14 +704,68 @@ function resetUserPerformanceGraph() {
     $rankGraph[0].innerHTML = '';
 }
 
-function loadUserPerformanceGraph(userId, mode) {
+function getPerformanceGraphRange(backupEntries, backupEntriesKey) {
+    var rankMin = null;
+    var rankMax = null;
 
-    resetUserPerformanceGraph();
+    if (backupEntries == undefined) {
+        var legendData = d3.selectAll('.nv-series').data();
+        for (var i = 0; i < legendData.length; i++) {
+            var legendElement = legendData[i];
+            if (legendElement.disabled) {
+                continue;
+            }
+
+            for (var j = 0; j < legendElement.values.length; j++) {
+                var rankValue = Math.abs(legendElement.values[j].y);
+
+                rankMin = rankMin == null ? rankValue : Math.min(rankMin, rankValue);
+                rankMax = rankMax == null ? rankValue : Math.max(rankMax, rankValue);
+            }
+        }
+    } else {
+        for (var i = 0; i < backupEntries.length; i++) {
+            var value = backupEntries[i][backupEntriesKey];
+
+            rankMin = rankMin == null ? value : Math.min(rankMin, value);
+            rankMax = rankMax == null ? value : Math.max(rankMax, value);
+        }
+    }
+
+    return [rankMin, rankMax];
+}
+
+function updatePerformanceGraphYAxis(chart, range) {
+    var userDigits = (range[1].toString().length - 1);
+
+    var minRankDigits = '1' + ((userDigits > 0) ? (userDigits) * '0' : '');
+    var relativeMinRank = Math.round(range[0] / (minRankDigits)) * minRankDigits;
+
+    var maxRankDigits = '1' + (userDigits * '0');
+    var relativeMaxRank = Math.round(range[1] / (maxRankDigits)) * maxRankDigits;
+
+    var betweenRank = (relativeMaxRank - relativeMaxRank / 2);
+
+    chart.yScale(d3.scale.linear().domain([-relativeMinRank - 1, -relativeMaxRank]));
+
+    // Only display certain tick values
+    chart.xAxis.tickValues([-90, -60, -30, 0]);
+    chart.yAxis.tickValues([-relativeMaxRank, -betweenRank, -relativeMinRank]);
+
+    // Force chart to show range between min/max ranks
+    chart.forceY([-range[1] + 1, -range[0] - 1]);
+}
+
+function loadPerformanceGraph(userId, mode) {
+    resetPerformanceGraph();
     var url = '/users/' + userId + '/history/rank/' + mode;
 
     performApiRequest("GET", url, null, function(xhr) {
         var entries = JSON.parse(xhr.responseText);
         var rankData = processRankHistory(entries);
+
+        // Used for initial y-axis calculation
+        var defaultSelectedRankType = 'global_rank';
 
         nv.addGraph(function() {
             var chart = nv.models.lineChart()
@@ -743,36 +797,18 @@ function loadUserPerformanceGraph(userId, mode) {
                     return '#' + (-rank);
                 });
 
-            // Calculate the relative min/max user rank to display on y axis
-            var ranks = [];
+            chart.legend.dispatch.on('legendClick', function (state) {
+                setTimeout(function () {
+                    updatePerformanceGraphYAxis(chart, getPerformanceGraphRange());
+                    chart.update();
+                }, 0);
+            });
 
-            for (var i = 0; i < rankData.length; i++) {
-                for (var j = 0; j < rankData[i].values.length; j++) {
-                    ranks.push(-rankData[i].values[j].y);
-                }
-            }
+            // Calculate the range of the y axis
+            var range = getPerformanceGraphRange(entries, defaultSelectedRankType);
 
-            var minRank = Math.min.apply(null, ranks);
-            var maxRank = Math.max.apply(null, ranks);
-            var userDigits = (maxRank.toString().length - 1);
-
-            var minRankDigits = '1' + ((userDigits > 0) ? (userDigits) * '0' : '');
-            var relativeMinRank = Math.round(minRank / (minRankDigits)) * minRankDigits;
-
-            var maxRankDigits = '1' + (userDigits * '0');
-            var relativeMaxRank = Math.round(maxRank / (maxRankDigits)) * maxRankDigits;
-
-            var betweenRank = (relativeMaxRank - relativeMaxRank / 2);
-
-            chart.yScale(d3.scale.linear().domain([-relativeMinRank - 1, -relativeMaxRank]));
-            chart.xScale(d3.scale.linear().domain([-90, 0]));
-
-            // Force chart to show range of x, y values
-            chart.forceY([-relativeMinRank - 1, -relativeMaxRank]);
-
-            // Only display certain tick values
-            chart.xAxis.tickValues([-90, -60, -30, 0]);
-            chart.yAxis.tickValues([-relativeMaxRank, -betweenRank, -relativeMinRank]);
+            // Update the y axis with the calculated range
+            updatePerformanceGraphYAxis(chart, range);
 
             d3.select("#rank-graph svg")
                 .datum(rankData)
@@ -795,6 +831,7 @@ function loadUserPerformanceGraph(userId, mode) {
 
 function processPlayHistory(entries) {
     var values = [];
+
     for (var i = 0; i < entries.length; i++) {
         var entry = entries[i];
         var start = new Date();
@@ -821,7 +858,7 @@ function processPlayHistory(entries) {
     }];
 }
 
-function loadUserPlaysGraph(userId, mode) {
+function loadPlaysGraph(userId, mode) {
     var url = "/users/" + userId + "/history/plays/" + mode;
 
     performApiRequest("GET", url, null, function(xhr) {
@@ -868,7 +905,6 @@ function loadUserPlaysGraph(userId, mode) {
 
             // Reset "dy" value
             var noDataElements = document.querySelectorAll('.nv-noData');
-
             for (var i = 0; i < noDataElements.length; i++) {
                 noDataElements[i].setAttribute('dy', 0);
             }
@@ -904,7 +940,7 @@ function processViewsHistory(entries) {
     }];
 }
 
-function loadUserViewsGraph(userId, mode) {
+function loadViewsGraph(userId, mode) {
     var url = "/users/" + userId + "/history/views/" + mode;
 
     performApiRequest("GET", url, null, function(xhr) {
@@ -988,9 +1024,9 @@ function addFriend() {
         };
 
         if (data.status === 'mutual')
-            friendStatus.innerText = 'Remove Mutual Friend';
+            setText(friendStatus, 'Remove Mutual Friend');
         else
-            friendStatus.innerText = 'Remove Friend';
+            setText(friendStatus, 'Remove Friend');
     });
 
     return false;
@@ -1010,9 +1046,9 @@ function removeFriend() {
         };
 
         if (data.status === 'mutual')
-            friendStatus.innerText = 'Add Mutual Friend';
+            setText(friendStatus, 'Add Mutual Friend');
         else
-            friendStatus.innerText = 'Add Friend';
+            setText(friendStatus, 'Add Friend');
     });
 
     return false;

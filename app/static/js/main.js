@@ -138,6 +138,10 @@ function isLoggedIn() {
     return document.getElementById('welcome-text').innerText != 'Welcome, guest!'
 }
 
+function isArray(obj) {
+    return Object.prototype.toString.call(obj) === '[object Array]';
+}
+
 function show(id) {
     $('#' + id).show();
 }
@@ -287,7 +291,7 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
         console.error("An error occurred while opening the request: " + e);
         return;
     }
-    
+
     try {
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.setRequestHeader("Cache-Control", "no-cache");
@@ -310,7 +314,6 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
                     callbackSuccess(xhr);
                 } catch (e) {
                     console.error("An error occurred while processing the response: " + e);
-                    callbackError(xhr);
                     throw e;
                 }
             }
@@ -336,7 +339,6 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
                         callbackSuccess(xhr);
                     } catch (e) {
                         console.error("An error occurred while processing the response: " + e);
-                        callbackError(xhr);
                         throw e;
                     }
                 }
@@ -354,16 +356,19 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
 }
 
 function convertFormToJson(formElement) {
-    var formData = new FormData(formElement);
+    var formData = formElement.elements;
     var jsonData = {};
 
-    for (var [key, value] of formData.entries()) {
-        if (jsonData[key] === undefined) {
-            jsonData[key] = value;
-        } else if (Array.isArray(jsonData[key])) {
-            jsonData[key].push(value);
-        } else {
-            jsonData[key] = [jsonData[key], value];
+    for (var i = 0; i < formData.length; i++) {
+        var field = formData[i];
+        if (field.name && !field.disabled) {
+            if (jsonData[field.name] === undefined) {
+                jsonData[field.name] = field.value;
+            } else if (isArray(jsonData[field.name])) {
+                jsonData[field.name].push(field.value);
+            } else {
+                jsonData[field.name] = [jsonData[field.name], field.value];
+            }
         }
     }
     return jsonData;
@@ -403,7 +408,7 @@ function loadBBCodePreview(element) {
 
 function renderTimeagoElements() {
     var times = document.getElementsByClassName('timeago');
-    for (let i = 0; i < times.length; i++) {
+    for (var i = 0; i < times.length; i++) {
         times[i].innerText = jQuery.timeago(times[i].getAttribute('datetime'));
     }
 }

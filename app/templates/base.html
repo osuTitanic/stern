@@ -16,13 +16,14 @@
     {% if site_image %}<meta property="og:image" content="{{ site_image }}">{% endif %}
     {% if site_url %}<meta property="og:url" content="{{ site_url }}">{% endif %}
     {% if config.ENABLE_SSL %}<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">{% endif %}
+    {% set css_url = ('/css/' + (css or 'main.css'))|git_asset_url %}
     <title>{{ title or 'Titanic!' }}</title>
     <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
-    <link rel="prefetch" href="/css/{{ css or 'main.css' }}">
-    <link rel="stylesheet" href="/css/{{ css or 'main.css' }}">
-    <link rel="stylesheet" href="/lib/fontawesome.min.css">
-    <link rel="stylesheet" href="/lib/fontawesome.solid.min.css">
-    <link rel="stylesheet" href="/lib/fontawesome.brands.min.css">
+    <link rel="prefetch" href="{{ css_url }}">
+    <link rel="stylesheet" href="{{ css_url }}">
+    <link rel="stylesheet" href="{{ '/lib/fontawesome.min.css'|git_asset_url }}">
+    <link rel="stylesheet" href="{{ '/lib/fontawesome.solid.min.css'|git_asset_url }}">
+    <link rel="stylesheet" href="{{ '/lib/fontawesome.brands.min.css'|git_asset_url }}">
     {% if canonical_url %}
     <link rel="canonical" href="{{ canonical_url }}">
     {% endif %}
@@ -64,11 +65,11 @@
     <div class="main">
         <a href="/" aria-label="Home">
             <img {% if not is_ie %}
-                 src="/images/logo/main-vector.min.svg"
-                 onerror="this.src='/images/logo/main-low.png';"
+                 src="{{ '/images/logo/main-vector.min.svg'|git_asset_url }}"
+                 onerror="this.src='{{ "/images/logo/main-low.png"|git_asset_url }}';"
                  loading="eager"
                  {% else %}
-                 src="/images/logo/main-low.png"
+                 src="{{ '/images/logo/main-low.png'|git_asset_url }}"
                  {% endif %}
                  class="logo"
                  alt="">
@@ -163,10 +164,10 @@
             <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js"></script>
             <!--<![endif]-->
             {% endif %}
-            <script src="/lib/jquery.min.js"></script>
-            <script src="/lib/jquery.timeago.js"></script>
-            <script src="/lib/jquery.marquee.js"></script>
-            <script src="/js/main.js"></script>
+            <script src="{{ '/lib/jquery.min.js'|git_asset_url }}"></script>
+            <script src="{{ '/lib/jquery.timeago.js'|git_asset_url }}"></script>
+            <script src="{{ '/lib/jquery.marquee.js'|git_asset_url }}"></script>
+            <script src="{{ '/js/main.js'|git_asset_url }}"></script>
             <div class="page">
                 {# Page Content #}
                 {% block content %}
@@ -174,7 +175,7 @@
                 <div style="clear: both;"></div>
             </div>
             <div class="gradient"></div>
-            <script src="/js/editor.js" defer></script>
+            <script src="{{ '/js/editor.js'|git_asset_url }}" defer></script>
         </div>
     </div>
 </body>

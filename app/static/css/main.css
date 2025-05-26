@@ -197,8 +197,13 @@ input[type="url"], input[type="search"] {
     max-width: 150px;
 }
 
+.nav-element-dropdown:focus-within > a {
+    background: #f375c5;
+    text-decoration: none;
+    transition: all 0.15s;
+}
+
 .nav-element-dropdown:hover > a,
-.nav-element-dropdown:focus-within > a,
 .nav-element a:hover,
 .nav-element a:focus,
 .nav-element a:active {
@@ -602,6 +607,18 @@ input[type="url"], input[type="search"] {
 
 .row-dark {
     background-color: #dad7fb;
+}
+
+.row-self {
+    background-color: #dcfcb9;
+}
+
+.row-friend {
+    background-color: #ffd3a6;
+}
+
+.row-jumpto {
+    background-color: #ffb5e9;
 }
 
 #error {

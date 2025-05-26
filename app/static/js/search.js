@@ -200,7 +200,7 @@ function getBeatmapsets(clear) {
                         element.pause();
                         element.currentTime = 0;
 
-                        var audioPlayIcon = element.parentElement.querySelector('.beatmap-image i');
+                        var audioPlayIcon = getParentElement(element).querySelector('.beatmap-image i');
                         audioPlayIcon.classList.remove("fa-pause");
                         audioPlayIcon.classList.add("fa-play");
                     }
@@ -476,7 +476,7 @@ function setOrder(element) {
     var orderSelection = document.createElement("img");
     orderSelection.src = "/images/down.gif";
     orderSelection.alt = "Descending";
-    element.parentElement.appendChild(orderSelection);
+    getParentElement(element).appendChild(orderSelection);
     getBeatmapsets(true);
 }
 

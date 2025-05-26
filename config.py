@@ -31,6 +31,7 @@ DOMAIN_NAME = os.environ.get('DOMAIN_NAME')
 DEBUG = eval(os.environ.get('DEBUG', 'False').capitalize())
 S3_ENABLED = eval(os.environ.get('ENABLE_S3', 'True').capitalize())
 ENABLE_SSL = eval(os.environ.get('ENABLE_SSL', 'False').capitalize())
+FROZEN_RANK_UPDATES = eval(os.environ.get('FROZEN_RANK_UPDATES', 'False').capitalize())
 APPROVED_MAP_REWARDS = eval(os.environ.get('APPROVED_MAP_REWARDS', 'False').capitalize())
 ALLOW_INSECURE_COOKIES = eval(os.environ.get('ALLOW_INSECURE_COOKIES', str(ENABLE_SSL)).capitalize()) or DEBUG
 
@@ -65,6 +66,7 @@ WIKI_DEFAULT_LANGUAGE = os.environ.get('WIKI_DEFAULT_LANGUAGE', 'en')
 DEFAULT_API_BASEURL = f'http{"s" if ENABLE_SSL else ""}://api.{DOMAIN_NAME}'
 DEFAULT_OSU_BASEURL = f'http{"s" if ENABLE_SSL else ""}://osu.{DOMAIN_NAME}'
 DEFAULT_STATIC_BASEURL = f'http{"s" if ENABLE_SSL else ""}://s.{DOMAIN_NAME}'
+SITEMAP_ENABLED = DOMAIN_NAME in ('titanic.sh', 'localhost')
 
 API_BASEURL = os.environ.get('API_BASEURL', DEFAULT_API_BASEURL)
 OSU_BASEURL = os.environ.get('OSU_BASEURL', DEFAULT_OSU_BASEURL)

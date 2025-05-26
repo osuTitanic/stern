@@ -31,7 +31,11 @@ def avatar(filename: str):
     )
 
     if (image := app.session.redis.get(f'avatar:{user_id}:{size}')):
-        return Response(image, mimetype='image/png')
+        return Response(
+            image,
+            mimetype='image/png',
+            headers={'Cache-Control': 'stale-while-revalidate, max-age=10'}
+        )
 
     if not (image := app.session.storage.get_avatar(user_id)):
         return default_avatar()
@@ -46,4 +50,8 @@ def avatar(filename: str):
         image = utils.resize_image(image, size)
         app.session.redis.set(f'avatar:{user_id}:{size}', image, ex=3600)
 
-    return Response(image, mimetype='image/png')
+    return Response(
+        image,
+        mimetype='image/png',
+        headers={'Cache-Control': 'stale-while-revalidate, max-age=10'}
+    )

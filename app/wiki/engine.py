@@ -193,6 +193,12 @@ def get_page_name(path: str) -> str:
                .removesuffix('.md').replace('_', ' ') \
                .title()
 
+def format_path(path: str) -> str:
+    """Format the path of a wiki page to be title case"""
+    tree = path.replace('_', ' ').split('/')
+    titles = [title.title().replace(" ", "_") for title in tree]
+    return '/'.join(titles)
+
 def sanitize_markdown(text: str) -> str:
     """Sanitize markdown text"""
     return text.encode().strip() \

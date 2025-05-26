@@ -58,6 +58,10 @@ def redirect_index(extension: Optional[str] = None) -> Response:
 
     return redirect(f'/?{request.query_string.decode()}')
 
+@router.get('/p/doyoureallywanttoaskpeppy/')
+def peppy_skill_issue():
+    return utils.render_template('peppy.html')
+
 @router.get('/p/<page>')
 @router.get('/p/<page>/')
 def redirect_page(page: str) -> Response:

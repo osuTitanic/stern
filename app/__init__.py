@@ -9,6 +9,7 @@ from . import common
 from . import routes
 from . import uwsgi
 from . import wiki
+from . import git
 
 from .app import flask
 from .filters import get_handle
@@ -21,3 +22,4 @@ logging.basicConfig(
     level=logging.DEBUG if config.DEBUG else logging.INFO,
     handlers=[Console, File]
 )
+git.initialize_repository()

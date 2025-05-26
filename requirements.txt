@@ -20,7 +20,9 @@ requests==2.32.3
 sendgrid==6.11.0
 sqlalchemy==2.0.39
 timeago==1.0.16
-titanic-pp-py==0.0.7
+rosu-pp-py==3.0.0
 markdown==3.7
 pyjwt==2.10.1
 regex==2024.11.6
+flask-squeeze==3.3.4
+gitpython==3.1.44

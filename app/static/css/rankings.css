@@ -52,7 +52,7 @@
     margin: auto;
     width: 100%;
     border-spacing: 0;
-    font-size: 73%;
+    font-size: 73.5%;
     margin-bottom: 5px;
     border-collapse: separate;
 }
@@ -64,8 +64,6 @@
 }
 
 .player-listing td {
-    padding-left: 5px;
-    padding-right: 5px;
     padding: 2px 5px 2px 5px;
     vertical-align: middle;
 }
@@ -75,4 +73,5 @@
 .ranking-flag-link:focus,
 .ranking-flag-link:active {
     text-decoration: none;
+    vertical-align: text-bottom;
 }

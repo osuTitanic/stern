@@ -165,7 +165,7 @@
                     {% endif %}
                 </td>
                 <td>
-                    <b>Favourited {{ favourites_count }} times</b> in total
+                    <b>Favourited {{ favourites_count }} time{{ 's' if favourites_count != 1 }}</b> in total
                     {% if current_user.is_authenticated %}
                         <br>
                         {% if favorite %}
@@ -208,10 +208,8 @@
                     {% endif %}
                 </td>
                 {% endif %}
-                {% if beatmapset.server == 1 %}
                 <td>Options:</td>
                 <td {% if not nominations or beatmapset.status > 0 %} colspan="5" {% endif %}>
-                    <a href="/api/beatmaps/osu/{{ beatmap.id }}">Grab latest .osu file</a>
                     {% if beatmapset.server == 0 %}
                     <p><a href="https://osu.ppy.sh/beatmapsets/{{ beatmapset.id }}/discussion">Modding / Discussion</a></p>
                     {% else %}
@@ -221,7 +219,6 @@
                     {% endif %}
                     <p><a setid="{{ beatmapset.id }}" onclick="copySetId(this)">Copy Beatmapset ID</a></p>
                 </td>
-                {% endif %}
             </tr>
         </table>
         {% if current_user.is_bat %}
@@ -641,9 +638,9 @@
         {% for score in scores %}
             {% if current_user.is_authenticated %}
                 {% if current_user.id == score.user.id %}
-                <tr class="row-score-self" id="{{ score.id }}">
+                <tr class="row-self" id="{{ score.id }}">
                 {% elif score.user_id in friends %}
-                <tr class="row-score-friend" id="{{ score.id }}">
+                <tr class="row-friend" id="{{ score.id }}">
                 {% elif loop.index0 % 2 %}
                 <tr class="row-dark" id="{{ score.id }}">
                 {% else %}
@@ -711,202 +708,14 @@
     {% endif %}
     {% endif %}
 </div>
-<script>
-    function addFavorite(beatmapsetId) {
-        var url = "/users/" + currentUser + "/favourites";
-
-        performApiRequest("POST", url, {"set_id": beatmapsetId}, function(xhr) {
-            var favourites = document.getElementById('favourites-button');
-            favourites.innerHTML = '(Remove Favourite)';
-            favourites.style.color = 'red';
-            favourites.onclick = function () {
-                removeFavorite(beatmapsetId);
-            };
-        });
-    }
-    
-    function removeFavorite(beatmapsetId) {
-        var url = "/users/" + currentUser + "/favourites/" + beatmapsetId;
-
-        performApiRequest("DELETE", url, null, function(xhr) {
-            var favourites = document.getElementById('favourites-button');
-            favourites.innerHTML = '(Add Favourite)';
-            favourites.style.color = 'green';
-            favourites.onclick = function () {
-                addFavorite(beatmapsetId);
-            };
-        });
-    }
-
-    function copySetId(element) {
-        var set_id = element.getAttribute('setid');
-
-        navigator.clipboard.writeText(set_id).then(function () {
-            element.innerHTML = 'Copied!';
-            element.style.color = 'green';
-        }, function () {
-            element.innerHTML = 'Failed to copy!';
-            element.style.color = 'red';
-        });
-
-        setTimeout(function () {
-            element.innerHTML = 'Copy Beatmapset ID';
-            element.style.color = 'rgb(0, 102, 204)';
-        }, 1500);
-    }
-
-    {% if beatmapset.server != 0 and beatmapset.creator_id == current_user.id %}
-    function editBeatmapDescription() {
-        var description = document.querySelector('.beatmap-description .bbcode');
-        if (!description) { return; }
-
-        var form = document.createElement('form');
-        form.action = '/api/beatmaps/update/{{ beatmapset.id }}/description';
-        form.method = 'post';
-
-        var textarea = document.createElement('textarea');
-        textarea.className = 'description-editor bbcode-editor';
-        textarea.innerHTML = bbcodeDescription;
-        textarea.name = 'description';
-        form.appendChild(textarea);
-
-        var csrfToken = document.createElement('input');
-        csrfToken.type = 'hidden';
-        csrfToken.name = 'csrf_token';
-        csrfToken.value = '{{ csrf_token() }}';
-        form.appendChild(csrfToken);
-
-        var submitButton = document.createElement('input');
-        submitButton.type = 'submit';
-        submitButton.value = 'Save';
-        form.appendChild(submitButton);
-
-        description.replaceWith(form);
-    }
-
-    var descriptionElements = document.querySelectorAll('.beatmap-description, .beatmap-description *');
-    var bbcodeDescription = `{{ beatmapset.description }}`;
-
-    for (var i = 0; i < descriptionElements.length; i++) {
-        addEvent('dblclick', descriptionElements[i], function(event) {
-            editBeatmapDescription();
-        });
-    }
-    {% endif %}
-
-    {% if current_user.is_bat %}
-    function setBeatmapsetStatus(beatmapsetId, status, promptText) {
-        if (promptText === undefined) {
-            promptText = "Are you sure?";
-        }
-
-        if (!confirm(promptText)) {
-            return;
-        }
-
-        performApiRequest("PATCH", "/beatmapsets/" + beatmapsetId + "/status?status=" + status, null, function(xhr) {
-            location.reload();
-        }, function(xhr) {
-            var response = JSON.parse(xhr.responseText);
-            alert(response.details);
-        });
-    }
-
-    function updateBeatmapsetMetadata(event) {
-        event.preventDefault();
-
-        var data = convertFormToJson(event.target);
-        var url = "/beatmapsets/" + data.beatmapset_id;
-
-        performApiRequest("PATCH", url, data, function(xhr) {
-            location.reload();
-        }, function(xhr) {
-            var response = JSON.parse(xhr.responseText);
-            alert(response.details);
-        });
-    }
-
-    function updateBeatmapStatuses(event) {
-        event.preventDefault();
-
-        var data = convertFormToJson(event.target);
-        var url = "/beatmapsets/" + data.beatmapset_id + "/status/beatmaps";
-
-        performApiRequest("PATCH", url, data, function(xhr) {
-            location.reload();
-        }, function(xhr) {
-            var response = JSON.parse(xhr.responseText);
-            alert(response.details);
-        });
-    }
-
-    function nukeBeatmapset(beatmapsetId) {
-        if (!confirm("This will fully delete the beatmap, are you sure you want to proceed?")) {
-            return;
-        }
-
-        performApiRequest("POST", "/beatmapsets/" + beatmapsetId + "/nuke", null, function(xhr) {
-            location.reload();
-        }, function(xhr) {
-            var response = JSON.parse(xhr.responseText);
-            alert(response.details);
-        });
-    }
-
-    function addNomination(beatmapsetId) {
-        var url = "/beatmapsets/" + beatmapsetId + "/nominations";
-
-        performApiRequest("POST", url, null, function(xhr) {
-            location.reload();
-        }, function(xhr) {
-            var response = JSON.parse(xhr.responseText);
-            alert(response.details);
-        });
-    }
-
-    function resetNominations(beatmapsetId) {
-        var url = "/beatmapsets/" + beatmapsetId + "/nominations";
-
-        performApiRequest("DELETE", url, null, function(xhr) {
-            location.reload();
-        }, function(xhr) {
-            var response = JSON.parse(xhr.responseText);
-            alert(response.details);
-        });
-    }
-    {% endif %}
-
-    // osu.ppy.sh spoilerbox conversion
-    var spoilerBoxes = document.querySelectorAll('.bbcode-spoilerbox');
-    for (var i = 0; i < spoilerBoxes.length; i++) {
-        spoilerBoxes[i].classList.add('spoiler');
-    }
-
-    var spoilerBoxContents = document.querySelectorAll('.bbcode-spoilerbox__body');
-    for (var i = 0; i < spoilerBoxContents.length; i++) {
-        spoilerBoxContents[i].classList.add('spoiler-body');
-    }
-
-    var spoilerBoxHeads = document.querySelectorAll('.bbcode-spoilerbox__link');
-    for (var i = 0; i < spoilerBoxHeads.length; i++) {
-        var spoilerBox = spoilerBoxHeads[i];
-        
-        // Change element type to div (in older versions of Chrome, use workarounds if necessary)
-        var newSpoilerBox = document.createElement('div');
-        newSpoilerBox.className = spoilerBox.className + ' spoiler-head';
-        newSpoilerBox.innerHTML = spoilerBox.innerHTML;
-        spoilerBox.parentNode.replaceChild(newSpoilerBox, spoilerBox);
-        
-        newSpoilerBox.onclick = function () {
-            toggleSpoiler(this);
-        };
-    }
-
-    // Set volume of beatmap preview to 0.5
-    var beatmapPreview = document.getElementById('beatmap-preview');
-    if (beatmapPreview) {
-        beatmapPreview.volume = 0.5;
-    }
-</script>
 {# TODO: Beatmap Comments #}
+<script>
+    var beatmapsetId = {{ beatmapset.id }};
+    var isBeatmapsetOwner = {{ (beatmapset.server != 0 and beatmapset.creator_id == current_user.id)|lower }};
+    var bbcodeDescription = `{{ beatmapset.description }}`;
+</script>
+<script src="{{ '/js/beatmap.js'|git_asset_url }}"></script>
+{% if current_user.is_bat %}
+<script src="{{ '/js/bat.js'|git_asset_url }}"></script>
+{% endif %}
 {% endblock content %}

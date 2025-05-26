@@ -6,6 +6,7 @@ from flask import Flask, Request, Response, jsonify, redirect, request, session
 from flask_pydantic.exceptions import ValidationError
 from flask_login import LoginManager, current_user
 from flask_wtf.csrf import CSRFProtect
+from flask_squeeze import Squeeze
 from typing import Tuple, Optional
 from werkzeug.exceptions import *
 
@@ -25,15 +26,18 @@ flask = Flask(
     template_folder='templates'
 )
 
-flask.register_blueprint(routes.router)
-flask.secret_key = config.FRONTEND_SECRET_KEY
-flask.config['FLASK_PYDANTIC_VALIDATION_ERROR_RAISE'] = True
+minify = Squeeze()
+minify.init_app(flask)
+
+csrf = CSRFProtect()
+csrf.init_app(flask)
 
 login_manager = LoginManager()
 login_manager.init_app(flask)
 
-csrf = CSRFProtect()
-csrf.init_app(flask)
+flask.register_blueprint(routes.router)
+flask.secret_key = config.FRONTEND_SECRET_KEY
+flask.config['FLASK_PYDANTIC_VALIDATION_ERROR_RAISE'] = True
 
 @login_manager.request_loader
 def request_loader(request: Request):
@@ -72,6 +76,59 @@ def refresh_access_token(response: Response) -> Response:
         current_user,
         response=response
     )
+
+@flask.after_request
+def caching_rules(response: Response) -> Response:
+    if config.DEBUG:
+        return response
+
+    static_paths = (
+        '/images/arrow-white-highlight.png',
+        '/images/arrow-white-normal.png',
+        '/images/signup-multi.png',
+        '/images/playstyles.png',
+        '/images/down.gif',
+        '/images/up.gif',
+        '/images/achivements/',
+        '/images/beatmap/',
+        '/images/clients/',
+        '/images/grades/',
+        '/images/icons/',
+        '/images/flags/',
+        '/images/art/'
+    )
+
+    has_static_path = any(
+        request.path.startswith(path)
+        for path in static_paths
+    )
+
+    if has_static_path:
+        # These resources will most likely never change
+        response.headers['Cache-Control'] = f'public, max-age={ 60*60*24*14 }'
+        return response
+
+    commit_static_paths = (
+        '/js/',
+        '/css/',
+        '/lib/',
+        '/images/',
+        '/webfonts/'
+    )
+
+    has_static_path = any(
+        request.path.startswith(path)
+        for path in commit_static_paths
+    )
+
+    if not has_static_path:
+        return response
+
+    if not request.args.get('commit'):
+        return response
+
+    response.headers['Cache-Control'] = f'public, max-age={ 60*60*24*7 }'
+    return response
 
 @login_manager.user_loader
 def user_loader(user_id: int) -> Optional[DBUser]:

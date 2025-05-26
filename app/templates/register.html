@@ -48,7 +48,7 @@
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 </form>
 <script>$("#username").select();</script>
-<script src="/js/register.js"></script>
+<script src="{{ '/js/register.js'|git_asset_url }}"></script>
 {% if config.RECAPTCHA_SITE_KEY %}
 <script src="https://www.google.com/recaptcha/api.js?render={{ config.RECAPTCHA_SITE_KEY }}"></script>
 <script>

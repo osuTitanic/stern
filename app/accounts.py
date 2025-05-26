@@ -29,7 +29,7 @@ def perform_login(
         access_token,
         domain=domain,
         secure=use_ssl,
-        httponly=not config.DEBUG,
+        httponly=domain is not None,
         max_age=config.FRONTEND_TOKEN_EXPIRY
     )
 
@@ -39,7 +39,7 @@ def perform_login(
             refresh_token,
             domain=domain,
             secure=use_ssl,
-            httponly=True,
+            httponly=domain is not None,
             max_age=config.FRONTEND_REFRESH_EXPIRY
         )
 
@@ -98,7 +98,12 @@ def validate_token(token: str) -> dict | None:
     return data
 
 def resolve_domain_name() -> str | None:
-    if config.DOMAIN_NAME == 'localhost' or config.DEBUG:
+    local_domains = ('localhost', '.local')
+    
+    if any(domain in config.DOMAIN_NAME for domain in local_domains):
+        return None
+
+    if config.DEBUG:
         return None
 
     return f'.{config.DOMAIN_NAME}'
