@@ -69,8 +69,10 @@ var isUploading = false;
 
 for (var i = 0; i < editors.length; i++) {
     var editor = editors[i];
-    
+
     addEvent('paste', editor, function(event) {
+        var editor = event.target;
+
         if (!event.clipboardData) {
             return;
         }
