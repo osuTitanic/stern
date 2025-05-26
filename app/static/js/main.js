@@ -292,9 +292,27 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
         return;
     }
 
+    // Determine content type & request data format
+    var contentType = null;
+    var requestData = data;
+
+    if (data instanceof FormData) {
+        contentType = null;
+        requestData = data;
+    } else if (typeof data === 'object' && data !== null) {
+        requestData = JSON.stringify(data);
+        contentType = "application/json; charset=UTF-8";
+    } else if (typeof data === 'string') {
+        contentType = "text/plain; charset=UTF-8";
+    }
+
     try {
-        xhr.setRequestHeader("Content-Type", "application/json");
         xhr.setRequestHeader("Cache-Control", "no-cache");
+        
+        if (contentType !== null)
+        {
+            xhr.setRequestHeader("Content-Type", contentType);
+        }
 
         if (cookieExists('access_token'))
         {
@@ -326,7 +344,7 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
             }
         }
 
-        xhr.send(JSON.stringify(data));
+        xhr.send(requestData);
         return xhr;
     }
 
@@ -351,7 +369,7 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
         }
     };
 
-    xhr.send(JSON.stringify(data));
+    xhr.send(requestData);
     return xhr;
 }
 
