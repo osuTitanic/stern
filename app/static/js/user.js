@@ -31,17 +31,15 @@ function expandProfileTab(id, forceExpand) {
 
         if (tab.style.height === "0px") {
             slideDown(tab);
+            setTimeout(function() { tab.className += " expanded" }, 500);
         }
 
         if (forceExpand) {
             window.location.hash = "#" + activeTab;
         }
-
-        // Apply class after slide animation is done
-        setTimeout(function() { tab.className += " expanded" }, 500);
     } else {
-        slideUp(tab);
         tab.className = tab.className.replace(/(?:^|\s)expanded(?!\S)/, '');
+        slideUp(tab);
     }
 
     if (activeTab === 'general') {
