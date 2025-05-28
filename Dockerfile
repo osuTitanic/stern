@@ -3,7 +3,7 @@ FROM python:3.13-slim-bullseye
 # Installing/Updating system dependencies
 RUN apt update -y && \
     apt install -y --no-install-recommends \
-        postgresql \
+        postgresql-client \
         git \
         curl \
         build-essential \
