@@ -248,6 +248,12 @@
                                     <dd>
                                         <input type="text" name="offset" value="{{ beatmapset.offset }}" size="6">
                                     </dd>
+                                    {% if beatmapset.server == 0 %}
+                                    <dt><label for="enhanced">Enhanced:</label></dt>
+                                    <dd>
+                                        <input type="checkbox" name="enhanced" {% if beatmapset.enhanced %}checked{% endif %}>
+                                    </dd>
+                                    {% endif %}
                                     <dt>Display Title:</dt>
                                     <dd>
                                         <textarea name="display_title">{{ beatmapset.display_title }}</textarea>
