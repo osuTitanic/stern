@@ -379,13 +379,25 @@ function convertFormToJson(formElement) {
 
     for (var i = 0; i < formData.length; i++) {
         var field = formData[i];
+        var value;
+
         if (field.name && !field.disabled) {
-            if (jsonData[field.name] === undefined) {
-                jsonData[field.name] = field.value;
-            } else if (isArray(jsonData[field.name])) {
-                jsonData[field.name].push(field.value);
+            if (field.type === "checkbox") {
+                if (!field.checked) continue;
+                value = field.value !== undefined ? field.value : "on";
+            } else if (field.type === "radio") {
+                if (!field.checked) continue;
+                value = field.value;
             } else {
-                jsonData[field.name] = [jsonData[field.name], field.value];
+                value = field.value;
+            }
+
+            if (jsonData[field.name] === undefined) {
+                jsonData[field.name] = value;
+            } else if (isArray(jsonData[field.name])) {
+                jsonData[field.name].push(value);
+            } else {
+                jsonData[field.name] = [jsonData[field.name], value];
             }
         }
     }
