@@ -239,9 +239,12 @@
                     <thead>
                         <th><h2>General</h2></th>
                         <th><h2>Ranking</h2></th>
+                        {% if beatmapset.status <= 0 %}
+                        <th><h2>Files</h2></th>
+                        {% endif %}
                     </thead>
                     <tbody>
-                        <td style="width: 50%">
+                        <td style="min-width: 38%">
                             <form method="post" onsubmit="updateBeatmapsetMetadata(event)">
                                 <dl>
                                     <dt>Offset:</dt>
@@ -252,6 +255,13 @@
                                     <dt>Enhanced:</dt>
                                     <dd>
                                         <input type="checkbox" name="enhanced" {% if beatmapset.enhanced %}checked{% endif %}>
+                                    </dd>
+                                    <dt>Download Server:</dt>
+                                    <dd>
+                                        <select name="download_server">
+                                            <option value="0" {% if beatmapset.download_server == 0 %}selected{% endif %}>Bancho</option>
+                                            <option value="1" {% if beatmapset.download_server == 1 %}selected{% endif %}>Titanic</option>
+                                        </select>
                                     </dd>
                                     {% endif %}
                                     <dt>Display Title:</dt>
@@ -280,12 +290,10 @@
                                     </dd>
                                 </dl>
                                 <input type="submit" value="Save">
-                                {# TODO: Add radio button for download server (titanic/bancho) #}
-                                <input type="hidden" name="download_server" value="{{ beatmapset.download_server }}">
                                 <input type="hidden" name="beatmapset_id" value="{{ beatmapset.id }}">
                             </form>
                         </td>
-                        <td>
+                        <td style="min-width: 30%">
                             <p>
                                 The current status of this beatmap is "{{ constants.DatabaseStatus(beatmapset.status).name }}".
                                 {% if nominations|length >= beatmapset|required_nominations and beatmapset.status <= 0 %}
@@ -375,6 +383,31 @@
                                 </form>
                             </details>
                         </td>
+                        {% if beatmapset.status <= 0 %}
+                        <td>
+                            <p>
+                                Please make sure you know what you are doing before replacing any files! <br><br>
+                            </p>
+                            {% if beatmapset.download_server == 0 %}
+                            <p>
+                                If the download server is set to "Titanic", your changes will take effect. <br>
+                                Once you change the download server, make sure all resources have been uploaded.
+                            </p><br>
+                            {% endif %}
+                            <a href="#" onclick="uploadResource('/resources/osz/{{ beatmapset.id }}', 'osz', '.osz,.zip');">
+                                Replace osz file
+                            </a><br>
+                            <a href="#" onclick="uploadResource('/resources/osu/{{ beatmap.id }}', 'osu', '.osu,.txt', 'This will replace the beatmap file for {{ beatmap.version }}. Are you sure?');">
+                                Replace beatmap file
+                            </a><br>
+                            <a href="#" onclick="uploadResource('/resources/mt/{{ beatmapset.id }}', 'mt', '.jpeg,.jpg', 'Please make sure this image is 160x120 pixels large! Are you sure you want to upload?');">
+                                Replace background file (large)
+                            </a><br>
+                            <a href="#" onclick="uploadResource('/resources/mp3/{{ beatmapset.id }}', 'mp3', '.mp3');">
+                                Replace audio preview file
+                            </a>
+                        </td>
+                        {% endif %}
                     </tr>
                     </tbody>
                 </table>
