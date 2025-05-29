@@ -218,6 +218,9 @@
                         {% endif %}
                     {% endif %}
                     <p><a setid="{{ beatmapset.id }}" onclick="copySetId(this)">Copy Beatmapset ID</a></p>
+                    {% if current_user.is_bat %}
+                    <a href="/web/maps/{{ beatmap.filename }}">Grab latest .osu file</a>
+                    {% endif %}
                 </td>
             </tr>
         </table>
