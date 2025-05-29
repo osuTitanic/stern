@@ -242,7 +242,7 @@
                     <thead>
                         <th><h2>General</h2></th>
                         <th><h2>Ranking</h2></th>
-                        {% if beatmapset.status <= 0 %}
+                        {% if beatmapset.status <= 0 or current_user.is_admin %}
                         <th><h2>Files</h2></th>
                         {% endif %}
                     </thead>
@@ -386,7 +386,7 @@
                                 </form>
                             </details>
                         </td>
-                        {% if beatmapset.status <= 0 %}
+                        {% if beatmapset.status <= 0 or current_user.is_admin %}
                         <td>
                             <p>
                                 Please make sure you know what you are doing before replacing any files! <br><br>
