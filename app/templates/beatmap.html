@@ -280,6 +280,8 @@
                                     </dd>
                                 </dl>
                                 <input type="submit" value="Save">
+                                {# TODO: Add radio button for download server (titanic/bancho) #}
+                                <input type="hidden" name="download_server" value="{{ beatmapset.download_server }}">
                                 <input type="hidden" name="beatmapset_id" value="{{ beatmapset.id }}">
                             </form>
                         </td>
