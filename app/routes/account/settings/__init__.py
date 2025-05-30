@@ -8,6 +8,7 @@ from . import profile
 from . import friends
 
 router = Blueprint('settings', __name__)
+router.register_blueprint(moderation.router)
 router.register_blueprint(overview.router)
 router.register_blueprint(security.router)
 router.register_blueprint(profile.router)
