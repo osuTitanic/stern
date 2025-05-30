@@ -9,10 +9,10 @@ from jinja2 import TemplateNotFound
 from sqlalchemy.orm import Session
 from PIL import Image
 
+from app.common.helpers import caching, browsers, permissions
 from app.common.database.repositories import wrapper
 from app.common.database import DBUser, DBBeatmapset
 from app.common.helpers.external import location
-from app.common.helpers import caching, browsers
 from app.common.cache import leaderboards
 from app.common import constants
 
@@ -56,6 +56,7 @@ def render_template(template_name: str, **context) -> str:
         online_users=online_users,
         total_users=total_users,
         repositories=repositories,
+        permissions=permissions,
         timedelta=timedelta,
         constants=constants,
         datetime=datetime,
