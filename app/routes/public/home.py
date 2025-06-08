@@ -11,6 +11,7 @@ from app.common.database import (
 
 from sqlalchemy.orm import Session
 from typing import Optional
+from functools import cache
 from flask import (
     Blueprint,
     Response,
@@ -67,6 +68,7 @@ def peppy_skill_issue():
 def redirect_page(page: str) -> Response:
     return handle_legacy_redirects(page, request)
 
+@cache
 def format_announcement(announcement: topics.DBForumTopic, session: Session) -> dict:
     if (post := posts.fetch_initial_post(announcement.id, session=session)):
         text = post.content.splitlines()[0]
