@@ -1,7 +1,9 @@
+# Python bytecode files
 __pycache__/
 *.py[cod]
 *$py.class
 
+# Titanic! Installation
 .data
 .env
 .venv
@@ -10,14 +12,15 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+logs/
 
-.data
+# Editor & IDE files
 .idea
 .vscode
 .history
 *.vsix
 .VSCodeCounter
-logs/
 
+# Runtime dist files
 app/static/dist/
 app/static/.webassets-cache/
