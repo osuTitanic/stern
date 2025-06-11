@@ -386,7 +386,7 @@
                                 </form>
                             </details>
                         </td>
-                        {% if beatmapset.status <= 0 or current_user.is_admin %}
+                        {% if beatmapset.status <= 0 or permissions.has_permission('beatmaps.moderation.resources', current_user.id) %}
                         <td>
                             <p>
                                 Please make sure you know what you are doing before replacing any files! <br><br>
