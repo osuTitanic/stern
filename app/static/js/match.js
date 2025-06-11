@@ -504,10 +504,7 @@ function loadMatchEventsLoop() {
     setTimeout(function() {
         var events = document.getElementById("match-events").innerHTML;
 
-        if (events.includes("disbanded"))
-            return;
-
-        if (events.includes("closed"))
+        if (events.includes("The match was disbanded."))
             return;
 
         loadMatchEvents(matchId, lastEventTime);

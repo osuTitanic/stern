@@ -241,3 +241,66 @@
 .friend-description a {
     font-size: 75%;
 }
+
+.moderation-heading {
+    display: grid;
+    padding: 10px;
+    padding-top: 0px;
+}
+
+.moderation-heading h1 {
+    margin-bottom: 10px;
+}
+
+.moderation-heading input {
+    width: 80%;
+    height: 25px;
+    padding: 5px;
+    margin: 0 auto;
+}
+
+.moderation-section {
+    padding: 10px;
+    padding-left: 20px;
+    display: flex;
+}
+
+.user-header-box {
+    float: left;
+}
+
+.user-info {
+    float: right;
+}
+
+.user-header a {
+    margin-right: 8px;
+}
+
+.user-header img {
+    text-align: center;
+    margin: 0 auto;
+}
+
+.user-title {
+    margin: 0px auto 5px auto;
+    text-align: center;
+    font-size: 80%;
+}
+
+.user-avatar img {
+    margin: 0 auto;
+    display: block;
+    width: 120px;
+    height: 120px;
+}
+
+.user-avatar {
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+    background-color: white;
+    margin: 0 auto;
+    margin-bottom: 5px;
+    padding: 2px;
+    height: 120px;
+    width: 120px;
+}
