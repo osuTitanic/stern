@@ -343,7 +343,7 @@
                             </h4>
                             <br>
                             {% set level = current_stats.tscore|get_level %}
-                            {% set level_score = current_stats.tscore|get_level_score %}
+                            {% set level_score = level|get_level_score %}
                             {% set max_score = constants.level.NEXT_LEVEL[level+1] %}
                             {% set level_percent = ((level_score / max_score) * 100)|round|int %}
                             <h4 class="profile-stats-element" title="Your level is based on your total accumulated score. This includes any ranked score, be it a pass or fail. You will gradually increase your level just by playing the game!">

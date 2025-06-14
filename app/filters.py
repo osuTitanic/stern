@@ -57,32 +57,49 @@ def get_short(mods):
     )
 
 @flask.template_filter('get_level')
-def get_user_level(total_score: int) -> int:
-    next_level = common.constants.level.NEXT_LEVEL
-    total_score = min(total_score, next_level[-1])
+def get_level(total_score: int) -> int:
+    if total_score <= 0:
+        return 0
 
+    next_level = common.constants.level.NEXT_LEVEL
     index = 0
     score = 0
+
+    if total_score >= next_level[99]:
+        return 100 + (total_score - next_level[99]) // 100000000000
 
     while score + next_level[index] < total_score:
         score += next_level[index]
         index += 1
 
-    return round((index + 1) + (total_score - score) / next_level[index])
+    return math.floor((index + 1) + (total_score - score) / next_level[index])
 
 @flask.template_filter('get_level_score')
-def get_level_score(total_score: int) -> int:
-    next_level = common.constants.level.NEXT_LEVEL
-    total_score = min(total_score, next_level[-1])
+def get_required_score_for_level(level: int) -> int:
+    if level <= 0:
+        return 0
 
-    index = 0
-    score = 0
+    if level <= 100:
+        return common.constants.level.NEXT_LEVEL[level - 1]
 
-    while score + next_level[index] < total_score:
-        score += next_level[index]
-        index += 1
+    return common.constants.level.NEXT_LEVEL[99] + 100000000000 * (level - 100)
 
-    return total_score - score
+@flask.template_filter('get_level_precise')
+def get_level_precise(total_score: int) -> float:
+    base_level = get_level(total_score)
+    base_level_score = get_required_score_for_level(base_level)
+    score_progress = total_score - base_level_score
+    score_level_difference = get_required_score_for_level(base_level + 1) - base_level_score
+    
+    if score_level_difference <= 0:
+        return base_level
+
+    result = score_progress / score_level_difference + base_level
+
+    if math.isinf(result) or math.isnan(result):
+        return 0
+
+    return result
 
 @flask.template_filter('strftime')
 def jinja2_strftime(date: datetime, format='%m/%d/%Y, %H:%M:%S'):
