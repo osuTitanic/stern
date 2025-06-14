@@ -150,7 +150,7 @@
                 {{ "{:,.2f}".format(player.stats[mode].acc * 100) }}%
             </td>
             <td>
-                <span>{{ "{:,}".format(player.stats[mode].playcount) }} (lv.{{ player.stats[mode].tscore|get_level }})</span>
+                <span>{{ "{:,}".format(player.stats[mode].playcount) }} (lv.{{ player.stats[mode].tscore|get_level|floor }})</span>
             </td>
             <td>
                 <span style="font-weight: bold;">
