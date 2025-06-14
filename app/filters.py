@@ -28,6 +28,10 @@ def timeago_formatting(date: datetime):
 def get_rounded(num: float, ndigits: int = 0):
     return round(num, ndigits)
 
+@flask.template_filter('floor')
+def get_floored(num: float):
+    return math.floor(num)
+
 @flask.template_filter('playstyle')
 def get_rounded(num: int):
     return common.constants.Playstyle(num)
@@ -72,7 +76,7 @@ def get_level(total_score: int) -> int:
         score += next_level[index]
         index += 1
 
-    return math.floor((index + 1) + (total_score - score) / next_level[index])
+    return (index + 1) + (total_score - score) / next_level[index]
 
 @flask.template_filter('get_level_score')
 def get_required_score_for_level(level: int) -> int:
@@ -83,23 +87,6 @@ def get_required_score_for_level(level: int) -> int:
         return common.constants.level.NEXT_LEVEL[level - 1]
 
     return common.constants.level.NEXT_LEVEL[99] + 100000000000 * (level - 100)
-
-@flask.template_filter('get_level_precise')
-def get_level_precise(total_score: int) -> float:
-    base_level = get_level(total_score)
-    base_level_score = get_required_score_for_level(base_level)
-    score_progress = total_score - base_level_score
-    score_level_difference = get_required_score_for_level(base_level + 1) - base_level_score
-    
-    if score_level_difference <= 0:
-        return base_level
-
-    result = score_progress / score_level_difference + base_level
-
-    if math.isinf(result) or math.isnan(result):
-        return 0
-
-    return result
 
 @flask.template_filter('strftime')
 def jinja2_strftime(date: datetime, format='%m/%d/%Y, %H:%M:%S'):
