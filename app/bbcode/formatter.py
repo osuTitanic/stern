@@ -65,7 +65,7 @@ valid_image_services = (
 )
 
 image_proxy_url = (
-    f"https://i.{config.DOMAIN_NAME}/proxy?url="
+    f"https://i.{config.DOMAIN_NAME}/proxy/"
     if config.DOMAIN_NAME == "titanic.sh" else ""
 )
 
