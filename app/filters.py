@@ -2,6 +2,7 @@
 from app.common.database import DBForumTopic, DBForum, DBUser
 from app.common.helpers import activity
 from datetime import datetime, timedelta
+from urllib.parse import quote
 from functools import cache
 from .app import flask
 from . import common
@@ -36,6 +37,10 @@ def get_floored(num: float):
 @flask.template_filter('playstyle')
 def get_playstyle(num: int):
     return common.constants.Playstyle(num)
+
+@flask.template_filter('url_quote')
+def url_quote(url: str) -> str:
+    return quote(url)
 
 @flask.template_filter('domain')
 def get_domain(url: str) -> str:

@@ -97,7 +97,7 @@ function uploadResource(endpoint, key, filetypes, promptText) {
             promptText = "Are you sure?";
         }
 
-        if (!confirm(promptText)) {
+        if (!confirm(decodeURI(promptText))) {
             return;
         }
 

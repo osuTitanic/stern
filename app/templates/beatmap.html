@@ -400,7 +400,7 @@
                             <a href="#" onclick="uploadResource('/resources/osz/{{ beatmapset.id }}', 'osz', '.osz,.zip');">
                                 Replace osz file
                             </a><br>
-                            <a href="#" onclick="uploadResource('/resources/osu/{{ beatmap.id }}', 'osu', '.osu,.txt', 'This will replace the beatmap file for {{ beatmap.version }}. Are you sure?');">
+                            <a href="#" onclick="uploadResource('/resources/osu/{{ beatmap.id }}', 'osu', '.osu,.txt', 'This will replace the beatmap file for {{ beatmap.version|url_quote }}. Are you sure?');">
                                 Replace beatmap file
                             </a><br>
                             <a href="#" onclick="uploadResource('/resources/mt/{{ beatmapset.id }}', 'mt', '.jpeg,.jpg', 'Please make sure this image is 160x120 pixels large! Are you sure you want to upload?');">
