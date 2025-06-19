@@ -1,16 +1,14 @@
 
 from app.common.database import DBForumTopic, DBForum, DBUser
-from app.common.constants import UserActivity
+from app.common.helpers import activity
 from datetime import datetime, timedelta
 from functools import cache
 from .app import flask
-from . import activity
 from . import common
 from . import bbcode
 from . import git
 
 import timeago
-import config
 import utils
 import math
 import re
