@@ -1,6 +1,8 @@
 
 from app.common.database import DBForumTopic, DBForum, DBUser
+from app.common.helpers import activity
 from datetime import datetime, timedelta
+from urllib.parse import quote
 from functools import cache
 from .app import flask
 from . import common
@@ -28,9 +30,17 @@ def timeago_formatting(date: datetime):
 def get_rounded(num: float, ndigits: int = 0):
     return round(num, ndigits)
 
+@flask.template_filter('floor')
+def get_floored(num: float):
+    return math.floor(num)
+
 @flask.template_filter('playstyle')
-def get_rounded(num: int):
+def get_playstyle(num: int):
     return common.constants.Playstyle(num)
+
+@flask.template_filter('url_quote')
+def url_quote(url: str) -> str:
+    return quote(url)
 
 @flask.template_filter('domain')
 def get_domain(url: str) -> str:
@@ -57,53 +67,37 @@ def get_short(mods):
     )
 
 @flask.template_filter('get_level')
-def get_user_level(total_score: int) -> int:
-    next_level = common.constants.level.NEXT_LEVEL
-    total_score = min(total_score, next_level[-1])
+def get_level(total_score: int) -> int:
+    if total_score <= 0:
+        return 0
 
+    next_level = common.constants.level.NEXT_LEVEL
     index = 0
     score = 0
+
+    if total_score >= next_level[99]:
+        return 100 + (total_score - next_level[99]) // 100000000000
 
     while score + next_level[index] < total_score:
         score += next_level[index]
         index += 1
 
-    return round((index + 1) + (total_score - score) / next_level[index])
+    return (index + 1) + (total_score - score) / next_level[index]
 
 @flask.template_filter('get_level_score')
-def get_level_score(total_score: int) -> int:
-    next_level = common.constants.level.NEXT_LEVEL
-    total_score = min(total_score, next_level[-1])
+def get_required_score_for_level(level: int) -> int:
+    if level <= 0:
+        return 0
 
-    index = 0
-    score = 0
+    if level <= 100:
+        return common.constants.level.NEXT_LEVEL[level - 1]
 
-    while score + next_level[index] < total_score:
-        score += next_level[index]
-        index += 1
-
-    return total_score - score
+    return common.constants.level.NEXT_LEVEL[99] + 100000000000 * (level - 100)
 
 @flask.template_filter('strftime')
 def jinja2_strftime(date: datetime, format='%m/%d/%Y, %H:%M:%S'):
     native = date.replace(tzinfo=None)
     return native.strftime(format)
-
-@flask.template_filter('format_activity')
-def format_activity(activity_text: str, activity: common.database.DBActivity) -> str:
-    links = activity.activity_links.split('||')
-    args = activity.activity_args.split('||')
-    items = tuple(zip(links, args))
-
-    return activity_text \
-        .format(
-            *(
-                f'<b><a href="{link}">{text}</a></b>'
-                if '/u/' in link else
-                f'<a href="{link}">{text}</a>'
-                for link, text in items
-            )
-        )
 
 @flask.template_filter('format_chat')
 def format_chat(text: str) -> str:
@@ -215,3 +209,13 @@ def get_status_icon(topic: DBForumTopic) -> str:
 
     # TODO: Read/Unread Logic
     return "/images/icons/topics/topic_read.gif"
+
+@flask.template_filter('format_activity')
+def format_activity(entry: common.database.DBActivity) -> str:
+    if not (formatter := activity.formatters.get(entry.type)):
+        return ""
+
+    if not (result_text := formatter(entry, escape_brackets=True)):
+        return ""
+
+    return format_chat(result_text)

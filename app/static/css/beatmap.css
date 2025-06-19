@@ -281,7 +281,7 @@
 .bat-controls dt {
     float: left;
     clear: left;
-    width: 30%;
+    width: 35%;
 }
 
 .bat-controls dd {
@@ -291,7 +291,8 @@
 }
 
 .bat-controls dd textarea {
-    max-width: 400px;
+    max-width: 190px;
+    max-height: 600px;
 }
 
 .bat-diffs {

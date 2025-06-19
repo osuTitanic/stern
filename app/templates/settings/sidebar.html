@@ -20,4 +20,11 @@
             <a href="/account/settings/pms">Private Messages</a>
         </div>
     #}
+    {#
+        {% if permissions.has_permission('users.moderation', current_user.id) %}
+        <div class="sidebar-section {% if current_endpoint.startswith('/account/settings/moderation') %}selected-sidebar{% endif %}">
+            <a href="/account/settings/moderation">Moderation</a>
+        </div>
+        {% endif %}
+    #}
 </div>

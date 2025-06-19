@@ -35,8 +35,8 @@ FROZEN_RANK_UPDATES = eval(os.environ.get('FROZEN_RANK_UPDATES', 'False').capita
 APPROVED_MAP_REWARDS = eval(os.environ.get('APPROVED_MAP_REWARDS', 'False').capitalize())
 ALLOW_INSECURE_COOKIES = eval(os.environ.get('ALLOW_INSECURE_COOKIES', str(ENABLE_SSL)).capitalize()) or DEBUG
 
-EMAIL_PROVIDER = os.environ.get('EMAIL_PROVIDER')
-EMAIL_SENDER = os.environ.get('EMAIL_SENDER')
+EMAIL_PROVIDER = os.environ.get('EMAIL_PROVIDER', '')
+EMAIL_SENDER = os.environ.get('EMAIL_SENDER', '')
 EMAIL_DOMAIN = EMAIL_SENDER.split('@')[-1]
 
 SMTP_HOST = os.environ.get('SMTP_HOST')

@@ -1,6 +1,6 @@
 
+from urllib.parse import unquote, urlparse
 from app.common.constants import regexes
-from urllib.parse import unquote
 from .parser import Parser
 import config
 
@@ -11,13 +11,6 @@ parser.add_simple_formatter('u', '<u>%(value)s</u>')
 parser.add_simple_formatter('heading', '<h2>%(value)s</h2>')
 parser.add_simple_formatter('strike', '<strike>%(value)s</strike>')
 parser.add_simple_formatter('centre', '<center>%(value)s</center>')
-
-parser.add_simple_formatter(
-    'img',
-    '<img src="%(value)s" alt="Forum Image" loading="lazy">',
-    replace_links=False,
-    render_embedded=False
-)
 
 parser.add_simple_formatter(
     'code',
@@ -59,6 +52,42 @@ parser.add_simple_formatter(
     replace_links=False,
     render_embedded=False
 )
+
+valid_image_services = (
+    'ibb.co',
+    'i.ibb.co',
+    'i.imgur.com',
+    'media.tenor.com',
+    'cdn.discordapp.com',
+    'media.discordapp.net',
+    f'i.{config.DOMAIN_NAME}',
+    f'osu.{config.DOMAIN_NAME}'
+)
+
+image_proxy_url = (
+    f"https://i.{config.DOMAIN_NAME}/proxy/"
+    if config.DOMAIN_NAME == "titanic.sh" else ""
+)
+
+@parser.formatter('img', replace_links=False, render_embedded=False)
+def render_image(tag_name, value, options, parent, context):
+    if not value:
+        return ''
+
+    # Try to parse URL
+    parsed_url = urlparse(value)
+
+    if not parsed_url.scheme or not parsed_url.netloc:
+        return ''
+
+    domain = parsed_url.netloc.lower().split(':')[0]
+    url = value
+
+    if domain not in valid_image_services:
+        # Use image proxy for non-trusted domains
+        url = image_proxy_url + value
+
+    return '<img src="%s" loading="lazy">' % sanitize_input(url)
 
 @parser.formatter('box')
 def render_box(tag_name, value, options, parent, context):

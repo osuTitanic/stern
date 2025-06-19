@@ -81,3 +81,39 @@ function resetNominations(beatmapsetId) {
         alert(response.details);
     });
 }
+
+function uploadResource(endpoint, key, filetypes, promptText) {
+    var fileInput = document.createElement("input");
+    fileInput.type = "file";
+    fileInput.accept = filetypes;
+
+    fileInput.onchange = function(event) {
+        var file = event.target.files[0];
+        if (!file) {
+            return;
+        }
+
+        if (promptText === undefined) {
+            promptText = "Are you sure?";
+        }
+
+        if (!confirm(decodeURI(promptText))) {
+            return;
+        }
+
+        // Create a FormData object to hold the file
+        var formData = new FormData();
+        formData.append(key, file, file.name);
+
+        // Perform the API request to upload the file
+        performApiRequest("PUT", endpoint, formData, function(xhr) {
+            location.reload();
+        }, function(xhr) {
+            var response = JSON.parse(xhr.responseText);
+            alert(response.details);
+        });
+    };
+
+    // Trigger the file input dialog
+    fileInput.click();
+}

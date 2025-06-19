@@ -1,9 +1,17 @@
-FROM python:3.11-bullseye
+FROM python:3.13-slim-bullseye
 
 # Installing/Updating system dependencies
 RUN apt update -y && \
-    apt install postgresql git curl -y --no-install-recommends && \
-    rm -rf /var/lib/apt/lists/*
+    apt install -y --no-install-recommends \
+        postgresql-client \
+        git \
+        curl \
+        build-essential \
+        gcc \
+        python3-dev \
+        libpcre3-dev \
+        libssl-dev \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install rust toolchain
 RUN curl -sSf https://sh.rustup.rs | sh -s -- -y
@@ -38,6 +46,13 @@ cheaper = 2 \n \
 cheaper-initial = 2 \n \
 cheaper-overload = 6 \n \
 " > uwsgi.ini
+
+# Generate __pycache__ directories
+ENV PYTHONDONTWRITEBYTECODE=1
+RUN python -m compileall -q app
+
+# Disable output buffering
+ENV PYTHONUNBUFFERED=1
 
 CMD uwsgi --http 0.0.0.0:80 \
           --ini uwsgi.ini \

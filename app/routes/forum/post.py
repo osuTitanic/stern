@@ -320,6 +320,14 @@ def update_topic_status_text(
             session=session
         )
 
+        if not last_creator_post:
+            topics.update(
+                beatmapset.topic_id,
+                {'status_text': 'Waiting for creator\'s response...'},
+                session=session
+            )
+            return
+
         if last_bat_post.id > last_creator_post.id:
             topics.update(
                beatmapset.topic_id,

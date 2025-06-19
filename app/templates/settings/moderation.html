@@ -1,0 +1,41 @@
+{# templates/overview/moderation.html #}
+
+{% extends "base.html" %}
+
+{% block content %}
+{% include "settings/sidebar.html" %}
+<div class="moderation-heading">
+    <h1>User Moderation Panel</h1>
+    <input id="search-input" type="search" placeholder="Select a user..." value="{{ user.name if user else '' }}">
+</div>
+{% if user %}
+<div class="moderation-section">
+    <div class="user-header-box">
+        <div class="user-avatar">
+            <img src="/a/{{ user.id }}" alt="">
+        </div>
+        <h1 class="user-header">    
+            {% if user.names %}
+                {# Name History #}
+                {% set names = user.names|map(attribute='name')|reject('equalto', user.name)|unique|join(', ') %}
+                <div class="username" style="color: {{ color }}; font-size: {{ name_size }}px;" title="Previously known as {{ names }}">
+                    {{ user.name }}
+                </div>
+            {% else %}
+                <div class="username" style="color: {{ color }}; font-size: {{ name_size }}px;">
+                    {{ user.name }}
+                </div>
+            {% endif %}
+        </h1>
+        <div class="user-title">
+            {% if user.title %}
+            {{ user.title }}
+            {% endif %}
+        </div>
+    </div>
+    <div class="user-info">
+        {# TODO #}
+    </div>
+</div>
+{% endif %}
+{% endblock content %}

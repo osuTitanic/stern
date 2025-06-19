@@ -89,7 +89,7 @@ def caching_rules(response: Response) -> Response:
         '/images/playstyles.png',
         '/images/down.gif',
         '/images/up.gif',
-        '/images/achivements/',
+        '/images/achievements/',
         '/images/beatmap/',
         '/images/clients/',
         '/images/grades/',
