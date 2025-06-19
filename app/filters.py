@@ -33,7 +33,7 @@ def get_floored(num: float):
     return math.floor(num)
 
 @flask.template_filter('playstyle')
-def get_rounded(num: int):
+def get_playstyle(num: int):
     return common.constants.Playstyle(num)
 
 @flask.template_filter('domain')
