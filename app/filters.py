@@ -210,7 +210,7 @@ def format_activity(entry: common.database.DBActivity) -> str:
     if not (formatter := activity.formatters.get(entry.type)):
         return ""
 
-    if not (result_text := formatter(entry)):
+    if not (result_text := formatter(entry, escape_brackets=True)):
         return ""
 
     return format_chat(result_text)
