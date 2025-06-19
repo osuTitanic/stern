@@ -2,6 +2,8 @@
 from app.common.constants import UserActivity
 from app.common.database import DBActivity
 
+import config
+
 def format_ranks_gained(activity: DBActivity) -> str:
     user_link = format_chat_link(
         activity.data['username'],
@@ -34,19 +36,20 @@ def format_leaderboard_rank(activity: DBActivity) -> str:
         activity.data['beatmap'],
         f'{config.OSU_BASEURL}/b/{activity.data["beatmap_id"]}'
     )
+    data = dict(activity.data)
 
-    return (
-        f'{user_link} achieved rank #{activity.data["beatmap_rank"]} on {beatmap_link} '
+    return "".join([
+        f'{user_link} achieved rank #{data["beatmap_rank"]} on {beatmap_link} ',
         (
-            f'with {activity.data["mods"]} '
-            if activity.data["mods"] else ""
-        )
-        f'<{activity.data["mode"]}>'
+            f'with {data["mods"]} '
+            if data.get("mods") else ""
+        ),
+        f'<{data["mode"]}>',
         (
-            f' ({activity.data["pp"]}pp)'
-            if activity.data["pp"] else ""
+            f' ({data["pp"]}pp)'
+            if data.get("pp") else ""
         )
-    )
+    ])
 
 def format_lost_first_place(activity: DBActivity) -> str:
     user_link = format_chat_link(
@@ -105,7 +108,7 @@ def format_chat_link(key: str, value: str) -> str:
     value = value.replace('(', '&#40;').replace(')', '&#41;') \
                  .replace('[', '&#91;').replace(']', '&#93;')
 
-    return f'[{key}]({value})'
+    return f'[{value} {key}]'
 
 formatters = {
     UserActivity.RanksGained.value: format_ranks_gained,
