@@ -293,7 +293,7 @@
                                     {% for item in activity[:4] %}
                                         <tr>
                                             <td style="width: 20%;">{{ item.time|timeago }}</td>
-                                            <td>{{ item.activity_text|format_activity(item)|safe }}</td>
+                                            <td>{{ item|format_activity|safe }}</td>
                                         </tr>
                                     {% endfor %}
                                     </tbody>
@@ -309,7 +309,7 @@
                                     {% for item in activity %}
                                         <tr>
                                             <td style="width: 20%;">{{ item.time|timeago }}</td>
-                                            <td>{{ item.activity_text|format_activity(item)|safe }}</td>
+                                            <td>{{ item|format_activity|safe }}</td>
                                         </tr>
                                     {% endfor %}
                                     </tbody>

@@ -1,13 +1,16 @@
 
 from app.common.database import DBForumTopic, DBForum, DBUser
+from app.common.constants import UserActivity
 from datetime import datetime, timedelta
 from functools import cache
 from .app import flask
+from . import activity
 from . import common
 from . import bbcode
 from . import git
 
 import timeago
+import config
 import utils
 import math
 import re
@@ -92,22 +95,6 @@ def get_required_score_for_level(level: int) -> int:
 def jinja2_strftime(date: datetime, format='%m/%d/%Y, %H:%M:%S'):
     native = date.replace(tzinfo=None)
     return native.strftime(format)
-
-@flask.template_filter('format_activity')
-def format_activity(activity_text: str, activity: common.database.DBActivity) -> str:
-    links = activity.activity_links.split('||')
-    args = activity.activity_args.split('||')
-    items = tuple(zip(links, args))
-
-    return activity_text \
-        .format(
-            *(
-                f'<b><a href="{link}">{text}</a></b>'
-                if '/u/' in link else
-                f'<a href="{link}">{text}</a>'
-                for link, text in items
-            )
-        )
 
 @flask.template_filter('format_chat')
 def format_chat(text: str) -> str:
@@ -219,3 +206,13 @@ def get_status_icon(topic: DBForumTopic) -> str:
 
     # TODO: Read/Unread Logic
     return "/images/icons/topics/topic_read.gif"
+
+@flask.template_filter('format_activity')
+def format_activity(entry: common.database.DBActivity) -> str:
+    if not (formatter := activity.formatters.get(entry.type)):
+        return ""
+
+    if not (result_text := formatter(entry)):
+        return ""
+
+    return format_chat(result_text)
