@@ -2,7 +2,11 @@
 from urllib.parse import unquote, urlparse
 from app.common.constants import regexes
 from .parser import Parser
+
+import binascii
+import hashlib
 import config
+import hmac
 
 parser = Parser()
 parser.add_simple_formatter('b', '<b>%(value)s</b>')
@@ -45,40 +49,6 @@ parser.add_simple_formatter(
     '<div class="spoiler-body">%(value)s</div>'
     '</div>'
 )
-
-valid_image_services = (
-    'ibb.co',
-    'i.ibb.co',
-    'i.imgur.com',
-    'media.tenor.com',
-    'cdn.discordapp.com',
-    'media.discordapp.net',
-    f'i.{config.DOMAIN_NAME}',
-    f'osu.{config.DOMAIN_NAME}'
-)
-
-image_proxy_url = (
-    f"https://i.{config.DOMAIN_NAME}/proxy/"
-    if config.DOMAIN_NAME == "titanic.sh" else ""
-)
-
-def resolve_proxied_url(value) -> str:
-    if not value:
-        return ''
-
-    # Try to parse URL
-    parsed_url = urlparse(value)
-
-    if not parsed_url.scheme or not parsed_url.netloc:
-        return ''
-
-    domain = parsed_url.netloc.lower().split(':')[0]
-
-    if domain not in valid_image_services:
-        # Use image proxy for non-trusted domains
-        value = image_proxy_url + value
-
-    return value
 
 @parser.formatter('img', replace_links=False, render_embedded=False)
 def render_image(tag_name, value, options, parent, context):
@@ -204,3 +174,52 @@ def sanitize_url(text: str) -> str:
         text = 'http://' + text
 
     return text
+
+valid_image_services = (
+    'ibb.co',
+    'i.ibb.co',
+    'i.imgur.com',
+    'media.tenor.com',
+    'cdn.discordapp.com',
+    'media.discordapp.net',
+    f'i.{config.DOMAIN_NAME}',
+    f'osu.{config.DOMAIN_NAME}'
+)
+
+# NOTE: The image proxy uses go-camo to sign URLs
+#       See: https://github.com/cactus/go-camo
+go_camo_baseurl = (
+    f"https://i.{config.DOMAIN_NAME}/"
+    if config.DOMAIN_NAME == "titanic.sh" else ""
+)
+
+def resolve_proxied_url(value) -> str:
+    if not value:
+        return ''
+
+    # Try to parse URL
+    parsed_url = urlparse(value)
+
+    if not parsed_url.scheme or not parsed_url.netloc:
+        return ''
+
+    domain = parsed_url.netloc.lower().split(':')[0]
+
+    if domain not in valid_image_services:
+        # Use image proxy for non-trusted domains
+        signed_url = sign_url(value, config.FRONTEND_SECRET_KEY.encode())
+        value = go_camo_baseurl + signed_url
+
+    return value
+
+def sign_url(url: str, key: bytes) -> str:
+    # Compute HMAC‑SHA1 for URL
+    url_bytes = url.encode('utf-8')
+    mac = hmac.new(key, url_bytes, hashlib.sha1).digest()
+
+    # Hex‑encode the computed MAC & URL
+    mac_hex = binascii.hexlify(mac).decode('ascii')
+    url_hex = binascii.hexlify(url_bytes).decode('ascii')
+
+    # Return the signed path
+    return f"/{mac_hex}/{url_hex}"
