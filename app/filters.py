@@ -114,7 +114,7 @@ def format_chat(text: str) -> str:
     result = result.replace('\x01ACTION', '') \
                    .replace('\x01', '')
 
-    return result[:100] + f"{'...' if len(result) > 100 else ''}"
+    return result
 
 @flask.template_filter('round_time')
 def round_time(dt: datetime, round_to = 60):
