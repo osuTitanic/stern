@@ -189,7 +189,7 @@ valid_image_services = (
 # NOTE: The image proxy uses go-camo to sign URLs
 #       See: https://github.com/cactus/go-camo
 go_camo_baseurl = (
-    f"https://i.{config.DOMAIN_NAME}/"
+    f"https://i.{config.DOMAIN_NAME}"
     if config.DOMAIN_NAME == "titanic.sh" else ""
 )
 
