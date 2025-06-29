@@ -57,6 +57,18 @@ OFFICER_WEBHOOK_URL = os.environ.get('OFFICER_WEBHOOK_URL')
 EVENT_WEBHOOK_URL = os.environ.get('EVENT_WEBHOOK_URL')
 DATA_PATH = os.path.abspath('.data')
 
+IMAGE_PROXY_BASEURL = os.environ.get('IMAGE_PROXY_BASEURL')
+VALID_IMAGE_SERVICES = (
+    'ibb.co',
+    'i.ibb.co',
+    'i.imgur.com',
+    'media.tenor.com',
+    'cdn.discordapp.com',
+    'media.discordapp.net',
+    f'i.{DOMAIN_NAME}',
+    f'osu.{DOMAIN_NAME}'
+)
+
 WIKI_REPOSITORY_OWNER = os.environ.get('WIKI_REPOSITORY_OWNER', 'osuTitanic')
 WIKI_REPOSITORY_NAME = os.environ.get('WIKI_REPOSITORY_NAME', 'wiki')
 WIKI_REPOSITORY_BRANCH = os.environ.get('WIKI_REPOSITORY_BRANCH', 'main')

@@ -175,24 +175,6 @@ def sanitize_url(text: str) -> str:
 
     return text
 
-valid_image_services = (
-    'ibb.co',
-    'i.ibb.co',
-    'i.imgur.com',
-    'media.tenor.com',
-    'cdn.discordapp.com',
-    'media.discordapp.net',
-    f'i.{config.DOMAIN_NAME}',
-    f'osu.{config.DOMAIN_NAME}'
-)
-
-# NOTE: The image proxy uses go-camo to sign URLs
-#       See: https://github.com/cactus/go-camo
-go_camo_baseurl = (
-    f"https://i.{config.DOMAIN_NAME}"
-    if config.DOMAIN_NAME == "titanic.sh" else ""
-)
-
 def resolve_proxied_url(value) -> str:
     if not value:
         return ''
@@ -202,13 +184,17 @@ def resolve_proxied_url(value) -> str:
 
     if not parsed_url.scheme or not parsed_url.netloc:
         return ''
+    
+    if not config.IMAGE_PROXY_BASEURL:
+        # No image proxy configured, return original URL
+        return value
 
     domain = parsed_url.netloc.lower().split(':')[0]
 
-    if domain not in valid_image_services:
+    if domain not in config.VALID_IMAGE_SERVICES:
         # Use image proxy for non-trusted domains
         signed_url = sign_url(value, config.FRONTEND_SECRET_KEY.encode())
-        value = go_camo_baseurl + signed_url
+        value = config.IMAGE_PROXY_BASEURL + signed_url
 
     return value
 
