@@ -77,8 +77,12 @@
                         {% else %}
                             <tr class="row-light">
                         {% endif %}
+                            {% set msg = message.message[:100] %}
+                            {% if message.message|length > 100 %}
+                                {% set msg = msg + '...' %}
+                            {% endif %}
                             <td class="chat-time">{{ message.time.strftime("%H:%M:%S") }}</th>
-                            <td>{{ message.sender }}: {{ message.message|format_chat|safe }}</td>
+                            <td>{{ message.sender }}: {{ msg|format_chat|safe }}</td>
                         </tr>
                     {% endfor %}
                     </tbody>
