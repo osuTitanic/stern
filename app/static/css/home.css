@@ -167,6 +167,8 @@
 
 .styled-table-chat {
     border-spacing: 0px;
+    overflow-wrap: anywhere;
+    overflow: auto;
 }
 
 .styled-table-chat a {
@@ -181,6 +183,7 @@
     color: #585479;
     padding-right: 10px;
     font-size: 8pt;
+    width: 43px;
 }
 
 .chat-wrapper {
