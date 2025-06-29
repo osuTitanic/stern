@@ -53,6 +53,10 @@
     border-radius: 10px;
 }
 
+.news-wrapper {
+    margin-bottom: 380px;
+}
+
 .news-wrapper h2 {
     margin-left: 3px;
 }
