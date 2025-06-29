@@ -46,13 +46,6 @@ parser.add_simple_formatter(
     '</div>'
 )
 
-parser.add_simple_formatter(
-    'video',
-    '<video src="%(value)s" controls></video>',
-    replace_links=False,
-    render_embedded=False
-)
-
 valid_image_services = (
     'ibb.co',
     'i.ibb.co',
@@ -69,8 +62,7 @@ image_proxy_url = (
     if config.DOMAIN_NAME == "titanic.sh" else ""
 )
 
-@parser.formatter('img', replace_links=False, render_embedded=False)
-def render_image(tag_name, value, options, parent, context):
+def resolve_proxied_url(value) -> str:
     if not value:
         return ''
 
@@ -81,13 +73,26 @@ def render_image(tag_name, value, options, parent, context):
         return ''
 
     domain = parsed_url.netloc.lower().split(':')[0]
-    url = value
 
     if domain not in valid_image_services:
         # Use image proxy for non-trusted domains
-        url = image_proxy_url + value
+        value = image_proxy_url + value
+
+    return value
+
+@parser.formatter('img', replace_links=False, render_embedded=False)
+def render_image(tag_name, value, options, parent, context):
+    if not (url := resolve_proxied_url(value)):
+        return ''
 
     return '<img src="%s" loading="lazy">' % sanitize_input(url)
+
+@parser.formatter('video', replace_links=False, render_embedded=False)
+def render_video(tag_name, value, options, parent, context):
+    if not (url := resolve_proxied_url(value)):
+        return ''
+
+    return '<video src="%s" controls></video>' % sanitize_input(url)
 
 @parser.formatter('box')
 def render_box(tag_name, value, options, parent, context):
