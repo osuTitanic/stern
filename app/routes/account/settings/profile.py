@@ -136,7 +136,7 @@ def update_userpage():
 
     user_id = request.form.get('user_id', type=int)
 
-    if current_user.id != user_id and not current_user.is_admin:
+    if current_user.id != user_id and not current_user.is_moderator:
         return redirect('/account/settings/profile')
 
     if error := check_account_status():
