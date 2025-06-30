@@ -1,7 +1,8 @@
 
 from app.common.database import DBForumTopic, DBForumPost, DBForum, DBUser
 from app.common.webhooks import Embed, Image, Author
-from app.common.helpers import ip
+from app.common.constants import UserActivity
+from app.common.helpers import ip, activity
 from app.common import officer
 from app.common.database import (
     beatmapsets,
@@ -40,15 +41,33 @@ def update_views(topic_id: int, session: Session) -> None:
         ex=60
     )
 
-def send_topic_webhook(
+def broadcast_topic_activity(
     topic: DBForumTopic,
     post: DBForumPost,
-    author: DBUser
+    author: DBUser,
+    session: Session
 ) -> None:
+    # Post to userpage & #announce channel
+    activity.submit(
+        author.id, None,
+        UserActivity.ForumTopicCreated,
+        {
+            'username': author.name,
+            'topic_name': topic.title,
+            'topic_id': topic.id,
+            'forum_id': topic.forum_id,
+            'forum_name': topic.forum.name
+        },
+        is_announcement=True,
+        session=session
+    )
+
+    # Post to webhook
     embed = Embed(
         title=topic.title,
         description=post.content[:512] + ('...' if len(post.content) > 1024 else ''),
         url=f'http://osu.{config.DOMAIN_NAME}/forum/{topic.forum_id}/t/{topic.id}',
+        color=0xc4492e,
         thumbnail=(
             Image(f'https://osu.{config.DOMAIN_NAME}/{topic.icon.location}')
             if topic.icon else None
@@ -59,8 +78,8 @@ def send_topic_webhook(
         url=f'http://osu.{config.DOMAIN_NAME}/u/{author.id}',
         icon_url=f'http://osu.{config.DOMAIN_NAME}/a/{author.id}'
     )
-    embed.color = 0xc4492e
     officer.event(embeds=[embed])
+    # TODO: Move webhook logic into activity module
 
 @router.get('/<forum_id>/t/<id>/')
 def topic(forum_id: str, id: str):
@@ -283,10 +302,11 @@ def create_post_action(forum_id: str):
             session=session
         )
 
-        send_topic_webhook(
+        broadcast_topic_activity(
             topic,
             post,
-            current_user
+            current_user,
+            session=session
         )
 
         app.session.logger.info(
