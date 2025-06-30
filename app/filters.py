@@ -212,7 +212,7 @@ def get_status_icon(topic: DBForumTopic) -> str:
 
 @flask.template_filter('format_activity')
 def format_activity(entry: common.database.DBActivity) -> str:
-    if not (formatter := activity.formatters.get(entry.type)):
+    if not (formatter := activity.text_formatters.get(entry.type)):
         return ""
 
     if not (result_text := formatter(entry, escape_brackets=True)):
