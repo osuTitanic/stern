@@ -45,6 +45,7 @@ def broadcast_post_activity(
             'topic_id': topic.id,
             'post_id': post.id
         },
+        is_announcement=True,
         is_hidden=True,
         session=session
     )
