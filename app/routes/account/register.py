@@ -1,9 +1,10 @@
 
+from app.common.constants import NotificationType, UserActivity
 from app.common.constants.regexes import USERNAME, EMAIL
 from app.common.constants.strings import BAD_WORDS
-from app.common.constants import NotificationType
 from app.common.helpers.external import location
 from app.common import mail, officer, helpers
+from app.common.helpers import activity
 from app.common.database.repositories import (
     verifications,
     notifications,
@@ -126,6 +127,15 @@ def registration_request():
         app.session.logger.info(f'User "{username}" with id "{user.id}" was created.')
         officer.call(f'New user registration: "[{username}](https://osu.{config.DOMAIN_NAME}/u/{user.id})" ({ip})')
 
+        # Broadcast user registration
+        activity.submit(
+            user.id, None,
+            UserActivity.UserRegistration,
+            {'username': user.name},
+            is_hidden=True,
+            session=session
+        )
+    
         # Send welcome notification
         notifications.create(
             user.id,
