@@ -356,11 +356,6 @@
                                 </a>
                             </div>
                             {% endif %}
-                            {% if beatmapset.server != 1 %}
-                            <div>
-                                <a href="/api/beatmaps/update/{{ beatmapset.id }}/hashes">Update beatmap hashes</a>
-                            </div><br>
-                            {% endif %}
                             <details>
                                 <summary>Difficulty Status Updates</summary><br>
                                 <form method="post" onsubmit="updateBeatmapStatuses(event)">
