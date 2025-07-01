@@ -46,7 +46,7 @@ def check_account_status() -> str | None:
             error='Your account is not activated.'
         )
 
-    if not permissions.has_permission('users.profile.update', 2196):
+    if not permissions.has_permission('users.profile.update', current_user.id):
         return utils.render_template(
             'settings/profile.html',
             css='settings.css',
