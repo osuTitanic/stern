@@ -47,7 +47,7 @@ def broadcast_topic_activity(
     author: DBUser,
     session: Session
 ) -> None:
-    # Post to userpage & #announce channel
+    # Post to webhook & #announce channel
     activity.submit(
         author.id, None,
         UserActivity.ForumTopicCreated,
@@ -63,25 +63,6 @@ def broadcast_topic_activity(
         is_announcement=True,
         session=session
     )
-
-    # Post to webhook
-    embed = Embed(
-        title=topic.title,
-        description=post.content[:512] + ('...' if len(post.content) > 1024 else ''),
-        url=f'http://osu.{config.DOMAIN_NAME}/forum/{topic.forum_id}/t/{topic.id}',
-        color=0xc4492e,
-        thumbnail=(
-            Image(f'https://osu.{config.DOMAIN_NAME}/{topic.icon.location}')
-            if topic.icon else None
-        )
-    )
-    embed.author = Author(
-        name=f'{author.name} created a new Topic',
-        url=f'http://osu.{config.DOMAIN_NAME}/u/{author.id}',
-        icon_url=f'http://osu.{config.DOMAIN_NAME}/a/{author.id}'
-    )
-    officer.event(embeds=[embed])
-    # TODO: Move webhook logic into activity module
 
 @router.get('/<forum_id>/t/<id>/')
 def topic(forum_id: str, id: str):
