@@ -41,9 +41,11 @@ def broadcast_post_activity(
         UserActivity.ForumPostCreated,
         {
             'username': author.name,
+            'post_id': post.id,
             'topic_name': topic.title,
             'topic_id': topic.id,
-            'post_id': post.id
+            'topic_icon': topic.icon.location if topic.icon else None,
+            'content': post.content[:512] + ('...' if len(post.content) > 1024 else ''),
         },
         is_announcement=True,
         is_hidden=True,

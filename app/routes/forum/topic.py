@@ -54,9 +54,11 @@ def broadcast_topic_activity(
         {
             'username': author.name,
             'topic_name': topic.title,
-            'topic_id': topic.id,
+            'forum_name': topic.forum.name,
             'forum_id': topic.forum_id,
-            'forum_name': topic.forum.name
+            'topic_id': topic.id,
+            'topic_icon': topic.icon.location if topic.icon else None,
+            'content': post.content[:512] + ('...' if len(post.content) > 1024 else ''),
         },
         is_announcement=True,
         session=session
