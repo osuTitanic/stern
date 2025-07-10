@@ -63,12 +63,48 @@ var EventRenderers = {
     [EventTypes.BeatmapStatusUpdated]: (event) => {},
     [EventTypes.BeatmapNominated]: (event) => {},
     [EventTypes.BeatmapNuked]: (event) => {},
-    [EventTypes.ForumTopicCreated]: (event) => {},
-    [EventTypes.ForumPostCreated]: (event) => {},
-    [EventTypes.ForumSubscribed]: (event) => {},
-    [EventTypes.ForumUnsubscribed]: (event) => {},
-    [EventTypes.ForumBookmarked]: (event) => {},
-    [EventTypes.ForumUnbookmarked]: (event) => {},
+    [EventTypes.ForumTopicCreated]: (event) => {
+        return [
+            renderProfile(event.data.username, event.user_id),
+            " created a new topic: ",
+            renderTopic(event.data.topic_name, event.data.topic_id)
+        ];
+    },
+    [EventTypes.ForumPostCreated]: (event) => {
+        return [
+            renderProfile(event.data.username, event.user_id),
+            " posted in a topic: ",
+            renderPost(event.data.topic_name, event.data.post_id)
+        ];
+    },
+    [EventTypes.ForumSubscribed]: (event) => {
+        return [
+            renderProfile(event.data.username, event.user_id),
+            " subscribed to a topic: ",
+            renderTopic(event.data.topic_name, event.data.topic_id)
+        ];
+    },
+    [EventTypes.ForumUnsubscribed]: (event) => {
+        return [
+            renderProfile(event.data.username, event.user_id),
+            " unsubscribed from a topic: ",
+            renderTopic(event.data.topic_name, event.data.topic_id)
+        ];
+    },
+    [EventTypes.ForumBookmarked]: (event) => {
+        return [
+            renderProfile(event.data.username, event.user_id),
+            " bookmarked a topic: ",
+            renderTopic(event.data.topic_name, event.data.topic_id)
+        ];
+    },
+    [EventTypes.ForumUnbookmarked]: (event) => {
+        return [
+            renderProfile(event.data.username, event.user_id),
+            " removed a topic from their bookmarks: ",
+            renderTopic(event.data.topic_name, event.data.topic_id)
+        ];
+    },
     [EventTypes.OsuCoinsReceived]: (event) => {
         return [
             renderProfile(event.data.username, event.user_id),
