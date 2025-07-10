@@ -282,6 +282,22 @@ function renderEvent(eventData) {
     return element;
 }
 
+function removeEvent(eventElement) {
+    if (totalEvents() <= 5) {
+        // Wait until enough events are present before removing
+        setTimeout(function() { removeEvent(eventElement) }, 1000);
+        return;
+    }
+    eventElement.style.opacity = '0';
+    setTimeout(function() { eventElement.remove() }, 1000);
+}
+
+function totalEvents() {
+    var activityContainer = document.getElementById('activity-feed-container');
+    if (!activityContainer) return 0;
+    return activityContainer.children.length;
+}
+
 function renderProfile(username, userId) {
     var profileLink = document.createElement('a');
     profileLink.textContent = username;
@@ -314,20 +330,20 @@ function renderMatchLink(matchName, matchId) {
     return matchLink;
 }
 
-function removeEvent(eventElement) {
-    if (totalEvents() <= 5) {
-        // Wait until enough events are present before removing
-        setTimeout(function() { removeEvent(eventElement) }, 1000);
-        return;
-    }
-    eventElement.style.opacity = '0';
-    setTimeout(function() { eventElement.remove() }, 1000);
+function renderTopic(topicName, topicId) {
+    var topicLink = document.createElement('a');
+    topicLink.textContent = topicName;
+    topicLink.href = `/forum/t/${topicId}`;
+    topicLink.className = 'topic-link';
+    return topicLink;
 }
 
-function totalEvents() {
-    var activityContainer = document.getElementById('activity-feed-container');
-    if (!activityContainer) return 0;
-    return activityContainer.children.length;
+function renderPost(postContent, postId) {
+    var postLink = document.createElement('a');
+    postLink.textContent = postContent;
+    postLink.href = `/forum/p/${postId}`;
+    postLink.className = 'post-link';
+    return postLink;
 }
 
 addEvent('DOMContentLoaded', document, function() {
