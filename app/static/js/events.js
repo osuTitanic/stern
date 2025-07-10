@@ -69,8 +69,20 @@ var EventRenderers = {
     [EventTypes.ForumUnsubscribed]: (event) => {},
     [EventTypes.ForumBookmarked]: (event) => {},
     [EventTypes.ForumUnbookmarked]: (event) => {},
-    [EventTypes.OsuCoinsReceived]: (event) => {},
-    [EventTypes.OsuCoinsUsed]: (event) => {},
+    [EventTypes.OsuCoinsReceived]: (event) => {
+        return [
+            renderProfile(event.data.username, event.user_id),
+            ` received ${event.data.amount} osu!coin${event.data.amount !== 1 ? 's' : ''},`,
+            ` now standing on ${event.data.coins} coins in total`
+        ];
+    },
+    [EventTypes.OsuCoinsUsed]: (event) => {
+        return [
+            renderProfile(event.data.username, event.user_id),
+            ` used ${event.data.amount} osu!coin${event.data.amount !== 1 ? 's' : ''},`,
+            ` now standing on ${event.data.coins} coins in total`
+        ];
+    },
     [EventTypes.FriendAdded]: (event) => {
         return [
             renderProfile(event.data.username, event.user_id),
