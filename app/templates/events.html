@@ -14,7 +14,7 @@
     <noscript>
         <p id="status-text">Please enable JavaScript to view the activity feed!</p>
     </noscript>
-    <div id="activity-feed-container"></div>
+    <div id="activity-feed-container" data-ws-endpoint="{{ websocket_endpoint }}"></div>
     <script src="{{ '/js/events.js'|git_asset_url }}"></script>
     {% endif %}
 {% endblock content %}
