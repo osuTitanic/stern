@@ -22,13 +22,9 @@
     font-weight: bold;
     margin: 0 auto;
     margin-top: 5px;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
     text-align: center;
     transition: all 0.8s ease-in;
-}
-
-#activity-feed-container {
-    margin-top: 5px;
 }
 
 .event-item {
