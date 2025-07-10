@@ -469,9 +469,9 @@ function renderEvent(eventData) {
 }
 
 function removeEvent(eventElement) {
-    if (totalEvents() <= 5) {
+    if (totalEvents() <= 10) {
         // Wait until enough events are present before removing
-        setTimeout(function() { removeEvent(eventElement) }, 1000);
+        setTimeout(function() { removeEvent(eventElement) }, 5000);
         return;
     }
     eventElement.style.opacity = '0';
