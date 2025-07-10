@@ -1,0 +1,24 @@
+@import url("main.css");
+
+.page {
+    margin-left: 20px;
+    font-size: 95%;
+}
+
+.heading {
+    margin-bottom: 12px;
+}
+
+.heading h1 {
+    text-shadow: #efcfe1 0px 0px 10px;
+    color: #e04aa4;
+    font-weight: normal;
+    font-size: 165%;
+    margin-bottom: 2.5px;
+}
+
+#status-text {
+    font-weight: bold;
+    margin: 0 auto;
+    text-align: center;
+}

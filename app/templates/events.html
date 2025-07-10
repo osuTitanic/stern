@@ -1,0 +1,20 @@
+{# templates/activity.html #}
+
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="heading">
+        <h1>Activity Feed</h1>
+        <p>Keep up with what's going on in Titanic!</p>
+    </div>
+    <br>
+    {% if not current_user.is_authenticated %}
+    <p id="status-text">Please log in to view the activity feed!</p>
+    {% else %}
+    <noscript>
+        <p id="status-text">Please enable JavaScript to view the activity feed!</p>
+    </noscript>
+    <div id="activity-feed-container"></div>
+    <script src="{{ '/js/events.js'|git_asset_url }}"></script>
+    {% endif %}
+{% endblock content %}
