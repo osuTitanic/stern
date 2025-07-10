@@ -253,6 +253,9 @@ var EventRenderers = {
         ];
     },
     [EventTypes.OsuCoinsReceived]: (event) => {
+        if (event.data.amount === 0)
+            return;
+
         return [
             renderProfile(event.data.username, event.user_id),
             ` received ${event.data.amount} osu!coin${event.data.amount !== 1 ? 's' : ''},`,
