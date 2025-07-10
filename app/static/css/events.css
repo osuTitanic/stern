@@ -20,6 +20,11 @@
 #status-text {
     font-weight: bold;
     margin: 0 auto;
+    margin-top: 5px;
     text-align: center;
     transition: all 0.8s ease-in;
+}
+
+.event-item {
+    transition: all 1s ease-in-out;
 }

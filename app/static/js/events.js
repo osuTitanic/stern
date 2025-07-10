@@ -1,4 +1,3 @@
-
 function WebSocketApiResolver() {
     return window.WebSocket || window.MozWebSocket;
 }
@@ -23,6 +22,7 @@ function setupWebSocket() {
     var WebSocket = WebSocketApiResolver();
     var WebSocketUrl = activityContainer.dataset.wsEndpoint;
     console.info('Connecting to WebSocket at:', WebSocketUrl);
+    statusText.textContent = 'Connecting to websocket...';
 
     var socket = new WebSocket(WebSocketUrl);
     socket.onopen = onWebSocketOpen;
@@ -42,17 +42,22 @@ function onWebSocketOpen(event) {
 }
 
 function onWebSocketMessage(event) {
+    var activityContainer = document.getElementById('activity-feed-container');
     var statusText = document.getElementById('status-text');
 
     try {
-        const data = JSON.parse(event.data);
+        var data = JSON.parse(event.data);
         console.info('Websocket message received:', data);
+
+        var eventElement = renderEvent(data);
+        activityContainer.insertBefore(eventElement, activityContainer.firstChild);
+        setTimeout(function() { removeEvent(eventElement) }, 10000);
     } catch (e) {
-        console.error('Failed to parse websocket message:', event.data, e);
         if (statusText) {
             statusText.textContent = 'Error processing message.';
             statusText.style.opacity = '1';
         }
+        console.error('Failed to parse websocket message:', event.data, e);
         return;
     }
 }
@@ -79,19 +84,28 @@ function onWebSocketClose(event) {
     setTimeout(setupWebSocket, 5000);
 }
 
+function renderEvent(eventData) {
+    // TODO: Render actual data
+    var element = document.createElement('div');
+    element.textContent = 'New event received';
+    element.className = 'event-item';
+    return element;
+}
+
+function removeEvent(eventElement) {
+    eventElement.style.opacity = '0';
+    setTimeout(function() { eventElement.remove() }, 1000);
+}
+
 addEvent('DOMContentLoaded', document, function() {
     var activityContainer = document.getElementById('activity-feed-container');
+    var statusText = document.getElementById('status-text');
 
     if (!activityContainer) {
+        statusText.textContent = 'Activity feed container not found.';
         console.error('Activity feed container not found!');
         return;
     }
-
-    var statusText = document.createElement('p');
-    statusText.textContent = 'Connecting to websocket...';
-    statusText.style.opacity = '1';
-    statusText.id = 'status-text';
-    activityContainer.appendChild(statusText);
 
     if (!supportsWebSockets()) {
         statusText.textContent = 'WebSockets are not supported by your browser.';
