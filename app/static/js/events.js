@@ -73,8 +73,24 @@ var EventRenderers = {
     [EventTypes.FriendAdded]: (event) => {},
     [EventTypes.FriendRemoved]: (event) => {},
     [EventTypes.ReplayWatched]: (event) => {},
-    [EventTypes.ScreenshotUploaded]: (event) => {},
-    [EventTypes.UserRegistration]: (event) => {},
+    [EventTypes.ScreenshotUploaded]: (event) => {
+        var textElement = document.createTextNode(" ");
+        var usernameElement = document.createElement('a');
+        usernameElement.textContent = event.data.username;
+        usernameElement.href = `/u/${event.user_id}`;
+        usernameElement.className = 'username-link';
+        textElement.textContent += `uploaded a screenshot`;
+        return [usernameElement, textElement];
+    },
+    [EventTypes.UserRegistration]: (event) => {
+        var textElement = document.createTextNode(" ");
+        var usernameElement = document.createElement('a');
+        usernameElement.textContent = event.data.username;
+        usernameElement.href = `/u/${event.user_id}`;
+        usernameElement.className = 'username-link';
+        textElement.textContent += `just registered!`;
+        return [usernameElement, textElement];
+    },
     [EventTypes.UserLogin]: (event) => {
         var textElement = document.createTextNode(" ");
         var usernameElement = document.createElement('a');
@@ -96,9 +112,42 @@ var EventRenderers = {
         return [usernameElement, textElement];
     },
     [EventTypes.UserChatMessage]: (event) => {},
-    [EventTypes.UserMatchCreated]: (event) => {},
-    [EventTypes.UserMatchJoined]: (event) => {},
-    [EventTypes.UserMatchLeft]: (event) => {},
+    [EventTypes.UserMatchCreated]: (event) => {
+        var textElement = document.createTextNode(" created a new match: ");
+        var usernameElement = document.createElement('a');
+        usernameElement.textContent = event.data.username;
+        usernameElement.href = `/u/${event.user_id}`;
+        usernameElement.className = 'username-link';
+        var matchLink = document.createElement('a');
+        matchLink.textContent = event.data.match_name;
+        matchLink.href = `/match/${event.data.match_id}`;
+        matchLink.className = 'match-link';
+        return [usernameElement, textElement, matchLink];
+    },
+    [EventTypes.UserMatchJoined]: (event) => {
+        var textElement = document.createTextNode(" joined a match: ");
+        var usernameElement = document.createElement('a');
+        usernameElement.textContent = event.data.username;
+        usernameElement.href = `/u/${event.user_id}`;
+        usernameElement.className = 'username-link';
+        var matchLink = document.createElement('a');
+        matchLink.textContent = event.data.match_name;
+        matchLink.href = `/match/${event.data.match_id}`;
+        matchLink.className = 'match-link';
+        return [usernameElement, textElement, matchLink];
+    },
+    [EventTypes.UserMatchLeft]: (event) => {
+        var textElement = document.createTextNode(" left the match: ");
+        var usernameElement = document.createElement('a');
+        usernameElement.textContent = event.data.username;
+        usernameElement.href = `/u/${event.user_id}`;
+        usernameElement.className = 'username-link';
+        var matchLink = document.createElement('a');
+        matchLink.textContent = event.data.match_name;
+        matchLink.href = `/match/${event.data.match_id}`;
+        matchLink.className = 'match-link';
+        return [usernameElement, textElement, matchLink];
+    },
     [EventTypes.BeatmapNuked]: (event) => {}
 };
 
