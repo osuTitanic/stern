@@ -72,116 +72,72 @@ var EventRenderers = {
     [EventTypes.OsuCoinsReceived]: (event) => {},
     [EventTypes.OsuCoinsUsed]: (event) => {},
     [EventTypes.FriendAdded]: (event) => {
-        var textElement = document.createTextNode(" is now following ");
-        var profileLink = document.createElement('a');
-        profileLink.textContent = event.data.username;
-        profileLink.href = `/u/${event.user_id}`;
-        profileLink.className = 'username-link';
-        var targetProfileLink = document.createElement('a');
-        targetProfileLink.textContent = event.data.target_username;
-        targetProfileLink.href = `/u/${event.data.target_id}`;
-        targetProfileLink.className = 'username-link';
-        return [profileLink, textElement, targetProfileLink];
+        return [
+            renderProfile(event.data.username, event.user_id),
+            " is now following ",
+            renderProfile(event.data.target_username, event.data.target_id)
+        ];
     },
     [EventTypes.FriendRemoved]: (event) => {
-        var textElement = document.createTextNode(" is no longer following ");
-        var profileLink = document.createElement('a');
-        profileLink.textContent = event.data.username;
-        profileLink.href = `/u/${event.user_id}`;
-        profileLink.className = 'username-link';
-        var targetProfileLink = document.createElement('a');
-        targetProfileLink.textContent = event.data.target_username;
-        targetProfileLink.href = `/u/${event.data.target_id}`;
-        targetProfileLink.className = 'username-link';
-        return [profileLink, textElement, targetProfileLink];
+        return [
+            renderProfile(event.data.username, event.user_id),
+            " is no longer following ",
+            renderProfile(event.data.target_username, event.data.target_id)
+        ];
     },
     [EventTypes.ReplayWatched]: (event) => {
-        var textElement = document.createTextNode(" downloaded a replay on ");
-        var profileLink = document.createElement('a');
-        profileLink.textContent = event.data.username;
-        profileLink.href = `/u/${event.user_id}`;
-        profileLink.className = 'username-link';
-        var replayLink = document.createElement('a');
-        replayLink.textContent = " (download)";
-        replayLink.href = `/scores/${event.data.score_id}/download`;
-        replayLink.className = 'replay-link';
-        var beatmapLink = document.createElement('a');
-        beatmapLink.textContent = event.data.beatmap_name;
-        beatmapLink.href = `/b/${event.data.beatmap_id}`;
-        beatmapLink.className = 'beatmap-link';
-        return [profileLink, textElement, beatmapLink, replayLink];
+        return [
+            renderProfile(event.data.username, event.user_id),
+            " downloaded a replay on ",
+            renderBeatmap(event.data.beatmap_name, event.data.beatmap_id),
+            " (", renderScoreLink("download", event.data.score_id), ")"
+        ];
     },
     [EventTypes.ScreenshotUploaded]: (event) => {
-        var textElement = document.createTextNode(" uploaded a screenshot");
-        var profileLink = document.createElement('a');
-        profileLink.textContent = event.data.username;
-        profileLink.href = `/u/${event.user_id}`;
-        profileLink.className = 'username-link';
-        return [profileLink, textElement];
+        return [
+            renderProfile(event.data.username, event.user_id), " uploaded a screenshot"
+        ];
     },
     [EventTypes.UserRegistration]: (event) => {
-        var textElement = document.createTextNode(" just registered!");
-        var profileLink = document.createElement('a');
-        profileLink.textContent = event.data.username;
-        profileLink.href = `/u/${event.user_id}`;
-        profileLink.className = 'username-link';
-        return [profileLink, textElement];
+        return [
+            renderProfile(event.data.username, event.user_id), " just registered!"
+        ];
     },
     [EventTypes.UserLogin]: (event) => {
-        var textElement = document.createTextNode(" ");
-        var profileLink = document.createElement('a');
-        profileLink.textContent = event.data.username;
-        profileLink.href = `/u/${event.user_id}`;
-        profileLink.className = 'username-link';
+        var profileLink = renderProfile(event.data.username, event.user_id);
+        var text = " logged in to the website";
 
-        if (event.data.location !== "bancho") {
-            textElement.textContent += `logged in to the website`;
-        } else {
+        if (event.data.location == "bancho") {
             var clientType = LoginClient[event.data.client] || event.data.client;
-            textElement.textContent += `logged in to Bancho using ${clientType}`;
+            text = ` logged in to Bancho using ${clientType}`;
 
             if (event.data.version !== undefined) {
-                textElement.textContent += ` (${event.data.version})`;
+                text += ` (${event.data.version})`;
             }
         }
 
-        return [profileLink, textElement];
+        return [profileLink, text];
     },
     [EventTypes.UserMatchCreated]: (event) => {
-        var textElement = document.createTextNode(" created a new match: ");
-        var profileLink = document.createElement('a');
-        profileLink.textContent = event.data.username;
-        profileLink.href = `/u/${event.user_id}`;
-        profileLink.className = 'username-link';
-        var matchLink = document.createElement('a');
-        matchLink.textContent = event.data.match_name;
-        matchLink.href = `/match/${event.data.match_id}`;
-        matchLink.className = 'match-link';
-        return [profileLink, textElement, matchLink];
+        return [
+            renderProfile(event.data.username, event.user_id),
+            " created a new match: ",
+            renderMatchLink(event.data.match_name, event.data.match_id)
+        ];
     },
     [EventTypes.UserMatchJoined]: (event) => {
-        var textElement = document.createTextNode(" joined a match: ");
-        var profileLink = document.createElement('a');
-        profileLink.textContent = event.data.username;
-        profileLink.href = `/u/${event.user_id}`;
-        profileLink.className = 'username-link';
-        var matchLink = document.createElement('a');
-        matchLink.textContent = event.data.match_name;
-        matchLink.href = `/match/${event.data.match_id}`;
-        matchLink.className = 'match-link';
-        return [profileLink, textElement, matchLink];
+        return [
+            renderProfile(event.data.username, event.user_id),
+            " joined the match: ",
+            renderMatchLink(event.data.match_name, event.data.match_id)
+        ]
     },
     [EventTypes.UserMatchLeft]: (event) => {
-        var textElement = document.createTextNode(" left the match: ");
-        var profileLink = document.createElement('a');
-        profileLink.textContent = event.data.username;
-        profileLink.href = `/u/${event.user_id}`;
-        profileLink.className = 'username-link';
-        var matchLink = document.createElement('a');
-        matchLink.textContent = event.data.match_name;
-        matchLink.href = `/match/${event.data.match_id}`;
-        matchLink.className = 'match-link';
-        return [profileLink, textElement, matchLink];
+        return [
+            renderProfile(event.data.username, event.user_id),
+            " left the match: ",
+            renderMatchLink(event.data.match_name, event.data.match_id)
+        ];
     }
 };
 
@@ -302,9 +258,48 @@ function renderEvent(eventData) {
     element.style.opacity = '1';
 
     // Append event data elements
-    processedEventData.forEach(function(e) { element.appendChild(e); });
+    processedEventData.forEach(function(e) {
+        if (typeof e === 'string') {
+            var textNode = document.createTextNode(e);
+            element.appendChild(textNode);
+        } else {
+            element.appendChild(e);
+        }
+    });
 
     return element;
+}
+
+function renderProfile(username, userId) {
+    var profileLink = document.createElement('a');
+    profileLink.textContent = username;
+    profileLink.href = `/u/${userId}`;
+    profileLink.className = 'username-link';
+    return profileLink;
+}
+
+function renderBeatmap(beatmapName, beatmapId) {
+    var beatmapLink = document.createElement('a');
+    beatmapLink.textContent = beatmapName;
+    beatmapLink.href = `/b/${beatmapId}`;
+    beatmapLink.className = 'beatmap-link';
+    return beatmapLink;
+}
+
+function renderScoreLink(linkText, scoreId) {
+    var replayLink = document.createElement('a');
+    replayLink.textContent = linkText;
+    replayLink.href = `/scores/${scoreId}/download`;
+    replayLink.className = 'replay-link';
+    return replayLink;
+}
+
+function renderMatchLink(matchName, matchId) {
+    var matchLink = document.createElement('a');
+    matchLink.textContent = matchName;
+    matchLink.href = `/mp/${matchId}`;
+    matchLink.className = 'match-link';
+    return matchLink;
 }
 
 function removeEvent(eventElement) {
