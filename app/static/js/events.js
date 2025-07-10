@@ -38,44 +38,68 @@ var EventTypes = {
     BeatmapNuked: 37
 };
 
+var LoginClient = {
+    osu: 'osu!',
+    irc: 'IRC'
+}
+
 var EventRenderers = {
-    [EventTypes.RanksGained]: (data) => {},
-    [EventTypes.NumberOne]: (data) => {},
-    [EventTypes.BeatmapLeaderboardRank]: (data) => {},
-    [EventTypes.LostFirstPlace]: (data) => {},
-    [EventTypes.PPRecord]: (data) => {},
-    [EventTypes.TopPlay]: (data) => {},
-    [EventTypes.AchievementUnlocked]: (data) => {},
-    [EventTypes.ScoreSubmitted]: (data) => {},
-    [EventTypes.BeatmapUploaded]: (data) => {},
-    [EventTypes.BeatmapUpdated]: (data) => {},
-    [EventTypes.BeatmapRevived]: (data) => {},
-    [EventTypes.BeatmapFavouriteAdded]: (data) => {},
-    [EventTypes.BeatmapFavouriteRemoved]: (data) => {},
-    [EventTypes.BeatmapRated]: (data) => {},
-    [EventTypes.BeatmapCommented]: (data) => {},
-    [EventTypes.BeatmapDownloaded]: (data) => {},
-    [EventTypes.BeatmapStatusUpdated]: (data) => {},
-    [EventTypes.BeatmapNominated]: (data) => {},
-    [EventTypes.ForumTopicCreated]: (data) => {},
-    [EventTypes.ForumPostCreated]: (data) => {},
-    [EventTypes.ForumSubscribed]: (data) => {},
-    [EventTypes.ForumUnsubscribed]: (data) => {},
-    [EventTypes.ForumBookmarked]: (data) => {},
-    [EventTypes.ForumUnbookmarked]: (data) => {},
-    [EventTypes.OsuCoinsReceived]: (data) => {},
-    [EventTypes.OsuCoinsUsed]: (data) => {},
-    [EventTypes.FriendAdded]: (data) => {},
-    [EventTypes.FriendRemoved]: (data) => {},
-    [EventTypes.ReplayWatched]: (data) => {},
-    [EventTypes.ScreenshotUploaded]: (data) => {},
-    [EventTypes.UserRegistration]: (data) => {},
-    [EventTypes.UserLogin]: (data) => {},
-    [EventTypes.UserChatMessage]: (data) => {},
-    [EventTypes.UserMatchCreated]: (data) => {},
-    [EventTypes.UserMatchJoined]: (data) => {},
-    [EventTypes.UserMatchLeft]: (data) => {},
-    [EventTypes.BeatmapNuked]: (data) => {}
+    [EventTypes.RanksGained]: (event) => {},
+    [EventTypes.NumberOne]: (event) => {},
+    [EventTypes.BeatmapLeaderboardRank]: (event) => {},
+    [EventTypes.LostFirstPlace]: (event) => {},
+    [EventTypes.PPRecord]: (event) => {},
+    [EventTypes.TopPlay]: (event) => {},
+    [EventTypes.AchievementUnlocked]: (event) => {},
+    [EventTypes.ScoreSubmitted]: (event) => {},
+    [EventTypes.BeatmapUploaded]: (event) => {},
+    [EventTypes.BeatmapUpdated]: (event) => {},
+    [EventTypes.BeatmapRevived]: (event) => {},
+    [EventTypes.BeatmapFavouriteAdded]: (event) => {},
+    [EventTypes.BeatmapFavouriteRemoved]: (event) => {},
+    [EventTypes.BeatmapRated]: (event) => {},
+    [EventTypes.BeatmapCommented]: (event) => {},
+    [EventTypes.BeatmapDownloaded]: (event) => {},
+    [EventTypes.BeatmapStatusUpdated]: (event) => {},
+    [EventTypes.BeatmapNominated]: (event) => {},
+    [EventTypes.ForumTopicCreated]: (event) => {},
+    [EventTypes.ForumPostCreated]: (event) => {},
+    [EventTypes.ForumSubscribed]: (event) => {},
+    [EventTypes.ForumUnsubscribed]: (event) => {},
+    [EventTypes.ForumBookmarked]: (event) => {},
+    [EventTypes.ForumUnbookmarked]: (event) => {},
+    [EventTypes.OsuCoinsReceived]: (event) => {},
+    [EventTypes.OsuCoinsUsed]: (event) => {},
+    [EventTypes.FriendAdded]: (event) => {},
+    [EventTypes.FriendRemoved]: (event) => {},
+    [EventTypes.ReplayWatched]: (event) => {},
+    [EventTypes.ScreenshotUploaded]: (event) => {},
+    [EventTypes.UserRegistration]: (event) => {},
+    [EventTypes.UserLogin]: (event) => {
+        var textElement = document.createTextNode(" ");
+        var usernameElement = document.createElement('a');
+        usernameElement.textContent = event.data.username;
+        usernameElement.href = `/u/${event.user_id}`;
+        usernameElement.className = 'username-link';
+
+        if (event.data.location !== "bancho") {
+            textElement.textContent += `logged in to the website`;
+        } else {
+            var clientType = LoginClient[event.data.client] || event.data.client;
+            textElement.textContent += `logged in to Bancho using ${clientType}`;
+
+            if (event.data.version !== undefined) {
+                textElement.textContent += ` (${event.data.version})`;
+            }
+        }
+
+        return [usernameElement, textElement];
+    },
+    [EventTypes.UserChatMessage]: (event) => {},
+    [EventTypes.UserMatchCreated]: (event) => {},
+    [EventTypes.UserMatchJoined]: (event) => {},
+    [EventTypes.UserMatchLeft]: (event) => {},
+    [EventTypes.BeatmapNuked]: (event) => {}
 };
 
 function webSocketApiResolver() {
@@ -179,15 +203,24 @@ function renderEvent(eventData) {
         return;
     }
 
-    var renderedEvent = renderer(eventData);
-    if (!renderedEvent) {
+    var processedEventData = renderer(eventData);
+    if (!processedEventData) {
         console.warn('Renderer returned no content for event type:', eventType);
         return;
     }
 
+    // If renderer returns a single element, wrap it in an array
+    if (!Array.isArray(processedEventData)) {
+        processedEventData = [processedEventData];
+    }
+
     var element = document.createElement('div');
     element.className = 'event-item';
-    element.appendChild(renderedEvent);
+    element.style.opacity = '1';
+
+    // Append event data elements
+    processedEventData.forEach(function(e) { element.appendChild(e); });
+
     return element;
 }
 

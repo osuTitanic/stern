@@ -1,6 +1,7 @@
 @import url("main.css");
 
 .page {
+    margin-right: 20px;
     margin-left: 20px;
     font-size: 95%;
 }
@@ -27,4 +28,14 @@
 
 .event-item {
     transition: all 1s ease-in-out;
+    border-bottom: solid 1px #d0d0d0;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    width: 100%;
+    display: block;
+}
+
+.username-link {
+    color: #e04aa4;
+    font-weight: bold;
 }
