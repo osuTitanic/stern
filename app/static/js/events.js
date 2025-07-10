@@ -69,14 +69,74 @@ var LoginClient = {
 };
 
 var EventRenderers = {
-    [EventTypes.RanksGained]: (event) => {},
-    [EventTypes.NumberOne]: (event) => {},
-    [EventTypes.BeatmapLeaderboardRank]: (event) => {},
-    [EventTypes.LostFirstPlace]: (event) => {},
-    [EventTypes.PPRecord]: (event) => {},
-    [EventTypes.TopPlay]: (event) => {},
-    [EventTypes.AchievementUnlocked]: (event) => {},
-    [EventTypes.ScoreSubmitted]: (event) => {},
+    [EventTypes.RanksGained]: (event) => {
+        return [
+            renderProfileWithMode(event.data.username, event.user_id, event.mode),
+            ` has gained ${event.data.ranks_gained} rank${event.data.ranks_gained !== 1 ? 's' : ''},`
+            ` now placed `, renderBoldElement(`#${event.data.rank}`), ` in ${event.data.mode}`
+        ];
+    },
+    [EventTypes.NumberOne]: (event) => {
+        return [
+            renderProfileWithMode(event.data.username, event.user_id, event.mode),
+            ` has taken the lead as the top-ranked ${event.data.mode} player!`
+        ];
+    },
+    [EventTypes.BeatmapLeaderboardRank]: (event) => {
+        var modsText = event.data.mods ? ` with ${event.data.mods}` : '';
+        var ppText = event.data.pp ? ` (${event.data.pp}pp)` : '';
+        var modeText = ` <${event.data.mode}>`;
+        
+        return [
+            renderProfileWithMode(event.data.username, event.user_id, event.mode),
+            ` achieved rank #${event.data.beatmap_rank} on `,
+            renderBeatmap(event.data.beatmap, event.data.beatmap_id),
+            modsText, modeText, ppText
+        ];
+    },
+    [EventTypes.LostFirstPlace]: (event) => {
+        return [
+            renderProfileWithMode(event.data.username, event.user_id, event.mode),
+            ` has lost first place on `,
+            renderBeatmap(event.data.beatmap, event.data.beatmap_id),
+            ` <${event.data.mode}>`
+        ];
+    },
+    [EventTypes.PPRecord]: (event) => {
+        return [
+            renderProfileWithMode(event.data.username, event.user_id, event.mode),
+            ` has set the new pp record on `,
+            renderBeatmap(event.data.beatmap, event.data.beatmap_id),
+            ` with ${event.data.pp}pp <${event.data.mode}>`
+        ];
+    },
+    [EventTypes.TopPlay]: (event) => {
+        return [
+            renderProfileWithMode(event.data.username, event.user_id, event.mode),
+            ` achieved a new top play on `,
+            renderBeatmap(event.data.beatmap, event.data.beatmap_id),
+            ` with ${event.data.pp}pp <${event.data.mode}>`
+        ];
+    },
+    [EventTypes.AchievementUnlocked]: (event) => {
+        return [
+            renderProfile(event.data.username, event.user_id),
+            " unlocked an achievement: ",
+            renderBoldElement(event.data.achievement)
+        ];
+    },
+    [EventTypes.ScoreSubmitted]: (event) => {
+        var modsText = event.data.mods ? ` with ${event.data.mods}` : '';
+        var ppText = event.data.pp ? ` (${event.data.pp}pp)` : '';
+        var modeText = ` <${event.data.mode}>`;
+        
+        return [
+            renderProfileWithMode(event.data.username, event.user_id, event.mode),
+            " submitted a score on ",
+            renderBeatmap(event.data.beatmap, event.data.beatmap_id),
+            modsText, modeText, ppText
+        ];
+    },
     [EventTypes.BeatmapUploaded]: (event) => {
         return [
             renderProfileWithMode(event.data.username, event.user_id, event.mode),
