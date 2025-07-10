@@ -225,8 +225,19 @@ function renderEvent(eventData) {
 }
 
 function removeEvent(eventElement) {
+    if (totalEvents() <= 5) {
+        // Wait until enough events are present before removing
+        setTimeout(function() { removeEvent(eventElement) }, 1000);
+        return;
+    }
     eventElement.style.opacity = '0';
     setTimeout(function() { eventElement.remove() }, 1000);
+}
+
+function totalEvents() {
+    var activityContainer = document.getElementById('activity-feed-container');
+    if (!activityContainer) return 0;
+    return activityContainer.children.length;
 }
 
 addEvent('DOMContentLoaded', document, function() {
