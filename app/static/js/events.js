@@ -71,8 +71,30 @@ var EventRenderers = {
     [EventTypes.ForumUnbookmarked]: (event) => {},
     [EventTypes.OsuCoinsReceived]: (event) => {},
     [EventTypes.OsuCoinsUsed]: (event) => {},
-    [EventTypes.FriendAdded]: (event) => {},
-    [EventTypes.FriendRemoved]: (event) => {},
+    [EventTypes.FriendAdded]: (event) => {
+        var textElement = document.createTextNode(" is now following ");
+        var profileLink = document.createElement('a');
+        profileLink.textContent = event.data.username;
+        profileLink.href = `/u/${event.user_id}`;
+        profileLink.className = 'username-link';
+        var targetProfileLink = document.createElement('a');
+        targetProfileLink.textContent = event.data.target_username;
+        targetProfileLink.href = `/u/${event.data.target_id}`;
+        targetProfileLink.className = 'username-link';
+        return [profileLink, textElement, targetProfileLink];
+    },
+    [EventTypes.FriendRemoved]: (event) => {
+        var textElement = document.createTextNode(" is no longer following ");
+        var profileLink = document.createElement('a');
+        profileLink.textContent = event.data.username;
+        profileLink.href = `/u/${event.user_id}`;
+        profileLink.className = 'username-link';
+        var targetProfileLink = document.createElement('a');
+        targetProfileLink.textContent = event.data.target_username;
+        targetProfileLink.href = `/u/${event.data.target_id}`;
+        targetProfileLink.className = 'username-link';
+        return [profileLink, textElement, targetProfileLink];
+    },
     [EventTypes.ReplayWatched]: (event) => {
         var textElement = document.createTextNode(" downloaded a replay on ");
         var profileLink = document.createElement('a');
@@ -90,12 +112,11 @@ var EventRenderers = {
         return [profileLink, textElement, beatmapLink, replayLink];
     },
     [EventTypes.ScreenshotUploaded]: (event) => {
-        var textElement = document.createTextNode(" ");
+        var textElement = document.createTextNode(" uploaded a screenshot");
         var profileLink = document.createElement('a');
         profileLink.textContent = event.data.username;
         profileLink.href = `/u/${event.user_id}`;
         profileLink.className = 'username-link';
-        textElement.textContent += `uploaded a screenshot`;
         return [profileLink, textElement];
     },
     [EventTypes.UserRegistration]: (event) => {
