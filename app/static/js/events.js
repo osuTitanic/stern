@@ -52,14 +52,55 @@ var EventRenderers = {
     [EventTypes.TopPlay]: (event) => {},
     [EventTypes.AchievementUnlocked]: (event) => {},
     [EventTypes.ScoreSubmitted]: (event) => {},
-    [EventTypes.BeatmapUploaded]: (event) => {},
-    [EventTypes.BeatmapUpdated]: (event) => {},
-    [EventTypes.BeatmapRevived]: (event) => {},
-    [EventTypes.BeatmapFavouriteAdded]: (event) => {},
-    [EventTypes.BeatmapFavouriteRemoved]: (event) => {},
-    [EventTypes.BeatmapRated]: (event) => {},
-    [EventTypes.BeatmapCommented]: (event) => {},
-    [EventTypes.BeatmapDownloaded]: (event) => {},
+    [EventTypes.BeatmapUploaded]: (event) => {
+        return [
+            renderProfileWithMode(event.data.username, event.user_id, event.mode),
+            " uploaded a new beatmap: ",
+            renderBeatmapset(event.data.beatmapset_name, event.data.beatmapset_id)
+        ];
+    },
+    [EventTypes.BeatmapUpdated]: (event) => {
+        return [
+            renderProfileWithMode(event.data.username, event.user_id, event.mode),
+            " updated a beatmap: ",
+            renderBeatmapset(event.data.beatmapset_name, event.data.beatmapset_id)
+        ];
+    },
+    [EventTypes.BeatmapRevived]: (event) => {
+        return [
+            renderBeatmapset(event.data.beatmapset_name, event.data.beatmapset_id),
+            " has been revived from eternal slumber by ",
+            renderProfileWithMode(event.data.username, event.user_id, event.mode)
+        ];
+    },
+    [EventTypes.BeatmapFavouriteAdded]: (event) => {
+        return [
+            renderProfile(event.data.username, event.user_id),
+            " added a beatmap to their favourites: ",
+            renderBeatmapset(event.data.beatmapset_name, event.data.beatmapset_id)
+        ];
+    },
+    [EventTypes.BeatmapFavouriteRemoved]: (event) => {
+        return [
+            renderProfile(event.data.username, event.user_id),
+            " removed a beatmap from their favourites: ",
+            renderBeatmapset(event.data.beatmapset_name, event.data.beatmapset_id)
+        ];
+    },
+    [EventTypes.BeatmapRated]: (event) => {
+        return [
+            renderProfile(event.data.username, event.user_id),
+            ` rated a beatmap with ${event.data.rating}/10 `,
+            "(", renderBeatmap(event.data.beatmap_name, event.data.beatmap_id), ")"
+        ];
+    },
+    [EventTypes.BeatmapCommented]: (event) => {
+        return [
+            renderProfile(event.data.username, event.user_id),
+            " commented on a beatmap: ",
+            renderBeatmap(event.data.beatmap_name, event.data.beatmap_id),
+        ];
+    },
     [EventTypes.BeatmapStatusUpdated]: (event) => {},
     [EventTypes.BeatmapNominated]: (event) => {},
     [EventTypes.BeatmapNuked]: (event) => {},
@@ -342,12 +383,28 @@ function renderProfile(username, userId) {
     return profileLink;
 }
 
+function renderProfileWithMode(username, userId, mode) {
+    var profileLink = document.createElement('a');
+    profileLink.textContent = username;
+    profileLink.href = `/u/${userId}?mode=${mode}`;
+    profileLink.className = 'username-link';
+    return profileLink;
+}
+
 function renderBeatmap(beatmapName, beatmapId) {
     var beatmapLink = document.createElement('a');
     beatmapLink.textContent = beatmapName;
     beatmapLink.href = `/b/${beatmapId}`;
     beatmapLink.className = 'beatmap-link';
     return beatmapLink;
+}
+
+function renderBeatmapset(beatmapsetName, beatmapsetId) {
+    var beatmapsetLink = document.createElement('a');
+    beatmapsetLink.textContent = beatmapsetName;
+    beatmapsetLink.href = `/s/${beatmapsetId}`;
+    beatmapsetLink.className = 'beatmapset-link';
+    return beatmapsetLink;
 }
 
 function renderScoreLink(linkText, scoreId) {
