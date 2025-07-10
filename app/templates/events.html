@@ -5,7 +5,10 @@
 {% block content %}
     <div class="heading">
         <h1>Activity Feed</h1>
-        <p>Keep up with what's going on in Titanic!</p>
+        <p>
+            Keep up with what's going on in Titanic!
+            Inspired by the <a href="https://osu.ppy.sh/p/events">original page</a>.
+        </p>
     </div>
     {% if not current_user.is_authenticated %}
     <p id="status-text">Please log in to view the activity feed!</p>
