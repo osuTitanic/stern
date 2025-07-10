@@ -38,10 +38,35 @@ var EventTypes = {
     BeatmapNuked: 37
 };
 
+var BeatmapStatus = {
+    Inactive: -3,
+    Graveyard: -2,
+    WIP: -1,
+    Pending: 0,
+    Ranked: 1,
+    Approved: 2,
+    Qualified: 3,
+    Loved: 4
+};
+
+BeatmapStatus.toString = function(status) {
+    switch (status) {
+        case BeatmapStatus.Inactive: return 'Inactive';
+        case BeatmapStatus.Graveyard: return 'Graveyard';
+        case BeatmapStatus.WIP: return 'WIP';
+        case BeatmapStatus.Pending: return 'Pending';
+        case BeatmapStatus.Ranked: return 'Ranked';
+        case BeatmapStatus.Approved: return 'Approved';
+        case BeatmapStatus.Qualified: return 'Qualified';
+        case BeatmapStatus.Loved: return 'Loved';
+        default: return 'Unknown';
+    }
+};
+
 var LoginClient = {
     osu: 'osu!',
     irc: 'IRC'
-}
+};
 
 var EventRenderers = {
     [EventTypes.RanksGained]: (event) => {},
@@ -101,9 +126,30 @@ var EventRenderers = {
             renderBeatmap(event.data.beatmap_name, event.data.beatmap_id),
         ];
     },
-    [EventTypes.BeatmapStatusUpdated]: (event) => {},
-    [EventTypes.BeatmapNominated]: (event) => {},
-    [EventTypes.BeatmapNuked]: (event) => {},
+    [EventTypes.BeatmapStatusUpdated]: (event) => {
+        return [
+            renderProfile(event.data.username, event.user_id),
+            " updated the status of a beatmap to ",
+            renderBoldElement(BeatmapStatus.toString(event.data.status)), ": ",
+            renderBeatmapset(event.data.beatmapset_name, event.data.beatmapset_id)
+        ];
+    },
+    [EventTypes.BeatmapNominated]: (event) => {
+        var profileLink = renderProfile(event.data.username, event.user_id);
+        var beatmapsetLink = renderBeatmapset(event.data.beatmapset_name, event.data.beatmapset_id);
+
+        if (event.data.type == 'reset')
+            return [profileLink, " popped the bubble for ", beatmapsetLink];
+
+        return [profileLink, " nominated a beatmap: ", beatmapsetLink];
+    },
+    [EventTypes.BeatmapNuked]: (event) => {
+        return [
+            renderProfile(event.data.username, event.user_id),
+            " nuked a beatmap: ",
+            renderBeatmapset(event.data.beatmapset_name, event.data.beatmapset_id)
+        ];
+    },
     [EventTypes.ForumTopicCreated]: (event) => {
         return [
             renderProfile(event.data.username, event.user_id),
@@ -437,6 +483,18 @@ function renderPost(postContent, postId) {
     postLink.href = `/forum/p/${postId}`;
     postLink.className = 'post-link';
     return postLink;
+}
+
+function renderBoldElement(text) {
+    var boldElement = document.createElement('strong');
+    boldElement.textContent = text;
+    return boldElement;
+}
+
+function renderItalicElement(text) {
+    var italicElement = document.createElement('em');
+    italicElement.textContent = text;
+    return italicElement;
 }
 
 addEvent('DOMContentLoaded', document, function() {
