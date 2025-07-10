@@ -62,6 +62,7 @@ var EventRenderers = {
     [EventTypes.BeatmapDownloaded]: (event) => {},
     [EventTypes.BeatmapStatusUpdated]: (event) => {},
     [EventTypes.BeatmapNominated]: (event) => {},
+    [EventTypes.BeatmapNuked]: (event) => {},
     [EventTypes.ForumTopicCreated]: (event) => {},
     [EventTypes.ForumPostCreated]: (event) => {},
     [EventTypes.ForumSubscribed]: (event) => {},
@@ -72,31 +73,45 @@ var EventRenderers = {
     [EventTypes.OsuCoinsUsed]: (event) => {},
     [EventTypes.FriendAdded]: (event) => {},
     [EventTypes.FriendRemoved]: (event) => {},
-    [EventTypes.ReplayWatched]: (event) => {},
+    [EventTypes.ReplayWatched]: (event) => {
+        var textElement = document.createTextNode(" downloaded a replay on ");
+        var profileLink = document.createElement('a');
+        profileLink.textContent = event.data.username;
+        profileLink.href = `/u/${event.user_id}`;
+        profileLink.className = 'username-link';
+        var replayLink = document.createElement('a');
+        replayLink.textContent = " (download)";
+        replayLink.href = `/scores/${event.data.score_id}/download`;
+        replayLink.className = 'replay-link';
+        var beatmapLink = document.createElement('a');
+        beatmapLink.textContent = event.data.beatmap_name;
+        beatmapLink.href = `/b/${event.data.beatmap_id}`;
+        beatmapLink.className = 'beatmap-link';
+        return [profileLink, textElement, beatmapLink, replayLink];
+    },
     [EventTypes.ScreenshotUploaded]: (event) => {
         var textElement = document.createTextNode(" ");
-        var usernameElement = document.createElement('a');
-        usernameElement.textContent = event.data.username;
-        usernameElement.href = `/u/${event.user_id}`;
-        usernameElement.className = 'username-link';
+        var profileLink = document.createElement('a');
+        profileLink.textContent = event.data.username;
+        profileLink.href = `/u/${event.user_id}`;
+        profileLink.className = 'username-link';
         textElement.textContent += `uploaded a screenshot`;
-        return [usernameElement, textElement];
+        return [profileLink, textElement];
     },
     [EventTypes.UserRegistration]: (event) => {
-        var textElement = document.createTextNode(" ");
-        var usernameElement = document.createElement('a');
-        usernameElement.textContent = event.data.username;
-        usernameElement.href = `/u/${event.user_id}`;
-        usernameElement.className = 'username-link';
-        textElement.textContent += `just registered!`;
-        return [usernameElement, textElement];
+        var textElement = document.createTextNode(" just registered!");
+        var profileLink = document.createElement('a');
+        profileLink.textContent = event.data.username;
+        profileLink.href = `/u/${event.user_id}`;
+        profileLink.className = 'username-link';
+        return [profileLink, textElement];
     },
     [EventTypes.UserLogin]: (event) => {
         var textElement = document.createTextNode(" ");
-        var usernameElement = document.createElement('a');
-        usernameElement.textContent = event.data.username;
-        usernameElement.href = `/u/${event.user_id}`;
-        usernameElement.className = 'username-link';
+        var profileLink = document.createElement('a');
+        profileLink.textContent = event.data.username;
+        profileLink.href = `/u/${event.user_id}`;
+        profileLink.className = 'username-link';
 
         if (event.data.location !== "bancho") {
             textElement.textContent += `logged in to the website`;
@@ -109,46 +124,44 @@ var EventRenderers = {
             }
         }
 
-        return [usernameElement, textElement];
+        return [profileLink, textElement];
     },
-    [EventTypes.UserChatMessage]: (event) => {},
     [EventTypes.UserMatchCreated]: (event) => {
         var textElement = document.createTextNode(" created a new match: ");
-        var usernameElement = document.createElement('a');
-        usernameElement.textContent = event.data.username;
-        usernameElement.href = `/u/${event.user_id}`;
-        usernameElement.className = 'username-link';
+        var profileLink = document.createElement('a');
+        profileLink.textContent = event.data.username;
+        profileLink.href = `/u/${event.user_id}`;
+        profileLink.className = 'username-link';
         var matchLink = document.createElement('a');
         matchLink.textContent = event.data.match_name;
         matchLink.href = `/match/${event.data.match_id}`;
         matchLink.className = 'match-link';
-        return [usernameElement, textElement, matchLink];
+        return [profileLink, textElement, matchLink];
     },
     [EventTypes.UserMatchJoined]: (event) => {
         var textElement = document.createTextNode(" joined a match: ");
-        var usernameElement = document.createElement('a');
-        usernameElement.textContent = event.data.username;
-        usernameElement.href = `/u/${event.user_id}`;
-        usernameElement.className = 'username-link';
+        var profileLink = document.createElement('a');
+        profileLink.textContent = event.data.username;
+        profileLink.href = `/u/${event.user_id}`;
+        profileLink.className = 'username-link';
         var matchLink = document.createElement('a');
         matchLink.textContent = event.data.match_name;
         matchLink.href = `/match/${event.data.match_id}`;
         matchLink.className = 'match-link';
-        return [usernameElement, textElement, matchLink];
+        return [profileLink, textElement, matchLink];
     },
     [EventTypes.UserMatchLeft]: (event) => {
         var textElement = document.createTextNode(" left the match: ");
-        var usernameElement = document.createElement('a');
-        usernameElement.textContent = event.data.username;
-        usernameElement.href = `/u/${event.user_id}`;
-        usernameElement.className = 'username-link';
+        var profileLink = document.createElement('a');
+        profileLink.textContent = event.data.username;
+        profileLink.href = `/u/${event.user_id}`;
+        profileLink.className = 'username-link';
         var matchLink = document.createElement('a');
         matchLink.textContent = event.data.match_name;
         matchLink.href = `/match/${event.data.match_id}`;
         matchLink.className = 'match-link';
-        return [usernameElement, textElement, matchLink];
-    },
-    [EventTypes.BeatmapNuked]: (event) => {}
+        return [profileLink, textElement, matchLink];
+    }
 };
 
 function webSocketApiResolver() {
