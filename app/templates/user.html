@@ -473,7 +473,7 @@
                         </div>
                         {% else %}
                         <div class="profile-beatmaps-container">
-                            {% for fav in user.favourites %}
+                            {% for fav in user.favourites|sort(attribute='created_at') %}
                             <table class="profile-beatmap" id="favourite-{{ fav.beatmapset.id }}">
                                 <tbody>
                                     <tr>

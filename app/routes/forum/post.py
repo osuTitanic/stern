@@ -10,8 +10,9 @@ from flask import (
     abort
 )
 from app.common.database import DBUser, DBForumPost, DBForumTopic, DBBeatmapset
-from app.common.constants import NotificationType, DatabaseStatus
+from app.common.constants import NotificationType, DatabaseStatus, UserActivity
 from app.common.webhooks import Embed, Author, Image
+from app.common.helpers import activity
 from app.common import officer
 from app.common.database import (
     notifications,
@@ -28,27 +29,28 @@ import app
 
 router = Blueprint("forum-posts", __name__)
 
-def send_post_webhook(
+def broadcast_post_activity(
     topic: DBForumTopic,
     post: DBForumPost,
-    author: DBUser
+    author: DBUser,
+    session: Session
 ) -> None:
-    embed = Embed(
-        title=topic.title,
-        description=post.content[:512] + ('...' if len(post.content) > 1024 else ''),
-        url=f'http://osu.{config.DOMAIN_NAME}/forum/{topic.forum_id}/p/{post.id}',
-        thumbnail=(
-            Image(f'https://osu.{config.DOMAIN_NAME}/{topic.icon.location}')
-            if topic.icon else None
-        )
+    # Post to webhook & #announce channel
+    activity.submit(
+        author.id, None,
+        UserActivity.ForumPostCreated,
+        {
+            'username': author.name,
+            'post_id': post.id,
+            'topic_name': topic.title,
+            'topic_id': topic.id,
+            'topic_icon': topic.icon.location if topic.icon else None,
+            'content': post.content[:512] + ('...' if len(post.content) > 1024 else ''),
+        },
+        is_announcement=True,
+        is_hidden=True,
+        session=session
     )
-    embed.author = Author(
-        name=f'{author.name} created a Post',
-        url=f'http://osu.{config.DOMAIN_NAME}/u/{author.id}',
-        icon_url=f'http://osu.{config.DOMAIN_NAME}/a/{author.id}'
-    )
-    embed.color = 0xc4492e
-    officer.event(embeds=[embed])
 
 @router.get('/<forum_id>/t/<topic_id>/post/')
 @login_required
@@ -481,10 +483,10 @@ def handle_post(topic: DBForumTopic, _: int, session: Session) -> Response:
             session=session
         )
 
-    send_post_webhook(
-        topic,
-        post,
-        current_user
+    broadcast_post_activity(
+        topic, post,
+        current_user,
+        session=session
     )
 
     app.session.logger.info(

@@ -1,6 +1,14 @@
 
 @import url('main.css');
 
+.page h1, .page h2 {
+    color: #cc2e8a;
+    text-shadow: #efcfe1 0px 0px 10px;
+    overflow: visible;
+    font-weight: normal;
+    font-size: 160%;
+}
+
 .left {
     float: left;
     margin-right: 15px;
@@ -19,14 +27,6 @@
     margin: 15px;
     display: -webkit-box;
     display: flow-root;
-}
-
-h1, h2 {
-    color: #cc2e8a;
-    text-shadow: #efcfe1 0px 0px 10px;
-    overflow: visible;
-    font-weight: normal;
-    font-size: 160%;
 }
 
 .password-reset-form {

@@ -1,6 +1,7 @@
 
 from app.common.constants.regexes import DISCORD_USERNAME, URL
 from app.common.database.repositories import users
+from app.common.helpers import permissions
 
 from flask_login import login_required, current_user
 from flask import Blueprint, request, redirect
@@ -43,6 +44,13 @@ def check_account_status() -> str | None:
             'settings/profile.html',
             css='settings.css',
             error='Your account is not activated.'
+        )
+
+    if not permissions.has_permission('users.profile.update', current_user.id):
+        return utils.render_template(
+            'settings/profile.html',
+            css='settings.css',
+            error='You are not allowed to update your profile.'
         )
 
 @router.post('/profile')
@@ -136,7 +144,7 @@ def update_userpage():
 
     user_id = request.form.get('user_id', type=int)
 
-    if current_user.id != user_id and not current_user.is_admin:
+    if current_user.id != user_id and not current_user.is_moderator:
         return redirect('/account/settings/profile')
 
     if error := check_account_status():

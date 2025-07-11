@@ -328,9 +328,6 @@
                                 <a onclick="setBeatmapsetStatus({{ beatmapset.id }}, 3, 'Are you sure you want to update the status to Qualified?')">
                                     Update status to "Qualified"
                                 </a><br>
-                                <a onclick="setBeatmapsetStatus({{ beatmapset.id }}, 2, 'Are you sure you want to update the status to Approved?')">
-                                    Update status to "Approved"
-                                </a><br>
                                 <a onclick="setBeatmapsetStatus({{ beatmapset.id }}, 4, 'Are you sure you want to update the status to Loved?')">
                                     Update status to "Loved"
                                 </a><br>
@@ -358,11 +355,6 @@
                                     Remove from "Loved" category
                                 </a>
                             </div>
-                            {% endif %}
-                            {% if beatmapset.server != 1 %}
-                            <div>
-                                <a href="/api/beatmaps/update/{{ beatmapset.id }}/hashes">Update beatmap hashes</a>
-                            </div><br>
                             {% endif %}
                             <details>
                                 <summary>Difficulty Status Updates</summary><br>

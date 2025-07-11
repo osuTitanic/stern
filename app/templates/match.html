@@ -3,10 +3,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>{{ match.name }}</h1>
-<p id="info-text">
-    Created by <a href="/u/{{ match.creator.id }}">{{ match.creator.name }}</a>, {{ match.created_at|timeago }}
-</p>
+<div class="heading">
+    <h1>{{ match.name }}</h1>
+    <p id="info-text">
+        Created by <a href="/u/{{ match.creator.id }}">{{ match.creator.name }}</a>, {{ match.created_at|timeago }}
+    </p>
+</div>
 <div id="match-events">
     <p id="status-text">Loading...</p>
 </div>

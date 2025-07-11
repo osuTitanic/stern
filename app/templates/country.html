@@ -3,10 +3,15 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Country Ranking ({{ constants.GameMode(mode).formatted }})</h1>
-<p style="margin: 6px; font-size: 80%;">
-    Country rankings combine the score of all players in each country group. Click a specific country's name to get a breakdown of all players from that location.
-</p>
+<div class="heading">
+    <h1>
+        Country Ranking ({{ constants.GameMode(mode).formatted }})
+    </h1>
+    <p>
+        Country rankings combine the score of all players in each country group.
+        Click a specific country's name to get a breakdown of all players from that location.
+    </p>
+</div>
 <div class="centered">
     <div class="pagination">
         Displaying {{ page }} of {{ total_pages }} results.

@@ -57,6 +57,18 @@ OFFICER_WEBHOOK_URL = os.environ.get('OFFICER_WEBHOOK_URL')
 EVENT_WEBHOOK_URL = os.environ.get('EVENT_WEBHOOK_URL')
 DATA_PATH = os.path.abspath('.data')
 
+IMAGE_PROXY_BASEURL = os.environ.get('IMAGE_PROXY_BASEURL')
+VALID_IMAGE_SERVICES = (
+    'ibb.co',
+    'i.ibb.co',
+    'i.imgur.com',
+    'media.tenor.com',
+    'cdn.discordapp.com',
+    'media.discordapp.net',
+    f'i.{DOMAIN_NAME}',
+    f'osu.{DOMAIN_NAME}'
+)
+
 WIKI_REPOSITORY_OWNER = os.environ.get('WIKI_REPOSITORY_OWNER', 'osuTitanic')
 WIKI_REPOSITORY_NAME = os.environ.get('WIKI_REPOSITORY_NAME', 'wiki')
 WIKI_REPOSITORY_BRANCH = os.environ.get('WIKI_REPOSITORY_BRANCH', 'main')
@@ -66,8 +78,10 @@ WIKI_DEFAULT_LANGUAGE = os.environ.get('WIKI_DEFAULT_LANGUAGE', 'en')
 DEFAULT_API_BASEURL = f'http{"s" if ENABLE_SSL else ""}://api.{DOMAIN_NAME}'
 DEFAULT_OSU_BASEURL = f'http{"s" if ENABLE_SSL else ""}://osu.{DOMAIN_NAME}'
 DEFAULT_STATIC_BASEURL = f'http{"s" if ENABLE_SSL else ""}://s.{DOMAIN_NAME}'
+DEFAULT_EVENTS_WEBSOCKET = f"ws{'s' if ENABLE_SSL else ''}://api.{DOMAIN_NAME}/events/ws"
 SITEMAP_ENABLED = DOMAIN_NAME in ('titanic.sh', 'localhost')
 
 API_BASEURL = os.environ.get('API_BASEURL', DEFAULT_API_BASEURL)
 OSU_BASEURL = os.environ.get('OSU_BASEURL', DEFAULT_OSU_BASEURL)
 STATIC_BASEURL = os.environ.get('STATIC_BASEURL', DEFAULT_STATIC_BASEURL)
+EVENTS_WEBSOCKET = os.environ.get('EVENTS_WEBSOCKET', DEFAULT_EVENTS_WEBSOCKET)

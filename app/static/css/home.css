@@ -53,6 +53,10 @@
     border-radius: 10px;
 }
 
+.news-wrapper {
+    margin-bottom: 380px;
+}
+
 .news-wrapper h2 {
     margin-left: 3px;
 }
@@ -167,6 +171,8 @@
 
 .styled-table-chat {
     border-spacing: 0px;
+    overflow-wrap: anywhere;
+    overflow: auto;
 }
 
 .styled-table-chat a {
@@ -181,6 +187,7 @@
     color: #585479;
     padding-right: 10px;
     font-size: 8pt;
+    width: 43px;
 }
 
 .chat-wrapper {

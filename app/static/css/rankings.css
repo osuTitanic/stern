@@ -5,22 +5,16 @@
     margin: 0;
 }
 
-.page h1 {
-    font-weight: normal;
-    font-size: 160%;
-    margin-top: 10px;
-    margin-bottom: 10px;
+.heading {
     padding-left: 6px;
     padding-right: 6px;
-    color: #cc2e8a;
-    text-shadow: #efcfe1 0px 0px 10px;
 }
 
 .centered {
     margin: 0 auto;
     text-align: center;
     font-size: 80%;
-    margin-top: 25px;
+    margin-top: 15px;
     margin-bottom: 15px;
 }
 

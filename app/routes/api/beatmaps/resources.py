@@ -10,9 +10,12 @@ import io
 router = Blueprint('resources', __name__)
 
 def remove_video_from_osz(osz: bytes) -> bytes:
-    video_extensions = [
-        ".wmv", ".flv", ".mp4", ".avi", ".m4v"
-    ]
+    video_extensions = (
+        ".wmv", ".flv", ".mp4",
+        ".avi", ".m4v", ".mpg",
+        ".mov", ".webm", ".mkv",
+        ".ogv", ".mpeg", ".3gp"
+    )
 
     with zipfile.ZipFile(io.BytesIO(osz), 'r') as osz_file:
         files_to_keep = [

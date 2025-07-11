@@ -26,9 +26,6 @@ flask = Flask(
     template_folder='templates'
 )
 
-minify = Squeeze()
-minify.init_app(flask)
-
 csrf = CSRFProtect()
 csrf.init_app(flask)
 
@@ -38,6 +35,10 @@ login_manager.init_app(flask)
 flask.register_blueprint(routes.router)
 flask.secret_key = config.FRONTEND_SECRET_KEY
 flask.config['FLASK_PYDANTIC_VALIDATION_ERROR_RAISE'] = True
+
+if not config.DEBUG:
+    minify = Squeeze()
+    minify.init_app(flask)
 
 @login_manager.request_loader
 def request_loader(request: Request):

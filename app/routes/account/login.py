@@ -1,6 +1,8 @@
 
 from app.common.database.repositories import users, verifications
 from app.common import mail, officer, helpers
+from app.common.constants import UserActivity
+from app.common.helpers import activity
 from app.accounts import perform_login
 
 from flask import Blueprint, request, redirect
@@ -106,6 +108,17 @@ def login():
 
             # Redirect to verification page
             return redirect(f'/account/verification?id={verification.id}')
+
+        activity.submit(
+            user.id, None,
+            UserActivity.UserLogin,
+            {
+                'username': user.name,
+                'location': 'website'
+            },
+            is_hidden=True,
+            session=session
+        )
 
         response = redirect(redirect_url or f'/u/{user.id}')
         response = perform_login(user, remember, response)
