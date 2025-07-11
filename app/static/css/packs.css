@@ -1,29 +1,21 @@
 @import url("main.css");
 
-.page p {
-    font-size: 90%;
+.pack-container {
+    background: #f9f7fe;
+    border: 1px solid #e1dfe7;
+    padding: 10px;
 }
 
-.page h1 {
-    font-size: 150%;
-    margin-bottom: 15px;
-    text-shadow: #efcfe1 0px 0px 10px;
-    font-weight: 100;
-    color: #e15fac;
-}
-
-.page h2 {
-    font-size: 120%;
-    margin-bottom: 11px;
+.pack-container h2 {
+    font-size: 110%;
+    margin-bottom: 10px;
     text-shadow: #efcfe1 0px 0px 2px;
     font-weight: 100;
     color: #e15fac;
 }
 
-.pack-container {
-    background: #f9f7fe;
-    border: 1px solid #e1dfe7;
-    padding: 10px;
+.pack-container p {
+    font-size: 85%;
 }
 
 .pack-categories {
