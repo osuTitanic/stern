@@ -38,10 +38,12 @@
 {% endmacro %}
 
 {% block content %}
-<h1>
-    {{ site_title }}
-    ({{ constants.GameMode(mode).formatted }})
-</h1>
+<div class="heading">
+    <h1>
+        {{ site_title }}
+        ({{ constants.GameMode(mode).formatted }})
+    </h1>
+</div>
 <p style="margin: 6px; font-size: 80%;">
 {% if order_type == 'ppv1' %}
     This is an attempt at recreating the original ppv1 system from back in the day.
