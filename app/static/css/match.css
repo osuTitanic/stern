@@ -1,12 +1,5 @@
 @import url('main.css');
 
-.page h1 {
-    color: #e15fac;
-    font-weight: normal;
-    font-size: 160%;
-    text-shadow: #efcfe1 0px 0px 10px;
-}
-
 #info-text {
     font-size: 80%;
     margin-top: 2.5px;
