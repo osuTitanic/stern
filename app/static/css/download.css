@@ -1,19 +1,6 @@
 
 @import url("main.css");
 
-.heading {
-    margin-bottom: 12px;
-    margin-left: 5px;
-}
-
-.heading h2 {
-    text-shadow: #efcfe1 0px 0px 10px;
-    color: #e04aa4;
-    font-weight: normal;
-    font-size: 160%;
-    margin-bottom: 2.5px;
-}
-
 .category {
     text-shadow: #f3c8e0 0px 0px 10px;
     color: #e15fac;

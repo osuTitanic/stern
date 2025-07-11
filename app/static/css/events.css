@@ -1,21 +1,9 @@
 @import url("main.css");
 
 .page {
-    margin-right: 20px;
-    margin-left: 20px;
+    margin-right: 15px;
+    margin-left: 15px;
     font-size: 95%;
-}
-
-.heading {
-    margin-bottom: 12px;
-}
-
-.heading h1 {
-    text-shadow: #efcfe1 0px 0px 10px;
-    color: #e04aa4;
-    font-weight: normal;
-    font-size: 165%;
-    margin-bottom: 2.5px;
 }
 
 #status-text {
