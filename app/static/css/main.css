@@ -770,6 +770,10 @@ input[type="url"], input[type="search"] {
     text-shadow: #efcfe1 0px 0px 10px;
     color: #e04aa4;
     font-weight: normal;
-    font-size: 160%;
+    font-size: 150%;
     margin-bottom: 2.5px;
+}
+
+.heading p {
+    font-size: 80%;
 }
