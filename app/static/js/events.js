@@ -72,7 +72,7 @@ var EventRenderers = {
     [EventTypes.RanksGained]: (event) => {
         return [
             renderProfileWithMode(event.data.username, event.user_id, event.mode),
-            ` has gained ${event.data.ranks_gained} rank${event.data.ranks_gained !== 1 ? 's' : ''},`
+            ` has gained ${event.data.ranks_gained} rank${event.data.ranks_gained !== 1 ? 's' : ''},`,
             ` now placed `, renderBoldElement(`#${event.data.rank}`), ` in ${event.data.mode}`
         ];
     },
