@@ -1,18 +1,17 @@
 @import url("main.css");
 
-.page {
-    margin-right: 15px;
-    margin-left: 15px;
-    font-size: 95%;
-}
-
 #status-text {
     font-weight: bold;
-    margin: 0 auto;
-    margin-top: 5px;
-    margin-bottom: 10px;
+    margin-top: 15px;
+    margin-bottom: 20px;
     text-align: center;
     transition: all 0.8s ease-in;
+    font-size: 90%;
+}
+
+#activity-feed-container {
+    margin-right: 5px;
+    margin-left: 5px;
 }
 
 .event-item {
@@ -22,9 +21,9 @@
     margin-bottom: 5px;
     width: 100%;
     display: block;
+    font-size: 85%;
 }
 
 .username-link {
-    color: #e04aa4;
     font-weight: bold;
 }
