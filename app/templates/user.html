@@ -8,10 +8,10 @@
         <div class="avatar-box">
             {% if current_user.id == user.id %}
             <a href="/account/settings/profile#picture">
-                <img src="/a/{{ user.id }}" alt="">
+                <img src="{{ user|avatar_url }}" alt="">
             </a>
             {% else %}
-            <img src="/a/{{ user.id }}" alt="">
+            <img src="{{ user|avatar_url }}" alt="">
             {% endif %}
         </div>
         <h1 class="user-header">

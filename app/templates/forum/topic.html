@@ -138,7 +138,7 @@
                         </div>
                         <a href="/u/{{ post.user.id }}">
                             <div class="post-avatar">
-                                <img src="/a/{{ post.user_id }}" alt="" loading="lazy">
+                                <img src="{{ post.user|avatar_url }}" alt="" loading="lazy">
                             </div>
                         </a>
                         <div>

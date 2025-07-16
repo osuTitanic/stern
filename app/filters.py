@@ -219,3 +219,23 @@ def format_activity(entry: common.database.DBActivity) -> str:
         return ""
 
     return format_chat(result_text)
+
+@flask.template_filter('avatar_url')
+def avatar_url(user: DBUser, size: int | None = None) -> str:
+    url_args = {}
+
+    if size:
+        url_args['s'] = f'{size}'
+
+    if user.avatar_hash:
+        url_args['c'] = user.avatar_hash
+
+    if not url_args:
+        return f'/a/{user.id}'
+
+    url_args_string = "&".join(
+        f"{k}={v}"
+        for k, v in url_args.items()
+    )
+
+    return f'/a/{user.id}?{url_args_string}'

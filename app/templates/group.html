@@ -21,7 +21,7 @@
                     </div>
                 </div>
                 <div class="avatar">
-                    <img src="/a/{{ user.id }}" alt="">
+                    <img src="{{ user|avatar_url }}" alt="">
                 </div>
                 {% if user.title %}
                 <div class="user-title">{{ user.title }}</div>

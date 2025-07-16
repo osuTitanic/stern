@@ -12,7 +12,7 @@
 <div class="moderation-section">
     <div class="user-header-box">
         <div class="user-avatar">
-            <img src="/a/{{ user.id }}" alt="">
+            <img src="{{ user|avatar_url }}" alt="">
         </div>
         <h1 class="user-header">    
             {% if user.names %}
