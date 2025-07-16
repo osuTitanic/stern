@@ -1,10 +1,12 @@
 
+from app.common.database.repositories import users
 from flask_login import login_required, current_user
 from flask import Blueprint, redirect, request
 from datetime import datetime
 from typing import Optional
 from PIL import Image
 
+import hashlib
 import utils
 import app
 import io
@@ -64,6 +66,14 @@ def update_avatar():
     app.session.storage.upload_avatar(
         current_user.id,
         buffer.getvalue()
+    )
+    
+    users.update(
+        current_user.id,
+        {
+            'avatar_hash': hashlib.md5(buffer.getvalue()).hexdigest(),
+            'avatar_last_update': datetime.now()
+        }
     )
 
     app.session.logger.info(
