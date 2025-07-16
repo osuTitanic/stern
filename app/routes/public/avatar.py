@@ -19,22 +19,34 @@ def default_avatar():
 
 @router.get('/<filename>')
 def avatar(filename: str):
-    # Workaround for older clients
+    # Workaround for older clients that use filename extensions
     user_id = int(
         filename.replace('_000.png', '').replace('_000.jpg', '')
     )
 
     size = request.args.get(
-        'size',
+        key='s',
         default=128,
         type=int
+    )
+
+    checksum = request.args.get(
+        key='c',
+        default=None,
+        type=str
+    )
+
+    # If a checksum is provided, we can cache the avatar
+    cache_header = (
+        {'Cache-Control': 'public, max-age=86400'}
+        if checksum is not None else {}
     )
 
     if (image := app.session.redis.get(f'avatar:{user_id}:{size}')):
         return Response(
             image,
             mimetype='image/png',
-            headers={'Cache-Control': 'stale-while-revalidate, max-age=10'}
+            headers=cache_header
         )
 
     if not (image := app.session.storage.get_avatar(user_id)):
@@ -53,5 +65,5 @@ def avatar(filename: str):
     return Response(
         image,
         mimetype='image/png',
-        headers={'Cache-Control': 'stale-while-revalidate, max-age=10'}
+        headers=cache_header
     )
