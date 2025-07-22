@@ -11,17 +11,17 @@ import app
 router = Blueprint('avatar', __name__)
 
 @router.get('/')
-def default_avatar():
+def default_avatar() -> Response:
     if not (image := app.session.storage.get_avatar('unknown')):
         return abort(500, 'Failed to load default avatar')
 
     return Response(image, mimetype='image/png')
 
 @router.get('/<filename>')
-def avatar(filename: str):
+def avatar(filename: str) -> Response:
     # Workaround for older clients that use filename extensions
     user_id = int(
-        filename.replace('_000.png', '').replace('_000.jpg', '')
+        filename.split('_')[0]
     )
 
     size = request.args.get(
