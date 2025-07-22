@@ -19,3 +19,35 @@ function regenerateIrcToken(onSuccess, onFailure)
 
     return performApiRequest("POST", "/account/irc/token", null, onSuccess, onFailure);
 }
+
+function showIrcTokenInSettings(action)
+{
+    var resolver = action == "view" ? fetchIrcToken : regenerateIrcToken;
+
+    resolver(
+        function(xhr)
+        {
+            var tokenContainer = document.getElementById("irc-token-container");
+            if (!tokenContainer)
+            {
+                console.error("IRC token container not found in the document.");
+                return;
+            }
+
+            var response = JSON.parse(xhr.responseText);
+            if (!response || !response.token)
+            {
+                console.error("Invalid response format or missing token:", response);
+                alert("Failed to retrieve your IRC token. Please try again later!");
+                return;
+            }
+
+            tokenContainer.innerText = response.token;
+        },
+        function(xhr)
+        {
+            console.error("Failed to fetch IRC token:", xhr);
+            alert("Failed to retrieve your IRC token. Please try again later!");
+        }
+    );
+}

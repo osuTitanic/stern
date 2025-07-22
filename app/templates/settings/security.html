@@ -75,5 +75,22 @@
             {% endif %}
         </dl>
     </div>
+    <div id="irc">
+        <h2>IRC</h2>
+        <dl class="login-details section">
+            <dt>Server</dt>
+            <dd>irc.{{ config.DOMAIN_NAME }}</dd>
+            <dt>Port</dt>
+            <dd>6667 (or 6697 for SSL)</dd>
+            <dt>Username</dt>
+            <dd>{{ current_user.name.replace(' ', '_') }}</dd>
+            <dt>Token</dt>
+            <dd id="irc-token-container">
+                <a href="#irc" onclick="showIrcTokenInSettings('view')">View Token</a> / 
+                <a href="#irc" onclick="showIrcTokenInSettings('generate')">Regenerate Token</a>
+            </dd>
+        </dl>
+    </div>
+    <script src="{{ '/js/irc.js'|git_asset_url }}"></script>
 </div>
 {% endblock content %}
