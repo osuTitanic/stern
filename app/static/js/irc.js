@@ -22,9 +22,9 @@ function regenerateIrcToken(onSuccess, onFailure)
 
 function showIrcTokenInSettings(action)
 {
-    var resolver = action == "view" ? fetchIrcToken : regenerateIrcToken;
+    var tokenResolver = action == "view" ? fetchIrcToken : regenerateIrcToken;
 
-    resolver(
+    tokenResolver(
         function(xhr)
         {
             var tokenContainer = document.getElementById("irc-token-container");
@@ -38,7 +38,7 @@ function showIrcTokenInSettings(action)
             if (!response || !response.token)
             {
                 console.error("Invalid response format or missing token:", response);
-                alert("Failed to retrieve your IRC token. Please try again later!");
+                alert("Failed to retrieve your IRC password. Please try again later!");
                 return;
             }
 
@@ -47,7 +47,7 @@ function showIrcTokenInSettings(action)
         function(xhr)
         {
             console.error("Failed to fetch IRC token:", xhr);
-            alert("Failed to retrieve your IRC token. Please try again later!");
+            alert("Failed to retrieve your IRC password. Please try again later!");
         }
     );
 }

@@ -81,13 +81,13 @@
             <dt>Server</dt>
             <dd>irc.{{ config.DOMAIN_NAME }}</dd>
             <dt>Port</dt>
-            <dd>6667 (or 6697 for SSL)</dd>
+            <dd>6667 (6697 for SSL)</dd>
             <dt>Username</dt>
             <dd>{{ current_user.name.replace(' ', '_') }}</dd>
-            <dt>Token</dt>
+            <dt>Server Password</dt>
             <dd id="irc-token-container">
-                <a href="#irc" onclick="showIrcTokenInSettings('view')">View Token</a> / 
-                <a href="#irc" onclick="showIrcTokenInSettings('generate')">Regenerate Token</a>
+                <a href="#irc" onclick="showIrcTokenInSettings('view')">View</a> / 
+                <a href="#irc" onclick="showIrcTokenInSettings('generate')">Regenerate</a>
             </dd>
         </dl>
     </div>
