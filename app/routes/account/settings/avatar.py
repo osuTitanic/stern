@@ -76,6 +76,11 @@ def update_avatar():
         }
     )
 
+    # Remove avatar checksum cache, if it exists
+    app.session.redis.delete(
+        f'bancho:avatar_hash:{current_user.id}'
+    )
+
     app.session.logger.info(
         f'{current_user.name} changed their avatar.'
     )
