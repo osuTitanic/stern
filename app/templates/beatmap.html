@@ -198,9 +198,21 @@
                 </td>
             </tr>
             <tr>
-                {% if nominations or beatmapset.status <= 0 %}
+                {% set display_collaborations = collaborations and not (collaborations|first).is_beatmap_author %}
+                {% set display_nominations = nominations or beatmapset.status <= 0 %}
+                {% if display_collaborations %}
+                <td>Collaborators:</td>
+                <td colspan="{% if display_nominations %}1{% else %}3{% endif %}">
+                    {% for collaboration in collaborations %}
+                    <a href="/u/{{ collaboration.user.id }}">
+                        {{ collaboration.user.name }}{% if loop.index0 != collaborations|length - 1 %}, {% endif %}
+                    </a>
+                    {% endfor %}
+                </td>
+                {% endif %}
+                {% if display_nominations %}
                 <td>Nominators:</td>
-                <td colspan="3">
+                <td colspan="{% if display_collaborations %}1{% else %}3{% endif %}">
                     {% if not nominations %}
                     <p>No one has nominated this map yet.</p>
                     {% else %}
@@ -213,7 +225,7 @@
                 </td>
                 {% endif %}
                 <td>Options:</td>
-                <td {% if not nominations or beatmapset.status > 0 %} colspan="5" {% endif %}>
+                <td {% if not display_nominations %} colspan="5" {% endif %}>
                     {% if beatmapset.server == 0 %}
                     <p><a href="https://osu.ppy.sh/beatmapsets/{{ beatmapset.id }}/discussion">Modding / Discussion</a></p>
                     {% else %}
