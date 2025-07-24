@@ -1,5 +1,5 @@
 
-from app.common.database import beatmaps, scores, favourites, nominations, relationships
+from app.common.database import beatmaps, scores, favourites, nominations, relationships, collaborations
 from app.common.constants import BeatmapLanguage, BeatmapGenre, DatabaseStatus, Mods
 from flask import Blueprint, request, redirect
 from flask_login import current_user
@@ -82,6 +82,7 @@ def get_beatmap(id: int):
             Language=BeatmapLanguage,
             Genre=BeatmapGenre,
             scores=beatmap_scores,
+            collaborations=collaborations.fetch_by_beatmap(beatmap.id, session=session),
             favourites_count=favourites.fetch_count_by_set(beatmap.set_id, session=session),
             favourites=favourites.fetch_many_by_set(beatmap.set_id, session=session),
             favorite=(

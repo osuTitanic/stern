@@ -105,7 +105,11 @@
                 {% if beatmapset.server == 0 %}
                     <a href="https://osu.ppy.sh/u/{{ beatmapset.creator }}">{{ beatmapset.creator }}</a>
                 {% else %}
+                    {% if collaborations|length == 1 and (collaborations|first).is_beatmap_author %}
+                    <a href="/u/{{ (collaborations|first).user_id }}">{{ (collaborations|first).user.name }}</a>
+                    {% else %}
                     <a href="/u/{{ beatmapset.creator_id }}">{{ beatmapset.creator }}</a>
+                    {% endif %}
                 {% endif %}
                 </td>
                 <td>Accuracy:</td>
