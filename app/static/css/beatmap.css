@@ -245,6 +245,9 @@
     height: 15px;
     vertical-align: middle;
     padding: 2.25px 5px 2.25px 5px;
+    max-width: 160px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .scores img {
