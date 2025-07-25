@@ -387,6 +387,10 @@ input[type="url"], input[type="search"] {
 
 #welcome-text {
     color: rgb(80, 80, 80);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 260px;
 }
 
 #login-text {
