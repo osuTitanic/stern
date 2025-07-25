@@ -45,7 +45,7 @@ function insertBBCode(event) {
     }
 }
 
-function insertImageBBCode(textarea, url) {
+function insertImageBBCode(textarea, content) {
     var bbcodeTagStart = "[img]";
     var bbcodeTagEnd = "[/img]";
 
@@ -55,13 +55,38 @@ function insertImageBBCode(textarea, url) {
     var beforeText = textarea.value.substring(0, start);
     var afterText = textarea.value.substring(end);
 
-    var fullTag = bbcodeTagStart + url + bbcodeTagEnd;
+    var fullTag = bbcodeTagStart + content + bbcodeTagEnd;
     textarea.value = beforeText + fullTag + afterText;
 
     // Move the caret to just after the inserted tag:
     var newCaretPos = beforeText.length + fullTag.length;
     textarea.focus();
     textarea.selectionStart = textarea.selectionEnd = newCaretPos;
+}
+
+function replaceImageBBCode(textarea, oldContent, newContent) {
+    var bbcodeTagStart = "[img]";
+    var bbcodeTagEnd = "[/img]";
+    var oldTag = bbcodeTagStart + oldContent + bbcodeTagEnd;
+    var newTag = bbcodeTagStart + newContent + bbcodeTagEnd;
+
+    var value = textarea.value;
+    var replaced = false;
+
+    // Replace all occurrences of oldTag with newTag
+    var newValue = value.split(oldTag).join(newTag);
+    replaced = newValue !== value;
+    textarea.value = newValue;
+
+    if (replaced) {
+        // Move caret to just after the last replaced tag
+        var lastIndex = newValue.lastIndexOf(newTag);
+        if (lastIndex !== -1) {
+            var newCaretPos = lastIndex + newTag.length;
+            textarea.focus();
+            textarea.selectionStart = textarea.selectionEnd = newCaretPos;
+        }
+    }
 }
 
 var editors = document.getElementsByClassName('bbcode-editor');
@@ -107,6 +132,9 @@ for (var i = 0; i < editors.length; i++) {
                 continue;
             }
 
+            var uploadPrompt = "Uploading " + blob.name + "...";
+            insertImageBBCode(editor, uploadPrompt);
+
             var formData = new FormData();
             formData.append('input', blob);
 
@@ -114,7 +142,7 @@ for (var i = 0; i < editors.length; i++) {
                 setTimeout(function() { isUploading = false }, 1000);
                 var response = JSON.parse(xhr.responseText);
                 var imageUrl = response.image.image.url;
-                insertImageBBCode(editor, imageUrl);
+                replaceImageBBCode(editor, uploadPrompt, imageUrl);
             }, function (xhr) {
                 setTimeout(function() { isUploading = false }, 1000);
             });
