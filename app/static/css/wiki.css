@@ -96,8 +96,8 @@
 
 .wiki-content {
     padding-top: 5px;
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-left: 18px;
+    padding-right: 18px;
     font-size: 0.9em;
 }
 
@@ -122,11 +122,12 @@
     padding: 2.5px;
     display: block;
     text-shadow: #efcfe1 0px 0px 10px;
-    font-size: 1.1em;
+    font-size: 1.2em;
 }
 
-.wiki-content .toc ul {
-    margin-left: -15px;
+.wiki-content .toc ul, .wiki-content .toc li {
+    margin-left: -5px;
+    font-size: 0.98em !important;
 }
 
 .wiki-content h1 {
@@ -175,6 +176,10 @@
     font-size: 0.85em;
     padding: 1px;
     overflow: hidden;
+}
+
+.wiki-content li, .wiki-content ul {
+    font-size: 0.9em;
 }
 
 .wiki-content img {
