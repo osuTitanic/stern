@@ -49,6 +49,10 @@ LINK_REGEX = re.compile(
     r"\[\[([^|\]]+)(?:\|([^\]]+))?\]\]"
 )
 
+WIKI_LINK_REGEX = re.compile(
+    r"\[\[([^|\]]+)(?:\|([^\]]+))?\]\]"
+)
+
 LANGUAGES = (
     'en', 'ru', 'de', 'pl'
 )

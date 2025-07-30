@@ -62,12 +62,14 @@ def wiki_page(path: str, language: str = config.WIKI_DEFAULT_LANGUAGE):
     if language.lower() not in wiki.LANGUAGES:
         return abort(404)
 
-    with app.session.database.managed_session() as session:
+    path = path.removesuffix("/")
+
+    with app.session.database.managed_session() as session:        
         if not (result := wiki.fetch_page(path, language.lower(), session)):
             return abort(404)
 
-        formatted_path = wiki.format_path(path)
         page, entry = result
+        formatted_path = wiki.format_path(path, page.name)
 
         if formatted_path != path:
             return redirect(f'/wiki/{language}/{formatted_path}')

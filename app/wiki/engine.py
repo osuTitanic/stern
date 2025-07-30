@@ -1,7 +1,7 @@
 
 from __future__ import annotations
 from app.common.database import DBWikiPage, DBWikiContent, wiki
-from app.wiki.constants import CONTENT_BASEURL, LINK_REGEX
+from app.wiki.constants import CONTENT_BASEURL, WIKI_LINK_REGEX
 from app.common.helpers import caching
 from typing import Set, Tuple, List
 from sqlalchemy.orm import Session
@@ -31,7 +31,7 @@ def fetch_page(path: str, language: str, session: Session) -> Tuple[DBWikiPage, 
         return create_page(path, language, session)
 
     if language == config.WIKI_DEFAULT_LANGUAGE:
-        return page, update_content(default_content, session)
+        return page, update_content(path, default_content, session)
 
     if not (content := wiki.fetch_content(page.id, language, session)):
         # Try to create content in the requested language
@@ -49,7 +49,7 @@ def fetch_page(path: str, language: str, session: Session) -> Tuple[DBWikiPage, 
         )
         return page, content
     
-    return page, update_content(content, session)
+    return page, update_content(path, content, session)
 
 @caching.ttl_cache(ttl=60*5)
 def fetch_markdown_cached(path: str, language: str) -> str | None:
@@ -59,7 +59,7 @@ def fetch_markdown_cached(path: str, language: str) -> str | None:
 def fetch_markdown(path: str, language: str) -> str | None:
     """Fetch the raw markdown text of a wiki page"""
     response = app.session.requests.get(
-        f'{CONTENT_BASEURL}/{path.replace(" ", "_")}/{language}.md',
+        f'{CONTENT_BASEURL}/{path.replace(" ", "_").removesuffix("/")}/{language}.md',
         allow_redirects=True
     )
 
@@ -124,7 +124,12 @@ def create_page(path: str, language: str, session: Session) -> Tuple[DBWikiPage,
 
     return page, content
 
-def update_content(entry: DBWikiContent, session: Session, no_cache: bool = False) -> DBWikiContent:
+def update_content(
+    path: str,
+    entry: DBWikiContent,
+    session: Session,
+    no_cache: bool = False
+) -> DBWikiContent:
     """Update the content of a wiki page"""
     markdown_resolver = (
         fetch_markdown_cached
@@ -132,7 +137,7 @@ def update_content(entry: DBWikiContent, session: Session, no_cache: bool = Fals
     )
 
     content_markdown = markdown_resolver(
-        entry.page.name,
+        path,
         entry.language
     )
 
@@ -165,7 +170,7 @@ def update_content(entry: DBWikiContent, session: Session, no_cache: bool = Fals
 
 def create_outlinks(page_id: int, content: str, session: Session) -> List[DBWikiPage]:
     """Scan for outlinks, and return associated pages"""
-    outlinks = LINK_REGEX.findall(content)
+    outlinks = WIKI_LINK_REGEX.findall(content)
     logger.info(f'Found {len(outlinks)} outlinks.')
 
     pages = [
@@ -190,13 +195,13 @@ def create_outlinks(page_id: int, content: str, session: Session) -> List[DBWiki
 def get_page_name(path: str) -> str:
     """Get the name of the page from the path"""
     return path.removesuffix('/').split('/')[-1] \
-               .removesuffix('.md').replace('_', ' ') \
-               .title()
+               .removesuffix('.md').replace('_', ' ')
 
-def format_path(path: str) -> str:
+def format_path(path: str, page_name: str) -> str:
     """Format the path of a wiki page to be title case"""
-    tree = path.replace('_', ' ').split('/')
-    titles = [title.title().replace(" ", "_") for title in tree]
+    tree = path.replace('_', ' ').removesuffix("/").strip().split('/')
+    titles = [title.replace(" ", "_") for title in tree]
+    titles[-1] = page_name
     return '/'.join(titles)
 
 def sanitize_markdown(text: str) -> str:
