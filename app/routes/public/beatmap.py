@@ -1,6 +1,6 @@
 
 from app.common.database import beatmaps, scores, favourites, nominations, relationships, collaborations
-from app.common.constants import BeatmapLanguage, BeatmapGenre, DatabaseStatus, Mods
+from app.common.constants import BeatmapLanguage, BeatmapGenre, DatabaseStatus
 from flask import Blueprint, request, redirect
 from flask_login import current_user
 
@@ -64,12 +64,6 @@ def get_beatmap(id: int):
             limit=config.SCORE_RESPONSE_LIMIT,
             session=session
         )
-
-        for score in beatmap_scores:
-            mods = Mods(score.mods)
-
-            if Mods.Nightcore in mods:
-                score.mods &= ~Mods.DoubleTime
 
         return utils.render_template(
             'beatmap.html',
