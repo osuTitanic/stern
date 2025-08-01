@@ -1,19 +1,5 @@
 @import url("main.css");
 
-:root {
-    --header-pink: #e15fac;
-    --header-blue: #3843a6;
-    --description-border: #e1dfe7;
-    --description-color: #f9f7fe;
-    --difficulty-background: #e1d6fb;
-    --difficulty-active: #bfa8f8;
-    --difficulty-text: #5e5e5e;
-    --difficulty: #e7e2f3;
-    --leader-link: #fdbf2a;
-    --border-light: #cfc1ef;
-    --border: #8462db;
-}
-
 .page {
     margin: 0;
 }
@@ -271,6 +257,20 @@
 .score-flag-link:focus,
 .score-flag-link:active {
     text-decoration: none;
+}
+
+.collaboration-request {
+    border-bottom: 1px solid #cfc1ef;
+    padding: 10px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.collaboration-request button {
+    padding: 2.5px;
+    padding-right: 5px;
+    padding-left: 5px;
+    margin-right: 5px;
 }
 
 .bat-controls {

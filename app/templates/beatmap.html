@@ -240,6 +240,19 @@
                 </td>
             </tr>
         </table>
+        {% if beatmapset.server != 0 %}
+            {% if current_user.id != beatmapset.creator_id %}
+            {% set invite = collaboration_requests|selectattr("target_id", "eq", current_user.id)|first %}
+            {% if invite %}
+            <div class="collaboration-request">
+                <a href="/u/{{ invite.user.id }}">{{ invite.user.name }}</a> invited you to collaborate on this beatmap! &nbsp;
+                <button style="color: green">Accept</button>
+                <button style="color: red">Decline</button>
+                <button>Block</button>
+            </div>
+            {% endif %}
+            {% endif %}
+        {% endif %}
         {% if current_user.is_bat %}
         <div class="bat-controls">
             <details {% if bat_error or bat_info %}open{% endif %}>
