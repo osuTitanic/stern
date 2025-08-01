@@ -77,6 +77,10 @@ def get_beatmap(id: int):
             Genre=BeatmapGenre,
             scores=beatmap_scores,
             collaborations=collaborations.fetch_by_beatmap(beatmap.id, session=session),
+            collaboration_requests=(
+                collaborations.fetch_requests_outgoing(beatmap.id, session=session)
+                if current_user.is_authenticated and beatmap.status <= 0 else []
+            ),
             favourites_count=favourites.fetch_count_by_set(beatmap.set_id, session=session),
             favourites=favourites.fetch_many_by_set(beatmap.set_id, session=session),
             favorite=(
@@ -88,7 +92,6 @@ def get_beatmap(id: int):
             site_title=f"{beatmap.full_name} - Beatmap Info",
             personal_best=personal_best,
             personal_best_rank=personal_best_rank,
-            bat_error=request.args.get('bat_error'),
             bat_nomination=(
                 nominations.fetch_one(beatmap.set_id, current_user.id, session)
                 if current_user.is_authenticated else None
