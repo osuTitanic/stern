@@ -42,6 +42,7 @@ function copySetId(element) {
 }
 
 function editBeatmapDescription() {
+    // TODO: Move this endpoint to the new API
     var description = document.querySelector('.beatmap-description .bbcode');
     if (!description) { return; }
 
@@ -102,6 +103,22 @@ function setBeatmapVolume(volume) {
     if (beatmapPreview) {
         beatmapPreview.volume = volume;
     }
+}
+
+function acceptCollaborationRequest(beatmapId, requestId) {
+    var url = "/beatmaps/" + beatmapId + "/collaborations/requests/" + requestId + "/accept";
+
+    performApiRequest("POST", url, null, function(xhr) {
+        window.location.reload();
+    });
+}
+
+function rejectCollaborationRequest(beatmapId, requestId) {
+    var url = "/beatmaps/" + beatmapId + "/collaborations/requests/" + requestId;
+
+    performApiRequest("DELETE", url, null, function(xhr) {
+        window.location.reload();
+    });
 }
 
 addEvent('DOMContentLoaded', document, function() {

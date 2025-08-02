@@ -273,6 +273,11 @@
     margin-right: 5px;
 }
 
+.collaboration-management {
+    border-bottom: 1px solid #cfc1ef;
+    padding: 10px;
+}
+
 .bat-controls {
     margin: 5px;
 }
