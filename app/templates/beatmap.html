@@ -252,10 +252,65 @@
                 </div>
                 {% endif %}
             {% else %}
-            <!--
                 <div class="collaboration-management">
+                    <details {% if bat_error or bat_info %}open{% endif %}>
+                        <summary>Collaboration</summary>
+                        <table>
+                            <thead>
+                                <th><h2>Collaborators</h2></th>
+                                <th><h2>Pending Invites</h2></th>
+                            </thead>
+                            <tbody>
+                                <td>
+                                    {% if not collaborations %}
+                                    <p>No collaborators yet. Why not invite one?</p>
+                                    {% endif %}
+                                    <table>
+                                    {% for collaboration in collaborations %}
+                                    <tr>
+                                        <td>
+                                            <a href="/u/{{ collaboration.user.id }}">{{ collaboration.user.name }}</a>
+                                            {% if collaboration.is_beatmap_author %} (Author) {% endif %}
+                                        </td>
+                                        <td>
+                                            <button onclick="removeCollaboration({{ beatmap.id }}, {{ collaboration.id }})" style="color: red">Remove</button>
+                                            {% if collaborations|length == 1 %}
+                                                {% if not collaboration.is_beatmap_author %}
+                                                <button title="This will make the user show up as the creator of the beatmap">
+                                                    Make Author
+                                                </button>
+                                                {% else %}
+                                                <button>
+                                                    Remove Author Status
+                                                </button>
+                                                {% endif %}
+                                            {% endif %}
+                                            {% if not collaboration.allow_resource_updates %}
+                                            <button title="This will allow the user to upload images, storyboards, and other resources to your beatmapset">
+                                                Allow Resource Updates
+                                            </button>
+                                            {% else %}
+                                            <button>
+                                                Disallow Resource Updates
+                                            </button>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    </table>
+                                </td>
+                                <td style="min-width: 50%">
+                                    {% if not collaboration_requests %}
+                                    <p>
+                                        No pending invites.
+                                        <a href="#">Invite someone!</a>
+                                    </p>
+                                    {% endif %}
+                                </td>
+                            </tbody>
+                        </table>
+                    </details>
                 </div>
-            -->
             {% endif %}
         {% endif %}
         {% if current_user.is_bat %}

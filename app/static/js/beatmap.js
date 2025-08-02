@@ -114,6 +114,9 @@ function acceptCollaborationRequest(beatmapId, requestId) {
 }
 
 function rejectCollaborationRequest(beatmapId, requestId) {
+    if (!confirm("Are you sure you want to decline?"))
+        return;
+
     var url = "/beatmaps/" + beatmapId + "/collaborations/requests/" + requestId;
 
     performApiRequest("DELETE", url, null, function(xhr) {

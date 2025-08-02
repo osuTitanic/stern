@@ -278,6 +278,22 @@
     padding: 10px;
 }
 
+.collaboration-management thead h2 {
+    padding-bottom: 5px;
+}
+
+.collaboration-management td {
+    border: none;
+    padding: 5px;
+    padding-top: 0;
+}
+
+.collaboration-management button {
+    padding: 1px;
+    padding-right: 4px;
+    padding-left: 4px;
+}
+
 .bat-controls {
     margin: 5px;
 }
