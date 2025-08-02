@@ -240,7 +240,7 @@
                 </td>
             </tr>
         </table>
-        {% if beatmapset.server != 0 %}
+        {% if beatmapset.server != 0 and beatmapset.status <= 0 %}
             {% if current_user.id != beatmapset.creator_id %}
                 {% set invite = collaboration_requests|selectattr("target_id", "eq", current_user.id)|first %}
                 {% if invite %}
@@ -303,9 +303,17 @@
                                     {% if not collaboration_requests %}
                                     <p>
                                         No pending invites.
-                                        <a href="#">Invite someone!</a>
+                                        <a href="#" onclick="createCollaborationRequest({{ beatmap.id }})">Invite someone!</a>
                                     </p>
                                     {% endif %}
+                                    <div class="invite-container">
+                                        {% for invite in collaboration_requests %}
+                                        <div class="invite">
+                                            <a href="/u/{{ invite.target.id }}">{{ invite.target.name }}</a>
+                                            <button onclick="rejectCollaborationRequest({{ beatmap.id }}, {{ invite.id }})" style="color: red">Remove</button>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
                                 </td>
                             </tbody>
                         </table>

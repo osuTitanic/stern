@@ -124,6 +124,34 @@ function rejectCollaborationRequest(beatmapId, requestId) {
     });
 }
 
+function createCollaborationRequest(beatmapId) {
+    var username = prompt("Enter the username of the user you want to collaborate with:");
+    if (!username) {
+        return;
+    }
+
+    var url = "/users/lookup/" + username;
+
+    performApiRequest("GET", url, null, function(xhr) {
+        user = JSON.parse(xhr.responseText);
+        createCollaborationRequestFromUserId(user.id, beatmapId);
+    }, function(xhr) {
+        if (xhr.status === 404) {
+            alert("User not found. Please check the username and try again.");
+        } else {
+            alert("An error occurred while looking up the user.");
+        }
+    });
+}
+
+function createCollaborationRequestFromUserId(userId, beatmapId) {
+    var url = "/beatmaps/" + beatmapId + "/collaborations/requests";
+
+    performApiRequest("POST", url, { user_id: userId }, function(xhr) {
+        window.location.reload();
+    });
+}
+
 addEvent('DOMContentLoaded', document, function() {
     var url = window.location.pathname;
     if (!url.startsWith('/b/') && !url.startsWith('/s/')) {

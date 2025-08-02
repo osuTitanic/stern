@@ -294,6 +294,21 @@
     padding-left: 4px;
 }
 
+.invite-container {
+	max-height: 100px;
+	display: flex;
+	flex-wrap: wrap;
+	grid-gap: 1em;
+	flex-direction: column;
+    overflow: auto;
+}
+
+.invite {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .bat-controls {
     margin: 5px;
 }
