@@ -310,11 +310,13 @@
                                         {% for invite in collaboration_requests %}
                                         <div class="invite">
                                             <a href="/u/{{ invite.target.id }}">{{ invite.target.name }}</a>
-                                            <button onclick="rejectCollaborationRequest({{ beatmap.id }}, {{ invite.id }})" style="color: red">Remove</button>
+                                            <button onclick="removeCollaborationRequest({{ beatmap.id }}, {{ invite.id }})" style="color: red">Remove</button>
                                         </div>
                                         {% endfor %}
                                     </div><br>
-                                    <button class="invite-button">Invite</button>
+                                    <button class="invite-button" onclick="createCollaborationRequest({{ beatmap.id }})">
+                                        Invite
+                                    </button>
                                     {% endif %}
                                 </td>
                             </tbody>

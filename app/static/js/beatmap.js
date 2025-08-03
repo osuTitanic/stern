@@ -124,6 +124,17 @@ function rejectCollaborationRequest(beatmapId, requestId) {
     });
 }
 
+function removeCollaborationRequest(beatmapId, requestId) {
+    if (!confirm("Are you sure?"))
+        return;
+
+    var url = "/beatmaps/" + beatmapId + "/collaborations/requests/" + requestId;
+
+    performApiRequest("DELETE", url, null, function(xhr) {
+        window.location.reload();
+    });
+}
+
 function createCollaborationRequest(beatmapId) {
     var username = prompt("Enter the username of the user you want to collaborate with:");
     if (!username) {
