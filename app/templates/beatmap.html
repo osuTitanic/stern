@@ -305,7 +305,7 @@
                                         No pending invites.
                                         <a href="#" onclick="createCollaborationRequest({{ beatmap.id }})">Invite someone!</a>
                                     </p>
-                                    {% endif %}
+                                    {% else %}
                                     <div class="invite-container">
                                         {% for invite in collaboration_requests %}
                                         <div class="invite">
@@ -313,7 +313,9 @@
                                             <button onclick="rejectCollaborationRequest({{ beatmap.id }}, {{ invite.id }})" style="color: red">Remove</button>
                                         </div>
                                         {% endfor %}
-                                    </div>
+                                    </div><br>
+                                    <button class="invite-button">Invite</button>
+                                    {% endif %}
                                 </td>
                             </tbody>
                         </table>

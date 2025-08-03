@@ -301,6 +301,13 @@
 	grid-gap: 1em;
 	flex-direction: column;
     overflow: auto;
+    align-content: center;
+}
+
+.invite-button {
+    display: block;
+    text-align: center;
+    margin: 0 auto;
 }
 
 .invite {
