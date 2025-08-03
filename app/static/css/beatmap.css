@@ -295,25 +295,25 @@
 }
 
 .invite-container {
-	max-height: 100px;
-	display: flex;
-	flex-wrap: wrap;
-	grid-gap: 1em;
-	flex-direction: column;
+    max-height: 100px;
+    display: grid;
+    row-gap: 1em;
     overflow: auto;
     align-content: center;
+    align-items: center;
+    justify-items: center;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+}
+
+.invite {
+    display: grid;
+    justify-items: center;
 }
 
 .invite-button {
     display: block;
     text-align: center;
     margin: 0 auto;
-}
-
-.invite {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
 }
 
 .bat-controls {
