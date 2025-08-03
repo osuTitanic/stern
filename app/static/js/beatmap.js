@@ -110,6 +110,8 @@ function acceptCollaborationRequest(beatmapId, requestId) {
 
     performApiRequest("POST", url, null, function(xhr) {
         window.location.reload();
+    }, function(xhr) {
+        showError(xhr, "An error occurred while trying to accept the invite.");
     });
 }
 
@@ -121,6 +123,8 @@ function rejectCollaborationRequest(beatmapId, requestId) {
 
     performApiRequest("DELETE", url, null, function(xhr) {
         window.location.reload();
+    }, function(xhr) {
+        showError(xhr, "An error occurred while trying to decline the invite.");
     });
 }
 
@@ -132,6 +136,8 @@ function removeCollaborationRequest(beatmapId, requestId) {
 
     performApiRequest("DELETE", url, null, function(xhr) {
         window.location.reload();
+    }, function(xhr) {
+        showError(xhr, "An error occurred while trying to delete your invite.");
     });
 }
 
@@ -160,7 +166,94 @@ function createCollaborationRequestFromUserId(userId, beatmapId) {
 
     performApiRequest("POST", url, { user_id: userId }, function(xhr) {
         window.location.reload();
+    }, function(xhr) {
+        showError(xhr, "An error occurred while creating your invite.");
     });
+}
+
+function editCollaborationRequest(beatmapId, collaborationId, edits) {
+    var url = "/beatmaps/" + beatmapId + "/collaborations/" + collaborationId;
+
+    performApiRequest("PATCH", url, edits, function(xhr) {
+        window.location.reload();
+    }, function(xhr) {
+        showError(xhr, "An error occurred while editing the collaboration invite.");
+    });
+}
+
+function removeCollaboration(beatmapId, collaborationId) {
+    if (!confirm("Are you sure you want to remove this collaborator?")) {
+        return;
+    }
+
+    var url = "/beatmaps/" + beatmapId + "/collaborations/" + collaborationId;
+
+    performApiRequest("DELETE", url, null, function(xhr) {
+        window.location.reload();
+    }, function(xhr) {
+        showError(xhr, "An error occurred while trying to remove the collaborator.");
+    });
+}
+
+function collaborationMakeAuthor(beatmapId, collaborationId) {
+    return editCollaborationRequest(
+        beatmapId, collaborationId,
+        {
+            allow_resource_updates: canUpdateResources(collaborationId),
+            is_beatmap_author: true
+        }
+    );
+}
+
+function collaborationRemoveAuthor(beatmapId, collaborationId) {
+    return editCollaborationRequest(
+        beatmapId, collaborationId,
+        {
+            allow_resource_updates: canUpdateResources(collaborationId),
+            is_beatmap_author: false
+        }
+    );
+}
+
+function collaborationAllowResourceUpdates(beatmapId, collaborationId) {
+    return editCollaborationRequest(
+        beatmapId, collaborationId,
+        {
+            allow_resource_updates: true,
+            is_beatmap_author: isBeatmapAuthor(collaborationId)
+        }
+    );
+}
+
+function collaborationDisallowResourceUpdates(beatmapId, collaborationId) {
+    return editCollaborationRequest(
+        beatmapId, collaborationId,
+        {
+            allow_resource_updates: false,
+            is_beatmap_author: isBeatmapAuthor(collaborationId)
+        }
+    );
+}
+
+function isBeatmapAuthor(collaborationId) {
+    var collaborator = document.getElementById('collaborator-' + collaborationId);
+    return collaborator.innerHTML.includes('Remove Author Status');
+}
+
+function canUpdateResources(collaborationId) {
+    var collaborator = document.getElementById('collaborator-' + collaborationId);
+    return collaborator.innerHTML.includes('Disallow Resource Updates');
+}
+
+function showError(xhr, defaultMessage) {
+    var errorMessage = defaultMessage || "An error occurred while processing your request.";
+    try {
+        var response = JSON.parse(xhr.responseText);
+        errorMessage = response.details;
+    } catch (e) {
+        console.error("Failed to parse error response:", e);
+    }
+    alert(errorMessage);
 }
 
 addEvent('DOMContentLoaded', document, function() {

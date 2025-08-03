@@ -263,7 +263,14 @@
                             <tbody>
                                 <td>
                                     {% if not collaborations %}
-                                    <p>No collaborators yet. Why not invite one?</p>
+                                    <p>
+                                        No collaborators yet.
+                                        {% if not collaboration_requests %}
+                                        Why not invite one?
+                                        {% else %}
+                                        Please wait for an invite to be accepted.
+                                        {% endif %}
+                                    </p>
                                     {% endif %}
                                     <table>
                                     {% for collaboration in collaborations %}
@@ -272,25 +279,25 @@
                                             <a href="/u/{{ collaboration.user.id }}">{{ collaboration.user.name }}</a>
                                             {% if collaboration.is_beatmap_author %} (Author) {% endif %}
                                         </td>
-                                        <td>
-                                            <button onclick="removeCollaboration({{ beatmap.id }}, {{ collaboration.id }})" style="color: red">Remove</button>
+                                        <td class="collaborator" id="collaborator-{{ collaboration.user_id }}">
+                                            <button onclick="removeCollaboration({{ beatmap.id }}, {{ collaboration.user_id }})" style="color: red">Remove</button>
                                             {% if collaborations|length == 1 %}
                                                 {% if not collaboration.is_beatmap_author %}
-                                                <button title="This will make the user show up as the creator of the beatmap">
+                                                <button onclick="collaborationMakeAuthor({{ beatmap.id }}, {{ collaboration.user_id }})" title="This will make the user show up as the creator of the beatmap">
                                                     Make Author
                                                 </button>
                                                 {% else %}
-                                                <button>
+                                                <button onclick="collaborationRemoveAuthor({{ beatmap.id }}, {{ collaboration.user_id }})">
                                                     Remove Author Status
                                                 </button>
                                                 {% endif %}
                                             {% endif %}
                                             {% if not collaboration.allow_resource_updates %}
-                                            <button title="This will allow the user to upload images, storyboards, and other resources to your beatmapset">
+                                            <button onclick="collaborationAllowResourceUpdates({{ beatmap.id }}, {{ collaboration.user_id }})" title="This will allow the user to upload images, storyboards, and other resources to your beatmapset">
                                                 Allow Resource Updates
                                             </button>
                                             {% else %}
-                                            <button>
+                                            <button onclick="collaborationDisallowResourceUpdates({{ beatmap.id }}, {{ collaboration.user_id }})">
                                                 Disallow Resource Updates
                                             </button>
                                             {% endif %}
@@ -299,7 +306,7 @@
                                     {% endfor %}
                                     </table>
                                 </td>
-                                <td style="min-width: 50%">
+                                <td style="min-width: 40%">
                                     {% if not collaboration_requests %}
                                     <p>
                                         No pending invites.
