@@ -105,11 +105,7 @@
                 {% if beatmapset.server == 0 %}
                     <a href="https://osu.ppy.sh/u/{{ beatmapset.creator }}">{{ beatmapset.creator }}</a>
                 {% else %}
-                    {% if collaborations|length == 1 and (collaborations|first).is_beatmap_author %}
-                    <a href="/u/{{ (collaborations|first).user_id }}">{{ (collaborations|first).user.name }}</a>
-                    {% else %}
                     <a href="/u/{{ beatmapset.creator_id }}">{{ beatmapset.creator }}</a>
-                    {% endif %}
                 {% endif %}
                 </td>
                 <td>Accuracy:</td>
@@ -209,10 +205,15 @@
                     </a>
                     {% endfor %}
                 </td>
+                {% elif collaborations %}
+                <td>Mapped by:</td>
+                <td>
+                    <a href="/u/{{ (collaborations|first).user.id }}">{{ (collaborations|first).user.name }}</a>
+                </td>
                 {% endif %}
                 {% if display_nominations %}
                 <td>Nominators:</td>
-                <td colspan="{% if display_collaborations %}1{% else %}3{% endif %}">
+                <td colspan="{% if collaborations %}1{% else %}3{% endif %}">
                     {% if not nominations %}
                     <p>No one has nominated this map yet.</p>
                     {% else %}
