@@ -1,4 +1,5 @@
 
+from app.common.constants import OSU_CHAT_LINK_MODERN
 from app.common.database import DBForumTopic, DBForum, DBUser
 from app.common.helpers import activity
 from datetime import datetime, timedelta
@@ -106,13 +107,12 @@ def format_chat(text: str) -> str:
                .replace(">", "&gt;")
 
     # Replace chat links with html links
-    pattern = r'\[([^\s\]]+)\s+(.+?)\]'
     replacement = r'<a href="\1">\2</a>'
-    result = re.sub(pattern, replacement, text)
+    result = OSU_CHAT_LINK_MODERN.sub(replacement, text)
 
     # Remove action text
-    result = result.replace('\x01ACTION', '') \
-                   .replace('\x01', '')
+    result = result.removeprefix('\x01ACTION') \
+                   .removesuffix('\x01')
 
     return result
 
