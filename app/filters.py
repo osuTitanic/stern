@@ -15,6 +15,20 @@ import utils
 import math
 import re
 
+REPLACE_ESCAPE = (
+    ("&", "&amp;"),
+    ("<", "&lt;"),
+    (">", "&gt;"),
+    ('"', "&quot;"),
+    ("'", "&#39;"),
+)
+
+REPLACE_COSMETIC = (
+    ("(c)", "&copy;"),
+    ("(reg)", "&reg;"),
+    ("(tm)", "&trade;"),
+)
+
 @flask.template_filter('any')
 def any_filter(value: list) -> bool:
     return any(value)
@@ -103,14 +117,17 @@ def jinja2_strftime(date: datetime, format='%m/%d/%Y, %H:%M:%S'):
 @flask.template_filter('format_chat')
 def format_chat(text: str) -> str:
     # Sanitize input text
-    text = text.replace("<","&lt") \
-               .replace(">", "&gt;")
+    for sequence, replace in REPLACE_ESCAPE:
+        text = text.replace(sequence, replace)
+
+    for sequence, replace in REPLACE_COSMETIC:
+        text = text.replace(sequence, replace)
 
     # Replace chat links with html links
     replacement = r'<a href="\1">\2</a>'
     result = OSU_CHAT_LINK_MODERN.sub(replacement, text)
 
-    # Remove action text
+    # Remove /me text
     result = result.removeprefix('\x01ACTION') \
                    .removesuffix('\x01')
 
