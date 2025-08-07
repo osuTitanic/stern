@@ -325,7 +325,7 @@
                             {% set top_100_rscore = score_rank <= 100 and score_rank != 0 %}
                             <h3 class="profile-stats-header">Detailed Stats</h3>
                             <h4 class="profile-stats-element {% if top_100_rscore %}profile-stats-element-blue{% endif %}" title="Ranked Score consists of all your highest passing scores you have achieved. If you beat a score, only the difference between them will be added.">
-                                <b>Ranked Score</b>: {{ "{:,}".format(current_stats.rscore) }} {% if score_rank > 0 %} #{{ "{:,}".format(score_rank) }} {% endif %}
+                                <b>Ranked Score</b>: {{ "{:,}".format(current_stats.rscore) }} {% if score_rank > 0 %} (#{{ "{:,}".format(score_rank) }}) {% endif %}
                             </h4>
                             <br>
                             <h4 class="profile-stats-element" title="Accuracy is calculated as a pp-weighted average of every beatmap you have achieved a passing score in, with each difficulty counting separately. Accuracy is calculated based on the hit score value - so a 50 is worth 1/6th of a 300 hit, and a miss is worth nothing.">
@@ -341,7 +341,7 @@
                             </h4>
                             <br>
                             <h4 class="profile-stats-element {% if top_100_tscore %}profile-stats-element-blue{% endif %}" title="Total points scored in all ranked beatmap plays. This includes both passes and fails.">
-                                <b>Total Score</b>: {{ "{:,}".format(current_stats.tscore) }} {% if total_score_rank > 0 %} #{{ "{:,}".format(total_score_rank) }} {% endif %}
+                                <b>Total Score</b>: {{ "{:,}".format(current_stats.tscore) }} {% if total_score_rank > 0 %} (#{{ "{:,}".format(total_score_rank) }}) {% endif %}
                             </h4>
                             <br>
                             {% set level_precise = current_stats.tscore|get_level %}
