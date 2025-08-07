@@ -62,9 +62,6 @@ def refresh_access_token(response: Response) -> Response:
     if request.cookies.get('access_token'):
         return response
 
-    if "_user_id" in session:
-        return accounts.perform_login_migration(response)
-    
     if not (refresh_token := request.cookies.get('refresh_token')):
         return response
 

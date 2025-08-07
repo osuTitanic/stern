@@ -53,23 +53,6 @@ def perform_logout(response: Response | None = None) -> Response:
     flask_login.logout_user()
     return response
 
-def perform_login_migration(response: Response | None = None) -> Response:
-    """"
-    We are currently changing the authentication system from session-based
-    to token-based, for eventually making use of the new api. This function
-    ensures that the user is logged in using the new token-based system.
-    """
-    if not flask_login.current_user.is_authenticated:
-        return response
-
-    # Use the session-based user to generate a token
-    response = perform_login(flask_login.current_user, response=response)
-
-    # Remove the session-based user
-    flask_login.logout_user()
-
-    return response
-
 def generate_token(user: DBUser, expiry: int) -> str:
     return jwt.encode(
         {
