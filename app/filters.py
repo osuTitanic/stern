@@ -235,7 +235,9 @@ def format_activity(entry: common.database.DBActivity) -> str:
     if not (result_text := formatter(entry)):
         return ""
 
-    return format_chat(result_text)
+    # Replace chat links with html links
+    replacement = r'<a href="\1">\2</a>'
+    return OSU_CHAT_LINK_MODERN.sub(replacement, result_text)
 
 @flask.template_filter('avatar_url')
 def avatar_url(user: DBUser, size: int | None = None) -> str:
