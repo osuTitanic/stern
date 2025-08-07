@@ -556,6 +556,36 @@
                     </div>
                     {% endif %}
                     {% endfor %}
+                    {% if collaborations %}
+                    <div class="collaborations">
+                        <h2 class="profile-stats-header">
+                            <a onclick="toggleBeatmapContainer(this.parentNode.parentNode)">
+                                Guest Participation Beatmaps ({{ collaborations|length }})
+                            </a>
+                        </h2>
+                        <div class="profile-beatmaps-container">
+                            {% for beatmap in collaborations %}
+                            <table class="profile-beatmap">
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <a href="/b/{{ beatmap.id }}" class="profile-beatmap-description">
+                                                <b>{{ beatmap.full_name }}</b>
+                                            </a>
+                                            <br>
+                                            <a href="/u/{{ beatmap.beatmapset.creator_id }}">created by {{ beatmap.beatmapset.creator }}</a>
+                                        </td>
+                                        <td style="width: 80px; height: 60px">
+                                            <img src="/mt/{{ beatmap.set_id }}" alt="" loading="lazy">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            {% endfor %}
+                            <div style="clear: both"></div>
+                        </div>
+                    </div>
+                    {% endif %}
                     {% if user.is_bat or nominations %}
                     <div>
                         <h2 class="profile-stats-header">
