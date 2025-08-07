@@ -1,4 +1,5 @@
 
+from app.common.constants import OSU_CHAT_LINK_MODERN
 from app.common.database import DBForumTopic, DBForum, DBUser
 from app.common.helpers import activity
 from datetime import datetime, timedelta
@@ -13,6 +14,20 @@ import timeago
 import utils
 import math
 import re
+
+REPLACE_ESCAPE = (
+    ("&", "&amp;"),
+    ("<", "&lt;"),
+    (">", "&gt;"),
+    ('"', "&quot;"),
+    ("'", "&#39;"),
+)
+
+REPLACE_COSMETIC = (
+    ("(c)", "&copy;"),
+    ("(reg)", "&reg;"),
+    ("(tm)", "&trade;"),
+)
 
 @flask.template_filter('any')
 def any_filter(value: list) -> bool:
@@ -102,17 +117,19 @@ def jinja2_strftime(date: datetime, format='%m/%d/%Y, %H:%M:%S'):
 @flask.template_filter('format_chat')
 def format_chat(text: str) -> str:
     # Sanitize input text
-    text = text.replace("<","&lt") \
-               .replace(">", "&gt;")
+    for sequence, replace in REPLACE_ESCAPE:
+        text = text.replace(sequence, replace)
+
+    for sequence, replace in REPLACE_COSMETIC:
+        text = text.replace(sequence, replace)
 
     # Replace chat links with html links
-    pattern = r'\[([^\s\]]+)\s+(.+?)\]'
     replacement = r'<a href="\1">\2</a>'
-    result = re.sub(pattern, replacement, text)
+    result = OSU_CHAT_LINK_MODERN.sub(replacement, text)
 
-    # Remove action text
-    result = result.replace('\x01ACTION', '') \
-                   .replace('\x01', '')
+    # Remove /me text
+    result = result.removeprefix('\x01ACTION') \
+                   .removesuffix('\x01')
 
     return result
 
@@ -218,4 +235,26 @@ def format_activity(entry: common.database.DBActivity) -> str:
     if not (result_text := formatter(entry)):
         return ""
 
-    return format_chat(result_text)
+    # Replace chat links with html links
+    replacement = r'<a href="\1">\2</a>'
+    return OSU_CHAT_LINK_MODERN.sub(replacement, result_text)
+
+@flask.template_filter('avatar_url')
+def avatar_url(user: DBUser, size: int | None = None) -> str:
+    url_args = {}
+
+    if size:
+        url_args['s'] = f'{size}'
+
+    if user.avatar_hash:
+        url_args['c'] = user.avatar_hash
+
+    if not url_args:
+        return f'/a/{user.id}'
+
+    url_args_string = "&".join(
+        f"{k}={v}"
+        for k, v in url_args.items()
+    )
+
+    return f'/a/{user.id}?{url_args_string}'

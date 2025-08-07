@@ -92,7 +92,7 @@ def update_hashes(set_id: int):
                 )
         except Exception as e:
             app.session.logger.warning(f'Failed to update hashes: {e}')
-            return redirect(f'/b/{beatmap.id}?bat_error=Failed to update beatmap hashes.')
+            return redirect(f'/b/{beatmap.id}')
 
     return redirect(f'/s/{beatmapset.id}')
 

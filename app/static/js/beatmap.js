@@ -42,6 +42,7 @@ function copySetId(element) {
 }
 
 function editBeatmapDescription() {
+    // TODO: Move this endpoint to the new API
     var description = document.querySelector('.beatmap-description .bbcode');
     if (!description) { return; }
 
@@ -102,6 +103,157 @@ function setBeatmapVolume(volume) {
     if (beatmapPreview) {
         beatmapPreview.volume = volume;
     }
+}
+
+function acceptCollaborationRequest(beatmapId, requestId) {
+    var url = "/beatmaps/" + beatmapId + "/collaborations/requests/" + requestId + "/accept";
+
+    performApiRequest("POST", url, null, function(xhr) {
+        window.location.reload();
+    }, function(xhr) {
+        showError(xhr, "An error occurred while trying to accept the invite.");
+    });
+}
+
+function rejectCollaborationRequest(beatmapId, requestId) {
+    if (!confirm("Are you sure you want to decline?"))
+        return;
+
+    var url = "/beatmaps/" + beatmapId + "/collaborations/requests/" + requestId;
+
+    performApiRequest("DELETE", url, null, function(xhr) {
+        window.location.reload();
+    }, function(xhr) {
+        showError(xhr, "An error occurred while trying to decline the invite.");
+    });
+}
+
+function removeCollaborationRequest(beatmapId, requestId) {
+    if (!confirm("Are you sure?"))
+        return;
+
+    var url = "/beatmaps/" + beatmapId + "/collaborations/requests/" + requestId;
+
+    performApiRequest("DELETE", url, null, function(xhr) {
+        window.location.reload();
+    }, function(xhr) {
+        showError(xhr, "An error occurred while trying to delete your invite.");
+    });
+}
+
+function createCollaborationRequest(beatmapId) {
+    var username = prompt("Enter the username of the user you want to collaborate with:");
+    if (!username) {
+        return;
+    }
+
+    var url = "/users/lookup/" + username;
+
+    performApiRequest("GET", url, null, function(xhr) {
+        user = JSON.parse(xhr.responseText);
+        createCollaborationRequestFromUserId(user.id, beatmapId);
+    }, function(xhr) {
+        if (xhr.status === 404) {
+            alert("User not found. Please check the username and try again.");
+        } else {
+            alert("An error occurred while looking up the user.");
+        }
+    });
+}
+
+function createCollaborationRequestFromUserId(userId, beatmapId) {
+    var url = "/beatmaps/" + beatmapId + "/collaborations/requests";
+
+    performApiRequest("POST", url, { user_id: userId }, function(xhr) {
+        window.location.reload();
+    }, function(xhr) {
+        showError(xhr, "An error occurred while creating your invite.");
+    });
+}
+
+function editCollaborationRequest(beatmapId, collaborationId, edits) {
+    var url = "/beatmaps/" + beatmapId + "/collaborations/" + collaborationId;
+
+    performApiRequest("PATCH", url, edits, function(xhr) {
+        window.location.reload();
+    }, function(xhr) {
+        showError(xhr, "An error occurred while editing the collaboration invite.");
+    });
+}
+
+function removeCollaboration(beatmapId, collaborationId) {
+    if (!confirm("Are you sure you want to remove this collaborator?")) {
+        return;
+    }
+
+    var url = "/beatmaps/" + beatmapId + "/collaborations/" + collaborationId;
+
+    performApiRequest("DELETE", url, null, function(xhr) {
+        window.location.reload();
+    }, function(xhr) {
+        showError(xhr, "An error occurred while trying to remove the collaborator.");
+    });
+}
+
+function collaborationMakeAuthor(beatmapId, collaborationId) {
+    return editCollaborationRequest(
+        beatmapId, collaborationId,
+        {
+            allow_resource_updates: canUpdateResources(collaborationId),
+            is_beatmap_author: true
+        }
+    );
+}
+
+function collaborationRemoveAuthor(beatmapId, collaborationId) {
+    return editCollaborationRequest(
+        beatmapId, collaborationId,
+        {
+            allow_resource_updates: canUpdateResources(collaborationId),
+            is_beatmap_author: false
+        }
+    );
+}
+
+function collaborationAllowResourceUpdates(beatmapId, collaborationId) {
+    return editCollaborationRequest(
+        beatmapId, collaborationId,
+        {
+            allow_resource_updates: true,
+            is_beatmap_author: isBeatmapAuthor(collaborationId)
+        }
+    );
+}
+
+function collaborationDisallowResourceUpdates(beatmapId, collaborationId) {
+    return editCollaborationRequest(
+        beatmapId, collaborationId,
+        {
+            allow_resource_updates: false,
+            is_beatmap_author: isBeatmapAuthor(collaborationId)
+        }
+    );
+}
+
+function isBeatmapAuthor(collaborationId) {
+    var collaborator = document.getElementById('collaborator-' + collaborationId);
+    return collaborator.innerHTML.includes('Remove Author Status');
+}
+
+function canUpdateResources(collaborationId) {
+    var collaborator = document.getElementById('collaborator-' + collaborationId);
+    return collaborator.innerHTML.includes('Disallow Resource Updates');
+}
+
+function showError(xhr, defaultMessage) {
+    var errorMessage = defaultMessage || "An error occurred while processing your request.";
+    try {
+        var response = JSON.parse(xhr.responseText);
+        errorMessage = response.details;
+    } catch (e) {
+        console.error("Failed to parse error response:", e);
+    }
+    alert(errorMessage);
 }
 
 addEvent('DOMContentLoaded', document, function() {

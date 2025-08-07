@@ -1,4 +1,5 @@
 
+from config import DEBUG
 from app import session
 from git import Repo
 
@@ -6,7 +7,11 @@ current_repository: Repo | None = None
 
 def initialize_repository() -> None:
     global current_repository
-    
+
+    # Disable git in debug mode
+    if DEBUG:
+        return
+
     try:
         current_repository = Repo(search_parent_directories=True)
     except Exception as e:

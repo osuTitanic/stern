@@ -135,7 +135,7 @@ function setText(elem, text) {
 }
 
 function isLoggedIn() {
-    return document.getElementById('welcome-text').innerText != 'Welcome, guest!'
+    return currentUser !== null;
 }
 
 function isArray(obj) {
