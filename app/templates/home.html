@@ -134,9 +134,9 @@
                             </a>
                         </td>
                     {% if beatmap.server == 0 %}
-                        <td><a href="https://osu.ppy.sh/u/{{ beatmap.creator }}">{{ beatmap.creator }}</a></td>
+                        <td><a href="https://osu.ppy.sh/u/{{ beatmap.beatmapset.creator }}">{{ beatmap.beatmapset.creator }}</a></td>
                     {% else %}
-                        <td><a href="/u/{{ beatmap.creator_id }}">{{ beatmap.creator }}</a></td>
+                        <td><a href="/u/{{ beatmap.beatmapset.creator_id }}">{{ beatmap.beatmapset.creator }}</a></td>
                     {% endif %}
                     </tr>
                 {% endfor %}
