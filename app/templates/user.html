@@ -322,7 +322,7 @@
                         </div>
                         <div class="profile-detailed-stats">
                             <h3 class="profile-stats-header">Detailed Stats</h3>
-                            <h4 class="profile-stats-element profile-stats-element-rscore" title="Ranked Score consists of all your highest passing scores you have achieved. If you beat a score, only the difference between them will be added.">
+                            <h4 class="profile-stats-element {% if score_rank <= 100 %}profile-stats-element-blue{% endif %}" title="Ranked Score consists of all your highest passing scores you have achieved. If you beat a score, only the difference between them will be added.">
                                 <b>Ranked Score</b>: {{ "{:,}".format(current_stats.rscore) }}
                             </h4>
                             <br>
@@ -338,7 +338,7 @@
                                 <b>Play Time</b>: {{ (current_stats.playtime / 60 / 60)|round(1) }} hours
                             </h4>
                             <br>
-                            <h4 class="profile-stats-element" title="Total points scored in all ranked beatmap plays. This includes both passes and fails.">
+                            <h4 class="profile-stats-element {% if total_score_rank <= 100 %}profile-stats-element-blue{% endif %}" title="Total points scored in all ranked beatmap plays. This includes both passes and fails.">
                                 <b>Total Score</b>: {{ "{:,}".format(current_stats.tscore) }}
                             </h4>
                             <br>

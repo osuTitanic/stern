@@ -68,6 +68,7 @@ def userpage(query: str):
         pp_rank_country = leaderboards.country_rank(user.id, int(mode), user.country)
         score_rank = leaderboards.score_rank(user.id, int(mode))
         score_rank_country = leaderboards.score_rank_country(user.id, int(mode), user.country)
+        total_score_rank = leaderboards.total_score_rank(user.id, int(mode))
         ppv1_rank = leaderboards.ppv1_rank(user.id, int(mode))
 
         user_beatmapsets = beatmapsets.fetch_by_creator(
@@ -136,6 +137,7 @@ def userpage(query: str):
             site_url=f"{config.OSU_BASEURL}/u/{user.id}",
             canonical_url=f"/u/{user.id}",
             beatmapset_categories=beatmapset_categories,
+            total_score_rank=total_score_rank,
             pp_rank_country=pp_rank_country,
             pp_rank=pp_rank,
             score_rank_country=score_rank_country,
