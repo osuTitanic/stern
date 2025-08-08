@@ -144,6 +144,7 @@ def userpage(query: str):
             score_rank_country=score_rank_country,
             score_rank=score_rank,
             ppv1_rank=ppv1_rank,
+            firsts_rank=firsts_rank,
             followers=followers,
             infringements=infs,
             session=session
