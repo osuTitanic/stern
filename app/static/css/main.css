@@ -439,6 +439,9 @@ input[type="url"], input[type="search"] {
     text-align: center;
     padding: 5px 10px 5px 10px;
     display: inline-block;
+    -webkit-user-select: none; 
+    -moz-user-select: none;
+    -ms-user-select: none;
     user-select: none;
     font-weight: bold;
     width: 35%;
