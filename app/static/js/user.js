@@ -519,8 +519,9 @@ function loadRecentPlays(userId, mode) {
     var playsContainer = document.getElementById("recent-container");
 
     performApiRequest("GET", url, null, function(xhr) {
-        var scores = JSON.parse(xhr.responseText);
-        if (scores.length <= 0) {
+        var response = JSON.parse(xhr.responseText);
+        var scores = response.scores;
+        if (response.total <= 0) {
             playsContainer.appendChild(
                 document.createTextNode("No recent scores set by this player :(")
             );
