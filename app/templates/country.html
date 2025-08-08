@@ -14,7 +14,7 @@
 </div>
 <div class="centered">
     <div class="pagination">
-        Displaying {{ page }} of {{ total_pages }} results.
+        Displaying {{ page }} of {{ total_pages }} result{{ 's' if total_pages != 1 }}.
         <br>
         {% if total_pages > 1 %}
             {# "Previous" Button #}
@@ -121,7 +121,7 @@
 {% if total_pages > 1 %}
 <div class="centered" style="margin: 25px !important;">
     <div class="pagination">
-        Displaying {{ page }} of {{ total_pages }} results.
+        Displaying {{ page }} of {{ total_pages }} result{{ 's' if total_pages != 1 }}.
         <br>
         {% if total_pages > 1 %}
             {# "Previous" Button #}
