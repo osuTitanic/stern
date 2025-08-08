@@ -411,7 +411,7 @@ function loadLeaderScores(userId, mode, limit, offset) {
         // Update total score count
         var heading = document.getElementById('leader-scores').getElementsByTagName('h2')[0]
         var leaderScoresText = 'First Place Ranks';
-        var rankTextReg = new RegExp('#([0-9,\.]+');
+        var rankTextReg = new RegExp('\(#([0-9,\.]+\)');
         if (heading.innerText.length > leaderScoresText.length) {
             var rankTextMatch = heading.innerText.match(rankTextReg);
             if (rankTextMatch != null) {
