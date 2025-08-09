@@ -62,4 +62,5 @@ cheaper-initial = 2 \n \
 cheaper-overload = 6 \n \
 " > uwsgi.ini
 
+STOPSIGNAL SIGQUIT
 CMD ["uwsgi", "--http", "0.0.0.0:80", "--ini", "uwsgi.ini", "-w", "app:flask", "--lazy"]
