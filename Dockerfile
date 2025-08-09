@@ -1,4 +1,4 @@
-FROM python:3.13-slim-bullseye
+FROM python:3.13-slim-bullseye AS builder
 
 # Installing/Updating system dependencies
 RUN apt update -y && \
@@ -24,12 +24,32 @@ COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt && \
     pip install --no-cache-dir uwsgi
 
+# Generate __pycache__ directories
+ENV PYTHONDONTWRITEBYTECODE=1
+RUN python -m compileall -q app
+
+FROM python:3.13-slim-bullseye
+
+# Install runtime dependencies only
+RUN apt-get update -y && \
+    apt-get install -y --no-install-recommends git \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /stern
+
+# Copy installed Python packages from builder
+COPY --from=builder /usr/local /usr/local
+COPY --from=builder /stern /stern
+
 # Copy source code
 COPY . .
 
 # Get config for deployment
 ARG FRONTEND_WORKERS=4
 ENV FRONTEND_WORKERS $FRONTEND_WORKERS
+
+# Disable output buffering
+ENV PYTHONUNBUFFERED=1
 
 RUN echo " \
 [uwsgi] \n \
@@ -41,13 +61,6 @@ cheaper = 2 \n \
 cheaper-initial = 2 \n \
 cheaper-overload = 6 \n \
 " > uwsgi.ini
-
-# Generate __pycache__ directories
-ENV PYTHONDONTWRITEBYTECODE=1
-RUN python -m compileall -q app
-
-# Disable output buffering
-ENV PYTHONUNBUFFERED=1
 
 CMD uwsgi --http 0.0.0.0:80 \
           --ini uwsgi.ini \
