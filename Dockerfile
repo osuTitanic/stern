@@ -1,6 +1,6 @@
 FROM python:3.13-slim-bullseye AS builder
 
-# Installing/Updating system dependencies
+# Installing build dependencies
 RUN apt update -y && \
     apt install -y --no-install-recommends \
         postgresql-client \
@@ -24,10 +24,6 @@ COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt && \
     pip install --no-cache-dir uwsgi
 
-# Generate __pycache__ directories
-ENV PYTHONDONTWRITEBYTECODE=1
-RUN python -m compileall -q app
-
 FROM python:3.13-slim-bullseye
 
 # Install runtime dependencies only
@@ -43,6 +39,10 @@ COPY --from=builder /stern /stern
 
 # Copy source code
 COPY . .
+
+# Generate __pycache__ directories
+ENV PYTHONDONTWRITEBYTECODE=1
+RUN python -m compileall -q app
 
 # Get config for deployment
 ARG FRONTEND_WORKERS=4
@@ -62,7 +62,4 @@ cheaper-initial = 2 \n \
 cheaper-overload = 6 \n \
 " > uwsgi.ini
 
-CMD uwsgi --http 0.0.0.0:80 \
-          --ini uwsgi.ini \
-          -w app:flask \
-          --lazy
+CMD ["uwsgi", "--http", "0.0.0.0:80", "--ini", "uwsgi.ini", "-w", "app:flask", "--lazy"]
