@@ -258,9 +258,9 @@
                     {% if current_stats and current_stats.playcount > 0 and not user.restricted %}
                         <div class="profile-performance">
                             <h2>
-                                <strong>
+                                <strong {% if current_stats.peak_rank %}title="Peaked at #{{ '{:,}'.format(current_stats.peak_rank) }}"{% endif %}>
                                     <a href="https://osu.ppy.sh/help/wiki/Performance_Points">Performance</a>:
-                                    <span title="{{ '{:,}'.format(current_stats.pp|round(2)) }}pp">
+                                    <span>
                                         {{ "{:,}".format(current_stats.pp|round(0)|int) }}pp
                                     </span>
                                     {% if current_stats.pp > 0 %}
