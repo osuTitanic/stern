@@ -17,17 +17,12 @@ RUN apt update -y && \
 RUN curl -sSf https://sh.rustup.rs | sh -s -- -y
 ENV PATH="/root/.cargo/bin:${PATH}"
 
-# Update pip
-RUN pip install --upgrade pip
-
-WORKDIR /stern
-
-# Install uwsgi for deployment
-RUN pip install uwsgi
-
 # Install python dependencies
+# & uwsgi for deployment
+WORKDIR /stern
 COPY requirements.txt ./
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt && \
+    pip install --no-cache-dir uwsgi
 
 # Copy source code
 COPY . .
