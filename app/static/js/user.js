@@ -420,7 +420,7 @@ function loadLeaderScores(userId, mode, limit, offset) {
             }
         }
         
-        setText(heading, leaderScoresText + ' (' + data.total.toLocaleString() + ')' + leaderScoresRank);
+        setText(heading, leaderScoresText + ' - ' + data.total.toLocaleString() + '' + leaderScoresRank);
 
         for (var i = 0; i < scores.length; i++) {
             var scoreDiv = createScoreElement(scores[i], i, "leader");
