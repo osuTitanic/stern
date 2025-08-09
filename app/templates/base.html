@@ -16,7 +16,6 @@
     {% if site_image %}<meta property="og:image" content="{{ site_image }}">{% endif %}
     {% if site_url %}<meta property="og:url" content="{{ site_url }}">{% endif %}
     {% if config.ENABLE_SSL %}<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">{% endif %}
-    {% set css_url = ('/css/' + css)|git_asset_url %}
     <title>{{ title or 'Titanic!' }}</title>
     <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
     {% if canonical_url %}
@@ -24,7 +23,7 @@
     {% endif %}
     <link rel="stylesheet" href="{{ '/css/main.css'|git_asset_url }}">
     {% if css %}
-    <link rel="stylesheet" href="{{ css_url }}">
+    <link rel="stylesheet" href="{{ ('/css/' + css)|git_asset_url }}">
     {% endif %}
     {# Avoid render blocking with less important stylesheets #}
     <link rel="stylesheet" href="{{ '/lib/fontawesome.min.css'|git_asset_url }}" media="print" onload="this.media='all'">
