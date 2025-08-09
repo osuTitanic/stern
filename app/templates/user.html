@@ -419,7 +419,7 @@
                         <p id="top-scores-loading">Loading...</p>
                     </div>
                     <div id="leader-scores">
-                        <h2>First Place Ranks</h2>
+                        <h2>First Place Ranks {% if firsts_rank > 0 %} (#{{ "{:,}".format(firsts_rank) }}) {% endif %}</h2>
                         <p id="leader-scores-loading">Loading...</p>
                     </div>
                 </div>
@@ -819,6 +819,7 @@
     var globalRank = {{ pp_rank }};
     var countryRank = {{ pp_rank_country }};
     var ppv1Rank = {{ ppv1_rank }};
+    var firstsRank = {{ firsts_rank }};
 </script>
 <link rel="stylesheet" href="{{ '/lib/nv.d3.min.css'|git_asset_url }}">
 <script src="{{ '/lib/d3.v3.min.js'|git_asset_url }}"></script> 

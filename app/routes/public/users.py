@@ -71,6 +71,7 @@ def userpage(query: str):
         score_rank_country = leaderboards.score_rank_country(user.id, int(mode), user.country)
         total_score_rank = leaderboards.total_score_rank(user.id, int(mode))
         ppv1_rank = leaderboards.ppv1_rank(user.id, int(mode))
+        firsts_rank = leaderboards.leader_scores_rank(user.id, int(mode))
 
         user_beatmapsets = beatmapsets.fetch_by_creator(
             user.id,
@@ -145,6 +146,7 @@ def userpage(query: str):
             score_rank_country=score_rank_country,
             score_rank=score_rank,
             ppv1_rank=ppv1_rank,
+            firsts_rank=firsts_rank,
             followers=followers,
             infringements=infs,
             session=session
