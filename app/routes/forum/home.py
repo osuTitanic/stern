@@ -24,6 +24,7 @@ def home():
             title="Forums - Titanic",
             site_title="Titanic » Forums » Home",
             site_description="Discuss and share your thoughts with the community.",
+            site_image=f"{app.config.OSU_BASEURL}/images/logo/main-low.png",
             forums=forum_dict,
             session=session,
             forum_stats={

@@ -202,6 +202,7 @@ def render_register_page(error: Optional[str] = None) -> str:
         title='Register - Titanic!',
         site_title='Register',
         site_description='Create your account and start playing today!',
+        site_image=f"{app.config.OSU_BASEURL}/images/logo/main-low.png",
         error=error
     )
 

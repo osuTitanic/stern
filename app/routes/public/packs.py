@@ -23,9 +23,10 @@ def pack_listing():
         return utils.render_template(
             'packs.html',
             css='packs.css',
-            site_description="Titanic » Beatmap Packs",
-            site_title="Beatmap Packs",
             title="Beatmap Packs - Titanic",
+            site_title="Beatmap Packs",
+            site_description="Titanic » Beatmap Packs",
+            site_image=f"{app.config.OSU_BASEURL}/images/logo/main-low.png",
             canonical_url=request.base_url,
             beatmap_packs=beatmap_packs,
             categories=categories,
