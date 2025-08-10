@@ -4,20 +4,24 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="description" content="{{ description or site_description or 'Titanic! - A private server for osu! that lets you experience the early days of the game.' }}">
-    <meta name="keywords" content="osu, titanic, private, server, lekuru, old osu, nostalgia, ouendan, elite, beat, agents, rhythm, windows, game, taiko, tatsujin, simulator, sim, xna, ddr, beatmania" />
     <meta name="viewport" content="width=1080, user-scalable=yes"/>
     <meta name="msapplication-TileColor" content="#603cba">
+    <meta name="theme-color" content="#603cba">
+    <title>{{ title or 'Titanic!' }}</title>
+    {% if description or site_description %}
+    <meta name="description" content="{{ description or site_description }}">
+    {% endif %}
+    <meta name="keywords" content="titanic, osu, old osu, osu!, private server" />
     <meta property="og:site_name" content="Titanic!">
     <meta property="og:type" content="website">
-    <meta name="theme-color" content="#603cba">
-    {% if site_description %}<meta property="og:description" content="{{ site_description }}">{% endif %}
     {% if site_title %}<meta property="og:title" content="{{ site_title }}">{% endif %}
     {% if site_image %}<meta property="og:image" content="{{ site_image }}">{% endif %}
     {% if site_url %}<meta property="og:url" content="{{ site_url }}">{% endif %}
+    {% if site_description %}<meta property="og:description" content="{{ site_description }}">{% endif %}
     {% if config.ENABLE_SSL %}<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">{% endif %}
-    <title>{{ title or 'Titanic!' }}</title>
+    {% if config.SITEMAP_ENABLED %}
     <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
+    {% endif %}
     {% if canonical_url %}
     <link rel="canonical" href="{{ canonical_url }}">
     {% endif %}
