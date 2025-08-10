@@ -28,7 +28,7 @@ FROM python:3.13-slim-bullseye
 
 # Install runtime dependencies only
 RUN apt-get update -y && \
-    apt-get install -y --no-install-recommends git \
+    apt-get install -y --no-install-recommends git curl \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /stern
