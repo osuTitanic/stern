@@ -106,6 +106,10 @@ if (!window.console) {
     };
 }
 
+if (!window.FormData) {
+    window.FormData = function(form) {};
+}
+
 function slideDown(elem) {
     elem.style.height = elem.scrollHeight + "px";
 }
