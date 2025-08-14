@@ -29,16 +29,6 @@
     {% if css %}
     <link rel="stylesheet" href="{{ ('/css/' + css)|git_asset_url }}">
     {% endif %}
-    {# Avoid render blocking with less important stylesheets #}
-    <link rel="stylesheet" href="{{ '/lib/fontawesome.min.css'|git_asset_url }}" media="print" onload="this.media='all'">
-    <link rel="stylesheet" href="{{ '/lib/fontawesome.solid.min.css'|git_asset_url }}" media="print" onload="this.media='all'">
-    <link rel="stylesheet" href="{{ '/lib/fontawesome.brands.min.css'|git_asset_url }}" media="print" onload="this.media='all'">
-    <noscript>
-        {# Fallback for non-js browsers #}
-        <link rel="stylesheet" href="{{ '/lib/fontawesome.min.css'|git_asset_url }}">
-        <link rel="stylesheet" href="{{ '/lib/fontawesome.solid.min.css'|git_asset_url }}">
-        <link rel="stylesheet" href="{{ '/lib/fontawesome.brands.min.css'|git_asset_url }}">
-    </noscript>
     <script>
         var apiBaseurl = "{{ config.API_BASEURL }}";
         var osuBaseurl = "{{ config.OSU_BASEURL }}";
@@ -191,6 +181,9 @@
                 <div style="clear: both;"></div>
             </div>
             <div class="gradient"></div>
+            <link rel="stylesheet" href="{{ '/lib/fontawesome.min.css'|git_asset_url }}">
+            <link rel="stylesheet" href="{{ '/lib/fontawesome.solid.min.css'|git_asset_url }}">
+            <link rel="stylesheet" href="{{ '/lib/fontawesome.brands.min.css'|git_asset_url }}">
             <script src="{{ '/js/editor.js'|git_asset_url }}" fetchpriority="low" defer></script>
         </div>
     </div>
