@@ -116,10 +116,6 @@ def template_exists(template_name: str) -> bool:
     except TemplateNotFound:
         return False
 
-@caching.ttl_cache(ttl=900)
-def fetch_average_topic_views() -> int:
-    return int(topics.fetch_average_views())
-
 def on_sync_ranks_fail(e: Exception) -> None:
     app.session.logger.error(
         f'Failed to update user rank: {e}',
@@ -212,6 +208,6 @@ def secure_filename(filename: str) -> str:
     filename = re.compile(r"\s+").sub(" ", filename)
     return filename.strip()
 
-@caching.ttl_cache(ttl=900)
+@caching.ttl_cache(ttl=60*5)
 def fetch_average_topic_views() -> int:
     return int(topics.fetch_average_views())
