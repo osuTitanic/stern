@@ -14,7 +14,7 @@ logger = logging.getLogger("wiki")
 
 def fetch_page(path: str, language: str, session: Session) -> Tuple[DBWikiPage, DBWikiContent] | None:
     """Fetch a wiki page, or create it if it doesn't exist"""
-    if not (page := wiki.fetch_page_by_name(get_page_name(path), session)):
+    if not (page := wiki.fetch_page_by_path(get_page_path(path), session)):
         logger.info(f"Page '{path}' not found in database, creating...")
         return create_page(path, language, session)
 
@@ -85,6 +85,7 @@ def create_page(path: str, language: str, session: Session) -> Tuple[DBWikiPage,
 
     page, default_content = wiki.create_page(
         get_page_name(path),
+        get_page_path(path),
         default_content_markdown,
         config.WIKI_DEFAULT_LANGUAGE,
         session=session
@@ -193,9 +194,12 @@ def create_outlinks(page_id: int, content: str, session: Session) -> List[DBWiki
     return pages
 
 def get_page_name(path: str) -> str:
-    """Get the name of the page from the path"""
     return path.removesuffix('/').split('/')[-1] \
                .removesuffix('.md').replace('_', ' ')
+
+def get_page_path(path: str) -> str:
+    return path.removesuffix('/').removesuffix('.md') \
+               .replace('_', ' ')
 
 def format_path(path: str, page_name: str) -> str:
     """Format the path of a wiki page to be title case"""
