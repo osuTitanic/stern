@@ -44,6 +44,5 @@ retries = Retry(
     backoff_factor=0.3,
     status_forcelist=[500, 502, 503, 504]
 )
-
 requests.mount('http://', HTTPAdapter(max_retries=retries))
 requests.mount('https://', HTTPAdapter(max_retries=retries))
