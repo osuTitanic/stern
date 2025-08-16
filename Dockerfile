@@ -51,6 +51,9 @@ ENV FRONTEND_WORKERS $FRONTEND_WORKERS
 # Disable output buffering
 ENV PYTHONUNBUFFERED=1
 
+# Set production mode
+ENV FLASK_ENV=production
+
 RUN echo " \
 [uwsgi] \n \
 max-requests-delta = 1000 \n \
