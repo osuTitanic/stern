@@ -60,11 +60,10 @@
                 <tr>
                     <td>
                         {% if category.pages %}
-                            <ul>
                             {% for page in category.pages %}
-                                <li><a href="/wiki/{{ page.slug }}">{{ page.title }}</a></li>
+                                <a href="/wiki/en/{{ page.name }}">{{ page.name }}</a>
+                                {% if not loop.last %}<b>•</b>{% endif %}
                             {% endfor %}
-                            </ul>
                         {% else %}
                             Es gibt noch keine Seiten in dieser Kategorie.
                         {% endif %}
