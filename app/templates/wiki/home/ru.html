@@ -29,7 +29,7 @@
                 </tr>
             </tbody>
         </table>
-        <table width="50%" style="float: right;">
+        <table width="100%">
             <tbody>
                 <tr>
                     <th>Другие языки</th>
@@ -44,18 +44,33 @@
                 </tr>
             </tbody>
         </table>
-        <table width="50%" style="float: left;">
+        {% for category in categories %}
+        {% set odd_categories = categories|length is odd %}
+        {% set width = '50%' %}
+        {% if odd_categories and loop.index == categories|length %}
+            {% set width = '100%' %}
+        {% endif %}
+        <table width="{{ width }}" style="float: {{ 'left' if loop.index is odd else 'right' }};">
             <tbody>
                 <tr>
-                    <th>Категории</th>
+                    <th>{{ category.translations.get("ru", category.name) }}</th>
                 </tr>
                 <tr>
                     <td>
-                        В настоящее время нет доступных категорий. Пожалуйста, зайдите позже!
+                        {% if category.pages %}
+                            <ul>
+                            {% for page in category.pages %}
+                                <li><a href="/wiki/{{ page.slug }}">{{ page.title }}</a></li>
+                            {% endfor %}
+                            </ul>
+                        {% else %}
+                            В этой категории еще нет страниц.
+                        {% endif %}
                     </td>
                 </tr>
             </tbody>
         </table>
+        {% endfor %}
     </div>
 </div>
 {% endblock content_extension %}
