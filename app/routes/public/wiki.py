@@ -37,7 +37,9 @@ def home_wiki_page(language: str):
             categories=wiki.fetch_main_categories(session=session),
             available_languages=available_languages,
             requested_language=language,
-            language=language
+            language=language,
+            session=session,
+            wiki=wiki
         )
 
 @router.get('/<language>/search/')
