@@ -36,7 +36,7 @@ startup_time = time.time()
 
 storage = Storage()
 requests = Session()
-executor = ThreadPoolExecutor(max_workers=4)
+executor = ThreadPoolExecutor(max_workers=2)
 requests.headers = {'User-Agent': f'osuTitanic/stern ({config.DOMAIN_NAME})'}
 
 retries = Retry(
