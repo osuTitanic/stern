@@ -24,3 +24,7 @@ logging.basicConfig(
     handlers=[Console, File]
 )
 git.initialize_repository()
+
+# Useless debug logging, very annoying
+font_manager = logging.getLogger('matplotlib.font_manager')
+font_manager.setLevel(logging.WARNING)
