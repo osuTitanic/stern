@@ -69,6 +69,7 @@ def wiki_page(path: str, language: str = config.WIKI_DEFAULT_LANGUAGE):
             return abort(404)
 
         page, entry = result
+        github_path = path.replace(' ', '_')
         formatted_path = wiki.format_path(path, page.name)
 
         if formatted_path != path:
@@ -84,8 +85,8 @@ def wiki_page(path: str, language: str = config.WIKI_DEFAULT_LANGUAGE):
             canonical_url=f'/wiki/en/{path}',
             requested_language=language,
             language=entry.language,
-            translation_url=f'{wiki.CREATE_BASEURL}/{path}',
-            source_url=f'{wiki.BLOB_BASEURL}/{path}/{entry.language}.md',
-            history_url=f'{wiki.HISTORY_BASEURL}/{path}/{entry.language}.md',
+            translation_url=f'{wiki.CREATE_BASEURL}/{github_path}',
+            source_url=f'{wiki.BLOB_BASEURL}/{github_path}/{entry.language}.md',
+            history_url=f'{wiki.HISTORY_BASEURL}/{github_path}/{entry.language}.md',
             discussion_url=f'{wiki.GITHUB_BASEURL}/pulls?q={page.name}'
         )
