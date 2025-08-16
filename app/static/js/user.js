@@ -408,11 +408,16 @@ function loadLeaderScores(userId, mode, limit, offset) {
             return;
         }
 
-        // Update total score count
+        // Update count & rank
         var heading = document.getElementById('leader-scores').getElementsByTagName('h2')[0]
         var leaderScoresText = 'First Place Ranks';
+        var total = ' (' + data.total.toLocaleString() + ')';
+        var rank = ' - #' + firstsRank.toLocaleString();
+        if (data.total <= 0) {
+            rank = '';
+        }
 
-        setText(heading, leaderScoresText + ' (' + data.total.toLocaleString() + ') - #' + firstsRank);
+        setText(heading, leaderScoresText + total + rank);
 
         for (var i = 0; i < scores.length; i++) {
             var scoreDiv = createScoreElement(scores[i], i, "leader");
