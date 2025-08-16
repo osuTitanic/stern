@@ -22,21 +22,23 @@ def home_wiki_page(language: str):
     available_languages = copy(wiki.LANGUAGE_NAMES)
     available_languages.pop(language.lower())
 
-    return utils.render_template(
-        f'wiki/home/{language.lower()}.html',
-        css='wiki.css',
-        title='Home - Titanic! Wiki',
-        site_title='Titanic! Wiki',
-        canonical_url=f'/wiki/',
-        current_date=datetime.now(),
-        source_url=wiki.GITHUB_BASEURL,
-        discussion_url=f'{wiki.GITHUB_BASEURL}/pulls',
-        history_url=wiki.HISTORY_BASEURL,
-        page_count=wiki.fetch_page_count(),
-        available_languages=available_languages,
-        requested_language=language,
-        language=language
-    )
+    with app.session.database.managed_session() as session:
+        return utils.render_template(
+            f'wiki/home/{language.lower()}.html',
+            css='wiki.css',
+            title='Home - Titanic! Wiki',
+            site_title='Titanic! Wiki',
+            canonical_url=f'/wiki/',
+            current_date=datetime.now(),
+            source_url=wiki.GITHUB_BASEURL,
+            discussion_url=f'{wiki.GITHUB_BASEURL}/pulls',
+            history_url=wiki.HISTORY_BASEURL,
+            page_count=wiki.fetch_page_count(session=session),
+            categories=wiki.fetch_main_categories(session=session),
+            available_languages=available_languages,
+            requested_language=language,
+            language=language
+        )
 
 @router.get('/<language>/search/')
 def wiki_search_page(language: str):
