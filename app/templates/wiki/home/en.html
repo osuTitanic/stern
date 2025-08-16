@@ -59,7 +59,7 @@
                     <td>
                         {% if category.pages %}
                             {% for page in category.pages %}
-                                <a href="/wiki/en/{{ page.name }}">{{ page.name }}</a>
+                                <a href="/wiki/en/{{ page.path }}">{{ page.name }}</a>
                                 {% if not loop.last %}<b>•</b>{% endif %}
                             {% endfor %}
                         {% else %}
