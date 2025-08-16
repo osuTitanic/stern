@@ -11,8 +11,9 @@ from . import uwsgi
 from . import wiki
 from . import git
 
-from .app import flask
 from .filters import get_handle
+from .app import flask
+from . import handlers
 
 import logging
 import config
