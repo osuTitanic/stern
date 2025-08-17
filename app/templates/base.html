@@ -34,6 +34,7 @@
         var osuBaseurl = "{{ config.OSU_BASEURL }}";
         var staticBaseurl = "{{ config.STATIC_BASEURL }}";
         var currentUser = {{ current_user.id if current_user.is_authenticated else 'null' }};
+        var currentUsername = "{{ current_user.name if current_user.is_authenticated else '' }}";
         var approvedRewards = {{ config.APPROVED_MAP_REWARDS|lower }};
         var csrfToken = "{{ csrf_token() }}";
     </script>
