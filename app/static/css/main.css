@@ -779,6 +779,9 @@ input[type="url"], input[type="search"] {
     font-weight: normal;
     font-size: 150%;
     margin-bottom: 2.5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .heading p {
