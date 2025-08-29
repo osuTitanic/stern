@@ -28,3 +28,5 @@ git.initialize_repository()
 # Useless debug logging, very annoying
 font_manager = logging.getLogger('matplotlib.font_manager')
 font_manager.setLevel(logging.WARNING)
+pillow_debug = logging.getLogger('PIL.PngImagePlugin')
+pillow_debug.setLevel(logging.WARNING)
