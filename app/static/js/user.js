@@ -408,9 +408,16 @@ function loadLeaderScores(userId, mode, limit, offset) {
             return;
         }
 
-        // Update total score count
+        // Update count & rank
         var heading = document.getElementById('leader-scores').getElementsByTagName('h2')[0]
-        setText(heading, 'First Place Ranks (' + data.total.toLocaleString() + ')');
+        var leaderScoresText = 'First Place Ranks';
+        var total = ' (' + data.total.toLocaleString() + ')';
+        var rank = ' - #' + firstsRank.toLocaleString();
+        if (data.total <= 0) {
+            rank = '';
+        }
+
+        setText(heading, leaderScoresText + total + rank);
 
         for (var i = 0; i < scores.length; i++) {
             var scoreDiv = createScoreElement(scores[i], i, "leader");
@@ -519,8 +526,9 @@ function loadRecentPlays(userId, mode) {
     var playsContainer = document.getElementById("recent-container");
 
     performApiRequest("GET", url, null, function(xhr) {
-        var scores = JSON.parse(xhr.responseText);
-        if (scores.length <= 0) {
+        var response = JSON.parse(xhr.responseText);
+        var scores = response.scores;
+        if (response.total <= 0) {
             playsContainer.appendChild(
                 document.createTextNode("No recent scores set by this player :(")
             );

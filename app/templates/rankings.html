@@ -53,7 +53,7 @@
 </p>
 <div class="centered">
     <div class="pagination">
-        Displaying {{ page }} of {{ total_pages }} results.
+        Displaying {{ page }} of {{ total_pages }} result{{ 's' if total_pages != 1 }}.
         <br>
         {{ rankingsPagination() }}
     </div>

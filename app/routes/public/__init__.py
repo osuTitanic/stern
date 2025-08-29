@@ -7,6 +7,7 @@ from . import beatmapset
 from . import changelog
 from . import download
 from . import rankings
+from . import activity
 from . import beatmap
 from . import sitemap
 from . import groups
@@ -19,6 +20,7 @@ from . import home
 
 router = Blueprint("public", __name__)
 router.register_blueprint(download.router, url_prefix='/download')
+router.register_blueprint(activity.router, url_prefix='/activity')
 router.register_blueprint(multiplayer.router, url_prefix='/mp')
 router.register_blueprint(beatmapset.router, url_prefix='/')
 router.register_blueprint(changelog.router, url_prefix='/')

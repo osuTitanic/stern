@@ -31,7 +31,7 @@
                 </tr>
             </tbody>
         </table>
-        <table width="50%" style="float: right;">
+        <table width="100%">
             <tbody>
                 <tr>
                     <th>Andere Sprachen</th>
@@ -46,18 +46,34 @@
                 </tr>
             </tbody>
         </table>
-        <table width="50%" style="float: left;">
+        {% for category in categories %}
+        {% set odd_categories = categories|length is odd %}
+        {% set width = '50%' %}
+        {% if odd_categories and loop.index == categories|length %}
+            {% set width = '100%' %}
+        {% endif %}
+        <table width="{{ width }}" style="float: {{ 'left' if loop.index is odd else 'right' }};">
             <tbody>
                 <tr>
-                    <th>Kategorien</th>
+                    <th>{{ category.translations.get("de", category.name) }}</th>
                 </tr>
                 <tr>
                     <td>
-                        Es sind noch keine Kategorien vorhanden, versuche es später nochmal!
+                        {% if category.pages %}
+                            {% for page in category.pages %}
+                                <a href="/wiki/de/{{ page.path }}">
+                                    {{ wiki.fetch_translated_page_title(page.id, 'de', session) or page.name }}
+                                </a>
+                                {% if not loop.last %}<b>•</b>{% endif %}
+                            {% endfor %}
+                        {% else %}
+                            Es gibt noch keine Seiten in dieser Kategorie.
+                        {% endif %}
                     </td>
                 </tr>
             </tbody>
         </table>
+        {% endfor %}
     </div>
 </div>
 {% endblock content_extension %}

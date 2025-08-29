@@ -11,8 +11,9 @@ from . import uwsgi
 from . import wiki
 from . import git
 
-from .app import flask
 from .filters import get_handle
+from .app import flask
+from . import handlers
 
 import logging
 import config
@@ -23,3 +24,9 @@ logging.basicConfig(
     handlers=[Console, File]
 )
 git.initialize_repository()
+
+# Useless debug logging, very annoying
+font_manager = logging.getLogger('matplotlib.font_manager')
+font_manager.setLevel(logging.WARNING)
+pillow_debug = logging.getLogger('PIL.PngImagePlugin')
+pillow_debug.setLevel(logging.WARNING)

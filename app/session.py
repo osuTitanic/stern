@@ -36,7 +36,7 @@ startup_time = time.time()
 
 storage = Storage()
 requests = Session()
-executor = ThreadPoolExecutor(max_workers=4)
+executor = ThreadPoolExecutor(max_workers=2)
 requests.headers = {'User-Agent': f'osuTitanic/stern ({config.DOMAIN_NAME})'}
 
 retries = Retry(
@@ -44,6 +44,5 @@ retries = Retry(
     backoff_factor=0.3,
     status_forcelist=[500, 502, 503, 504]
 )
-
 requests.mount('http://', HTTPAdapter(max_retries=retries))
 requests.mount('https://', HTTPAdapter(max_retries=retries))

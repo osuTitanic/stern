@@ -258,9 +258,9 @@
                     {% if current_stats and current_stats.playcount > 0 and not user.restricted %}
                         <div class="profile-performance">
                             <h2>
-                                <strong>
+                                <strong {% if current_stats.peak_rank %}title="Peaked at #{{ '{:,}'.format(current_stats.peak_rank) }}"{% endif %}>
                                     <a href="https://osu.ppy.sh/help/wiki/Performance_Points">Performance</a>:
-                                    <span title="{{ '{:,}'.format(current_stats.pp|round(2)) }}pp">
+                                    <span>
                                         {{ "{:,}".format(current_stats.pp|round(0)|int) }}pp
                                     </span>
                                     {% if current_stats.pp > 0 %}
@@ -325,7 +325,7 @@
                             {% set top_100_rscore = score_rank <= 100 and score_rank != 0 %}
                             <h3 class="profile-stats-header">Detailed Stats</h3>
                             <h4 class="profile-stats-element {% if top_100_rscore %}profile-stats-element-blue{% endif %}" title="Ranked Score consists of all your highest passing scores you have achieved. If you beat a score, only the difference between them will be added.">
-                                <b>Ranked Score</b>: {{ "{:,}".format(current_stats.rscore) }}
+                                <b>Ranked Score</b>: {{ "{:,}".format(current_stats.rscore) }} {% if score_rank > 0 %} (#{{ "{:,}".format(score_rank) }}) {% endif %}
                             </h4>
                             <br>
                             <h4 class="profile-stats-element" title="Accuracy is calculated as a pp-weighted average of every beatmap you have achieved a passing score in, with each difficulty counting separately. Accuracy is calculated based on the hit score value - so a 50 is worth 1/6th of a 300 hit, and a miss is worth nothing.">
@@ -341,7 +341,7 @@
                             </h4>
                             <br>
                             <h4 class="profile-stats-element {% if top_100_tscore %}profile-stats-element-blue{% endif %}" title="Total points scored in all ranked beatmap plays. This includes both passes and fails.">
-                                <b>Total Score</b>: {{ "{:,}".format(current_stats.tscore) }}
+                                <b>Total Score</b>: {{ "{:,}".format(current_stats.tscore) }} {% if total_score_rank > 0 %} (#{{ "{:,}".format(total_score_rank) }}) {% endif %}
                             </h4>
                             <br>
                             {% set level_precise = current_stats.tscore|get_level %}
@@ -442,7 +442,7 @@
                         </div>
                     </div>
                     <div class="recent-plays">
-                        <h2 class="profile-stats-header">Recent Plays (last 24h)</h2>
+                        <h2 class="profile-stats-header">Recent Plays</h2>
                         <div id="recent-container">
                             <p id="recent-loading">Loading...</p>
                         </div>
@@ -556,6 +556,36 @@
                     </div>
                     {% endif %}
                     {% endfor %}
+                    {% if collaborations %}
+                    <div class="collaborations">
+                        <h2 class="profile-stats-header">
+                            <a onclick="toggleBeatmapContainer(this.parentNode.parentNode)">
+                                Guest Participation Beatmaps ({{ collaborations|length }})
+                            </a>
+                        </h2>
+                        <div class="profile-beatmaps-container">
+                            {% for beatmap in collaborations %}
+                            <table class="profile-beatmap">
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <a href="/b/{{ beatmap.id }}" class="profile-beatmap-description">
+                                                <b>{{ beatmap.full_name }}</b>
+                                            </a>
+                                            <br>
+                                            <a href="/u/{{ beatmap.beatmapset.creator_id }}">created by {{ beatmap.beatmapset.creator }}</a>
+                                        </td>
+                                        <td style="width: 80px; height: 60px">
+                                            <img src="/mt/{{ beatmap.set_id }}" alt="" loading="lazy">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            {% endfor %}
+                            <div style="clear: both"></div>
+                        </div>
+                    </div>
+                    {% endif %}
                     {% if user.is_bat or nominations %}
                     <div>
                         <h2 class="profile-stats-header">
@@ -785,9 +815,11 @@
     var mode = {{ mode }};
     var modeName = '{{ constants.GameMode(mode).alias }}';
     var scoreRank = {{ score_rank }};
+    var totalScoreRank = {{ total_score_rank }};
     var globalRank = {{ pp_rank }};
     var countryRank = {{ pp_rank_country }};
     var ppv1Rank = {{ ppv1_rank }};
+    var firstsRank = {{ firsts_rank }};
 </script>
 <link rel="stylesheet" href="{{ '/lib/nv.d3.min.css'|git_asset_url }}">
 <script src="{{ '/lib/d3.v3.min.js'|git_asset_url }}"></script> 

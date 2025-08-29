@@ -273,10 +273,10 @@ input[type="url"], input[type="search"] {
     padding-left: 10px;
     padding-top: 6px;
     letter-spacing: 0.4px;
-    border-radius: 5px 5px 0px 0px;
     -webkit-border-radius: 5px 5px 0px 0px;
     -khtml-border-radius: 5px 5px 0px 0px;
     -moz-border-radius: 5px 5px 0px 0px;
+    border-radius: 5px 5px 0px 0px;
 }
 
 .content {
@@ -285,10 +285,10 @@ input[type="url"], input[type="search"] {
     border-style: solid;
     border-color: #5c559c;
     border-width: 2px;
-    border-radius: 0px 5px 5px 5px;
     -webkit-border-radius: 0px 5px 5px 5px;
     -khtml-border-radius: 0px 5px 5px 5px;
     -moz-border-radius: 0px 5px 5px 5px;
+    border-radius: 0px 5px 5px 5px;
 }
 
 .gradient {
@@ -303,10 +303,10 @@ input[type="url"], input[type="search"] {
     clear: both;
     width: 99.5%;
     position: absolute;
-    border-radius: 0px 0px 5px 5px;
     -webkit-border-radius: 0px 0px 5px 5px;
     -khtml-border-radius: 0px 0px 5px 5px;
     -moz-border-radius: 0px 0px 5px 5px;
+    border-radius: 0px 0px 5px 5px;
 }
 
 .top {
@@ -439,6 +439,9 @@ input[type="url"], input[type="search"] {
     text-align: center;
     padding: 5px 10px 5px 10px;
     display: inline-block;
+    -webkit-user-select: none; 
+    -moz-user-select: none;
+    -ms-user-select: none;
     user-select: none;
     font-weight: bold;
     width: 35%;
@@ -776,6 +779,9 @@ input[type="url"], input[type="search"] {
     font-weight: normal;
     font-size: 150%;
     margin-bottom: 2.5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .heading p {

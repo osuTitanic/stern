@@ -18,7 +18,8 @@ def get_match(id: int):
             css='match.css',
             match=match,
             session=session,
-            site_description=f"Titanic » Matches » {match.name} (#{match.id:02d})",
             site_title=f"{match.name}",
+            site_description=f"Titanic » Matches » {match.name} (#{match.id:02d})",
+            site_image=f"{app.config.OSU_BASEURL}/images/logo/main-low.png",
             title=f"{match.name} - Titanic"
         )

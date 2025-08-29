@@ -1,5 +1,6 @@
 
 from app.common.database.repositories import (
+    collaborations,
     relationships,
     infringements,
     nominations,
@@ -70,6 +71,7 @@ def userpage(query: str):
         score_rank_country = leaderboards.score_rank_country(user.id, int(mode), user.country)
         total_score_rank = leaderboards.total_score_rank(user.id, int(mode))
         ppv1_rank = leaderboards.ppv1_rank(user.id, int(mode))
+        firsts_rank = leaderboards.leader_scores_rank(user.id, int(mode))
 
         user_beatmapsets = beatmapsets.fetch_by_creator(
             user.id,
@@ -124,6 +126,7 @@ def userpage(query: str):
             is_online=status.exists(user.id),
             achievement_categories=app.constants.ACHIEVEMENTS,
             achievements={a.name:a for a in user.achievements},
+            collaborations=collaborations.fetch_beatmaps_by_user(user.id, session=session),
             total_kudosu=modding.total_amount_by_user(user.id, session=session),
             recent_mods=modding.fetch_range_by_user(user.id, session=session),
             nominations=nominations.fetch_by_user(user.id, session=session),
@@ -143,6 +146,7 @@ def userpage(query: str):
             score_rank_country=score_rank_country,
             score_rank=score_rank,
             ppv1_rank=ppv1_rank,
+            firsts_rank=firsts_rank,
             followers=followers,
             infringements=infs,
             session=session

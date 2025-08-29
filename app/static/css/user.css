@@ -178,8 +178,8 @@
 
 .userpage-social {
     width: 100%;
-    margin-bottom: 15px;
-    margin-top: 10px;
+    padding-bottom: 10px;
+    padding-top: 10px;
     overflow: hidden;
 }
 
