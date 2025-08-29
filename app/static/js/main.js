@@ -268,8 +268,8 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
         } else {
             // IE6 and IE7
             xhr = new ActiveXObject("Microsoft.XMLHTTP");
-            // Rewrite url to use /api/v2/ as fallback, due to cors limitations
-            url = osuBaseurl + "/api/v2" + path;
+            // Rewrite url to use /api as fallback, due to cors limitations
+            url = osuBaseurl + "/api" + path;
         }
     } catch (e) {
         throw new Error("This browser does not support AJAX requests.");
