@@ -58,7 +58,7 @@
                 <tr>
                     <td>
                         {% if category.pages %}
-                            {% for page in category.pages %}
+                            {% for page in category.pages|sort(attribute='id') %}
                                 <a href="/wiki/pl/{{ page.path }}">
                                     {{ wiki.fetch_translated_page_title(page.id, 'pl', session) or page.name }}
                                 </a>
