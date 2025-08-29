@@ -770,6 +770,11 @@ function loadPerformanceGraph(userId, mode) {
         var entries = JSON.parse(xhr.responseText);
         var rankData = processRankHistory(entries);
 
+        if (!entries || entries.length <= 0) {
+            // Handle no data case
+            return;
+        }
+
         // Used for initial y-axis calculation
         var defaultSelectedRankType = 'global_rank';
 
