@@ -47,25 +47,27 @@ function editBeatmapDescription() {
     if (!description) { return; }
 
     var form = document.createElement('form');
-    form.action = '/api/beatmaps/update/' + beatmapsetId + '/description';
-    form.method = 'post';
-
     var textarea = document.createElement('textarea');
     textarea.className = 'description-editor bbcode-editor';
     textarea.innerHTML = bbcodeDescription;
     textarea.name = 'description';
     form.appendChild(textarea);
 
-    var csrfTokenInput = document.createElement('input');
-    csrfTokenInput.type = 'hidden';
-    csrfTokenInput.name = 'csrf_token';
-    csrfTokenInput.value = csrfToken;
-    form.appendChild(csrfTokenInput);
-
     var submitButton = document.createElement('input');
     submitButton.type = 'submit';
     submitButton.value = 'Save';
     form.appendChild(submitButton);
+
+    form.onsubmit = function(event) {
+        event.preventDefault();
+        var url = "/users/" + currentUser + "/beatmapsets/" + beatmapsetId + "/description";
+
+        performApiRequest("PATCH", url, {"bbcode": textarea.value}, function(xhr) {
+            window.location.reload();
+        }, function(xhr) {
+            showError(xhr, "An error occurred while trying to update the description.");
+        });
+    };
 
     description.replaceWith(form);
 }
