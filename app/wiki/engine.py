@@ -31,11 +31,11 @@ def fetch_page(path: str, language: str, session: Session) -> Tuple[DBWikiPage, 
         return create_page(path, language, session)
 
     if language == config.WIKI_DEFAULT_LANGUAGE:
-        return page, update_content(path, default_content, session)
+        return page, update_content(page.path, default_content, session)
 
     if not (content := wiki.fetch_content(page.id, language, session)):
         # Try to create content in the requested language
-        content_markdown = fetch_markdown_cached(path, language)
+        content_markdown = fetch_markdown_cached(page.path, language)
 
         if not content_markdown:
             return page, default_content
@@ -49,7 +49,7 @@ def fetch_page(path: str, language: str, session: Session) -> Tuple[DBWikiPage, 
         )
         return page, content
     
-    return page, update_content(path, content, session)
+    return page, update_content(page.path, content, session)
 
 @caching.ttl_cache(ttl=60*5)
 def fetch_markdown_cached(path: str, language: str) -> str | None:
