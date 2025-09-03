@@ -826,7 +826,13 @@
                     {{ score.max_combo }}
                     {% endif %}
                 </td>
-                <td>{{ score.pp|round|int }}</td>
+                <td>
+                    {% if not score.relaxing %}
+                        {{ score.pp|round|int }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
                 {% if mode != 3 %}
                 <td>{{ score.n300 }} / {{ score.n100 }} / {{ score.n50 }}</td>
                 <td>{{ score.nGeki }}</td>
