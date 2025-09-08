@@ -1,9 +1,7 @@
 
 from app.common.database import DBForumTopic, DBForumPost, DBForum, DBUser
-from app.common.webhooks import Embed, Image, Author
 from app.common.constants import UserActivity
 from app.common.helpers import ip, activity
-from app.common import officer
 from app.common.database import (
     beatmapsets,
     forums,
@@ -11,8 +9,8 @@ from app.common.database import (
     posts
 )
 
-from flask import Blueprint, abort, redirect, request
 from flask_login import current_user, login_required
+from flask import Blueprint, redirect, request
 from sqlalchemy.orm import Session
 
 import config

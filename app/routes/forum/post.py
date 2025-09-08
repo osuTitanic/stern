@@ -11,9 +11,7 @@ from flask import (
 )
 from app.common.database import DBUser, DBForumPost, DBForumTopic, DBBeatmapset
 from app.common.constants import NotificationType, DatabaseStatus, UserActivity
-from app.common.webhooks import Embed, Author, Image
 from app.common.helpers import activity
-from app.common import officer
 from app.common.database import (
     notifications,
     beatmapsets,
