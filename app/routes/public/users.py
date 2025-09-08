@@ -96,14 +96,34 @@ def userpage(query: str):
                 if s.status == DatabaseStatus.Graveyard
             ]
         }
+        
+        rankings = leaderboards.player_rankings(
+            user.id, mode, user.country,
+            leaderboards=(
+                "performance",
+                "rscore",
+                "tscore",
+                "ppv1",
+                "leader"
+            )
+        )
 
-        pp_rank = leaderboards.global_rank(user.id, mode)
-        pp_rank_country = leaderboards.country_rank(user.id, mode, user.country)
-        score_rank = leaderboards.score_rank(user.id, mode)
-        score_rank_country = leaderboards.score_rank_country(user.id, mode, user.country)
-        total_score_rank = leaderboards.total_score_rank(user.id, mode)
-        firsts_rank = leaderboards.leader_scores_rank(user.id, mode)
-        ppv1_rank = leaderboards.ppv1_rank(user.id, mode)
+        pp_ranking = rankings.get("performance", None)
+        pp_rank = pp_ranking["global"] if pp_ranking else None
+        pp_rank_country = pp_ranking["country"] if pp_ranking else None
+
+        score_ranking = rankings.get("rscore", None)
+        score_rank = score_ranking["global"] if score_ranking else None
+        score_rank_country = score_ranking["country"] if score_ranking else None
+
+        tscore_ranking = rankings.get("tscore", None)
+        total_score_rank = tscore_ranking["global"] if tscore_ranking else None
+
+        firsts_ranking = rankings.get("leader", None)
+        firsts_rank = firsts_ranking["global"] if firsts_ranking else None
+
+        ppv1_ranking = rankings.get("ppv1", None)
+        ppv1_rank = ppv1_ranking["global"] if ppv1_ranking else None
 
         return utils.render_template(
             template_name='user.html',
@@ -112,7 +132,7 @@ def userpage(query: str):
             mode=int(mode),
             title=f"{user.name} - Titanic",
             site_title=f"{user.name} - Player Info",
-            site_description=f"Rank ({GameMode(int(mode)).formatted}): Global: #{pp_rank} | Country: #{pp_rank_country}",
+            site_description=f"Rank ({GameMode(int(mode)).formatted}): Global: #{pp_rank or '-'} | Country: #{pp_rank_country or '-'}",
             site_image=f"{config.OSU_BASEURL}/a/{user.id}_000.png",
             site_url=f"{config.OSU_BASEURL}/u/{user.id}",
             canonical_url=f"/u/{user.id}",
@@ -129,14 +149,15 @@ def userpage(query: str):
             groups=groups.fetch_user_groups(user.id, session=session),
             beatmapset_categories=beatmapset_categories,
             total_score_rank=total_score_rank,
-            pp_rank_country=pp_rank_country,
-            pp_rank=pp_rank,
             score_rank_country=score_rank_country,
             score_rank=score_rank,
+            pp_rank_country=pp_rank_country,
+            pp_rank=pp_rank,
             ppv1_rank=ppv1_rank,
             firsts_rank=firsts_rank,
             followers=followers,
             infringements=infs,
+            rankings=rankings,
             session=session
         )
 
