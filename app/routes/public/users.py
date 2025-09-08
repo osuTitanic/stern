@@ -45,7 +45,7 @@ def userpage(query: str):
 
         mode = user.preferred_mode
 
-        if mode_string := request.args.get('mode') and mode_string.isdigit():
+        if mode_string := request.args.get('mode'):
             mode = int(mode_string)
             
         if user.restricted:
