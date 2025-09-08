@@ -105,9 +105,12 @@ def download_beatmapset(id: int):
     if not response:
         return abort(code=404)
 
-    osz_filename = utils.secure_filename(
-        f'{set.id} {set.artist} - {set.title}'
-    ) + '.osz'
+    # no_video can only be true if the beatmapset has videos
+    no_video = no_video and set.has_video
+
+    osz_filename = utils.secure_filename(f'{set.id} {set.artist} - {set.title}')
+    osz_filename += ' (no video)' if no_video else ''
+    osz_filename += '.osz'
 
     return Response(
         response.iter_content(6400),
