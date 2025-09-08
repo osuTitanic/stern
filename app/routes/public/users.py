@@ -16,6 +16,7 @@ from app.common.database.repositories import (
 from app.common.constants import GameMode, DatabaseStatus
 from flask import Blueprint, abort, redirect, request
 from app.common.cache import status, leaderboards
+from app.common.database.objects import DBUser
 
 import config
 import utils
@@ -38,8 +39,13 @@ def userpage(query: str):
                 return redirect(f'/u/{name.user_id}')
 
             return utils.render_error(404, 'user_not_found')
+        
+        preload = (
+            DBUser.favourites,
+            DBUser.relationships
+        )
 
-        if not (user := users.fetch_by_id(int(query), session=session)):
+        if not (user := users.fetch_by_id(int(query), *preload, session=session)):
             return utils.render_error(404, 'user_not_found')
 
         if not user.activated:
