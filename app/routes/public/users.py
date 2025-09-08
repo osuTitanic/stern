@@ -44,10 +44,11 @@ def userpage(query: str):
             return utils.render_error(404, 'user_not_found')
 
         mode = user.preferred_mode
+        mode_query = request.args.get('mode')
 
-        if mode_string := request.args.get('mode'):
-            mode = int(mode_string)
-            
+        if mode_query and mode_query.isdigit():
+            mode = int(mode_query)
+
         if user.restricted:
             infs = infringements.fetch_all(
                 user.id,
