@@ -55,8 +55,7 @@ def user_loader(user_id: int) -> Optional[DBUser]:
     try:
         user = users.fetch_by_id(
             user_id,
-            DBUser.groups,
-            DBUser.relationships
+            DBUser.groups
         )
 
         if not user:
