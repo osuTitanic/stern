@@ -34,15 +34,16 @@ def userpage(query: str):
         if not query.isdigit():
             # Searching for username based on user query
             return resolve_user_by_name(query, session=session)
-        
+
         user_id = int(query)
-        mode = user.preferred_mode
 
         if not (user := users.fetch_by_id(user_id, *preload, session=session)):
             return utils.render_error(404, 'user_not_found')
 
         if not user.activated:
             return utils.render_error(404, 'user_not_found')
+
+        mode = user.preferred_mode
 
         if mode_string := request.args.get('mode') and mode_string.isdigit():
             mode = int(mode_string)
