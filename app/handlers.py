@@ -2,13 +2,14 @@
 from app.common.database.repositories import users
 from app.common.database import DBUser
 
-from flask import Request, Response, jsonify, redirect, request
-from flask_pydantic.exceptions import ValidationError
+from flask import Request, Response, redirect, request
+from flask_wtf.csrf import generate_csrf
 from flask_login import current_user
 from typing import Tuple, Optional
 from werkzeug.exceptions import *
 
 from . import accounts
+from . import session
 from . import app
 
 import traceback
@@ -49,6 +50,18 @@ def refresh_access_token(response: Response) -> Response:
         current_user,
         response=response
     )
+
+@app.flask.after_request
+def csrf_store(response: Response) -> Response:
+    if not current_user.is_authenticated:
+        return response
+
+    session.redis.set(
+        f'csrf:{current_user.id}',
+        generate_csrf(),
+        ex=60*60*24
+    )
+    return response
 
 @app.login_manager.user_loader
 def user_loader(user_id: int) -> Optional[DBUser]:
