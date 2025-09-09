@@ -9,9 +9,13 @@ from app.common.database import DBUserCount
 from app.common.helpers import caching
 
 import matplotlib.pyplot as plt
+import matplotlib as mpl
 import numpy as np
 
 router = Blueprint("activity", __name__)
+
+# Use Anti-Grain Geometry backend (non-GUI backend)
+mpl.use('Agg')
 
 def calculate_peak_x(
     n: DBUserCount,
