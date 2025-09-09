@@ -68,22 +68,10 @@ def user_loader(user_id: int) -> Optional[DBUser]:
 
 @app.login_manager.unauthorized_handler
 def unauthorized_user():
-    if request.path.startswith('/api'):
-        return jsonify(
-            error=403,
-            details='You are not authorized to perform this action.'
-        ), 403
-
     return redirect(f'/account/login?redirect={request.path}')
 
 @app.flask.errorhandler(HTTPException)
 def on_http_exception(error: HTTPException) -> Tuple[str, int]:
-    if request.path.startswith('/api'):
-        return jsonify(
-            error=error.code,
-            details=error.description or error.name
-        ), error.code
-
     if utils.template_exists(f'errors/default/{error.code}.html'):
         # Use error page override for this status code
         return utils.render_error(
@@ -102,37 +90,10 @@ def on_http_exception(error: HTTPException) -> Tuple[str, int]:
 @app.flask.errorhandler(Exception)
 def on_exception(error: Exception) -> Tuple[str, int]:
     traceback.print_exc()
-
-    if request.path.startswith('/api'):
-        return jsonify(
-            error=500,
-            details=InternalServerError.description
-        ), 500
-
-    return utils.render_error(500, description='Internal Server Error')
-
-@app.flask.errorhandler(ValidationError)
-def on_validation_error(error: ValidationError) -> Tuple[str, int]:
-    params = {
-        param: getattr(error, param)
-        for param in (
-            'body_params',
-            'form_params',
-            'path_params',
-            'query_params'
-        )
-    }
-
-    return jsonify(
-        error=400,
-        details={
-            'validation_error': {
-                name: value
-                for name, value in params.items()
-                if value is not None
-            }
-        }
-    ), 400
+    return utils.render_error(
+        code=500,
+        description='Internal Server Error'
+    )
 
 static_paths = (
     '/images/arrow-white-highlight.png',
