@@ -73,6 +73,7 @@
 .subforum-head p {
     margin: 1px;
     font-size: 8.2pt;
+    display: flex;
 }
 
 .subforum-head img {

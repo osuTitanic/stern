@@ -158,7 +158,7 @@
         <div class="userpage-actions">
             {% if current_user.id != user.id %}
             <div class="friend-actions">
-                {% set current_friends = current_user.relationships|get_attributes('target_id') %}
+                {% set current_friends = repositories.relationships.fetch_many_by_id(current_user.id, session)|get_attributes('target_id') %}
                 {% set target_friends = user.relationships|get_attributes('target_id') %}
                 {# Determine friend status #}
                 {% if user.id in current_friends %}

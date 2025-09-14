@@ -1,10 +1,11 @@
 
 from __future__ import annotations
-from typing import Tuple
 
 from flask import request, current_app, abort, Response
 from flask import render_template as _render_template
 from datetime import datetime, timedelta
+from flask_wtf.csrf import generate_csrf
+from flask_login import current_user
 from jinja2 import TemplateNotFound
 from sqlalchemy.orm import Session
 from PIL import Image
@@ -24,7 +25,6 @@ from app.common.database import (
     stats
 )
 
-import flask_login
 import unicodedata
 import config
 import app
@@ -64,14 +64,19 @@ def render_template(template_name: str, **context) -> str:
         config=config
     )
 
-    if not flask_login.current_user.is_anonymous:
+    if not current_user.is_anonymous:
         context.update({
             'notification_count': notifications.fetch_count(
-                flask_login.current_user.id,
+                current_user.id,
                 read=False,
                 session=context.get('session')
             )
         })
+        app.session.redis.set(
+            f'csrf:{current_user.id}',
+            generate_csrf(),
+            ex=60*60*24
+        )
 
     return _render_template(
         template_name,

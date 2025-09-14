@@ -122,10 +122,9 @@ def render_quote(tag_name, value, options, parent, context):
 
 @parser.formatter('size')
 def render_size(tag_name, value, options, parent, context):
-    if 'size' not in options:
-        size = '100'
+    size = options.get('size', '100')
 
-    if (size := options['size']).isdigit():
+    if size.isdigit():
         size = max(10, min(800, int(size)))
         return '<span style="font-size:%s%%;">%s</span>' % (size, value)
 

@@ -312,6 +312,7 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
 
     try {
         xhr.setRequestHeader("Cache-Control", "no-cache");
+        xhr.setRequestHeader("X-CSRF-Token", csrfToken);
         
         if (contentType !== null)
         {

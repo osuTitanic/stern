@@ -1,45 +1,87 @@
 
 from app.common.helpers.caching import ttl_cache
 from flask import Blueprint, redirect, request
-from datetime import datetime, timedelta
 from collections import defaultdict
 from typing import Tuple, List
+from datetime import datetime
 
 import app
 
 router = Blueprint('changelog', __name__)
 
-def get_branch_hash(user: str, repo: str, branch_name: str = 'dev') -> str:
-    response = app.session.requests.get(
-        f'https://api.github.com/repos/{user}/{repo}/branches'
+skip_keywords = (
+    'merge',
+    'rebase',
+    'bump',
+    'submodule',
+    'update'
+)
+
+fix_keywords = (
+    'fix',
+    'fixed'
+)
+
+repos = (
+    'anchor',
+    'stern',
+    'deck'
+)
+
+repo_alias = {
+    'anchor': 'Bancho',
+    'stern': 'Web',
+    'deck': 'API'
+}
+
+@router.get('/p/changelog')
+def changelog():
+    # NOTE: This endpoint was used for changelogs to the osu! client
+    #       I will be using it to display recent commits to the github repositories
+    updater = request.args.get(
+        'updater',
+        default=0,
+        type=int
     )
 
-    if not response.ok:
-        return
+    # TODO: Implement changelog page for non-osu requests
+    if updater != 3:
+        return redirect('/changelog')
 
-    branches = response.json()
+    return get_changelog()
 
-    for branch in branches:
-        if branch['name'] != branch_name:
-            continue
+@ttl_cache(ttl=60*15)
+def get_changelog() -> str:
+    # Get commits for all repos & sort them by date
+    formatted_commits = [
+        (f"{message} ({repo_alias[repo]})", date)
+        for repo in repos
+        for message, date in format_commits(get_latest_commits(repo))
+    ]
 
-        return branch['commit']['sha']
-
-    return branches[0]['commit']['sha']
-
-def get_latest_commits(repo: str, user: str = 'osuTitanic', amount: int = 50) -> List[dict]:
-    response = app.session.requests.get(
-        f'https://api.github.com/repos/{user}/{repo}/commits',
-        params={
-            'sha': get_branch_hash(user, repo),
-            'per_page': amount
-        }
+    sorted_commits = sorted(
+        formatted_commits,
+        key=lambda commit: commit[1],
+        reverse=True
     )
 
-    if not response.ok:
-        return []
+    # Split commits into days
+    commit_dict = defaultdict(list)
 
-    return response.json()
+    for commit in sorted_commits:
+        commit_dict[commit[1].date()].append(commit[0])
+
+    # Combine them into a string
+    changelog_result = '\n'.join(
+        f'({date.month}/{date.day}/{date.year})\n' +
+        '\n'.join(commits)
+        for date, commits in commit_dict.items()
+    )
+
+    return (
+        'Titanic GitHub Updates\n\n' +
+        changelog_result
+    )
 
 def format_commits(commits: List[dict]) -> List[Tuple[str, datetime]]:
     formatted_commits: List[Tuple[str, datetime]] = []
@@ -47,19 +89,6 @@ def format_commits(commits: List[dict]) -> List[Tuple[str, datetime]]:
     for commit in commits:
         message = commit['commit']['message']
         date = datetime.fromisoformat(commit['commit']['author']['date'])
-
-        skip_keywords = (
-            'merge',
-            'rebase',
-            'bump',
-            'submodule',
-            'update'
-        )
-
-        fix_keywords = (
-            'fix',
-            'fixed'
-        )
 
         if any(kw in message.lower() for kw in skip_keywords):
             # We don't need to include this
@@ -82,62 +111,34 @@ def format_commits(commits: List[dict]) -> List[Tuple[str, datetime]]:
 
     return formatted_commits
 
-@ttl_cache(ttl=60*15)
-def get_changelog() -> str:
-    repos = (
-        'anchor',
-        'stern',
-        'deck'
+def get_latest_commits(repo: str, user: str = 'osuTitanic', amount: int = 50) -> List[dict]:
+    response = app.session.requests.get(
+        f'https://api.github.com/repos/{user}/{repo}/commits',
+        params={
+            'sha': get_branch_hash(user, repo),
+            'per_page': amount
+        }
     )
 
-    repo_alias = {
-        'anchor': 'Bancho',
-        'stern': 'Web',
-        'deck': 'API'
-    }
+    if not response.ok:
+        return []
 
-    # Get commits for all repos
-    commits = sorted(
-        [
-            (f"{message} ({repo_alias[repo]})", date)
-            for repo in repos
-            for message, date in format_commits(get_latest_commits(repo))
-        ],
-        key=lambda commit: commit[1],
-        reverse=True
+    return response.json()
+
+def get_branch_hash(user: str, repo: str, branch_name: str = 'dev') -> str:
+    response = app.session.requests.get(
+        f'https://api.github.com/repos/{user}/{repo}/branches'
     )
 
-    # Split commits into days
-    commit_dict = defaultdict(list)
+    if not response.ok:
+        return
 
-    for commit in commits:
-        commit_dict[commit[1].date()].append(commit[0])
+    branches = response.json()
 
-    # Combine them into a string
-    changelog_result = '\n'.join(
-        f'({date.month}/{date.day}/{date.year})\n' +
-        '\n'.join(commits)
-        for date, commits in commit_dict.items()
-    )
+    for branch in branches:
+        if branch['name'] != branch_name:
+            continue
 
-    return (
-        'Titanic GitHub Updates\n\n' +
-        changelog_result
-    )
+        return branch['commit']['sha']
 
-@router.get('/p/changelog')
-def changelog():
-    # NOTE: This endpoint was used for new updates to the client.
-    #       I will be using it to display recent commits to the github repositories.
-
-    updater = request.args.get(
-        'updater',
-        default=0,
-        type=int
-    )
-
-    if updater != 3:
-        # TODO
-        return redirect('/changelog')
-
-    return get_changelog()
+    return branches[0]['commit']['sha']
