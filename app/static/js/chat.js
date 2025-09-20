@@ -176,9 +176,7 @@ function handleWhoIsResponse(data) {
     var userId = parseInt(identParts[identParts.length - 1]);
     users[userId] = whois;
     users[userId].id = userId;
-
-    // We'll fill that in later via. the API
-    users[userId].info = null;
+    users[userId].status = null;
 }
 
 function sendWhoIs(username) {
@@ -284,6 +282,22 @@ function fetchUserByName(username, onSuccess, onFailure) {
         onSuccess(response);
     }, function(xhr) {
         console.error("Failed to fetch user by name:", xhr);
+        onFailure(xhr);
+    });
+}
+
+function fetchUserStatus(userId, onSuccess, onFailure) {
+    var url = "/users/" + userId + "/status";
+    return performApiRequest("GET", url, null, function(xhr) {
+        var response = JSON.parse(xhr.responseText);
+        if (!response) {
+            console.error("Invalid response format:", response);
+            onFailure(xhr);
+            return;
+        }
+        onSuccess(response);
+    }, function(xhr) {
+        console.error("Failed to fetch user status:", xhr);
         onFailure(xhr);
     });
 }
