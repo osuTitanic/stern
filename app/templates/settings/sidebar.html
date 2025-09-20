@@ -15,11 +15,12 @@
     <div class="sidebar-section {% if current_endpoint == '/account/settings/friends' %}selected-sidebar{% endif %}">
         <a href="/account/settings/friends">Friends</a>
     </div>
-    {#
-        <div class="sidebar-section {% if current_endpoint == '/account/settings/pms' %}selected-sidebar{% endif %}">
-            <a href="/account/settings/pms">Private Messages</a>
-        </div>
-    #}
+    {# Currently in development, should not be accessed #}
+    {% if current_endpoint == '/account/settings/chat' %}
+    <div class="sidebar-section selected-sidebar">
+        <a href="/account/settings/chat">Chat</a>
+    </div>
+    {% endif %}
     {#
         {% if permissions.has_permission('users.moderation', current_user.id) %}
         <div class="sidebar-section {% if current_endpoint.startswith('/account/settings/moderation') %}selected-sidebar{% endif %}">
