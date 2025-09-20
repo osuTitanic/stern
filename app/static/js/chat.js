@@ -6,7 +6,8 @@ var users = {};
 var messageHandlers = {
     "part": handleUserPart,
     "quit": handleUserQuit,
-    "whois": handleWhoIsResponse
+    "whois": handleWhoIsResponse,
+    "message": handleChannelMessage
 }
 
 function initializeSocket(username, password) {
@@ -177,6 +178,25 @@ function handleWhoIsResponse(data) {
     users[userId] = whois;
     users[userId].id = userId;
     users[userId].status = null;
+}
+
+function handleChannelMessage(data) {
+    var channel = channels[data.chan];
+    if (!channel) {
+        console.error("Received message for unknown channel:", data.chan);
+        return;
+    }
+
+    var sender = getUserByName(data.msg.from.nick);
+    if (!sender) {
+        sender = { nick: data.msg.from.nick };
+    }
+
+    var message = data.msg.text;
+    var highlight = data.msg.highlight;
+
+    // TODO: Display the message in UI
+    console.log(channel.name, sender.nick + ":", message);
 }
 
 function sendWhoIs(username) {
