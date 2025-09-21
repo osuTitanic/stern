@@ -89,9 +89,16 @@ function onNetworkConfiguration(data) {
         channels[channel.id] = channel;
         mainChannelId = channel.id;
     }
+
+    populateChannels();
+    populateDMs();
 }
 
 function onChannelJoin(data) {
+    if (data.chan.type !== "channel") {
+        // We only care about actual channels here
+        return;
+    }
     channels[data.chan.id] = data.chan;
 }
 
@@ -102,6 +109,7 @@ function onChannelTopic(data) {
         return;
     }
     channel.topic = data.topic;
+    populateChannels();
 }
 
 function onChannelUsers(data) {
@@ -319,6 +327,78 @@ function fetchUserStatus(userId, onSuccess, onFailure) {
     }, function(xhr) {
         console.error("Failed to fetch user status:", xhr);
         onFailure(xhr);
+    });
+}
+
+function fetchDirectMessageSelection(onSuccess, onFailure) {
+    var url = "/chat/dms";
+
+    return performApiRequest("GET", url, null, function(xhr) {
+        var response = JSON.parse(xhr.responseText);
+        if (!response) {
+            console.error("Invalid response format:", response);
+            onFailure(xhr);
+            return;
+        }
+        onSuccess(response);
+    }, function(xhr) {
+        console.error("Failed to fetch DM selection:", xhr);
+        onFailure(xhr);
+    });
+}
+
+function populateChannels() {
+    var channelContainer = document.getElementById("channel-container");
+
+    // Nuke everything first
+    while (channelContainer.firstChild) {
+        channelContainer.removeChild(channelContainer.firstChild);
+    }
+
+    for (var id in channels) {
+        var channel = channels[id];
+        var channelElement = document.createElement("div");
+        channelElement.className = "channel-entry";
+        channelElement.textContent = channel.name;
+        channelElement.title = channel.topic || "No topic set";
+        channelElement.id = "channel-" + channel.id;
+        channelContainer.appendChild(channelElement);
+    }
+}
+
+function populateDMs() {
+    var dmContainer = document.getElementById("dm-container");
+
+    
+    fetchDirectMessageSelection(function(dms) {
+        if (!dms || dms.length === 0) {
+            var errorElement = document.getElementById("dm-status");
+            if (errorElement) {
+                errorElement.textContent = "No DMs available.";
+                errorElement.style.display = "block";
+            }
+            return;
+        }
+
+        // Nuke everything first
+        while (dmContainer.firstChild) {
+            dmContainer.removeChild(dmContainer.firstChild);
+        }
+
+        for (var i = 0; i < dms.length; i++) {
+            var dm = dms[i];
+            var dmElement = document.createElement("div");
+            dmElement.className = "dm-entry";
+            dmElement.textContent = dm.user.name;
+            dmElement.dataset.userId = dm.user.id;
+            dmContainer.appendChild(dmElement);
+        }
+    }, function(xhr) {
+        var errorElement = document.getElementById("dm-status");
+        if (errorElement) {
+            errorElement.textContent = "Failed to load DMs.";
+            errorElement.style.display = "block";
+        }
     });
 }
 

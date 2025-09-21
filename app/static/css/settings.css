@@ -342,6 +342,8 @@
     float: right;
     margin-right: 5px;
     height: 350px;
+    overflow: auto;
+    width: auto;
 }
 
 .chat-selection div {
