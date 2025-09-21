@@ -21,7 +21,6 @@ from app.common.database import (
     posts
 )
 
-import config
 import utils
 import app
 
@@ -578,6 +577,38 @@ def handle_post_edit(topic: DBForumTopic, post_id: int, session: Session) -> Res
         f"/forum/{topic.forum_id}/t/{topic.id}/p/{post.id}"
     )
 
+def handle_draft_save(topic: DBForumTopic, _: int, session: Session) -> Response:
+    content = request.form.get(
+        'bbcode',
+        type=str
+    )
+
+    if not content:
+        return redirect(f"/forum/{topic.forum_id}/t/{topic.id}")
+
+    drafts = posts.fetch_drafts(
+        current_user.id,
+        topic.id,
+        session=session
+    )
+
+    # Delete old draft(s)
+    for draft in drafts:
+        posts.delete(draft.id, session=session)
+
+    draft = posts.create(
+        topic.id,
+        topic.forum_id,
+        current_user.id,
+        content,
+        draft=True,
+        hidden=True,
+        session=session
+    )
+
+    app.session.logger.info(f'{current_user.name} saved a draft ({draft.id}).')
+    return redirect(f"/forum/{topic.forum_id}/t/{topic.id}/")
+
 @router.post('/<forum_id>/t/<topic_id>/post')
 @login_required
 def do_post(forum_id: str, topic_id: str):
@@ -621,6 +652,40 @@ def do_post(forum_id: str, topic_id: str):
             return abort(code=404)
 
         return actions[action](
+            topic,
+            action_id,
+            session=session
+        )
+
+@router.post('/<forum_id>/t/<topic_id>/draft')
+@login_required
+def do_draft_save(forum_id: str, topic_id: str):
+    if not forum_id.isdigit():
+        return utils.render_error(404, 'forum_not_found')
+
+    if not topic_id.isdigit():
+        return utils.render_error(404, 'topic_not_found')
+
+    with app.session.database.managed_session() as session:
+        if not (topic := topics.fetch_one(topic_id, session=session)):
+            return utils.render_error(404, 'topic_not_found')
+
+        if topic.forum_id != int(forum_id):
+            return utils.render_error(404, 'forum_not_found')
+
+        if current_user.silence_end:
+            return utils.render_error(403, 'user_silenced')
+
+        if current_user.restricted:
+            return utils.render_error(403, 'user_restricted')
+
+        action_id = request.form.get('id', type=int)
+        content = request.form.get('bbcode', type=str)
+
+        if len(content) > 2**14 and not current_user.is_moderator:
+            return utils.render_error(400, 'post_too_long')
+
+        return handle_draft_save(
             topic,
             action_id,
             session=session
