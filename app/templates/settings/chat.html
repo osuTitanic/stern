@@ -11,6 +11,28 @@
     <noscript>
         Please enable JavaScript to use the chat feature!
     </noscript>
+    <div class="chat-container">
+        <div class="chat-window">
+            <div class="chat-log">
+                {# TODO: Loading spinner or something #}
+            </div>
+            <div class="chat-input">
+                <p class="status-text">Connecting to chat server...</p>
+                <input type="text" class="chat-message" placeholder="Type a message..." disabled />
+                <button class="chat-send" disabled>Send</button>
+            </div>
+        </div>
+        <div class="chat-selection">
+            <div class="chat-channels">
+                <h2>Channels</h2>
+                <p>Loading...</p>
+            </div>
+            <div class="chat-dms">
+                <h2>Direct Messages</h2>
+                <p>Loading...</p>
+            </div>
+        </div>
+    </div>
     <script>var loungeBackend = "{{ config.LOUNGE_BACKEND }}";</script>
     <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
     <script src="{{ '/js/irc.js'|git_asset_url }}"></script>

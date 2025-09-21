@@ -309,3 +309,41 @@
     width: 76%;
     margin-left: 190px;
 }
+
+.chat-window {
+    float: left;
+}
+
+.chat-log {
+    height: 300px;
+}
+
+.chat-input {
+    width: 500px;
+}
+
+.chat-input .status-text {
+    margin-bottom: 5px;
+    font-size: 85%;
+    color: #536482;
+}
+
+.chat-input .chat-message {
+    width: 90%;
+    font-size: 100%;
+    float: left;
+}
+
+.chat-input button {
+    margin-left: 5px;
+}
+
+.chat-selection {
+    float: right;
+    margin-right: 5px;
+    height: 350px;
+}
+
+.chat-selection div {
+    margin-bottom: 15px;
+}
