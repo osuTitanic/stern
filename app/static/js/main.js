@@ -95,6 +95,7 @@ var Mode = {
 };
 
 var isNavigatingAway = false;
+var pageLoaded = false;
 
 if (!window.console) {
     // Console polyfill for ~IE8 and earlier
@@ -441,6 +442,19 @@ function loadBBCodePreview(element) {
     return false;
 }
 
+function reloadCsrfToken() {
+    performApiRequest("GET", "/account/csrf", null, function(xhr) {
+        var response = JSON.parse(xhr.responseText);
+        if (response && response.token) {
+            csrfToken = response.token;
+        } else {
+            console.error("Failed to reload CSRF token: invalid response");
+        }
+    }, function(xhr) {
+        console.error("Failed to reload CSRF token");
+    });
+}
+
 function renderTimeagoElements() {
     var times = document.getElementsByClassName('timeago');
     for (var i = 0; i < times.length; i++) {
@@ -466,9 +480,21 @@ if (!document.getElementsByClassName) {
 }
 
 addEvent("DOMContentLoaded", document, function(e) {
+    pageLoaded = true;
     renderTimeagoElements();
 });
 
 addEvent("beforeunload", window, function(e) {
     isNavigatingAway = true;
+});
+
+addEvent("visibilitychange", document, function(e) {
+    if (!isLoggedIn())
+        return;
+
+    if (!pageLoaded)
+        return;
+
+    if (document.visibilityState === "visible")
+        reloadCsrfToken();
 });
