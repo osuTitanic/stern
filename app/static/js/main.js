@@ -206,7 +206,7 @@ function showLoginForm() {
 }
 
 function toggleSpoiler(root) {
-    var spoiler = $(root).parents(".spoiler");
+    var spoiler = $(root).closest(".spoiler");
     spoiler.children(".spoiler-body").slideToggle("fast");
     spoiler.find('img').trigger('unveil');
     return false;
