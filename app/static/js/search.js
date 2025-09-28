@@ -375,6 +375,7 @@ function getBeatmapsets(clear) {
                 year: "numeric" 
             });
             setText(dateText, displayDate);
+            dateText.title = beatmapset.approved_at ? "Approved date" : "Last update";
             dateText.classList.add("hidden-elements");
 
             var heartIcon = document.createElement("i");
