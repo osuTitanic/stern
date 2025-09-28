@@ -180,10 +180,11 @@ def render_country_page(
 ) -> str:
     # Get country ranking
     leaderboard = [country for country in leaderboards.top_countries(mode) if country['name'] != 'xx']
-    leaderboard = leaderboard[(page - 1)*items_per_page:(page - 1)*items_per_page + items_per_page]
 
     country_count = len(leaderboard)
     total_pages = max(1, min(10000, math.ceil(country_count / items_per_page)))
+    
+    leaderboard = leaderboard[(page - 1)*items_per_page:(page - 1)*items_per_page + items_per_page]
 
     # Get min/max pages to display for pagination
     max_page_display = max(page, min(total_pages, page + 8))
