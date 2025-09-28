@@ -225,6 +225,10 @@
     padding-right: 2.5px;
 }
 
+.beatmap-details span {
+    font-size: 100%;
+}
+
 .beatmap-order-select {
     width: 100%;
     border-radius: 5px;
