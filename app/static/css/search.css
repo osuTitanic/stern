@@ -179,6 +179,10 @@
     margin-top: 12px;
 }
 
+.hidden-elements span {
+    font-size: 100%;
+}
+
 .beatmapset .beatmap-icon {
     margin: 2px;
     width: 16px;

@@ -367,6 +367,16 @@ function getBeatmapsets(clear) {
             beatmapRating.classList.add("beatmap-rating");
             beatmapRating.appendChild(ratingBar);
 
+            var dateText = document.createElement("span");
+            var statusTimestamp = beatmapset.approved_at || beatmapset.last_update;
+            var displayDate = new Date(statusTimestamp).toLocaleDateString("en-US", { 
+                month: "short", 
+                day: "numeric", 
+                year: "numeric" 
+            });
+            setText(dateText, displayDate);
+            dateText.classList.add("hidden-elements");
+
             var heartIcon = document.createElement("i");
             heartIcon.classList.add("fa-solid", "fa-heart");
 
@@ -383,6 +393,7 @@ function getBeatmapsets(clear) {
 
             var detailsDiv = document.createElement("div");
             detailsDiv.classList.add("beatmap-details");
+            detailsDiv.appendChild(dateText);
             detailsDiv.appendChild(heartIcon);
             detailsDiv.appendChild(document.createTextNode(beatmapset.favourites));
             detailsDiv.appendChild(playsIcon);
