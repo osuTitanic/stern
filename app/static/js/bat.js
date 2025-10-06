@@ -117,3 +117,20 @@ function uploadResource(endpoint, key, filetypes, promptText) {
     // Trigger the file input dialog
     fileInput.click();
 }
+
+function updateBeatmapsetOwner(beatmapsetId) {
+    var newOwner = prompt("Enter the user ID of the new owner:");
+
+    if (!newOwner || isNaN(newOwner))
+        return;
+
+    var url = "/beatmapsets/" + beatmapsetId + "/owner";
+    var data = { user_id: newOwner };
+
+    performApiRequest("PATCH", url, data, function(xhr) {
+        location.reload();
+    }, function(xhr) {
+        var response = JSON.parse(xhr.responseText);
+        alert(response.details);
+    });
+}
