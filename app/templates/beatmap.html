@@ -22,22 +22,22 @@
             {% for map in beatmapset.beatmaps %}
             <li class="tab-item difficulty-icon">
                 <a href="/b/{{ map.id }}" class="tab-link {{ 'active' if map.id == beatmap.id }}">
-                    {% if map.diff < 2.7 %}
+                    {% if map.diff < 2 %}
                         <img
                             src="/images/beatmap/difficulties/easy-{{map.mode}}.png"
                             alt="Easy"
                         >
-                    {% elif map.diff < 3.7 %}
+                    {% elif map.diff < 2.7 %}
                         <img
                             src="/images/beatmap/difficulties/normal-{{map.mode}}.png"
                             alt="Normal"
                         >
-                    {% elif map.diff < 4.5 %}
+                    {% elif map.diff < 4 %}
                         <img
                             src="/images/beatmap/difficulties/hard-{{map.mode}}.png"
                             alt="Hard"
                         >
-                    {% elif map.diff < 5.5 %}
+                    {% elif map.diff < 5.3 %}
                         <img
                             src="/images/beatmap/difficulties/insane-{{map.mode}}.png"
                             alt="Insane"
