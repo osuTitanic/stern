@@ -702,6 +702,18 @@
     margin: 4px;
 }
 
+.user-moderation {
+    font-size: 90%;
+}
+
+.user-moderation h2 {
+    font-size: 110%;
+    margin: 10px auto;
+    text-align: center;
+    color: #e15fac;
+    text-shadow: #efcfe1 0px 0px 10px;
+}
+
 @supports (display: flex) {
     .avatar-box img {
         display: flex;
