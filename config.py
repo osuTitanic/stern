@@ -86,4 +86,7 @@ OSU_BASEURL = os.environ.get('OSU_BASEURL', DEFAULT_OSU_BASEURL)
 STATIC_BASEURL = os.environ.get('STATIC_BASEURL', DEFAULT_STATIC_BASEURL)
 EVENTS_WEBSOCKET = os.environ.get('EVENTS_WEBSOCKET', DEFAULT_EVENTS_WEBSOCKET)
 
-SUPER_FRIENDLY_USERS = [int(i) for i in os.environ.get('SUPER_FRIENDLY_USERS', '').split(',') if i.isdigit()]
+SUPER_FRIENDLY_USERS = [
+    int(i) for i in os.environ.get('SUPER_FRIENDLY_USERS', '1').split(',')
+    if i.isdigit()
+]
