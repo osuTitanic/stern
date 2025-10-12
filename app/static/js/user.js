@@ -1035,9 +1035,9 @@ function addFriend() {
         };
 
         if (data.status === 'mutual')
-            setText(friendStatus, 'Remove Mutual Friend');
+            setText(friendStatus, 'Mutual Friend');
         else
-            setText(friendStatus, 'Remove Friend');
+            setText(friendStatus, 'Friend');
     });
 
     return false;
