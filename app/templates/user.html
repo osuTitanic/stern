@@ -164,11 +164,11 @@
                 {% if user.id in current_friends %}
                     {% if current_user.id in target_friends %}
                     <a href="#" class="friend-remove" id="friend-status" onclick="return removeFriend()">
-                        Remove Mutual Friend
+                        Mutual Friend
                     </a>
                     {% else %}
                     <a href="#" class="friend-remove" id="friend-status" onclick="return removeFriend()">
-                        Remove Friend
+                        Friend
                     </a>
                     {% endif %}
                 {% else %}
