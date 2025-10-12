@@ -1027,17 +1027,10 @@ function addFriend() {
 
     performApiRequest("POST", "/account/friends?id=" + userId, null, function(xhr) {
         var data = JSON.parse(xhr.responseText);
+        var targetAdded = data.status === 'mutual' || superFriendly;
         var friendStatus = document.getElementById('friend-status');
-        friendStatus.classList.remove('friend-add');
-        friendStatus.classList.add('friend-remove');
-        friendStatus.onclick = function() {
-            return removeFriend();
-        };
 
-        if (data.status === 'mutual')
-            setText(friendStatus, 'Remove Mutual Friend');
-        else
-            setText(friendStatus, 'Remove Friend');
+        friendStatus.className = `friend-current-true-target-${targetAdded}`;
     });
 
     return false;
@@ -1049,17 +1042,10 @@ function removeFriend() {
 
     performApiRequest("DELETE", "/account/friends?id=" + userId, null, function(xhr) {
         var data = JSON.parse(xhr.responseText);
+        var targetAdded = data.status === 'mutual' || superFriendly;
         var friendStatus = document.getElementById('friend-status');
-        friendStatus.classList.remove('friend-remove');
-        friendStatus.classList.add('friend-add');
-        friendStatus.onclick = function() {
-            return addFriend();
-        };
 
-        if (data.status === 'mutual')
-            setText(friendStatus, 'Add Mutual Friend');
-        else
-            setText(friendStatus, 'Add Friend');
+        friendStatus.className = `friend-current-false-target-${targetAdded}`;
     });
 
     return false;
