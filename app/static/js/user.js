@@ -1034,7 +1034,7 @@ function addFriend() {
             return removeFriend();
         };
 
-        if (data.status === 'mutual')
+        if (data.status === 'mutual' || superFriendly)
             setText(friendStatus, 'Mutual Friend');
         else
             setText(friendStatus, 'Friend');
@@ -1056,7 +1056,7 @@ function removeFriend() {
             return addFriend();
         };
 
-        if (data.status === 'mutual')
+        if (data.status === 'mutual' || superFriendly)
             setText(friendStatus, 'Add Mutual Friend');
         else
             setText(friendStatus, 'Add Friend');
