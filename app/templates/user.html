@@ -160,29 +160,22 @@
             <div class="friend-actions">
                 {% set current_friends = repositories.relationships.fetch_many_by_id(current_user.id, session)|get_attributes('target_id') %}
                 {% set target_friends = user.relationships|get_attributes('target_id') %}
-                {% set friended_by_target = current_user.id in target_friends or user.id in config.SUPER_FRIENDLY_USERS %}
-                {# Determine friend status #}
-                {% if user.id in current_friends %}
-                    {% if friended_by_target %}
-                    <a href="#" class="friend-remove" id="friend-status" onclick="return removeFriend()">
-                        Mutual Friend
+                {% set current_added = user.id in current_friends %}
+                {% set target_added = current_user.id in target_friends or user.id in config.SUPER_FRIENDLY_USERS %}
+                <div id="friend-status" class="friend-current-{{ current_added|lower }}-target-{{ target_added|lower }}">
+                    <a href="#" onclick="return removeFriend()">
+                        <i class="fa-solid fa-heart"></i> Mutual Friend
                     </a>
-                    {% else %}
-                    <a href="#" class="friend-remove" id="friend-status" onclick="return removeFriend()">
-                        Friend
+                    <a href="#" onclick="return removeFriend()">
+                        <i class="fa-solid fa-star"></i> Friend
                     </a>
-                    {% endif %}
-                {% else %}
-                    {% if friended_by_target %}
-                    <a href="#" class="friend-add" id="friend-status" onclick="return addFriend()">
-                        Add Mutual Friend
+                    <a href="#" onclick="return addFriend()">
+                        <i class="fa-solid fa-plus"></i> Add Mutual Friend
                     </a>
-                    {% else %}
-                    <a href="#" class="friend-add" id="friend-status" onclick="return addFriend()">
-                        Add Friend
+                    <a href="#" onclick="return addFriend()">
+                        <i class="fa-solid fa-plus"></i> Add Friend
                     </a>
-                    {% endif %}
-                {% endif %}
+                </div>
             </div>
             {% endif %}
         </div>

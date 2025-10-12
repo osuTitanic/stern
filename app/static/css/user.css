@@ -650,19 +650,47 @@
     width: 100%;
 }
 
-.friend-add {
-    color: green !important;
-}
-
-.friend-remove {
-    color: red !important;
-}
-
-#friend-status {
-    display: block;
-    margin: 0 auto;
+#friend-status a {
+    color: #fff;
     text-align: center;
+    font-size: 15px;
+    padding: 5px 10px;
     margin: 5px;
+    border-radius: 6px;
+}
+
+#friend-status a:hover {
+    color: #fff;
+    text-decoration: none;
+    text-shadow: 0 0 5px #fff;
+}
+
+#friend-status a:focus {
+    text-decoration: none;
+}
+
+#friend-status a {
+    display: none;
+}
+
+#friend-status.friend-current-true-target-true a:nth-child(1),
+#friend-status.friend-current-true-target-false a:nth-child(2),
+#friend-status.friend-current-false-target-true a:nth-child(3),
+#friend-status.friend-current-false-target-false a:nth-child(4) {
+    display: block;
+}
+
+.friend-current-false-target-true a,
+.friend-current-false-target-false a {
+    background: #5db8ef;
+}
+
+.friend-current-true-target-false a {
+    background: #54bd21;
+}
+
+.friend-current-true-target-true a {
+    background: #ef77af;
 }
 
 #admin-userpage-controls:after {
