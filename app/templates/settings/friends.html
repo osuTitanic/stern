@@ -18,7 +18,10 @@
         </div>
         <div class="friend-description">
             <p>{{ user.name }}</p>
-            {% set is_mutual = repositories.relationships.is_friend(user.id, current_user.id, session) or user.id in config.SUPER_FRIENDLY_USERS %}
+            {% set is_mutual = (
+                repositories.relationships.is_friend(user.id, current_user.id, session) or
+                user.id in config.SUPER_FRIENDLY_USERS 
+            ) %}
             {% if is_mutual %}
             <a id="{{ user.id }}" style="color: red;" onclick="return removeFriend(this);">Remove Mutual Friend</a>
             {% else %}
