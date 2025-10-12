@@ -248,7 +248,7 @@
                             <td onclick="expandProfileTab('leader', true)">Top Plays</td>
                             <td onclick="expandProfileTab('history', true)">Historical</td>
                             <td onclick="expandProfileTab('beatmaps', true)">Beatmaps</td>
-                            <td onclick="expandProfileTab('kudosu', true)">Kudosu</td>
+                            <td onclick="expandProfileTab('kudosu', true)">Kudosu!</td>
                             <td onclick="expandProfileTab('achievements', true)">Achievements</td>
                         </tbody>
                     </table>
@@ -638,6 +638,44 @@
                     <br>
                 </div>
             </td>
+            {% if total_kudosu > 0 %}
+            <tr onclick="expandProfileTab('kudosu')">
+                <td id="tab-kudosu" class="tab-heading">Kudosu!</td>
+            </tr>
+            <td>
+                <div id="kudosu" class="tab-content" style="opacity: 1; filter: none; display: none; height: 0px;">
+                    {% if not recent_mods %}
+                        <p>This user has not earned any kudosu yet.</p>
+                    {% else %}
+                        <h4 class="profile-stats-element">
+                            <b>Total Kudosu Earned</b>: {{ "{:,}".format(total_kudosu) }}
+                        </h4>
+                        <h3 class="profile-stats-header">Recent Kudosu History</h3>
+                        {% for mod in recent_mods %}
+                            {% set mod_status = (
+                                'revoked' if mod.amount < 0 else
+                                'received' if mod.target_id == user.id else
+                                'gave'
+                            ) %}
+                            {{ mod.time|timeago }} -
+                            {% if mod_status != 'received' %}
+                                <a href="/u/{{ mod.sender_id }}">{{ mod.sender.name }}</a>
+                            {% else %}
+                                <a href="/u/{{ mod.target_id }}">{{ mod.target.name }}</a>
+                            {% endif %}
+                            {{ mod_status }}
+                            <b>{{ mod.amount|abs }} kudos</b> {{ 'from' if mod_status != 'gave' else 'to' }} a post by
+                            {% if mod_status == 'received' %}
+                                <a href="/u/{{ mod.sender_id }}">{{ mod.sender.name }}</a>
+                            {% else %}
+                                <a href="/u/{{ mod.target_id }}">{{ mod.target.name }}</a>
+                            {% endif %}
+                            in <a href="/forum/p/{{ mod.post_id }}">{{ mod.post.topic.title }}</a><br>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </td>
+            {% endif %}
             <tr onclick="expandProfileTab('achievements')">
                 <td id="tab-achievements" class="tab-heading">Achievements</td>
             </tr>
@@ -725,97 +763,53 @@
                 {% endif %}
                 </div>
             </td>
-            <tr onclick="expandProfileTab('kudosu')">
-                <td id="tab-kudosu" class="tab-heading">Kudosu</td>
+            {% if infringements %}
+            <tr>
+                <td class="tab-heading tab-heading-account">Account Standing</td>
             </tr>
             <td>
-                <div id="kudosu" class="tab-content" style="opacity: 1; filter: none; display: none; height: 0px;">
-                    {% if not recent_mods %}
-                        <p>This user has not earned any kudosu yet.</p>
-                    {% else %}
-                        <h4 class="profile-stats-element">
-                            <b>Total Kudosu Earned</b>: {{ "{:,}".format(total_kudosu) }}
-                        </h4>
-                        <h3 class="profile-stats-header">Recent Kudosu History</h3>
-                        {% for mod in recent_mods %}
-                            {% set mod_status = (
-                                'revoked' if mod.amount < 0 else
-                                'received' if mod.target_id == user.id else
-                                'gave'
-                            ) %}
-                            {{ mod.time|timeago }} -
-                            {% if mod_status != 'received' %}
-                                <a href="/u/{{ mod.sender_id }}">{{ mod.sender.name }}</a>
-                            {% else %}
-                                <a href="/u/{{ mod.target_id }}">{{ mod.target.name }}</a>
-                            {% endif %}
-                            {{ mod_status }}
-                            <b>{{ mod.amount|abs }} kudos</b> {{ 'from' if mod_status != 'gave' else 'to' }} a post by
-                            {% if mod_status == 'received' %}
-                                <a href="/u/{{ mod.sender_id }}">{{ mod.sender.name }}</a>
-                            {% else %}
-                                <a href="/u/{{ mod.target_id }}">{{ mod.target.name }}</a>
-                            {% endif %}
-                            in <a href="/forum/p/{{ mod.post_id }}">{{ mod.post.topic.title }}</a><br>
-                        {% endfor %}
-                    {% endif %}
+                <div>
+                    <p style="color: red">
+                        {{ user.name }}'s account is not in good standing :(
+                        {% if current_user.id == user.id %}
+                        <br/>
+                        <br/>Your account could be permanently disabled if you continue to cause problems. Please make sure to follow the <a href='/wiki/en/Rules'>community rules</a>! Note that infringements will disappear after four weeks of good behaviour.
+                        {% endif %}
+                    </p>
+                    <h3 class="profile-stats-header" style="text-align: left">
+                        Recent Infringements
+                    </h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <td>Date</td>
+                                <td>Action</td>
+                                <td>Length</td>
+                                <td>Description</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for inf in infringements %}
+                            <tr>
+                                <td>{{ inf.time|timeago }}</td>
+                                {% if inf.action == 0 %}
+                                <td style="background-color: red">BAN</td>
+                                {% else %}
+                                <td style="background-color: yellow">SILENCE</td>
+                                {% endif %}
+                                {% if inf.is_permanent %}
+                                <td>Permanent</td>
+                                {% else %}
+                                <td>{{ (inf.length|round_time - inf.time|round_time) }}</td>
+                                {% endif %}
+                                <td>{{ inf.description }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </td>
-            <tr onclick="expandProfileTab('account')">
-                <td id="tab-general" class="tab-heading">Account Standing</td>
-            </tr>
-            <td>
-                <div id="account" class="tab-content" style="opacity: 1; filter: none; display: none; height: 0px;">
-                    <div>
-                        {% if infringements %}
-                        <p style="color: red">
-                            {{ user.name }}'s account is not in good standing :(
-                            {% if current_user.id == user.id %}
-                            <br/>
-                            <br/>Your account could be permanently disabled if you continue to cause problems. Please make sure to follow the <a href='/wiki/en/Rules'>community rules</a>! Note that infringements will disappear after four weeks of good behaviour.
-                            {% endif %}
-                        </p>
-                        {% else %}
-                        <p>
-                            This account is in good standing :)
-                        </p>
-                        {% endif %}
-                        {% if infringements %}
-                        <h3 class="profile-stats-header" style="text-align: left">
-                            Recent Infringements
-                        </h3>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <td>Date</td>
-                                    <td>Action</td>
-                                    <td>Length</td>
-                                    <td>Description</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for inf in infringements %}
-                                <tr>
-                                    <td>{{ inf.time|timeago }}</td>
-                                    {% if inf.action == 0 %}
-                                    <td style="background-color: red">BAN</td>
-                                    {% else %}
-                                    <td style="background-color: yellow">SILENCE</td>
-                                    {% endif %}
-                                    {% if inf.is_permanent %}
-                                    <td>Permanent</td>
-                                    {% else %}
-                                    <td>{{ (inf.length|round_time - inf.time|round_time) }}</td>
-                                    {% endif %}
-                                    <td>{{ inf.description }}</td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                        {% endif %}
-                    </div>
-                </div>
-            </td>
+            {% endif %}
         </tbody>
     </table>
 </div>
