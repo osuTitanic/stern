@@ -64,16 +64,16 @@ function endsWith(str, suffix) {
 function getBeatmapIcon(beatmap) {
     var difficulty = "expert";
 
-    if (beatmap.diff < 2.7) {
+    if (beatmap.diff < 2) {
         difficulty = "easy";
     }
-    else if (beatmap.diff < 3.7) {
+    else if (beatmap.diff < 2.7) {
         difficulty = "normal";
     }
-    else if (beatmap.diff < 4.5) {
+    else if (beatmap.diff < 4) {
         difficulty = "hard";
     }
-    else if (beatmap.diff < 5.5) {
+    else if (beatmap.diff < 5.3) {
         difficulty = "insane";
     }
 
