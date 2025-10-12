@@ -336,6 +336,11 @@
     margin-bottom: 5px;
 }
 
+.tab-heading-account {
+    background-color: #2f2f65;
+    cursor: auto;
+}
+
 .tab-content {
     transition: all .5s ease;
     overflow: hidden;
