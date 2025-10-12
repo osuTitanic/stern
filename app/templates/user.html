@@ -763,13 +763,13 @@
                 {% endif %}
                 </div>
             </td>
-            <tr onclick="expandProfileTab('account')">
-                <td id="tab-general" class="tab-heading">Account Standing</td>
+            {% if infringements %}
+            <tr>
+                <td class="tab-heading tab-heading-account">Account Standing</td>
             </tr>
             <td>
                 <div id="account" class="tab-content" style="opacity: 1; filter: none; display: none; height: 0px;">
                     <div>
-                        {% if infringements %}
                         <p style="color: red">
                             {{ user.name }}'s account is not in good standing :(
                             {% if current_user.id == user.id %}
@@ -777,12 +777,6 @@
                             <br/>Your account could be permanently disabled if you continue to cause problems. Please make sure to follow the <a href='/wiki/en/Rules'>community rules</a>! Note that infringements will disappear after four weeks of good behaviour.
                             {% endif %}
                         </p>
-                        {% else %}
-                        <p>
-                            This account is in good standing :)
-                        </p>
-                        {% endif %}
-                        {% if infringements %}
                         <h3 class="profile-stats-header" style="text-align: left">
                             Recent Infringements
                         </h3>
@@ -814,10 +808,10 @@
                                 {% endfor %}
                             </tbody>
                         </table>
-                        {% endif %}
                     </div>
                 </div>
             </td>
+            {% endif %}
         </tbody>
     </table>
 </div>
