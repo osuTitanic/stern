@@ -591,6 +591,7 @@
                         </div>
                     </div>
                     {% endif %}
+                    {% set nominations = nominations_titanic + nominations_bancho %}
                     {% if user.is_bat or nominations %}
                     <div>
                         <h2 class="profile-stats-header">
