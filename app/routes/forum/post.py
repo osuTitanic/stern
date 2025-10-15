@@ -204,7 +204,7 @@ def update_topic_type(
 
     type = request.form.get(
         key='type',
-        default='global'
+        default=get_post_type(topic)
     )
 
     if type == 'announcement':

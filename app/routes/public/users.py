@@ -129,8 +129,8 @@ def userpage(query: str):
         return utils.render_template(
             template_name='user.html',
             user=user,
+            mode=mode,
             css='user.css',
-            mode=int(mode),
             title=f"{user.name} - Titanic",
             site_title=f"{user.name} - Player Info",
             site_description=f"Rank ({GameMode(int(mode)).formatted}): Global: #{pp_rank or '-'} | Country: #{pp_rank_country or '-'}",
