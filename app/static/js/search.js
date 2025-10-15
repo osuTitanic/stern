@@ -193,6 +193,7 @@ function getBeatmapsets(clear) {
         beatmapsets.forEach(function(beatmapset) {
             var beatmapsetDiv = document.createElement("div");
             beatmapsetDiv.classList.add("beatmapset");
+            beatmapsetDiv.id = "beatmapset-" + beatmapset.id;
 
             var imageUrl = 'url("/mt/' + beatmapset.id + '?c=' + beatmapset.last_update	+ '")';
 
@@ -204,6 +205,53 @@ function getBeatmapsets(clear) {
             var beatmapImage = document.createElement("div");
             beatmapImage.classList.add("beatmap-image");
             beatmapImage.style.backgroundImage = imageUrl;
+
+            var beatmapSideOptions = document.createElement("div");
+            beatmapSideOptions.classList.add("beatmap-side-options");
+            beatmapSideOptions.style.display = "none";
+            beatmapSideOptions.style.overflow = "hidden";
+            beatmapSideOptions.style.width = "24px";
+
+            var heartIcon = document.createElement("i");
+            heartIcon.classList.add("fa-solid", "fa-heart");
+            var favouriteLink = document.createElement("a");
+            favouriteLink.href = "#";
+            favouriteLink.appendChild(heartIcon);
+            beatmapSideOptions.appendChild(favouriteLink);
+
+            var speechBubbleIcon = document.createElement("i");
+            speechBubbleIcon.classList.add("fa-regular", "fa-comment-dots");
+            var commentsLink = document.createElement("a");
+            commentsLink.href = '/forum/t/' + beatmapset.topic_id;
+            commentsLink.appendChild(speechBubbleIcon);
+            beatmapSideOptions.appendChild(commentsLink);
+
+            var downloadIcon = document.createElement("i");
+            downloadIcon.classList.add("fa-solid", "fa-download");
+            var downloadLink = document.createElement("a");
+            downloadLink.href = '/d/' + beatmapset.id;
+            downloadLink.appendChild(downloadIcon);
+            beatmapSideOptions.appendChild(downloadLink);
+
+            if (beatmapset.server == 0) {
+                commentsLink.href = 'https://osu.ppy.sh/beatmapsets/' + beatmapset.id + '#comments';
+            }
+
+            if (!currentUser) {
+                favouriteLink.onclick = function(e) {
+                    e.preventDefault();
+                    showLoginForm();
+                }
+                downloadLink.onclick = function(e) {
+                    e.preventDefault();
+                    showLoginForm();
+                }
+            } else {
+                favouriteLink.onclick = function(e) {
+                    e.preventDefault();
+                    addFavorite(beatmapset.id);
+                }
+            }
 
             var playIcon = document.createElement("i");
             playIcon.classList.add("fa-solid", "fa-play");
@@ -247,6 +295,7 @@ function getBeatmapsets(clear) {
             beatmapImage.appendChild(playIcon);
             beatmapsetDiv.appendChild(beatmapImage);
             beatmapsetDiv.appendChild(beatmapAudio);
+            beatmapsetDiv.appendChild(beatmapSideOptions);
 
             var beatmapInfoLeft = document.createElement("div");
             beatmapInfoLeft.classList.add("beatmap-info");
@@ -415,10 +464,16 @@ function getBeatmapsets(clear) {
             function() {
                 $(this).find(".beatmap-info").marquee({ speed: 50 });
                 $(this).find(".hidden-elements").stop().fadeTo(1,100);
+                $(this).find(".beatmap-side-options").clearQueue().stop().delay(500).animate({
+                    width: 'show'
+                }, 100);
             },
             function() {
                 $(this).find(".beatmap-info").attr('stop', 1);
                 $(this).find(".hidden-elements").fadeOut(400);
+                $(this).find(".beatmap-side-options").clearQueue().stop().delay(500).animate({
+                    width: 'hide'
+                }, 100);
             }
         );
 
@@ -435,6 +490,40 @@ function getBeatmapsets(clear) {
 
         beatmapContainer.appendChild(errorText);
         busy = false;
+    });
+}
+
+function addFavorite(beatmapsetId) {
+    var url = "/users/" + currentUser + "/favourites";
+
+    performApiRequest("POST", url, {"set_id": beatmapsetId}, function(xhr) {
+        var heartIcon = document.querySelector("#beatmapset-" + beatmapsetId + " .fa-heart");
+        heartIcon.parentNode.style.color = "red";
+        heartIcon.parentNode.onclick = function(e) {
+            e.preventDefault();
+            removeFavorite(beatmapsetId);
+        }
+    }, function(xhr) {
+        // Most likely already favorited, so just do the same thing
+        var heartIcon = document.querySelector("#beatmapset-" + beatmapsetId + " .fa-heart");
+        heartIconparentNode.style.color = "red";
+        heartIcon.parentNode.onclick = function(e) {
+            e.preventDefault();
+            removeFavorite(beatmapsetId);
+        }
+    });
+}
+
+function removeFavorite(beatmapsetId) {
+    var url = "/users/" + currentUser + "/favourites/" + beatmapsetId;
+
+    performApiRequest("DELETE", url, null, function(xhr) {
+        var heartIcon = document.querySelector("#beatmapset-" + beatmapsetId + " .fa-heart");
+        heartIcon.parentNode.style.color = null;
+        heartIcon.parentNode.onclick = function(e) {
+            e.preventDefault();
+            addFavorite(beatmapsetId);
+        }
     });
 }
 
