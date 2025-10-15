@@ -305,6 +305,7 @@ function getBeatmapsets(clear) {
             beatmapArtist.style.color = "#555555";
 
             var beatmapTitle = document.createElement("span");
+            beatmapTitle.classList.add("beatmap-title");
             setText(beatmapTitle, beatmapset.title);
 
             var beatmapLink = document.createElement("a");
