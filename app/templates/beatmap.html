@@ -114,7 +114,7 @@
                         <div class="starfield-selected" style="width: {{ image_width*beatmap.od }}px"></div>
                     </div>
                 </td>
-                <td><b>Length:</b></td>
+                <td>Length:</td>
                 <td class="beatmap-stats-info">
                     {% set minutes = beatmap.total_length // 60 %}
                     {% set seconds = beatmap.total_length % 60 %}
@@ -135,7 +135,7 @@
                     <a href="/beatmapsets?language={{ beatmapset.language_id }}">({{ Language(beatmapset.language_id).name }})</a>
                     {% endif %}
                 </td>
-                <td><b>BPM:</b></td>
+                <td>BPM:</td>
                 <td class="beatmap-stats-info">{{ beatmap.bpm|round|int }}</td>
             </tr>
             <tr>
