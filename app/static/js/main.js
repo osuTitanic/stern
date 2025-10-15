@@ -447,12 +447,21 @@ function reloadCsrfToken() {
         var response = JSON.parse(xhr.responseText);
         if (response && response.token) {
             csrfToken = response.token;
+            applyCsrfToForms();
         } else {
             console.error("Failed to reload CSRF token: invalid response");
         }
     }, function(xhr) {
         console.error("Failed to reload CSRF token");
     });
+}
+
+function applyCsrfToForms() {
+    var inputs = document.querySelectorAll('input[name="csrf_token"]');
+
+    for (var i = 0; i < inputs.length; i++) {
+        inputs[i].attributes.value = csrfToken;
+    }
 }
 
 function renderTimeagoElements() {
