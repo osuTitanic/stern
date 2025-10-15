@@ -120,13 +120,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                {% for beatmap in most_played %}
+                {% for count, beatmap in most_played %}
                     {% if loop.index0 % 2 %}
                         <tr class="row-light">
                     {% else %}
                         <tr class="row-dark">
                     {% endif %}
-                        <td>{{ "{:,}".format(beatmap.playcount) }}</th>
+                        <td>{{ "{:,}".format(count) }}</td>
                         <td>
                             <a href="/b/{{ beatmap.id }}">
                                 <img src="/mt/{{ beatmap.set_id }}" loading="lazy" alt="image"/>
