@@ -396,9 +396,9 @@ function getBeatmapsets(clear) {
             detailsDiv.classList.add("beatmap-details");
             detailsDiv.appendChild(dateText);
             detailsDiv.appendChild(heartIcon);
-            detailsDiv.appendChild(document.createTextNode(beatmapset.favourites));
+            detailsDiv.appendChild(document.createTextNode(beatmapset.favourites.toLocaleString()));
             detailsDiv.appendChild(playsIcon);
-            detailsDiv.appendChild(document.createTextNode(totalPlays));
+            detailsDiv.appendChild(document.createTextNode(totalPlays.toLocaleString()));
 
             beatmapInfoRight.appendChild(beatmapTagsDiv);
             beatmapInfoRight.appendChild(beatmapRating);
