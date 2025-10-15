@@ -3,6 +3,7 @@ from app.common.database.repositories import users, stats, beatmaps, relationshi
 from app.common.constants import GameMode, COUNTRIES
 from app.common.database import DBUser, DBStats
 from app.common.cache import leaderboards
+from app.common.helpers import caching
 
 from flask import Blueprint, abort, request
 from flask_login import current_user
@@ -85,10 +86,8 @@ def render_rankings_page(
         if jumpto and (user := users.fetch_by_name_case_insensitive(jumpto, session)):
             # Change the page to where the user is
             user_rank = leaderboards.rank(
-                user.id,
-                mode.value,
-                order_type,
-                country
+                user.id, mode.value,
+                order_type, country
             )
             page = math.ceil(user_rank / items_per_page)
 
@@ -133,7 +132,7 @@ def render_rankings_page(
         min_page_display = max(1, min(total_pages, max_page_display - 9))
 
         # Fetch top countries for country selection
-        top_countries = leaderboards.top_countries(mode)
+        top_countries = top_countries_cached(mode)
         order_name = order_name_mapping.get(order_type.lower())
 
         friend_ids = (
@@ -274,3 +273,7 @@ def create_user_stats(user: DBUser, session) -> List[DBStats]:
         stats.create(user.id, 2, session),
         stats.create(user.id, 3, session)
     ]
+
+@caching.ttl_cache(ttl=60*5)
+def top_countries_cached(mode: int) -> List[dict]:
+    return leaderboards.top_countries(mode)
