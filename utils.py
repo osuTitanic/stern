@@ -33,6 +33,7 @@ import re
 
 def render_template(template_name: str, **context) -> str:
     """This will automatically append the required data to the context for rendering pages"""
+    redis_available = False
     total_scores = 0
     online_users = 0
     total_users = 0
@@ -41,6 +42,7 @@ def render_template(template_name: str, **context) -> str:
         total_scores = int(app.session.redis.get('bancho:totalscores') or 0)
         online_users = int(app.session.redis.get('bancho:users') or 0)
         total_users = int(app.session.redis.get('bancho:totalusers') or 0)
+        redis_available = True
     except Exception as e:
         # Most likely failed to connect to redis instance
         app.session.logger.error(
@@ -52,6 +54,7 @@ def render_template(template_name: str, **context) -> str:
         is_modern_browser=browsers.is_modern_browser(request.user_agent.string),
         is_ie=browsers.is_internet_explorer(request.user_agent.string),
         is_compact=request.args.get('compact', 0, type=int) == 1,
+        redis_available=redis_available,
         total_scores=total_scores,
         online_users=online_users,
         total_users=total_users,
@@ -72,11 +75,13 @@ def render_template(template_name: str, **context) -> str:
                 session=context.get('session')
             )
         })
-        app.session.redis.set(
-            f'csrf:{current_user.id}',
-            generate_csrf(),
-            ex=60*60*24
-        )
+        
+        if redis_available:
+            app.session.redis.set(
+                f'csrf:{current_user.id}',
+                generate_csrf(),
+                ex=60*60*24
+            )
 
     return _render_template(
         template_name,
