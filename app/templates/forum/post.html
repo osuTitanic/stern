@@ -10,9 +10,8 @@
 {% set can_edit_icon = (
     action != "edit" and
     (
-        is_privileged or
-        topic.can_change_icon and
-        current_user.id == topic.creator_id
+        is_privileged and
+        topic.can_change_icon
     )
 ) %}
 
