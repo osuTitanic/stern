@@ -229,11 +229,11 @@ def get_icon_id(topic: DBForumTopic) -> int | None:
         current_user.is_bat or
         current_user.is_moderator
     )
-
-    if not topic.can_change_icon and not is_privileged:
+    
+    if not is_privileged:
         return -2
 
-    if current_user.id != topic.creator_id and not is_privileged:
+    if not topic.can_change_icon:
         return -2
 
     icon_id = request.form.get(
