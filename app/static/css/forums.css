@@ -221,6 +221,12 @@
     height: 128px;
 }
 
+.post-user-title {
+    margin: 0 0 5px;
+    text-align: center;
+    font-size: 80%;
+}
+
 .beatmapset-link-info {
     text-align: center;
     font-size: 80%;
