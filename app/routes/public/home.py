@@ -44,7 +44,7 @@ def root() -> Response:
                 format_announcement(announcement, session=session)
                 for announcement in announcements
             ],
-            most_played=beatmaps.fetch_most_played_approved(session=session),
+            most_played=beatmaps.fetch_most_played_delta(session=session),
             messages=messages.fetch_recent(session=session),
             session=session
         )
