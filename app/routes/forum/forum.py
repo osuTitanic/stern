@@ -1,10 +1,11 @@
 
 from app.common.database import forums, topics, posts
 from flask import Blueprint, abort, redirect, request
-from datetime import datetime, timedelta
+from flask_login import current_user
+from datetime import datetime
+from . import activity
 
 import utils
-import math
 import app
 
 router = Blueprint("forum", __name__)
@@ -24,6 +25,10 @@ def forum_view(forum_id: int):
         if not forum.parent_id:
             # Forum can be viewed on front-page
             return redirect('/forum')
+
+        if current_user.is_authenticated:
+            # Used for "Current users browsing this forum"
+            activity.mark_user_active(current_user.id, forum.id)
 
         page = max(request.args.get('page', 1, type=int), 1)
         topics_per_page = 25
