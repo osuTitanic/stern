@@ -200,6 +200,11 @@
     margin-left: 2.5px;
 }
 
+.beatmap-tags a:hover {
+    background-color: #eae7fb;
+    text-decoration: none;
+}
+
 .beatmap-rating {
     display: inline-block;
     width: 100px;
