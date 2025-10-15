@@ -11,7 +11,7 @@ from sqlalchemy.orm import Session
 from PIL import Image
 
 from app.common.helpers import caching, browsers, permissions
-from app.common.database.repositories import wrapper
+from app.common.database.repositories import wrapper, users
 from app.common.database import DBUser, DBBeatmapset
 from app.common.helpers.external import location
 from app.common.cache import leaderboards
@@ -75,7 +75,13 @@ def render_template(template_name: str, **context) -> str:
                 session=context.get('session')
             )
         })
-        
+
+        users.update(
+            current_user.id,
+            {'latest_activity': datetime.now()},
+            session=context.get('session')
+        )
+
         if redis_available:
             app.session.redis.set(
                 f'csrf:{current_user.id}',
