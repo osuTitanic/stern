@@ -136,7 +136,6 @@
 .wiki-content code {
     font-family: Consolas, "Liberation Mono", Courier, monospace;
     font-size: 0.9em;
-    font-weight: bold;
 }
 
 .wiki-content .toc ul, .wiki-content .toc li {
