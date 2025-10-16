@@ -92,18 +92,11 @@ a img {
 }
 
 html {
-    background-color: #a9a9ff; /* Fallback normal color */
-    background: -webkit-linear-gradient(#686fc1, #a9a9ff 20%);
-    background: -moz-linear-gradient(#686fc1, #a9a9ff 20%);
-    background: -ms-linear-gradient(#686fc1, #a9a9ff 20%);
-    background: -o-linear-gradient(#686fc1, #a9a9ff 20%);
-    background: linear-gradient(#686fc1, #a9a9ff 20%);
-    background-attachment: fixed;
+    background: #a9a9ff url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAOkCAIAAADoTskeAAAAnklEQVRIie2SSRaAIAxDG0/rykN6McShdELXLrL4TxoLDVFZt30RkSnoNJxPJL3XiH3iNK3R66Y1UHqH3iTU0Fl+fe4FPtb3vPredPN9a8XLNXN5fPh7OO/qSTVM5o39sHu4epwXzjBtllHMEHa+z9zllTOJvUj+k2fk3CTla/O9r3qXnG/8tqW//CcpxxdNfTV5/3cIIYQQQgghv+MAGlANmPLI1V0AAAAASUVORK5CYII=") repeat-x;
 }
 
 html[data-darkreader-mode="dynamic"] {
-    background: linear-gradient(#475280, #2f3b6a 20%) !important;
-    background-attachment: fixed;
+    background: linear-gradient(#475280, #2f3b6a 180px) !important;
 }
 
 input:focus {
