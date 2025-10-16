@@ -192,7 +192,7 @@
     overflow: hidden;
 }
 
-.wiki-content ul {
+.wiki-content ul, .wiki-content ol {
     font-size: 9pt;
 }
 
