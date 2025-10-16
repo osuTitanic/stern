@@ -132,7 +132,7 @@
                                 {{ beatmap.full_name }}
                             </a>
                         </td>
-                    {% if beatmap.server == 0 %}
+                    {% if beatmap.beatmapset.server == 0 %}
                         <td><a href="https://osu.ppy.sh/u/{{ beatmap.beatmapset.creator }}">{{ beatmap.beatmapset.creator }}</a></td>
                     {% else %}
                         <td><a href="/u/{{ beatmap.beatmapset.creator_id }}">{{ beatmap.beatmapset.creator }}</a></td>
