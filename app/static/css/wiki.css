@@ -125,34 +125,49 @@
     font-size: 1.2em;
 }
 
+.wiki-content .codehilite {
+    background: #f8f8f8;
+    border: 1px solid #aaa;
+    padding: 4px;
+    padding-left: 6px;
+    overflow-x: auto;
+}
+
+.wiki-content code {
+    font-family: Consolas, "Liberation Mono", Courier, monospace;
+    font-size: 0.9em;
+    font-weight: bold;
+}
+
 .wiki-content .toc ul, .wiki-content .toc li {
     margin-left: -5px;
     font-size: 0.98em !important;
 }
 
 .wiki-content h1 {
-    font-size: 1.55em;
+    font-size: 1.6em;
     margin-top: 0.5em;
     margin-bottom: 0.5em;
     color: #cc2e8a;
     font-weight: normal;
+    text-shadow: #efcfe1 0px 0px 10px;
 }
 
 .wiki-content h2 {
-    font-size: 1.35em;
+    font-size: 1.4em;
     margin-top: 0.7em;
-    margin-bottom: 0.4em;
+    margin-bottom: 0.5em;
     color: #cc2e8a;
     font-weight: normal;
+    text-shadow: #efcfe1 0px 0px 15px;
 }
 
 .wiki-content h3 {
-    font-size: 1.25em;
+    font-size: 1.2em;
     margin-top: 0.7em;
-    margin-bottom: 0.4em;
+    margin-bottom: 0.5em;
     color: #cc2e8a;
     font-weight: normal;
-    padding-left: 2px;
     padding-right: 2px;
 }
 
