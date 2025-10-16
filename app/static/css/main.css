@@ -96,7 +96,7 @@ html {
 }
 
 html[data-darkreader-mode="dynamic"] {
-    background: linear-gradient(#475280, #2f3b6a 180px) !important;
+    background: linear-gradient(#313a5a, #070606 180px) !important;
 }
 
 input:focus {
