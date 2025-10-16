@@ -196,6 +196,11 @@
     font-size: 9pt;
 }
 
+.wiki-content ol {
+    list-style: decimal;
+    margin-left: 25px;
+}
+
 .wiki-content img {
     max-width: 600px;
     text-decoration: none;
