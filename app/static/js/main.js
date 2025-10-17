@@ -494,10 +494,31 @@ function reloadCsrfToken() {
 }
 
 function applyCsrfToForms() {
-    var inputs = document.querySelectorAll('input[name="csrf_token"]');
+    var inputs = $('input[name="csrf_token"]');
 
     for (var i = 0; i < inputs.length; i++) {
         inputs[i].attributes.value = csrfToken;
+    }
+}
+
+function reloadCsrfBeforeSubmit(formElement) {
+    var submitHandler = function(e) {
+        e.preventDefault();
+        reloadCsrfToken();
+        formElement.submit();
+    };
+    
+    formElement.addEventListener('submit', submitHandler, false);
+}
+
+function applyCsrfUpdaterToForms() {
+    var forms = document.getElementsByTagName('form');
+
+    for (var i = 0; i < forms.length; i++) {
+        var elements = $(forms[i]).find('input[name="csrf_token"]');
+        if (elements.length > 0) {
+            reloadCsrfBeforeSubmit(forms[i]);
+        }
     }
 }
 
@@ -528,6 +549,7 @@ if (!document.getElementsByClassName) {
 addEvent("DOMContentLoaded", document, function(e) {
     pageLoaded = true;
     renderTimeagoElements();
+    applyCsrfUpdaterToForms();
 });
 
 addEvent("beforeunload", window, function(e) {
