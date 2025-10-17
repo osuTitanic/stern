@@ -182,6 +182,10 @@
             <link rel="stylesheet" href="{{ '/lib/fontawesome.solid.min.css'|git_asset_url }}">
             <link rel="stylesheet" href="{{ '/lib/fontawesome.brands.min.css'|git_asset_url }}">
             <script src="{{ '/js/editor.js'|git_asset_url }}" fetchpriority="low" defer></script>
+            {% if is_modern_browser %}
+            <script type="module" src="https://unpkg.com/quicklink@3.0.1/dist/quicklink.umd.js"></script>
+            <script>window.addEventListener('load', () => { quicklink.listen(); });</script>
+            {% endif %}
         </div>
     </div>
 </body>
