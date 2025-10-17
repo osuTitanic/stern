@@ -27,37 +27,17 @@ from app.common.database import (
 
 import unicodedata
 import config
+import time
 import app
 import io
 import re
 
 def render_template(template_name: str, **context) -> str:
     """This will automatically append the required data to the context for rendering pages"""
-    redis_available = False
-    total_scores = 0
-    online_users = 0
-    total_users = 0
-
-    try:
-        total_scores = int(app.session.redis.get('bancho:totalscores') or 0)
-        online_users = int(app.session.redis.get('bancho:users') or 0)
-        total_users = int(app.session.redis.get('bancho:totalusers') or 0)
-        redis_available = True
-    except Exception as e:
-        # Most likely failed to connect to redis instance
-        app.session.logger.error(
-            f'Failed to fetch bancho stats: {e}',
-            exc_info=e
-        )
-
     context.update(
         is_modern_browser=browsers.is_modern_browser(request.user_agent.string),
         is_ie=browsers.is_internet_explorer(request.user_agent.string),
         is_compact=request.args.get('compact', 0, type=int) == 1,
-        redis_available=redis_available,
-        total_scores=total_scores,
-        online_users=online_users,
-        total_users=total_users,
         repositories=repositories,
         permissions=permissions,
         timedelta=timedelta,
@@ -66,6 +46,7 @@ def render_template(template_name: str, **context) -> str:
         location=location,
         config=config
     )
+    context.update(fetch_website_stats())
 
     if not current_user.is_anonymous:
         context.update({
@@ -82,12 +63,8 @@ def render_template(template_name: str, **context) -> str:
             session=context.get('session')
         )
 
-        if redis_available:
-            app.session.redis.set(
-                f'csrf:{current_user.id}',
-                generate_csrf(),
-                ex=60*60*24
-            )
+        # Update CSRF token in Redis
+        update_csrf_token(current_user.id)
 
     return _render_template(
         template_name,
@@ -131,6 +108,46 @@ def template_exists(template_name: str) -> bool:
         return True
     except TemplateNotFound:
         return False
+
+def fetch_website_stats() -> dict[str, int]:
+    """Fetch website statistics from redis cache"""
+    stats = {
+        'total_users': 0,
+        'online_users': 0,
+        'total_scores': 0
+    }
+
+    try:
+        pipeline = app.session.redis.pipeline()
+        pipeline.get('bancho:totalusers')
+        pipeline.get('bancho:users')
+        pipeline.get('bancho:totalscores')
+        results = pipeline.execute()
+    except Exception as e:
+        app.session.logger.error(
+            f'Failed to fetch website stats: {e}',
+            exc_info=e
+        )
+        return stats
+
+    stats['total_users'] = int(results[0] or 0)
+    stats['online_users'] = int(results[1] or 0)
+    stats['total_scores'] = int(results[2] or 0)
+    return stats
+
+def update_csrf_token(user_id: int) -> None:
+    """Update CSRF token in Redis for the given user"""
+    try:
+        app.session.redis.set(
+            f'csrf:{user_id}',
+            generate_csrf(),
+            ex=60*60*24
+        )
+    except Exception as e:
+        app.session.logger.error(
+            f'Failed to update CSRF token for user {user_id}: {e}',
+            exc_info=e
+        )
 
 def on_sync_ranks_fail(e: Exception) -> None:
     app.session.logger.error(
