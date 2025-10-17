@@ -39,6 +39,9 @@
         var approvedRewards = {{ config.APPROVED_MAP_REWARDS|lower }};
         var csrfToken = "{{ csrf_token() }}";
     </script>
+    {% if is_modern_browser %}
+    <script src="//instant.page/5.2.0" type="module" integrity="sha384-jnZyxPjiipYXnSU0ygqeac2q7CVYMbh84q0uHVRRxEtvFPiQYbXWUorga2aqZJ0z"></script>
+    {% endif %}
     <!-- CSS fixes for Internet Explorer -->
     <!--[if IE 6]>
     <style>
