@@ -344,6 +344,13 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
         }
 
         xhr.onerror = function() {
+            var retry = handleApiError(xhr);
+            if (retry) {
+                console.log("Retrying " + method + " request to " + path);
+                xhr.send(requestData);
+                return;
+            }
+
             console.error("An error occurred during " + method + " request to " + path);
             if (callbackError) {
                 callbackError(xhr);
@@ -367,6 +374,13 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
                     }
                 }
             } else {
+                var retry = handleApiError(xhr);
+                if (retry) {
+                    console.log("Retrying " + method + " request to " + path);
+                    xhr.send(requestData);
+                    return;
+                }
+
                 console.error("[" + xhr.status + "] An error occurred during " + method + " request to " + path);
                 if (callbackError && !isNavigatingAway) {
                     callbackError(xhr);
@@ -377,6 +391,24 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
 
     xhr.send(requestData);
     return xhr;
+}
+
+function handleApiError(xhr) {
+    if (xhr.status !== 403)
+        return false;
+
+    try {
+        var response = JSON.parse(xhr.responseText);
+        if (response && response.details == "Invalid CSRF token") {
+            reloadCsrfToken();
+            return true;
+        }
+    } catch (e) {
+        console.error("Failed to parse API error response: " + e);
+        return false;
+    }
+
+    return false;
 }
 
 function convertFormToJson(formElement) {
