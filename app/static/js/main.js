@@ -96,6 +96,7 @@ var Mode = {
 
 var isNavigatingAway = false;
 var pageLoaded = false;
+var apiRetries = 0;
 
 if (!window.console) {
     // Console polyfill for ~IE8 and earlier
@@ -332,6 +333,7 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
 
     if (xhr.onreadystatechange === undefined) {
         xhr.onload = function() {
+            apiRetries = 0;
             console.log("Request successful: " + method + " " + path);
             if (callbackSuccess) {
                 try {
@@ -345,9 +347,10 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
 
         xhr.onerror = function() {
             var retry = handleApiError(xhr);
-            if (retry) {
+            if (retry && apiRetries < 2) {
+                apiRetries += 1;
                 console.log("Retrying " + method + " request to " + path);
-                xhr.send(requestData);
+                performApiRequest(method, path, data, callbackSuccess, callbackError);
                 return;
             }
 
@@ -364,6 +367,7 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4) {
             if (xhr.status >= 200 && xhr.status < 300) {
+                apiRetries = 0;
                 console.log("[" + xhr.status + "] Request successful: " + method + " " + path);
                 if (callbackSuccess) {
                     try {
@@ -375,9 +379,10 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
                 }
             } else {
                 var retry = handleApiError(xhr);
-                if (retry) {
+                if (retry && apiRetries < 2) {
+                    apiRetries += 1;
                     console.log("Retrying " + method + " request to " + path);
-                    xhr.send(requestData);
+                    performApiRequest(method, path, data, callbackSuccess, callbackError);
                     return;
                 }
 
