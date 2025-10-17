@@ -31,8 +31,8 @@
             {% else %}
             <div class="notifications">
                 {% for notification in notifications %}
-                <div class="notification {{ 'new' if not notification.read else '' }}" onclick="return confirmNotification(this)" id="{{ notification.id }}">
-                    <a href="{{ notification.link or '#' }}" class="notification-link">{{ notification.header }}</a>
+                <div class="notification {{ 'new' if not notification.read else '' }}" id="{{ notification.id }}" onclick="return handleNotificationClick(event, this)">
+                    <a href="{{ notification.link or '#' }}" class="notification-link" onclick="return handleNotificationClick(event, this)">{{ notification.header }}</a>
                     <p>{{ notification.content|markdown_urls|safe }}</p>
                     <p class="time">{{ notification.time|strftime }}</p>
                 </div>
@@ -63,11 +63,39 @@
     </div>
 </div>
 <script>
-    function confirmNotification(element) {
-        performApiRequest('DELETE', '/account/notifications/' + element.id, null, function(xhr) {
-            element.classList.remove('new');
-            element.onclick = function() {};
+    function handleNotificationClick(event, linkElement) {
+        event.preventDefault();
+
+        var notificationElement = linkElement.closest('.notification');
+        var notificationId = notificationElement.id;
+        var targetUrl = linkElement.href;
+
+        // Mark notification as read
+        performApiRequest('DELETE', '/account/notifications/' + notificationId, null, function(xhr) {
+            notificationElement.classList.remove('new');
+
+            // Redirect to the target URL after marking as read
+            if (targetUrl) window.location.href = targetUrl;
         });
+        
+        return false;
+    }
+
+    function handleNotificationBoxClick(event, notificationId) {
+        event.preventDefault();
+
+        var notificationElement = document.getElementById(notificationId);
+        var targetUrl = notificationElement.querySelector('.notification-link').href;
+
+        // Mark notification as read
+        performApiRequest('DELETE', '/account/notifications/' + notificationId, null, function(xhr) {
+            notificationElement.classList.remove('new');
+
+            // Redirect to the target URL after marking as read
+            if (targetUrl) window.location.href = targetUrl;
+        });
+
+        return false;
     }
 
     function clearAllNotifications() {
