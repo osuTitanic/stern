@@ -39,6 +39,9 @@
         var approvedRewards = {{ config.APPROVED_MAP_REWARDS|lower }};
         var csrfToken = "{{ csrf_token() }}";
     </script>
+    {% if is_modern_browser %}
+    <script src="/js/instant.page.js" type="module"></script>
+    {% endif %}
     <!-- CSS fixes for Internet Explorer -->
     <!--[if IE 6]>
     <style>
@@ -182,10 +185,6 @@
             <link rel="stylesheet" href="{{ '/lib/fontawesome.solid.min.css'|git_asset_url }}">
             <link rel="stylesheet" href="{{ '/lib/fontawesome.brands.min.css'|git_asset_url }}">
             <script src="{{ '/js/editor.js'|git_asset_url }}" fetchpriority="low" defer></script>
-            {% if is_modern_browser %}
-            <script type="module" src="https://unpkg.com/quicklink@3.0.1/dist/quicklink.umd.js"></script>
-            <script>window.addEventListener('load', () => { quicklink.listen(); });</script>
-            {% endif %}
         </div>
     </div>
 </body>
