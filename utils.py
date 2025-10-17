@@ -98,7 +98,7 @@ def render_error(
     return Response(
         content,
         status=code,
-        mimetype='text/html'
+        mimetype='text/html; charset=utf-8'
     )
 
 def template_exists(template_name: str) -> bool:
