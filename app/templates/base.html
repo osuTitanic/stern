@@ -29,6 +29,7 @@
     {% if css %}
     <link rel="stylesheet" href="{{ ('/css/' + css)|git_asset_url }}">
     {% endif %}
+    <link rel="preload" href="{{ '/images/logo/main-vector.min.svg'|git_asset_url }}" as="image">
     <script>
         var apiBaseurl = "{{ config.API_BASEURL }}";
         var osuBaseurl = "{{ config.OSU_BASEURL }}";
@@ -67,16 +68,11 @@
     {% endif %}
     <div class="main">
         <a href="/" aria-label="Home">
-            <img {% if not is_ie %}
-                 src="{{ '/images/logo/main-vector.min.svg'|git_asset_url }}"
-                 onerror="this.src='{{ "/images/logo/main-low.png"|git_asset_url }}';"
-                 fetchpriority="high"
-                 loading="eager"
-                 {% else %}
-                 src="{{ '/images/logo/main-low.png'|git_asset_url }}"
-                 {% endif %}
-                 class="logo"
-                 alt="">
+            {% if is_ie %}
+            <img src="{{ '/images/logo/main-low.png'|git_asset_url }}" class="logo" alt="">
+            {% else %}
+            <img src="{{ '/images/logo/main-vector.min.svg'|git_asset_url }}" loading="eager" fetchpriority="high" class="logo" alt="">
+            {% endif %}
         </a>
         <div class="nav">
             {% include "navigation.html" %}
