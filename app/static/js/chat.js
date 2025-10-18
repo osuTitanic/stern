@@ -227,6 +227,15 @@ function sendChannelMessage(channel, message) {
     sendInput(channel, message);
 }
 
+function sendDirectMessage(username, message) {
+    if (!username || !message) {
+        console.error("Username and message are required to send a direct message");
+        return;
+    }
+    var channel = getChannelByName(username);
+    sendInput(channel.id, message);
+}
+
 function sendInput(channel, message) {
     if (!socket) {
         console.error("Socket is not initialized");
