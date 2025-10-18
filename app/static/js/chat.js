@@ -66,6 +66,14 @@ function initializeSocket(username, password) {
         }
     });
 
+    socket.on('network:status', function(data) {
+        console.log("Network status:", data);
+        if (!data.connected) {
+            updateStatusText('Disconnected from chat server. Please refresh the page to reconnect!');
+            disableChatInput();
+        }
+    });
+
     socket.on('network', onNetworkConfiguration);
     socket.on('join', onChannelJoin);
     socket.on('topic', onChannelTopic);
