@@ -424,6 +424,24 @@ function fetchDirectMessageSelection(onSuccess, onFailure) {
     });
 }
 
+function postDirectMessage(userId, message, onSuccess, onFailure) {
+    var url = "/chat/dms/" + userId + "/messages";
+    var data = { message: message };
+
+    return performApiRequest("POST", url, data, function(xhr) {
+        var response = JSON.parse(xhr.responseText);
+        if (!response) {
+            console.error("Invalid response format:", response);
+            onFailure(xhr);
+            return;
+        }
+        onSuccess(response);
+    }, function(xhr) {
+        console.error("Failed to post direct message:", xhr);
+        onFailure(xhr);
+    });
+}
+
 function populateChannels() {
     var channelContainer = document.getElementById("channel-container");
 
@@ -842,25 +860,41 @@ function sendCurrentMessage() {
     if (activeChannel) {
         sendChannelMessage(activeChannel.id, message);
         inputField.value = "";
-    } else if (activeDM) {
-        fetchUserById(activeDM, function(user) {
-            sendDirectMessage(user.name, message);
-            inputField.value = "";
-            
-            // Optionally display the sent message immediately
-            displayMessage(
-                { nick: currentUsername, id: currentUser },
-                message,
-                false,
-                new Date()
-            );
-        }, function(xhr) {
-            console.error("Failed to send DM:", xhr);
-            updateStatusText("Failed to send message");
-        });
-    } else {
-        console.error("No active channel or DM selected");
+        return;
     }
+
+    if (activeDM) {
+        displayMessage(
+            { nick: currentUsername, id: currentUser },
+            message,
+            false,
+            new Date()
+        );
+        inputField.value = "";
+
+        var userObject = getUserById(activeDM);
+        if (!userObject) {
+            // User is most likely offline
+            postDirectMessage(activeDM, message, function(response) {
+                inputField.value = "";
+                console.log("DM sent successfully:", response);
+            }, function(xhr) {
+                console.error("Failed to send DM:", xhr);
+                updateStatusText("Failed to send message");
+            });
+            return;
+        }
+
+        var userChannel = getChannelByName(userObject.name);
+        if (userChannel) {
+            sendChannelMessage(userChannel.id, message);
+            inputField.value = "";
+            return;
+        }
+        return;
+    }
+
+    console.error("No active channel or DM selected");
 }
 
 function initializeChatHandlers() {
