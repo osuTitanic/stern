@@ -322,7 +322,7 @@
     border-radius: 4px;
     padding: 10px;
     margin-bottom: 10px;
-    width: 468px;
+    width: 455px;
     font-family: 'Courier New', monospace;
     font-size: 90%;
 }
@@ -357,7 +357,7 @@
 }
 
 .chat-input {
-    width: 500px;
+    width: 485px;
 }
 
 .chat-input .chat-message {
@@ -394,11 +394,11 @@
 
 .chat-selection {
     float: right;
-    margin-right: 5px;
     height: 450px;
     overflow: auto;
     width: 140px;
     overflow-x: hidden;
+    padding-right: 20px;
 }
 
 .chat-selection div {
