@@ -869,8 +869,14 @@ function displayMessage(sender, text, highlight, time) {
         return;
     }
 
-    var messageElement = createMessageElement(sender, text, highlight, time);
-    chatLog.appendChild(messageElement);
+    // Split message by newlines and display
+    // each line as a separate message
+    var lines = text.split('\n');
+    for (var i = 0; i < lines.length; i++) {
+        var messageElement = createMessageElement(sender, lines[i], highlight, time);
+        chatLog.appendChild(messageElement);
+    }
+
     scrollChatToBottom();
 }
 
