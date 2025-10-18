@@ -1,0 +1,52 @@
+{# templates/settings/chat.html #}
+
+{% extends "base.html" %}
+
+{% block content %}
+{% include "settings/sidebar.html" %}
+<div class="chat">
+    <div class="heading">
+        <h1>Chat</h1>
+    </div>
+    <noscript>
+        Please enable JavaScript to use the chat feature!
+    </noscript>
+    <div class="chat-container">
+        <div class="chat-window">
+            <div class="chat-log">
+            </div>
+            <div class="chat-input">
+                <input type="text" class="chat-message" placeholder="Connecting..." disabled />
+                <button class="chat-send" disabled>Send</button>
+            </div>
+        </div>
+        <div class="chat-selection">
+            <div class="chat-channels">
+                <h2>Channels</h2>
+                <div id="channel-container">
+                    <p class="channel-status">Loading...</p>
+                </div>
+                <div class="channel-join">
+                    <input type="text" id="channel-join-input" placeholder="#channel" />
+                    <button id="channel-join-btn">Join</button>
+                </div>
+            </div>
+            <div class="chat-dms">
+                <h2>Direct Messages</h2>
+                <div id="dm-container">
+                    <p class="dm-status">Loading...</p>
+                </div>
+                <div class="dm-join">
+                    <input type="text" id="dm-join-input" placeholder="Username" />
+                    <button id="dm-join-btn">Chat</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>var loungeBackend = "{{ config.LOUNGE_BACKEND }}";</script>
+    <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+    <script src="{{ '/js/irc.js'|git_asset_url }}"></script>
+    <script src="{{ '/js/chat.js'|git_asset_url }}"></script>
+    <div style="clear: both;"></div>
+</div>
+{% endblock content %}

@@ -333,6 +333,7 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
 
     if (xhr.onreadystatechange === undefined) {
         xhr.onload = function() {
+            apiRetries = 0;
             console.log("Request successful: " + method + " " + path);
             apiRetries = 0;
 
