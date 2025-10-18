@@ -291,6 +291,10 @@ function sendInput(channel, message) {
     socket.emit("input", { target: channel, text: message });
 }
 
+function joinChannel(channelName) {
+    sendInput(1, "/join " + channelName);
+}
+
 function getChannelByName(name) {
     for (var id in channels) {
         if (channels[id].name === name) {
