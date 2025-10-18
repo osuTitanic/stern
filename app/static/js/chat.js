@@ -268,6 +268,7 @@ function handleChannelMessage(data) {
         historyKey = getChannelHistoryKey(channel);
     } else if (channel.type === "query") {
         historyKey = getDMHistoryKey(sender.id);
+        highlight = false;
     }
 
     if (historyKey) {
