@@ -196,7 +196,6 @@ function handleWhoIsResponse(data) {
     users[userId].status = null;
 }
 
-// TODO: Make this work with DMs as well
 function handleChannelMessage(data) {
     var channel = channels[data.chan];
     if (!channel) {
@@ -223,12 +222,21 @@ function handleChannelMessage(data) {
         time: data.msg.time || new Date()
     });
 
-    // Display the message if we're in this channel
-    if (activeChannel && activeChannel.id === data.chan) {
-        displayMessage(sender, message, highlight, data.msg.time);
+    if (channel.type === "channel") {
+        // Display the message if we're in this channel
+        if (activeChannel && activeChannel.id === data.chan) {
+            displayMessage(sender, message, highlight, data.msg.time);
+        }
+        console.log(channel.name, sender.nick + ":", message);
     }
 
-    console.log(channel.name, sender.nick + ":", message);
+    if (channel.type === "query") {
+        // Display the message if we're in this DM
+        if (activeDM && sender.id === activeDM) {
+            displayMessage(sender, message, highlight, data.msg.time);
+        }
+        console.log("[DM] ", sender.nick + ":", message);
+    }
 }
 
 function sendWhoIs(username) {
