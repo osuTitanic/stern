@@ -333,8 +333,9 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
 
     if (xhr.onreadystatechange === undefined) {
         xhr.onload = function() {
-            apiRetries = 0;
             console.log("Request successful: " + method + " " + path);
+            apiRetries = 0;
+
             if (callbackSuccess) {
                 try {
                     callbackSuccess(xhr);
@@ -362,28 +363,30 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
     }
 
     xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4) {
-            if (xhr.status >= 200 && xhr.status < 300) {
-                apiRetries = 0;
-                console.log("[" + xhr.status + "] Request successful: " + method + " " + path);
-                if (callbackSuccess) {
-                    try {
-                        callbackSuccess(xhr);
-                    } catch (e) {
-                        console.error("An error occurred while processing the response: " + e);
-                        throw e;
-                    }
-                }
-            } else {
-                handleApiError(
-                    xhr, method, path, data,
-                    callbackSuccess, callbackError
-                );
+        if (xhr.readyState !== 4)
+            return;
 
-                console.error("[" + xhr.status + "] An error occurred during " + method + " request to " + path);
-                if (callbackError && !isNavigatingAway) {
-                    callbackError(xhr);
+        if (xhr.status >= 200 && xhr.status < 300) {
+            console.log("[" + xhr.status + "] Request successful: " + method + " " + path);
+            apiRetries = 0;
+
+            if (callbackSuccess) {
+                try {
+                    callbackSuccess(xhr);
+                } catch (e) {
+                    console.error("An error occurred while processing the response: " + e);
+                    throw e;
                 }
+            }
+        } else {
+            handleApiError(
+                xhr, method, path, data,
+                callbackSuccess, callbackError
+            );
+
+            console.error("[" + xhr.status + "] An error occurred during " + method + " request to " + path);
+            if (callbackError && !isNavigatingAway) {
+                callbackError(xhr);
             }
         }
     };
