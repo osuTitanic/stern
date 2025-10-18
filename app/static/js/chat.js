@@ -219,6 +219,10 @@ function handleUserQuit(data) {
     for (var id in users) {
         if (users[id].nick === data.msg.from.nick) {
             delete users[id];
+            var dmElement = document.getElementById("dm-" + id);
+            if (dmElement) {
+                dmElement.dataset.isOnline = "false";
+            }
         }
     }
 }
@@ -237,6 +241,12 @@ function handleWhoIsResponse(data) {
     users[userId] = whois;
     users[userId].id = userId;
     users[userId].status = null;
+
+    // Update any DM entries for this user
+    var dmElement = document.getElementById("dm-" + userId);
+    if (dmElement) {
+        dmElement.dataset.isOnline = "true";
+    }
 }
 
 function handleChannelMessage(data) {
@@ -665,6 +675,7 @@ function populateDMs() {
             dmElement.className = "dm-entry";
             dmElement.id = "dm-" + dm.user.id;
             dmElement.textContent = dm.user.name;
+            dmElement.dataset.name = dm.user.name;
             dmElement.dataset.userId = dm.user.id;
             dmElement.dataset.isOnline = getUserById(dm.user.id) ? "true" : "false";
             dmElement.addEventListener("click", function() {
