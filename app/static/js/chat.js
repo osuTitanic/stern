@@ -1524,6 +1524,9 @@ addEvent("DOMContentLoaded", document, function() {
     if (!isLoggedIn())
         return;
 
+    // Replace " " with "_" for IRC compatibility
+    currentUsername = currentUsername.replace(/ /g, "_");
+
     initializeChatHandlers();
     fetchIrcToken(onIrcTokenResponse, onIrcTokenFailure);
 });
