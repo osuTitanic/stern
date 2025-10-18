@@ -510,7 +510,7 @@
     border-radius: 4px;
     background-color: #f8f9fa;
     transition: background-color 0.2s;
-    min-width: 120px;
+    width: 120px;
 }
 
 .channel-entry:hover, .dm-entry:hover {
