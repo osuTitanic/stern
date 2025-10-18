@@ -3,6 +3,7 @@ var socket = null;
 
 var connected = false;
 var isLoadingHistory = false;
+var loadingHistoryFor = null;
 
 var hasMoreMessages = {};
 var messageHistory = {};
@@ -794,8 +795,19 @@ function loadChannelHistory(channel) {
 
     // No cache, fetch from API
     updateStatusText("Loading messages...");
+    isLoadingHistory = true;
+    loadingHistoryFor = historyKey;
 
     fetchChannelMessageHistory(channel.name, 0, 50, function(messages) {
+        isLoadingHistory = false;
+        
+        // Check if we're still viewing this channel
+        if (loadingHistoryFor !== historyKey) {
+            console.debug("Channel changed during load, ignoring results");
+            return;
+        }
+        loadingHistoryFor = null;
+
         if (!messages || messages.length === 0) {
             updateStatusText("No messages in this channel yet.");
             hasMoreMessages[historyKey] = false;
@@ -821,6 +833,8 @@ function loadChannelHistory(channel) {
         updateStatusText("Type a message...");
         scrollChatToBottom();
     }, function(xhr) {
+        isLoadingHistory = false;
+        loadingHistoryFor = null;
         console.error("Failed to load channel history:", xhr);
         updateStatusText("Failed to load message history.");
     });
@@ -847,8 +861,19 @@ function loadDMHistory(user) {
 
     // No cache, fetch from API
     updateStatusText("Loading messages...");
+    isLoadingHistory = true;
+    loadingHistoryFor = historyKey;
 
     fetchDirectMessageHistory(user.id, 0, 50, function(messages) {
+        isLoadingHistory = false;
+
+        // Check if we're still viewing this DM
+        if (loadingHistoryFor !== historyKey) {
+            console.debug("DM changed during load, ignoring results");
+            return;
+        }
+        loadingHistoryFor = null;
+
         if (!messages || messages.length === 0) {
             updateStatusText("No messages yet. Start a conversation!");
             hasMoreMessages[historyKey] = false;
@@ -879,6 +904,8 @@ function loadDMHistory(user) {
         updateStatusText("Type a message...");
         scrollChatToBottom();
     }, function(xhr) {
+        isLoadingHistory = false;
+        loadingHistoryFor = null;
         console.error("Failed to load DM history:", xhr);
         updateStatusText("Failed to load message history.");
     });
@@ -1107,6 +1134,7 @@ function scrollChatToBottom() {
 
 function loadMoreChannelMessages(channel) {
     if (isLoadingHistory) {
+        console.debug("Already loading history, ignoring request");
         return;
     }
 
@@ -1125,6 +1153,12 @@ function loadMoreChannelMessages(channel) {
     
     fetchChannelMessageHistory(channel.name, offset, 50, function(messages) {
         isLoadingHistory = false;
+        
+        // Verify we're still on the same channel
+        if (!activeChannel || activeChannel.id !== channel.id) {
+            console.debug("Channel changed during loadMore, ignoring results");
+            return;
+        }
 
         if (!messages || messages.length === 0) {
             hasMoreMessages[historyKey] = false;
@@ -1178,6 +1212,7 @@ function loadMoreChannelMessages(channel) {
 
 function loadMoreDMMessages(userId) {
     if (isLoadingHistory) {
+        console.debug("Already loading history, ignoring request");
         return;
     }
     
@@ -1196,7 +1231,13 @@ function loadMoreDMMessages(userId) {
     fetchUserById(userId, function(user) {
         fetchDirectMessageHistory(userId, offset, 50, function(messages) {
             isLoadingHistory = false;
-            
+
+            // Verify we're still on the same DM
+            if (activeDM !== userId) {
+                console.debug("DM changed during loadMore, ignoring results");
+                return;
+            }
+
             if (!messages || messages.length === 0) {
                 hasMoreMessages[historyKey] = false;
                 updateStatusText("Type a message...");
