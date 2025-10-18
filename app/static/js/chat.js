@@ -257,6 +257,10 @@ function getChannelByName(name) {
     return null;
 }
 
+function getChannelById(channelId) {
+    return channels[channelId] || null;
+}
+
 function getUserByName(username) {
     for (var id in users) {
         if (users[id].nick === username) {
@@ -264,6 +268,10 @@ function getUserByName(username) {
         }
     }
     return null;
+}
+
+function getUserById(userId) {
+    return users[userId] || null;
 }
 
 function fetchChannelMessageHistory(channel, offset, limit, onSuccess, onFailure) {
