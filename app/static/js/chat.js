@@ -11,6 +11,9 @@ var connected = false;
 // Compiled regex for message link parsing
 var linkRegex = /\[((?:https?:\/\/)[^\s\]]+)\s+(.+?)\]/g;
 
+// Disallowed channels to load message histories from
+var disallowedChannels = ["#multi_", "#spec_"];
+
 var messageHandlers = {
     "part": handleUserPart,
     "quit": handleUserQuit,
@@ -640,8 +643,11 @@ function switchToDM(userId) {
 }
 
 function loadChannelHistory(channel) {
+    if (disallowedChannels.some(prefix => channel.name.startsWith(prefix)))
+        return;
+
     updateStatusText("Loading messages...");
-    
+
     fetchChannelMessageHistory(channel.name, 0, 50, function(messages) {
         if (!messages || messages.length === 0) {
             updateStatusText("No messages in this channel yet.");
@@ -664,7 +670,7 @@ function loadChannelHistory(channel) {
 
 function loadDMHistory(user) {
     updateStatusText("Loading messages...");
-    
+
     fetchDirectMessageHistory(user.id, 0, 50, function(messages) {
         if (!messages || messages.length === 0) {
             updateStatusText("No messages yet. Start a conversation!");
