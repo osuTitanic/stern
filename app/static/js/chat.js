@@ -6,6 +6,7 @@ var users = {};
 var activeChannel = null;
 var activeDM = null;
 var messageHistory = {};
+var connected = false;
 
 // Compiled regex for message link parsing
 var linkRegex = /\[((?:https?:\/\/)[^\s\]]+)\s+(.+?)\]/g;
@@ -26,22 +27,23 @@ function initializeSocket(username, password) {
     socket = io(loungeBackend, {transports: ['polling']});
 
     socket.onAny((event, ...args) => {
-        console.log("Incoming event:", event, args);
+        console.debug("Incoming event:", event, args);
     });
 
     socket.onAnyOutgoing((event, ...args) => {
-        console.log("Outgoing event:", event, args);
+        console.debug("Outgoing event:", event, args);
     });
 
     socket.on('connect', function() {
         console.log('Connected to IRC backend');
-        updateStatusText('Connected to chat server');
+        updateStatusText('Connected to chat server.');
     });
 
     socket.on('disconnect', function() {
         console.log('Disconnected from IRC backend');
-        updateStatusText('Disconnected from chat server');
+        updateStatusText('Disconnected from chat server. Please refresh the page to reconnect!');
         disableChatInput();
+        connected = false;
     });
 
     socket.on('init', function() {
@@ -71,6 +73,10 @@ function initializeSocket(username, password) {
         if (!data.connected) {
             updateStatusText('Disconnected from chat server. Please refresh the page to reconnect!');
             disableChatInput();
+            connected = false;
+        } else {
+            updateStatusText('Connecting...');
+            connected = true;
         }
     });
 
@@ -109,6 +115,7 @@ function onNetworkConfiguration(data) {
         mainChannelId = channel.id;
     }
 
+    connected = true;
     populateChannels();
     populateDMs();
 
@@ -871,6 +878,9 @@ function updateStatusText(text) {
 }
 
 function enableChatInput() {
+    if (!connected)
+        return;
+
     var inputField = document.querySelector(".chat-input .chat-message");
     var sendButton = document.querySelector(".chat-input .chat-send");
 
@@ -890,7 +900,6 @@ function disableChatInput() {
     
     if (inputField) {
         inputField.disabled = true;
-        inputField.placeholder = "Connecting...";
     }
     
     if (sendButton) {
