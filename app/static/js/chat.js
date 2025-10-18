@@ -918,11 +918,58 @@ function initializeChatHandlers() {
     }
 
     if (inputField) {
-        inputField.addEventListener("keypress", function(e) {
-            if (e.key === "Enter") {
+        inputField.addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
                 sendCurrentMessage();
             }
         });
+    }
+
+    // Initialize join channel button
+    var joinButton = document.getElementById("channel-join-btn");
+    var joinInput = document.getElementById("channel-join-input");
+
+    if (joinButton) {
+        joinButton.addEventListener("click", function() {
+            handleJoinChannel();
+        });
+    }
+
+    if (joinInput) {
+        joinInput.addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                handleJoinChannel();
+            }
+        });
+    }
+}
+
+function handleJoinChannel() {
+    var joinInput = document.getElementById("channel-join-input");
+    if (!joinInput) {
+        console.error("Join input field not found");
+        return;
+    }
+
+    var channelName = joinInput.value.trim();
+    if (!channelName) {
+        return;
+    }
+
+    // Add # prefix if not present
+    if (!channelName.startsWith("#")) {
+        channelName = "#" + channelName;
+    }
+
+    console.log("Joining channel:", channelName);
+    joinChannel(channelName);
+    joinInput.value = "";
+
+    // Disable the button temporarily to prevent spam
+    var joinButton = document.getElementById("channel-join-btn");
+    if (joinButton) {
+        joinButton.disabled = true;
+        setTimeout(function() { joinButton.disabled = false; }, 1000);
     }
 }
 

@@ -395,6 +395,42 @@
     width: 140px;
 }
 
+.channel-join {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 10px;
+    width: 140px;
+}
+
+.channel-join input {
+    flex: 1;
+    padding: 5px 10px;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    font-size: 90%;
+    width: calc(100% - 80px);
+}
+
+.channel-join button {
+    padding: 0 8px;
+    background-color: #0066cc;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 90%;
+    transition: background-color 0.2s;
+}
+
+.channel-join button:hover {
+    background-color: #0052a3;
+}
+
+.channel-join button:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
+
 .channel-entry, .dm-entry {
     padding: 5px 10px;
     margin-bottom: 2px;
