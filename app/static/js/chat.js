@@ -1359,20 +1359,8 @@ function sendCurrentMessage() {
     }
 
     if (activeChannel) {
-        // Store message in cache for the channel
-        var historyKey = getChannelHistoryKey(activeChannel);
-        var time = new Date();
-
-        if (!messageHistory[historyKey]) {
-            messageHistory[historyKey] = [];
-        }
-        messageHistory[historyKey].push({
-            sender: { nick: currentUsername, id: currentUser },
-            text: message,
-            highlight: false,
-            time: time
-        });
-
+        // Don't add to cache here - let the server echo
+        // handle it to avoid duplicate messages in cache
         sendChannelMessage(activeChannel.id, message);
         inputField.value = "";
         return;
