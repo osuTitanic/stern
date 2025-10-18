@@ -663,8 +663,10 @@ function populateDMs() {
             var dm = dms[i];
             var dmElement = document.createElement("div");
             dmElement.className = "dm-entry";
+            dmElement.id = "dm-" + dm.user.id;
             dmElement.textContent = dm.user.name;
             dmElement.dataset.userId = dm.user.id;
+            dmElement.dataset.isOnline = getUserById(dm.user.id) ? "true" : "false";
             dmElement.addEventListener("click", function() {
                 switchToDM(parseInt(this.dataset.userId));
             });
