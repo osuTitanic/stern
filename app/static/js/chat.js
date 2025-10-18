@@ -459,7 +459,6 @@ function populateChannels() {
 
 function populateDMs() {
     var dmContainer = document.getElementById("dm-container");
-
     
     fetchDirectMessageSelection(function(dms) {
         if (!dms || dms.length === 0) {
@@ -502,6 +501,32 @@ function populateDMs() {
     });
 }
 
+function updateActiveChannel() {
+    var channelContainer = document.getElementById("channel-container");
+
+    for (var i = 0; i < channelContainer.children.length; i++) {
+        var channelElement = channelContainer.children[i];
+        channelElement.classList.remove("active");
+
+        if (activeChannel && parseInt(channelElement.dataset.channelId) === activeChannel.id) {
+            channelElement.classList.add("active");
+        }
+    }
+}
+
+function updateActiveDM() {
+    var dmContainer = document.getElementById("dm-container");
+
+    for (var i = 0; i < dmContainer.children.length; i++) {
+        var dmElement = dmContainer.children[i];
+        dmElement.classList.remove("active");
+
+        if (activeDM && parseInt(dmElement.dataset.userId) === activeDM) {
+            dmElement.classList.add("active");
+        }
+    }
+}
+
 function switchToChannel(channelId) {
     var channel = channels[channelId];
     if (!channel) {
@@ -513,7 +538,8 @@ function switchToChannel(channelId) {
     activeDM = null;
 
     // Update UI to show active channel
-    populateChannels();
+    updateActiveChannel();
+    updateActiveDM();
     updateChatTitle(channel.name);
 
     // Clear and reload chat log
@@ -527,8 +553,8 @@ function switchToDM(userId) {
     activeChannel = null;
 
     // Update UI to show active DM
-    populateChannels();
-    populateDMs();
+    updateActiveChannel();
+    updateActiveDM();
 
     fetchUserById(userId, function(user) {
         updateChatTitle("Direct Message with " + user.name);
