@@ -640,6 +640,8 @@ function displayMessage(sender, text, highlight, time) {
     var senderSpan = document.createElement("span");
     senderSpan.className = "message-sender";
     senderSpan.textContent = senderName;
+    senderSpan.style.color = getUserColor(senderName);
+    senderSpan.style.fontWeight = "bold";
 
     if (userId) {
         senderSpan.style.cursor = "pointer";
@@ -677,6 +679,18 @@ function displayMessage(sender, text, highlight, time) {
 
     chatLog.appendChild(messageElement);
     scrollChatToBottom();
+}
+
+function getUserColor(username) {
+    return `hsl(${hashCode(username) % 360}, 60%, 60%)`;
+}
+
+function hashCode(str) {
+    var hash = 0;
+    for (var i = 0; i < str.length; i++) {
+        hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    return hash;
 }
 
 function parseMessageLinks(text) {
