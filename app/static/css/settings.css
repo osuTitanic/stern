@@ -523,6 +523,10 @@
     font-weight: bold;
 }
 
+.dm-entry[data-is-online="false"]:not(.active) {
+    color: #5a6269;
+}
+
 .channel-status, .dm-status {
     color: #6c757d;
     font-size: 85%;
