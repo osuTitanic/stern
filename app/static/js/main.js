@@ -335,6 +335,8 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
         xhr.onload = function() {
             apiRetries = 0;
             console.log("Request successful: " + method + " " + path);
+            apiRetries = 0;
+
             if (callbackSuccess) {
                 try {
                     callbackSuccess(xhr);
@@ -346,13 +348,13 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
         }
 
         xhr.onerror = function() {
-            var retry = handleApiError(xhr);
-            if (retry && apiRetries < 2) {
-                apiRetries += 1;
-                console.log("Retrying " + method + " request to " + path);
-                performApiRequest(method, path, data, callbackSuccess, callbackError);
+            var retried = handleApiError(
+                xhr, method, path, data,
+                callbackSuccess, callbackError
+            );
+
+            if (retried)
                 return;
-            }
 
             console.error("An error occurred during " + method + " request to " + path);
             if (callbackError) {
@@ -365,31 +367,33 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
     }
 
     xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4) {
-            if (xhr.status >= 200 && xhr.status < 300) {
-                apiRetries = 0;
-                console.log("[" + xhr.status + "] Request successful: " + method + " " + path);
-                if (callbackSuccess) {
-                    try {
-                        callbackSuccess(xhr);
-                    } catch (e) {
-                        console.error("An error occurred while processing the response: " + e);
-                        throw e;
-                    }
-                }
-            } else {
-                var retry = handleApiError(xhr);
-                if (retry && apiRetries < 2) {
-                    apiRetries += 1;
-                    console.log("Retrying " + method + " request to " + path);
-                    performApiRequest(method, path, data, callbackSuccess, callbackError);
-                    return;
-                }
+        if (xhr.readyState !== 4)
+            return;
 
-                console.error("[" + xhr.status + "] An error occurred during " + method + " request to " + path);
-                if (callbackError && !isNavigatingAway) {
-                    callbackError(xhr);
+        if (xhr.status >= 200 && xhr.status < 300) {
+            console.log("[" + xhr.status + "] Request successful: " + method + " " + path);
+            apiRetries = 0;
+
+            if (callbackSuccess) {
+                try {
+                    callbackSuccess(xhr);
+                } catch (e) {
+                    console.error("An error occurred while processing the response: " + e);
+                    throw e;
                 }
+            }
+        } else {
+            var retried = handleApiError(
+                xhr, method, path, data,
+                callbackSuccess, callbackError
+            );
+
+            if (retried)
+                return;
+
+            console.error("[" + xhr.status + "] An error occurred during " + method + " request to " + path);
+            if (callbackError && !isNavigatingAway) {
+                callbackError(xhr);
             }
         }
     };
@@ -398,22 +402,28 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
     return xhr;
 }
 
-function handleApiError(xhr) {
+function handleApiError(xhr, method, path, data, callbackSuccess, callbackError) {
     if (xhr.status !== 403)
+        return false;
+
+    if (apiRetries >= 2)
         return false;
 
     try {
         var response = JSON.parse(xhr.responseText);
-        if (response && response.details == "Invalid CSRF token") {
-            reloadCsrfToken();
-            return true;
-        }
+        if (!response || response.details !== "Invalid CSRF token")
+            return false;
+
+        reloadCsrfToken(function() {
+            apiRetries += 1;
+            console.log("Retrying " + method + " request to " + path + " after reloading CSRF token");
+            performApiRequest(method, path, data, callbackSuccess, callbackError);
+        });
+        return true;
     } catch (e) {
         console.error("Failed to parse API error response: " + e);
         return false;
     }
-
-    return false;
 }
 
 function convertFormToJson(formElement) {
@@ -479,12 +489,13 @@ function loadBBCodePreview(element) {
     return false;
 }
 
-function reloadCsrfToken() {
+function reloadCsrfToken(callback) {
     performApiRequest("GET", "/account/csrf", null, function(xhr) {
         var response = JSON.parse(xhr.responseText);
         if (response && response.token) {
             csrfToken = response.token;
             applyCsrfToForms();
+            if (callback) callback();
         } else {
             console.error("Failed to reload CSRF token: invalid response");
         }
@@ -504,10 +515,11 @@ function applyCsrfToForms() {
 function reloadCsrfBeforeSubmit(formElement) {
     var submitHandler = function(e) {
         e.preventDefault();
-        reloadCsrfToken();
-        formElement.submit();
+        reloadCsrfToken(function() {
+            HTMLFormElement.prototype.submit.call(formElement);
+        });
     };
-    
+
     formElement.addEventListener('submit', submitHandler, false);
 }
 
@@ -549,7 +561,10 @@ if (!document.getElementsByClassName) {
 addEvent("DOMContentLoaded", document, function(e) {
     pageLoaded = true;
     renderTimeagoElements();
-    applyCsrfUpdaterToForms();
+
+    if (isLoggedIn()) {
+        applyCsrfUpdaterToForms();
+    }
 });
 
 addEvent("beforeunload", window, function(e) {
