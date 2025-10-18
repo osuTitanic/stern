@@ -12,8 +12,9 @@ var users = {};
 var activeChannel = null;
 var activeDM = null;
 
-// Compiled regex for message link parsing
-var linkRegex = /\[((?:https?:\/\/)[^\s\]]+)\s+(.+?)\]/g;
+// Compiled regexes for message link parsing
+var osuLinkRegex = /\[((?:https?:\/\/)[^\s\]]+)\s+(.+?)\]/g;
+var urlRegex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g;
 
 // Disallowed channels to load message histories from
 var disallowedChannels = ["#multi_", "#spec_"];
@@ -990,49 +991,74 @@ function hashCode(str) {
 }
 
 function parseMessageLinks(text) {
-    var messageParts = [];
+    // First parse osu! links [<url> <text>]
+    var parts = parseLinksWithRegex(text, osuLinkRegex, function(match) {
+        return {
+            type: 'link',
+            url: match[1],
+            text: match[2]
+        };
+    });
+
+    // Then parse regular URLs in remaining text parts
+    var finalParts = [];
+
+    for (var i = 0; i < parts.length; i++) {
+        if (parts[i].type === 'text') {
+            var urlParts = parseLinksWithRegex(parts[i].content, urlRegex, function(match) {
+                return {
+                    type: 'link',
+                    url: match[0],
+                    text: match[0]
+                };
+            });
+            finalParts = finalParts.concat(urlParts);
+        } else {
+            finalParts.push(parts[i]);
+        }
+    }
+
+    return finalParts;
+}
+
+function parseLinksWithRegex(text, regex, linkFactory) {
+    var parts = [];
     var lastIndex = 0;
     var match;
 
-    // Reset regex state
-    linkRegex.lastIndex = 0;
+    regex.lastIndex = 0;
 
-    while ((match = linkRegex.exec(text)) !== null) {
+    while ((match = regex.exec(text)) !== null) {
         // Add text before the match
         if (match.index > lastIndex) {
-            messageParts.push({
+            parts.push({
                 type: 'text',
                 content: text.substring(lastIndex, match.index)
             });
         }
 
-        // Add the link
-        messageParts.push({
-            type: 'link',
-            url: match[1],
-            text: match[2]
-        });
-
-        lastIndex = linkRegex.lastIndex;
+        // Add the link using the factory function
+        parts.push(linkFactory(match));
+        lastIndex = regex.lastIndex;
     }
 
-    // Add remaining text after the last match
+    // Add remaining text
     if (lastIndex < text.length) {
-        messageParts.push({
+        parts.push({
             type: 'text',
             content: text.substring(lastIndex)
         });
     }
 
-    // If no matches were found, return the original text as a single part
-    if (messageParts.length === 0) {
-        messageParts.push({
+    // If no matches, return original text
+    if (parts.length === 0) {
+        parts.push({
             type: 'text',
             content: text
         });
     }
 
-    return messageParts;
+    return parts;
 }
 
 function displayHistoricalMessage(msg) {
