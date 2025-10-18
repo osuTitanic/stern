@@ -223,6 +223,12 @@ function handleWhoIsResponse(data) {
 }
 
 function handleChannelMessage(data) {
+    if (data.chan == 1) {
+        // System message, log to console
+        console.log("[System]:", data.msg.text);
+        return;
+    }
+
     var channel = channels[data.chan];
     if (!channel) {
         console.error("Received message for unknown channel:", data.chan);
