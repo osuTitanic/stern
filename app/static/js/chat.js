@@ -282,6 +282,31 @@ function fetchChannelMessageHistory(channel, offset, limit, onSuccess, onFailure
     });
 }
 
+function fetchDirectMessageHistory(userId, offset, limit, onSuccess, onFailure) {
+    var url = "/chat/dms/" + userId + "/messages";
+
+    if (offset) {
+        url += "?offset=" + encodeURIComponent(offset);
+    }
+    if (limit) {
+        url += (offset ? "&" : "?") + "limit=" + encodeURIComponent(limit);
+    }
+
+    return performApiRequest("GET", url, null, function(xhr) {
+        var response = JSON.parse(xhr.responseText);
+        if (!response) {
+            console.error("Invalid response format:", response);
+            onFailure(xhr);
+            return;
+        }
+
+        onSuccess(response);
+    }, function(xhr) {
+        console.error("Failed to fetch DM message history:", xhr);
+        onFailure(xhr);
+    });
+}
+
 function fetchUserById(userId, onSuccess, onFailure) {
     var url = "/users/" + userId;
     return performApiRequest("GET", url, null, function(xhr) {
