@@ -266,7 +266,7 @@ function handleChannelMessage(data) {
         if (activeChannel && activeChannel.id === data.chan) {
             displayMessage(sender, message, highlight, data.msg.time);
         }
-        console.log(channel.name, sender.nick + ":", message);
+        console.log("[" + channel.name + "] " + sender.nick + ":", message);
     }
 
     if (channel.type === "query") {
