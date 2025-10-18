@@ -361,7 +361,7 @@
 }
 
 .chat-input .chat-message {
-    width: 90%;
+    width: 87%;
     font-size: 100%;
     float: left;
 }
@@ -370,8 +370,26 @@
     font-size: 85%;
 }
 
-.chat-input button {
+.chat-input .chat-send {
     margin-left: 5px;
+    padding: 2px 8px;
+    background-color: #0066cc;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 90%;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.chat-input .chat-send:hover:not(:disabled) {
+    background-color: #0052a3;
+}
+
+.chat-input .chat-send:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
 }
 
 .chat-selection {
