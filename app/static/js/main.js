@@ -346,13 +346,10 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
         }
 
         xhr.onerror = function() {
-            var retry = handleApiError(xhr);
-            if (retry && apiRetries < 2) {
-                apiRetries += 1;
-                console.log("Retrying " + method + " request to " + path);
-                performApiRequest(method, path, data, callbackSuccess, callbackError);
-                return;
-            }
+            handleApiError(
+                xhr, method, path, data,
+                callbackSuccess, callbackError
+            );
 
             console.error("An error occurred during " + method + " request to " + path);
             if (callbackError) {
@@ -378,13 +375,10 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
                     }
                 }
             } else {
-                var retry = handleApiError(xhr);
-                if (retry && apiRetries < 2) {
-                    apiRetries += 1;
-                    console.log("Retrying " + method + " request to " + path);
-                    performApiRequest(method, path, data, callbackSuccess, callbackError);
-                    return;
-                }
+                handleApiError(
+                    xhr, method, path, data,
+                    callbackSuccess, callbackError
+                );
 
                 console.error("[" + xhr.status + "] An error occurred during " + method + " request to " + path);
                 if (callbackError && !isNavigatingAway) {
@@ -398,22 +392,26 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
     return xhr;
 }
 
-function handleApiError(xhr) {
+function handleApiError(xhr, method, path, data, callbackSuccess, callbackError) {
     if (xhr.status !== 403)
-        return false;
+        return;
+
+    if (apiRetries >= 2)
+        return;
 
     try {
         var response = JSON.parse(xhr.responseText);
-        if (response && response.details == "Invalid CSRF token") {
-            reloadCsrfToken();
-            return true;
-        }
+        if (!response || response.details !== "Invalid CSRF token")
+            return;
+
+        reloadCsrfToken(function() {
+            apiRetries += 1;
+            console.log("Retrying " + method + " request to " + path + " after reloading CSRF token");
+            performApiRequest(method, path, data, callbackSuccess, callbackError);
+        });
     } catch (e) {
         console.error("Failed to parse API error response: " + e);
-        return false;
     }
-
-    return false;
 }
 
 function convertFormToJson(formElement) {
