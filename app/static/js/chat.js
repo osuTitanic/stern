@@ -958,67 +958,112 @@ function sendCurrentMessage() {
 }
 
 function initializeChatHandlers() {
+    var chatInput = document.querySelector(".chat-input .chat-message");
     var sendButton = document.querySelector(".chat-input .chat-send");
-    var inputField = document.querySelector(".chat-input .chat-message");
+    var joinChannelBtn = document.getElementById("channel-join-btn");
+    var joinDMApiBtn = document.getElementById("dm-join-btn");
 
     if (sendButton) {
         sendButton.addEventListener("click", sendCurrentMessage);
     }
 
-    if (inputField) {
-        inputField.addEventListener("keypress", function(event) {
+    if (chatInput) {
+        chatInput.addEventListener("keypress", function(event) {
             if (event.key === "Enter") {
                 sendCurrentMessage();
             }
         });
     }
 
-    // Initialize join channel button
-    var joinButton = document.getElementById("channel-join-btn");
-    var joinInput = document.getElementById("channel-join-input");
+    if (joinChannelBtn) {
+        joinChannelBtn.addEventListener("click", handleJoinChannel);
+    }
 
-    if (joinButton) {
-        joinButton.addEventListener("click", function() {
-            handleJoinChannel();
+    if (joinDMApiBtn) {
+        joinDMApiBtn.addEventListener("click", handleStartDM);
+    }
+
+    // Add listener for enter key on channel join input
+    var channelJoinInput = document.getElementById("channel-join-input");
+    if (channelJoinInput) {
+        channelJoinInput.addEventListener("keyup", function(event) {
+            if (event.key === "Enter") {
+                handleJoinChannel();
+            }
         });
     }
 
-    if (joinInput) {
-        joinInput.addEventListener("keypress", function(event) {
+    // Add listener for enter key on dm join input
+    var dmJoinInput = document.getElementById("dm-join-input");
+    if (dmJoinInput) {
+        dmJoinInput.addEventListener("keyup", function(event) {
             if (event.key === "Enter") {
-                handleJoinChannel();
+                handleStartDM();
             }
         });
     }
 }
 
 function handleJoinChannel() {
-    var joinInput = document.getElementById("channel-join-input");
-    if (!joinInput) {
-        console.error("Join input field not found");
+    var channelInput = document.getElementById("channel-join-input");
+    if (!channelInput) {
+        console.error("Channel input field not found");
         return;
     }
 
-    var channelName = joinInput.value.trim();
+    var channelName = channelInput.value.trim();
     if (!channelName) {
         return;
     }
 
-    // Add # prefix if not present
     if (!channelName.startsWith("#")) {
         channelName = "#" + channelName;
     }
 
-    console.log("Joining channel:", channelName);
-    joinChannel(channelName);
-    joinInput.value = "";
-
-    // Disable the button temporarily to prevent spam
-    var joinButton = document.getElementById("channel-join-btn");
-    if (joinButton) {
-        joinButton.disabled = true;
-        setTimeout(function() { joinButton.disabled = false; }, 1000);
+    // Check if we are already in this channel
+    for (var id in channels) {
+        if (channels[id].name === channelName) {
+            switchToChannel(id);
+            channelInput.value = "";
+            return;
+        }
     }
+
+    joinChannel(channelName);
+    channelInput.value = "";
+}
+
+function handleStartDM() {
+    var usernameInput = document.getElementById("dm-join-input");
+    if (!usernameInput) return;
+
+    var username = usernameInput.value.trim();
+    if (!username) return;
+
+    fetchUserByName(username,
+        function(user) {
+            // Add user to DM list if not already present
+            var dmContainer = document.getElementById("dm-container");
+            var existing = dmContainer.querySelector(`.dm-entry[data-user-id="${user.id}"]`);
+            if (!existing) {
+                var dmEntry = document.createElement("div");
+                dmEntry.className = "dm-entry";
+                dmEntry.setAttribute("data-user-id", user.id);
+                dmEntry.textContent = user.name;
+                dmEntry.onclick = function() {
+                    switchToDM(user.id);
+                };
+                dmContainer.appendChild(dmEntry);
+            }
+
+            // User found, switch to DM
+            usernameInput.value = "";
+            switchToDM(user.id);
+        },
+        function(xhr) {
+            alert("User '" + username + "' was not found.");
+        }
+    );
 }
 
 function onIrcTokenResponse(xhr) {
