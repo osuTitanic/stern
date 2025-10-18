@@ -479,12 +479,13 @@ function loadBBCodePreview(element) {
     return false;
 }
 
-function reloadCsrfToken() {
+function reloadCsrfToken(callback) {
     performApiRequest("GET", "/account/csrf", null, function(xhr) {
         var response = JSON.parse(xhr.responseText);
         if (response && response.token) {
             csrfToken = response.token;
             applyCsrfToForms();
+            if (callback) callback();
         } else {
             console.error("Failed to reload CSRF token: invalid response");
         }
@@ -504,8 +505,9 @@ function applyCsrfToForms() {
 function reloadCsrfBeforeSubmit(formElement) {
     var submitHandler = function(e) {
         e.preventDefault();
-        reloadCsrfToken();
-        formElement.submit();
+        reloadCsrfToken(function() {
+            formElement.submit();
+        });
     };
     
     formElement.addEventListener('submit', submitHandler, false);
