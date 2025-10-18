@@ -560,7 +560,10 @@ if (!document.getElementsByClassName) {
 addEvent("DOMContentLoaded", document, function(e) {
     pageLoaded = true;
     renderTimeagoElements();
-    applyCsrfUpdaterToForms();
+
+    if (isLoggedIn()) {
+        applyCsrfUpdaterToForms();
+    }
 });
 
 addEvent("beforeunload", window, function(e) {
