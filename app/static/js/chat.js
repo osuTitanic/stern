@@ -95,10 +95,6 @@ function onNetworkConfiguration(data) {
 }
 
 function onChannelJoin(data) {
-    if (data.chan.type !== "channel") {
-        // We only care about actual channels here
-        return;
-    }
     channels[data.chan.id] = data.chan;
 }
 
@@ -399,6 +395,10 @@ function populateChannels() {
 
     for (var id in channels) {
         var channel = channels[id];
+        if (channel.type !== "channel") {
+            continue;
+        }
+
         var channelElement = document.createElement("div");
         channelElement.className = "channel-entry";
         channelElement.textContent = channel.name;
