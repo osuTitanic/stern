@@ -316,16 +316,50 @@
 
 .chat-log {
     height: 300px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 10px;
+    width: 468px;
+    font-family: 'Courier New', monospace;
+    font-size: 90%;
+}
+
+.chat-message-entry {
+    margin-bottom: 4px;
+    word-wrap: break-word;
+}
+
+.chat-message-entry.highlighted {
+    background-color: #fff3cd;
+    padding: 2px 4px;
+    border-radius: 2px;
+}
+
+.chat-message-entry .message-time {
+    color: #6c757d;
+    font-size: 85%;
+    margin-right: 4px;
+}
+
+.chat-message-entry .message-sender {
+    font-weight: bold;
+    color: #0066cc;
+}
+
+.chat-message-entry .message-sender:hover {
+    text-decoration: underline;
+}
+
+.chat-message-entry .message-text {
+    color: #212529;
 }
 
 .chat-input {
     width: 500px;
-}
-
-.chat-input .status-text {
-    margin-bottom: 5px;
-    font-size: 85%;
-    color: #536482;
 }
 
 .chat-input .chat-message {
@@ -347,5 +381,39 @@
 }
 
 .chat-selection div {
-    margin-bottom: 15px;
+    margin-bottom: 10px;
+}
+
+.chat-selection h2 {
+    font-size: 100%;
+    margin-bottom: 8px;
+    color: #536482;
+    width: 140px;
+}
+
+.channel-entry, .dm-entry {
+    padding: 5px 10px;
+    margin-bottom: 2px;
+    cursor: pointer;
+    border-radius: 4px;
+    background-color: #f8f9fa;
+    transition: background-color 0.2s;
+    min-width: 120px;
+}
+
+.channel-entry:hover, .dm-entry:hover {
+    background-color: #e0e1ec;
+}
+
+.channel-entry.active, .dm-entry.active {
+    background-color: #0066cc;
+    color: white;
+    font-weight: bold;
+}
+
+.channel-status, .dm-status {
+    color: #6c757d;
+    font-size: 85%;
+    font-style: italic;
+    padding: 6px 10px;
 }
