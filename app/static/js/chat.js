@@ -76,6 +76,7 @@ function initializeSocket(username, password) {
 
     socket.on('network', onNetworkConfiguration);
     socket.on('join', onChannelJoin);
+    socket.on('part', onChannelPart);
     socket.on('topic', onChannelTopic);
     socket.on('users', onChannelUsers);
     socket.on('names', onChannelNames);
@@ -119,6 +120,20 @@ function onNetworkConfiguration(data) {
 
 function onChannelJoin(data) {
     channels[data.chan.id] = data.chan;
+}
+
+function onChannelPart(data) {
+    var channelId = data.chan;
+    delete channels[channelId];
+    populateChannels();
+
+    // If the current channel is the one we parted from, clear UI
+    if (activeChannel && activeChannel.id === channelId) {
+        activeChannel = null;
+        clearChatLog();
+        disableChatInput();
+        updateChatTitle("Select a channel");
+    }
 }
 
 function onChannelTopic(data) {
@@ -281,11 +296,11 @@ function sendDirectMessage(username, message) {
 
 function sendInput(channel, message) {
     if (!socket) {
-        console.error("Socket is not initialized");
+        console.error("Socket not initialized");
         return;
     }
-    if (!channel || !message) {
-        console.error("Channel and message are required to send input");
+    if (channel == undefined || !message) {
+        console.error("Invalid arguments for sendInput");
         return;
     }
     socket.emit("input", { target: channel, text: message });
@@ -293,6 +308,13 @@ function sendInput(channel, message) {
 
 function joinChannel(channelName) {
     sendInput(1, "/join " + channelName);
+}
+
+function leaveChannel(channelName) {
+    var channel = getChannelByName(channelName);
+    if (!channel) return;
+    sendInput(channel.id, "/close");
+    onChannelPart({ chan: channel.id });
 }
 
 function getChannelByName(name) {
@@ -464,19 +486,31 @@ function populateChannels() {
 
     for (var id in channels) {
         var channel = channels[id];
-        if (channel.type !== "channel") {
-            continue;
-        }
+        if (channel.type !== "channel") continue;
 
         var channelElement = document.createElement("div");
         channelElement.className = "channel-entry";
+        channelElement.dataset.channelId = id;
         channelElement.textContent = channel.name;
-        channelElement.title = channel.topic || "No topic set";
-        channelElement.id = "channel-" + channel.id;
-        channelElement.dataset.channelId = channel.id;
-        channelElement.addEventListener("click", function() {
-            switchToChannel(parseInt(this.dataset.channelId));
-        });
+        channelElement.onclick = function() {
+            switchToChannel(this.dataset.channelId);
+        };
+
+        var closeButton = document.createElement("span");
+        closeButton.className = "close-channel";
+        closeButton.textContent = "x";
+        closeButton.onclick = function(e) {
+            e.stopPropagation();
+            var channelId = this.parentElement.dataset.channelId;
+            var channel = getChannelById(channelId);
+            if (channel) leaveChannel(channel.name);
+        };
+
+        if (channel.name !== "#osu")
+        {
+            // Only add close button for non-forced channels
+            channelElement.appendChild(closeButton);
+        }
 
         // Mark active channel
         if (activeChannel && activeChannel.id === channel.id) {

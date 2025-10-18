@@ -1,4 +1,3 @@
-
 @import url('main.css');
 
 .page {
@@ -429,6 +428,24 @@
 .channel-join button:disabled {
     background-color: #6c757d;
     cursor: not-allowed;
+}
+
+.channel-entry .close-channel {
+    float: right;
+    color: #999;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0 5px;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.channel-entry:hover .close-channel {
+    opacity: 1;
+}
+
+.channel-entry .close-channel:hover {
+    color: red;
 }
 
 .channel-entry, .dm-entry {
