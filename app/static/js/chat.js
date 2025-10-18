@@ -7,6 +7,9 @@ var activeChannel = null;
 var activeDM = null;
 var messageHistory = {};
 
+// Compiled regex for message link parsing
+var linkRegex = /\[((?:https?:\/\/)[^\s\]]+)\s+(.+?)\]/g;
+
 var messageHandlers = {
     "part": handleUserPart,
     "quit": handleUserQuit,
@@ -622,7 +625,23 @@ function displayMessage(sender, text, highlight, time) {
 
     var textSpan = document.createElement("span");
     textSpan.className = "message-text";
-    textSpan.textContent = text;
+    
+    // Parse and render message with links
+    var parsedParts = parseMessageLinks(text);
+
+    for (var i = 0; i < parsedParts.length; i++) {
+        var part = parsedParts[i];
+        if (part.type === 'link') {
+            var linkElement = document.createElement("a");
+            linkElement.href = part.url;
+            linkElement.textContent = part.text;
+            linkElement.target = "_blank";
+            linkElement.rel = "noopener noreferrer";
+            textSpan.appendChild(linkElement);
+        } else {
+            textSpan.appendChild(document.createTextNode(part.content));
+        }
+    }
 
     messageElement.appendChild(timestampSpan);
     messageElement.appendChild(document.createTextNode(" "));
@@ -632,6 +651,52 @@ function displayMessage(sender, text, highlight, time) {
 
     chatLog.appendChild(messageElement);
     scrollChatToBottom();
+}
+
+function parseMessageLinks(text) {
+    var messageParts = [];
+    var lastIndex = 0;
+    var match;
+
+    // Reset regex state
+    linkRegex.lastIndex = 0;
+
+    while ((match = linkRegex.exec(text)) !== null) {
+        // Add text before the match
+        if (match.index > lastIndex) {
+            messageParts.push({
+                type: 'text',
+                content: text.substring(lastIndex, match.index)
+            });
+        }
+
+        // Add the link
+        messageParts.push({
+            type: 'link',
+            url: match[1],
+            text: match[2]
+        });
+
+        lastIndex = linkRegex.lastIndex;
+    }
+
+    // Add remaining text after the last match
+    if (lastIndex < text.length) {
+        messageParts.push({
+            type: 'text',
+            content: text.substring(lastIndex)
+        });
+    }
+
+    // If no matches were found, return the original text as a single part
+    if (messageParts.length === 0) {
+        messageParts.push({
+            type: 'text',
+            content: text
+        });
+    }
+
+    return messageParts;
 }
 
 function displayHistoricalMessage(msg) {
