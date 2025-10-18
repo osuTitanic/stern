@@ -895,13 +895,20 @@ function createMessageElement(sender, text, highlight, time) {
     var senderName = sender.nick || sender.name || "Unknown";
     var userId = sender.id;
 
+    // Check if this is a /me command
+    var isAction = false;
+    if (text.startsWith("\u0001ACTION ") && text.endsWith("\u0001")) {
+        // Remove \u0001ACTION and trailing \u0001
+        text = text.substring(8, text.length - 1);
+        isAction = true;
+    }
+
     var timestampSpan = document.createElement("span");
     timestampSpan.className = "message-time";
     timestampSpan.textContent = timestamp;
 
     var senderLink = document.createElement("a");
     senderLink.className = "message-sender";
-    senderLink.textContent = senderName;
     senderLink.style.color = getUserColor(senderName);
     senderLink.style.fontWeight = "bold";
     senderLink.href = "#";
@@ -914,7 +921,7 @@ function createMessageElement(sender, text, highlight, time) {
 
     var textSpan = document.createElement("span");
     textSpan.className = "message-text";
-    
+
     // Parse and render message with links
     var parsedParts = parseMessageLinks(text);
 
@@ -934,10 +941,21 @@ function createMessageElement(sender, text, highlight, time) {
 
     messageElement.appendChild(timestampSpan);
     messageElement.appendChild(document.createTextNode(" "));
-    messageElement.appendChild(senderLink);
-    messageElement.appendChild(document.createTextNode(": "));
-    messageElement.appendChild(textSpan);
 
+    if (isAction) {
+        // For ACTION messages, display as: <username> text
+        messageElement.appendChild(document.createTextNode("*"));
+        senderLink.textContent = senderName;
+        messageElement.appendChild(senderLink);
+        messageElement.appendChild(document.createTextNode(" "));
+    } else {
+        // For normal messages, display as: username: text
+        senderLink.textContent = senderName;
+        messageElement.appendChild(senderLink);
+        messageElement.appendChild(document.createTextNode(": "));
+    }
+
+    messageElement.appendChild(textSpan);
     return messageElement;
 }
 
