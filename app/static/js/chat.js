@@ -274,7 +274,7 @@ function handleChannelMessage(data) {
         if (activeDM && sender.id === activeDM) {
             displayMessage(sender, message, false, data.msg.time);
         }
-        console.log("[DM] ", sender.nick + ":", message);
+        console.log("[DM]", sender.nick + ":", message);
     }
 }
 
