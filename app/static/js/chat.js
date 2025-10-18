@@ -539,11 +539,7 @@ function populateDMs() {
     
     fetchDirectMessageSelection(function(dms) {
         if (!dms || dms.length === 0) {
-            var errorElement = document.getElementById("dm-status");
-            if (errorElement) {
-                errorElement.textContent = "No DMs available.";
-                errorElement.style.display = "block";
-            }
+            // No DMs available
             return;
         }
 
@@ -570,11 +566,8 @@ function populateDMs() {
             dmContainer.appendChild(dmElement);
         }
     }, function(xhr) {
-        var errorElement = document.getElementById("dm-status");
-        if (errorElement) {
-            errorElement.textContent = "Failed to load DMs.";
-            errorElement.style.display = "block";
-        }
+        updateStatusText("Failed to load DMs.");
+        disableChatInput();
     });
 }
 
