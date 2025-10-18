@@ -233,7 +233,7 @@ function handleChannelMessage(data) {
     if (channel.type === "query") {
         // Display the message if we're in this DM
         if (activeDM && sender.id === activeDM) {
-            displayMessage(sender, message, highlight, data.msg.time);
+            displayMessage(sender, message, false, data.msg.time);
         }
         console.log("[DM] ", sender.nick + ":", message);
     }
