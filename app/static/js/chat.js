@@ -1,12 +1,16 @@
 var mainChannelId = 2; // #osu
 var socket = null;
+
+var connected = false;
+var isLoadingHistory = false;
+
+var hasMoreMessages = {};
+var messageHistory = {};
 var channels = {};
 var users = {};
 
 var activeChannel = null;
 var activeDM = null;
-var messageHistory = {};
-var connected = false;
 
 // Compiled regex for message link parsing
 var linkRegex = /\[((?:https?:\/\/)[^\s\]]+)\s+(.+?)\]/g;
@@ -14,6 +18,7 @@ var linkRegex = /\[((?:https?:\/\/)[^\s\]]+)\s+(.+?)\]/g;
 // Disallowed channels to load message histories from
 var disallowedChannels = ["#multi_", "#spec_"];
 
+// Message type handlers, used for "msg" events
 var messageHandlers = {
     "part": handleUserPart,
     "quit": handleUserQuit,
@@ -96,6 +101,8 @@ function resetConnection() {
         socket.disconnect();
         socket = null;
     }
+    hasMoreMessages = {};
+    messageHistory = {};
     channels = {};
     users = {};
 }
@@ -252,22 +259,33 @@ function handleChannelMessage(data) {
 
     var message = data.msg.text;
     var highlight = data.msg.highlight;
+    var time = data.msg.time || new Date();
 
-    // Store message in history
-    if (!messageHistory[data.chan]) {
-        messageHistory[data.chan] = [];
+    // Store message in appropriate cache
+    var historyKey = null;
+
+    if (channel.type === "channel") {
+        historyKey = getChannelHistoryKey(channel);
+    } else if (channel.type === "query") {
+        historyKey = getDMHistoryKey(sender.id);
     }
-    messageHistory[data.chan].push({
-        sender: sender,
-        text: message,
-        highlight: highlight,
-        time: data.msg.time || new Date()
-    });
+
+    if (historyKey) {
+        if (!messageHistory[historyKey]) {
+            messageHistory[historyKey] = [];
+        }
+        messageHistory[historyKey].push({
+            sender: sender,
+            text: message,
+            highlight: highlight,
+            time: time
+        });
+    }
 
     if (channel.type === "channel") {
         // Display the message if we're in this channel
         if (activeChannel && activeChannel.id === data.chan) {
-            displayMessage(sender, message, highlight, data.msg.time);
+            displayMessage(sender, message, highlight, time);
         }
         console.log("[" + channel.name + "] " + sender.nick + ":", message);
     }
@@ -275,7 +293,7 @@ function handleChannelMessage(data) {
     if (channel.type === "query") {
         // Display the message if we're in this DM
         if (activeDM && sender.id === activeDM) {
-            displayMessage(sender, message, false, data.msg.time);
+            displayMessage(sender, message, false, time);
         }
         console.log("[DM]", sender.nick + ":", message);
     }
@@ -357,6 +375,35 @@ function getUserByName(username) {
 
 function getUserById(userId) {
     return users[userId] || null;
+}
+
+function getChannelHistoryKey(channel) {
+    return 'channel_' + channel.id;
+}
+
+function getDMHistoryKey(userId) {
+    return 'dm_' + userId;
+}
+
+function getHistoryMessages(key) {
+    return messageHistory[key] || [];
+}
+
+function hasHistoryCache(key) {
+    return messageHistory[key] && messageHistory[key].length > 0;
+}
+
+function storeHistoryMessages(key, messages, append) {
+    if (!messageHistory[key]) {
+        messageHistory[key] = [];
+    }
+
+    if (append) {
+        // Prepend older messages at the beginning
+        messageHistory[key] = messages.concat(messageHistory[key]);
+    } else {
+        messageHistory[key] = messages;
+    }
 }
 
 function fetchChannelMessageHistory(channel, offset, limit, onSuccess, onFailure) {
@@ -646,19 +693,49 @@ function loadChannelHistory(channel) {
     if (disallowedChannels.some(prefix => channel.name.startsWith(prefix)))
         return;
 
+    var historyKey = getChannelHistoryKey(channel);
+    
+    // Check if we have cached messages
+    if (hasHistoryCache(historyKey)) {
+        console.debug("Loading messages from cache for", channel.name);
+        var cachedMessages = getHistoryMessages(historyKey);
+
+        // Display cached messages
+        for (var i = 0; i < cachedMessages.length; i++) {
+            var msg = cachedMessages[i];
+            displayMessage(msg.sender, msg.text, msg.highlight, msg.time);
+        }
+
+        updateStatusText("Type a message...");
+        scrollChatToBottom();
+        return;
+    }
+
+    // No cache, fetch from API
     updateStatusText("Loading messages...");
 
     fetchChannelMessageHistory(channel.name, 0, 50, function(messages) {
         if (!messages || messages.length === 0) {
             updateStatusText("No messages in this channel yet.");
+            hasMoreMessages[historyKey] = false;
             return;
         }
 
-        // Display messages in order (reversed)
+        // Store messages in cache
+        var historicalMessages = [];
         for (var i = messages.length - 1; i >= 0; i--) {
             var msg = messages[i];
+            historicalMessages.push({
+                sender: { nick: msg.sender.name, id: msg.sender.id },
+                text: msg.message,
+                highlight: false,
+                time: new Date(msg.time)
+            });
             displayHistoricalMessage(msg);
         }
+        
+        storeHistoryMessages(historyKey, historicalMessages, false);
+        hasMoreMessages[historyKey] = messages.length >= 50;
 
         updateStatusText("Type a message...");
         scrollChatToBottom();
@@ -669,19 +746,54 @@ function loadChannelHistory(channel) {
 }
 
 function loadDMHistory(user) {
+    var historyKey = getDMHistoryKey(user.id);
+
+    // Check if we have cached messages
+    if (hasHistoryCache(historyKey)) {
+        console.debug("Loading DM messages from cache for", user.name);
+        var cachedMessages = getHistoryMessages(historyKey);
+
+        // Display cached messages
+        for (var i = 0; i < cachedMessages.length; i++) {
+            var msg = cachedMessages[i];
+            displayMessage(msg.sender, msg.text, msg.highlight, msg.time);
+        }
+
+        updateStatusText("Type a message...");
+        scrollChatToBottom();
+        return;
+    }
+
+    // No cache, fetch from API
     updateStatusText("Loading messages...");
 
     fetchDirectMessageHistory(user.id, 0, 50, function(messages) {
         if (!messages || messages.length === 0) {
             updateStatusText("No messages yet. Start a conversation!");
+            hasMoreMessages[historyKey] = false;
             return;
         }
 
-        // Display messages in order (reversed)
+        // Store messages in cache
+        var historicalMessages = [];
         for (var i = messages.length - 1; i >= 0; i--) {
             var msg = messages[i];
+            var nickname = currentUsername;
+            if (msg.sender_id === user.id) {
+                nickname = user.name;
+            }
+            
+            historicalMessages.push({
+                sender: { nick: nickname, id: msg.sender_id },
+                text: msg.message,
+                highlight: false,
+                time: new Date(msg.time)
+            });
             displayHistoricalDirectMessage(msg, user);
         }
+
+        storeHistoryMessages(historyKey, historicalMessages, false);
+        hasMoreMessages[historyKey] = messages.length >= 50;
 
         updateStatusText("Type a message...");
         scrollChatToBottom();
@@ -691,13 +803,7 @@ function loadDMHistory(user) {
     });
 }
 
-function displayMessage(sender, text, highlight, time) {
-    var chatLog = document.querySelector(".chat-log");
-    if (!chatLog) {
-        console.error("Chat log element not found");
-        return;
-    }
-
+function createMessageElement(sender, text, highlight, time) {
     var messageElement = document.createElement("div");
     messageElement.className = "chat-message-entry";
 
@@ -752,6 +858,17 @@ function displayMessage(sender, text, highlight, time) {
     messageElement.appendChild(document.createTextNode(": "));
     messageElement.appendChild(textSpan);
 
+    return messageElement;
+}
+
+function displayMessage(sender, text, highlight, time) {
+    var chatLog = document.querySelector(".chat-log");
+    if (!chatLog) {
+        console.error("Chat log element not found");
+        return;
+    }
+
+    var messageElement = createMessageElement(sender, text, highlight, time);
     chatLog.appendChild(messageElement);
     scrollChatToBottom();
 }
@@ -862,6 +979,163 @@ function scrollChatToBottom() {
     }
 }
 
+function loadMoreChannelMessages(channel) {
+    if (isLoadingHistory) {
+        return;
+    }
+
+    var historyKey = getChannelHistoryKey(channel);
+
+    if (hasMoreMessages[historyKey] === false) {
+        console.debug("No more messages to load for", channel.name);
+        return;
+    }
+
+    var currentMessages = getHistoryMessages(historyKey);
+    var offset = currentMessages.length;
+
+    isLoadingHistory = true;
+    updateStatusText("Loading more messages...");
+    
+    fetchChannelMessageHistory(channel.name, offset, 50, function(messages) {
+        isLoadingHistory = false;
+
+        if (!messages || messages.length === 0) {
+            hasMoreMessages[historyKey] = false;
+            updateStatusText("Type a message...");
+            return;
+        }
+
+        var chatLog = document.querySelector(".chat-log");
+        var scrollHeightBefore = chatLog.scrollHeight;
+        var scrollTopBefore = chatLog.scrollTop;
+
+        // Store and display older messages
+        var olderMessages = [];
+
+        for (var i = messages.length - 1; i >= 0; i--) {
+            var msg = messages[i];
+            olderMessages.push({
+                sender: { nick: msg.sender.name, id: msg.sender.id },
+                text: msg.message,
+                highlight: false,
+                time: new Date(msg.time)
+            });
+
+            // Insert at the beginning of the chat log
+            var messageElement = createMessageElement(
+                { nick: msg.sender.name, id: msg.sender.id },
+                msg.message,
+                false,
+                new Date(msg.time)
+            );
+            if (chatLog.firstChild) {
+                chatLog.insertBefore(messageElement, chatLog.firstChild);
+            } else {
+                chatLog.appendChild(messageElement);
+            }
+        }
+
+        storeHistoryMessages(historyKey, olderMessages, true);
+        hasMoreMessages[historyKey] = messages.length >= 50;
+
+        // Maintain scroll position
+        chatLog.scrollTop = scrollTopBefore + (chatLog.scrollHeight - scrollHeightBefore);
+
+        updateStatusText("Type a message...");
+    }, function(xhr) {
+        isLoadingHistory = false;
+        console.error("Failed to load more channel messages:", xhr);
+        updateStatusText("Failed to load more messages.");
+    });
+}
+
+function loadMoreDMMessages(userId) {
+    if (isLoadingHistory) {
+        return;
+    }
+    
+    var historyKey = getDMHistoryKey(userId);
+    if (hasMoreMessages[historyKey] === false) {
+        console.debug("No more messages to load for DM");
+        return;
+    }
+    
+    var currentMessages = getHistoryMessages(historyKey);
+    var offset = currentMessages.length;
+    
+    isLoadingHistory = true;
+    updateStatusText("Loading more messages...");
+    
+    fetchUserById(userId, function(user) {
+        fetchDirectMessageHistory(userId, offset, 50, function(messages) {
+            isLoadingHistory = false;
+            
+            if (!messages || messages.length === 0) {
+                hasMoreMessages[historyKey] = false;
+                updateStatusText("Type a message...");
+                return;
+            }
+
+            var chatLog = document.querySelector(".chat-log");
+            var scrollHeightBefore = chatLog.scrollHeight;
+            var scrollTopBefore = chatLog.scrollTop;
+
+            // Store and display older messages
+            var olderMessages = [];
+            for (var i = messages.length - 1; i >= 0; i--) {
+                var msg = messages[i];
+                var nickname = currentUsername;
+                if (msg.sender_id === user.id) {
+                    nickname = user.name;
+                }
+
+                olderMessages.push({
+                    sender: { nick: nickname, id: msg.sender_id },
+                    text: msg.message,
+                    highlight: false,
+                    time: new Date(msg.time)
+                });
+
+                // Insert at the beginning of the chat log
+                var messageElement = createMessageElement(
+                    { nick: nickname, id: msg.sender_id },
+                    msg.message,
+                    false,
+                    new Date(msg.time)
+                );
+                if (chatLog.firstChild) {
+                    chatLog.insertBefore(messageElement, chatLog.firstChild);
+                } else {
+                    chatLog.appendChild(messageElement);
+                }
+            }
+
+            storeHistoryMessages(historyKey, olderMessages, true);
+            hasMoreMessages[historyKey] = messages.length >= 50;
+
+            // Maintain scroll position
+            chatLog.scrollTop = scrollTopBefore + (chatLog.scrollHeight - scrollHeightBefore);
+
+            updateStatusText("Type a message...");
+        }, function(xhr) {
+            isLoadingHistory = false;
+            console.error("Failed to load more DM messages:", xhr);
+            updateStatusText("Failed to load more messages.");
+        });
+    }, function(xhr) {
+        isLoadingHistory = false;
+        console.error("Failed to fetch user for DM:", xhr);
+    });
+}
+
+function scrollChatToBottom() {
+    var chatLog = document.querySelector(".chat-log");
+    if (chatLog) {
+        chatLog.scrollTop = chatLog.scrollHeight;
+    }
+}
+
 function updateChatTitle(title) {
     var statusText = document.querySelector(".chat-input .status-text");
     if (statusText) {
@@ -962,6 +1236,7 @@ function initializeChatHandlers() {
     var sendButton = document.querySelector(".chat-input .chat-send");
     var joinChannelBtn = document.getElementById("channel-join-btn");
     var joinDMApiBtn = document.getElementById("dm-join-btn");
+    var chatLog = document.querySelector(".chat-log");
 
     if (sendButton) {
         sendButton.addEventListener("click", sendCurrentMessage);
@@ -999,6 +1274,20 @@ function initializeChatHandlers() {
         dmJoinInput.addEventListener("keyup", function(event) {
             if (event.key === "Enter") {
                 handleStartDM();
+            }
+        });
+    }
+
+    // Add scroll listener for infinite scroll
+    if (chatLog) {
+        chatLog.addEventListener("scroll", function() {
+            // Check if scrolled to near the top (within 50px)
+            if (chatLog.scrollTop < 50 && !isLoadingHistory) {
+                if (activeChannel) {
+                    loadMoreChannelMessages(activeChannel);
+                } else if (activeDM) {
+                    loadMoreDMMessages(activeDM);
+                }
             }
         });
     }
