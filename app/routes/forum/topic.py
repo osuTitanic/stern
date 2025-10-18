@@ -218,7 +218,7 @@ def get_icon_id(forum: DBForum) -> int | None:
     if icon_id != -1:
         return icon_id
 
-def get_type_dict() -> dict:
+def get_topic_options() -> dict:
     if not current_user.is_moderator:
         return {}
 
@@ -264,7 +264,7 @@ def create_post_action(forum_id: str):
             session=session,
             can_change_icon=forum.allow_icons,
             icon_id=get_icon_id(forum),
-            **get_type_dict()
+            **get_topic_options()
         )
 
         post = posts.create(
