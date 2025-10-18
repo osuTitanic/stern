@@ -934,9 +934,7 @@ function parseMessageLinks(text) {
 function displayHistoricalMessage(msg) {
     displayMessage(
         { nick: msg.sender.name, id: msg.sender.id },
-        msg.message,
-        false,
-        new Date(msg.time)
+        msg.message, false, new Date(msg.time)
     );
 }
 
@@ -948,9 +946,7 @@ function displayHistoricalDirectMessage(msg, user) {
 
     displayMessage(
         { nick: nickname, id: msg.sender_id },
-        msg.message,
-        false,
-        new Date(msg.time)
+        msg.message, false, new Date(msg.time)
     );
 }
 
@@ -1192,17 +1188,42 @@ function sendCurrentMessage() {
     }
 
     if (activeChannel) {
+        // Store message in cache for the channel
+        var historyKey = getChannelHistoryKey(activeChannel);
+        var time = new Date();
+
+        if (!messageHistory[historyKey]) {
+            messageHistory[historyKey] = [];
+        }
+        messageHistory[historyKey].push({
+            sender: { nick: currentUsername, id: currentUser },
+            text: message,
+            highlight: false,
+            time: time
+        });
+
         sendChannelMessage(activeChannel.id, message);
         inputField.value = "";
         return;
     }
 
     if (activeDM) {
+        var time = new Date();
+
+        var historyKey = getDMHistoryKey(activeDM);
+        if (!messageHistory[historyKey]) {
+            messageHistory[historyKey] = [];
+        }
+        messageHistory[historyKey].push({
+            sender: { nick: currentUsername, id: currentUser },
+            text: message,
+            highlight: false,
+            time: time
+        });
+
         displayMessage(
             { nick: currentUsername, id: currentUser },
-            message,
-            false,
-            new Date()
+            message, false, time
         );
         inputField.value = "";
 
@@ -1210,7 +1231,6 @@ function sendCurrentMessage() {
         if (!userObject) {
             // User is most likely offline
             postDirectMessage(activeDM, message, function(response) {
-                inputField.value = "";
                 console.log("DM sent successfully:", response);
             }, function(xhr) {
                 console.error("Failed to send DM:", xhr);
@@ -1222,7 +1242,6 @@ function sendCurrentMessage() {
         var userChannel = getChannelByName(userObject.nick);
         if (userChannel) {
             sendChannelMessage(userChannel.id, message);
-            inputField.value = "";
             return;
         }
         return;
