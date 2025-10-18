@@ -347,10 +347,13 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
         }
 
         xhr.onerror = function() {
-            handleApiError(
+            var retried = handleApiError(
                 xhr, method, path, data,
                 callbackSuccess, callbackError
             );
+
+            if (retried)
+                return;
 
             console.error("An error occurred during " + method + " request to " + path);
             if (callbackError) {
@@ -379,10 +382,13 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
                 }
             }
         } else {
-            handleApiError(
+            var retried = handleApiError(
                 xhr, method, path, data,
                 callbackSuccess, callbackError
             );
+
+            if (retried)
+                return;
 
             console.error("[" + xhr.status + "] An error occurred during " + method + " request to " + path);
             if (callbackError && !isNavigatingAway) {
@@ -397,23 +403,25 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
 
 function handleApiError(xhr, method, path, data, callbackSuccess, callbackError) {
     if (xhr.status !== 403)
-        return;
+        return false;
 
     if (apiRetries >= 2)
-        return;
+        return false;
 
     try {
         var response = JSON.parse(xhr.responseText);
         if (!response || response.details !== "Invalid CSRF token")
-            return;
+            return false;
 
         reloadCsrfToken(function() {
             apiRetries += 1;
             console.log("Retrying " + method + " request to " + path + " after reloading CSRF token");
             performApiRequest(method, path, data, callbackSuccess, callbackError);
         });
+        return true;
     } catch (e) {
         console.error("Failed to parse API error response: " + e);
+        return false;
     }
 }
 
