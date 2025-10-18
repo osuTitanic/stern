@@ -637,18 +637,17 @@ function displayMessage(sender, text, highlight, time) {
     timestampSpan.className = "message-time";
     timestampSpan.textContent = timestamp;
 
-    var senderSpan = document.createElement("span");
-    senderSpan.className = "message-sender";
-    senderSpan.textContent = senderName;
-    senderSpan.style.color = getUserColor(senderName);
-    senderSpan.style.fontWeight = "bold";
+    var senderLink = document.createElement("a");
+    senderLink.className = "message-sender";
+    senderLink.textContent = senderName;
+    senderLink.style.color = getUserColor(senderName);
+    senderLink.style.fontWeight = "bold";
+    senderLink.href = "#";
 
     if (userId) {
-        senderSpan.style.cursor = "pointer";
-        senderSpan.dataset.userId = userId;
-        senderSpan.addEventListener("click", function() {
-            window.location.href = "/users/" + this.dataset.userId;
-        });
+        senderLink.style.cursor = "pointer";
+        senderLink.dataset.userId = userId;
+        senderLink.href = "/u/" + userId;
     }
 
     var textSpan = document.createElement("span");
@@ -673,7 +672,7 @@ function displayMessage(sender, text, highlight, time) {
 
     messageElement.appendChild(timestampSpan);
     messageElement.appendChild(document.createTextNode(" "));
-    messageElement.appendChild(senderSpan);
+    messageElement.appendChild(senderLink);
     messageElement.appendChild(document.createTextNode(": "));
     messageElement.appendChild(textSpan);
 
@@ -741,7 +740,7 @@ function parseMessageLinks(text) {
 
 function displayHistoricalMessage(msg) {
     displayMessage(
-        { nick: msg.sender.name, id: msg.sender_id },
+        { nick: msg.sender.name, id: msg.sender.id },
         msg.message,
         false,
         new Date(msg.time)
