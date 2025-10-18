@@ -368,6 +368,10 @@
     float: left;
 }
 
+.chat-input .chat-message::placeholder {
+    font-size: 85%;
+}
+
 .chat-input button {
     margin-left: 5px;
 }
