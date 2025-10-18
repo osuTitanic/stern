@@ -939,7 +939,7 @@ function sendCurrentMessage() {
             return;
         }
 
-        var userChannel = getChannelByName(userObject.name);
+        var userChannel = getChannelByName(userObject.nick);
         if (userChannel) {
             sendChannelMessage(userChannel.id, message);
             inputField.value = "";
