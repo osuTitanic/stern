@@ -284,19 +284,27 @@ function handleChannelMessage(data) {
     }
 
     if (channel.type === "channel") {
+        console.log("[" + channel.name + "] " + sender.nick + ":", message);
+
         // Display the message if we're in this channel
         if (activeChannel && activeChannel.id === data.chan) {
             displayMessage(sender, message, highlight, time);
+            return;
         }
-        console.log("[" + channel.name + "] " + sender.nick + ":", message);
+
+        markChannelAsUnread(data.chan);
     }
 
     if (channel.type === "query") {
+        console.log("[DM]", sender.nick + ":", message);
+
         // Display the message if we're in this DM
         if (activeDM && sender.id === activeDM) {
             displayMessage(sender, message, false, time);
+            return;
         }
-        console.log("[DM]", sender.nick + ":", message);
+
+        markDMAsUnread(sender.id);
     }
 }
 
@@ -540,6 +548,58 @@ function postDirectMessage(userId, message, onSuccess, onFailure) {
     });
 }
 
+function markChannelAsUnread(channelId) {
+    var channelContainer = document.getElementById("channel-container");
+    if (!channelContainer) {
+        return;
+    }
+
+    var channelElement = channelContainer.querySelector('[data-channel-id="' + channelId + '"]');
+    if (channelElement && !channelElement.classList.contains("active")) {
+        channelElement.classList.add("unread");
+        channelElement.style.fontWeight = "bold";
+    }
+}
+
+function markDMAsUnread(userId) {
+    var dmContainer = document.getElementById("dm-container");
+    if (!dmContainer) {
+        return;
+    }
+
+    var dmElement = dmContainer.querySelector('[data-user-id="' + userId + '"]');
+    if (dmElement && !dmElement.classList.contains("active")) {
+        dmElement.classList.add("unread");
+        dmElement.style.fontWeight = "bold";
+    }
+}
+
+function clearChannelUnread(channelId) {
+    var channelContainer = document.getElementById("channel-container");
+    if (!channelContainer) {
+        return;
+    }
+
+    var channelElement = channelContainer.querySelector('[data-channel-id="' + channelId + '"]');
+    if (channelElement) {
+        channelElement.classList.remove("unread");
+        channelElement.style.fontWeight = "normal";
+    }
+}
+
+function clearDMUnread(userId) {
+    var dmContainer = document.getElementById("dm-container");
+    if (!dmContainer) {
+        return;
+    }
+
+    var dmElement = dmContainer.querySelector('[data-user-id="' + userId + '"]');
+    if (dmElement) {
+        dmElement.classList.remove("unread");
+        dmElement.style.fontWeight = "normal";
+    }
+}
+
 function populateChannels() {
     var channelContainer = document.getElementById("channel-container");
 
@@ -658,6 +718,9 @@ function switchToChannel(channelId) {
     activeChannel = channel;
     activeDM = null;
 
+    // Clear unread marker
+    clearChannelUnread(channelId);
+
     // Update UI to show active channel
     updateActiveChannel();
     updateActiveDM();
@@ -672,6 +735,9 @@ function switchToChannel(channelId) {
 function switchToDM(userId) {
     activeDM = userId;
     activeChannel = null;
+
+    // Clear unread marker
+    clearDMUnread(userId);
 
     // Update UI to show active DM
     updateActiveChannel();
