@@ -506,10 +506,10 @@ function reloadCsrfBeforeSubmit(formElement) {
     var submitHandler = function(e) {
         e.preventDefault();
         reloadCsrfToken(function() {
-            formElement.submit();
+            HTMLFormElement.prototype.submit.call(formElement);
         });
     };
-    
+
     formElement.addEventListener('submit', submitHandler, false);
 }
 
