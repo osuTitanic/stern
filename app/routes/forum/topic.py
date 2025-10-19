@@ -145,7 +145,7 @@ def topic(forum_id: str, id: str):
             title=f"{topic.title} - Titanic",
             site_title=f"Titanic » Forums » {topic.forum.name} » {topic.title}",
             site_description=initial_post.content.split('\n')[0],
-            site_image=f'http://osu.{config.DOMAIN_NAME}/a/{initial_post.user_id}',
+            site_image=f'{config.OSU_BASEURL}/a/{initial_post.user_id}',
             canonical_url=request.base_url,
             forum=topic.forum,
             topic=topic,

@@ -125,7 +125,7 @@ def registration_request():
             return render_register_page('An error occured on the server side. Please try again!')
 
         app.session.logger.info(f'User "{username}" with id "{user.id}" was created.')
-        officer.call(f'New user registration: "[{username}](https://osu.{config.DOMAIN_NAME}/u/{user.id})" ({ip})')
+        officer.call(f'New user registration: "[{username}]({config.OSU_BASEURL}/u/{user.id})" ({ip})')
 
         # Broadcast user registration
         activity.submit(
