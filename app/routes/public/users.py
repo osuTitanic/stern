@@ -134,7 +134,7 @@ def userpage(query: str):
             title=f"{user.name} - Titanic",
             site_title=f"{user.name} - Player Info",
             site_description=f"Rank ({GameMode(int(mode)).formatted}): Global: #{pp_rank or '-'} | Country: #{pp_rank_country or '-'}",
-            site_image=f"{config.OSU_BASEURL}/a/{user.id}_000.png",
+            site_image=f'{config.OSU_BASEURL}{app.filters.avatar_url(user)}',
             site_url=f"{config.OSU_BASEURL}/u/{user.id}",
             canonical_url=f"/u/{user.id}",
             is_online=status.exists(user.id),
