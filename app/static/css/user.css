@@ -1,4 +1,6 @@
-@import url('main.css');
+body {
+    overflow-y: scroll;
+}
 
 .page {
     display: inline-block;
