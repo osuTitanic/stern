@@ -160,35 +160,36 @@
             <div class="friend-actions">
                 {% set current_friends = repositories.relationships.fetch_many_by_id(current_user.id, session)|get_attributes('target_id') %}
                 {% set target_friends = user.relationships|get_attributes('target_id') %}
-                {# Determine friend status #}
-                {% if user.id in current_friends %}
-                    {% if current_user.id in target_friends %}
-                    <a href="#" class="friend-remove" id="friend-status" onclick="return removeFriend()">
-                        Remove Mutual Friend
+                {% set current_added = user.id in current_friends %}
+                {% set target_added = current_user.id in target_friends or user.id in config.SUPER_FRIENDLY_USERS %}
+                <div id="friend-status" class="friend-current-{{ current_added|lower }}-target-{{ target_added|lower }}">
+                    <a href="#" onclick="return removeFriend()">
+                        <i class="fa-solid fa-heart"></i> Mutual Friend
                     </a>
-                    {% else %}
-                    <a href="#" class="friend-remove" id="friend-status" onclick="return removeFriend()">
-                        Remove Friend
+                    <a href="#" onclick="return removeFriend()">
+                        <i class="fa-solid fa-star"></i> Friend
                     </a>
-                    {% endif %}
-                {% else %}
-                    {% if current_user.id in target_friends %}
-                    <a href="#" class="friend-add" id="friend-status" onclick="return addFriend()">
-                        Add Mutual Friend
+                    <a href="#" onclick="return addFriend()">
+                        <i class="fa-solid fa-plus"></i> Add Mutual Friend
                     </a>
-                    {% else %}
-                    <a href="#" class="friend-add" id="friend-status" onclick="return addFriend()">
-                        Add Friend
+                    <a href="#" onclick="return addFriend()">
+                        <i class="fa-solid fa-plus"></i> Add Friend
                     </a>
-                    {% endif %}
-                {% endif %}
+                </div>
             </div>
             {% endif %}
         </div>
         {% endif %}
+        {% if current_user.is_moderator %}
+        <!--
+        <div class="user-moderation">
+            <h2>Moderation</h2>
+            Coming soon...
+        </div>
+        -->
+        {% endif %}
+        {# TODO: User reports #}
     </div>
-    {# TODO: Add admin controls #}
-    {# TODO: Report user #}
 </div>
 <div class="profile-right">
     {% if current_user.id == user.id %}
@@ -243,7 +244,7 @@
                             <td onclick="expandProfileTab('leader', true)">Top Plays</td>
                             <td onclick="expandProfileTab('history', true)">Historical</td>
                             <td onclick="expandProfileTab('beatmaps', true)">Beatmaps</td>
-                            <td onclick="expandProfileTab('kudosu', true)">Kudosu</td>
+                            <td onclick="expandProfileTab('kudosu', true)">Kudosu!</td>
                             <td onclick="expandProfileTab('achievements', true)">Achievements</td>
                         </tbody>
                     </table>
@@ -364,8 +365,12 @@
                                 <b>Total Hits</b>: {{ "{:,}".format(current_stats.total_hits) }}
                             </h4>
                             <br>
-                            <h4 class="profile-stats-element" title="Total notes hit.">
+                            <h4 class="profile-stats-element" title="Highest combo achieved (hits in a row without a miss).">
                                 <b>Maximum Combo</b>: {{ "{:,}".format(current_stats.max_combo) }}
+                            </h4>
+                            <br>
+                            <h4 class="profile-stats-element" title="Based on how much of a contribution the user has made to beatmap moderation.">
+                                <b>Total Kudosu Earned</b>: {{ "{:,}".format(total_kudosu) }}
                             </h4>
                             <br>
                             <h4 class="profile-stats-element" title="The total number of times this user's replays have been watched.">
@@ -586,6 +591,7 @@
                         </div>
                     </div>
                     {% endif %}
+                    {% set nominations = nominations_titanic + nominations_bancho %}
                     {% if user.is_bat or nominations %}
                     <div>
                         <h2 class="profile-stats-header">
@@ -629,6 +635,44 @@
                     <br>
                 </div>
             </td>
+            {% if total_kudosu > 0 %}
+            <tr onclick="expandProfileTab('kudosu')">
+                <td id="tab-kudosu" class="tab-heading">Kudosu!</td>
+            </tr>
+            <td>
+                <div id="kudosu" class="tab-content" style="opacity: 1; filter: none; display: none; height: 0px;">
+                    {% if not recent_mods %}
+                        <p>This user has not earned any kudosu yet.</p>
+                    {% else %}
+                        <h4 class="profile-stats-element">
+                            <b>Total Kudosu Earned</b>: {{ "{:,}".format(total_kudosu) }}
+                        </h4>
+                        <h3 class="profile-stats-header">Recent Kudosu History</h3>
+                        {% for mod in recent_mods %}
+                            {% set mod_status = (
+                                'revoked' if mod.amount < 0 else
+                                'received' if mod.target_id == user.id else
+                                'gave'
+                            ) %}
+                            {{ mod.time|timeago }} -
+                            {% if mod_status != 'received' %}
+                                <a href="/u/{{ mod.sender_id }}">{{ mod.sender.name }}</a>
+                            {% else %}
+                                <a href="/u/{{ mod.target_id }}">{{ mod.target.name }}</a>
+                            {% endif %}
+                            {{ mod_status }}
+                            <b>{{ mod.amount|abs }} kudos</b> {{ 'from' if mod_status != 'gave' else 'to' }} a post by
+                            {% if mod_status == 'received' %}
+                                <a href="/u/{{ mod.sender_id }}">{{ mod.sender.name }}</a>
+                            {% else %}
+                                <a href="/u/{{ mod.target_id }}">{{ mod.target.name }}</a>
+                            {% endif %}
+                            in <a href="/forum/p/{{ mod.post_id }}">{{ mod.post.topic.title }}</a><br>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </td>
+            {% endif %}
             <tr onclick="expandProfileTab('achievements')">
                 <td id="tab-achievements" class="tab-heading">Achievements</td>
             </tr>
@@ -716,62 +760,24 @@
                 {% endif %}
                 </div>
             </td>
-            <tr onclick="expandProfileTab('kudosu')">
-                <td id="tab-kudosu" class="tab-heading">Kudosu</td>
+            {% if infringements %}
+            <tr>
+                <td class="tab-heading tab-heading-account">Account Standing</td>
             </tr>
             <td>
-                <div id="kudosu" class="tab-content" style="opacity: 1; filter: none; display: none; height: 0px;">
-                    {% if not recent_mods %}
-                        <p>This user has not earned any kudosu yet.</p>
-                    {% else %}
-                        <h4 class="profile-stats-element">
-                            <b>Total Kudosu Earned</b>: {{ "{:,}".format(total_kudosu) }}
-                        </h4>
-                        <h3 class="profile-stats-header">Recent Kudosu History</h3>
-                        {% for mod in recent_mods %}
-                            {% set mod_status = (
-                                'revoked' if mod.amount < 0 else
-                                'received' if mod.target_id == user.id else
-                                'gave'
-                            ) %}
-                            {{ mod.time|timeago }} -
-                            {% if mod_status != 'received' %}
-                                <a href="/u/{{ mod.sender_id }}">{{ mod.sender.name }}</a>
-                            {% else %}
-                                <a href="/u/{{ mod.target_id }}">{{ mod.target.name }}</a>
-                            {% endif %}
-                            {{ mod_status }}
-                            <b>{{ mod.amount|abs }} kudos</b> {{ 'from' if mod_status != 'gave' else 'to' }} a post by
-                            {% if mod_status == 'received' %}
-                                <a href="/u/{{ mod.sender_id }}">{{ mod.sender.name }}</a>
-                            {% else %}
-                                <a href="/u/{{ mod.target_id }}">{{ mod.target.name }}</a>
-                            {% endif %}
-                            in <a href="/forum/p/{{ mod.post_id }}">{{ mod.post.topic.title }}</a><br>
-                        {% endfor %}
-                    {% endif %}
-                </div>
-            </td>
-            <tr onclick="expandProfileTab('account')">
-                <td id="tab-general" class="tab-heading">Account Standing</td>
-            </tr>
-            <td>
-                <div id="account" class="tab-content" style="opacity: 1; filter: none; display: none; height: 0px;">
-                    <div>
-                        {% if infringements %}
+                <div id="account" class="tab-content">
+                    <div style="width: 100%">
                         <p style="color: red">
                             {{ user.name }}'s account is not in good standing :(
                             {% if current_user.id == user.id %}
                             <br/>
-                            <br/>Your account could be permanently disabled if you continue to cause problems. Please make sure to follow the <a href='/wiki/en/Rules'>community rules</a>! Note that infringements will disappear after four weeks of good behaviour.
+                            <br/>
+                            Your account could be permanently disabled if you continue to cause problems.
+                            Please make sure to follow the <a href='/wiki/en/Rules'>community rules</a>!
+                            Note that infringements will disappear after four weeks of good behaviour.
                             {% endif %}
                         </p>
-                        {% else %}
-                        <p>
-                            This account is in good standing :)
-                        </p>
-                        {% endif %}
-                        {% if infringements %}
+                        <br>
                         <h3 class="profile-stats-header" style="text-align: left">
                             Recent Infringements
                         </h3>
@@ -803,10 +809,10 @@
                                 {% endfor %}
                             </tbody>
                         </table>
-                        {% endif %}
                     </div>
                 </div>
             </td>
+            {% endif %}
         </tbody>
     </table>
 </div>
@@ -820,9 +826,13 @@
     var countryRank = {{ pp_rank_country }};
     var ppv1Rank = {{ ppv1_rank }};
     var firstsRank = {{ firsts_rank }};
+    var superFriendly = {{ (user.id in config.SUPER_FRIENDLY_USERS)|lower }};
 </script>
 <link rel="stylesheet" href="{{ '/lib/nv.d3.min.css'|git_asset_url }}">
 <script src="{{ '/lib/d3.v3.min.js'|git_asset_url }}"></script> 
 <script src="{{ '/lib/nv.d3.min.js'|git_asset_url }}"></script>
 <script src="{{ '/js/user.js'|git_asset_url }}"></script>
+{% if current_user.is_moderator %}
+<script src="{{ '/js/moderation.js'|git_asset_url }}"></script>
+{% endif %}
 {% endblock content %}

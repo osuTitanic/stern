@@ -22,22 +22,22 @@
             {% for map in beatmapset.beatmaps %}
             <li class="tab-item difficulty-icon">
                 <a href="/b/{{ map.id }}" class="tab-link {{ 'active' if map.id == beatmap.id }}">
-                    {% if map.diff < 2.7 %}
+                    {% if map.diff < 2 %}
                         <img
                             src="/images/beatmap/difficulties/easy-{{map.mode}}.png"
                             alt="Easy"
                         >
-                    {% elif map.diff < 3.7 %}
+                    {% elif map.diff < 2.7 %}
                         <img
                             src="/images/beatmap/difficulties/normal-{{map.mode}}.png"
                             alt="Normal"
                         >
-                    {% elif map.diff < 4.5 %}
+                    {% elif map.diff < 4 %}
                         <img
                             src="/images/beatmap/difficulties/hard-{{map.mode}}.png"
                             alt="Hard"
                         >
-                    {% elif map.diff < 5.5 %}
+                    {% elif map.diff < 5.3 %}
                         <img
                             src="/images/beatmap/difficulties/insane-{{map.mode}}.png"
                             alt="Insane"
@@ -114,7 +114,7 @@
                         <div class="starfield-selected" style="width: {{ image_width*beatmap.od }}px"></div>
                     </div>
                 </td>
-                <td><b>Length:</b></td>
+                <td>Length:</td>
                 <td class="beatmap-stats-info">
                     {% set minutes = beatmap.total_length // 60 %}
                     {% set seconds = beatmap.total_length % 60 %}
@@ -135,7 +135,7 @@
                     <a href="/beatmapsets?language={{ beatmapset.language_id }}">({{ Language(beatmapset.language_id).name }})</a>
                     {% endif %}
                 </td>
-                <td><b>BPM:</b></td>
+                <td>BPM:</td>
                 <td class="beatmap-stats-info">{{ beatmap.bpm|round|int }}</td>
             </tr>
             <tr>
@@ -236,7 +236,10 @@
                     {% endif %}
                     <p><a setid="{{ beatmapset.id }}" onclick="copySetId(this)">Copy Beatmapset ID</a></p>
                     {% if current_user.is_bat %}
-                    <a href="/web/maps/{{ beatmap.filename }}">Grab latest .osu file</a>
+                    <p><a href="/web/maps/{{ beatmap.filename }}">Grab latest .osu file</a></p>
+                    {% endif %}
+                    {% if current_user.is_authenticated and permissions.has_permission('beatmaps.moderation.owner', current_user.id) %}
+                    <p><a href="#" onclick="updateBeatmapsetOwner({{ beatmapset.id }})">Change Owner</a></p>
                     {% endif %}
                 </td>
             </tr>

@@ -53,8 +53,8 @@ var Languages = {
     }
 };
 
-var currentPage = 0;
 var totalBeatmaps = 0;
+var currentPage = 0;
 var busy = false;
 
 function endsWith(str, suffix) {
@@ -64,16 +64,16 @@ function endsWith(str, suffix) {
 function getBeatmapIcon(beatmap) {
     var difficulty = "expert";
 
-    if (beatmap.diff < 2.7) {
+    if (beatmap.diff < 2) {
         difficulty = "easy";
     }
-    else if (beatmap.diff < 3.7) {
+    else if (beatmap.diff < 2.7) {
         difficulty = "normal";
     }
-    else if (beatmap.diff < 4.5) {
+    else if (beatmap.diff < 4) {
         difficulty = "hard";
     }
-    else if (beatmap.diff < 5.5) {
+    else if (beatmap.diff < 5.3) {
         difficulty = "insane";
     }
 
@@ -123,6 +123,22 @@ function getSearchInput() {
     return json;
 }
 
+function getPageParameter() {
+    try {
+        var searchParams = new URLSearchParams(window.location.search);
+        var pageParam = parseInt(searchParams.get("page"));
+    } catch (e) {
+        console.error(e);
+        var pageParam = 0;
+    }
+
+    if (isNaN(pageParam) || pageParam < 0) {
+        pageParam = 0;
+    }
+
+    return pageParam;
+}
+
 function getBeatmapsets(clear) {    
     if (busy) {
         return;
@@ -132,8 +148,9 @@ function getBeatmapsets(clear) {
         // Clear current beatmaps
         var input = document.getElementById("beatmap-list");
         input.innerHTML = "";
+
+        currentPage = getPageParameter();
         totalBeatmaps = 0;
-        currentPage = 0;
 
         // Create loading text
         clearStatusText();
@@ -176,6 +193,7 @@ function getBeatmapsets(clear) {
         beatmapsets.forEach(function(beatmapset) {
             var beatmapsetDiv = document.createElement("div");
             beatmapsetDiv.classList.add("beatmapset");
+            beatmapsetDiv.id = "beatmapset-" + beatmapset.id;
 
             var imageUrl = 'url("/mt/' + beatmapset.id + '?c=' + beatmapset.last_update	+ '")';
 
@@ -187,6 +205,53 @@ function getBeatmapsets(clear) {
             var beatmapImage = document.createElement("div");
             beatmapImage.classList.add("beatmap-image");
             beatmapImage.style.backgroundImage = imageUrl;
+
+            var beatmapSideOptions = document.createElement("div");
+            beatmapSideOptions.classList.add("beatmap-side-options");
+            beatmapSideOptions.style.display = "none";
+            beatmapSideOptions.style.overflow = "hidden";
+            beatmapSideOptions.style.width = "24px";
+
+            var heartIcon = document.createElement("i");
+            heartIcon.classList.add("fa-solid", "fa-heart");
+            var favouriteLink = document.createElement("a");
+            favouriteLink.href = "#";
+            favouriteLink.appendChild(heartIcon);
+            beatmapSideOptions.appendChild(favouriteLink);
+
+            var speechBubbleIcon = document.createElement("i");
+            speechBubbleIcon.classList.add("fa-regular", "fa-comment-dots");
+            var commentsLink = document.createElement("a");
+            commentsLink.href = '/forum/t/' + beatmapset.topic_id;
+            commentsLink.appendChild(speechBubbleIcon);
+            beatmapSideOptions.appendChild(commentsLink);
+
+            var downloadIcon = document.createElement("i");
+            downloadIcon.classList.add("fa-solid", "fa-download");
+            var downloadLink = document.createElement("a");
+            downloadLink.href = '/d/' + beatmapset.id;
+            downloadLink.appendChild(downloadIcon);
+            beatmapSideOptions.appendChild(downloadLink);
+
+            if (beatmapset.server == 0) {
+                commentsLink.href = 'https://osu.ppy.sh/beatmapsets/' + beatmapset.id + '#comments';
+            }
+
+            if (!currentUser) {
+                favouriteLink.onclick = function(e) {
+                    e.preventDefault();
+                    showLoginForm();
+                }
+                downloadLink.onclick = function(e) {
+                    e.preventDefault();
+                    showLoginForm();
+                }
+            } else {
+                favouriteLink.onclick = function(e) {
+                    e.preventDefault();
+                    addFavorite(beatmapset.id);
+                }
+            }
 
             var playIcon = document.createElement("i");
             playIcon.classList.add("fa-solid", "fa-play");
@@ -230,6 +295,7 @@ function getBeatmapsets(clear) {
             beatmapImage.appendChild(playIcon);
             beatmapsetDiv.appendChild(beatmapImage);
             beatmapsetDiv.appendChild(beatmapAudio);
+            beatmapsetDiv.appendChild(beatmapSideOptions);
 
             var beatmapInfoLeft = document.createElement("div");
             beatmapInfoLeft.classList.add("beatmap-info");
@@ -239,6 +305,7 @@ function getBeatmapsets(clear) {
             beatmapArtist.style.color = "#555555";
 
             var beatmapTitle = document.createElement("span");
+            beatmapTitle.classList.add("beatmap-title");
             setText(beatmapTitle, beatmapset.title);
 
             var beatmapLink = document.createElement("a");
@@ -350,6 +417,17 @@ function getBeatmapsets(clear) {
             beatmapRating.classList.add("beatmap-rating");
             beatmapRating.appendChild(ratingBar);
 
+            var dateText = document.createElement("span");
+            var statusTimestamp = beatmapset.approved_at || beatmapset.last_update;
+            var displayDate = new Date(statusTimestamp).toLocaleDateString("en-US", { 
+                month: "short", 
+                day: "numeric", 
+                year: "numeric" 
+            });
+            setText(dateText, displayDate);
+            dateText.title = beatmapset.approved_at ? "Approved date" : "Last update";
+            dateText.classList.add("hidden-elements");
+
             var heartIcon = document.createElement("i");
             heartIcon.classList.add("fa-solid", "fa-heart");
 
@@ -366,10 +444,11 @@ function getBeatmapsets(clear) {
 
             var detailsDiv = document.createElement("div");
             detailsDiv.classList.add("beatmap-details");
+            detailsDiv.appendChild(dateText);
             detailsDiv.appendChild(heartIcon);
-            detailsDiv.appendChild(document.createTextNode(beatmapset.favourites));
+            detailsDiv.appendChild(document.createTextNode(beatmapset.favourites.toLocaleString()));
             detailsDiv.appendChild(playsIcon);
-            detailsDiv.appendChild(document.createTextNode(totalPlays));
+            detailsDiv.appendChild(document.createTextNode(totalPlays.toLocaleString()));
 
             beatmapInfoRight.appendChild(beatmapTagsDiv);
             beatmapInfoRight.appendChild(beatmapRating);
@@ -386,10 +465,16 @@ function getBeatmapsets(clear) {
             function() {
                 $(this).find(".beatmap-info").marquee({ speed: 50 });
                 $(this).find(".hidden-elements").stop().fadeTo(1,100);
+                $(this).find(".beatmap-side-options").clearQueue().stop().delay(500).animate({
+                    width: 'show'
+                }, 100);
             },
             function() {
                 $(this).find(".beatmap-info").attr('stop', 1);
                 $(this).find(".hidden-elements").fadeOut(400);
+                $(this).find(".beatmap-side-options").clearQueue().stop().delay(500).animate({
+                    width: 'hide'
+                }, 100);
             }
         );
 
@@ -399,13 +484,47 @@ function getBeatmapsets(clear) {
     }, function(xhr) {
         clearStatusText();
         var errorText = document.createElement("h3");
-        setText(errorText, "An error occurred while loading beatmaps.");
-        errorText.style.margin = "0 auto";
         errorText.style.textAlign = "center";
+        errorText.style.margin = "0 auto";
         errorText.id = "status-text";
+        setText(errorText, "An error occurred while loading beatmaps.");
 
         beatmapContainer.appendChild(errorText);
         busy = false;
+    });
+}
+
+function addFavorite(beatmapsetId) {
+    var url = "/users/" + currentUser + "/favourites";
+
+    performApiRequest("POST", url, {"set_id": beatmapsetId}, function(xhr) {
+        var heartIcon = document.querySelector("#beatmapset-" + beatmapsetId + " .fa-heart");
+        heartIcon.parentNode.style.color = "red";
+        heartIcon.parentNode.onclick = function(e) {
+            e.preventDefault();
+            removeFavorite(beatmapsetId);
+        }
+    }, function(xhr) {
+        // Most likely already favorited, so just do the same thing
+        var heartIcon = document.querySelector("#beatmapset-" + beatmapsetId + " .fa-heart");
+        heartIconparentNode.style.color = "red";
+        heartIcon.parentNode.onclick = function(e) {
+            e.preventDefault();
+            removeFavorite(beatmapsetId);
+        }
+    });
+}
+
+function removeFavorite(beatmapsetId) {
+    var url = "/users/" + currentUser + "/favourites/" + beatmapsetId;
+
+    performApiRequest("DELETE", url, null, function(xhr) {
+        var heartIcon = document.querySelector("#beatmapset-" + beatmapsetId + " .fa-heart");
+        heartIcon.parentNode.style.color = null;
+        heartIcon.parentNode.onclick = function(e) {
+            e.preventDefault();
+            addFavorite(beatmapsetId);
+        }
     });
 }
 

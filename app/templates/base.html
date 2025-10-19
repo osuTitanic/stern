@@ -29,6 +29,7 @@
     {% if css %}
     <link rel="stylesheet" href="{{ ('/css/' + css)|git_asset_url }}">
     {% endif %}
+    <link rel="preload" href="{{ '/images/logo/main-vector.min.svg'|git_asset_url }}" as="image">
     <script>
         var apiBaseurl = "{{ config.API_BASEURL }}";
         var osuBaseurl = "{{ config.OSU_BASEURL }}";
@@ -38,6 +39,9 @@
         var approvedRewards = {{ config.APPROVED_MAP_REWARDS|lower }};
         var csrfToken = "{{ csrf_token() }}";
     </script>
+    {% if is_modern_browser %}
+    <script src="/lib/instant.page.js" type="module"></script>
+    {% endif %}
     <!-- CSS fixes for Internet Explorer -->
     <!--[if IE 6]>
     <style>
@@ -67,16 +71,11 @@
     {% endif %}
     <div class="main">
         <a href="/" aria-label="Home">
-            <img {% if not is_ie %}
-                 src="{{ '/images/logo/main-vector.min.svg'|git_asset_url }}"
-                 onerror="this.src='{{ "/images/logo/main-low.png"|git_asset_url }}';"
-                 fetchpriority="high"
-                 loading="eager"
-                 {% else %}
-                 src="{{ '/images/logo/main-low.png'|git_asset_url }}"
-                 {% endif %}
-                 class="logo"
-                 alt="">
+            {% if is_ie %}
+            <img src="{{ '/images/logo/main-low.png'|git_asset_url }}" class="logo" alt="">
+            {% else %}
+            <img src="{{ '/images/logo/main-vector.min.svg'|git_asset_url }}" loading="eager" fetchpriority="high" class="logo" alt="">
+            {% endif %}
         </a>
         <div class="nav">
             {% include "navigation.html" %}
@@ -101,7 +100,7 @@
                         Welcome, <b><a href="/u/{{ current_user.id }}">{{ current_user.name }}</a></b>
                     </span>
                     <a href="/account/settings/profile#avatar" style="height: 25px">
-                        <img class="small-avatar" src="{{ current_user|avatar_url(25) }}" alt="">
+                        <img class="small-avatar" src="{{ current_user|avatar_url }}" alt="">
                     </a>
                     <a href="/account/settings"><i class="fa-solid fa-gear" style="color: #808080;"></i> Settings</a>
                     <a href="/account/settings#notifications">

@@ -68,7 +68,9 @@
             </div>
 
             <div class="chat-wrapper">
-                <h2 class="headers">Chat</h2>
+                <h2 class="headers">
+                    Chat <span>also connect from <a href="/account/settings/security#irc">irc</a></span>
+                </h2>
                 <table class="styled-table styled-table-chat">
                     <tbody>
                     {% for message in messages|reverse %}
@@ -108,8 +110,7 @@
         <div class="most-played">
             <h2 class="headers">
                 Most Played Beatmaps
-                {# TODO: Last 24 hours lol #}
-                {# <span>Over the last 24 hours</span> #}
+                <span>Over the last 24 hours</span>
             </h2>
             <table class="styled-table">
                 <thead>
@@ -120,20 +121,20 @@
                     </tr>
                 </thead>
                 <tbody>
-                {% for beatmap in most_played %}
+                {% for count, beatmap in most_played %}
                     {% if loop.index0 % 2 %}
                         <tr class="row-light">
                     {% else %}
                         <tr class="row-dark">
                     {% endif %}
-                        <td>{{ "{:,}".format(beatmap.playcount) }}</th>
+                        <td>{{ "{:,}".format(count) }}</td>
                         <td>
                             <a href="/b/{{ beatmap.id }}">
                                 <img src="/mt/{{ beatmap.set_id }}" loading="lazy" alt="image"/>
                                 {{ beatmap.full_name }}
                             </a>
                         </td>
-                    {% if beatmap.server == 0 %}
+                    {% if beatmap.beatmapset.server == 0 %}
                         <td><a href="https://osu.ppy.sh/u/{{ beatmap.beatmapset.creator }}">{{ beatmap.beatmapset.creator }}</a></td>
                     {% else %}
                         <td><a href="/u/{{ beatmap.beatmapset.creator_id }}">{{ beatmap.beatmapset.creator }}</a></td>

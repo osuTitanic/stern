@@ -16,6 +16,34 @@
     current_user.is_bat
 ) %}
 
+{% macro userTitle(user, user_post_count) %}
+    {% if user.title %}
+        {{ user.title }}
+    {% else %}
+        {% if user_post_count < 5 %}
+            Rhythm Rookie
+        {% elif user_post_count < 15 %}
+            Tempo Trainee
+        {% elif user_post_count < 30 %}
+            Whistle Blower
+        {% elif user_post_count < 50 %}
+            Cymbal Sounder
+        {% elif user_post_count < 80 %}
+            Beat Clicker
+        {% elif user_post_count < 120 %}
+            Slider Savant
+        {% elif user_post_count < 180 %}
+            Spinner Sage
+        {% elif user_post_count < 260 %}
+            Star Shooter
+        {% elif user_post_count < 500 %}
+            Combo Commander
+        {% else %}
+            Rhythm Incarnate
+        {% endif %}
+    {% endif %}
+{% endmacro %}
+
 {% macro topicPaginationPage(page) %}
     {% if page != current_page %}
         <a href="/forum/{{ forum.id }}/t/{{ topic.id }}/?page={{ page }}">{{ page }}</a>
@@ -142,6 +170,10 @@
                             </div>
                         </a>
                         <div>
+                            {% set user_post_count = repositories.users.fetch_post_count(post.user.id, session=session) %}
+                            <div class="post-user-title">
+                                {{ userTitle(post.user, user_post_count) }}
+                            </div>
                             {% set groups = repositories.groups.fetch_user_groups(post.user.id, session=session) %}
                             {% if groups %}
                             <div class="groups">
@@ -155,7 +187,7 @@
                             </div>
                             {% endif %}
                             <div>
-                                {{ "{:,}".format(repositories.users.fetch_post_count(post.user.id, session=session)) }} posts
+                                {{ "{:,}".format(user_post_count) }} posts
                             </div>
                             <div>
                                 <img src="/images/flags/{{ post.user.country|lower }}.gif" alt="{{ post.user.country }} Flag" class="flag">

@@ -1,3 +1,7 @@
+body {
+    overflow-y: scroll;
+}
+
 .page {
     margin: 0;
 }
@@ -128,6 +132,30 @@
     font-size: 480%;
 }
 
+.beatmap-side-options {
+    display: none;
+    padding-top: 2px;
+    background: #dad7fb;
+    height: 75px;
+    width: 24px;
+    text-align: center;
+    margin: auto;
+    float: right;
+    z-index: 10;
+}
+
+.beatmap-side-options a {
+    line-height: 23px;
+    font-size: 160%;
+    color: #aaa7cb;
+}
+
+.beatmap-side-options a:hover {
+    color: #3843a6;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
 .beatmap-info {
     white-space: nowrap;
     overflow: hidden;
@@ -148,6 +176,10 @@
 .beatmap-link:hover {
     color: #696969;
     text-decoration: none;
+}
+
+.beatmap-link .beatmap-title:hover {
+    color: #3843a6;
 }
 
 .beatmap-creator {
@@ -200,6 +232,11 @@
     margin-left: 2.5px;
 }
 
+.beatmap-tags a:hover {
+    background-color: #eae7fb;
+    text-decoration: none;
+}
+
 .beatmap-rating {
     display: inline-block;
     width: 100px;
@@ -223,6 +260,10 @@
     font-size: 100% !important;
     padding-left: 4px;
     padding-right: 2.5px;
+}
+
+.beatmap-details span {
+    font-size: 100%;
 }
 
 .beatmap-order-select {

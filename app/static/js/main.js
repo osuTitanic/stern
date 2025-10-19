@@ -95,6 +95,8 @@ var Mode = {
 };
 
 var isNavigatingAway = false;
+var pageLoaded = false;
+var apiRetries = 0;
 
 if (!window.console) {
     // Console polyfill for ~IE8 and earlier
@@ -206,7 +208,7 @@ function showLoginForm() {
 }
 
 function toggleSpoiler(root) {
-    var spoiler = $(root).parents(".spoiler");
+    var spoiler = $(root).closest(".spoiler");
     spoiler.children(".spoiler-body").slideToggle("fast");
     spoiler.find('img').trigger('unveil');
     return false;
@@ -331,7 +333,10 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
 
     if (xhr.onreadystatechange === undefined) {
         xhr.onload = function() {
+            apiRetries = 0;
             console.log("Request successful: " + method + " " + path);
+            apiRetries = 0;
+
             if (callbackSuccess) {
                 try {
                     callbackSuccess(xhr);
@@ -343,6 +348,14 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
         }
 
         xhr.onerror = function() {
+            var retried = handleApiError(
+                xhr, method, path, data,
+                callbackSuccess, callbackError
+            );
+
+            if (retried)
+                return;
+
             console.error("An error occurred during " + method + " request to " + path);
             if (callbackError) {
                 callbackError(xhr);
@@ -354,28 +367,63 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
     }
 
     xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4) {
-            if (xhr.status >= 200 && xhr.status < 300) {
-                console.log("[" + xhr.status + "] Request successful: " + method + " " + path);
-                if (callbackSuccess) {
-                    try {
-                        callbackSuccess(xhr);
-                    } catch (e) {
-                        console.error("An error occurred while processing the response: " + e);
-                        throw e;
-                    }
+        if (xhr.readyState !== 4)
+            return;
+
+        if (xhr.status >= 200 && xhr.status < 300) {
+            console.log("[" + xhr.status + "] Request successful: " + method + " " + path);
+            apiRetries = 0;
+
+            if (callbackSuccess) {
+                try {
+                    callbackSuccess(xhr);
+                } catch (e) {
+                    console.error("An error occurred while processing the response: " + e);
+                    throw e;
                 }
-            } else {
-                console.error("[" + xhr.status + "] An error occurred during " + method + " request to " + path);
-                if (callbackError && !isNavigatingAway) {
-                    callbackError(xhr);
-                }
+            }
+        } else {
+            var retried = handleApiError(
+                xhr, method, path, data,
+                callbackSuccess, callbackError
+            );
+
+            if (retried)
+                return;
+
+            console.error("[" + xhr.status + "] An error occurred during " + method + " request to " + path);
+            if (callbackError && !isNavigatingAway) {
+                callbackError(xhr);
             }
         }
     };
 
     xhr.send(requestData);
     return xhr;
+}
+
+function handleApiError(xhr, method, path, data, callbackSuccess, callbackError) {
+    if (xhr.status !== 403)
+        return false;
+
+    if (apiRetries >= 2)
+        return false;
+
+    try {
+        var response = JSON.parse(xhr.responseText);
+        if (!response || response.details !== "Invalid CSRF token")
+            return false;
+
+        reloadCsrfToken(function() {
+            apiRetries += 1;
+            console.log("Retrying " + method + " request to " + path + " after reloading CSRF token");
+            performApiRequest(method, path, data, callbackSuccess, callbackError);
+        });
+        return true;
+    } catch (e) {
+        console.error("Failed to parse API error response: " + e);
+        return false;
+    }
 }
 
 function convertFormToJson(formElement) {
@@ -441,6 +489,51 @@ function loadBBCodePreview(element) {
     return false;
 }
 
+function reloadCsrfToken(callback) {
+    performApiRequest("GET", "/account/csrf", null, function(xhr) {
+        var response = JSON.parse(xhr.responseText);
+        if (response && response.token) {
+            csrfToken = response.token;
+            applyCsrfToForms();
+            if (callback) callback();
+        } else {
+            console.error("Failed to reload CSRF token: invalid response");
+        }
+    }, function(xhr) {
+        console.error("Failed to reload CSRF token");
+    });
+}
+
+function applyCsrfToForms() {
+    var inputs = $('input[name="csrf_token"]');
+
+    for (var i = 0; i < inputs.length; i++) {
+        inputs[i].attributes.value = csrfToken;
+    }
+}
+
+function reloadCsrfBeforeSubmit(formElement) {
+    var submitHandler = function(e) {
+        e.preventDefault();
+        reloadCsrfToken(function() {
+            HTMLFormElement.prototype.submit.call(formElement);
+        });
+    };
+
+    formElement.addEventListener('submit', submitHandler, false);
+}
+
+function applyCsrfUpdaterToForms() {
+    var forms = document.getElementsByTagName('form');
+
+    for (var i = 0; i < forms.length; i++) {
+        var elements = $(forms[i]).find('input[name="csrf_token"]');
+        if (elements.length > 0) {
+            reloadCsrfBeforeSubmit(forms[i]);
+        }
+    }
+}
+
 function renderTimeagoElements() {
     var times = document.getElementsByClassName('timeago');
     for (var i = 0; i < times.length; i++) {
@@ -466,9 +559,25 @@ if (!document.getElementsByClassName) {
 }
 
 addEvent("DOMContentLoaded", document, function(e) {
+    pageLoaded = true;
     renderTimeagoElements();
+
+    if (isLoggedIn()) {
+        applyCsrfUpdaterToForms();
+    }
 });
 
 addEvent("beforeunload", window, function(e) {
     isNavigatingAway = true;
+});
+
+addEvent("visibilitychange", document, function(e) {
+    if (!isLoggedIn())
+        return;
+
+    if (!pageLoaded)
+        return;
+
+    if (document.visibilityState === "visible")
+        reloadCsrfToken();
 });

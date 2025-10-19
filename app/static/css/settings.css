@@ -1,6 +1,3 @@
-
-@import url('main.css');
-
 .page {
     font-size: 90%;
     margin: 0;
@@ -303,4 +300,238 @@
     padding: 2px;
     height: 120px;
     width: 120px;
+}
+
+.chat {
+    width: 76%;
+    margin-left: 190px;
+}
+
+.chat-window {
+    float: left;
+}
+
+.chat-log {
+    height: 400px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 10px;
+    width: 455px;
+    font-family: 'Courier New', monospace;
+    font-size: 90%;
+}
+
+.chat-message-entry {
+    margin-bottom: 4px;
+    word-wrap: break-word;
+}
+
+.chat-message-entry.highlighted {
+    background-color: #fff3cd;
+    border-radius: 2px;
+}
+
+.chat-message-entry .message-time {
+    color: #6c757d;
+    font-size: 85%;
+    margin-right: 4px;
+}
+
+.chat-message-entry .message-sender {
+    font-weight: bold;
+    color: #0066cc;
+}
+
+.chat-message-entry .message-sender:hover {
+    text-decoration: underline;
+}
+
+.chat-message-entry .message-text {
+    color: #212529;
+}
+
+.chat-input {
+    width: 485px;
+}
+
+.chat-input .chat-message {
+    width: 87%;
+    font-size: 100%;
+    float: left;
+}
+
+.chat-input .chat-message::placeholder {
+    font-size: 85%;
+}
+
+.chat-input .chat-send {
+    margin-left: 5px;
+    padding: 2px 8px;
+    background-color: #0066cc;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 90%;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.chat-input .chat-send:hover:not(:disabled) {
+    background-color: #0052a3;
+}
+
+.chat-input .chat-send:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
+
+.chat-selection {
+    float: right;
+    height: 450px;
+    overflow: auto;
+    width: 140px;
+    overflow-x: hidden;
+    padding-right: 20px;
+}
+
+.chat-selection div {
+    margin-bottom: 10px;
+}
+
+.chat-selection h2 {
+    font-size: 100%;
+    margin-bottom: 8px;
+    color: #e04aa4;
+    width: 140px;
+}
+
+.channel-join {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 10px;
+    width: 140px;
+}
+
+.channel-join input {
+    flex: 1;
+    padding: 5px 10px;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    font-size: 90%;
+    width: calc(100% - 80px);
+}
+
+.channel-join button {
+    padding: 0 8px;
+    background-color: #0066cc;
+    color: white;
+    height: 26px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 90%;
+    transition: background-color 0.2s;
+}
+
+.channel-join button:hover {
+    background-color: #0052a3;
+}
+
+.channel-join button:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
+
+.dm-join {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 10px;
+    width: 140px;
+}
+
+.dm-join input {
+    flex: 1;
+    padding: 5px 10px;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    font-size: 90%;
+    width: calc(100% - 80px);
+}
+
+.dm-join button {
+    padding: 0 8px;
+    background-color: #0066cc;
+    color: white;
+    height: 26px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 90%;
+    transition: background-color 0.2s;
+}
+
+.dm-join button:hover {
+    background-color: #0052a3;
+}
+
+.dm-join button:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
+
+.channel-entry .close-channel {
+    float: right;
+    color: #999;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0 5px;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.channel-entry:hover .close-channel {
+    opacity: 1;
+}
+
+.channel-entry .close-channel:hover {
+    color: red;
+}
+
+.channel-entry, .dm-entry {
+    padding: 5px 10px;
+    margin-bottom: 2px;
+    cursor: pointer;
+    border-radius: 4px;
+    background-color: #f8f9fa;
+    transition: background-color 0.2s;
+    width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.channel-entry:hover, .dm-entry:hover {
+    background-color: #e0e1ec;
+}
+
+.channel-entry.active, .dm-entry.active {
+    background-color: #0066cc;
+    color: white;
+    font-weight: bold;
+}
+
+.dm-entry[data-is-online="false"]:not(.active) {
+    color: #5a6269;
+}
+
+.channel-status, .dm-status {
+    color: #6c757d;
+    font-size: 85%;
+    font-style: italic;
+    padding: 6px 4px;
 }

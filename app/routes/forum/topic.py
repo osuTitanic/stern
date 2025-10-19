@@ -9,6 +9,7 @@ from app.common.database import (
     posts
 )
 
+from . import activity as forum_activity
 from flask_login import current_user, login_required
 from flask import Blueprint, redirect, request
 from sqlalchemy.orm import Session
@@ -21,7 +22,6 @@ router = Blueprint("forum-topics", __name__)
 
 def update_views(topic_id: int, session: Session) -> None:
     ip_address = ip.resolve_ip_address_flask(request)
-
     lock = app.session.redis.get(f'forums:viewlock:{topic_id}:{ip_address}')
 
     if lock:
@@ -122,6 +122,11 @@ def topic(forum_id: str, id: str):
                 session=session
             )
 
+            forum_activity.mark_user_active(
+                current_user.id,
+                topic.forum_id
+            )
+
         initial_post = posts.fetch_initial_post(
             topic.id,
             session=session
@@ -213,7 +218,7 @@ def get_icon_id(forum: DBForum) -> int | None:
     if icon_id != -1:
         return icon_id
 
-def get_type_dict() -> dict:
+def get_topic_options() -> dict:
     if not current_user.is_moderator:
         return {}
 
@@ -259,7 +264,7 @@ def create_post_action(forum_id: str):
             session=session,
             can_change_icon=forum.allow_icons,
             icon_id=get_icon_id(forum),
-            **get_type_dict()
+            **get_topic_options()
         )
 
         post = posts.create(

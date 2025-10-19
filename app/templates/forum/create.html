@@ -7,6 +7,11 @@
     current_user.is_moderator
 ) %}
 
+{% set can_edit_icon = (
+    forum.allow_icons and
+    is_privileged
+) %}
+
 {% block content %}
 <h1 class="header-text">
     <a href="/forum" style="color:#5a5399">Index</a> »
@@ -24,7 +29,7 @@
     <p class="post-subject">
         Subject: <input type="text" name="title" class="nav-search">
     </p>
-    {% if forum.allow_icons or is_privileged %}
+    {% if can_edit_icon %}
     <div class="icon-selection">
         <input type="radio" name="icon" value="-1" checked="checked">
         <label for="-1">None</label>

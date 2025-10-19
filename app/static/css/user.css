@@ -1,4 +1,6 @@
-@import url('main.css');
+body {
+    overflow-y: scroll;
+}
 
 .page {
     display: inline-block;
@@ -336,6 +338,11 @@
     margin-bottom: 5px;
 }
 
+.tab-heading-account {
+    background-color: #2f2f65;
+    cursor: auto;
+}
+
 .tab-content {
     transition: all .5s ease;
     overflow: hidden;
@@ -650,19 +657,47 @@
     width: 100%;
 }
 
-.friend-add {
-    color: green !important;
-}
-
-.friend-remove {
-    color: red !important;
-}
-
-#friend-status {
-    display: block;
-    margin: 0 auto;
+#friend-status a {
+    color: #fff;
     text-align: center;
+    font-size: 15px;
+    padding: 5px 10px;
     margin: 5px;
+    border-radius: 6px;
+}
+
+#friend-status a:hover {
+    color: #fff;
+    text-decoration: none;
+    text-shadow: 0 0 5px #fff;
+}
+
+#friend-status a:focus {
+    text-decoration: none;
+}
+
+#friend-status a {
+    display: none;
+}
+
+#friend-status.friend-current-true-target-true a:nth-child(1),
+#friend-status.friend-current-true-target-false a:nth-child(2),
+#friend-status.friend-current-false-target-true a:nth-child(3),
+#friend-status.friend-current-false-target-false a:nth-child(4) {
+    display: block;
+}
+
+.friend-current-false-target-true a,
+.friend-current-false-target-false a {
+    background: #5db8ef;
+}
+
+.friend-current-true-target-false a {
+    background: #54bd21;
+}
+
+.friend-current-true-target-true a {
+    background: #ef77af;
 }
 
 #admin-userpage-controls:after {
@@ -700,6 +735,18 @@
 
 #admin-userpage-controls input[type="submit"] {
     margin: 4px;
+}
+
+.user-moderation {
+    font-size: 90%;
+}
+
+.user-moderation h2 {
+    font-size: 110%;
+    margin: 10px auto;
+    text-align: center;
+    color: #e15fac;
+    text-shadow: #efcfe1 0px 0px 10px;
 }
 
 @supports (display: flex) {
