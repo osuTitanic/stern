@@ -583,6 +583,10 @@ input[type="url"], input[type="search"] {
     max-height: 500px;
 }
 
+.bbcode ol {
+    padding-left: 20px;
+}
+
 .bbcode-preview {
     margin: 5px 5px 1.5px 5px;
     background-color: #dbd8fd;
