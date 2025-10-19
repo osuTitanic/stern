@@ -126,7 +126,7 @@
         <a href="../" class="button-red">Cancel</a>
     {% endif %}
     {% if context['draft'] %}
-        <input formaction="../draft"
+        <input onclick="this.form.action='../draft';"
                class="button-grey"
                type="submit"
                value="Save Draft">
