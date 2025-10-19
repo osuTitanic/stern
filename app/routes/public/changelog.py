@@ -125,7 +125,7 @@ def get_latest_commits(repo: str, user: str = 'osuTitanic', amount: int = 50) ->
 
     return response.json()
 
-def get_branch_hash(user: str, repo: str, branch_name: str = 'dev') -> str:
+def get_branch_hash(user: str, repo: str, branch_name: str = 'main') -> str:
     response = app.session.requests.get(
         f'https://api.github.com/repos/{user}/{repo}/branches'
     )
