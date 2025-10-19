@@ -23,6 +23,5 @@ timeago==1.0.16
 rosu-pp-py==3.1.0
 markdown==3.9
 pyjwt==2.10.1
-flask-squeeze==3.4.0
 gitpython==3.1.45
 regex
