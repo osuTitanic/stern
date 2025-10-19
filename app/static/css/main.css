@@ -129,6 +129,15 @@ input[type="url"], input[type="search"] {
     border-radius: 3px;
 }
 
+@view-transition {
+    navigation: auto;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+    animation-duration: 0.05s;
+}
+
 .main {
     margin: auto;
     position: relative;
