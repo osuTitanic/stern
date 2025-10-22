@@ -56,7 +56,7 @@ def update_avatar():
         )
         return get_profile_page('Please provide a valid image!')
 
-    if (image.height > 1000) or (image.width > 1000):
+    if (image.height > 8000) or (image.width > 8000):
         return get_profile_page('This image is too large. Please lower the resolution!')
 
     buffer = io.BytesIO()
