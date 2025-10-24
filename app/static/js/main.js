@@ -120,9 +120,8 @@ function slideDown(elem) {
 
 function slideUp(elem) {
     // Use jQuery's slideUp for cross-browser compatibility
-    $(elem).stop(true, false).slideUp(500, function() {
-        elem.style.height = '0px';
-    });
+    $(elem).stop(true, false).slideUp(500);
+    setTimeout(function() { elem.style.height = '0px' }, 500);
 }
 
 function isHidden(elem) {
