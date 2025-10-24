@@ -52,15 +52,14 @@
         {% endif %}
 
         {# Difference from osu!: Added group icons #}
+        {# Hide the Donator group badge, hardcoded here for now until the donator image is used elsewhere on the site #}
+        {% set groups = groups|rejectattr("id", "equalto", 6) %}
         {% if groups %}
             <div class="groups">
                 {% for group in groups %}
-                    {# Hide the Donator group badge, hardcoded here for now until the donator image is used elsewhere on the site #}
-                    {% if group.id != 6 %}
-                        <a class="group" href="/g/{{ group.id }}" style="color: {{ group.color }}; border: 1px solid {{ group.color }};">
-                            {{ group.short_name|upper }}
-                        </a>
-                    {% endif %}
+                    <a class="group" href="/g/{{ group.id }}" style="color: {{ group.color }}; border: 1px solid {{ group.color }};">
+                        {{ group.short_name|upper }}
+                    </a>
                 {% endfor %}
             </div>
         {% endif %}
