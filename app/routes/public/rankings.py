@@ -99,7 +99,7 @@ def render_rankings_page(
                 order_type, country
             )
             page = math.ceil(user_rank / items_per_page)
-            jumpto = user.username
+            jumpto = user.name
 
         leaderboard = leaderboards.top_players(
             mode.value,
