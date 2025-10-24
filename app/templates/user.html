@@ -4,191 +4,292 @@
 
 {% block content %}
 <div class="profile-left">
-    <div class="left-top">
-        <div class="avatar-box">
+    <div class="profile-user-card">
+        {# TODO: if (user has set an avatar) #}
+        {% if true %}
             {% if current_user.id == user.id %}
-            <a href="/account/settings/profile#picture">
-                <img src="{{ user|avatar_url }}" alt="">
-            </a>
+                <a href="/account/settings/profile#edit">
+                    <div class="avatar">
+                        <img src="{{ user|avatar_url }}" alt="User avatar" />
+                    </div>
+                </a>
             {% else %}
-            <img src="{{ user|avatar_url }}" alt="">
+                <div class="avatar">
+                    <img src="{{ user|avatar_url }}" alt="User avatar" />
+                </div>
             {% endif %}
-        </div>
-        <h1 class="user-header">
-            <a class="flag" href="/rankings/{{ constants.GameMode(mode).alias }}/performance?country={{ user.country|lower }}">
-                <img src="/images/flags/{{ user.country|lower }}.gif" alt="{{ user.country|upper }}">
-            </a>
+        {% endif %}
 
-            {# Username Color #}
-            {% if user.groups %}
-                {% set primary_group_id = user.groups|get_attributes('group_id')|min %}
-                {% set primary_group = (user.groups|selectattr("group_id", "eq", primary_group_id)|first).group %}
-                {% set color = primary_group.color %}
-            {% else %}
-                {% set color = '#000000' %}
-            {% endif %}
-    
-            {# Username Size #}
-            {% set name_length = user.name|length %}
-            {% set name_size = (21 - (name_length - 14) * 1.5)|clamp(12, 25) %}
-    
-            {% if user.names %}
-            {# Name History #}
-            {% set names = user.names|map(attribute='name')|reject('equalto', user.name)|unique|join(', ') %}
-            <div class="username" style="color: {{ color }}; font-size: {{ name_size }}px;" title="Previously known as {{ names }}">
+        <div class="profile-username-container">
+            <div
+                class="profile-username"
+
+                {% if user.groups %}
+                    {% set primary_group_id = user.groups|get_attributes("group_id")|min %}
+                    {% set primary_group = (user.groups|selectattr("group_id", "eq", primary_group_id)|first).group %}
+                    style="color: {{ primary_group.color }};"
+                {% endif %}
+
+                {# Difference from osu!: All past names are shown, instead of only the most recent change #}
+                {% if user.names %}
+                    {% set names = user.names|map(attribute='name')|reject('equalto', user.name)|unique|join(', ') %}
+                    title="Previously known as {{ names }}"
+                {% endif %}
+            >
                 {{ user.name }}
             </div>
-            {% else %}
-            <div class="username" style="color: {{ color }}; font-size: {{ name_size }}px;">
-                {{ user.name }}
-            </div>
-            {% endif %}
-        </h1>
-        <div class="user-title">
-            {% if user.title %}
-            {{ user.title }}
+
+            {# TODO: Change username ability #}
+            {% if false and current_user.id == user.id and not user.names %}
+                <a class="change-username" href="...">change</a>
             {% endif %}
         </div>
-        {% if user.restricted %}
-        <img src="/images/banned.png" id="banned-image" alt="">
+
+        {% if user.title %}
+            <div>
+                <b>{{ user.title }}</b>
+            </div>
         {% endif %}
+
+        {# Difference from osu!: Added group icons #}
         {% if groups %}
-        <div class="groups">
-            {% for group in groups %}
-            <div class="group">
-                <a href="/g/{{ group.id }}" style="color: {{ group.color }}">
-                    {{ group.short_name|upper }}
-                </a>
+            <div class="groups">
+                {% for group in groups %}
+                    <a class="group" href="/g/{{ group.id }}" style="--color: {{ group.color }};">
+                        {{ group.short_name|upper }}
+                    </a>
+                {% endfor %}
             </div>
-            {% endfor %}
-        </div>
         {% endif %}
-        {% if user.badges %}
-        <div class="user-badges">
+
         {% for badge in user.badges %}
-            <div class="badge-container">
-                <a href="{{ badge.badge_url if badge.badge_url else '#' }}" title="{{ badge.badge_description }}">
-                    <img src="{{ badge.badge_icon }}" alt="{{ badge.badge_description }}" loading="lazy">
-                </a>
+            <div
+                class="badge"
+                {% if badge.badge_description %}
+                    title="{{ badge.badge_description }}"
+                {% endif %}
+            >
+                {# Difference from osu!: Added optional links on badges #}
+                {% if badge.badge_url %}
+                    <a href="{{ badge.badge_url }}">
+                        <img src="{{ badge.badge_icon }}" alt="" />
+                    </a>
+                {% else %}
+                    <img src="{{ badge.badge_icon }}" alt="" />
+                {% endif %}
             </div>
         {% endfor %}
+
+        <div>
+            <center>
+                {# Difference from osu!: Link doesn't jump to user on leaderboard #}
+                {# TODO^ #}
+                <a href='/rankings/{{ constants.GameMode(mode).alias }}/performance?country={{ user.country|lower }}'>
+                    <img
+                        class='flag'
+                        title="{{ constants.COUNTRIES[user.country|upper] }}"
+                        src="/images/flags/{{ user.country|lower }}.gif"
+                        alt="{{ user.country|upper }}"
+                    />
+                </a>
+
+                {# TODO: Forum PM #}
+                {% if false and current_user.is_authenticated and current_user.id != user.id %}
+                    <a href="...">
+                        <img
+                            src="icon_contact_pm.png"
+                            alt="Send private message"
+                            title="Send private message"
+                        />
+                    </a>
+                {% endif %}
+
+                {% if user.is_donator %}
+                    <div class="donator"></div>
+                {% endif %}
+            </center>
         </div>
+
+        {% if user.restricted %}
+            <div class="banned-container">
+                <img src="/images/banned.png" alt="Banned" />
+            </div>
         {% endif %}
     </div>
-    <div class="left-bottom">
-        <div class="userpage-social">
-            {% if user.location %}
-            <div title="Location" class="activity">
-                <i class="fa-sharp fa-solid fa-location-dot" style="color: #76777b;"></i>
-                <p>{{ user.location }}</p>
-            </div>
-            {% endif %}
-            {% if user.interests %}
-            <div title="Interests" class="activity">
-                <i class="fa-regular fa-heart" style="color: #76777b;"></i>
-                <p>{{ user.interests }}</p>
-            </div>
-            {% endif %}
-            {% if user.website %}
-            <div title="Website" class="activity">
-                <i class="fa-solid fa-earth-americas" style="color: #76777b;"></i>
-                <a href="{{ user.website }}">{{ user.website|domain }}</a>
-            </div>
-            {% endif %}
-            {% if user.twitter %}
-            <div title="Twitter" class="activity">
-                <i class="fa-brands fa-twitter" style="color: #76777b;"></i>
-                <a href="{{ user.twitter }}">{{ user.twitter|twitter_handle }}</a>
-            </div>
-            {% endif %}
-            {% if user.discord %}
-            <div title="Discord" class="activity">
-                <i class="fa-brands fa-discord" style="color: #76777b;"></i>
-                <p>{{ user.discord }}</p>
-            </div>
-            {% endif %}
+
+    {% if current_user.is_authenticated and current_user.id != user.id %}
+        {% set current_friends = repositories.relationships.fetch_many_by_id(current_user.id, session)|get_attributes('target_id') %}
+        {% set target_friends = user.relationships|get_attributes('target_id') %}
+        {% set current_added = user.id in current_friends %}
+        {% set target_added = current_user.id in target_friends or user.id in config.SUPER_FRIENDLY_USERS %}
+        <div id="friend-status" class="friend-current-{{ current_added|lower }}-target-{{ target_added|lower }}">
+            <a href="#" onclick="return removeFriend()">
+                <i class="fa3-heart"></i> Mutual Friend
+            </a>
+            <a href="#" onclick="return removeFriend()">
+                <i class="fa3-star"></i> Friend
+            </a>
+            {# Difference from osu!: Added "Add as Mutual Friend" state #}
+            <a href="#" onclick="return addFriend()">
+                <i class="fa3-plus-sign"></i> Add as Mutual Friend
+            </a>
+            <a href="#" onclick="return addFriend()">
+                <i class="fa3-plus-sign"></i> Add as Friend
+            </a>
         </div>
-        <div class="userpage-stats">
-            {% if followers > 0 %}
-            <div class="activity activity-followers">
-                <i class="fa-solid fa-user" style="color: #76777b;"></i>
-                <p>{{ "{:,}".format(followers) }} follower{{ 's' if followers != 1 }} </p>
+    {% endif %}
+
+    <div class='profile-details'>
+        {% if user.location %}
+            <div title='Location'>
+                <i class='fa3-map-marker'></i>
+                <div>{{ user.location|truncate(30, True) }}</div>
             </div>
-            {% endif %}
-            <div title="Arrived ({{ user.created_at.strftime('%Y-%m-%d %H:%M:%S') }})" class="activity">
-                <i class="fa-solid fa-right-to-bracket" style="color: #76777b;"></i>
-                <p>{{ user.created_at|timeago }}</p>
-            </div>
-            <div title="Last Active ({{ user.latest_activity.strftime('%Y-%m-%d %H:%M:%S') }})" class="activity">
-                {% if is_online %}
-                <i class="fa-solid fa-right-from-bracket" style="color: #c966c9;"></i>
-                <p>Online</p>
-                {% else %}
-                <i class="fa-solid fa-right-from-bracket" style="color: #76777b;"></i>
-                <p>{{ user.latest_activity|timeago }}</p>
-                {% endif %}
-            </div>
-            <div title="Total Posts" class="activity">
-                <i class="fa-regular fa-pen-to-square" style="color: #76777b;"></i>
-                <p>{{ "{:,}".format(total_posts) }} post{{ 's' if total_posts != 1 }}</p>
-            </div>
-        </div>
-        {% if user.playstyle > 0 or current_user.id == user.id %}
-        <div class="playstyle-container">
-        {% set current_playstyle = user.playstyle|playstyle %}
-        {% if current_user.id == user.id %}
-            {# Let user edit the playstyle #}
-            {% for playstyle in constants.Playstyle %}
-                {% if playstyle in current_playstyle and playstyle > 0 %}
-                <div id="{{ playstyle.name }}" class="playstyle {{ playstyle.name|lower }} playstyle-selectable" onclick="updatePlaystyleElement(this)"></div>
-                {% else %}
-                <div id="{{ playstyle.name }}" class="playstyle-hidden {{ playstyle.name|lower }} playstyle-selectable" onclick="updatePlaystyleElement(this)"></div>
-                {% endif %}
-            {% endfor %}
-        {% else %}
-            {% for playstyle in constants.Playstyle %}
-                {% if playstyle in current_playstyle and playstyle > 0 %}
-                <div class="playstyle {{ playstyle.name|lower }}"></div>
-                {% endif %}
-            {% endfor %}
         {% endif %}
-        </div>
+
+        {# Difference from osu!: Removed age #}
+
+        {# TODO: Occupation #}
+        {% if false and user.occupation %}
+            <div title='Occupation'>
+                <i class='fa3-pencil'></i>
+                <div>{{ user.occupation|truncate(30, True) }}</div>
+            </div>
         {% endif %}
-        {% if current_user.id %}
-        <div class="userpage-actions">
-            {% if current_user.id != user.id %}
-            <div class="friend-actions">
-                {% set current_friends = repositories.relationships.fetch_many_by_id(current_user.id, session)|get_attributes('target_id') %}
-                {% set target_friends = user.relationships|get_attributes('target_id') %}
-                {% set current_added = user.id in current_friends %}
-                {% set target_added = current_user.id in target_friends or user.id in config.SUPER_FRIENDLY_USERS %}
-                <div id="friend-status" class="friend-current-{{ current_added|lower }}-target-{{ target_added|lower }}">
-                    <a href="#" onclick="return removeFriend()">
-                        <i class="fa-solid fa-heart"></i> Mutual Friend
-                    </a>
-                    <a href="#" onclick="return removeFriend()">
-                        <i class="fa-solid fa-star"></i> Friend
-                    </a>
-                    <a href="#" onclick="return addFriend()">
-                        <i class="fa-solid fa-plus"></i> Add Mutual Friend
-                    </a>
-                    <a href="#" onclick="return addFriend()">
-                        <i class="fa-solid fa-plus"></i> Add Friend
-                    </a>
+
+        {% if user.interests %}
+            <div title='Interests'>
+                <i class='fa3-heart-empty'></i>
+                <div>{{ user.interests|truncate(30, True) }}</div>
+            </div>
+        {% endif %}
+
+        {# Separator #}
+        <div></div>
+
+        {% if user.website %}
+            <div title='Website'>
+                <i class='fa3-globe'></i>
+                <div>
+                    <a href="{{ user.website }}">{{ user.website|truncate(30, True) }}</a>
                 </div>
             </div>
+        {% endif %}
+
+        {% if user.twitter %}
+            <div title='Twitter'>
+                <i class='fa3-twitter'></i>
+                <div>
+                    <a href="{{ user.twitter }}">{{ user.twitter|twitter_handle|truncate(30, True) }}</a>
+                </div>
+            </div>
+        {% endif %}
+
+        {# Difference from osu!: Added Discord #}
+        {% if user.discord %}
+            <div title='Discord'>
+                <i class='fa-brands fa-discord'></i>
+                <div>{{ user.discord|truncate(30, True) }}</div>
+            </div>
+        {% endif %}
+
+        {# TODO: Last.fm #}
+        {% if false and user.last_fm %}
+            <div title='last.fm'>
+                <i class='fa3-music'></i>
+                <div>
+                    <a href="//last.fm/...">{{ user.last_fm|truncate(30, True) }}</a>
+                    {# Difference from osu!: This used to show a prompt to connect to last.fm if the user hadn't already, but a faulty check was added that made it never display at some point #}
+                    {% if current_user.id == user.id %}
+                        <span class="last-fm-unlink">(<a href="...">unlink</a>)</span>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+
+        {# Separator #}
+        <div></div>
+
+        <div title="Arrived">
+            <i class="fa3-signin"></i>
+            <div>
+                {# Difference from osu!: Wrapped "since the beginning" in <time> #}
+                <time
+                    datetime="{{ user.created_at.strftime('%Y-%m-%d %H:%M:%S') }}"
+                    title="{{ user.created_at.strftime('%Y-%m-%d %H:%M:%S') }} UTC"
+                >
+                    {% if user.created_at <= config.BEGINNING_ENDED_AT %}
+                        since the beginning
+                    {% else %}
+                        {{ user.created_at|timeago }}
+                    {% endif %}
+                </time>
+            </div>
+        </div>
+
+        <div title="Last Active">
+            {# Difference from osu!: Special online variant #}
+            {% if is_online %}
+                <i class="fa3-signout online"></i>
+                <div>Online</div>
+            {% else %}
+                <i class="fa3-signout"></i>
+                <div>
+                    {# Difference from osu!: Wrapped "dead" in <time> #}
+                    <time
+                        datetime="{{ user.latest_activity.strftime('%Y-%m-%d %H:%M:%S') }}"
+                        title="{{ user.latest_activity.strftime('%Y-%m-%d %H:%M:%S') }} UTC"
+                    >
+                        {% if user.latest_activity <= config.BEGINNING_ENDED_AT %}
+                            dead
+                        {% else %}
+                            {{ user.latest_activity|timeago }}
+                        {% endif %}
+                    </time>
+                </div>
             {% endif %}
         </div>
+
+        {# Difference from osu!: Added follower count #}
+        {% if followers > 0 %}
+            <div title='Followers'>
+                <i class='fa-solid fa-users'></i>
+                <div>{{ followers|format_number }} follower{{ 's' if followers != 1 }}</div>
+            </div>
         {% endif %}
-        {% if current_user.is_moderator %}
-        <!--
-        <div class="user-moderation">
-            <h2>Moderation</h2>
-            Coming soon...
-        </div>
-        -->
+
+        {% if total_posts > 0 %}
+            {# Difference from osu!: Doesn't link to user's post history #}
+            {# TODO^ #}
+            {# Difference from osu!: Fixed "1 posts" case #}
+            <div title='Posts'>
+                <i class='fa3-edit'></i>
+                <div>{{ total_posts|format_number }} post{{ 's' if total_posts != 1 }}</div>
+            </div>
         {% endif %}
-        {# TODO: User reports #}
+
+        {% if current_user.id == user.id %}
+            <a class='edit-profile' href='/account/settings/profile#edit'>Edit</a>
+        {% endif %}
+    </div>
+
+    <div class="playstyle-container">
+        {% set current_playstyle = constants.Playstyle(user.playstyle) %}
+        {% for playstyle in [constants.Playstyle.Mouse, constants.Playstyle.Keyboard, constants.Playstyle.Tablet, constants.Playstyle.Touch] %}
+            {% set class_name = [
+                'playstyle',
+                'playstyle-' + playstyle.name|lower,
+                'playstyle-using' if playstyle in current_playstyle,
+                'playstyle-toggleable' if current_user.id == user.id,
+            ]|reject('none')|join(' ') %}
+            <div
+                id="{{ playstyle.name }}"
+                class="{{ class_name }}"
+                {% if current_user.id == user.id %}
+                    onclick="updatePlaystyleElement(this)"
+                {% endif %}
+            ></div>
+        {% endfor %}
     </div>
 </div>
 <div class="profile-right">

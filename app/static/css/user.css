@@ -1,240 +1,304 @@
 @import url('main.css');
 
 .page {
-    display: inline-block;
-    margin-top: 0;
+    /* TODO: Revisit margin structure on this page when global page style is more accurate */
+    margin-left: 0;
+    margin-right: 0;
 }
 
 .profile-left {
-    background-color: #dad7fb;
     width: 200px;
-    min-height: 100%;
-    padding: 5px;
-    padding-top: 15px;
-    border-radius: 5px;
-    position: sticky;
     float: left;
+    padding-left: 7px;
+
+    /* TODO: Belongs at the root of the site, not here */
+    font-size: 8pt;
+    line-height: normal;
+
+    /* TODO: Revisit margin structure on this page when global page style is more accurate */
+    margin-top: -10px;
+}
+
+/* Some versions of the osu! website had a sticky profile card, in others it didn't work */
+#titanic .profile-left {
+    position: sticky;
     top: 0;
 }
 
-.profile-right {
-    margin-left: 10px;
-    text-align: left;
-    float: right;
-    width: 620px;
+/* TODO: Shouldn't need to un-reset some of the reset like this */
+.profile-left * {
+    font-size: unset;
 }
 
-.left-top {
-    display: grid;
-    justify-content: center;
-    align-items: center;
-    overflow-wrap: anywhere;
-}
-
-.user-header {
-    font-weight: normal;
-    font-size: 145%;
-    padding-top: 5px;
-    justify-content: center;
-    align-items: center;
+.profile-user-card {
+    margin-top: 10px;
     text-align: center;
-    display: flex;
-    margin: 0 auto;
-    max-width: 200px;
-    text-overflow: ellipsis;
-    overflow: hidden;
 }
 
-.flag {
-    float: left;
-    margin-bottom: 2.5px;
-}
-
-.user-header a {
-    margin-right: 8px;
-}
-
-.user-header img {
+.avatar {
+    display: inline-block;
+    background: #fff;
+    border: 1px solid #ddd;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+    max-width: 128px;
+    max-height: 128px;
     text-align: center;
-    margin: 0 auto;
+    vertical-align: middle;
+    margin: auto;
+    padding: 3px;
 }
 
-.username {
-    padding-left: 1px;
+.avatar > img {
+    display: inline-block;
+    max-width: 128px;
+    max-height: 128px;
 }
 
-.user-title {
-    margin: 0px auto 5px auto;
-    text-align: center;
-    font-size: 80%;
+.profile-username-container {
+    position: relative;
 }
 
-#banned-image {
-    display: block;
-    margin: 10px auto 15px auto;
+.profile-username {
+    padding-bottom: 2px;
+    font-size: 250%;
+}
+
+.change-username {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 5px;
+    text-align: right;
+}
+
+.profile-username-container:hover > .change-username {
+    display: inline-block;
 }
 
 .groups {
-    display: block;
-    text-align: center;
-    overflow-wrap: break-word;
     display: flex;
-    justify-content: center;
     flex-wrap: wrap;
+    gap: 4px;
+    justify-content: center;
+    margin: 6px 0;
 }
 
 .group {
-    margin: 4px;
-    margin-left: 6px;
-    margin-right: 6px;
-    background-color: #e3e0f1;
-    border-radius: 2.5px;
-    padding: 2.5px;
-    padding-left: 5px;
-    padding-right: 5px;
-    line-height: 18px;
-    display: inline-block;
-    text-align: center;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+    border: 1px solid var(--color);
+    color: var(--color);
+    background: #fff9;
+    padding: 1px 3px;
+    font-size: 75%;
+    font-weight: bold;
 }
 
 .group:hover,
-.group:focus,
+.group:focus {
+    background: #fff;
+    text-decoration: none;
+    color: var(--color);
+}
+
 .group:active {
     text-decoration: none;
-    background-color: #f0ecfa;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.20);
-    text-shadow: 0 0 0.6px;
-    transition: all 0.1s ease-in-out;
+    color: var(--color);
 }
 
-.group a:hover {
+.badge {
+    line-height: 0;
+}
+
+.badge img {
+    max-width: 86px;
+    padding: 5px;
+}
+
+.banned-container {
+    background: #dad7fb;
+}
+
+#titanic .banned-container {
+    /* Difference from osu!: Margin to avoid awkward missing gap below banned image */
+    margin-bottom: 5px;
+}
+
+.flag {
+    width: 16px;
+    height: 11px;
+    padding: 5px;
+}
+
+#titanic .flag {
+    /* Difference from osu!: Preserve the flag art style at high DPI */
+    image-rendering: pixelated;
+}
+
+.donator {
+    display: inline-block;
+    height: 12px;
+    width: 80px;
+    padding: 2px;
+    background: url("/images/titanic-donator.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+#friend-status a {
+    color: #fff;
+    text-align: center;
+    font-size: 15px;
+    padding: 5px 10px;
+    margin: 5px;
+    border-radius: 6px;
+}
+
+#friend-status a:hover {
+    color: #fff;
+    text-decoration: none;
+    text-shadow: 0 0 5px #fff;
+}
+
+#friend-status a:focus {
     text-decoration: none;
 }
 
-.avatar-box {
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
-    background-color: white;
-    border: 1px solid #ddd;
-    margin: 0 auto;
-    margin-bottom: 5px;
-    padding: 2px;
-    display: inline;
-    justify-content: center;
-    align-items: center;
-    height: 120px;
-    width: 120px;
+#friend-status a {
+    display: none;
 }
 
-.avatar-box img {
-    margin: 0 auto;
+#friend-status.friend-current-true-target-true a:nth-child(1),
+#friend-status.friend-current-true-target-false a:nth-child(2),
+#friend-status.friend-current-false-target-true a:nth-child(3),
+#friend-status.friend-current-false-target-false a:nth-child(4) {
     display: block;
-    width: 120px;
-    height: 120px;
 }
 
-.user-badges {
-    text-align: center;
-    margin: 5px auto;
+.friend-current-false-target-true a,
+.friend-current-false-target-false a {
+    background: #5db8ef;
 }
 
-.badge-container {
-    margin-top: 10px;
+.friend-current-true-target-false a {
+    background: #54bd21;
 }
 
-.badge-container img {
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
-    max-height: 50px;
-    max-width: 100px;
+.friend-current-true-target-true a {
+    background: #ef77af;
 }
 
-.left-bottom {
-    margin: 0px 10px 10px 10px;
+.profile-details {
+    position: relative;
+    font-size: 120%;
 }
 
-.activity {
-    width: 100%;
-    margin-bottom: 5px;
-    font-size: 90%;
+.profile-details > div {
+    position: relative;
+    padding-bottom: 5px;
 }
 
-.activity i {
-    padding-top: 2px;
+.profile-details > div > div {
+    margin-left: 23px;
+}
+
+.profile-details i {
+    position: absolute;
     width: 23px;
-    margin-right: 4px;
     text-align: center;
-    float: left;
+    color: #76777b;
+    font-size: 130%;
+}
+
+/* Font metrics for different FA versions are completely different, matched visually */
+#titanic .profile-details i[class^="fa-"] {
+    font-size: 105%;
+    margin-top: 1px;
+}
+
+#titanic .profile-details i.online {
+    color: #c966c9;
+}
+
+.last-fm-unlink {
+    font-size: 60%;
+}
+
+.edit-profile {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 5px;
+    text-align: right;
+}
+
+.profile-details:hover > .edit-profile {
+    display: inline-block;
 }
 
 .playstyle-container {
-    background-color: #dbcaea;
-    text-align: center;
     margin: 5px auto;
-    margin-top: 20px;
-    margin-bottom: 15px;
+    text-align: center;
+    background: #e1ddfc;
     border-radius: 5px;
-    min-height: 32px;
-}
-
-.userpage-social {
-    width: 100%;
-    padding-bottom: 10px;
-    padding-top: 10px;
-    overflow: hidden;
-}
-
-.userpage-social p, .userpage-social a {
-    overflow: hidden;
 }
 
 .playstyle {
+    display: none;
     width: 32px;
     height: 32px;
-    background-image: url('/images/playstyles.png');
-    display: inline-block;
+    opacity: 0.2;
+    background-image: url("/images/playstyles.png");
 }
 
-.playstyle-hidden {
-    width: 32px;
-    height: 32px;
-    background-image: url('/images/playstyles.png');
-    display: inline-block;
-}
-
-.playstyle-selectable {
-    cursor: pointer;
-}
-
-.playstyle.mouse {
+.playstyle-mouse {
     background-position: 0px 0px;
 }
 
-.playstyle.keyboard {
+.playstyle-keyboard {
     background-position: -64px 0px;
 }
 
-.playstyle.tablet {
+.playstyle-tablet {
     background-position: -32px 0px;
 }
 
-.playstyle.touch {
+.playstyle-touch {
     background-position: -96px 0px;
 }
 
-.playstyle-hidden.mouse {
-    background-position: 0px 32px;
+.playstyle-using {
+    display: inline-block;
+    opacity: 1;
 }
 
-.playstyle-hidden.keyboard {
-    background-position: -64px 32px;
+.playstyle-toggleable {
+    display: inline-block;
 }
 
-.playstyle-hidden.tablet {
-    background-position: -32px 32px;
+.playstyle-toggleable:hover {
+    opacity: 0.5;
+    cursor: pointer;
 }
 
-.playstyle-hidden.touch {
-    background-position: -96px 32px;
+.playstyle-using.playstyle-toggleable:hover {
+    opacity: 0.9;
+}
+
+@media
+(min--moz-device-pixel-ratio: 1.4),
+(-o-min-device-pixel-ratio: 7/5),
+(-webkit-min-device-pixel-ratio: 1.4),
+(min-device-pixel-ratio: 1.4),
+(min-resolution: 134dpi) {
+    .playstyle {
+        background-image: url("/images/playstyles@2x.png");
+        background-size: 128px 64px;
+    }
+}
+
+.profile-right {
+    text-align: left;
+    float: right;
+    width: 640px;
 }
 
 .edit-button {
@@ -646,58 +710,6 @@
     padding-bottom: 5px;
 }
 
-.userpage-stats {
-    margin-bottom: 10px;
-}
-
-.userpage-actions {
-    display: grid;
-    width: 100%;
-}
-
-#friend-status a {
-    color: #fff;
-    text-align: center;
-    font-size: 15px;
-    padding: 5px 10px;
-    margin: 5px;
-    border-radius: 6px;
-}
-
-#friend-status a:hover {
-    color: #fff;
-    text-decoration: none;
-    text-shadow: 0 0 5px #fff;
-}
-
-#friend-status a:focus {
-    text-decoration: none;
-}
-
-#friend-status a {
-    display: none;
-}
-
-#friend-status.friend-current-true-target-true a:nth-child(1),
-#friend-status.friend-current-true-target-false a:nth-child(2),
-#friend-status.friend-current-false-target-true a:nth-child(3),
-#friend-status.friend-current-false-target-false a:nth-child(4) {
-    display: block;
-}
-
-.friend-current-false-target-true a,
-.friend-current-false-target-false a {
-    background: #5db8ef;
-}
-
-.friend-current-true-target-false a {
-    background: #54bd21;
-}
-
-.friend-current-true-target-true a {
-    background: #ef77af;
-}
-
 #admin-userpage-controls:after {
     position: fixed;
     content: "";
@@ -733,23 +745,4 @@
 
 #admin-userpage-controls input[type="submit"] {
     margin: 4px;
-}
-
-.user-moderation {
-    font-size: 90%;
-}
-
-.user-moderation h2 {
-    font-size: 110%;
-    margin: 10px auto;
-    text-align: center;
-    color: #e15fac;
-    text-shadow: #efcfe1 0px 0px 10px;
-}
-
-@supports (display: flex) {
-    .avatar-box img {
-        display: flex;
-        vertical-align: middle;
-    }
 }
