@@ -59,8 +59,13 @@
 }
 
 .profile-username {
-    padding-top: 2px;
+    padding-bottom: 2px;
     font-size: 250%;
+}
+
+#titanic .profile-username {
+    padding-top: 2px;
+    padding-bottom: 0;
 }
 
 .change-username {
