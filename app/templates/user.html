@@ -84,9 +84,9 @@
             <center>
                 {# Difference from osu!: Link doesn't jump to user on leaderboard #}
                 {# TODO^ #}
-                <a href='/rankings/{{ constants.GameMode(mode).alias }}/performance?country={{ user.country|lower }}'>
+                <a href="/rankings/{{ constants.GameMode(mode).alias }}/performance?country={{ user.country|lower }}">
                     <img
-                        class='flag'
+                        class="flag"
                         title="{{ constants.COUNTRIES[user.country|upper] }}"
                         src="/images/flags/{{ user.country|lower }}.gif"
                         alt="{{ user.country|upper }}"
@@ -139,10 +139,10 @@
         </div>
     {% endif %}
 
-    <div class='profile-details'>
+    <div class="profile-details">
         {% if user.location %}
-            <div title='Location'>
-                <i class='fa3-map-marker'></i>
+            <div title="Location">
+                <i class="fa3-map-marker"></i>
                 <div>{{ user.location|truncate(30, True) }}</div>
             </div>
         {% endif %}
@@ -151,15 +151,15 @@
 
         {# TODO: Occupation #}
         {% if false and user.occupation %}
-            <div title='Occupation'>
-                <i class='fa3-pencil'></i>
+            <div title="Occupation">
+                <i class="fa3-pencil"></i>
                 <div>{{ user.occupation|truncate(30, True) }}</div>
             </div>
         {% endif %}
 
         {% if user.interests %}
-            <div title='Interests'>
-                <i class='fa3-heart-empty'></i>
+            <div title="Interests">
+                <i class="fa3-heart-empty"></i>
                 <div>{{ user.interests|truncate(30, True) }}</div>
             </div>
         {% endif %}
@@ -168,8 +168,8 @@
         <div></div>
 
         {% if user.website %}
-            <div title='Website'>
-                <i class='fa3-globe'></i>
+            <div title="Website">
+                <i class="fa3-globe"></i>
                 <div>
                     <a href="{{ user.website }}">{{ user.website|truncate(30, True) }}</a>
                 </div>
@@ -177,8 +177,8 @@
         {% endif %}
 
         {% if user.twitter %}
-            <div title='Twitter'>
-                <i class='fa3-twitter'></i>
+            <div title="Twitter">
+                <i class="fa3-twitter"></i>
                 <div>
                     <a href="{{ user.twitter }}">{{ user.twitter|twitter_handle|truncate(30, True) }}</a>
                 </div>
@@ -187,16 +187,16 @@
 
         {# Difference from osu!: Added Discord #}
         {% if user.discord %}
-            <div title='Discord'>
-                <i class='fa-brands fa-discord'></i>
+            <div title="Discord">
+                <i class="fa-brands fa-discord"></i>
                 <div>{{ user.discord|truncate(30, True) }}</div>
             </div>
         {% endif %}
 
         {# TODO: Last.fm #}
         {% if false and user.last_fm %}
-            <div title='last.fm'>
-                <i class='fa3-music'></i>
+            <div title="last.fm">
+                <i class="fa3-music"></i>
                 <div>
                     <a href="//last.fm/...">{{ user.last_fm|truncate(30, True) }}</a>
                     {# Difference from osu!: This used to show a prompt to connect to last.fm if the user hadn't already, but a faulty check was added that made it never display at some point #}
@@ -252,8 +252,8 @@
 
         {# Difference from osu!: Added follower count #}
         {% if followers > 0 %}
-            <div title='Followers'>
-                <i class='fa-solid fa-users'></i>
+            <div title="Followers">
+                <i class="fa-solid fa-users"></i>
                 <div>{{ followers|format_number }} follower{{ 's' if followers != 1 }}</div>
             </div>
         {% endif %}
@@ -262,14 +262,14 @@
             {# Difference from osu!: Doesn't link to user's post history #}
             {# TODO^ #}
             {# Difference from osu!: Fixed "1 posts" case #}
-            <div title='Posts'>
-                <i class='fa3-edit'></i>
+            <div title="Posts">
+                <i class="fa3-edit"></i>
                 <div>{{ total_posts|format_number }} post{{ 's' if total_posts != 1 }}</div>
             </div>
         {% endif %}
 
         {% if current_user.id == user.id %}
-            <a class='edit-profile' href='/account/settings/profile#edit'>Edit</a>
+            <a class="edit-profile" href="/account/settings/profile#edit">Edit</a>
         {% endif %}
     </div>
 
