@@ -1,4 +1,5 @@
 
+from datetime import datetime
 import dotenv
 import os
 
@@ -92,3 +93,5 @@ SUPER_FRIENDLY_USERS = [
     int(i) for i in os.environ.get('SUPER_FRIENDLY_USERS', '1').split(',')
     if i.isdigit()
 ]
+
+BEGINNING_ENDED_AT = datetime.fromisoformat(os.environ.get('BEGINNING_ENDED_AT', '2023-12-31T06:00:00'))

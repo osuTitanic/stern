@@ -142,7 +142,7 @@ function createScoreElement(score, index, type) {
     scoreInfoDiv.appendChild(scoreGrade);
     scoreInfoDiv.appendChild(scoreInfo);
     scoreInfoDiv.appendChild(accuracyText);
-    
+
     var scoreBottomDiv = document.createElement('div');
     scoreBottomDiv.classList.add('score-bottom');
 
@@ -162,12 +162,12 @@ function createScoreElement(score, index, type) {
     } else if (typeof(score.client_version) == 'number') {
         versionText = "b" + score.client_version.toString();
     }
-    
+
     if (versionText != false) {
         var clientText = document.createElement('div');
         clientText.classList.add('score-version');
         clientText.innerHTML += ' &mdash; on ';
-    
+
         var clientTextVersion = document.createElement('span');
         clientTextVersion.classList.add('score-version-number');
         setText(clientTextVersion, versionText);
@@ -1007,18 +1007,11 @@ function loadViewsGraph(userId, mode) {
 }
 
 function updatePlaystyleElement(element) {
-    var selected = element.classList.contains('playstyle');
-    var url = "/users/" + userId + "/playstyle";
-
-    if (selected) {
-        element.classList.remove('playstyle');
-        element.classList.add('playstyle-hidden');
-        performApiRequest("DELETE", url, {"playstyle": element.id});
-    } else {
-        element.classList.add('playstyle');
-        element.classList.remove('playstyle-hidden');
-        performApiRequest("POST", url, {"playstyle": element.id});
-    }
+    performApiRequest(
+        element.classList.toggle("playstyle-using") ? "POST" : "DELETE",
+        "/users/" + userId + "/playstyle",
+        { playstyle: element.id }
+    );
 }
 
 function addFriend() {

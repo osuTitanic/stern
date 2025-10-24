@@ -49,18 +49,9 @@ def get_rounded(num: float, ndigits: int = 0):
 def get_floored(num: float):
     return math.floor(num)
 
-@flask.template_filter('playstyle')
-def get_playstyle(num: int):
-    return common.constants.Playstyle(num)
-
 @flask.template_filter('url_quote')
 def url_quote(url: str) -> str:
     return quote(url)
-
-@flask.template_filter('domain')
-def get_domain(url: str) -> str:
-    return re.search(r'https?://([A-Za-z_0-9.-]+).*', url) \
-             .group(1)
 
 @flask.template_filter('twitter_handle')
 def get_handle(url: str) -> str:
@@ -258,3 +249,7 @@ def avatar_url(user: DBUser, size: int | None = None) -> str:
     )
 
     return f'/a/{user.id}?{url_args_string}'
+
+@flask.template_filter('format_number')
+def format_number(number: int | float) -> str:
+    return "{:,}".format(number)
