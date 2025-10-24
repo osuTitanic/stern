@@ -190,7 +190,9 @@ function getBeatmapsets(clear) {
             return;
         }
 
-        beatmapsets.forEach(function(beatmapset) {
+        for (var beatmapsetIndex = 0; beatmapsetIndex < beatmapsets.length; beatmapsetIndex++) {
+            var beatmapset = beatmapsets[beatmapsetIndex];
+            
             var beatmapsetDiv = document.createElement("div");
             beatmapsetDiv.classList.add("beatmapset");
             beatmapsetDiv.id = "beatmapset-" + beatmapset.id;
@@ -434,13 +436,10 @@ function getBeatmapsets(clear) {
             var playsIcon = document.createElement("i");
             playsIcon.classList.add("fa-solid", "fa-play");
 
-            var totalPlays = beatmapset.beatmaps
-                .map(function(item) {
-                    return item.playcount;
-                })
-                .reduce(function(prev, next) {
-                    return prev + next;
-                });
+            var totalPlays = 0;
+            for (var j = 0; j < beatmapset.beatmaps.length; j++) {
+                totalPlays += beatmapset.beatmaps[j].playcount;
+            }
 
             var detailsDiv = document.createElement("div");
             detailsDiv.classList.add("beatmap-details");
@@ -459,7 +458,7 @@ function getBeatmapsets(clear) {
             beatmapsetDiv.appendChild(beatmapInfoRight);
             beatmapsetDiv.appendChild(hiddenElementsContainer);
             beatmapContainer.appendChild(beatmapsetDiv);
-        });
+        }
 
         $(".beatmapset").hover(
             function() {
