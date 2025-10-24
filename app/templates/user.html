@@ -90,16 +90,20 @@
                     alt="{{ user.country|upper }}"
                 /></a>
 
+                {% if user.is_donator %}
+                <a href="/g/6" class="donator"></a>
+                {% endif %}
+
                 {% if current_user.is_authenticated and current_user.id != user.id %}
+                    {% if user.is_donator %}
+                    {# Add a line break here to make stuff look good #}
+                    <br>
+                    {% endif %}
                     <a href="/account/chat?target={{ user.id }}"><img
                         src="icon_contact_pm.png"
                         alt="Send private message"
                         title="Send private message"
                     /></a>
-                {% endif %}
-
-                {% if user.is_donator %}
-                    <a href="/g/6" class="donator"></a>
                 {% endif %}
             </center>
         </div>
