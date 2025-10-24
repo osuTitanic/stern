@@ -253,9 +253,15 @@ function handlePendingTarget() {
     // Clear target to avoid repeated attempts
     pendingTarget = null;
 
+    if (!isNaN(parseInt(target))) {
+        // We got a user ID
+        handleStartDMById(parseInt(target));
+        return;
+    }
+
     if (!target.startsWith("#")) {
         // We got a username
-        handleStartDM(target);
+        handleStartDMByName(target);
         return;
     }
 
@@ -1553,7 +1559,7 @@ function handleJoinChannel() {
     channelInput.value = "";
 }
 
-function handleStartDM(username) {
+function handleStartDMByName(username) {
     if (!username) {
         console.error("Username is required to start a DM");
         return;
@@ -1585,6 +1591,38 @@ function handleStartDM(username) {
     );
 }
 
+function handleStartDMById(userId) {
+    if (!userId) {
+        console.error("User ID is required to start a DM");
+        return;
+    }
+
+    fetchUserById(userId,
+        function(user) {
+            // Add user to DM list if not already present
+            var dmContainer = document.getElementById("dm-container");
+            var existing = dmContainer.querySelector(`.dm-entry[data-user-id="${user.id}"]`);
+            if (!existing) {
+                var dmEntry = document.createElement("div");
+                dmEntry.className = "dm-entry";
+                dmEntry.setAttribute("data-user-id", user.id);
+                dmEntry.textContent = user.name;
+                dmEntry.onclick = function() {
+                    switchToDM(user.id);
+                };
+                dmContainer.appendChild(dmEntry);
+            }
+
+            // User found, switch to DM
+            switchToDM(user.id);
+        },
+        function(xhr) {
+            console.error("User '" + userId + "' was not found.");
+            alert("User '" + userId + "' was not found.");
+        }
+    );
+}
+
 function handleStartDMFromInput() {
     var usernameInput = document.getElementById("dm-join-input");
     if (!usernameInput) return;
@@ -1593,7 +1631,7 @@ function handleStartDMFromInput() {
     if (!username) return;
 
     usernameInput.value = "";
-    handleStartDM(username);
+    handleStartDMByName(username);
 }
 
 function onIrcTokenResponse(xhr) {
