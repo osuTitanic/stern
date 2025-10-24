@@ -129,8 +129,8 @@
                     {% endif %}
                         <td>{{ "{:,}".format(count) }}</td>
                         <td>
+                            <img src="/mt/{{ beatmap.set_id }}" loading="lazy" alt=""/>
                             <a href="/b/{{ beatmap.id }}">
-                                <img src="/mt/{{ beatmap.set_id }}" loading="lazy" alt=""/>
                                 {{ beatmap.full_name }}
                             </a>
                         </td>

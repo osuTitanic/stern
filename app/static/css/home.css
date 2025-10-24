@@ -147,6 +147,10 @@
     color: #3843a6;
     text-decoration: none;
     vertical-align: middle;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+    display: block;
 }
 
 .styled-table a:hover {
