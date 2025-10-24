@@ -83,27 +83,27 @@
 
         <div style="padding: 3px;">
             <center>
-                <a href="/rankings/{{ constants.GameMode(mode).alias }}/performance?country={{ user.country|lower }}&jumpto_id={{ user.id }}#jumpto"><img
-                    class="flag"
-                    title="{{ constants.COUNTRIES[user.country|upper] }}"
-                    src="/images/flags/{{ user.country|lower }}.gif"
-                    alt="{{ user.country|upper }}"
-                /></a>
+                <a href="/rankings/{{ constants.GameMode(mode).alias }}/performance?country={{ user.country|lower }}&jumpto_id={{ user.id }}#jumpto">
+                    <img
+                        class="flag"
+                        title="{{ constants.COUNTRIES[user.country|upper] }}"
+                        src="/images/flags/{{ user.country|lower }}.gif"
+                        alt="{{ user.country|upper }}"
+                    />
+                </a>
+
+                {% if current_user.is_authenticated and current_user.id != user.id %}
+                    <a href="/account/chat?target={{ user.id }}">
+                        <img
+                            src="/images/icons/user/contact.png"
+                            title="Send private message"
+                            alt="DM"
+                        />
+                    </a>
+                {% endif %}
 
                 {% if user.is_donator %}
                 <a href="/g/6" class="donator"></a>
-                {% endif %}
-
-                {% if current_user.is_authenticated and current_user.id != user.id %}
-                    {% if user.is_donator %}
-                    {# Add a line break here to make stuff look good #}
-                    <br>
-                    {% endif %}
-                    <a href="/account/chat?target={{ user.id }}"><img
-                        src="icon_contact_pm.png"
-                        alt="Send private message"
-                        title="Send private message"
-                    /></a>
                 {% endif %}
             </center>
         </div>

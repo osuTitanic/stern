@@ -128,9 +128,6 @@ body {
 .flag {
     width: 16px;
     height: 11px;
-    padding: 5px;
-    padding-top: 0px;
-    padding-bottom: 0px;
 }
 
 #titanic .flag {
