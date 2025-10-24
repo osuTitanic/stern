@@ -10,6 +10,7 @@ from app.common.database import (
     posts
 )
 
+from datetime import timedelta
 from typing import Optional
 from flask import (
     Blueprint,
@@ -44,7 +45,7 @@ def root() -> Response:
                 format_announcement(announcement)
                 for announcement in announcements
             ],
-            most_played=beatmaps.fetch_most_played_delta(session=session),
+            most_played=beatmaps.fetch_most_played_delta(delta=timedelta(weeks=1), session=session),
             messages=messages.fetch_recent(session=session),
             session=session
         )
