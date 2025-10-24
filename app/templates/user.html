@@ -90,9 +90,8 @@
                     alt="{{ user.country|upper }}"
                 /></a>
 
-                {# TODO: Forum PM or direct chat PM link would be fine too #}
-                {% if false and current_user.is_authenticated and current_user.id != user.id %}
-                    <a href="..."><img
+                {% if current_user.is_authenticated and current_user.id != user.id %}
+                    <a href="/account/chat?target={{ user.id }}"><img
                         src="icon_contact_pm.png"
                         alt="Send private message"
                         title="Send private message"
