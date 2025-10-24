@@ -84,8 +84,6 @@
 }
 
 .group {
-    border: 1px solid var(--color);
-    color: var(--color);
     background: #fff9;
     padding: 1px 3px;
     font-size: 75%;
@@ -96,12 +94,10 @@
 .group:focus {
     background: #fff;
     text-decoration: none;
-    color: var(--color);
 }
 
 .group:active {
     text-decoration: none;
-    color: var(--color);
 }
 
 .badge {
