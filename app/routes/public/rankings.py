@@ -82,8 +82,17 @@ def render_rankings_page(
 ) -> str:
     with app.session.database.managed_session() as session:
         jumpto = request.args.get('jumpto', default=None)
+        jumpto_id = request.args.get('jumpto_id', default=None, type=int)
 
         if jumpto and (user := users.fetch_by_name_case_insensitive(jumpto, session)):
+            # Change the page to where the user is
+            user_rank = leaderboards.rank(
+                user.id, mode.value,
+                order_type, country
+            )
+            page = math.ceil(user_rank / items_per_page)
+
+        if jumpto_id and (user := users.fetch_by_id(jumpto_id, session=session)):
             # Change the page to where the user is
             user_rank = leaderboards.rank(
                 user.id, mode.value,
