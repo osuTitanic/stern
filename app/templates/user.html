@@ -52,10 +52,10 @@
 
         {# Difference from osu!: Added group icons #}
         {# Hide the Donator group badge, hardcoded here for now until the donator image is used elsewhere on the site #}
-        {% set groups = groups|rejectattr("id", "equalto", 6) %}
-        {% if groups %}
+        {% set visible_groups = groups|rejectattr("id", "equalto", 6)|list %}
+        {% if visible_groups %}
             <div class="groups">
-                {% for group in groups %}
+                {% for group in visible_groups %}
                     <a class="group" href="/g/{{ group.id }}" style="color: {{ group.color }}; border: 1px solid {{ group.color }};">
                         {{ group.short_name|upper }}
                     </a>
