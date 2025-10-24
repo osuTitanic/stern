@@ -194,7 +194,6 @@
     width: 160px;
     overflow: hidden;
     overflow-wrap: anywhere;
-    font-size: 115%;
     padding-top: 8px;
     padding-bottom: 8px;
     border-radius: 5px;
@@ -222,9 +221,16 @@
 }
 
 .post-user-title {
-    margin: 0 0 5px;
     text-align: center;
     font-size: 80%;
+}
+
+.post-user-stats {
+    font-size: 80%;
+}
+
+.post-profile .flag {
+    margin-top: 8px;
 }
 
 .beatmapset-link-info {
@@ -234,42 +240,31 @@
     padding-top: 2px;
 }
 
+
 .groups {
+    margin-top: 6px;
     display: flex;
-    justify-content: center;
-    overflow-wrap: break-word;
     flex-wrap: wrap;
-    font-size: 80%;
+    gap: 4px;
+    justify-content: center;
 }
 
 .group {
-    margin: 2.5px;
-    margin-bottom: 6px;
-    background-color: #f4f4f7;
-    border-radius: 2.5px;
-    padding: 1px;
-    padding-left: 5px;
-    padding-right: 5px;
-    line-height: 18px;
-    display: inline;
-    text-align: center;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+    background: #fff9;
+    padding: 1px 3px;
+    font-size: 65%;
+    font-weight: bold;
 }
 
 .group:hover,
-.group:focus,
+.group:focus {
+    background: #fff;
+    text-decoration: none;
+}
+
 .group:active {
     text-decoration: none;
-    background-color: #fefdff;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.20);
-    text-shadow: 0 0 0.6px;
-    transition: all 0.1s ease-in-out;
 }
-
-.group a:hover {
-    text-decoration: none;
-}
-
 
 .post-time {
     text-align: right;

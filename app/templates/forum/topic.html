@@ -174,21 +174,22 @@
                             <div class="post-user-title">
                                 {{ userTitle(post.user, user_post_count) }}
                             </div>
-                            {% set groups = repositories.groups.fetch_user_groups(post.user.id, session=session) %}
-                            {% if groups %}
-                            <div class="groups">
-                                {% for group in groups %}
-                                <div class="group">
-                                    <a href="/g/{{ group.id }}" style="color: {{ group.color }}">
-                                        {{ group.short_name|upper }}
-                                    </a>
-                                </div>
-                                {% endfor %}
-                            </div>
-                            {% endif %}
-                            <div>
+                            <div class="post-user-stats">
                                 {{ "{:,}".format(user_post_count) }} posts
                             </div>
+                            {% set groups = repositories.groups.fetch_user_groups(post.user.id, session=session) %}
+                            {# Difference from osu!: Added group icons #}
+                            {# Hide the Donator group badge, hardcoded here for now until the donator image is used elsewhere on the site #}
+                            {% set visible_groups = groups|rejectattr("id", "equalto", 6)|list %}
+                            {% if visible_groups %}
+                                <div class="groups">
+                                    {% for group in visible_groups %}
+                                        <a class="group" href="/g/{{ group.id }}" style="color: {{ group.color }}; border: 1px solid {{ group.color }};">
+                                            {{ group.short_name|upper }}
+                                        </a>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
                             <div>
                                 <img src="/images/flags/{{ post.user.country|lower }}.gif" alt="{{ post.user.country }} Flag" class="flag">
                             </div>
