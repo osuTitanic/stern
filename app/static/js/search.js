@@ -507,7 +507,7 @@ function addFavorite(beatmapsetId) {
     }, function(xhr) {
         // Most likely already favorited, so just do the same thing
         var heartIcon = document.querySelector("#beatmapset-" + beatmapsetId + " .fa-heart");
-        heartIconparentNode.style.color = "red";
+        heartIcon.parentNode.style.color = "red";
         heartIcon.parentNode.onclick = function(e) {
             e.preventDefault();
             removeFavorite(beatmapsetId);
