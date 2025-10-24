@@ -21,7 +21,7 @@ function expandProfileTab(id, forceExpand) {
     activeTab = id;
 
     if (!tab) {
-        expandProfileTab(id.startsWith("score-top") ? "leader" : "general", forceExpand);
+        expandProfileTab(id.indexOf("score-top") === 0 ? "leader" : "general", forceExpand);
         return;
     }
 
@@ -144,7 +144,7 @@ function createScoreElement(score, index, type) {
     scoreInfoDiv.appendChild(accuracyText);
 
     var scoreBottomDiv = document.createElement('div');
-    scoreBottomDiv.classList.add('score-bottom');
+    scoreBottomDiv.className = 'score-bottom';
 
     // Score's Date
     var dateText = document.createElement("time");
@@ -165,11 +165,11 @@ function createScoreElement(score, index, type) {
 
     if (versionText != false) {
         var clientText = document.createElement('div');
-        clientText.classList.add('score-version');
+        clientText.className = 'score-version';
         clientText.innerHTML += ' &mdash; on ';
 
         var clientTextVersion = document.createElement('span');
-        clientTextVersion.classList.add('score-version-number');
+        clientTextVersion.className = 'score-version-number';
         setText(clientTextVersion, versionText);
 
         clientText.appendChild(clientTextVersion);
@@ -1023,7 +1023,7 @@ function addFriend() {
         var targetAdded = data.status === 'mutual' || superFriendly;
         var friendStatus = document.getElementById('friend-status');
 
-        friendStatus.className = `friend-current-true-target-${targetAdded}`;
+        friendStatus.className = 'friend-current-true-target-' + targetAdded;
     });
 
     return false;
@@ -1038,7 +1038,7 @@ function removeFriend() {
         var targetAdded = data.status === 'mutual' || superFriendly;
         var friendStatus = document.getElementById('friend-status');
 
-        friendStatus.className = `friend-current-false-target-${targetAdded}`;
+        friendStatus.className = 'friend-current-false-target-' + targetAdded;
     });
 
     return false;
