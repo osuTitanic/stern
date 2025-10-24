@@ -192,6 +192,9 @@
                             {% endif %}
                             <div>
                                 <img src="/images/flags/{{ post.user.country|lower }}.gif" alt="{{ post.user.country }} Flag" class="flag">
+                                {% if post.user.is_donator %}
+                                    <a href="/g/6" class="donator"></a>
+                                {% endif %}
                             </div>
                         </div>
                         <br>

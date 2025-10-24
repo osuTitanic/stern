@@ -770,6 +770,15 @@ input[type="url"], input[type="search"] {
     height: 100%;
 }
 
+.donator {
+    display: inline-block;
+    height: 12px;
+    width: 80px;
+    background: url("/images/titanic-donator.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
 .heading {
     margin-bottom: 12px;
     margin-left: 5px;

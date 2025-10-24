@@ -137,13 +137,7 @@ body {
 }
 
 .donator {
-    display: inline-block;
-    height: 12px;
-    width: 80px;
-    padding: 2px;
-    background: url("/images/titanic-donator.png");
-    background-repeat: no-repeat;
-    background-size: contain;
+    padding: 2.5px;
 }
 
 #friend-status {
