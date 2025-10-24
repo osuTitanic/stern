@@ -82,9 +82,7 @@
 
         <div>
             <center>
-                {# Difference from osu!: Link doesn't jump to user on leaderboard #}
-                {# TODO^ #}
-                <a href="/rankings/{{ constants.GameMode(mode).alias }}/performance?country={{ user.country|lower }}">
+                <a href="/rankings/{{ constants.GameMode(mode).alias }}/performance?country={{ user.country|lower }}&jumpto_id={{ user.id }}#jumpto">
                     <img
                         class="flag"
                         title="{{ constants.COUNTRIES[user.country|upper] }}"
