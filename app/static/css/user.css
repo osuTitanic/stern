@@ -144,13 +144,18 @@
     background-size: contain;
 }
 
+#friend-status {
+    padding-bottom: 8px;
+    text-align: center;
+}
+
 #friend-status a {
     color: #fff;
-    text-align: center;
     font-size: 15px;
     padding: 5px 10px;
     margin: 5px;
     border-radius: 6px;
+    min-width: 100px;
 }
 
 #friend-status a:hover {
@@ -171,7 +176,7 @@
 #friend-status.friend-current-true-target-false a:nth-child(2),
 #friend-status.friend-current-false-target-true a:nth-child(3),
 #friend-status.friend-current-false-target-false a:nth-child(4) {
-    display: block;
+    display: inline-block;
 }
 
 .friend-current-false-target-true a,
