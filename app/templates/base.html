@@ -99,11 +99,11 @@
                     <span class="nav-login" id="welcome-text">
                         Welcome, <b><a href="/u/{{ current_user.id }}">{{ current_user.name }}</a></b>
                     </span>
-                    <a href="/account/settings/profile#avatar" style="height: 25px">
+                    <a href="/account/profile#avatar" style="height: 25px">
                         <img class="small-avatar" src="{{ current_user|avatar_url }}" alt="">
                     </a>
-                    <a href="/account/settings"><i class="fa-solid fa-gear" style="color: #808080;"></i> Settings</a>
-                    <a href="/account/settings#notifications">
+                    <a href="/account"><i class="fa-solid fa-gear" style="color: #808080;"></i> Settings</a>
+                    <a href="/account#notifications">
                         <i class="fa-solid fa-bell" style="color: #808080;"></i>
                         {% if notification_count > 0 %}
                         {{ notification_count }} {{ 'notification' if notification_count == 1 else 'notifications' }}

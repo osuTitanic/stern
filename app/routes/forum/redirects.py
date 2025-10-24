@@ -153,11 +153,11 @@ def user_control_panel():
     redirect_map = {
         'register': '/account/register',
         'sendpassword': '/account/reset',
-        'avatar': '/account/settings/profile#avatar',
+        'avatar': '/account/profile#avatar',
     }
 
     return redirect(
-        redirect_map.get(request.args.get('mode'), '/account/settings')
+        redirect_map.get(request.args.get('mode'), '/account')
     )
 
 @router.get('/index.php')

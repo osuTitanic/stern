@@ -7,7 +7,7 @@
     <div class="profile-user-card">
         {% if user.avatar_hash %}
             {% if current_user.id == user.id %}
-                <a href="/account/settings/profile#edit">
+                <a href="/account/profile#edit">
                     <div class="avatar">
                         <img src="{{ user|avatar_url }}" alt="User avatar" />
                     </div>
@@ -264,7 +264,7 @@
         {% endif %}
 
         {% if current_user.id == user.id %}
-            <a class="edit-profile" href="/account/settings/profile#edit">Edit</a>
+            <a class="edit-profile" href="/account/profile#edit">Edit</a>
         {% endif %}
     </div>
 
@@ -290,13 +290,13 @@
 <div class="profile-right">
     {% if current_user.id == user.id %}
         {% if user.userpage %}
-            <a class="edit-button" href="/account/settings/profile#userpage">Edit</a>
+            <a class="edit-button" href="/account/profile#userpage">Edit</a>
             <br>
             <div class="userpage">
                 {{ user.userpage|bbcode|safe }}
             </div>
         {% else %}
-            <a href="/account/settings/profile#userpage">Click to make your user page!</a>
+            <a href="/account/profile#userpage">Click to make your user page!</a>
             <br>
         {% endif %}
     {% else %}
@@ -306,7 +306,7 @@
             <br>
             <div id="admin-userpage-controls" class="popup">
                 <div onclick="hide('admin-userpage-controls')" class="popup-close">x</div>
-                <form class="section" action="/account/settings/profile/userpage" method="post">
+                <form class="section" action="/account/profile/userpage" method="post">
                     {% with context = {
                         "current": user.userpage,
                         "submit-text": "Update",

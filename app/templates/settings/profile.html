@@ -14,7 +14,7 @@
     {% endif %}
     <div id="edit">
         <h2>Edit Profile</h2>
-        <form class="section" action="/account/settings/profile/avatar" method="post" enctype="multipart/form-data">
+        <form class="section" action="/account/profile/avatar" method="post" enctype="multipart/form-data">
             <div class="avatar-box">
                 <img src="{{ current_user|avatar_url }}" alt="">
             </div>
@@ -22,7 +22,7 @@
             <input class="submit-button" type="submit" name="submit" value="Upload">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         </form>
-        <form class="profile-section section" action="/account/settings/profile" method="post">
+        <form class="profile-section section" action="/account/profile" method="post">
             <dl>
                 <div class="inner-section">
                     <dt><label></label><b>Username:</b></label></dt>
@@ -71,7 +71,7 @@
     </div>
     <div id="userpage">
         <h2>Edit Userpage</h2>
-        <form class="section" action="/account/settings/profile/userpage" method="post">
+        <form class="section" action="/account/profile/userpage" method="post">
             {% with context = {
                 "current": current_user.userpage,
                 "submit-text": "Update",
@@ -86,7 +86,7 @@
     </div>
     <div id="signature">
         <h2>Edit Signature</h2>
-        <form class="section" action="/account/settings/profile/signature" method="post">
+        <form class="section" action="/account/profile/signature" method="post">
             {% with context = {
                 "current": current_user.signature,
                 "submit-text": "Update",

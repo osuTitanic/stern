@@ -140,12 +140,12 @@ def update_profile_settings():
 @login_required
 def update_userpage():
     if (bbcode := request.form.get('bbcode')) is None:
-        return redirect('/account/settings/profile')
+        return redirect('/account/profile')
 
     user_id = request.form.get('user_id', type=int)
 
     if current_user.id != user_id and not current_user.is_moderator:
-        return redirect('/account/settings/profile')
+        return redirect('/account/profile')
 
     if error := check_account_status():
         return error
@@ -169,18 +169,18 @@ def update_userpage():
     if user_id != current_user.id:
         return redirect(f'/u/{user_id}')
 
-    return redirect('/account/settings/profile#userpage')
+    return redirect('/account/profile#userpage')
 
 @router.post('/profile/signature')
 @login_required
 def update_signature():
     if (bbcode := request.form.get('bbcode')) is None:
-        return redirect('/account/settings/profile')
+        return redirect('/account/profile')
 
     user_id = request.form.get('user_id', type=int)
 
     if current_user.id != user_id and not current_user.is_admin:
-        return redirect('/account/settings/profile')
+        return redirect('/account/profile')
 
     if error := check_account_status():
         return error
@@ -204,4 +204,4 @@ def update_signature():
     if user_id != current_user.id:
         return redirect(f'/u/{user_id}')
 
-    return redirect('/account/settings/profile#signature')
+    return redirect('/account/profile#signature')

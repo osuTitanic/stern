@@ -23,7 +23,7 @@ def get_profile_page(error: Optional[str] = None):
 @router.get('/avatar')
 @login_required
 def redirect_to_settings():
-    return redirect('/account/settings/profile')
+    return redirect('/account/profile')
 
 @router.post('/avatar')
 @login_required
@@ -85,4 +85,4 @@ def update_avatar():
         f'{current_user.name} changed their avatar.'
     )
 
-    return redirect('/account/settings/profile')
+    return redirect('/account/profile')

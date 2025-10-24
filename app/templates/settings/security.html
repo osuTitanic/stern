@@ -14,7 +14,7 @@
     {% endif %}
     <div id="edit">
         <h2>Personal Details</h2>
-        <form class="profile-section section" action="/account/settings/security" method="post">
+        <form class="profile-section section" action="/account/security" method="post">
             <dl>
                 <div class="inner-section">
                     <dt><label for="new-password">New Password:</label></dt>
@@ -35,7 +35,7 @@
             </dl>
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         </form>
-        <form class="profile-section section" action="/account/settings/security" method="post">
+        <form class="profile-section section" action="/account/security" method="post">
             <dl>
                 <div class="inner-section">
                     <dt><label for="new-email">E-Mail Address:</label></dt>

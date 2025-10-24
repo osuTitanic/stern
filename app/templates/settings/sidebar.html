@@ -3,25 +3,25 @@
 {% set current_endpoint = url_for(request.endpoint, **request.view_args) %}
 
 <div class="sidebar">
-    <div class="sidebar-section {% if current_endpoint == '/account/settings/' %}selected-sidebar{% endif %}">
-        <a href="/account/settings/">Overview</a>
+    <div class="sidebar-section {% if current_endpoint == '/account/' %}selected-sidebar{% endif %}">
+        <a href="/account/">Overview</a>
     </div>
-    <div class="sidebar-section {% if current_endpoint == '/account/settings/profile' %}selected-sidebar{% endif %}">
-        <a href="/account/settings/profile">Profile</a>
+    <div class="sidebar-section {% if current_endpoint == '/account/profile' %}selected-sidebar{% endif %}">
+        <a href="/account/profile">Profile</a>
     </div>
-    <div class="sidebar-section {% if current_endpoint == '/account/settings/security' %}selected-sidebar{% endif %}">
-        <a href="/account/settings/security">Security</a>
+    <div class="sidebar-section {% if current_endpoint == '/account/security' %}selected-sidebar{% endif %}">
+        <a href="/account/security">Security</a>
     </div>
-    <div class="sidebar-section {% if current_endpoint == '/account/settings/friends' %}selected-sidebar{% endif %}">
-        <a href="/account/settings/friends">Friends</a>
+    <div class="sidebar-section {% if current_endpoint == '/account/friends' %}selected-sidebar{% endif %}">
+        <a href="/account/friends">Friends</a>
     </div>
-    <div class="sidebar-section {% if current_endpoint == '/account/settings/chat' %}selected-sidebar{% endif %}">
-        <a href="/account/settings/chat">Chat</a>
+    <div class="sidebar-section {% if current_endpoint == '/account/chat' %}selected-sidebar{% endif %}">
+        <a href="/account/chat">Chat</a>
     </div>
     {#
         {% if permissions.has_permission('users.moderation', current_user.id) %}
-        <div class="sidebar-section {% if current_endpoint.startswith('/account/settings/moderation') %}selected-sidebar{% endif %}">
-            <a href="/account/settings/moderation">Moderation</a>
+        <div class="sidebar-section {% if current_endpoint.startswith('/account/moderation') %}selected-sidebar{% endif %}">
+            <a href="/account/moderation">Moderation</a>
         </div>
         {% endif %}
     #}

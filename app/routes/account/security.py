@@ -113,4 +113,4 @@ def edit_account_details():
             mail.send_password_changed_email(current_user)
             return get_security_page(info='Your password was updated.')
 
-        return redirect('/account/settings/profile')
+        return redirect('/account/profile')
