@@ -113,11 +113,22 @@ if (!window.FormData) {
 }
 
 function slideDown(elem) {
-    elem.style.height = elem.scrollHeight + "px";
+    // Use jQuery's slideDown for cross-browser compatibility
+    elem.style.height = '';
+    $(elem).stop(true, false).slideDown(500);
 }
 
 function slideUp(elem) {
-    elem.style.height = "0px";
+    // Use jQuery's slideUp for cross-browser compatibility
+    $(elem).stop(true, false).slideUp(500, function() {
+        elem.style.height = '0px';
+    });
+}
+
+function isHidden(elem) {
+    // Cross-browser compatible check for hidden elements
+    return elem.style.display === 'none' || elem.offsetParent === null ||
+           elem.offsetWidth === 0 || elem.offsetHeight === 0;
 }
 
 function getElementHeight(elem) {

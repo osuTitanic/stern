@@ -403,12 +403,10 @@ body {
 }
 
 .tab-content {
-    transition: all .5s ease;
     overflow: hidden;
     background-color: white;
     font-size: 80%;
     z-index: 0;
-    transition: all .5s ease;
     position: relative;
 }
 

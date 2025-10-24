@@ -25,11 +25,11 @@ function expandProfileTab(id, forceExpand) {
         return;
     }
 
-    // Check for 'expanded' class
-    if (tab.className.indexOf("expanded") === -1 || forceExpand) {
-        tab.style.display = "block";
+    var isExpanded = tab.className.indexOf("expanded") !== -1;
 
-        if (tab.style.height === "0px") {
+    // If forceExpand is true, always expand; otherwise toggle
+    if (forceExpand || !isExpanded) {
+        if (isHidden(tab) || tab.style.height === "0px") {
             slideDown(tab);
             setTimeout(function() { tab.className += " expanded" }, 500);
         }
@@ -38,7 +38,8 @@ function expandProfileTab(id, forceExpand) {
             window.location.hash = "#" + activeTab;
         }
     } else {
-        tab.className = tab.className.replace(/(?:^|\s)expanded(?!\S)/, '');
+        // Collapse the tab
+        tab.classList.remove("expanded");
         slideUp(tab);
     }
 
@@ -55,8 +56,8 @@ function expandRecentActivity() {
     var recentFull = document.getElementById("profile-recent-full");
     var general = document.getElementById("general");
 
-    recentPreview.style.display = "none";
-    recentFull.style.display = "block";
+    $(recentPreview).hide();
+    $(recentFull).show();
     slideDown(general);
 }
 
@@ -283,8 +284,6 @@ function loadPinnedScores(userId, mode) {
 
         // Render timeago elements
         renderTimeagoElements();
-
-        slideDown(document.getElementById("leader"));
     }, function(xhr) {
         var errorText = document.createElement("p");
         setText(errorText, "Failed to load pinned scores.");
@@ -368,8 +367,6 @@ function loadTopPlays(userId, mode, limit, offset) {
             // Append show more text to container
             scoreContainer.appendChild(showMore);
         }
-
-        slideDown(document.getElementById("leader"));
     }, function(xhr) {
         var errorText = document.createElement("p");
         setText(errorText, "Failed to load top plays.");
@@ -457,8 +454,6 @@ function loadLeaderScores(userId, mode, limit, offset) {
             // Append show more text to container
             scoreContainer.appendChild(showMore);
         }
-
-        slideDown(document.getElementById("leader"));
     }, function(xhr) {
         var errorText = document.createElement("p");
         setText(errorText, "Failed to load first place ranks.");
@@ -509,8 +504,6 @@ function loadMostPlayed(userId, limit, offset) {
 
             playsContainer.appendChild(playsDiv);
         }
-
-        slideDown(document.getElementById("history"));
     });
 
     loadingText.remove();
@@ -577,9 +570,6 @@ function loadRecentPlays(userId, mode) {
 
         // Render timeago elements
         renderTimeagoElements();
-
-        // Slide down tab
-        slideDown(document.getElementById("history"));
     });
 
     loadingText.parentNode.removeChild(loadingText);
