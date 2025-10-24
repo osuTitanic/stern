@@ -5,8 +5,7 @@
 {% block content %}
 <div class="profile-left">
     <div class="profile-user-card">
-        {# TODO: if (user has set an avatar) #}
-        {% if true %}
+        {% if user.avatar_hash %}
             {% if current_user.id == user.id %}
                 <a href="/account/settings/profile#edit">
                     <div class="avatar">
