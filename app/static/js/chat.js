@@ -13,6 +13,9 @@ var users = {};
 var activeChannel = null;
 var activeDM = null;
 
+// Target channel/DM to join after connection
+var pendingTarget = null;
+
 // Compiled regexes for message link parsing
 var osuLinkRegex = /\[((?:https?:\/\/)[^\s\]]+)\s+(.+?)\]/g;
 var urlRegex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g;
@@ -26,6 +29,11 @@ var messageHandlers = {
     "quit": handleUserQuit,
     "whois": handleWhoIsResponse,
     "message": handleChannelMessage
+}
+
+function getQueryParameter(name) {
+    var urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(name);
 }
 
 function initializeSocket(username, password) {
@@ -131,7 +139,13 @@ function onNetworkConfiguration(data) {
     populateChannels();
     populateDMs();
 
-    // Auto-switch to main channel
+    // Handle pending target if set
+    if (pendingTarget) {
+        handlePendingTarget();
+        return;
+    }
+
+    // Auto-switch to main channel only if no target is specified (#osu)
     if (channels[mainChannelId]) {
         switchToChannel(mainChannelId);
     }
@@ -227,6 +241,45 @@ function handleUserQuit(data) {
             }
         }
     }
+}
+
+function handlePendingTarget() {
+    if (!pendingTarget) {
+        return;
+    }
+
+    var target = pendingTarget;
+
+    // Clear target to avoid repeated attempts
+    pendingTarget = null;
+
+    if (!target.startsWith("#")) {
+        // We got a username
+        handleStartDM(target);
+        return;
+    }
+
+    // We got a channel
+    var channel = getChannelByName(target);
+    if (channel) {
+        // Already in this channel, just switch to it
+        switchToChannel(channel.id);
+        return;
+    }
+
+    // Join the channel
+    joinChannel(target);
+
+    // Wait a moment for the join to complete, then try to switch
+    setTimeout(function() {
+        var joinedChannel = getChannelByName(target);
+        if (joinedChannel) {
+            switchToChannel(joinedChannel.id);
+        } else {
+            console.error("Failed to join channel:", target);
+            switchToChannel(mainChannelId);
+        }
+    }, 1000);
 }
 
 function handleWhoIsResponse(data) {
@@ -1433,7 +1486,7 @@ function initializeChatHandlers() {
     }
 
     if (joinDMApiBtn) {
-        joinDMApiBtn.addEventListener("click", handleStartDM);
+        joinDMApiBtn.addEventListener("click", handleStartDMFromInput);
     }
 
     // Add listener for enter key on channel join input
@@ -1451,7 +1504,7 @@ function initializeChatHandlers() {
     if (dmJoinInput) {
         dmJoinInput.addEventListener("keyup", function(event) {
             if (event.key === "Enter") {
-                handleStartDM();
+                handleStartDMFromInput();
             }
         });
     }
@@ -1500,12 +1553,11 @@ function handleJoinChannel() {
     channelInput.value = "";
 }
 
-function handleStartDM() {
-    var usernameInput = document.getElementById("dm-join-input");
-    if (!usernameInput) return;
-
-    var username = usernameInput.value.trim();
-    if (!username) return;
+function handleStartDM(username) {
+    if (!username) {
+        console.error("Username is required to start a DM");
+        return;
+    }
 
     fetchUserByName(username,
         function(user) {
@@ -1524,13 +1576,24 @@ function handleStartDM() {
             }
 
             // User found, switch to DM
-            usernameInput.value = "";
             switchToDM(user.id);
         },
         function(xhr) {
+            console.error("User '" + username + "' was not found.");
             alert("User '" + username + "' was not found.");
         }
     );
+}
+
+function handleStartDMFromInput() {
+    var usernameInput = document.getElementById("dm-join-input");
+    if (!usernameInput) return;
+
+    var username = usernameInput.value.trim();
+    if (!username) return;
+
+    usernameInput.value = "";
+    handleStartDM(username);
 }
 
 function onIrcTokenResponse(xhr) {
@@ -1555,6 +1618,12 @@ addEvent("DOMContentLoaded", document, function() {
 
     // Replace " " with "_" for IRC compatibility
     currentUsername = currentUsername.replace(/ /g, "_");
+
+    // Check for target query parameter
+    var target = getQueryParameter("target");
+    if (target) {
+        pendingTarget = target;
+    }
 
     initializeChatHandlers();
     fetchIrcToken(onIrcTokenResponse, onIrcTokenFailure);
