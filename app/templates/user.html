@@ -85,24 +85,20 @@
 
         <div>
             <center>
-                <a href="/rankings/{{ constants.GameMode(mode).alias }}/performance?country={{ user.country|lower }}&jumpto_id={{ user.id }}#jumpto">
-                    <img
-                        class="flag"
-                        title="{{ constants.COUNTRIES[user.country|upper] }}"
-                        src="/images/flags/{{ user.country|lower }}.gif"
-                        alt="{{ user.country|upper }}"
-                    />
-                </a>
+                <a href="/rankings/{{ constants.GameMode(mode).alias }}/performance?country={{ user.country|lower }}&jumpto_id={{ user.id }}#jumpto"><img
+                    class="flag"
+                    title="{{ constants.COUNTRIES[user.country|upper] }}"
+                    src="/images/flags/{{ user.country|lower }}.gif"
+                    alt="{{ user.country|upper }}"
+                /></a>
 
                 {# TODO: Forum PM or direct chat PM link would be fine too #}
                 {% if false and current_user.is_authenticated and current_user.id != user.id %}
-                    <a href="...">
-                        <img
-                            src="icon_contact_pm.png"
-                            alt="Send private message"
-                            title="Send private message"
-                        />
-                    </a>
+                    <a href="..."><img
+                        src="icon_contact_pm.png"
+                        alt="Send private message"
+                        title="Send private message"
+                    /></a>
                 {% endif %}
 
                 {% if user.is_donator %}
