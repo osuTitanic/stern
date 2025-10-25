@@ -190,9 +190,7 @@ function getBeatmapsets(clear) {
             return;
         }
 
-        for (var beatmapsetIndex = 0; beatmapsetIndex < beatmapsets.length; beatmapsetIndex++) {
-            var beatmapset = beatmapsets[beatmapsetIndex];
-            
+        beatmapsets.forEach(function(beatmapset) {
             var beatmapsetDiv = document.createElement("div");
             beatmapsetDiv.classList.add("beatmapset");
             beatmapsetDiv.id = "beatmapset-" + beatmapset.id;
@@ -458,7 +456,7 @@ function getBeatmapsets(clear) {
             beatmapsetDiv.appendChild(beatmapInfoRight);
             beatmapsetDiv.appendChild(hiddenElementsContainer);
             beatmapContainer.appendChild(beatmapsetDiv);
-        }
+        });
 
         $(".beatmapset").hover(
             function() {
