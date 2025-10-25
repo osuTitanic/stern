@@ -100,7 +100,7 @@ var apiRetries = 0;
 
 if (!window.console) {
     // Console polyfill for ~IE8 and earlier
-    console = {
+    window.console = {
         log: function() {},
         info: function() {},
         warn: function() {},
