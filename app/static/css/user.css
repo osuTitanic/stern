@@ -116,10 +116,6 @@ body {
     padding: 5px;
 }
 
-.banned-container {
-    background: #dad7fb;
-}
-
 #titanic .banned-container {
     /* Difference from osu!: Margin to avoid awkward missing gap below banned image */
     margin-bottom: 5px;
