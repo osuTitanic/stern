@@ -16,11 +16,14 @@ function expandBeatmapPack(id) {
 
     element.innerHTML = "<center>Loading...</center>";
     element.classList.add("expanded");
-    slideDown(element);
-    loadBeatmapPackInfo(id);
+    element.style.height = '';
+    $(element).hide().slideDown(100);
+    loadBeatmapPackInfo(id, function() {
+        $(element).hide().slideDown(500);
+    });
 }
 
-function loadBeatmapPackInfo(id) {
+function loadBeatmapPackInfo(id, callback) {
     var element = document.getElementById("pack-" + id);
     var url = '/beatmapsets/packs/' + currentCategory + '/' + id;
 
@@ -69,11 +72,10 @@ function loadBeatmapPackInfo(id) {
         element.appendChild(description);
         element.appendChild(beatmapList);
         element.appendChild(document.createElement("br"));
-        slideDown(element);
+        if (callback) callback();
     },
     function(xhr) {
         element.innerHTML = "<center>Failed to load beatmap pack info.</center>";
         console.error("Failed to load beatmap pack info: " + xhr.responseText);
-        return;
     });
 }
