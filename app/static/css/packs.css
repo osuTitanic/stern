@@ -91,13 +91,10 @@
 }
 
 .pack-listing [id^="pack-"] {
-    height: 0px;
-    transition: all .5s ease;
     overflow: hidden;
     z-index: 0;
 }
 
 .pack-listing .expanded {
-    transition: all .5s ease;
     position: relative;
 }
