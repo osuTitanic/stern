@@ -108,7 +108,7 @@
             </center>
         </div>
 
-        {% if user.restricted %}
+        {% if user.restricted and current_user.is_moderator %}
             <div class="banned-container">
                 <img src="/images/banned.png" alt="Banned" />
             </div>
