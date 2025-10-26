@@ -781,6 +781,16 @@ function populateDMs() {
             }
 
             dmContainer.appendChild(dmElement);
+
+            if (!dm.last_message) {
+                continue;
+            }
+
+            // Mark as unread depending on last message's state
+            if (dm.last_message.read == false && dm.last_message.sender_id == dm.user.id) {
+                console.log("Unread conversation with", dm.user.name);
+                markDmAsUnread(dm.user.id);
+            }
         }
     }, function(xhr) {
         updateStatusText("Failed to load DMs.");
