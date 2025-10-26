@@ -67,8 +67,23 @@
         <dl class="login-details section">
             {% if logins %}
                 {% for login in logins %}
+                {# Check if we are using web-irc #}
+                {% set is_local_ip = location.is_local_ip(login.ip) %}
+                {% set using_webirc = is_local_ip and login.version.lower() == "irc" %}
+
+                {% if login.version.lower() == "irc" %}
+                {# Make "IRC" uppercase #}
+                {% set login.version = "IRC" %}
+                {% endif %}
+
+                {% if using_webirc %}
+                <dt>{{ login.time|strftime }}</dt>
+                <dd>Login from Website Chat</dd>
+                {% else %}
                 <dt>{{ login.time|strftime }}</dt>
                 <dd>Login from {{ location.fetch_geolocation(login.ip).country_name }} ({{ login.ip }}) with {{ login.version }}</dd>
+                {% endif %}
+
                 {% endfor %}
             {% else %}
                 You have not logged in yet
