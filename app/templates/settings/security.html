@@ -71,11 +71,6 @@
                 {% set is_local_ip = location.is_local_ip(login.ip) %}
                 {% set using_webirc = is_local_ip and login.version.lower() == "irc" %}
 
-                {% if login.version.lower() == "irc" %}
-                {# Make "IRC" uppercase #}
-                {% set login.version = "IRC" %}
-                {% endif %}
-
                 {% if using_webirc %}
                 <dt>{{ login.time|strftime }}</dt>
                 <dd>Login from Website Chat</dd>
