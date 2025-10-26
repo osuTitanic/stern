@@ -750,7 +750,7 @@ function populateChannels() {
 
 function populateDMs() {
     var dmContainer = document.getElementById("dm-container");
-    
+
     fetchDirectMessageSelection(function(dms) {
         if (!dms || dms.length === 0) {
             // No DMs available
@@ -866,6 +866,7 @@ function switchToDM(userId) {
         clearChatLog();
         loadDMHistory(user);
         enableChatInput();
+        markAllDmsAsRead(userId);
     }, function(xhr) {
         console.error("Failed to fetch user for DM:", xhr);
         updateStatusText("Failed to load DM");
