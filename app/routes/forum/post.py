@@ -373,7 +373,7 @@ def notify_subscribers(post: DBForumPost, topic: DBForumTopic, session: Session)
 
         notifications.create(
             subscriber.user_id,
-            NotificationType.News.value,
+            NotificationType.Forum.value,
             f'New Post',
             f'{current_user.name} posted something in "{topic.title}". Click here to view it!',
             link=f'/forum/{topic.forum_id}/p/{post.id}',
