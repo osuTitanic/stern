@@ -76,7 +76,7 @@
                 <dd>Login from Website Chat</dd>
                 {% else %}
                 <dt>{{ login.time|strftime }}</dt>
-                <dd>Login from {{ location.fetch_geolocation(login.ip).country_name }} ({{ login.ip }}) with {{ login.version }}</dd>
+                <dd>Login from {{ location.fetch_geolocation(login.ip).country_name }} (<span class="censored-ip">{{ login.ip }}</span>) with {{ login.version }}</dd>
                 {% endif %}
 
                 {% endfor %}

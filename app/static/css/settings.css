@@ -94,6 +94,22 @@
     width: 25%;
 }
 
+.censored-ip {
+    background-color: #696969;
+    color: transparent;
+    border-radius: 3px;
+    padding: 2px 4px;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.censored-ip:hover {
+    background-color: transparent;
+    color: #536482;
+    user-select: text;
+}
+
 .profile-section label {
     font-weight: bold;
 }
