@@ -375,7 +375,7 @@ function handleChannelMessage(data) {
             return;
         }
 
-        markDMAsUnread(sender.id);
+        markDmAsUnread(sender.id);
     }
 }
 
@@ -619,6 +619,38 @@ function postDirectMessage(userId, message, onSuccess, onFailure) {
     });
 }
 
+function markDmAsRead(targetId, messageId, onSuccess, onFailure) {
+    var url = "/chat/dms/" + targetId + "/messages/" + messageId + "/read";
+    return performApiRequest("POST", url, null, function(xhr) {
+        var response = JSON.parse(xhr.responseText);
+        if (!response) {
+            console.error("Invalid response format:", response);
+            onFailure(xhr);
+            return;
+        }
+        onSuccess(response);
+    }, function(xhr) {
+        console.error("Failed to mark DM as read:", xhr);
+        onFailure(xhr);
+    });
+}
+
+function markAllDmsAsRead(targetId, onSuccess, onFailure) {
+    var url = "/chat/dms/" + targetId + "/messages/read";
+    return performApiRequest("POST", url, null, function(xhr) {
+        var response = JSON.parse(xhr.responseText);
+        if (!response) {
+            console.error("Invalid response format:", response);
+            onFailure(xhr);
+            return;
+        }
+        onSuccess(response);
+    }, function(xhr) {
+        console.error("Failed to mark all DMs as read:", xhr);
+        onFailure(xhr);
+    });
+}
+
 function markChannelAsUnread(channelId) {
     var channelContainer = document.getElementById("channel-container");
     if (!channelContainer) {
@@ -632,7 +664,7 @@ function markChannelAsUnread(channelId) {
     }
 }
 
-function markDMAsUnread(userId) {
+function markDmAsUnread(userId) {
     var dmContainer = document.getElementById("dm-container");
     if (!dmContainer) {
         return;
