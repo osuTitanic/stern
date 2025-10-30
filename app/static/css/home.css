@@ -192,10 +192,19 @@
 }
 
 .chat-message {
+    max-width: 400px;
+    display: inline-block;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    width: 410px;
+    vertical-align: middle;
+}
+
+.chat-message a {
+    display: inline;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .chat-wrapper {
