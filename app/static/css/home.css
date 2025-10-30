@@ -191,6 +191,13 @@
     width: 44px;
 }
 
+.chat-message {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 410px;
+}
+
 .chat-wrapper {
     width: 100%;
 }
