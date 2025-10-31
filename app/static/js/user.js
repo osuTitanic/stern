@@ -831,25 +831,21 @@ function loadPerformanceGraph(userId, mode) {
 }
 
 function processPlayHistory(entries) {
-    var values = [];
+    var currentDate = new Date();
+    var currentYear = currentDate.getFullYear();
+    var currentMonth = currentDate.getMonth();
 
-    for (var i = 0; i < entries.length; i++) {
-        var entry = entries[i];
-        var start = new Date();
-        var end = new Date();
-        end.setFullYear(entry.year, entry.month - 1);
-
-        var years = start.getFullYear() - end.getFullYear();
-        var months = start.getMonth() - end.getMonth();
-
-        var elapsedMonths = years * 12 + months;
-        values.push({
+    var values = entries.map(function(entry) {
+        var elapsedMonths = (currentYear - entry.year) * 12 + (currentMonth - (entry.month - 1));
+        return {
             x: -elapsedMonths,
             y: entry.plays
-        });
-    }
+        };
+    });
 
-    values.reverse();
+    values.sort(function(a, b) {
+        return a.x - b.x;
+    });
 
     return [{
         values: values,
@@ -916,22 +912,21 @@ function loadPlaysGraph(userId, mode) {
 }
 
 function processViewsHistory(entries) {
+    var currentDate = new Date();
+    var currentYear = currentDate.getFullYear();
+    var currentMonth = currentDate.getMonth();
+
     var values = entries.map(function(entry) {
-        var start = new Date();
-        var end = new Date();
-        end.setFullYear(entry.year, entry.month - 1);
-
-        var years = start.getFullYear() - end.getFullYear();
-        var months = start.getMonth() - end.getMonth();
-
-        var elapsedMonths = years * 12 + months;
+        var elapsedMonths = (currentYear - entry.year) * 12 + (currentMonth - (entry.month - 1));
         return {
             x: -elapsedMonths,
             y: entry.replay_views
         };
     });
 
-    values = values.reverse();
+    values.sort(function(a, b) {
+        return a.x - b.x;
+    });
 
     return [{
         values: values,
