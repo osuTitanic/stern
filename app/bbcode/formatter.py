@@ -23,7 +23,8 @@ parser.add_simple_formatter(
     render_embedded=False,
     transform_newlines=True,
     escape_html=True,
-    replace_links=False
+    replace_links=False,
+    replace_cosmetic=False,
 )
 
 parser.add_simple_formatter(
@@ -33,7 +34,8 @@ parser.add_simple_formatter(
     render_embedded=False,
     transform_newlines=True,
     escape_html=True,
-    replace_links=False
+    replace_links=False,
+    replace_cosmetic=False,
 )
 
 parser.add_simple_formatter(
