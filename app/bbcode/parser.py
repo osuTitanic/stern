@@ -1,6 +1,6 @@
 
 from .objects import TagOptions, CaseInsensitiveDict
-from .regexes import _domain_re, _url_re
+from .regexes import _beatmap_timecode_re, _url_re
 
 import regex
 import sys
@@ -294,13 +294,20 @@ class Parser:
                 if found_close:
                     tag = data[start:end]
                     valid, tag_name, closer, opts = self._parse_tag(tag)
+                    tokenizable_tags = [x for x in self.recognized_tags if x != 'beatmap_header']
+
                     # Make sure this is a well-formed, recognized tag, otherwise it's just data.
-                    if valid and tag_name in self.recognized_tags:
+                    if valid and tag_name in tokenizable_tags:
                         if closer:
                             tokens.append((self.TOKEN_TAG_END, tag_name, None, tag))
                         else:
                             tokens.append((self.TOKEN_TAG_START, tag_name, opts, tag))
-                    elif valid and self.drop_unrecognized and tag_name not in self.recognized_tags:
+                    elif valid and (start == 0 or data[start - 1] == '\n') and (end >= len(data) or data[end] == '\n'):
+                        # Treat tags as beatmap headers when they are unrecognized and appear on a line by themselves
+                        opts = CaseInsensitiveDict()
+                        opts['beatmap_header'] = tag[len(self.tag_opener) : -len(self.tag_closer)]
+                        tokens.append((self.TOKEN_TAG_START, 'beatmap_header', opts, tag))
+                    elif valid and self.drop_unrecognized and tag_name not in tokenizable_tags:
                         # If we found a valid (but unrecognized) tag and self.drop_unrecognized is True, just drop it.
                         pass
                     else:
@@ -410,6 +417,21 @@ class Parser:
             data = self._replace(data, self.REPLACE_ESCAPE)
         if replace_cosmetic:
             data = self._replace(data, self.REPLACE_COSMETIC)
+
+            def replace_timecode(match: regex.Match[str]) -> str:
+                m = match.group('m')
+                s = match.group('s')
+                ms = match.group('ms')
+                obj = match.group('obj')
+
+                timecode = f'{m}:{s}:{ms}'
+                if obj:
+                    timecode += f' {obj}'
+
+                return f'<a class="beatmap-timecode" href="osu://edit/{timecode}">{timecode}</a>'
+
+            data = _beatmap_timecode_re.sub(replace_timecode, data)
+
         # Now put the replaced links back in the text.
         for token, replacement in url_matches.items():
             data = data.replace(token, replacement)

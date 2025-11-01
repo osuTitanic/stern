@@ -23,7 +23,8 @@ parser.add_simple_formatter(
     render_embedded=False,
     transform_newlines=True,
     escape_html=True,
-    replace_links=False
+    replace_links=False,
+    replace_cosmetic=False,
 )
 
 parser.add_simple_formatter(
@@ -33,7 +34,8 @@ parser.add_simple_formatter(
     render_embedded=False,
     transform_newlines=True,
     escape_html=True,
-    replace_links=False
+    replace_links=False,
+    replace_cosmetic=False,
 )
 
 parser.add_simple_formatter(
@@ -49,6 +51,10 @@ parser.add_simple_formatter(
     '<div class="spoiler-body">%(value)s</div>'
     '</div>'
 )
+
+@parser.formatter('beatmap_header', standalone=True)
+def render_beatmap_haeder(tag_name, value, options, parent, context):
+    return '<div class="beatmap-header">%s</div>' % sanitize_input(options.get('beatmap_header', ''))
 
 @parser.formatter('img', replace_links=False, render_embedded=False)
 def render_image(tag_name, value, options, parent, context):

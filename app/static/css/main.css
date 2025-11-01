@@ -587,6 +587,35 @@ input[type="url"], input[type="search"] {
     padding-left: 20px;
 }
 
+.bbcode .beatmap-timecode {
+    color: #000;
+    display: inline-block;
+    border-radius: 3px;
+    padding: 1px 2px;
+    margin: 1px 3px;
+    background: #ddecff;
+    border: 1px solid #91c2ff;
+    font-size: 90%;
+    font-weight: bold;
+}
+
+.bbcode .beatmap-timecode:hover {
+    background: #fff;
+    text-decoration: none;
+}
+
+.bbcode .beatmap-header {
+    color: #433f75;
+    display: inline-block;
+    width: 100%;
+    margin: 1px 3px 5px -8px;
+    padding-left: 8px;
+    border-bottom: solid 1px #bebbcd;
+    box-shadow: 0 3px 2px -3px #bebbcd;
+    font-size: 140%;
+    font-weight: bold;
+}
+
 .bbcode-preview {
     margin: 5px 5px 1.5px 5px;
     background-color: #dbd8fd;
