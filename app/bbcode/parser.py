@@ -294,13 +294,20 @@ class Parser:
                 if found_close:
                     tag = data[start:end]
                     valid, tag_name, closer, opts = self._parse_tag(tag)
+                    tokenizable_tags = [x for x in self.recognized_tags if x != 'beatmap_header']
+
                     # Make sure this is a well-formed, recognized tag, otherwise it's just data.
-                    if valid and tag_name in self.recognized_tags:
+                    if valid and tag_name in tokenizable_tags:
                         if closer:
                             tokens.append((self.TOKEN_TAG_END, tag_name, None, tag))
                         else:
                             tokens.append((self.TOKEN_TAG_START, tag_name, opts, tag))
-                    elif valid and self.drop_unrecognized and tag_name not in self.recognized_tags:
+                    elif valid and (start == 0 or data[start - 1] == '\n') and (end >= len(data) or data[end] == '\n'):
+                        # Treat tags as beatmap headers when they are unrecognized and appear on a line by themselves
+                        opts = CaseInsensitiveDict()
+                        opts['beatmap_header'] = tag[len(self.tag_opener) : -len(self.tag_closer)]
+                        tokens.append((self.TOKEN_TAG_START, 'beatmap_header', opts, tag))
+                    elif valid and self.drop_unrecognized and tag_name not in tokenizable_tags:
                         # If we found a valid (but unrecognized) tag and self.drop_unrecognized is True, just drop it.
                         pass
                     else:

@@ -50,6 +50,10 @@ parser.add_simple_formatter(
     '</div>'
 )
 
+@parser.formatter('beatmap_header', standalone=True)
+def render_beatmap_haeder(tag_name, value, options, parent, context):
+    return '<div class="beatmap-header">%s</div>' % sanitize_input(options.get('beatmap_header', ''))
+
 @parser.formatter('img', replace_links=False, render_embedded=False)
 def render_image(tag_name, value, options, parent, context):
     if not (url := resolve_proxied_url(value)):
