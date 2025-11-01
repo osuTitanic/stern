@@ -21,5 +21,7 @@ _bbcode_url_re = regex.compile(
 )
 
 _beatmap_timecode_re = regex.compile(
-    r'\b(?P<m>\d{2,}):(?P<s>[0-5]\d)[:.](?P<ms>\d{3})(?:\s(?P<obj>\((?:\d+[,|])*\d+\)))?'
+    r'\b(?:osu://edit/)?'
+    r'(?P<m>\d{2,}):(?P<s>[0-5]\d)[:.](?P<ms>\d{3})'
+    r'(?:\s(?P<obj>\((?:\d+[,|])*\d+\)))?'
 )
