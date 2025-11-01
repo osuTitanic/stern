@@ -19,3 +19,7 @@ _domain_re = regex.compile(
 _bbcode_url_re = regex.compile(
     r'\[url=(?P<url>.*?)\](?P<name>.*?)\[/url\]'
 )
+
+_beatmap_timecode_re = regex.compile(
+    r'\b(?P<m>\d{2,}):(?P<s>[0-5]\d)[:.](?P<ms>\d{3})(?:\s(?P<obj>\((?:\d+[,|])*\d+\)))?'
+)

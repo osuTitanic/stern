@@ -1,6 +1,6 @@
 
 from .objects import TagOptions, CaseInsensitiveDict
-from .regexes import _domain_re, _url_re
+from .regexes import _beatmap_timecode_re, _url_re
 
 import regex
 import sys
@@ -410,6 +410,21 @@ class Parser:
             data = self._replace(data, self.REPLACE_ESCAPE)
         if replace_cosmetic:
             data = self._replace(data, self.REPLACE_COSMETIC)
+
+            def replace_timecode(match: regex.Match[str]) -> str:
+                m = match.group('m')
+                s = match.group('s')
+                ms = match.group('ms')
+                obj = match.group('obj')
+
+                timecode = f'{m}:{s}:{ms}'
+                if obj:
+                    timecode += f' {obj}'
+
+                return f'<a class="beatmap-timecode" href="osu://edit/{timecode}">{timecode}</a>'
+
+            data = _beatmap_timecode_re.sub(replace_timecode, data)
+
         # Now put the replaced links back in the text.
         for token, replacement in url_matches.items():
             data = data.replace(token, replacement)
