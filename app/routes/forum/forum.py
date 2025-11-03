@@ -1,6 +1,6 @@
 
 
-from app.common.database import forums, topics, posts
+from app.common.database import forums, topics, posts, users
 from . import activity
 
 from flask import Blueprint, redirect, request
@@ -101,6 +101,11 @@ def forum_view(forum_id: int):
             session=session
         )
 
+        active_users = users.fetch_usernames(
+            activity.get_active_users(forum.id),
+            session=session
+        )
+
         return utils.render_template(
             "forum/forum.html",
             css='forums.css',
@@ -119,6 +124,7 @@ def forum_view(forum_id: int):
                 forum.id: subforum_last_posts.get(forum.id)
                 for forum in sub_forums
             },
+            active_users=active_users,
             has_custom_icons=has_custom_icons,
             announcements=announcements,
             recent_topics=recent_topics,
