@@ -321,6 +321,17 @@
         </td>
         {% endif %}
     </table>
+    <div class="forum-active-users" style="margin-left: 8px">
+        Users browsing this forum:
+        {% if not active_users %}
+            None
+        {% else %}
+            {% for user_id, username in active_users.items() %}
+                <a href="{{ user_id }}">{{ username }}</a>{% if not loop.last %}, {% endif %}
+            {% endfor %}
+        {% endif %}
+    </div>
+    <br>
 </div>
 <script>
     function addSubscription(topicId) {

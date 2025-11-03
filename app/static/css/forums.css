@@ -108,7 +108,6 @@
 
 .topics-table {
     margin-top: 15px;
-    margin-bottom: 5px;
     border-collapse: separate;
     border-spacing: 1px 2px;
 }
@@ -314,7 +313,6 @@
     display: flex;
     justify-content: flex-start;
     margin-top: 2px;
-    margin-bottom: 5px;
     margin-left: 6px;
     padding-bottom: 10px;
 }
@@ -440,4 +438,12 @@
     justify-content: center;
     display: flex;
     margin-bottom: 6px;
+}
+
+.forum-active-users {
+    font-size: 90%;
+    margin-bottom: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

@@ -137,6 +137,16 @@
             {% endif %}
         </tbody>
     </table>
+    <div class="forum-active-users">
+        Users browsing this forum:
+        {% if not active_users %}
+            None
+        {% else %}
+            {% for user_id, username in active_users.items() %}
+                <a href="{{ user_id }}">{{ username }}</a>{% if not loop.last %}, {% endif %}
+            {% endfor %}
+        {% endif %}
+    </div>
     {% else %}
     <p style="margin-top: 10px; margin-left: 2.5px;">
         Hmmm... seems like nothing was posted here yet.
