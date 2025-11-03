@@ -54,9 +54,7 @@
         {% endif %}
     </td>
     <td align="center">
-        <a href="/u/{{ topic.creator_id }}" style="color: {{ topic.creator|user_color }}">
-            {{ topic.creator.name }}
-        </a>
+        {{ topic.creator|forum_user_link|safe }}
     </td>
     <td width="6%" align="center">
         <p class="subforum-topiccount">{{ post_count }}</p>
@@ -66,9 +64,7 @@
         {% set last_post = repositories.posts.fetch_last(topic.id, session) %}
         {% if last_post %}
             <p>
-                <a href="/u/{{ last_post.user.id }}" style="color: {{ last_post.user|user_color }}">
-                    {{ last_post.user.name }}
-                </a>
+                {{ last_post.user|forum_user_link|safe }}
                 <a href="/forum/{{ forum.id }}/p/{{ last_post.id }}/">
                     <i class="fa-solid fa-arrow-right" style="color: #ababab"></i>
                 </a>

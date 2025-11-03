@@ -34,8 +34,7 @@
                         {{ recent.topic.title }}
                     </a>
                     <p>
-                        {{ recent.created_at|timeago }} by
-                        <a href="/u/{{ recent.user_id }}">{{ recent.user.name }}</a>
+                        {{ recent.created_at|timeago }} by {{ recent.user|forum_user_link|safe }}
                     </p>
                 {% else %}
                     <p>No recent topics</p>

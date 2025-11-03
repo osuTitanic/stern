@@ -10,6 +10,8 @@ from . import common
 from . import bbcode
 from . import git
 
+import html
+import flask_login
 import timeago
 import utils
 import math
@@ -176,13 +178,26 @@ def list_parent_forums(forum: DBForum) -> list:
     return parent_forums
 
 @flask.template_filter('user_color')
-def get_user_color(user: DBUser, default='#4a4a4a') -> str:
+def get_user_color(user: DBUser) -> str | None:
     if not user.groups:
-        return default
+        return None
 
-    primary_group_id = min(get_attributes(user.groups, 'group_id'))
-    primary_group = next(group for group in user.groups if group.group_id == primary_group_id).group
-    return primary_group.color
+    groups = [ge.group for ge in user.groups if ge.group.color != '#000000']
+    groups.sort(key=lambda g: g.id)
+
+    if groups:
+        return groups[0].color
+
+@flask.template_filter('forum_user_link')
+def get_forum_user_link(user: DBUser) -> str:
+    color = get_user_color(user)
+
+    if not color and flask_login.current_user.get_id() == user.id:
+        color = '#310e7a'
+
+    attrs = f'class="username-colored" style="color: {color};"' if color else ''
+
+    return f'<a href="/u/{user.id}" {attrs}>{html.escape(user.name)}</a>'
 
 @flask.template_filter('ceil')
 def ceil(value: float) -> int:
