@@ -19,7 +19,7 @@ def home():
         }
 
         all_sub_forums = list(itertools.chain(*forum_dict.values()))
-        sub_forum_ids = (forum.id for forum in all_sub_forums)
+        sub_forum_ids = [forum.id for forum in all_sub_forums]
 
         forum_counts = forums.fetch_statistics_by_forum_ids(
             sub_forum_ids,
