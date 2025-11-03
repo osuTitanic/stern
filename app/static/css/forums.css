@@ -125,6 +125,10 @@
     color: #868686;
 }
 
+.username-colored {
+    font-weight: bold;
+}
+
 .light-row {
     background-color: #edebfa;
     font-size: 90%;

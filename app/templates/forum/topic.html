@@ -160,7 +160,7 @@
                 <tbody><tr>
                     <td class="post-profile">
                         <div class="post-username">
-                            <a href="/u/{{ post.user.id }}" style="color: {{ post.user|user_color }}">
+                            <a href="/u/{{ post.user.id }}" style="color: {{ post.user|user_color or '#000' }}">
                                 {{ post.user.name }}
                             </a>
                         </div>

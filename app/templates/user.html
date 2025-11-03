@@ -22,12 +22,7 @@
         <div class="profile-username-container">
             <div
                 class="profile-username"
-
-                {% if user.groups %}
-                    {% set primary_group_id = user.groups|get_attributes("group_id")|min %}
-                    {% set primary_group = (user.groups|selectattr("group_id", "eq", primary_group_id)|first).group %}
-                    style="color: {{ primary_group.color }};"
-                {% endif %}
+                style="color: {{ user|user_color or '#000' }};"
 
                 {# Difference from osu!: All past names are shown, instead of only the most recent change #}
                 {% if user.names %}
