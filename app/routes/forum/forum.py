@@ -1,12 +1,12 @@
 
-from datetime import datetime
-from typing import List, Set
-
-from flask import Blueprint, redirect, request
-from flask_login import current_user
 
 from app.common.database import forums, topics, posts
 from . import activity
+
+from flask import Blueprint, redirect, request
+from flask_login import current_user
+from datetime import datetime
+from typing import Set
 
 import utils
 import app
