@@ -21,7 +21,7 @@ sendgrid==6.12.5
 sqlalchemy==2.0.44
 timeago==1.0.16
 rosu-pp-py==3.1.0
-markdown==3.9
+markdown==3.10
 pyjwt==2.10.1
 gitpython==3.1.45
 regex
