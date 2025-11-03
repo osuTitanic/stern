@@ -193,11 +193,15 @@ def get_forum_user_link(user: DBUser) -> str:
     color = get_user_color(user)
 
     if not color and flask_login.current_user.get_id() == user.id:
+        # Highlight our own username
         color = '#310e7a'
 
-    attrs = f'class="username-colored" style="color: {color};"' if color else ''
+    attributes = (
+        f'class="username-colored" style="color: {color};"'
+        if color else ''
+    )
 
-    return f'<a href="/u/{user.id}" {attrs}>{html.escape(user.name)}</a>'
+    return f'<a href="/u/{user.id}" {attributes}>{html.escape(user.name)}</a>'
 
 @flask.template_filter('ceil')
 def ceil(value: float) -> int:
