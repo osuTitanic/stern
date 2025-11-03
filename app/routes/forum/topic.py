@@ -6,7 +6,8 @@ from app.common.database import (
     beatmapsets,
     forums,
     topics,
-    posts
+    posts,
+    users
 )
 
 from . import activity as forum_activity
@@ -82,6 +83,10 @@ def topic(forum_id: str, id: str):
                 f"/forum/{topic.forum_id}/t/{id}/"
             )
 
+        if current_user.is_authenticated:
+            # Used for "Current users browsing this forum"
+            forum_activity.mark_user_active(current_user.id, topic.forum_id)
+
         page = max(1, request.args.get('page', 1, type=int))
 
         topic_posts = posts.fetch_range_by_topic(
@@ -139,6 +144,11 @@ def topic(forum_id: str, id: str):
             # Override icon for initial post
             topic_posts[0].icon = topic.icon
 
+        active_users = users.fetch_usernames(
+            forum_activity.get_active_users(topic.forum_id),
+            session=session
+        )
+
         return utils.render_template(
             "forum/topic.html",
             css='forums.css',
@@ -153,6 +163,7 @@ def topic(forum_id: str, id: str):
             current_page=page,
             post_count=post_count,
             beatmapset=beatmapset,
+            active_users=active_users,
             is_bookmarked=is_bookmarked,
             is_subscribed=is_subscribed,
             initial_post=initial_post,
