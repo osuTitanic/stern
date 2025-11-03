@@ -1,6 +1,6 @@
 {# templates/forum/topic_preview.html #}
 
-{% set post_count = repositories.posts.fetch_count(topic.id, session) %}
+{% set post_count = topic_post_counts.get(topic.id, 0) %}
 {% set posts_per_page = 15 %}
 {% set page_count = (post_count / posts_per_page)|ceil %}
 
@@ -61,7 +61,7 @@
         <p class="subforum-postcount">{{ topic.views }}</p>
     </td>
     <td align="center">
-        {% set last_post = repositories.posts.fetch_last(topic.id, session) %}
+    {% set last_post = topic_last_posts.get(topic.id) %}
         {% if last_post %}
             <p>
                 {{ last_post.user|forum_user_link|safe }}

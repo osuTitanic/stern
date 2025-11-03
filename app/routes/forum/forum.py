@@ -1,8 +1,11 @@
 
-from app.common.database import forums, topics, posts
-from flask import Blueprint, abort, redirect, request
-from flask_login import current_user
 from datetime import datetime
+from typing import List, Set
+
+from flask import Blueprint, redirect, request
+from flask_login import current_user
+
+from app.common.database import forums, topics, posts
 from . import activity
 
 import utils
@@ -54,6 +57,21 @@ def forum_view(forum_id: int):
             session=session
         )
 
+        topic_ids: Set[int] = set()
+
+        for topic_collection in (recent_topics, pinned_topics, announcements):
+            topic_ids.update(topic.id for topic in topic_collection)
+
+        topic_post_counts = posts.fetch_statistics_by_topic_ids(
+            topic_ids,
+            session=session
+        )
+
+        topic_last_posts = posts.fetch_last_for_topics(
+            topic_ids,
+            session=session
+        )
+
         pinned_timestamp = datetime.now()
 
         # Merge pinned topics with recent topics and
@@ -69,6 +87,20 @@ def forum_view(forum_id: int):
             for topic in recent_topics
         )
 
+        subforum_ids = {
+            subforum.id for subforum in sub_forums
+        }
+
+        subforum_counts = forums.fetch_statistics_by_forum_ids(
+            subforum_ids,
+            session=session
+        )
+
+        subforum_last_posts = posts.fetch_last_for_forums(
+            subforum_ids,
+            session=session
+        )
+
         return utils.render_template(
             "forum/forum.html",
             css='forums.css',
@@ -80,19 +112,18 @@ def forum_view(forum_id: int):
             forum=forum,
             sub_forums=sub_forums,
             subforum_stats={
-                subforum.id: (
-                    forums.fetch_topic_count(subforum.id, session),
-                    forums.fetch_post_count(subforum.id, session)
-                )
+                subforum.id: subforum_counts.get(subforum.id, (0, 0))
                 for subforum in sub_forums
             },
             subforum_recent={
-                forum.id: posts.fetch_last_by_forum(forum.id, session)
+                forum.id: subforum_last_posts.get(forum.id)
                 for forum in sub_forums
             },
             has_custom_icons=has_custom_icons,
             announcements=announcements,
             recent_topics=recent_topics,
+            topic_post_counts=topic_post_counts,
+            topic_last_posts=topic_last_posts,
             topic_count=topic_count,
             total_pages=topic_count // topics_per_page,
             current_page=page - 1,

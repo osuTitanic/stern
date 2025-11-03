@@ -18,6 +18,19 @@ def home():
             for forum in main_forums
         }
 
+        all_sub_forums = list(itertools.chain(*forum_dict.values()))
+        sub_forum_ids = (forum.id for forum in all_sub_forums)
+
+        forum_counts = forums.fetch_statistics_by_forum_ids(
+            sub_forum_ids,
+            session=session
+        )
+
+        forum_last_posts = posts.fetch_last_for_forums(
+            sub_forum_ids,
+            session=session
+        )
+
         return utils.render_template(
             "forum/home.html",
             css='forums.css',
@@ -28,14 +41,11 @@ def home():
             forums=forum_dict,
             session=session,
             forum_stats={
-                forum.id: (
-                    forums.fetch_topic_count(forum.id, session),
-                    forums.fetch_post_count(forum.id, session)
-                )
-                for forum in itertools.chain(*forum_dict.values())
+                forum.id: forum_counts.get(forum.id, (0, 0))
+                for forum in all_sub_forums
             },
             forum_recent={
-                forum.id: posts.fetch_last_by_forum(forum.id, session)
-                for forum in itertools.chain(*forum_dict.values())
+                forum.id: forum_last_posts.get(forum.id)
+                for forum in all_sub_forums
             }
         )
