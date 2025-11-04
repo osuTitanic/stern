@@ -327,7 +327,7 @@
             None
         {% else %}
             {% for user_id, username in active_users.items() %}
-                <a href="{{ user_id }}">{{ username }}</a>{% if not loop.last %}, {% endif %}
+                <a href="/u/{{ user_id }}">{{ username }}</a>{% if not loop.last %}, {% endif %}
             {% endfor %}
         {% endif %}
     </div>
