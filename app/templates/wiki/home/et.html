@@ -55,13 +55,15 @@
         <table width="{{ width }}" style="float: {{ 'left' if loop.index is odd else 'right' }};">
             <tbody>
                 <tr>
-                    <th>{{ category.name }}</th>
+                    <th>{{ category.translations.get("et", category.name) }}</th>
                 </tr>
                 <tr>
                     <td>
                         {% if category.pages %}
                             {% for page in category.pages|sort(attribute='id') %}
-                                <a href="/wiki/et/{{ page.path }}">{{ page.name }}</a>
+                                <a href="/wiki/fi/{{ page.path }}">
+                                    {{ wiki.fetch_translated_page_title(page.id, 'et', session) or page.name }}
+                                </a>
                                 {% if not loop.last %}<b>•</b>{% endif %}
                             {% endfor %}
                         {% else %}
