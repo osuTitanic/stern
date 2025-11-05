@@ -1,0 +1,40 @@
+{# templates/content/et.html #}
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="wiki-navigation">
+    <div class="left-navigation">
+        <a href="#" class="current">Leht</a>
+        <a href="{{ discussion_url or '#' }}">Arutelu</a>
+    </div>
+    <div class="right-navigation">
+        <a href="#" class="current">Loe</a>
+        <a href="{{ source_url or '#' }}">Vaata lähteteksti</a>
+        <a href="{{ history_url or '#' }}">Vaata ajalugu</a>
+        <div class="wiki-search">
+            <form action="/wiki/et/search" method="get">
+                <input type="text" name="query" placeholder="Otsi..." {% if search_query %}value="{{ search_query }}"{% endif %}>
+                <button type="submit">Otsi</button>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="wiki-sidebar">
+    {# TODO: Sidebar "Contents" #}
+</div>
+{% if language != requested_language %}
+<div class="wiki-warning">
+    <p>
+        See leht ei ole sinu valitud keeles saadaval. 
+        Saad selle <a href="{{ translation_url }}">tõlkida</a>, et see oleks saadaval.
+    </p>
+</div>
+{% endif %}
+<div class="wiki-content">
+    {% block content_extension %}
+    {% endblock content_extension %}
+    {{ content|safe }}
+    <br>
+</div>
+{% endblock content %}
