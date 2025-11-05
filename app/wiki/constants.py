@@ -54,12 +54,13 @@ WIKI_LINK_REGEX = re.compile(
 )
 
 LANGUAGES = (
-    'en', 'ru', 'de', 'pl'
+    'en', 'ru', 'de', 'pl', 'fi'
 )
 
 LANGUAGE_NAMES = {
     'en': 'English',
     'ru': 'Русский',
     'de': 'Deutsch',
-    'pl': 'Polski'
+    'pl': 'Polski',
+    'fi': 'Suomi'
 }

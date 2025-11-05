@@ -1,0 +1,77 @@
+{# templates/home/fi.html #}
+
+{% extends 'wiki/content/fi.html' %}
+
+{% block content_extension %}
+<div class="wiki-content">
+    <span class="wiki-welcome">
+        <h1>Etusivu</h1>
+        <img src="/images/logo/main-vector.min.svg" alt="logo" width="40" height="40">
+        <h2 style="font-size: 1.3em">
+            <i>Tervetuloa Titanic! Wikiin - yhteisölliseen tietopankkiin kaikesta Titanic!-projektista.</i>
+        </h2>
+    </span>
+    <div class="wiki-stats">
+        <span>Meillä on tällä hetkellä <a href="#">{{ page_count }}</a> artikkelia ja määrä kasvaa jatkuvasti!</span>
+        <span>Tänään on {{ current_date.strftime("%A, %B %d, %Y") }}.</span>
+    </div>
+    <div class="wiki-categories">
+        <table>
+            <tbody>
+                <tr>
+                    <th>Yleiskuvaus</th>
+                </tr>
+                <tr>
+                    <td>
+                        Titanic! Wiki on yhteisön ylläpitämä projekti, jota rakentavat Titanic!-yhteisön omistautuneet kirjoittajat.
+                        Tavoitteenamme on luoda kattavin tietolähde kaikkeen Titanic!-projektiin liittyvään.
+                        Emme kuitenkaan pysty siihen yksin - <b>tarvitsemme sinun apuasi!</b>
+                        Jos olet innostunut projektista, jaa tietosi ja ryhdy tekijäksi jo tänään!
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <table width="100%">
+            <tbody>
+                <tr>
+                    <th>Muut kielet</th>
+                </tr>
+                <tr>
+                    <td>
+                        {% for code, language in available_languages.items() %}
+                            <a href="/wiki/{{ code }}">{{ language }}</a>
+                            {% if not loop.last %}<b>•</b>{% endif %}
+                        {% endfor %}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        {% for category in categories %}
+        {% set odd_categories = categories|length is odd %}
+        {% set width = '50%' %}
+        {% if odd_categories and loop.index == categories|length %}
+            {% set width = '100%' %}
+        {% endif %}
+        <table width="{{ width }}" style="float: {{ 'left' if loop.index is odd else 'right' }};">
+            <tbody>
+                <tr>
+                    <th>{{ category.name }}</th>
+                </tr>
+                <tr>
+                    <td>
+                        {% if category.pages %}
+                            {% for page in category.pages|sort(attribute='id') %}
+                                <a href="/wiki/fi/{{ page.path }}">{{ page.name }}</a>
+                                {% if not loop.last %}<b>•</b>{% endif %}
+                            {% endfor %}
+                        {% else %}
+                            Tässä kategoriassa ei ole vielä sivuja.
+                        {% endif %}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content_extension %}

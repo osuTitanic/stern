@@ -1,0 +1,40 @@
+{# templates/content/fi.html #}
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="wiki-navigation">
+    <div class="left-navigation">
+        <a href="#" class="current">Sivu</a>
+        <a href="{{ discussion_url or '#' }}">Keskustelu</a>
+    </div>
+    <div class="right-navigation">
+        <a href="#" class="current">Lue</a>
+        <a href="{{ source_url or '#' }}">Näytä lähde</a>
+        <a href="{{ history_url or '#' }}">Näytä historia</a>
+        <div class="wiki-search">
+            <form action="/wiki/fi/search" method="get">
+                <input type="text" name="query" placeholder="Haku..." {% if search_query %}value="{{ search_query }}"{% endif %}>
+                <button type="submit">Hae</button>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="wiki-sidebar">
+    {# TODO: Sidebar "Contents" #}
+</div>
+{% if language != requested_language %}
+<div class="wiki-warning">
+    <p>
+        Tämä sivu ei ole saatavilla valitsemallasi kielellä.
+        Voit <a href="{{ translation_url }}">kääntää sen</a>, jotta se olisi saatavilla.
+    </p>
+</div>
+{% endif %}
+<div class="wiki-content">
+    {% block content_extension %}
+    {% endblock content_extension %}
+    {{ content|safe }}
+    <br>
+</div>
+{% endblock content %}
