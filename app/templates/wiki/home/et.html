@@ -61,7 +61,7 @@
                     <td>
                         {% if category.pages %}
                             {% for page in category.pages|sort(attribute='id') %}
-                                <a href="/wiki/fi/{{ page.path }}">
+                                <a href="/wiki/et/{{ page.path }}">
                                     {{ wiki.fetch_translated_page_title(page.id, 'et', session) or page.name }}
                                 </a>
                                 {% if not loop.last %}<b>•</b>{% endif %}
