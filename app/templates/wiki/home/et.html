@@ -1,0 +1,79 @@
+{# templates/home/et.html #}
+
+{% extends 'wiki/content/et.html' %}
+
+{% block content_extension %}
+<div class="wiki-content">
+    <span class="wiki-welcome">
+        <h1>Avaleht</h1>
+        <img src="/images/logo/main-vector.min.svg" alt="logo" width="40" height="40">
+        <h2 style="font-size: 1.09em">
+            <i>Tere tulemast Titanic!-wikisse - koostööpõhisesse kogumikku kõigest, mis puudutab Titanic! serverit.</i>
+        </h2>
+    </span>
+    <div class="wiki-stats">
+        <span>Meil on praegu <a href="#">{{ page_count }}</a> artiklit ja number aina kasvab!</span>
+        <span>Tänane kuupäev: {{ current_date.strftime("%A, %B %d, %Y") }}.</span>
+    </div>
+    <div class="wiki-categories">
+        <table>
+            <tbody>
+                <tr>
+                    <th>Üldkirjeldus</th>
+                </tr>
+                <tr>
+                    <td>
+                        Titanic!-wiki on kogukonna juhitud projekt, mida ehitavad pühendunud panustajad Titanic!-ist.
+                        Meie eesmärk on luua parim teadmisteallikas kõigele, mis on seotud Titanic!-iga.
+                        Kuid üksi me seda ei saavuta - <b>vajame sinu abi!</b>
+                        Kui oled projektist huvitatud, kasuta oma teadmisi ja hakka juba täna panustama!
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <table width="100%">
+            <tbody>
+                <tr>
+                    <th>Tesised keeled</th>
+                </tr>
+                <tr>
+                    <td>
+                        {% for code, language in available_languages.items() %}
+                            <a href="/wiki/{{ code }}">{{ language }}</a>
+                            {% if not loop.last %}<b>•</b>{% endif %}
+                        {% endfor %}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        {% for category in categories %}
+        {% set odd_categories = categories|length is odd %}
+        {% set width = '50%' %}
+        {% if odd_categories and loop.index == categories|length %}
+            {% set width = '100%' %}
+        {% endif %}
+        <table width="{{ width }}" style="float: {{ 'left' if loop.index is odd else 'right' }};">
+            <tbody>
+                <tr>
+                    <th>{{ category.translations.get("et", category.name) }}</th>
+                </tr>
+                <tr>
+                    <td>
+                        {% if category.pages %}
+                            {% for page in category.pages|sort(attribute='id') %}
+                                <a href="/wiki/fi/{{ page.path }}">
+                                    {{ wiki.fetch_translated_page_title(page.id, 'et', session) or page.name }}
+                                </a>
+                                {% if not loop.last %}<b>•</b>{% endif %}
+                            {% endfor %}
+                        {% else %}
+                            Selles kategoorias puuduvad lehed.
+                        {% endif %}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content_extension %}
