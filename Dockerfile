@@ -40,10 +40,6 @@ COPY --from=builder /stern /stern
 # Copy source code
 COPY . .
 
-# Generate __pycache__ directories
-ENV PYTHONDONTWRITEBYTECODE=1
-RUN python -m compileall -q app
-
 # Get config for deployment
 ARG FRONTEND_WORKERS=4
 ENV FRONTEND_WORKERS $FRONTEND_WORKERS
@@ -66,4 +62,4 @@ cheaper-overload = 6 \n \
 " > uwsgi.ini
 
 STOPSIGNAL SIGQUIT
-CMD ["uwsgi", "--http", "0.0.0.0:80", "--ini", "uwsgi.ini", "-w", "app:flask", "--lazy"]
+CMD ["uwsgi", "--http", "0.0.0.0:80", "--ini", "uwsgi.ini", "-w", "app:flask"]
