@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from app.common.constants import GameMode
-from app.common.helpers import caching
+from app.common.database import DBForumPost, DBForumTopic
 from app.common.database import (
     beatmaps,
     messages,
@@ -31,7 +31,14 @@ def root() -> Response:
         return handle_legacy_redirects(page, request)
 
     with app.session.database.managed_session() as session:
-        announcements = topics.fetch_announcements(4, 0, session=session)
+        announcements = topics.fetch_announcements(
+            4, 0,
+            session=session
+        )
+        initial_posts = posts.fetch_initial_posts(
+            (announcement.id for announcement in announcements),
+            session=session
+        )
 
         return utils.render_template(
             "home.html",
@@ -42,7 +49,7 @@ def root() -> Response:
             site_image=f"{app.config.OSU_BASEURL}/images/logo/main-low.png",
             site_url=app.config.OSU_BASEURL,
             news=[
-                format_announcement(announcement)
+                format_announcement(announcement, initial_posts.get(announcement.id))
                 for announcement in announcements
             ],
             most_played=beatmaps.fetch_most_played_delta(delta=timedelta(weeks=1), session=session),
@@ -68,17 +75,22 @@ def peppy_skill_issue():
 def redirect_page(page: str) -> Response:
     return handle_legacy_redirects(page, request)
 
-@caching.ttl_cache(ttl=60*60)
-def format_announcement(announcement: topics.DBForumTopic) -> dict:
-    if (post := posts.fetch_initial_post(announcement.id)):
-        text = post.content.splitlines()[0]
+def format_announcement(
+    announcement: DBForumTopic,
+    post: DBForumPost | None = None
+) -> dict:
+    text = ""
+
+    if post and post.content:
+        lines = post.content.splitlines()
+        text = lines[0]
 
     return {
         "date": f"{announcement.created_at.day}.{announcement.created_at.month}.{announcement.created_at.year}",
         "link": f"/forum/{announcement.forum_id}/t/{announcement.id}/",
         "title": announcement.title,
         "author": announcement.creator.name,
-        "text": text if post else ""
+        "text": text
     }
 
 def handle_legacy_redirects(page: str, request: Request) -> Response | None:
