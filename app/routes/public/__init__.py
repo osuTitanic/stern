@@ -31,7 +31,7 @@ router.register_blueprint(wiki.router, url_prefix='/wiki')
 router.register_blueprint(scores.router, url_prefix='/scores')
 router.register_blueprint(avatar.router, url_prefix='/a')
 router.register_blueprint(groups.router, url_prefix='/g')
-router.register_blueprint(users.router, url_prefix='/u')
+router.register_blueprint(users.router, url_prefix='/')
 router.register_blueprint(home.router, url_prefix='/')
 
 if SITEMAP_ENABLED:
