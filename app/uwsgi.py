@@ -8,7 +8,7 @@ def on_startup() -> None:
     session.redis.ping()
 
     # Run a test query
-    beatmapsets.search("Nightcore", 0)
+    beatmapsets.search_direct("Nightcore", 0)
 
 def setup_uwsgi() -> None:
     import uwsgi
