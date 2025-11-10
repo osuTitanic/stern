@@ -26,7 +26,11 @@ import app
 router = Blueprint('users', __name__)
 preload = (DBUser.favourites, DBUser.relationships, DBUser.achievements)
 
-@router.get('/<query>')
+@router.get('/users/<query>')
+def modern_userpage_redirect(query: str) -> Response:
+    return redirect(f'/u/{query}')
+
+@router.get('/u/<query>')
 def userpage(query: str):
     query = query.strip()
 
