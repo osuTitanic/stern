@@ -1,6 +1,6 @@
 
 from app.common.database import beatmaps, scores, favourites, nominations, relationships, collaborations
-from app.common.constants import BeatmapLanguage, BeatmapGenre, DatabaseStatus
+from app.common.constants import BeatmapLanguage, BeatmapGenre, BeatmapStatus
 from flask import Blueprint, request, redirect
 from flask_login import current_user
 
@@ -72,7 +72,7 @@ def get_beatmap(id: int):
             beatmapset=beatmap.beatmapset,
             css='beatmap.css',
             title=f"{beatmap.beatmapset.artist} - {beatmap.beatmapset.title}",
-            Status=DatabaseStatus,
+            Status=BeatmapStatus,
             Language=BeatmapLanguage,
             Genre=BeatmapGenre,
             scores=beatmap_scores,

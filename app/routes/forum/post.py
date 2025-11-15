@@ -10,7 +10,7 @@ from flask import (
     abort
 )
 from app.common.database import DBUser, DBForumPost, DBForumTopic, DBBeatmapset
-from app.common.constants import NotificationType, DatabaseStatus, UserActivity
+from app.common.constants import NotificationType, BeatmapStatus, UserActivity
 from app.common.helpers import activity
 from app.common.database import (
     notifications,
@@ -272,14 +272,14 @@ def update_topic_status_text(
     if not beatmapset.topic_id:
         return
 
-    if beatmapset.status > DatabaseStatus.Pending:
+    if beatmapset.status > BeatmapStatus.Pending:
         topics.update(
             beatmapset.topic_id,
             {'status_text': None},
             session=session
         )
 
-    elif status == DatabaseStatus.Graveyard:
+    elif status == BeatmapStatus.Graveyard:
         topics.update(
             beatmapset.topic_id,
             {'status_text': None},
