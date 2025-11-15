@@ -94,92 +94,94 @@ def format_announcement(
     }
 
 def handle_legacy_redirects(page: str, request: Request) -> Response | None:
-    if page == 'download':
-        return redirect('/download')
+    match page:
+        case 'download':
+            return redirect('/download')
 
-    elif page == 'team':
-        return redirect('/g/1')
+        case 'team':
+            return redirect('/g/1')
 
-    elif page == 'pp':
-        return redirect('/rankings/osu/performance')
+        case 'pp':
+            return redirect('/rankings/osu/performance')
 
-    elif page == 'ranking':
-        return redirect('/rankings/osu/performance')
+        case 'ranking':
+            return redirect('/rankings/osu/performance')
 
-    elif page == 'countryranking':
-        return redirect('/rankings/osu/country')
+        case 'countryranking':
+            return redirect('/rankings/osu/country')
 
-    elif page == 'player':
-        if username := request.args.get("f"):
-            return redirect(f'/u/{username}')
+        case 'player':
+            if username := request.args.get("f"):
+                return redirect(f'/u/{username}')
 
-    elif page == 'profile':
-        if id := request.args.get("u"):
-            return redirect(f'/u/{id}')
+        case 'profile':
+            if id := request.args.get("u"):
+                return redirect(f'/u/{id}')
 
-    elif page == 'beatmap':
-        if id := request.args.get("b"):
-            return redirect(f'/b/{id}')
+        case 'beatmap':
+            if id := request.args.get("b"):
+                return redirect(f'/b/{id}')
 
-        elif id := request.args.get("s"):
-            return redirect(f'/s/{id}')
+            elif id := request.args.get("s"):
+                return redirect(f'/s/{id}')
 
-    elif page == 'song':
-        if id := request.args.get("b"):
-            return redirect(f'/b/{id}')
+        case 'song':
+            if id := request.args.get("b"):
+                return redirect(f'/b/{id}')
 
-        if id := request.args.get("s"):
-            return redirect(f'/s/{id}')
+            if id := request.args.get("s"):
+                return redirect(f'/s/{id}')
 
-    elif page == 'playerranking':
-        mode = request.args.get("m", type=int)
-        mode_string = "osu"
+        case 'playerranking':
+            mode = request.args.get("m", type=int)
+            mode_string = "osu"
 
-        if mode in (0, 1, 2, 3):
-            mode_string = GameMode(mode).alias
+            if mode in (0, 1, 2, 3):
+                mode_string = GameMode(mode).alias
 
-        arguments = {
-            'jumpto': request.args.get("f"),
-            'country': request.args.get("c"),
-            'page': request.args.get("page", type=int),
-        }
-        argument_string = "&".join(
-            f"{key}={value}"
-            for key, value in arguments.items()
-            if value is not None
-        )
-        query_string = (
-            "?" + argument_string
-            if argument_string else ""
-        )
+            arguments = {
+                'jumpto': request.args.get("f"),
+                'country': request.args.get("c"),
+                'page': request.args.get("page", type=int),
+            }
+            argument_string = "&".join(
+                f"{key}={value}"
+                for key, value in arguments.items()
+                if value is not None
+            )
+            query_string = (
+                "?" + argument_string
+                if argument_string else ""
+            )
 
-        # Preserve the hash in the URL
-        location = request.full_path.split("#")
-        query_string += (
-            "&" + location[-1]
-            if len(location) > 1 and location[-1] else ""
-        )
+            # Preserve the hash in the URL
+            location = request.full_path.split("#")
+            query_string += (
+                "&" + location[-1]
+                if len(location) > 1 and location[-1] else ""
+            )
 
-        return redirect(f'/rankings/{mode_string}/performance{query_string}')
+            return redirect(f'/rankings/{mode_string}/performance{query_string}')
 
-    elif page == 'beatmaplist':
-        arguments = {
-            'language': request.args.get("la", type=int),
-            'genre': request.args.get("g", type=int),
-            'mode': request.args.get("m", type=int),
-            'sort': request.args.get("s", type=int),
-            'order': request.args.get("o", type=int),
-            'query': request.args.get("q")
-        }
-        argument_string = "&".join(
-            f"{key}={value}"
-            for key, value in arguments.items()
-            if value is not None
-        )
-        query_string = (
-            "?" + argument_string
-            if argument_string else ""
-        )
-        return redirect(f'/beatmapsets{query_string}')
+        case 'beatmaplist':
+            arguments = {
+                'language': request.args.get("la", type=int),
+                'genre': request.args.get("g", type=int),
+                'mode': request.args.get("m", type=int),
+                'sort': request.args.get("s", type=int),
+                'order': request.args.get("o", type=int),
+                'query': request.args.get("q")
+            }
+            argument_string = "&".join(
+                f"{key}={value}"
+                for key, value in arguments.items()
+                if value is not None
+            )
+            query_string = (
+                "?" + argument_string
+                if argument_string else ""
+            )
+            return redirect(f'/beatmapsets{query_string}')
 
-    return redirect('/')
+        case _:
+            return redirect('/')
