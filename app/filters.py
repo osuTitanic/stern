@@ -2,12 +2,14 @@
 from app.common.constants import OSU_CHAT_LINK_MODERN
 from app.common.database import DBForumTopic, DBForum, DBUser
 from app.common.helpers import activity
+from app.common import bbcode
+
 from datetime import datetime, timedelta
 from urllib.parse import quote
 from functools import cache
+
 from .app import flask
 from . import common
-from . import bbcode
 from . import git
 
 import html
