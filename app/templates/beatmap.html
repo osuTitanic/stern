@@ -869,8 +869,8 @@
     var isBeatmapsetOwner = {{ (beatmapset.server != 0 and beatmapset.creator_id == current_user.id)|lower }};
     var bbcodeDescription = `{{ beatmapset.description }}`;
 </script>
-<script src="{{ '/js/beatmap.js'|git_asset_url }}"></script>
+<script src="{{ '/js/beatmap.js'|cached_url }}"></script>
 {% if current_user.is_bat %}
-<script src="{{ '/js/bat.js'|git_asset_url }}"></script>
+<script src="{{ '/js/bat.js'|cached_url }}"></script>
 {% endif %}
 {% endblock content %}

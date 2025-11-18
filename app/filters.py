@@ -10,14 +10,15 @@ from functools import cache
 
 from .app import flask
 from . import common
-from . import git
 
-import html
 import flask_login
 import timeago
+import hashlib
 import utils
+import html
 import math
 import re
+import os
 
 REPLACE_ESCAPE = (
     ("&", "&amp;"),
@@ -213,11 +214,19 @@ def ceil(value: float) -> int:
 def get_required_nominations(beatmapset) -> int:
     return utils.required_nominations(beatmapset)
 
-@flask.template_filter('git_asset_url')
+@flask.template_filter('cached_url')
 @cache
-def git_asset_url(url_path: str) -> str:
-    commit = git.fetch_latest_commit_for_file('./app/static' + url_path)
-    return f"{url_path}?commit={commit}" if commit else url_path
+def cached_url(url_path: str) -> str:
+    filepath = './app/static' + url_path
+
+    if not os.path.isfile(filepath):
+        return url_path
+
+    with open(filepath, 'rb') as f:
+        file_data = f.read()
+        checksum = hashlib.md5(file_data).hexdigest()
+
+    return f"{url_path}?c={checksum}"
 
 @flask.template_filter('get_status_icon')
 def get_status_icon(topic: DBForumTopic) -> str:
