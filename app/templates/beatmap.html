@@ -411,7 +411,7 @@
                         </td>
                         <td style="min-width: 30%">
                             <p>
-                                The current status of this beatmap is "{{ constants.DatabaseStatus(beatmapset.status).name }}".
+                                The current status of this beatmap is "{{ constants.BeatmapStatus(beatmapset.status).name }}".
                                 {% if nominations|length >= beatmapset|required_nominations and beatmapset.status <= 0 %}
                                 This beatmap has enough nominations to be qualified!
                                 {% elif beatmapset.status == 3 %}
@@ -478,8 +478,8 @@
                                             <dt>{{ beatmap.version }}</dt>
                                             <dd>
                                                 <select name="{{ beatmap.id }}">
-                                                    {% for status in constants.DatabaseStatus.values() %}
-                                                    <option value="{{ status }}" {% if beatmap.status == status %}selected{% endif %}>{{ constants.DatabaseStatus(status).name }}</option>
+                                                    {% for status in constants.BeatmapStatus.values() %}
+                                                    <option value="{{ status }}" {% if beatmap.status == status %}selected{% endif %}>{{ constants.BeatmapStatus(status).name }}</option>
                                                     {% endfor %}
                                                 </select>
                                             </dd>
