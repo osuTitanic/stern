@@ -21,7 +21,7 @@
                     </div>
                 </div>
                 <div class="avatar">
-                    <img src="{{ user|avatar_url }}" alt="">
+                    <img src="{{ user|avatar_url }}" alt="" loading="lazy" width="120" height="120">
                 </div>
                 {% if user.title %}
                 <div class="user-title">{{ user.title }}</div>
