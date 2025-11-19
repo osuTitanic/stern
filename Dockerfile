@@ -83,6 +83,9 @@ COPY uwsgi.ini ./uwsgi.ini
 # Precompile python files for faster startup
 RUN python -m compileall -q app
 
+# Setup volume for app/static
+VOLUME /stern/app/static
+
 STOPSIGNAL SIGQUIT
 ENTRYPOINT ["/sbin/tini", "--"]
 
