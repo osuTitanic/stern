@@ -6,7 +6,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=1080, user-scalable=yes"/>
     <meta name="msapplication-TileColor" content="#603cba">
-    <meta name="theme-color" content="#603cba">
+    <meta name="theme-color" content="rgba(96, 60, 186, 1)">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/logo/apple-touch-icon.png">
+    <link rel="apple-touch-icon" href="/images/logo/icon-192.png">
+    <link rel="manifest" href="/manifest.json">
+
+    <link rel="dns-prefetch" href="https://cdn.socket.io">
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="{{ config.API_BASEURL }}">
+    <link rel="preconnect" href="{{ config.API_BASEURL }}" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+
     <title>{{ title or 'Titanic!' }}</title>
     {% if description or site_description %}
     <meta name="description" content="{{ description or site_description }}">
@@ -29,7 +39,7 @@
     {% if css %}
     <link rel="stylesheet" href="{{ ('/css/' + css)|cached_url }}">
     {% endif %}
-    <link rel="preload" href="{{ '/images/logo/main-vector.min.svg'|cached_url }}" as="image">
+    <link rel="preload" href="{{ '/images/logo/main-vector.min.svg'|cached_url }}" as="image" fetchpriority="high">
     <script>
         var apiBaseurl = "{{ config.API_BASEURL }}";
         var osuBaseurl = "{{ config.OSU_BASEURL }}";
