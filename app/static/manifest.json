@@ -1,0 +1,26 @@
+{
+  "name": "Titanic",
+  "short_name": "Titanic",
+  "description": "Reviving old osu! - A private server dedicated to preserving the nostalgia of osu!'s earlier days",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#603cba",
+  "theme_color": "#603cba",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/images/logo/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/images/logo/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["games", "entertainment"]
+}
