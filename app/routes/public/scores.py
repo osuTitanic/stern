@@ -2,14 +2,13 @@
 from flask import Blueprint, send_file, redirect, abort
 from app.common.constants import GameMode
 from app.common.database import scores
-import app
-import utils
+
 import config
-import requests
+import utils
+import app
 import io
 
 router = Blueprint("scores", __name__)
-
 
 @router.get("/<id>", strict_slashes=False)
 def get_score(id: int):
