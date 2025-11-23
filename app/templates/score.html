@@ -4,7 +4,7 @@
 <h1 class="header-text" style="margin-bottom: 20px;">
     <a href="/beatmapsets">Beatmap</a> »
     <a href="/b/{{ beatmap.id }}">{{ beatmap.beatmapset.artist }} - {{ beatmap.beatmapset.title }}</a> »
-    <span style="color: #ff66aa;">{{ user.name }}’s Score</span>
+    <span style="color: #ff66aa;">{{ user.name }}'s Score</span>
 </h1>
 
 <div style="margin: 20px auto; width: 640px; text-align: center;">
@@ -18,7 +18,7 @@
                              loading="lazy"
                              class="flag">
                     </a>
-                    <a href="/u/{{ user.id }}">{{ user.name }}</a>’s Score on
+                    <a href="/u/{{ user.id }}">{{ user.name }}</a>'s Score on
                     [<b>{{ beatmap.version }}</b>]
                     ({{ score.submitted_at.split('.')[0].replace('T', ' ') }})
                 </td>
