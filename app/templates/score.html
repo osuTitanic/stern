@@ -76,6 +76,7 @@
                     <span class="score-label">{{ constants.GameMode(score.mode).short }} Score:</span>
                     {% endif %}
                     <span class="score-value">{{ "{:,}".format(score.total_score) }}</span>
+                    <span class="score-rank">#{{ "{:,}".format(score_rank) if score_rank > 0 else "N/A" }}</span>
                 </div>
             </div>
             

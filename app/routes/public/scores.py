@@ -18,13 +18,18 @@ def get_score(id: int):
         return abort(404)
 
     with app.session.database.managed_session() as session:
-        score = scores.fetch_by_id(int(id), session)
-        if not score:
+        if not (score := scores.fetch_by_id(int(id), session)):
             return abort(404)
+
+        score_rank = scores.fetch_score_index_by_id(
+            score.id,
+            score.beatmap_id,
+            score.mode,
+            session=session
+        )
 
         user = score.user
         user.stats.sort(key=lambda s: s.mode)
-
         beatmap = score.beatmap
         beatmapset = beatmap.beatmapset
 
@@ -51,6 +56,7 @@ def get_score(id: int):
             site_title=site_title,
             site_description=site_description,
             site_image=site_image,
+            score_rank=score_rank,
             title=site_title,
         )
 
