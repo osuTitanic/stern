@@ -174,8 +174,9 @@ def build_csp_directives():
 
     csp_directives = [
         f"connect-src 'self' {config.API_BASEURL} {config.EVENTS_WEBSOCKET} {config.LOUNGE_BACKEND} https://cdn.socket.io",
-        f"script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.socket.io {config.API_BASEURL}",
+        f"script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.socket.io https://static.cloudflareinsights.com {config.API_BASEURL}",
         f"style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com",
+        "frame-src https://www.youtube.com https://www.youtube-nocookie.com",
         f"img-src {media_sources}",
         f"media-src {media_sources}",
         f"font-src 'self' data:",
