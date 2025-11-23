@@ -65,6 +65,10 @@ function createScoreElement(score, index, type) {
     var scoreDiv = document.createElement("div");
     scoreDiv.id = "score-" + type + "-" + index;
     scoreDiv.className = "score";
+    scoreDiv.onclick = function(e) {
+        if (e.target.closest('a')) return;
+        window.location.href = "/scores/" + score.id;
+    };
 
     var scoreTable = document.createElement("table");
     var tableBody = document.createElement("tbody");
