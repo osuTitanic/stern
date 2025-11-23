@@ -5,6 +5,7 @@ from app.common.database import DBUser
 from flask import Request, Response, redirect, request
 from flask_login import current_user
 from typing import Tuple, Optional
+from functools import lru_cache
 from werkzeug.exceptions import *
 
 from . import accounts
@@ -94,6 +95,19 @@ def on_exception(error: Exception) -> Tuple[str, int]:
         description='Internal Server Error'
     )
 
+@app.flask.after_request
+def set_security_headers(response: Response) -> Response:
+    if not config.ENABLE_CSP:
+        return response
+
+    response.headers['Permissions-Policy'] = 'geolocation=(), microphone=(), camera=()'
+    response.headers['Content-Security-Policy'] = '; '.join(build_csp_directives())
+    response.headers['Referrer-Policy'] = 'strict-origin-when-cross-origin'
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    response.headers['X-XSS-Protection'] = '1; mode=block'
+    response.headers['X-Frame-Options'] = 'DENY'
+    return response
+
 static_paths = (
     '/images/arrow-white-highlight.png',
     '/images/arrow-white-normal.png',
@@ -146,3 +160,29 @@ def caching_rules(response: Response) -> Response:
 
     response.headers['Cache-Control'] = f'public, max-age={ 60*60*24*7 }'
     return response
+
+@lru_cache(maxsize=1)
+def build_csp_directives():
+    prefix = "https" if config.ENABLE_SSL else "http"
+    media_sources_list = ["'self'", config.STATIC_BASEURL]
+    media_sources_list.extend([f'{prefix}://{service}' for service in config.VALID_IMAGE_SERVICES])
+    media_sources = ' '.join(media_sources_list)
+
+    csp_directives = [
+        f"connect-src 'self' {config.API_BASEURL} {config.EVENTS_WEBSOCKET} {config.LOUNGE_BACKEND} https://cdn.socket.io",
+        f"script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.socket.io {config.API_BASEURL}",
+        f"style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com",
+        f"img-src 'self' data: {media_sources}",
+        f"media-src {media_sources}",
+        f"font-src 'self' data:",
+        "default-src 'self'",
+        "object-src 'none'",
+        "base-uri 'self'",
+        "form-action 'self'",
+        "frame-ancestors 'none'",
+    ]
+
+    if config.ENABLE_SSL:
+        csp_directives.append("upgrade-insecure-requests")
+
+    return csp_directives

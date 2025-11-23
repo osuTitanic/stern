@@ -28,7 +28,6 @@
     {% if site_image %}<meta property="og:image" content="{{ site_image }}">{% endif %}
     {% if site_url %}<meta property="og:url" content="{{ site_url }}">{% endif %}
     {% if site_description %}<meta property="og:description" content="{{ site_description }}">{% endif %}
-    {% if config.ENABLE_SSL %}<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">{% endif %}
     {% if config.SITEMAP_ENABLED %}
     <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
     {% endif %}
