@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="header-text" style="margin-bottom: 20px;">
+    <a href="/beatmapsets">Beatmap</a> »
+    <a href="/b/{{ beatmap.id }}">{{ beatmap.beatmapset.artist }} - {{ beatmap.beatmapset.title }}</a> »
+    <span style="color: #ff66aa;">{{ user.name }}’s Score</span>
+</h1>
+
+<div style="margin: 20px auto; width: 640px; text-align: center;">
+    <table class="leader" style="display:inline-table; width:auto; text-align:left;">
+        <tbody>
+            <tr>
+                <td class="row-title" colspan="3">
+                    <a href="/rankings/{{ constants.GameMode(beatmap.mode).alias }}/performance?country={{ user.country }}">
+                        <img src="/images/flags/{{ user.country|lower }}.gif"
+                             alt="Flag of {{ user.country }}"
+                             loading="lazy"
+                             class="flag">
+                    </a>
+                    <a href="/u/{{ user.id }}">{{ user.name }}</a>’s Score on
+                    [<b>{{ beatmap.version }}</b>]
+                    ({{ score.submitted_at.split('.')[0].replace('T', ' ') }})
+                </td>
+            </tr>
+
+            <tr class="row-light">
+                <td><b>Score</b></td>
+                <td>{{ "{:,}".format(score.total_score) }}</td>
+                <td class="row-grade" rowspan="12" style="vertical-align: middle; text-align: center;">
+                    <img src="/images/grades/{{ score.grade|upper }}.png"
+                         loading="lazy"
+                         alt="Grade {{ score.grade|upper }}"
+                         style="height:120px;">
+                </td>
+            </tr>
+
+            <tr class="row-dark"><td><b>Accuracy</b></td><td>{{ "%.2f"|format(score.acc * 100) }}%</td></tr>
+            <tr class="row-light"><td><b>Performance (pp)</b></td><td>{{ "%.2f"|format(score.pp) }}</td></tr>
+            <tr class="row-dark"><td><b>Max Combo</b></td><td>{{ score.max_combo }}x / {{ beatmap.max_combo }}x</td></tr>
+
+            <tr class="row-light">
+                <td><b>300 / 100 / 50</b></td>
+                <td>{{ score.n300 }} / {{ score.n100 }} / {{ score.n50 }}</td>
+            </tr>
+
+            <tr class="row-dark"><td><b>Misses</b></td><td>{{ score.nMiss }}</td></tr>
+            <tr class="row-light"><td><b>Geki</b></td><td>{{ score.nGeki }}</td></tr>
+            <tr class="row-dark"><td><b>Katu</b></td><td>{{ score.nKatu }}</td></tr>
+
+            <tr class="row-light">
+                <td><b>Mods</b></td>
+                <td>
+                    {% if score.mods == 4 %}
+                        None
+                    {% else %}
+                        {{ score.mods|short_mods }}
+                    {% endif %}
+                </td>
+            </tr>
+
+            <tr class="row-dark"><td><b>Client Version</b></td><td>b{{ score.client_version }}</td></tr>
+            <tr class="row-light"><td><b>Passed</b></td><td>{{ "Yes" if score.passed else "No" }}</td></tr>
+        </tbody>
+    </table>
+
+    <div style="text-align:center;margin-top:8px;">
+        <a href="/scores/{{ score.id }}/download">Download Replay</a>
+        <br>
+        <a href="/b/{{ beatmap.id }}">View Beatmap</a> •
+        <a href="/u/{{ user.id }}">View Player</a>
+    </div>
+</div>
+
+{% endblock %}
