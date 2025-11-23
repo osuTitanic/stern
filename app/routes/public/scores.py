@@ -23,6 +23,8 @@ def get_score(id: int):
             return abort(404)
 
         user = score.user
+        user.stats.sort(key=lambda s: s.mode)
+
         beatmap = score.beatmap
         beatmapset = beatmap.beatmapset
 
@@ -41,11 +43,11 @@ def get_score(id: int):
 
         return utils.render_template(
             "score.html",
+            user=user,
             score=score,
             beatmap=beatmap,
             beatmapset=beatmapset,
-            user=user,
-            css="beatmap.css",
+            css="scores.css",
             site_title=site_title,
             site_description=site_description,
             site_image=site_image,
