@@ -14,7 +14,7 @@
                 <td class="row-title" colspan="3">
                     <a href="/rankings/{{ constants.GameMode(beatmap.mode).alias }}/performance?country={{ user.country }}">
                         <img src="/images/flags/{{ user.country|lower }}.gif"
-                             alt="{{ user.country }} Flag"
+                             alt="Flag of {{ user.country }}"
                              loading="lazy"
                              class="flag">
                     </a>
@@ -38,10 +38,16 @@
             <tr class="row-dark"><td><b>Accuracy</b></td><td>{{ "%.2f"|format(score.acc * 100) }}%</td></tr>
             <tr class="row-light"><td><b>Performance (pp)</b></td><td>{{ "%.2f"|format(score.pp) }}</td></tr>
             <tr class="row-dark"><td><b>Max Combo</b></td><td>{{ score.max_combo }}x / {{ beatmap.max_combo }}x</td></tr>
-            <tr class="row-light"><td><b>300 / 100 / 50</b></td><td>{{ score.n300 }} / {{ score.n100 }} / {{ score.n50 }}</td></tr>
+
+            <tr class="row-light">
+                <td><b>300 / 100 / 50</b></td>
+                <td>{{ score.n300 }} / {{ score.n100 }} / {{ score.n50 }}</td>
+            </tr>
+
             <tr class="row-dark"><td><b>Misses</b></td><td>{{ score.nMiss }}</td></tr>
             <tr class="row-light"><td><b>Geki</b></td><td>{{ score.nGeki }}</td></tr>
             <tr class="row-dark"><td><b>Katu</b></td><td>{{ score.nKatu }}</td></tr>
+
             <tr class="row-light">
                 <td><b>Mods</b></td>
                 <td>
@@ -52,6 +58,7 @@
                     {% endif %}
                 </td>
             </tr>
+
             <tr class="row-dark"><td><b>Client Version</b></td><td>b{{ score.client_version }}</td></tr>
             <tr class="row-light"><td><b>Passed</b></td><td>{{ "Yes" if score.passed else "No" }}</td></tr>
         </tbody>
