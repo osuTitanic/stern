@@ -164,13 +164,13 @@ def caching_rules(response: Response) -> Response:
 @lru_cache(maxsize=1)
 def build_csp_directives():
     prefix = "https" if config.ENABLE_SSL else "http"
-    media_sources = ["'self'", config.STATIC_BASEURL]
+    media_sources = ["'self'", "data:", "blob:", config.STATIC_BASEURL]
     media_sources.extend([f'{prefix}://{service}' for service in config.VALID_IMAGE_SERVICES])
     media_sources.extend(["https://i.ytimg.com", "https://yt3.ggpht.com"])
 
     if not config.IMAGE_PROXY_BASEURL:
         # Allow all images if no proxy is configured
-        media_sources = ["'self'", "data:", "https:", "http:"]
+        media_sources = ["'self'", "data:", "blob:", "https:", "http:"]
 
     script_sources = [
         "'self'",
