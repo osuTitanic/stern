@@ -1,25 +1,64 @@
 
+from flask import Blueprint, send_file, redirect, abort
 from app.common.constants import GameMode
 from app.common.database import scores
-from flask import (
-    Blueprint,
-    send_file,
-    redirect,
-    abort
-)
 
+import config
+import utils
 import app
 import io
 
-router = Blueprint('scores', __name__)
+router = Blueprint("scores", __name__)
 
-@router.get('/<id>')
-def get_scores(id: int):
-    if not (score := scores.fetch_by_id(id)):
+@router.get("/<id>", strict_slashes=False)
+def get_score(id: int):
+    """Render individual score page"""
+
+    if not str(id).isdigit():
         return abort(404)
 
-    # TODO: Add score page
-    return redirect(f'/b/{score.beatmap_id}#{score.id}')
+    with app.session.database.managed_session() as session:
+        if not (score := scores.fetch_by_id(int(id), session)):
+            return abort(404)
+
+        score_rank = scores.fetch_score_index_by_id(
+            score.id,
+            score.beatmap_id,
+            score.mode,
+            session=session
+        )
+
+        user = score.user
+        user.stats.sort(key=lambda s: s.mode)
+        beatmap = score.beatmap
+        beatmapset = beatmap.beatmapset
+
+        site_title = (
+            f"{user.name} on {beatmapset.artist} - {beatmapset.title} "
+            f"[{beatmap.version}] | Titanic"
+        )
+
+        site_description = (
+            f"{user.name} achieved {score.pp:.2f}pp with "
+            f"{score.acc * 100:.2f}% accuracy ({score.grade}) on "
+            f"{beatmapset.artist} - {beatmapset.title} [{beatmap.version}]"
+        )
+
+        site_image = f"{config.OSU_BASEURL}/mt/{beatmap.set_id}l.jpg"
+
+        return utils.render_template(
+            "score.html",
+            user=user,
+            score=score,
+            beatmap=beatmap,
+            beatmapset=beatmapset,
+            css="scores.css",
+            site_title=site_title,
+            site_description=site_description,
+            site_image=site_image,
+            score_rank=score_rank,
+            title=site_title,
+        )
 
 @router.get('/<id>/download')
 def download_replay(id: int):

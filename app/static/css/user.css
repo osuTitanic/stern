@@ -540,6 +540,11 @@ body {
     padding: 2.5px;
 }
 
+.score:hover {
+    background-color: #dedbfd;
+    cursor: pointer;
+}
+
 .score table {
     border-spacing: 0px;
     border-collapse: collapse;

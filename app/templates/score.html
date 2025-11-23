@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="score-container">
+    <div class="top-section">
+        <div class="player-card">
+            <div class="player-header">
+                <a href="/u/{{ user.id }}">
+                    <img src="/a/{{ user.id }}" alt="" class="player-avatar" loading="lazy">
+                </a>
+                <div class="player-info">
+                    <span class="player-label">
+                        <a href="/u/{{ user.id }}" class="player-name">
+                            {{ user.name }}
+                        </a>
+                        <a href="/rankings/{{ constants.GameMode(score.mode).alias }}/performance?country={{ user.country|upper }}">
+                            <img src="/images/flags/{{ user.country|lower }}.gif" alt="{{ user.country|upper }}">
+                        </a>
+                    </span>
+                    {% set user_stats = user.stats[score.mode] %}
+                    {% if user_stats %}
+                    <div class="player-stats">
+                        <span class="player-rank">
+                            Global Rank: <b>#{{ "{:,}".format(user_stats.rank) if user_stats.rank > 0 else "N/A" }}</b>
+                            (<span class="player-pp">{{ "{:,.0f}".format(user_stats.pp) }}pp</span>)
+                        </span>
+                    </div>
+                    {% endif %}
+                    <div class="play-date">
+                        Played on
+                        <span title="{{ score.submitted_at.strftime('%d/%m/%Y at %H:%M:%S %Z') }}">{{ score.submitted_at.strftime('%d/%m/%Y') }}</span>
+                        with
+                        <span>b{{ score.client_version }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="beatmap-card">
+            <div class="card-content">
+                <div class="beatmap-info">
+                    <a href="/b/{{ beatmap.id }}" class="beatmap-title">
+                        <b>{{ beatmapset.artist }} - {{ beatmapset.title }}</b>
+                        <span class="beatmap-version">[{{ beatmap.version }}]</span>
+                        <span class="beatmap-stars">
+                            ({{ "%.2f"|format(beatmap.diff) }} <i class="fa-regular fa-star"></i>)
+                        </span>
+                    </a>
+                    <br>
+                    {% if beatmapset.server == 0 %}
+                        <a href="https://osu.ppy.sh/u/{{ beatmapset.creator }}" class="beatmap-creator">
+                            mapped by <span>{{ beatmapset.creator }}</span>
+                        </a>
+                    {% else %}
+                        <a href="/u/{{ beatmapset.creator_id }}" class="beatmap-creator">
+                            mapped by <span>{{ beatmapset.creator }}</span>
+                        </a>
+                    {% endif %}
+                </div>
+                <div class="beatmap-thumbnail">
+                    <a href="/b/{{ beatmap.id }}">
+                        <img src="http://osu.localhost/mt/{{ beatmap.set_id }}l" alt="" loading="lazy">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-section">
+        <div class="stats-panel">
+            <div class="stats-header">
+                <div class="score-display">
+                    {% if score.mode == 0 %}
+                    <span class="score-label">Score:</span>
+                    {% else %}
+                    <span class="score-label">{{ constants.GameMode(score.mode).short }} Score:</span>
+                    {% endif %}
+                    <span class="score-value">{{ "{:,}".format(score.total_score) }}</span>
+                    <span class="score-label">#{{ "{:,}".format(score_rank) if score_rank else "N/A" }}</span>
+                </div>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-row">
+                    <div class="stat-item hit-300">
+                        <span class="hit-label">300</span>
+                        <span class="hit-count">{{ score.n300 }}x</span>
+                    </div>
+                    <div class="stat-item hit-100">
+                        <span class="hit-label">100</span>
+                        <span class="hit-count">{{ score.n100 }}x</span>
+                    </div>
+                </div>
+
+                <div class="stat-row">
+                    <div class="stat-item hit-50">
+                        <span class="hit-label">50</span>
+                        <span class="hit-count">{{ score.n50 }}x</span>
+                    </div>
+                    <div class="stat-item hit-miss">
+                        <span class="hit-label">Miss</span>
+                        <span class="hit-count">{{ score.nMiss }}x</span>
+                    </div>
+                </div>
+
+                {% if score.mode in (1, 3) %}
+                {# Taiko & Mania specific #}
+                <div class="stat-row">
+                    <div class="stat-item hit-geki">
+                        <span class="hit-label">Geki</span>
+                        <span class="hit-count">{{ score.nGeki }}x</span>
+                    </div>
+                    <div class="stat-item hit-katu">
+                        <span class="hit-label">Katu</span>
+                        <span class="hit-count">{{ score.nKatu }}x</span>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            
+            <div class="score-metadata {% if score.mods > 0 %}has-mods{% endif %}">
+                <div class="metadata-item combo">
+                    <span class="label">Max Combo</span>
+                    <span class="value">{{ score.max_combo }}x</span>
+                </div>
+                <div class="metadata-item accuracy">
+                    <span class="label">Accuracy</span>
+                    <span class="value">{{ "%.2f"|format(score.acc * 100) }}%</span>
+                </div>
+                {% if score.mods > 0 %}
+                <div class="metadata-item mods">
+                    <span class="label">Mods</span>
+                    <span class="value">+{{ constants.Mods(score.mods).short }}</span>
+                </div>
+                {% endif %}
+                <div class="metadata-item pp">
+                    <span class="label">PP</span>
+                    {% if beatmap.status == 4 %}
+                    <span class="value" title="{{ "{:,.4f}".format(score.pp) }}pp if ranked">
+                        <i class="fa-regular fa-heart"></i>
+                    </span>
+                    {% elif score.relaxing %}
+                    <span class="value" title="PP is not awarded for Relax/Autopilot scores">
+                        <i class="fa-regular fa-xmark"></i>
+                    </span>
+                    {% else %}
+                    <span class="value" title="{{ "{:,.4f}".format(score.pp) }}pp">
+                        {{ "{:,.0f}".format(score.pp) }}pp
+                    </span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="grade-section">
+            <div class="grade-wrapper">
+                <img src="/images/grades/{{ score.grade|upper }}.png" alt="Grade {{ score.grade|upper }}" class="grade-image" loading="lazy">
+            </div>
+
+            <div class="score-buttons">
+                {% if score.replay_md5 %}
+                <a href="/scores/{{ score.id }}/download" class="score-button primary">
+                    <i class="fa fa-download"></i> Download Replay
+                </a>
+                {% endif %}
+                <a href="/b/{{ beatmap.id }}" class="score-button secondary">
+                    <i class="fa fa-arrow-left"></i> Return to Beatmap
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+{% endblock %}
