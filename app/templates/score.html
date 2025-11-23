@@ -20,7 +20,7 @@
                     </a>
                     <a href="/u/{{ user.id }}">{{ user.name }}</a>'s Score on
                     [<b>{{ beatmap.version }}</b>]
-                    ({{ score.submitted_at.split('.')[0].replace('T', ' ') }})
+                    ({{ score.submitted_at.strftime("%Y-%m-%d %H:%M:%S") }})
                 </td>
             </tr>
 
