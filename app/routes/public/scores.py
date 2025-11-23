@@ -40,16 +40,13 @@ def get_score(id: int):
         beatmapset = beatmap.beatmapset
 
         site_title = (
-            f"{user.name} on {beatmapset.artist} - {beatmapset.title} "
-            f"[{beatmap.version}] | Titanic"
+            f"Titanic » Beatmaps » {beatmap.full_name} » {user.name}'s Score"
         )
-
         site_description = (
-            f"{user.name} achieved {score.pp:.2f}pp with "
-            f"{score.acc * 100:.2f}% accuracy ({score.grade}) on "
-            f"{beatmapset.artist} - {beatmapset.title} [{beatmap.version}]"
+            f"{user.name} achieved #{score_rank} with "
+            f"{score.acc * 100:.2f}% ({score.grade}) for {score.pp:.2f}pp "
+            f"on {beatmap.full_name}"
         )
-
         site_image = f"{config.OSU_BASEURL}/mt/{beatmap.set_id}l.jpg"
 
         return utils.render_template(
