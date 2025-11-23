@@ -192,20 +192,18 @@
 }
 
 .score-display {
-    font-size: 1.3em;
+    font-size: 1.4em;
 }
 
 .score-label {
     color: #555;
-    margin-right: 8px;
+    margin-right: 4px;
     font-weight: bold;
 }
 
 .score-value {
     font-weight: bold;
-    font-size: 1.1em;
     color: #3843a6;
-    margin-right: 8px;
 }
 
 .stats-grid {
