@@ -164,23 +164,57 @@ def caching_rules(response: Response) -> Response:
 @lru_cache(maxsize=1)
 def build_csp_directives():
     prefix = "https" if config.ENABLE_SSL else "http"
-    media_sources_list = ["'self'", config.STATIC_BASEURL]
-    media_sources_list.extend([f'{prefix}://{service}' for service in config.VALID_IMAGE_SERVICES])
-    media_sources_list.extend(["https://i.ytimg.com", "https://yt3.ggpht.com"])
-    media_sources = ' '.join(media_sources_list)
+    media_sources = ["'self'", config.STATIC_BASEURL]
+    media_sources.extend([f'{prefix}://{service}' for service in config.VALID_IMAGE_SERVICES])
+    media_sources.extend(["https://i.ytimg.com", "https://yt3.ggpht.com"])
 
     if not config.IMAGE_PROXY_BASEURL:
         # Allow all images if no proxy is configured
-        media_sources = "'self' data: https: http:"
+        media_sources = ["'self'", "data:", "https:", "http:"]
+
+    script_sources = [
+        "'self'",
+        "'unsafe-inline'",
+        "https://cdnjs.cloudflare.com",
+        "https://cdn.socket.io",
+        "https://s.ytimg.com",
+        "https://www.youtube.com",
+        "https://www.youtube-nocookie.com",
+        "https://static.cloudflareinsights.com",
+        config.API_BASEURL
+    ]
+    connect_sources = [
+        "'self'",
+        config.API_BASEURL,
+        config.EVENTS_WEBSOCKET,
+        config.LOUNGE_BACKEND,
+        "https://cdn.socket.io",
+        "https://www.youtube.com",
+        "https://www.youtube-nocookie.com",
+        "https://static.cloudflareinsights.com"
+    ]
+    style_sources = [
+        "'self'",
+        "'unsafe-inline'",
+        "https://cdnjs.cloudflare.com"
+    ]
+    frame_sources = [
+        "https://www.youtube.com",
+        "https://www.youtube-nocookie.com"
+    ]
+    font_sources = [
+        "'self'",
+        "data:"
+    ]
 
     csp_directives = [
-        f"connect-src 'self' {config.API_BASEURL} {config.EVENTS_WEBSOCKET} {config.LOUNGE_BACKEND} https://cdn.socket.io https://www.youtube.com https://www.youtube-nocookie.com",
-        f"script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.socket.io https://static.cloudflareinsights.com https://www.youtube.com https://www.youtube-nocookie.com {config.API_BASEURL}",
-        f"style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com",
-        "frame-src https://www.youtube.com https://www.youtube-nocookie.com",
-        f"img-src {media_sources}",
-        f"media-src {media_sources}",
-        f"font-src 'self' data:",
+        f"connect-src {' '.join(connect_sources)}",
+        f"script-src {' '.join(script_sources)}",
+        f"style-src {' '.join(style_sources)}",
+        f"frame-src {' '.join(frame_sources)}",
+        f"img-src {' '.join(media_sources)}",
+        f"media-src {' '.join(media_sources)}",
+        f"font-src {' '.join(font_sources)}",
         "default-src 'self'",
         "object-src 'none'",
         "base-uri 'self'",
