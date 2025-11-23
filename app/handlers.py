@@ -100,7 +100,7 @@ def set_security_headers(response: Response) -> Response:
     if not config.ENABLE_CSP:
         return response
 
-    response.headers['Permissions-Policy'] = 'geolocation=(), microphone=(), camera=()'
+    response.headers['Permissions-Policy'] = 'geolocation=(), microphone=(), camera=(), clipboard-write=(self)'
     response.headers['Content-Security-Policy'] = '; '.join(build_csp_directives())
     response.headers['Referrer-Policy'] = 'strict-origin-when-cross-origin'
     response.headers['X-Content-Type-Options'] = 'nosniff'
