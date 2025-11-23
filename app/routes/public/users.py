@@ -14,7 +14,7 @@ from app.common.database.repositories import (
 )
 
 from flask import Response, abort, Blueprint, redirect, request
-from app.common.constants import GameMode, DatabaseStatus
+from app.common.constants import GameMode, BeatmapStatus
 from app.common.cache import status, leaderboards
 from app.common.database.objects import DBUser
 from sqlalchemy.orm import Session
@@ -26,7 +26,11 @@ import app
 router = Blueprint('users', __name__)
 preload = (DBUser.favourites, DBUser.relationships, DBUser.achievements)
 
-@router.get('/<query>')
+@router.get('/users/<query>')
+def modern_userpage_redirect(query: str) -> Response:
+    return redirect(f'/u/{query}')
+
+@router.get('/u/<query>')
 def userpage(query: str):
     query = query.strip()
 
@@ -74,27 +78,27 @@ def userpage(query: str):
         beatmapset_categories = {
             'Ranked': [
                 s for s in user_beatmapsets
-                if s.status in (DatabaseStatus.Ranked, DatabaseStatus.Approved)
+                if s.status in (BeatmapStatus.Ranked, BeatmapStatus.Approved)
             ],
             'Loved': [
                 s for s in user_beatmapsets
-                if s.status == DatabaseStatus.Loved
+                if s.status == BeatmapStatus.Loved
             ],
             'Qualified': [
                 s for s in user_beatmapsets
-                if s.status == DatabaseStatus.Qualified
+                if s.status == BeatmapStatus.Qualified
             ],
             'Pending': [
                 s for s in user_beatmapsets
-                if s.status == DatabaseStatus.Pending
+                if s.status == BeatmapStatus.Pending
             ],
             'WIP': [
                 s for s in user_beatmapsets
-                if s.status == DatabaseStatus.WIP
+                if s.status == BeatmapStatus.WIP
             ],
             'Graveyarded': [
                 s for s in user_beatmapsets
-                if s.status == DatabaseStatus.Graveyard
+                if s.status == BeatmapStatus.Graveyard
             ]
         }
         

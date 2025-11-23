@@ -25,27 +25,37 @@
                     {% if map.diff < 2 %}
                         <img
                             src="/images/beatmap/difficulties/easy-{{map.mode}}.png"
-                            alt="Easy"
+                            alt="E"
+                            width="16" height="16"
+                            loading="lazy"
                         >
                     {% elif map.diff < 2.7 %}
                         <img
                             src="/images/beatmap/difficulties/normal-{{map.mode}}.png"
-                            alt="Normal"
+                            alt="N"
+                            width="16" height="16"
+                            loading="lazy"
                         >
                     {% elif map.diff < 4 %}
                         <img
                             src="/images/beatmap/difficulties/hard-{{map.mode}}.png"
-                            alt="Hard"
+                            alt="H"
+                            width="16" height="16"
+                            loading="lazy"
                         >
                     {% elif map.diff < 5.3 %}
                         <img
                             src="/images/beatmap/difficulties/insane-{{map.mode}}.png"
-                            alt="Insane"
+                            alt="I"
+                            width="16" height="16"
+                            loading="lazy"
                         >
                     {% else %}
                         <img
                             src="/images/beatmap/difficulties/expert-{{map.mode}}.png"
-                            alt="Expert"
+                            alt="X"
+                            width="16" height="16"
+                            loading="lazy"
                         >
                     {% endif %}
                     <span>{{map.version}}</span>
@@ -411,7 +421,7 @@
                         </td>
                         <td style="min-width: 30%">
                             <p>
-                                The current status of this beatmap is "{{ constants.DatabaseStatus(beatmapset.status).name }}".
+                                The current status of this beatmap is "{{ constants.BeatmapStatus(beatmapset.status).name }}".
                                 {% if nominations|length >= beatmapset|required_nominations and beatmapset.status <= 0 %}
                                 This beatmap has enough nominations to be qualified!
                                 {% elif beatmapset.status == 3 %}
@@ -478,8 +488,8 @@
                                             <dt>{{ beatmap.version }}</dt>
                                             <dd>
                                                 <select name="{{ beatmap.id }}">
-                                                    {% for status in constants.DatabaseStatus.values() %}
-                                                    <option value="{{ status }}" {% if beatmap.status == status %}selected{% endif %}>{{ constants.DatabaseStatus(status).name }}</option>
+                                                    {% for status in constants.BeatmapStatus.values() %}
+                                                    <option value="{{ status }}" {% if beatmap.status == status %}selected{% endif %}>{{ constants.BeatmapStatus(status).name }}</option>
                                                     {% endfor %}
                                                 </select>
                                             </dd>
@@ -869,8 +879,8 @@
     var isBeatmapsetOwner = {{ (beatmapset.server != 0 and beatmapset.creator_id == current_user.id)|lower }};
     var bbcodeDescription = `{{ beatmapset.description }}`;
 </script>
-<script src="{{ '/js/beatmap.js'|git_asset_url }}"></script>
+<script src="{{ '/js/beatmap.js'|cached_url }}"></script>
 {% if current_user.is_bat %}
-<script src="{{ '/js/bat.js'|git_asset_url }}"></script>
+<script src="{{ '/js/bat.js'|cached_url }}"></script>
 {% endif %}
 {% endblock content %}

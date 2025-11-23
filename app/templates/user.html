@@ -9,12 +9,12 @@
             {% if current_user.id == user.id %}
                 <a href="/account/profile#edit">
                     <div class="avatar">
-                        <img src="{{ user|avatar_url }}" alt="User avatar" />
+                        <img src="{{ user|avatar_url }}" alt="" width="128" height="128" fetchpriority="high" />
                     </div>
                 </a>
             {% else %}
                 <div class="avatar">
-                    <img src="{{ user|avatar_url }}" alt="User avatar" />
+                    <img src="{{ user|avatar_url }}" alt="" width="128" height="128" fetchpriority="high" />
                 </div>
             {% endif %}
         {% endif %}
@@ -922,11 +922,11 @@
     var firstsRank = {{ firsts_rank }};
     var superFriendly = {{ (user.id in config.SUPER_FRIENDLY_USERS)|lower }};
 </script>
-<link rel="stylesheet" href="{{ '/lib/nv.d3.min.css'|git_asset_url }}">
-<script src="{{ '/lib/d3.v3.min.js'|git_asset_url }}"></script>
-<script src="{{ '/lib/nv.d3.min.js'|git_asset_url }}"></script>
-<script src="{{ '/js/user.js'|git_asset_url }}"></script>
+<link rel="stylesheet" href="{{ '/lib/nv.d3.min.css'|cached_url }}">
+<script src="{{ '/lib/d3.v3.min.js'|cached_url }}"></script>
+<script src="{{ '/lib/nv.d3.min.js'|cached_url }}"></script>
+<script src="{{ '/js/user.js'|cached_url }}"></script>
 {% if current_user.is_moderator %}
-<script src="{{ '/js/moderation.js'|git_asset_url }}"></script>
+<script src="{{ '/js/moderation.js'|cached_url }}"></script>
 {% endif %}
 {% endblock content %}

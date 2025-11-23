@@ -1,5 +1,6 @@
 
 from app.common.constants import NotificationType, UserActivity
+from app.common.constants.country import COUNTRIES as Countries
 from app.common.constants.regexes import USERNAME, EMAIL
 from app.common.constants.strings import BAD_WORDS
 from app.common.helpers.external import location
@@ -105,6 +106,10 @@ def registration_request():
 
         if cf_country not in ('XX', 'T1'):
             country = cf_country.upper()
+
+        if country not in Countries:
+            country = 'XX'
+            officer.call(f'Unknown country code "{country}" ({ip})')
 
         hashed_password = get_hashed_password(password)
         username = username.strip()

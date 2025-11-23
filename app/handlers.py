@@ -110,7 +110,7 @@ static_paths = (
     '/images/art/'
 )
 
-commit_static_paths = (
+cacheable_static_paths = (
     '/js/',
     '/css/',
     '/lib/',
@@ -135,13 +135,13 @@ def caching_rules(response: Response) -> Response:
 
     has_static_path = any(
         request.path.startswith(path)
-        for path in commit_static_paths
+        for path in cacheable_static_paths
     )
 
     if not has_static_path:
         return response
 
-    if not request.args.get('commit'):
+    if not request.args.get('c'):
         return response
 
     response.headers['Cache-Control'] = f'public, max-age={ 60*60*24*7 }'

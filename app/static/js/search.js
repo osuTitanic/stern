@@ -195,7 +195,10 @@ function getBeatmapsets(clear) {
             beatmapsetDiv.classList.add("beatmapset");
             beatmapsetDiv.id = "beatmapset-" + beatmapset.id;
 
-            var imageUrl = 'url("/mt/' + beatmapset.id + '?c=' + beatmapset.last_update	+ '")';
+            var lastUpdate = beatmapset.last_update;
+            var lastUpdateTimestamp = Math.floor(Date.parse(lastUpdate) / 1000);
+
+            var imageUrl = 'url("/mt/' + beatmapset.id + '?c=' + lastUpdateTimestamp + '")';
 
             // Use http for images if the page is not secure
             if (window.location.protocol != "https:") {
@@ -283,8 +286,11 @@ function getBeatmapsets(clear) {
                 }
             };
 
+            var lastUpdate = beatmapset.last_update;
+            var lastUpdateTimestamp = Math.floor(Date.parse(lastUpdate) / 1000);
+
             var beatmapAudio = document.createElement("audio");
-            beatmapAudio.src = '/mp3/preview/' + beatmapset.id + '?c=' + beatmapset.last_update;
+            beatmapAudio.src = '/mp3/preview/' + beatmapset.id + '?c=' + lastUpdateTimestamp;
             beatmapAudio.id = 'beatmap-preview-' + beatmapset.id;
             beatmapAudio.volume = 0.5;
             beatmapAudio.onended = function() {
