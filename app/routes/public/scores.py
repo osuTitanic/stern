@@ -60,7 +60,7 @@ def get_score(id: int):
             site_description=site_description,
             site_image=site_image,
             score_rank=score_rank,
-            title=site_title,
+            title=f"{user.name} on {beatmap.full_name}",
         )
 
 @router.get('/<id>/download')
