@@ -21,6 +21,12 @@ def get_score(id: int):
         if not (score := scores.fetch_by_id(int(id), session)):
             return abort(404)
 
+        if score.hidden:
+            return abort(404)
+
+        if not score.passed:
+            return abort(404)
+
         score_rank = scores.fetch_score_index_by_id(
             score.id,
             score.beatmap_id,
