@@ -9,7 +9,14 @@
                     <img src="/a/{{ user.id }}" alt="" class="player-avatar" loading="lazy">
                 </a>
                 <div class="player-info">
-                    <a href="/u/{{ user.id }}" class="player-name">{{ user.name }}</a>
+                    <span class="player-label">
+                        <a href="/u/{{ user.id }}" class="player-name">
+                            {{ user.name }}
+                        </a>
+                        <a href="/rankings/{{ constants.GameMode(score.mode).alias }}/performance?country={{ user.country|upper }}">
+                            <img src="/images/flags/{{ user.country|lower }}.gif" alt="{{ user.country|upper }}">
+                        </a>
+                    </span>
                     {% set user_stats = user.stats[score.mode] %}
                     {% if user_stats %}
                     <div class="player-stats">
@@ -49,7 +56,7 @@
                 </div>
                 <div class="beatmap-thumbnail">
                     <a href="/b/{{ beatmap.id }}">
-                        <img src="/mt/{{ beatmap.set_id }}l" alt="" loading="lazy">
+                        <img src="http://osu.localhost/mt/{{ beatmap.set_id }}l" alt="" loading="lazy">
                     </a>
                 </div>
             </div>
