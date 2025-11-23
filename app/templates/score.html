@@ -42,6 +42,9 @@
                     <a href="/b/{{ beatmap.id }}" class="beatmap-title">
                         <b>{{ beatmapset.artist }} - {{ beatmapset.title }}</b>
                         <span class="beatmap-version">[{{ beatmap.version }}]</span>
+                        <span class="beatmap-stars">
+                            ({{ "%.2f"|format(beatmap.diff) }} <i class="fa-regular fa-star"></i>)
+                        </span>
                     </a>
                     <br>
                     {% if beatmapset.server == 0 %}

@@ -127,6 +127,21 @@
     font-weight: 500;
 }
 
+.beatmap-stars {
+    color: #555;
+    display: inline-flex;
+    align-items: center;
+    font-size: smaller;
+    gap: 4px;
+}
+
+.beatmap-stars i {
+    color: #979797;
+    margin-right: -4px;
+    margin-left: -1px;
+    font-weight: 98%;
+}
+
 .beatmap-creator {
     color: #3843a6;
     text-decoration: none;
