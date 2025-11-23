@@ -258,6 +258,16 @@ function showError(xhr, defaultMessage) {
     alert(errorMessage);
 }
 
+var scores = document.querySelectorAll('.scores tbody tr');
+for (var i = 0; i < scores.length; i++) {
+    addEvent('click', scores[i], function(e) {
+        if (e.target.closest('a'))
+            return;
+
+        window.location.href = `/scores/${this.id}`;
+    });
+}
+
 addEvent('DOMContentLoaded', document, function() {
     var url = window.location.pathname;
     if (!url.startsWith('/b/') && !url.startsWith('/s/')) {

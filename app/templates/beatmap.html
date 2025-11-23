@@ -784,7 +784,6 @@
                 {% endif %}
                 <th><b>Misses</b></th>
                 <th><b>Mods</b></th>
-                <th><b>Version</b></th>
                 {% if current_user.is_authenticated %}
                 {# TODO: Report button #}
                 <th>
@@ -859,7 +858,6 @@
                 {% endif %}
                 <td>{{ score.nMiss }}</td>
                 <td>{{ score.mods|short_mods }}</td>
-                <td>b{{ score.client_version }}</td>
                 {% if current_user.is_authenticated %}
                 {# Replay Downloads #}
                 <td style="text-align: center;">
