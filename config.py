@@ -32,7 +32,6 @@ DOMAIN_NAME = os.environ.get('DOMAIN_NAME')
 DEBUG = eval(os.environ.get('DEBUG', 'False').capitalize())
 S3_ENABLED = eval(os.environ.get('ENABLE_S3', 'True').capitalize())
 ENABLE_SSL = eval(os.environ.get('ENABLE_SSL', 'False').capitalize())
-ENABLE_CSP = eval(os.environ.get('ENABLE_CSP', 'False').capitalize())
 FROZEN_RANK_UPDATES = eval(os.environ.get('FROZEN_RANK_UPDATES', 'False').capitalize())
 APPROVED_MAP_REWARDS = eval(os.environ.get('APPROVED_MAP_REWARDS', 'False').capitalize())
 ALLOW_INSECURE_COOKIES = eval(os.environ.get('ALLOW_INSECURE_COOKIES', str(ENABLE_SSL)).capitalize()) or DEBUG
