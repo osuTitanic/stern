@@ -181,6 +181,8 @@ def build_csp_directives():
         "https://www.youtube.com",
         "https://www.youtube-nocookie.com",
         "https://static.cloudflareinsights.com",
+        "https://www.google.com",
+        "https://www.gstatic.com",
         config.API_BASEURL
     ]
     connect_sources = [
@@ -191,7 +193,9 @@ def build_csp_directives():
         "https://cdn.socket.io",
         "https://www.youtube.com",
         "https://www.youtube-nocookie.com",
-        "https://static.cloudflareinsights.com"
+        "https://static.cloudflareinsights.com",
+        "https://www.google.com",
+        "https://www.gstatic.com"
     ]
     style_sources = [
         "'self'",
@@ -200,7 +204,8 @@ def build_csp_directives():
     ]
     frame_sources = [
         "https://www.youtube.com",
-        "https://www.youtube-nocookie.com"
+        "https://www.youtube-nocookie.com",
+        "https://www.google.com"
     ]
     font_sources = [
         "'self'",
