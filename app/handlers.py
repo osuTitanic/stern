@@ -33,6 +33,9 @@ def request_loader(request: Request):
 
 @app.flask.after_request
 def refresh_access_token(response: Response) -> Response:
+    if not current_user.is_authenticated:
+        return response
+        
     if request.cookies.get('access_token'):
         return response
 
