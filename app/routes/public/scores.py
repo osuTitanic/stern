@@ -70,7 +70,7 @@ def download_replay(id: int):
             return abort(404)
 
         if not (replay := app.session.storage.get_full_replay_from_score(score)):
-            return redirect('about:blank')
+            return abort(404)
 
         formatted_time = score.submitted_at.strftime("%Y-%m-%d %H-%M-%S")
         mode = GameMode(score.mode).name
