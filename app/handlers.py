@@ -5,7 +5,6 @@ from app.common.database import DBUser
 from flask import Request, Response, redirect, request
 from flask_login import current_user
 from typing import Tuple, Optional
-from functools import lru_cache
 from werkzeug.exceptions import *
 
 from . import accounts
@@ -104,22 +103,6 @@ def set_security_headers(response: Response) -> Response:
     response.headers['X-Frame-Options'] = 'DENY'
     return response
 
-static_paths = (
-    '/images/arrow-white-highlight.png',
-    '/images/arrow-white-normal.png',
-    '/images/signup-multi.png',
-    '/images/playstyles.png',
-    '/images/down.gif',
-    '/images/up.gif',
-    '/images/achievements/',
-    '/images/beatmap/',
-    '/images/clients/',
-    '/images/grades/',
-    '/images/icons/',
-    '/images/flags/',
-    '/images/art/'
-)
-
 cacheable_static_paths = (
     '/js/',
     '/css/',
@@ -133,14 +116,9 @@ def caching_rules(response: Response) -> Response:
     if config.DEBUG:
         return response
 
-    has_static_path = any(
-        request.path.startswith(path)
-        for path in static_paths
-    )
-
-    if has_static_path:
-        # These resources will most likely never change
-        response.headers['Cache-Control'] = f'public, max-age={ 60*60*24*14 }'
+    if request.path.startswith('/images/'):
+        # Images will most likely never change
+        response.headers['Cache-Control'] = f'public, max-age={ 60*60*24*7 }'
         return response
 
     has_static_path = any(
@@ -154,5 +132,5 @@ def caching_rules(response: Response) -> Response:
     if not request.args.get('c'):
         return response
 
-    response.headers['Cache-Control'] = f'public, max-age={ 60*60*24*7 }'
+    response.headers['Cache-Control'] = f'public, max-age={ 60*60*24*14 }'
     return response
