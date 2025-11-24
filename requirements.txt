@@ -14,7 +14,7 @@ psycopg2-binary==2.9.11
 pydantic==2.12.4
 pyparsing==3.2.5
 python-dotenv==1.2.1
-redis==7.0.1
+redis==7.1.0
 requests==2.32.5
 sendgrid==6.12.5
 sqlalchemy==2.0.44
