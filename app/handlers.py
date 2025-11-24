@@ -97,9 +97,6 @@ def on_exception(error: Exception) -> Tuple[str, int]:
 
 @app.flask.after_request
 def set_security_headers(response: Response) -> Response:
-    if not config.ENABLE_CSP:
-        return response
-
     response.headers['Permissions-Policy'] = 'geolocation=(), microphone=(), camera=(), clipboard-write=(self)'
     response.headers['Referrer-Policy'] = 'strict-origin-when-cross-origin'
     response.headers['X-Content-Type-Options'] = 'nosniff'
