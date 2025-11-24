@@ -101,7 +101,6 @@ def set_security_headers(response: Response) -> Response:
         return response
 
     response.headers['Permissions-Policy'] = 'geolocation=(), microphone=(), camera=(), clipboard-write=(self)'
-    response.headers['Content-Security-Policy'] = '; '.join(build_csp_directives())
     response.headers['Referrer-Policy'] = 'strict-origin-when-cross-origin'
     response.headers['X-Content-Type-Options'] = 'nosniff'
     response.headers['X-XSS-Protection'] = '1; mode=block'
@@ -160,58 +159,3 @@ def caching_rules(response: Response) -> Response:
 
     response.headers['Cache-Control'] = f'public, max-age={ 60*60*24*7 }'
     return response
-
-@lru_cache(maxsize=1)
-def build_csp_directives():
-    script_sources = [
-        "'self'",
-        "'unsafe-inline'",
-        "https://cdnjs.cloudflare.com",
-        "https://cdn.socket.io",
-        "https://s.ytimg.com",
-        "https://www.youtube.com",
-        "https://www.youtube-nocookie.com",
-        "https://static.cloudflareinsights.com",
-        "https://www.google.com",
-        "https://www.gstatic.com",
-        config.API_BASEURL
-    ]
-    connect_sources = [
-        "'self'",
-        config.API_BASEURL,
-        config.EVENTS_WEBSOCKET,
-        config.LOUNGE_BACKEND,
-        "https://cdn.socket.io",
-        "https://www.youtube.com",
-        "https://www.youtube-nocookie.com",
-        "https://static.cloudflareinsights.com",
-        "https://www.google.com",
-        "https://www.gstatic.com"
-    ]
-    style_sources = [
-        "'self'",
-        "'unsafe-inline'",
-        "https://cdnjs.cloudflare.com"
-    ]
-    frame_sources = [
-        "https://www.youtube.com",
-        "https://www.youtube-nocookie.com",
-        "https://www.google.com"
-    ]
-
-    csp_directives = [
-        f"connect-src {' '.join(connect_sources)}",
-        f"script-src {' '.join(script_sources)}",
-        f"style-src {' '.join(style_sources)}",
-        f"frame-src {' '.join(frame_sources)}",
-        "default-src 'self'",
-        "object-src 'none'",
-        "base-uri 'self'",
-        "form-action 'self'",
-        "frame-ancestors 'none'",
-    ]
-
-    if config.ENABLE_SSL:
-        csp_directives.append("upgrade-insecure-requests")
-
-    return csp_directives
