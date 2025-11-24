@@ -284,6 +284,6 @@ def create_user_stats(user: DBUser, session) -> List[DBStats]:
         stats.create(user.id, 3, session)
     ]
 
-@caching.ttl_cache(ttl=60*5)
+@caching.ttl_cache(ttl=60*15)
 def top_countries_cached(mode: int) -> List[dict]:
     return leaderboards.top_countries(mode)
