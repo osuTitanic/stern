@@ -43,7 +43,7 @@ def get_score(id: int):
             f"Titanic » {beatmapset.artist} - {beatmapset.title} » {user.name}'s Score"
         )
         site_description = (
-            f"{user.name} achieved #{score_rank} with "
+            f"{user.name} achieved #{score_rank if score_rank else 'N/A'} with "
             f"{score.acc * 100:.2f}% ({score.grade}) for {score.pp:.2f}pp "
             f"on {beatmap.full_name}"
         )
