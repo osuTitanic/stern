@@ -67,6 +67,9 @@ function createScoreElement(score, index, type) {
     scoreDiv.className = "score";
     scoreDiv.onclick = function(e) {
         if (e.target.closest('a')) return;
+        if (e.target.closest('.score-pin-icon')) return;
+        if (e.target.closest('.score-pinned-icon')) return;
+        if (e.target.closest('.score-replay')) return;
         window.location.href = "/scores/" + score.id;
     };
 
