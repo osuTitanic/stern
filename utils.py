@@ -113,6 +113,7 @@ def fetch_website_stats() -> dict[str, int]:
     stats = {
         'total_users': 0,
         'total_scores': 0,
+        'online_users': 0,
         'osu_users': 0,
         'irc_users': 0
     }
@@ -135,6 +136,7 @@ def fetch_website_stats() -> dict[str, int]:
     stats['total_scores'] = int(results[1] or b"0")
     stats['osu_users'] = int(results[2] or b"0")
     stats['irc_users'] = int(results[3] or b"0")
+    stats['online_users'] = stats['osu_users'] + stats['irc_users']
     return stats
 
 def update_csrf_token(user_id: int) -> None:
