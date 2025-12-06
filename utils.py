@@ -245,6 +245,11 @@ def secure_filename(filename: str) -> str:
     filename = re.compile(r"\s+").sub(" ", filename)
     return filename.strip()
 
+def hex_to_rgba(hex_color: str, alpha: float = 1.0) -> tuple[float, float, float, float]:
+    hex_color = hex_color.lstrip('#')
+    r, g, b = tuple(int(hex_color[i:i+2], 16) for i in (0, 2, 4))
+    return (r/255.0, g/255.0, b/255.0, alpha)
+
 @caching.ttl_cache(ttl=60*5)
 def fetch_average_topic_views() -> int:
     return int(topics.fetch_average_views())
