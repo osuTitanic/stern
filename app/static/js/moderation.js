@@ -3,7 +3,7 @@ var defaultError = {
     "details": "An internal server error occurred."
 }
 
-function handleApiError(xhr, handlerFunction) {
+function handleApiErrorCallback(xhr, handlerFunction) {
     var error = defaultError;
     try { error = JSON.parse(xhr.responseText); } catch (e) {}
     if (handlerFunction) { handlerFunction(error); }
@@ -16,7 +16,7 @@ function getUser(userId, onSuccess, onFailure) {
         var user = JSON.parse(xhr.responseText);
         if (onSuccess) { onSuccess(user); }
     }, function(xhr) {
-        return handleApiError(xhr, onFailure);
+        return handleApiErrorCallback(xhr, onFailure);
     });
 }
 
@@ -65,7 +65,7 @@ function removeUserAvatar(userId, onSuccess, onFailure) {
     performApiRequest("DELETE", "/moderation/users/" + userId + "/avatar", null, function(xhr) {
         if (onSuccess) { onSuccess(); }
     }, function(xhr) {
-        return handleApiError(xhr, onFailure);
+        return handleApiErrorCallback(xhr, onFailure);
     });
 }
 
@@ -74,7 +74,7 @@ function addBadge(userId, badgeData, onSuccess, onFailure) {
         var badge = JSON.parse(xhr.responseText);
         if (onSuccess) { onSuccess(badge); }
     }, function(xhr) {
-        return handleApiError(xhr, onFailure);
+        return handleApiErrorCallback(xhr, onFailure);
     });
 }
 
@@ -82,7 +82,7 @@ function removeBadge(userId, badgeId, onSuccess, onFailure) {
     performApiRequest("DELETE", "/moderation/users/" + userId + "/badges/" + badgeId, null, function(xhr) {
         if (onSuccess) { onSuccess(); }
     }, function(xhr) {
-        return handleApiError(xhr, onFailure);
+        return handleApiErrorCallback(xhr, onFailure);
     });
 }
 
@@ -91,7 +91,7 @@ function getUserInfringements(userId, onSuccess, onFailure) {
         var infringements = JSON.parse(xhr.responseText);
         if (onSuccess) { onSuccess(infringements); }
     }, function(xhr) {
-        return handleApiError(xhr, onFailure);
+        return handleApiErrorCallback(xhr, onFailure);
     });
 }
 
@@ -100,7 +100,7 @@ function createUserInfringement(userId, infringementData, onSuccess, onFailure) 
         var infringement = JSON.parse(xhr.responseText);
         if (onSuccess) { onSuccess(infringement); }
     }, function(xhr) {
-        return handleApiError(xhr, onFailure);
+        return handleApiErrorCallback(xhr, onFailure);
     });
 }
 
@@ -109,7 +109,7 @@ function updateUserInfringement(userId, infringementId, infringementData, onSucc
         var infringement = JSON.parse(xhr.responseText);
         if (onSuccess) { onSuccess(infringement); }
     }, function(xhr) {
-        return handleApiError(xhr, onFailure);
+        return handleApiErrorCallback(xhr, onFailure);
     });
 }
 
@@ -117,7 +117,7 @@ function deleteUserInfringement(userId, infringementId, onSuccess, onFailure) {
     performApiRequest("DELETE", "/moderation/users/" + userId + "/infringements/" + infringementId, null, function(xhr) {
         if (onSuccess) { onSuccess(); }
     }, function(xhr) {
-        return handleApiError(xhr, onFailure);
+        return handleApiErrorCallback(xhr, onFailure);
     });
 }
 
@@ -125,7 +125,7 @@ function wipeUserScores(userId, onSuccess, onFailure) {
     performApiRequest("DELETE", "/moderation/users/" + userId + "/scores", null, function(xhr) {
         if (onSuccess) { onSuccess(); }
     }, function(xhr) {
-        return handleApiError(xhr, onFailure);
+        return handleApiErrorCallback(xhr, onFailure);
     });
 }
 
@@ -133,7 +133,7 @@ function restoreUserScores(userId, onSuccess, onFailure) {
     performApiRequest("POST", "/moderation/users/" + userId + "/scores/restore", null, function(xhr) {
         if (onSuccess) { onSuccess(); }
     }, function(xhr) {
-        return handleApiError(xhr, onFailure);
+        return handleApiErrorCallback(xhr, onFailure);
     });
 }
 
