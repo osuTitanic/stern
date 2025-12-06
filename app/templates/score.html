@@ -30,7 +30,7 @@
                         Played on
                         <span title="{{ score.submitted_at.strftime('%d/%m/%Y at %H:%M:%S %Z') }}">{{ score.submitted_at.strftime('%d/%m/%Y') }}</span>
                         with
-                        <span>b{{ score.client_version }}</span>
+                        <span>{{ score.client_version_string or "an unknown version" }}</span>
                     </div>
                 </div>
             </div>
