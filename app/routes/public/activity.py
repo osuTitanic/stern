@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 from io import BytesIO
 
 from app.common.database.repositories import usercount
-from app.common.database import DBUserCount
+from app.common.database import DBUserActivity
 from app.common.helpers import caching
 
 import matplotlib.pyplot as plt
@@ -18,9 +18,9 @@ router = Blueprint("activity", __name__)
 mpl.use('Agg')
 
 def calculate_peak_x(
-    n: DBUserCount,
-    smallest: DBUserCount,
-    largest: DBUserCount
+    n: DBUserActivity,
+    smallest: DBUserActivity,
+    largest: DBUserActivity
 ) -> datetime:
     """Used to calculate the x position of peak text, so that it doesnt exit the chart box."""
     time_range = largest.time - smallest.time
