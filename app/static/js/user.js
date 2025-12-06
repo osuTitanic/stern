@@ -164,7 +164,7 @@ function createScoreElement(score, index, type) {
     scoreBottomDiv.appendChild(dateText);
 
     // Score's Client Version
-    versionText = score.client_version_string ? score.client_version_string : undefined;
+    versionText = score.client_string ? score.client_string : undefined;
 
     if (versionText != undefined) {
         var clientText = document.createElement('div');
