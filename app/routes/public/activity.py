@@ -43,7 +43,7 @@ def generate_activity_chart(width: int, height: int) -> bytes:
     if not usercounts:
         return abort(500, 'User activity is empty. Please contact an administrator!')
 
-    peak = max(usercounts, key=lambda x: x.count)
+    peak = max(usercounts, key=lambda x: x.total_users)
 
     # Define width & height
     plt.figure(figsize=np.array([width, height]) / 100)
@@ -65,15 +65,15 @@ def generate_activity_chart(width: int, height: int) -> bytes:
     )
 
     # Increase y height
-    plt.ylim(top=peak.count + (peak.count * 0.5))
+    plt.ylim(top=peak.total_users + (peak.total_users * 0.5))
 
     # Prevent text overflow
     plt.autoscale(False)
 
-    if peak.count > 0:
+    if peak.total_users > 0:
         # Add peak text
         plt.annotate(
-            text=f'Peak: {peak.count} {"users" if peak.count > 1 else "user"}',
+            text=f'Peak: {peak.total_users} {"users" if peak.total_users > 1 else "user"}',
             fontsize=8,
             xy=(
                 # X Offset
@@ -83,14 +83,14 @@ def generate_activity_chart(width: int, height: int) -> bytes:
                     usercounts[0]
                 ),
                 # Y Offset
-                peak.count - peak.count * 0.4
+                peak.total_users - peak.total_users * 0.4
             ),
             zorder=2
         )
 
         # Add peak point
         plt.scatter(
-            peak.time, peak.count,
+            peak.time, peak.total_users,
             c='blue',
             s=12,
             zorder=4
