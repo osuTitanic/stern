@@ -164,14 +164,9 @@ function createScoreElement(score, index, type) {
     scoreBottomDiv.appendChild(dateText);
 
     // Score's Client Version
-    var versionText = false;
-    if (typeof(score.client_version) == 'string') {
-        versionText = score.client_version; // If it's a string, b will already be prepended
-    } else if (typeof(score.client_version) == 'number') {
-        versionText = "b" + score.client_version.toString();
-    }
+    versionText = score.client_version_string ? score.client_version_string : undefined;
 
-    if (versionText != false) {
+    if (versionText != undefined) {
         var clientText = document.createElement('div');
         clientText.className = 'score-version';
         clientText.innerHTML += ' &mdash; on ';
