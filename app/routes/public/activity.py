@@ -52,7 +52,7 @@ def generate_activity_chart(width: int, height: int) -> bytes:
     # Define plot
     plt.plot(
         [uc.time for uc in usercounts],
-        [uc.count for uc in usercounts],
+        [uc.total_users for uc in usercounts],
         linestyle='-',
         color='#9096bc'
     )

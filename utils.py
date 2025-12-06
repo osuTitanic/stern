@@ -112,15 +112,17 @@ def fetch_website_stats() -> dict[str, int]:
     """Fetch website statistics from redis cache"""
     stats = {
         'total_users': 0,
-        'online_users': 0,
-        'total_scores': 0
+        'total_scores': 0,
+        'osu_users': 0,
+        'irc_users': 0
     }
 
     try:
         pipeline = app.session.redis.pipeline()
         pipeline.get('bancho:totalusers')
-        pipeline.get('bancho:users')
         pipeline.get('bancho:totalscores')
+        pipeline.get('bancho:activity:osu')
+        pipeline.get('bancho:activity:irc')
         results = pipeline.execute()
     except Exception as e:
         app.session.logger.error(
@@ -129,9 +131,10 @@ def fetch_website_stats() -> dict[str, int]:
         )
         return stats
 
-    stats['total_users'] = int(results[0] or 0)
-    stats['online_users'] = int(results[1] or 0)
-    stats['total_scores'] = int(results[2] or 0)
+    stats['total_users'] = int(results[0] or b"0")
+    stats['total_scores'] = int(results[1] or b"0")
+    stats['osu_users'] = int(results[2] or b"0")
+    stats['irc_users'] = int(results[3] or b"0")
     return stats
 
 def update_csrf_token(user_id: int) -> None:
