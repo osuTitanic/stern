@@ -32,7 +32,7 @@ def get_beatmap(id: int):
             mode = beatmap.mode
 
         if not (mods := request.args.get('mods')):
-            mods = None
+            mods = ""
 
         personal_best_rank = None
         personal_best = None
@@ -113,7 +113,18 @@ def fetch_beatmap_scores(
     mods: str,
     session: Session
 ) -> None:
-    if mods:
+    mods = mods.strip().removeprefix("+")
+
+    if mods.isdigit():
+        return scores.fetch_range_scores_mods(
+            beatmap_id,
+            mode=mode,
+            mods=Mods(mods).value,
+            limit=config.SCORE_RESPONSE_LIMIT,
+            session=session
+        )
+
+    elif mods:
         return scores.fetch_range_scores_mods(
             beatmap_id,
             mode=mode,
