@@ -4,6 +4,7 @@ from app.common.constants import BeatmapLanguage, BeatmapGenre, BeatmapStatus, M
 from flask import Blueprint, request, redirect
 from flask_login import current_user
 from sqlalchemy.orm import Session
+from contextlib import suppress
 
 import config
 import utils
@@ -115,23 +116,24 @@ def fetch_beatmap_scores(
 ) -> None:
     mods = mods.strip().removeprefix("+")
 
-    if mods.isdigit():
-        return scores.fetch_range_scores_mods(
-            beatmap_id,
-            mode=mode,
-            mods=Mods(mods).value,
-            limit=config.SCORE_RESPONSE_LIMIT,
-            session=session
-        )
+    with suppress(ValueError):
+        if mods.isdigit():
+            return scores.fetch_range_scores_mods(
+                beatmap_id,
+                mode=mode,
+                mods=Mods(int(mods)).value,
+                limit=config.SCORE_RESPONSE_LIMIT,
+                session=session
+            )
 
-    elif mods:
-        return scores.fetch_range_scores_mods(
-            beatmap_id,
-            mode=mode,
-            mods=Mods.from_string(mods).value,
-            limit=config.SCORE_RESPONSE_LIMIT,
-            session=session
-        )
+        elif mods:
+            return scores.fetch_range_scores_mods(
+                beatmap_id,
+                mode=mode,
+                mods=Mods.from_string(mods).value,
+                limit=config.SCORE_RESPONSE_LIMIT,
+                session=session
+            )
 
     return scores.fetch_range_scores(
         beatmap_id,
