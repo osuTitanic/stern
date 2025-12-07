@@ -599,7 +599,11 @@
     </div>
     <div class="score-header">
     {% if not scores %}
+        {% if mods %}
+        <b class="no-records">No records have been set for this game mode and mod combination yet!</b>
+        {% else %}
         <b class="no-records">No records have been set for this game mode yet!</b>
+        {% endif %}
     {% else %}
         {% set leader_score = scores[0] %}
         <table class="leader">
@@ -752,7 +756,11 @@
     {% endif %}
     </div>
     {% if scores %}
+    {% if mods %}
+    <h2>Top {{ config.SCORE_RESPONSE_LIMIT or 50 }} Scoreboard ({{ constants.Mods(scores[0].mods).short }})</h2>
+    {% else %}
     <h2>Top {{ config.SCORE_RESPONSE_LIMIT or 50 }} Scoreboard</h2>
+    {% endif %}
     <table class="scores">
         <thead class="scores-header">
             <tr>

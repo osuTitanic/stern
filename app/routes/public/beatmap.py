@@ -1,8 +1,9 @@
 
 from app.common.database import beatmaps, scores, favourites, nominations, relationships, collaborations
-from app.common.constants import BeatmapLanguage, BeatmapGenre, BeatmapStatus
+from app.common.constants import BeatmapLanguage, BeatmapGenre, BeatmapStatus, Mods
 from flask import Blueprint, request, redirect
 from flask_login import current_user
+from sqlalchemy.orm import Session
 
 import config
 import utils
@@ -30,8 +31,11 @@ def get_beatmap(id: int):
         if not (mode := request.args.get('mode')):
             mode = beatmap.mode
 
-        personal_best = None
+        if not (mods := request.args.get('mods')):
+            mods = None
+
         personal_best_rank = None
+        personal_best = None
         friend_ids = []
 
         if current_user.is_authenticated:
@@ -58,19 +62,20 @@ def get_beatmap(id: int):
             key=lambda x: x.diff
         )
 
-        beatmap_scores = scores.fetch_range_scores(
+        beatmap_scores = fetch_beatmap_scores(
             beatmap.id,
             mode=int(mode),
-            limit=config.SCORE_RESPONSE_LIMIT,
+            mods=mods,
             session=session
         )
 
         return utils.render_template(
             'beatmap.html',
-            mode=int(mode),
+            css='beatmap.css',
             beatmap=beatmap,
             beatmapset=beatmap.beatmapset,
-            css='beatmap.css',
+            mode=int(mode),
+            mods=mods,
             title=f"{beatmap.beatmapset.artist} - {beatmap.beatmapset.title}",
             Status=BeatmapStatus,
             Language=BeatmapLanguage,
@@ -101,3 +106,25 @@ def get_beatmap(id: int):
             friends=friend_ids,
             session=session
         )
+
+def fetch_beatmap_scores(
+    beatmap_id: int,
+    mode: int | None,
+    mods: str,
+    session: Session
+) -> None:
+    if mods:
+        return scores.fetch_range_scores_mods(
+            beatmap_id,
+            mode=mode,
+            mods=Mods.from_string(mods).value,
+            limit=config.SCORE_RESPONSE_LIMIT,
+            session=session
+        )
+
+    return scores.fetch_range_scores(
+        beatmap_id,
+        mode=mode,
+        limit=config.SCORE_RESPONSE_LIMIT,
+        session=session
+    )
