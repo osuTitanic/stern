@@ -68,7 +68,7 @@ def generate_activity_chart(width: int, height: int, dpi: int = 100) -> bytes:
 
     # Calculate y-axis maximum with proportional padding
     padding = max(10, int(highest_val * 0.2))
-    high = ((highest_val + padding + 10) // 10) * 10
+    high = ((highest_val + padding) // 10) * 10
 
     # Create figure with specified dimensions & add axes
     fig = plt.figure(figsize=(width/dpi, height/dpi), dpi=dpi)
