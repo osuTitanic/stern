@@ -94,6 +94,31 @@ var Mode = {
     3: "osu!Mania"
 };
 
+var BeatmapStatus = {
+    Inactive: -3,
+    Graveyard: -2,
+    WIP: -1,
+    Pending: 0,
+    Ranked: 1,
+    Approved: 2,
+    Qualified: 3,
+    Loved: 4
+};
+
+BeatmapStatus.toString = function(status) {
+    switch (status) {
+        case BeatmapStatus.Inactive: return 'Inactive';
+        case BeatmapStatus.Graveyard: return 'Graveyard';
+        case BeatmapStatus.WIP: return 'WIP';
+        case BeatmapStatus.Pending: return 'Pending';
+        case BeatmapStatus.Ranked: return 'Ranked';
+        case BeatmapStatus.Approved: return 'Approved';
+        case BeatmapStatus.Qualified: return 'Qualified';
+        case BeatmapStatus.Loved: return 'Loved';
+        default: return 'Unknown';
+    }
+};
+
 var isNavigatingAway = false;
 var pageLoaded = false;
 var apiRetries = 0;

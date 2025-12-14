@@ -3,8 +3,6 @@ from app.common.database.repositories import (
     collaborations,
     relationships,
     infringements,
-    nominations,
-    beatmapsets,
     activities,
     modding,
     groups,
@@ -14,7 +12,7 @@ from app.common.database.repositories import (
 )
 
 from flask import Response, abort, Blueprint, redirect, request
-from app.common.constants import GameMode, BeatmapStatus
+from app.common.constants import GameMode
 from app.common.cache import status, leaderboards
 from app.common.database.objects import DBUser
 from sqlalchemy.orm import Session
@@ -24,7 +22,7 @@ import utils
 import app
 
 router = Blueprint('users', __name__)
-preload = (DBUser.favourites, DBUser.relationships, DBUser.achievements)
+preload = (DBUser.relationships, DBUser.achievements)
 
 @router.get('/users/<query>')
 def modern_userpage_redirect(query: str) -> Response:
@@ -69,38 +67,6 @@ def userpage(query: str):
             user.id,
             session=session
         )
-
-        user_beatmapsets = beatmapsets.fetch_by_creator(
-            user.id,
-            session=session
-        )
-
-        beatmapset_categories = {
-            'Ranked': [
-                s for s in user_beatmapsets
-                if s.status in (BeatmapStatus.Ranked, BeatmapStatus.Approved)
-            ],
-            'Loved': [
-                s for s in user_beatmapsets
-                if s.status == BeatmapStatus.Loved
-            ],
-            'Qualified': [
-                s for s in user_beatmapsets
-                if s.status == BeatmapStatus.Qualified
-            ],
-            'Pending': [
-                s for s in user_beatmapsets
-                if s.status == BeatmapStatus.Pending
-            ],
-            'WIP': [
-                s for s in user_beatmapsets
-                if s.status == BeatmapStatus.WIP
-            ],
-            'Graveyarded': [
-                s for s in user_beatmapsets
-                if s.status == BeatmapStatus.Graveyard
-            ]
-        }
         
         rankings = leaderboards.player_rankings(
             user.id, mode, user.country,
@@ -147,13 +113,10 @@ def userpage(query: str):
             collaborations=collaborations.fetch_beatmaps_by_user(user.id, session=session),
             total_kudosu=modding.total_amount_by_user(user.id, session=session),
             recent_mods=modding.fetch_range_by_user(user.id, session=session),
-            nominations_bancho=nominations.fetch_by_user_and_server(user.id, 0, session=session),
-            nominations_titanic=nominations.fetch_by_user_and_server(user.id, 1, session=session),
             activity=activities.fetch_recent(user.id, int(mode), session=session),
             current_stats=stats.fetch_by_mode(user.id, int(mode), session=session),
             total_posts=users.fetch_post_count(user.id, session=session),
             groups=groups.fetch_user_groups(user.id, session=session),
-            beatmapset_categories=beatmapset_categories,
             total_score_rank=total_score_rank,
             score_rank_country=score_rank_country,
             score_rank=score_rank,
