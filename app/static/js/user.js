@@ -1158,7 +1158,12 @@ function loadUserCreatedBeatmapsets(userId) {
 
         for (var i = 0; i < beatmapsets.length; i++) {
             var bm = beatmapsets[i];
-            if (!bm) continue;
+
+            if (!bm)
+                continue;
+
+            if (bm.status === BeatmapStatus.Inactive)
+                continue;
 
             if (bm.status === BeatmapStatus.Loved) {
                 categories['Loved'].push(bm);
