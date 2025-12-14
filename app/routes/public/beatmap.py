@@ -60,7 +60,7 @@ def get_beatmap(id: int):
             )
 
         beatmap.beatmapset.beatmaps.sort(
-            key=lambda x: x.diff
+            key=lambda x: (x.mode, x.diff)
         )
 
         beatmap_scores = fetch_beatmap_scores(
