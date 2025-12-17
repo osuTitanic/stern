@@ -1,5 +1,6 @@
 
 from app.common.database.repositories import users, verifications
+from app.common.config import config_instance as config
 from app.common import mail
 
 from flask import Blueprint, request, redirect, abort
@@ -7,7 +8,6 @@ from typing import Optional
 
 import flask_login
 import hashlib
-import config
 import bcrypt
 import utils
 import app

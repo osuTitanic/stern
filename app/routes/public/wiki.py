@@ -1,10 +1,10 @@
 
+from app.common.config import config_instance as config
 from flask import Blueprint, request, abort, redirect
 from datetime import datetime
 from copy import copy
 from app import wiki
 
-import config
 import utils
 import app
 

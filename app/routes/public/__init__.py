@@ -1,5 +1,5 @@
 
-from config import SITEMAP_ENABLED
+from app.common.config import config_instance as config
 from flask import Blueprint
 
 from . import multiplayer
@@ -34,7 +34,7 @@ router.register_blueprint(groups.router, url_prefix='/g')
 router.register_blueprint(users.router, url_prefix='/')
 router.register_blueprint(home.router, url_prefix='/')
 
-if SITEMAP_ENABLED:
+if config.SITEMAP_ENABLED:
     router.register_blueprint(
         sitemap.router,
         url_prefix='/'

@@ -1,4 +1,5 @@
 
+from app.common.config import config_instance as config
 from app.common.database.repositories import users
 from app.common.database import DBUser
 
@@ -11,7 +12,6 @@ from . import accounts
 from . import app
 
 import traceback
-import config
 import utils
 
 @app.login_manager.request_loader

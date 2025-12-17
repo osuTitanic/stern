@@ -5,9 +5,9 @@ from flask_login import LoginManager
 from flask import Flask
 
 from . import accounts
+from . import session
 from . import routes
 
-import config
 import utils
 
 flask = Flask(
@@ -24,5 +24,5 @@ login_manager = LoginManager()
 login_manager.init_app(flask)
 
 flask.register_blueprint(routes.router)
-flask.secret_key = config.FRONTEND_SECRET_KEY
+flask.secret_key = session.config.FRONTEND_SECRET_KEY
 flask.config['FLASK_PYDANTIC_VALIDATION_ERROR_RAISE'] = True

@@ -1,12 +1,12 @@
 
 from app.common.database import beatmaps, scores, favourites, nominations, relationships, collaborations
 from app.common.constants import BeatmapLanguage, BeatmapGenre, BeatmapStatus, Mods
+from app.common.config import config_instance as config
 from flask import Blueprint, request, redirect
 from flask_login import current_user
 from sqlalchemy.orm import Session
 from contextlib import suppress
 
-import config
 import utils
 import app
 

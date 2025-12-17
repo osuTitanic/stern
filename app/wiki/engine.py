@@ -2,12 +2,12 @@
 from __future__ import annotations
 from app.common.database import DBWikiPage, DBWikiContent, wiki
 from app.wiki.constants import CONTENT_BASEURL, WIKI_LINK_REGEX
+from app.common.config import config_instance as config
 from app.common.helpers import caching
 from typing import Set, Tuple, List
 from sqlalchemy.orm import Session
 
 import logging
-import config
 import app
 
 logger = logging.getLogger("wiki")

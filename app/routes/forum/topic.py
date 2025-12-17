@@ -1,5 +1,6 @@
 
 from app.common.database import DBForumTopic, DBForumPost, DBForum, DBUser
+from app.common.config import config_instance as config
 from app.common.constants import UserActivity
 from app.common.helpers import ip, activity
 from app.common.database import (
@@ -15,7 +16,6 @@ from flask_login import current_user, login_required
 from flask import Blueprint, redirect, request
 from sqlalchemy.orm import Session
 
-import config
 import utils
 import app
 

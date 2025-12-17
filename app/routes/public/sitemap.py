@@ -1,13 +1,13 @@
 
 from app.common.constants import BeatmapOrder, BeatmapSortBy, BeatmapCategory
 from app.common.database import forums, users, beatmapsets
+from app.common.config import config_instance as config
 
 from datetime import datetime, timedelta
 from dataclasses import dataclass, field
 from flask import Blueprint, Response
 from typing import List, Callable
 
-import config
 import app
 
 @dataclass

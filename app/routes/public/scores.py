@@ -1,9 +1,9 @@
 
 from flask import Blueprint, send_file, redirect, abort
+from app.common.config import config_instance as config
 from app.common.constants import GameMode
 from app.common.database import scores
 
-import config
 import utils
 import app
 import io

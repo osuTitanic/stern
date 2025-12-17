@@ -1,6 +1,6 @@
 
+from app.common.config import config_instance as config
 from flask import Blueprint, redirect
-from config import API_BASEURL
 
 from . import account
 from . import public
@@ -13,4 +13,4 @@ router.register_blueprint(public.router, url_prefix='/')
 
 @router.get("/api/<path>")
 def api_redirect(path: str):
-    return redirect(f"{API_BASEURL}/{path}", code=308)
+    return redirect(f"{config.API_BASEURL}/{path}", code=308)

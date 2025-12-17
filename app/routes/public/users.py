@@ -12,12 +12,12 @@ from app.common.database.repositories import (
 )
 
 from flask import Response, abort, Blueprint, redirect, request
-from app.common.constants import GameMode
+from app.common.config import config_instance as config
 from app.common.cache import status, leaderboards
 from app.common.database.objects import DBUser
+from app.common.constants import GameMode
 from sqlalchemy.orm import Session
 
-import config
 import utils
 import app
 

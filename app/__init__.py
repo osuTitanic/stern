@@ -10,11 +10,11 @@ from . import uwsgi
 from . import wiki
 
 from .filters import get_handle
+from .session import config
 from .app import flask
 from . import handlers
 
 import logging
-import config
 
 logging.basicConfig(
     format='[%(asctime)s] - <%(name)s> %(levelname)s: %(message)s',

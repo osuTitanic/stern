@@ -12,6 +12,7 @@ from PIL import Image
 
 from app.common.helpers import caching, browsers, permissions
 from app.common.database.repositories import wrapper, users
+from app.common.config import config_instance as config
 from app.common.database import DBUser, DBBeatmapset
 from app.common.helpers.external import location
 from app.common.cache import leaderboards
@@ -26,7 +27,6 @@ from app.common.database import (
 )
 
 import unicodedata
-import config
 import app
 import io
 import re

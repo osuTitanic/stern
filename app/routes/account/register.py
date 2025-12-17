@@ -1,4 +1,5 @@
 
+from app.common.config import config_instance as config
 from app.common.constants import NotificationType, UserActivity
 from app.common.constants.country import COUNTRIES as Countries
 from app.common.constants.regexes import USERNAME, EMAIL
@@ -22,7 +23,6 @@ from app import accounts
 
 import flask_login
 import hashlib
-import config
 import bcrypt
 import utils
 import app

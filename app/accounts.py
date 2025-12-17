@@ -1,9 +1,9 @@
 
-from flask import Response, redirect, request
+from app.common.config import config_instance as config
 from app.common.database import DBUser
+from flask import Response, redirect, request
 
 import flask_login
-import config
 import time
 import jwt
 

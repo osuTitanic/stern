@@ -1,5 +1,5 @@
 
-import config
+from app.common.config import config_instance as config
 import re
 
 __all__ = [
