@@ -1,6 +1,7 @@
 FROM python:3.14-alpine AS builder
 
-ENV PYO3_USE_ABI3_FORWARD_COMPATIBILITY=1
+ENV PYO3_USE_ABI3_FORWARD_COMPATIBILITY=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1
 
 # Install build dependencies for Python wheels and uwsgi modules
 RUN apk add --no-cache \
@@ -25,8 +26,9 @@ WORKDIR /tmp/build
 COPY requirements.txt ./
 
 # Install Python dependencies (including uwsgi) into a relocatable prefix
-RUN pip install --upgrade pip setuptools wheel && \
-    pip install --no-cache-dir --no-compile --root /install -r requirements.txt uwsgi
+RUN --mount=type=cache,target=/root/.cache/pip \
+    pip install --upgrade pip setuptools wheel && \
+    pip install --no-compile --root /install -r requirements.txt uwsgi
 
 FROM python:3.14-alpine
 
