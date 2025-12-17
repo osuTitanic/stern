@@ -533,9 +533,11 @@ function reloadCsrfToken(callback) {
             if (callback) callback();
         } else {
             console.error("Failed to reload CSRF token: invalid response");
+            if (callback) callback();
         }
     }, function(xhr) {
         console.error("Failed to reload CSRF token");
+        if (callback) callback();
     });
 }
 
