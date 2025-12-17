@@ -23,3 +23,4 @@ rosu-pp-py==3.1.0
 markdown==3.10
 pyjwt==2.10.1
 regex
+pydantic-settings==2.12.0
