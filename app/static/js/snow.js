@@ -147,11 +147,76 @@ function animate() {
     requestAnimationFrame(animate);
 }
 
+function loadSnowState() {
+    const savedState = sessionStorage.getItem('snowState');
+    if (!savedState) {
+        return;
+    }
+
+    const state = JSON.parse(savedState);
+
+    // Check if saved state matches current canvas width
+    if (state.canvasWidth !== snowBuildUpCanvas.width) {
+        return;
+    }
+
+    // Restore snow levels
+    for (let i = 0; i < Math.min(state.snowLevels.length, snowLevels.length); i++) {
+        snowLevels[i] = state.snowLevels[i];
+    }
+
+    // Restore falling snowflakes
+    state.snowflakes.forEach(flake => {
+        // Offset y position to account for time passed since save
+        const timeSinceSave = (Date.now() - state.timestamp) / 1000;
+        flake.y += flake.speed * timeSinceSave * 60;
+        // Add snowflake back to array
+        snowflakes.push({...flake});
+    });
+
+    // Restore other state
+    isMelting = state.isMelting || false;
+    snowflakeCounter = state.snowflakeCounter || 0;
+}
+
+function saveSnowState() {
+    const state = {
+        snowLevels: Array.from(snowLevels),
+        snowflakes: snowflakes.map(flake => ({...flake})),
+        snowflakeCounter: snowflakeCounter,
+        canvasWidth: snowBuildUpCanvas.width,
+        isMelting: isMelting,
+        timestamp: Date.now()
+    };
+    sessionStorage.setItem('snowState', JSON.stringify(state));
+}
+
+// Load state on initialization
+loadSnowState();
+
+// Save state before page unload
+window.addEventListener('beforeunload', () => {
+    saveSnowState();
+});
+
 // Update array on window resize
 window.addEventListener('resize', () => {
     snowBuildUpCanvas.width = window.innerWidth;
     snowBuildUpCanvas.height = document.documentElement.scrollHeight;
+
+    // Don't reset snow levels on resize, let it adapt
+    if (snowLevels.length === snowBuildUpCanvas.width) {
+        return;
+    }
+
+    const oldLevels = Array.from(snowLevels);
+    snowLevels.length = snowBuildUpCanvas.width;
     snowLevels.fill(0);
+
+    // Try to preserve some state if resizing
+    for (let i = 0; i < Math.min(oldLevels.length, snowLevels.length); i++) {
+        snowLevels[i] = oldLevels[i];
+    }
 });
 
 animate();
