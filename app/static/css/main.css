@@ -827,3 +827,19 @@ input[type="url"], input[type="search"] {
 .heading p {
     font-size: 80%;
 }
+
+.snowflake {
+    position: absolute;
+    color: white;
+    font-size: 20px;
+    opacity: 0.8;
+}
+
+#snow-build-up {
+    position: absolute;
+    top: 0;
+    min-width: 100%;
+    min-height: 100%;
+    transition: all 0.1s;
+    z-index: -1;
+}

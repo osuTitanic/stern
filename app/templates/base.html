@@ -79,6 +79,9 @@
         </div>
     </div><br>
     {% endif %}
+    {% if config.CHRISTMAS_MODE %}
+    <canvas id="snow-build-up"></canvas>
+    {% endif %}
     <div class="main">
         <a href="/" aria-label="Home">
             {% if is_ie %}
@@ -203,6 +206,9 @@
                 <link rel="stylesheet" href="{{ '/lib/fontawesome.brands.min.css'|cached_url }}">
             </noscript>
             <script src="{{ '/js/editor.js'|cached_url }}" fetchpriority="low" defer></script>
+            {% if config.CHRISTMAS_MODE %}
+            <script src="{{ '/js/snow.js'|cached_url }}" fetchpriority="low" defer></script>
+            {% endif %}
         </div>
     </div>
 </body>
