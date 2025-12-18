@@ -79,7 +79,7 @@
         </div>
     </div><br>
     {% endif %}
-    {% if config.CHRISTMAS_MODE %}
+    {% if config.CHRISTMAS_MODE and is_modern_browser %}
     <canvas id="snow-build-up"></canvas>
     {% endif %}
     <div class="main">
@@ -206,7 +206,7 @@
                 <link rel="stylesheet" href="{{ '/lib/fontawesome.brands.min.css'|cached_url }}">
             </noscript>
             <script src="{{ '/js/editor.js'|cached_url }}" fetchpriority="low" defer></script>
-            {% if config.CHRISTMAS_MODE %}
+            {% if config.CHRISTMAS_MODE and is_modern_browser %}
             <script src="{{ '/js/snow.js'|cached_url }}" fetchpriority="low" defer></script>
             {% endif %}
         </div>
