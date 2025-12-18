@@ -219,4 +219,9 @@ window.addEventListener('resize', () => {
     }
 });
 
+// Update canvas height on scroll
+window.addEventListener('scroll', () => {
+    snowBuildUpCanvas.height = document.documentElement.scrollHeight;
+});
+
 animate();
