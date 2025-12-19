@@ -5,7 +5,7 @@ const snowflakes = [];
 snowBuildUpCanvas.width = window.innerWidth;
 snowBuildUpCanvas.height = document.documentElement.scrollHeight;
 
-const snowflakeCharacters = ['❄', '*', '❉', '❃', '❅'];
+let snowflakeCharacters = ['❄', '*', '❉', '❃', '❅'];
 const snowLevels = new Array(snowBuildUpCanvas.width).fill(0);
 const maxSnowDepth = 40;
 
