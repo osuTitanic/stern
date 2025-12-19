@@ -843,3 +843,8 @@ input[type="url"], input[type="search"] {
     transition: all 0.1s;
     z-index: -1;
 }
+
+/* stupid fix to make scrollbar not appear when using snow i hate this */
+body {
+    overflow-x: hidden;
+}
