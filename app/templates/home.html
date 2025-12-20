@@ -64,7 +64,7 @@
         <div class="bottom-stats">
             <div class="stats-wrapper">
                 <h2 class="headers">Online Users<span>Over the last 24 hours</span></h2>
-                <img src="/activity/image" alt="Activity" loading="lazy" height="70">
+                <img src="/activity/image" alt="Activity" loading="lazy" height="70" width="459">
             </div>
 
             <div class="chat-wrapper">
@@ -125,7 +125,7 @@
                     {% endif %}
                         <td>{{ "{:,}".format(count) }}</td>
                         <td>
-                            <img src="/mt/{{ beatmap.set_id }}" loading="lazy" alt=""/>
+                            <img src="/mt/{{ beatmap.set_id }}" loading="lazy" alt="" width="80" height="60" />
                             <a href="/b/{{ beatmap.id }}">
                                 {{ beatmap.full_name }}
                             </a>
