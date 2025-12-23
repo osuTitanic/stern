@@ -13,14 +13,52 @@ let snowflakeCounter = 0;
 let snowflakeCreationRate;
 let isMelting = false;
 
-// Determine creation rate based on screen size
-if (window.innerWidth > 768) {
-    snowflakeCreationRate = 2; // More snowflakes on desktop
-} else {
-    snowflakeCreationRate = 8; // Fewer snowflakes on mobile
+const SNOW_ENABLED_COOKIE = 'snow_enabled';
+const SNOW_DENSITY_COOKIE = 'snow_density';
+
+function ensureSnowCookiesExist() {
+    const oneYearSeconds = 60 * 60 * 24 * 365;
+    if (getCookie(SNOW_ENABLED_COOKIE) === "") {
+        setCookie(SNOW_ENABLED_COOKIE, '1', oneYearSeconds);
+    }
+    if (getCookie(SNOW_DENSITY_COOKIE) === "") {
+        setCookie(SNOW_DENSITY_COOKIE, '1', oneYearSeconds);
+    }
 }
 
+function parseSnowDensity(rawValue) {
+    const v = (rawValue || '').trim();
+    const parsed = Number(v);
+
+    if (!Number.isFinite(parsed))
+        return 1;
+
+    // Clamp to avoid pathological values.
+    return Math.min(5, Math.max(0.1, parsed));
+}
+
+function computeBaseCreationRate() {
+    if (window.innerWidth > 768) {
+        // More snowflakes on desktop
+        return 2;
+    }
+    // Fewer snowflakes on mobile
+    return 8;
+}
+
+function applyDensityToCreationRate(baseRate, density) {
+    // Lower rate -> more flakes
+    // Density > 1 should increase snowfall
+    return Math.max(1, Math.round(baseRate / density));
+}
+
+ensureSnowCookiesExist();
+
+let snowEnabled = parseBooleanFromString(getCookie(SNOW_ENABLED_COOKIE));
+let snowDensity = parseSnowDensity(getCookie(SNOW_DENSITY_COOKIE));
 let lastFrameTime = performance.now();
+
+snowflakeCreationRate = applyDensityToCreationRate(computeBaseCreationRate(), snowDensity);
 
 function createSnowflake() {
     const snowflake = {
@@ -127,6 +165,23 @@ function animate() {
     const deltaTime = (currentTime - lastFrameTime) / 1000;
     lastFrameTime = currentTime;
 
+    // Throttle cookie reads
+    if (!animate._lastPrefCheck || currentTime - animate._lastPrefCheck > 500) {
+        animate._lastPrefCheck = currentTime;
+        snowEnabled = parseBooleanFromString(getCookie(SNOW_ENABLED_COOKIE));
+        snowDensity = parseSnowDensity(getCookie(SNOW_DENSITY_COOKIE));
+        snowflakeCreationRate = applyDensityToCreationRate(computeBaseCreationRate(), snowDensity);
+    }
+
+    if (!snowEnabled) {
+        snowflakes.length = 0;
+        snowLevels.fill(0);
+        isMelting = false;
+        ctx.clearRect(0, 0, snowBuildUpCanvas.width, snowBuildUpCanvas.height);
+        requestAnimationFrame(animate);
+        return;
+    }
+
     if (!isMelting) {
         if (checkFullSnow()) {
             isMelting = true;
@@ -148,6 +203,9 @@ function animate() {
 }
 
 function loadSnowState() {
+    if (!snowEnabled) {
+        return;
+    }
     const savedState = sessionStorage.getItem('snowState');
     if (!savedState) {
         return;
@@ -180,6 +238,10 @@ function loadSnowState() {
 }
 
 function saveSnowState() {
+    if (!snowEnabled) {
+        sessionStorage.removeItem('snowState');
+        return;
+    }
     const state = {
         snowLevels: Array.from(snowLevels),
         snowflakes: snowflakes.map(flake => ({...flake})),
@@ -203,6 +265,9 @@ window.addEventListener('beforeunload', () => {
 window.addEventListener('resize', () => {
     snowBuildUpCanvas.width = window.innerWidth;
     snowBuildUpCanvas.height = document.documentElement.scrollHeight;
+
+    // Recompute snowfall rate when viewport changes.
+    snowflakeCreationRate = applyDensityToCreationRate(computeBaseCreationRate(), snowDensity);
 
     // Don't reset snow levels on resize, let it adapt
     if (snowLevels.length === snowBuildUpCanvas.width) {

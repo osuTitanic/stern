@@ -216,6 +216,28 @@ function getCookie(cname) {
     return "";
 }
 
+function setCookie(name, value, maxAgeSeconds) {
+    const parts = [
+        `${name}=${encodeURIComponent(String(value))}`,
+        'Path=/',
+        `Max-Age=${maxAgeSeconds}`,
+        'SameSite=Lax'
+    ];
+
+    if (window.location && window.location.protocol === 'https:') {
+        parts.push('Secure');
+    }
+
+    document.cookie = parts.join('; ');
+}
+
+function parseBooleanFromString(rawValue) {
+    const v = (rawValue || '').trim().toLowerCase();
+    if (v === '' || v === '1' || v === 'true' || v === 'yes' || v === 'on') return true;
+    if (v === '0' || v === 'false' || v === 'no' || v === 'off') return false;
+    return true;
+}
+
 function confirmRedirect(url, promptText) {
     var do_redirect = confirmAction(promptText);
 
