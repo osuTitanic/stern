@@ -40,7 +40,7 @@ function parseSnowDensity(rawValue) {
 function computeBaseCreationRate() {
     if (window.innerWidth > 768) {
         // More snowflakes on desktop
-        return 2;
+        return 4;
     }
     // Fewer snowflakes on mobile
     return 8;
