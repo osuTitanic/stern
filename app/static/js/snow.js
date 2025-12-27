@@ -2,7 +2,7 @@ const snowBuildUpCanvas = document.getElementById('snow-build-up');
 const ctx = snowBuildUpCanvas.getContext('2d');
 const snowflakes = [];
 
-snowBuildUpCanvas.width = window.innerWidth;
+snowBuildUpCanvas.width = getViewportWidth();
 snowBuildUpCanvas.height = document.documentElement.scrollHeight;
 
 let snowflakeCharacters = ['❄', '*', '❉', '❃', '❅'];
@@ -263,7 +263,7 @@ window.addEventListener('beforeunload', () => {
 
 // Update array on window resize
 window.addEventListener('resize', () => {
-    snowBuildUpCanvas.width = window.innerWidth;
+    snowBuildUpCanvas.width = getViewportWidth();
     snowBuildUpCanvas.height = document.documentElement.scrollHeight;
 
     // Recompute snowfall rate when viewport changes.

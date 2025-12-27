@@ -191,6 +191,11 @@ function hide(id) {
     $('#' + id).hide();
 }
 
+function getViewportWidth() {
+    // Use clientWidth to avoid issues with scrollbars and mobile viewport quirks
+    return document.documentElement.clientWidth || window.innerWidth;
+}
+
 function confirmAction(promptText) {
     if (promptText === undefined) promptText = 'Are you sure?';
     return confirm(promptText);
