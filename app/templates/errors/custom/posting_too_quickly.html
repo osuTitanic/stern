@@ -1,0 +1,13 @@
+{# templates/errors/custom/posting_too_quickly.html #}
+
+{% set title = "Posting Too Quickly - Titanic!" %}
+{% set site_title = "Posting Too Quickly - Titanic!" %}
+
+{% extends 'errors/base.html' %}
+
+{% block error_content %}
+<img src="/images/art/ffffff.png" alt="Error Image">
+<div class="description">
+    <h1>You are posting too quickly, slow down!</h1>
+</div>
+{% endblock error_content %}

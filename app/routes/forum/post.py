@@ -21,6 +21,7 @@ from app.common.database import (
     posts
 )
 
+import hashlib
 import utils
 import app
 
@@ -390,6 +391,28 @@ def handle_post(topic: DBForumTopic, _: int, session: Session) -> Response:
         'bbcode',
         type=str
     )
+
+    last_post = posts.fetch_last_by_user(
+        topic.id,
+        current_user.id,
+        session=session
+    )
+
+    # Prevent users from spamming posts too quickly
+    last_post_delta = (
+        (datetime.now() - last_post.created_at).total_seconds()
+        if last_post else float('inf')
+    )
+
+    if last_post_delta <= 2:
+        # We'll assume that this is part of the "duplicate post" bug
+        # and redirect them to their last post instead of showing an error
+        return redirect(
+            f"/forum/{topic.forum_id}/t/{topic.id}/p/{last_post.id}"
+        )
+
+    if last_post_delta < 8:
+        return utils.render_error(429, 'posting_too_quickly')
 
     if not content:
         return redirect(
