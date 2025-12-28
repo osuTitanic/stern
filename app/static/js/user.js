@@ -892,9 +892,28 @@ function loadPlaysGraph(userId, mode) {
             chart.yAxis
                 .axisLabel("Plays")
                 .tickFormat(function(plays) {
-                    plays = Math.round(plays);
-                    return plays + "";
+                    var rounded = Math.round(plays);
+                    if (plays !== rounded) return "";
+                    return rounded.toString();
                 });
+
+            // Calculate proper Y-axis range
+            var playMultiplier = 2;
+            var maxPlays = 0;
+
+            if (playData[0] && playData[0].values) {
+                for (var i = 0; i < playData[0].values.length; i++) {
+                    if (playData[0].values[i].y > maxPlays) {
+                        maxPlays = playData[0].values[i].y;
+                    }
+                }
+
+                // Makes graph look better if user has a single "play" entry
+                playMultiplier = (2 / playData[0].values.length);
+            }
+
+            // Force Y-axis to start at 0 and use nice round numbers
+            chart.forceY([0, maxPlays > 0 ? maxPlays * playMultiplier : 10]);
 
             d3.select("#play-graph svg")
                 .datum(playData)
@@ -973,8 +992,28 @@ function loadViewsGraph(userId, mode) {
             chart.yAxis
                 .axisLabel("Views")
                 .tickFormat(function(views) {
-                    return Math.round(views).toString();
+                    var rounded = Math.round(views);
+                    if (views !== rounded) return "";
+                    return rounded.toString();
                 });
+
+            // Calculate proper Y-axis range
+            var viewMultiplier = 2;
+            var maxViews = 0;
+
+            if (viewsData[0] && viewsData[0].values) {
+                for (var i = 0; i < viewsData[0].values.length; i++) {
+                    if (viewsData[0].values[i].y > maxViews) {
+                        maxViews = viewsData[0].values[i].y;
+                    }
+                }
+
+                // Makes graph look better if user has a single "view" entry
+                viewMultiplier = (2 / viewsData[0].values.length);
+            }
+
+            // Force Y-axis to start at 0 and use nice round numbers
+            chart.forceY([0, maxViews > 0 ? maxViews * viewMultiplier : 10]);
 
             d3.select("#replay-graph svg")
                 .datum(viewsData)
