@@ -848,3 +848,47 @@ input[type="url"], input[type="search"] {
 body {
     overflow-x: hidden;
 }
+
+/* https://gist.github.com/peppy/2276367 */
+.flashlight {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    background: url('/images/flashlight.png');
+    position: fixed;
+    z-index: 99999;
+    pointer-events:none;
+}
+
+.modtoggle
+{
+    z-index: 9990;
+    display: block;
+    position: fixed;
+    opacity: 0;
+    width: 69px;
+    height: 65px;
+    top: 5px;
+    right: 5px;
+}
+
+.modtoggle.fl
+{
+    background: no-repeat url('/images/selection-mod-flashlight.png');
+}
+
+.modtoggle.hd
+{
+    top: 68px;
+    background: no-repeat url('/images/selection-mod-hidden.png');
+}
+
+.hiddenA {
+    opacity : 0.01;
+}
+
+.hiddenA:hover {
+    opacity: 1;
+}
