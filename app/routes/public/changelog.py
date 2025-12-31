@@ -34,13 +34,16 @@ def osu_changelog():
 
 def osume_changelog(limit: int = 50, test: bool = False) -> str:
     with app.session.database.managed_session() as session:
+        entries = changelog.fetch_range_desc(
+            resolve_target_date(default=client_cutoff_osume),
+            limit=limit,
+            session=session
+        )
+
         return render_template(
             'changelog_osume.html',
-            entries=changelog.fetch_range_desc(
-                resolve_target_date(default=client_cutoff_osume),
-                limit=limit,
-                session=session
-            ),
+            config=app.session.config,
+            entries=entries,
             session=session,
             test=test
         )
