@@ -69,7 +69,7 @@ def client_changelog() -> Response:
 
 def format_entries(date: datetime, entries: list[DBReleaseChangelog]) -> str:
     commits = (
-        f"{entry.type_symbol}\t\t{entry.text}"
+        f"{entry.type_symbol}\t{entry.author}\t{entry.text}"
         for entry in entries
     )
     return (
