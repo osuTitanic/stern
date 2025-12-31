@@ -37,7 +37,7 @@ def osume_changelog(limit: int = 50, test: bool = False) -> str:
         return render_template(
             'changelog_osume.html',
             entries=changelog.fetch_range_desc(
-                client_cutoff_osume,
+                resolve_target_date(default=client_cutoff_osume),
                 limit=limit,
                 session=session
             ),
@@ -46,30 +46,9 @@ def osume_changelog(limit: int = 50, test: bool = False) -> str:
         )
 
 def client_changelog() -> Response:
-    from_version = request.args.get(
-        'from',
-        default=20121228,
-        type=float
-    )
-    current_version = request.args.get(
-        'current',
-        default=20151230,
-        type=float
-    )
-
-    current_version_string = str(round(current_version))
-    version_date = client_cutoff
-
-    if len(current_version_string) >= 8:
-        version_date = datetime(
-            int(current_version_string[0:4]),
-            int(current_version_string[4:6]),
-            int(current_version_string[6:8])
-        )
-
     with app.session.database.managed_session() as session:
         changelog_entries = changelog.fetch_range_desc(
-            version_date,
+            resolve_target_date(default=client_cutoff),
             session=session
         )
 
@@ -97,3 +76,27 @@ def format_entries(date: datetime, entries: list[DBReleaseChangelog]) -> str:
         f"({date.month}/{date.day}/{date.year})\n" +
         "\n".join(commits)
     )
+
+def resolve_target_date(default: datetime) -> datetime:
+    from_version = request.args.get(
+        'from',
+        default=0,
+        type=float
+    )
+    current_version = request.args.get(
+        'current',
+        default=0,
+        type=float
+    )
+
+    current_version_string = str(round(current_version))
+    version_date = default
+
+    if len(current_version_string) >= 8:
+        version_date = datetime(
+            int(current_version_string[0:4]),
+            int(current_version_string[4:6]),
+            int(current_version_string[6:8])
+        )
+
+    return version_date
