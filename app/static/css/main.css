@@ -876,13 +876,13 @@ body {
 
 .modtoggle.fl
 {
-    background: no-repeat url('/images/selection-mod-flashlight.png');
+    background: no-repeat url('/images/mods/selection-mod-flashlight.png');
 }
 
 .modtoggle.hd
 {
     top: 68px;
-    background: no-repeat url('/images/selection-mod-hidden.png');
+    background: no-repeat url('/images/mods/selection-mod-hidden.png');
 }
 
 .hiddenA {
