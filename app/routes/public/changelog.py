@@ -1,6 +1,9 @@
 
-from app.common.database.repositories import changelog
-from flask import Blueprint, redirect, request, render_template
+from app.common.database.repositories import changelog, releases
+from app.common.database.objects import DBReleaseChangelog
+
+from flask import Response, Blueprint, redirect, request, render_template
+from collections import defaultdict
 from datetime import datetime
 
 import utils
@@ -42,5 +45,34 @@ def osume_changelog(limit: int = 50, test: bool = False) -> str:
             test=test
         )
 
-def client_changelog() -> str:
-    ...
+def client_changelog() -> Response:
+    with app.session.database.managed_session() as session:
+        changelog_entries = changelog.fetch_range_desc(
+            client_cutoff,
+            session=session
+        )
+
+        sorted_entries: dict[datetime, list[DBReleaseChangelog]] = defaultdict(list)
+
+        for entry in changelog_entries:
+            date_key = entry.created_at
+            sorted_entries[date_key].append(entry)
+
+        result = "\n".join(
+            format_entries(date, entries)
+            for date, entries in sorted_entries.items()
+        )
+        return Response(
+            result,
+            mimetype='text/plain'
+        )
+
+def format_entries(date: datetime, entries: list[DBReleaseChangelog]) -> str:
+    commits = (
+        f"{entry.type_symbol}\t\t{entry.text}"
+        for entry in entries
+    )
+    return (
+        f"({date.month}/{date.day}/{date.year})\n" +
+        "\n".join(commits)
+    )
