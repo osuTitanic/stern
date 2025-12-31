@@ -12,7 +12,7 @@ import app
 router = Blueprint('changelog', __name__)
 
 client_cutoff = datetime(2015, 12, 30)
-client_cutoff_osume = datetime(2012, 6, 1)
+client_cutoff_osume = datetime(2014, 8, 11)
 
 @router.get('/p/changelog')
 def osu_changelog():
