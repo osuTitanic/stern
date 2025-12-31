@@ -46,9 +46,30 @@ def osume_changelog(limit: int = 50, test: bool = False) -> str:
         )
 
 def client_changelog() -> Response:
+    from_version = request.args.get(
+        'from',
+        default=20121228,
+        type=float
+    )
+    current_version = request.args.get(
+        'current',
+        default=20151230,
+        type=float
+    )
+
+    current_version_string = str(round(current_version))
+    version_date = client_cutoff
+
+    if len(current_version_string) >= 8:
+        version_date = datetime(
+            int(current_version_string[0:4]),
+            int(current_version_string[4:6]),
+            int(current_version_string[6:8])
+        )
+
     with app.session.database.managed_session() as session:
         changelog_entries = changelog.fetch_range_desc(
-            client_cutoff,
+            version_date,
             session=session
         )
 
