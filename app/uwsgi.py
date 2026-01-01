@@ -3,7 +3,6 @@ from app.common.database import beatmapsets
 from app import session
 
 def on_startup() -> None:
-    session.database.engine.dispose()
     session.database.wait_for_connection()
     session.redis.ping()
 
