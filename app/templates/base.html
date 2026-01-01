@@ -194,17 +194,10 @@
                 <div style="clear: both;"></div>
             </div>
             <div class="gradient"></div>
-            {# Defer icon fonts for better initial page load #}
-            <link rel="stylesheet" href="{{ '/css/font-awesome-3.css'|cached_url }}" media="print" onload="this.media='all'">
-            <link rel="stylesheet" href="{{ '/lib/fontawesome.min.css'|cached_url }}" media="print" onload="this.media='all'">
-            <link rel="stylesheet" href="{{ '/lib/fontawesome.solid.min.css'|cached_url }}" media="print" onload="this.media='all'">
-            <link rel="stylesheet" href="{{ '/lib/fontawesome.brands.min.css'|cached_url }}" media="print" onload="this.media='all'">
-            <noscript>
-                <link rel="stylesheet" href="{{ '/css/font-awesome-3.css'|cached_url }}">
-                <link rel="stylesheet" href="{{ '/lib/fontawesome.min.css'|cached_url }}">
-                <link rel="stylesheet" href="{{ '/lib/fontawesome.solid.min.css'|cached_url }}">
-                <link rel="stylesheet" href="{{ '/lib/fontawesome.brands.min.css'|cached_url }}">
-            </noscript>
+            <link rel="stylesheet" href="{{ '/css/font-awesome-3.css'|cached_url }}">
+            <link rel="stylesheet" href="{{ '/lib/fontawesome.min.css'|cached_url }}">
+            <link rel="stylesheet" href="{{ '/lib/fontawesome.solid.min.css'|cached_url }}">
+            <link rel="stylesheet" href="{{ '/lib/fontawesome.brands.min.css'|cached_url }}">
             <script src="{{ '/js/editor.js'|cached_url }}" fetchpriority="low" defer></script>
             {% if config.CHRISTMAS_MODE and is_modern_browser %}
             <script src="{{ '/js/snow.js'|cached_url }}" fetchpriority="low" defer></script>
