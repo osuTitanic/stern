@@ -84,15 +84,15 @@ def resolve_target_date(default: datetime) -> datetime:
     from_version = request.args.get(
         'from',
         default=0,
-        type=float
+        type=int
     )
     current_version = request.args.get(
         'current',
         default=0,
-        type=float
+        type=int
     )
 
-    current_version_string = str(round(current_version))
+    current_version_string = str(current_version or from_version)
     version_date = default
 
     if len(current_version_string) >= 8:
