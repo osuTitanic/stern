@@ -168,8 +168,8 @@
                 <td>Average Rating:</td>
                 <td class="beatmap-stats-info">
                     {# TODO: Create rating graph #}
-                    {% if beatmapset.ratings %}
-                    {{ (beatmapset.ratings | sum(attribute='rating') / beatmapset.ratings | count) | round(4) }}
+                    {% if beatmapset.rating_count > 0 %}
+                    {{ beatmapset.rating_average | round(4) }}
                     {% else %}
                     Nobody has rated this map yet... ):
                     {% endif %}

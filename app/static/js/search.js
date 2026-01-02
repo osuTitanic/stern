@@ -416,7 +416,7 @@ function getBeatmapsets(clear) {
             }
 
             var ratingBar = document.createElement("div");
-            ratingBar.style.width = (100 - ((beatmapset.ratings / 10) * 100)) + '%';
+            ratingBar.style.width = (100 - ((beatmapset.rating_average / 10) * 100)) + '%';
             ratingBar.classList.add("beatmap-rating-bar");
 
             var beatmapRating = document.createElement("div");
@@ -449,7 +449,7 @@ function getBeatmapsets(clear) {
             detailsDiv.classList.add("beatmap-details");
             detailsDiv.appendChild(dateText);
             detailsDiv.appendChild(heartIcon);
-            detailsDiv.appendChild(document.createTextNode(beatmapset.favourites.toLocaleString()));
+            detailsDiv.appendChild(document.createTextNode(beatmapset.favourite_count.toLocaleString()));
             detailsDiv.appendChild(playsIcon);
             detailsDiv.appendChild(document.createTextNode(totalPlays.toLocaleString()));
 
