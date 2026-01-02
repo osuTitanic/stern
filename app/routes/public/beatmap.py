@@ -87,7 +87,7 @@ def get_beatmap(id: int):
                 collaborations.fetch_requests_outgoing(beatmap.id, session=session)
                 if current_user.is_authenticated and beatmap.status <= 0 else []
             ),
-            favourites_count=favourites.fetch_count_by_set(beatmap.set_id, session=session),
+            favourites_count=beatmap.beatmapset.favourite_count,
             favourites=favourites.fetch_many_by_set(beatmap.set_id, session=session),
             favorite=(
                 favourites.fetch_one(current_user.id, beatmap.set_id, session=session)
