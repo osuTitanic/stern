@@ -1,5 +1,6 @@
 
 from app.common.config import config_instance as config
+from app.common.constants import TokenSource
 from app.common.database import DBUser
 from flask import Response, redirect, request
 
@@ -18,8 +19,8 @@ def perform_login(
     expiry = current_time + config.FRONTEND_TOKEN_EXPIRY
     expiry_refresh = current_time + config.FRONTEND_REFRESH_EXPIRY
 
-    access_token = generate_token(user, expiry)
-    refresh_token = generate_token(user, expiry_refresh)
+    access_token = generate_token(user, expiry, TokenSource.Web)
+    refresh_token = generate_token(user, expiry_refresh, TokenSource.Web)
 
     domain = resolve_domain_name()
     use_ssl = request.is_secure or not config.ALLOW_INSECURE_COOKIES
@@ -53,12 +54,13 @@ def perform_logout(response: Response | None = None) -> Response:
     flask_login.logout_user()
     return response
 
-def generate_token(user: DBUser, expiry: int) -> str:
+def generate_token(user: DBUser, expiry: int, source=TokenSource.Web) -> str:
     return jwt.encode(
         {
             'id': user.id,
             'name': user.name,
             'exp': expiry,
+            'source': source.value
         },
         config.FRONTEND_SECRET_KEY,
         algorithm='HS256'
