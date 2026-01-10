@@ -706,39 +706,174 @@ body {
     padding-bottom: 5px;
 }
 
-#admin-userpage-controls:after {
-    position: fixed;
-    content: "";
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    background: rgba(0,0,0,0.5);
-    z-index: -2;
-    border-radius: 2.5px;
+.moderation-header {
+    text-align: center;
+    margin-bottom: 5px;
 }
 
-#admin-userpage-controls:before {
-    position: absolute;
-    content: "";
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
+.moderation-container {
+    opacity: 0;
+    transition: opacity 0.25s ease-in-out;
+    margin-top: 5px;
+    margin-bottom: 7.5px;
+    padding: 5px;
+    display: grid;
+    background-color: #e7e4fc;
+    border-radius: 5px;
+}
+
+.moderation-container:hover {
+    opacity: 1;
+}
+
+.moderation-container button {
+    margin-top: 2.5px;
+    background: #efeeff;
+    border: 1px solid #bab6e6;
+    border-radius: 5px;
+    margin-left: 5px;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.moderation-container button:hover {
+    background: #cfcafc;
+    cursor: pointer;
+}
+
+.moderation-container dialog::backdrop {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.moderation-container .confirm-button {
+    background: #5db8ef;
+    color: #fff;
+    border: none;
+}
+
+.moderation-container .confirm-button:hover {
+    background: #46a7e8;
+    cursor: pointer;
+}
+
+.moderation-container .grey-button {
+    background: #e6e2f8;
+    border: 1px solid #cfc9f6;
+}
+
+.moderation-container .grey-button:hover {
+    background: #d4cfff;
+    cursor: pointer;
+}
+
+.moderation-container h2 {
+    margin-bottom: 15px;
+    font-size: 125%;
+}
+
+.moderation-container .form-row {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+
+.moderation-container .form-row label {
+    width: 100px;
+    flex: 0 0 100px;
+    font-weight: bold;
+    color: #333;
+    margin-top: 6px;
+}
+
+.moderation-container .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 14px;
+    gap: 8px;
+}
+
+.moderation-container dialog input[type="text"],
+.moderation-container dialog input[type="email"],
+.moderation-container dialog textarea {
+    flex: 1 1 auto;
+    padding: 6px;
+    border: 1px solid #cfc9f6;
+    border-radius: 4px;
+    background: #ffff;
+}
+
+.moderation-container dialog textarea {
+    min-height: 60px;
+    resize: vertical;
+}
+
+.moderation-container dialog input[type="checkbox"] {
+    /* idk why but checkboxes are offset */
+    transform: translateY(4px);
+}
+
+.moderation-container dialog select {
+    max-width: 60%
+}
+
+#moderation-edit-profile {
+    width: 800px;
+    max-width: calc(100% - 40px);
+    padding: 18px;
     background: #f0ecfa;
-    z-index: -1;
-    border-radius: 2.5px;
+    border-radius: 6px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    color: #222;
 }
 
-#admin-userpage-controls {
-    width: 600px;
-    min-height: 380px;
-    top: 50%;
-    left: 50%;
-    margin-top: -290px; /* Negative half of height. */
-    margin-left: -300px; /* Negative half of width. */
+#moderation-badges {
+    width: 1200px;
+    max-width: calc(100% - 40px);
+    padding: 14px;
+    background: #f7f5fd;
+    border-radius: 6px;
+    box-shadow: 0 8px 22px rgba(0,0,0,0.18);
+    color: #222;
 }
 
-#admin-userpage-controls input[type="submit"] {
-    margin: 4px;
+#moderation-badges h2 {
+    margin: 0 0 10px 0;
+    font-size: 115%;
+    color: #40347a;
+}
+
+#moderation-badges table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 8px;
+    background: transparent;
+}
+
+#moderation-badges th,
+#moderation-badges td {
+    padding: 8px;
+    border-bottom: 1px solid #efecff;
+    vertical-align: middle;
+}
+
+#moderation-badges input[type="text"],
+#moderation-badges textarea {
+    width: 100%;
+    padding: 6px 8px;
+    border: 1px solid #cfc9f6;
+    border-radius: 4px;
+    background: #fff;
+    font-size: 95%;
+    box-sizing: border-box;
+}
+
+#moderation-infringements {
+    width: 800px;
+    max-width: calc(100% - 40px);
+    padding: 14px;
+    background: #f7f5fd;
+    border-radius: 6px;
+    box-shadow: 0 8px 22px rgba(0,0,0,0.18);
+    color: #222;
 }
