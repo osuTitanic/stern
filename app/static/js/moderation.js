@@ -423,7 +423,7 @@ function createInfringementElement(inf, userId) {
     delBtn.style.color = '#c00';
     delBtn.onclick = function() {
         if (confirm('Delete this infringement?'))
-            moderationDeleteInfringement(userId, inf.id);
+            moderationDeleteInfringement(userId, inf.id, inf.action === 0);
     };
 
     actionTd.appendChild(moderationSelect);
