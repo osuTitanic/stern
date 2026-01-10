@@ -251,7 +251,7 @@ function moderationSaveProfile(userId) {
 
     updateUserProfile(userId, data, function(user) {
         document.getElementById('moderation-edit-profile').close();
-        location.reload();
+        setTimeout(function() { location.reload(); }, 250);
     }, function(err) {
         alert('Error: ' + err.details);
     });
