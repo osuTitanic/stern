@@ -122,8 +122,13 @@ function updateUserInfringement(userId, infringementId, infringementData, onSucc
     });
 }
 
-function deleteUserInfringement(userId, infringementId, onSuccess, onFailure) {
-    performApiRequest("DELETE", "/moderation/users/" + userId + "/infringements/" + infringementId, null, function(xhr) {
+function deleteUserInfringement(userId, infringementId, restoreScores, onSuccess, onFailure) {
+    var url = "/moderation/users/" + userId + "/infringements/" + infringementId;
+    if (restoreScores) {
+        url += "?restore_scores=true";
+    }
+
+    performApiRequest("DELETE", url, null, function(xhr) {
         if (onSuccess) { onSuccess(); }
     }, function(xhr) {
         return handleApiErrorCallback(xhr, onFailure);
@@ -326,8 +331,10 @@ function moderationUpdateInfringement(userId, infringementId) {
     });
 }
 
-function moderationDeleteInfringement(userId, infringementId) {
-    deleteUserInfringement(userId, infringementId, function() {
+function moderationDeleteInfringement(userId, infringementId, isRestriction) {
+    var restoreScores = isRestriction ? confirm('Do you want to restore the user scores & stats?') : false;
+
+    deleteUserInfringement(userId, infringementId, restoreScores, function() {
         var row = document.querySelector('tr[data-infringement-id="' + infringementId + '"]');
         if (row) row.remove();
         else setTimeout(function() { location.reload(); }, 250);
