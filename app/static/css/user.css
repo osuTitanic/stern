@@ -789,6 +789,7 @@ body {
 .moderation-container .form-actions {
     display: flex;
     justify-content: flex-end;
+    vertical-align: middle;
     margin-top: 14px;
     gap: 8px;
 }

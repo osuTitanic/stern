@@ -217,6 +217,16 @@ function defaultOnError(err) {
     alert('An error occurred: ' + err.details);
 }
 
+function showSpinner() {
+    var el = document.getElementById('moderation-loader');
+    if (el) el.style.display = 'block';
+}
+
+function hideSpinner() {
+    var el = document.getElementById('moderation-loader');
+    if (el) el.style.display = 'none';
+}
+
 function moderationSaveProfile(userId) {
     var data = {};
 
@@ -287,6 +297,8 @@ function moderationAddBadge(userId) {
 }
 
 function moderationOpenInfringements(userId) {
+    showSpinner();
+
     // Show dialog immediately & load data
     document.getElementById('moderation-infringements').showModal();
     var body = document.getElementById('moderation-infringements-body');
@@ -308,8 +320,10 @@ function moderationOpenInfringements(userId) {
                 document.getElementById('infringement-new-row')
             );
         });
+        hideSpinner();
     }, function(err){
-        alert('Failed to load infringements: ' + err.details);
+        hideSpinner();
+        alert('Failed to load infringements: ' + (err && err.details ? err.details : 'Unknown error'));
     });
 }
 
@@ -323,23 +337,29 @@ function moderationUpdateInfringement(userId, infringementId) {
         description: row.elements.description.value || null,
         is_permanent: !!row.elements.isPermanent.checked
     };
+    showSpinner();
 
     updateUserInfringement(userId, infringementId, data, function(updated) {
+        hideSpinner();
         moderationOpenInfringements(userId);
     }, function(err){
-        alert('Failed to update infringement: ' + err.details);
+        hideSpinner();
+        alert('Failed to update infringement: ' + (err && err.details ? err.details : 'Unknown error'));
     });
 }
 
 function moderationDeleteInfringement(userId, infringementId, isRestriction) {
     var restoreScores = isRestriction ? confirm('Do you want to restore the user scores & stats?') : false;
+    showSpinner();
 
     deleteUserInfringement(userId, infringementId, restoreScores, function() {
+        hideSpinner();
         var row = document.querySelector('tr[data-infringement-id="' + infringementId + '"]');
         if (row) row.remove();
         else setTimeout(function() { location.reload(); }, 250);
     }, function(err){
-        alert('Failed to delete infringement: ' + err.details);
+        hideSpinner();
+        alert('Failed to delete infringement: ' + (err && err.details ? err.details : 'Unknown error'));
     });
 }
 
@@ -355,11 +375,14 @@ function moderationAddInfringement(userId) {
         description: description,
         is_permanent: is_permanent
     };
+    showSpinner();
 
     createUserInfringement(userId, data, function(created) {
+        hideSpinner();
         moderationOpenInfringements(userId);
     }, function(err){
-        alert('Failed to add infringement: ' + err.details);
+        hideSpinner();
+        alert('Failed to add infringement: ' + (err && err.details ? err.details : 'Unknown error'));
     });
 }
 
