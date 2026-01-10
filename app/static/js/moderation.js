@@ -62,6 +62,10 @@ function updateUserProfile(userId, data, onSuccess, onFailure) {
 }
 
 function removeUserAvatar(userId, onSuccess, onFailure) {
+    if (!confirm("Are you sure you want to remove this user's avatar?")) {
+        return;
+    }
+
     performApiRequest("DELETE", "/moderation/users/" + userId + "/avatar", null, function(xhr) {
         if (onSuccess) { onSuccess(); }
     }, function(xhr) {
@@ -105,6 +109,10 @@ function getUserInfringements(userId, onSuccess, onFailure) {
 }
 
 function createUserInfringement(userId, infringementData, onSuccess, onFailure) {
+    if (!confirm("Are you sure you want to create this infringement? (This may take a while)")) {
+        return;
+    }
+
     performApiRequest("POST", "/moderation/users/" + userId + "/infringements", infringementData, function(xhr) {
         var infringement = JSON.parse(xhr.responseText);
         if (onSuccess) { onSuccess(infringement); }
@@ -123,6 +131,10 @@ function updateUserInfringement(userId, infringementId, infringementData, onSucc
 }
 
 function deleteUserInfringement(userId, infringementId, restoreScores, onSuccess, onFailure) {
+    if (!confirm("Are you sure you want to delete this infringement? (This may take a while)")) {
+        return;
+    }
+
     var url = "/moderation/users/" + userId + "/infringements/" + infringementId;
     if (restoreScores) {
         url += "?restore_scores=true";
@@ -136,7 +148,10 @@ function deleteUserInfringement(userId, infringementId, restoreScores, onSuccess
 }
 
 function wipeUserScores(userId, onSuccess, onFailure) {
-    if (!confirm("Are you sure you want to wipe this user's scores?")) {
+    if (!confirm("Are you sure you want to wipe this user's scores? (This may take a while)")) {
+        return;
+    }
+    if (!confirm("Are you ABSOLUTELY sure you want to WIPE the user's scores?")) {
         return;
     }
 
@@ -165,6 +180,9 @@ function deleteUserAccount(userId, onSuccess, onFailure) {
 
 function clearUserProfile(userId, onSuccess, onFailure) {
     if (!confirm("Are you sure you want to clear this user's profile? This action cannot be undone.")) {
+        return;
+    }
+    if (!confirm("Are you ABSOLUTELY sure you want to CLEAR the user's profile?")) {
         return;
     }
 
