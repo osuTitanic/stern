@@ -285,7 +285,7 @@
         {% endfor %}
     </div>
 
-    {% if current_user.is_moderator and current_user.id != user.id %}
+    {% if current_user.is_moderator %}
     <div class="moderation-container">
         <h1 class="moderation-header">
             Moderation
