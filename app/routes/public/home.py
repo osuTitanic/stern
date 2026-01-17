@@ -79,19 +79,33 @@ def format_announcement(
     announcement: DBForumTopic,
     post: DBForumPost | None = None
 ) -> dict:
-    text = ""
-
-    if post and post.content:
-        lines = post.content.splitlines()
-        text = lines[0]
-
     return {
         "date": f"{announcement.created_at.day}.{announcement.created_at.month}.{announcement.created_at.year}",
         "link": f"/forum/{announcement.forum_id}/t/{announcement.id}/",
         "title": announcement.title,
         "author": announcement.creator.name,
-        "text": text
+        "text": resolve_news_text(announcement, post)
     }
+
+def resolve_news_text(announcement: DBForumTopic, post: DBForumPost | None = None) -> str:
+    if post is None:
+        return ""
+    
+    if not post.content:
+        return ""
+
+    lines = post.content.splitlines()
+
+    for line in lines:
+        if "[heading]" in line.lower():
+            continue
+
+        if "[img]" in line.lower():
+            continue
+
+        content = line.strip()
+        content = content.replace("[centre]", "").replace("[/centre]", "")
+        return content
 
 def handle_legacy_redirects(page: str, request: Request) -> Response | None:
     match page:
