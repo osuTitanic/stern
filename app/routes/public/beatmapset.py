@@ -60,12 +60,12 @@ def beatmap_search():
     )
 
 @router.get('/beatmapsets/<id>')
-def redirect_to_set(id: int):
+def redirect_to_set(id: str):
     return redirect(f'/s/{id}')
 
 @router.get('/beatmapsets/<set_id>/discussion/<map_id>')
 @router.get('/beatmapsets/<set_id>/discussion/')
-def redirect_to_discussion(set_id: int, map_id: int = None):
+def redirect_to_discussion(set_id: str, map_id=None):
     if not set_id.isdigit():
         return utils.render_error(404, 'beatmap_not_found')
 
@@ -78,7 +78,7 @@ def redirect_to_discussion(set_id: int, map_id: int = None):
     return redirect(f'/forum/t/{set.topic_id}')
 
 @router.get('/beatmapsets/download/<id>')
-def download_beatmapset(id: int):
+def download_beatmapset(id: str):
     if not id.isdigit():
         return abort(code=404)
 
@@ -97,6 +97,11 @@ def download_beatmapset(id: int):
         type=bool
     )
 
+    # no_video can only be true if the beatmapset has videos
+    no_video = (
+        no_video and set.has_video
+    )
+
     response = app.session.storage.api.osz(
         set.id,
         no_video
@@ -105,18 +110,21 @@ def download_beatmapset(id: int):
     if not response:
         return abort(code=404)
 
-    # no_video can only be true if the beatmapset has videos
-    no_video = no_video and set.has_video
+    estimated_size = (
+        set.osz_filesize_novideo if no_video else
+        set.osz_filesize
+    )
 
     osz_filename = utils.secure_filename(f'{set.id} {set.artist} - {set.title}')
     osz_filename += ' (no video)' if no_video else ''
     osz_filename += '.osz'
 
     return Response(
-        response.iter_content(6400),
+        response.iter_content(65536),
         mimetype='application/octet-stream',
         headers={
             'Content-Disposition': f'attachment; filename="{osz_filename}";',
-            'Content-Length': response.headers.get('Content-Length', 0)
+            'Content-Length': response.headers.get('Content-Length', f"{estimated_size}"),
+            'Last-Modified': set.last_update.strftime('%a, %d %b %Y %H:%M:%S GMT')
         }
     )
