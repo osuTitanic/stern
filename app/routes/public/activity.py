@@ -16,8 +16,8 @@ router = Blueprint("activity", __name__)
 BACKGROUND_COLOR = hex_to_rgba('#f0ecfa')
 GRID_COLOR = hex_to_rgba('#dddddd')
 OSU_FILL_COLOR = hex_to_rgba('#ffe8fa')
-OSU_LINE_COLOR = hex_to_rgba('#ffd0f6')
-IRC_FILL_COLOR = hex_to_rgba('#dfe2f4')
+OSU_LINE_COLOR = hex_to_rgba("#ffcdf6")
+IRC_FILL_COLOR = hex_to_rgba("#ffe3f9")
 IRC_LINE_COLOR = hex_to_rgba('#9096bc')
 GAMES_COLOR = hex_to_rgba('#ef8e03')
 
@@ -106,7 +106,7 @@ def generate_activity_chart(width: int, height: int, dpi: int = 100) -> bytes:
 
     # Plot IRC users
     ax.fill_between(x, 0, irc, color=IRC_FILL_COLOR, linewidth=0, zorder=3)
-    ax.plot(x, irc, color=IRC_LINE_COLOR, linewidth=0.25, zorder=4, solid_capstyle='round')
+    ax.plot(x, irc, color=IRC_LINE_COLOR, linewidth=0.1, zorder=4)
 
     # Plot multiplayer games
     ax.fill_between(x, 0, games, color=GAMES_COLOR, linewidth=0, zorder=4)
