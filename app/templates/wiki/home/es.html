@@ -1,0 +1,75 @@
+{# templates/home/es.html #}
+
+{% extends 'wiki/content/es.html' %}
+
+{% block content_extension %}
+<div class="wiki-content">
+    <span class="wiki-welcome">
+        <h1>Página principal</h1>
+        <img src="/images/logo/main-vector.min.svg" alt="logo" width="40" height="40">
+        <h2><i>Bienvenido a la wiki de Titanic, un compendio colaborativo sobre todo lo relacionado con Titanic.</i></h2>
+    </span>
+    <div class="wiki-stats">
+        <span>Actualmente tenemos <a href="#">{{ page_count }}</a> artículos y seguimos sumando.</span>
+        <span>Hoy es {{ current_date.strftime("%A, %B %d, %Y") }}.</span>
+    </div>
+    <div class="wiki-categories">
+        <table>
+            <tbody>
+                <tr>
+                    <th>Descripción general</th>
+                </tr>
+                <tr>
+                    <td>
+                        La wiki de Titanic! es un proyecto impulsado por la comunidad, construido por colaboradores dedicados de Titanic!.
+                        Nuestro objetivo es crear el recurso definitivo para todo lo relacionado con Titanic!.
+                        Sin embargo, no podemos hacerlo solos: <b>necesitamos tu ayuda.</b>
+                        Si te apasiona el proyecto, usa tus conocimientos y comienza a contribuir hoy mismo.
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <table width="100%">
+            <tbody>
+                <tr>
+                    <th>Otros idiomas</th>
+                </tr>
+                <tr>
+                    <td>
+                        {% for code, language in available_languages.items() %}
+                            <a href="/wiki/{{ code }}">{{ language }}</a>
+                            {% if not loop.last %}<b>•</b>{% endif %}
+                        {% endfor %}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        {% for category in categories %}
+        {% set odd_categories = categories|length is odd %}
+        {% set width = '50%' %}
+        {% if odd_categories and loop.index == categories|length %}
+            {% set width = '100%' %}
+        {% endif %}
+        <table width="{{ width }}" style="float: {{ 'left' if loop.index is odd else 'right' }};">
+            <tbody>
+                <tr>
+                    <th>{{ category.name }}</th>
+                </tr>
+                <tr>
+                    <td>
+                        {% if category.pages %}
+                            {% for page in category.pages|sort(attribute='id') %}
+                                <a href="/wiki/es/{{ page.path }}">{{ page.name }}</a>
+                                {% if not loop.last %}<b>•</b>{% endif %}
+                            {% endfor %}
+                        {% else %}
+                            No hay páginas disponibles en esta categoría.
+                        {% endif %}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content_extension %}
