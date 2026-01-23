@@ -111,25 +111,32 @@
     </div>
 
     {% if current_user.is_authenticated and current_user.id != user.id %}
-        {% set current_friends = repositories.relationships.fetch_many_by_id(current_user.id, session)|get_attributes('target_id') %}
-        {% set target_friends = user.relationships|get_attributes('target_id') %}
-        {% set current_added = user.id in current_friends %}
-        {% set target_added = current_user.id in target_friends or user.id in config.SUPER_FRIENDLY_USERS %}
-        <div id="friend-status" class="friend-current-{{ current_added|lower }}-target-{{ target_added|lower }}">
-            <a href="#" onclick="return removeFriend()">
-                <i class="fa3-heart"></i> Mutual Friend
-            </a>
-            <a href="#" onclick="return removeFriend()">
-                <i class="fa3-star"></i> Friend
-            </a>
-            {# Difference from osu!: Added "Add as Mutual Friend" state #}
-            <a href="#" onclick="return addFriend()">
-                <i class="fa3-plus-sign"></i> Add as Mutual Friend
-            </a>
-            <a href="#" onclick="return addFriend()">
-                <i class="fa3-plus-sign"></i> Add as Friend
-            </a>
-        </div>
+        {% set is_blocked = repositories.relationships.is_blocked(current_user.id, user.id, session) %}
+
+        {% if not is_blocked %}
+            {% set current_relationships = repositories.relationships.fetch_many_by_id(current_user.id, session) %}
+            {% set current_friends = current_relationships|selectattr("status", "equalto", 0)|map(attribute="target_id")|list %}
+            {% set target_friends = user.relationships|selectattr("status", "equalto", 0)|map(attribute="target_id")|list %}
+
+            {% set current_added = user.id in current_friends %}
+            {% set target_added = current_user.id in target_friends or user.id in config.SUPER_FRIENDLY_USERS %}
+
+            <div id="friend-status" class="friend-current-{{ current_added|lower }}-target-{{ target_added|lower }}">
+                <a href="#" onclick="return removeFriend()">
+                    <i class="fa3-heart"></i> Mutual Friend
+                </a>
+                <a href="#" onclick="return removeFriend()">
+                    <i class="fa3-star"></i> Friend
+                </a>
+                {# Difference from osu!: Added "Add as Mutual Friend" state #}
+                <a href="#" onclick="return addFriend()">
+                    <i class="fa3-plus-sign"></i> Add as Mutual Friend
+                </a>
+                <a href="#" onclick="return addFriend()">
+                    <i class="fa3-plus-sign"></i> Add as Friend
+                </a>
+            </div>
+        {% endif %}
     {% endif %}
 
     <div class="profile-details">
