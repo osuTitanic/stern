@@ -19,7 +19,7 @@ sendgrid==6.12.5
 sqlalchemy==2.0.46
 timeago==1.0.16
 rosu-pp-py==3.1.0
-markdown==3.10
+markdown==3.10.1
 pyjwt==2.10.1
 regex
 pydantic-settings==2.12.0
