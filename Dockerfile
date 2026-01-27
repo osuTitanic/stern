@@ -3,7 +3,7 @@ FROM python:3.14-alpine AS builder
 ENV PYO3_USE_ABI3_FORWARD_COMPATIBILITY=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=1
 
-# Install build dependencies for Python wheels and uwsgi modules
+# Install build dependencies for Python wheels and gunicorn modules
 RUN apk add --no-cache \
     build-base \
     cargo \
@@ -25,10 +25,10 @@ RUN apk add --no-cache \
 WORKDIR /tmp/build
 COPY requirements.txt ./
 
-# Install Python dependencies (including uwsgi) into a relocatable prefix
+# Install Python dependencies (including gunicorn + gevent) into a relocatable prefix
 RUN --mount=type=cache,target=/root/.cache/pip \
     pip install --upgrade pip setuptools wheel && \
-    pip install --no-compile --root /install -r requirements.txt uwsgi
+    pip install --no-compile --root /install -r requirements.txt gunicorn gevent
 
 FROM python:3.14-alpine
 
@@ -55,21 +55,19 @@ RUN apk add --no-cache \
 
 ARG FRONTEND_WORKERS=4
 ARG FRONTEND_THREADS=2
-ARG UWSGI_OFFLOAD_THREADS=4
-ARG UWSGI_STATS=":1717"
-ARG UWSGI_CHEAPER_MIN=0
-ARG UWSGI_CHEAPER_INITIAL=1
-ARG UWSGI_CHEAPER_OVERLOAD=6
-ARG UWSGI_CHEAPER_STEP=1
+ARG GUNICORN_WORKER_CLASS="gevent"
+ARG GUNICORN_BIND="0.0.0.0:80"
+ARG GUNICORN_MAX_REQUESTS=150000
+ARG GUNICORN_MAX_REQUESTS_JITTER=1000
+ARG GUNICORN_TIMEOUT=45
 
 ENV FRONTEND_WORKERS=${FRONTEND_WORKERS} \
     FRONTEND_THREADS=${FRONTEND_THREADS} \
-    UWSGI_OFFLOAD_THREADS=${UWSGI_OFFLOAD_THREADS} \
-    UWSGI_STATS=${UWSGI_STATS} \
-    UWSGI_CHEAPER_MIN=${UWSGI_CHEAPER_MIN} \
-    UWSGI_CHEAPER_INITIAL=${UWSGI_CHEAPER_INITIAL} \
-    UWSGI_CHEAPER_OVERLOAD=${UWSGI_CHEAPER_OVERLOAD} \
-    UWSGI_CHEAPER_STEP=${UWSGI_CHEAPER_STEP}
+    GUNICORN_WORKER_CLASS=${GUNICORN_WORKER_CLASS} \
+    GUNICORN_BIND=${GUNICORN_BIND} \
+    GUNICORN_MAX_REQUESTS=${GUNICORN_MAX_REQUESTS} \
+    GUNICORN_MAX_REQUESTS_JITTER=${GUNICORN_MAX_REQUESTS_JITTER} \
+    GUNICORN_TIMEOUT=${GUNICORN_TIMEOUT}
 
 WORKDIR /stern
 
@@ -78,9 +76,6 @@ COPY --from=builder /install/usr/local /usr/local
 
 # Copy application source
 COPY . .
-
-# Copy tuned uwsgi configuration
-COPY uwsgi.ini ./uwsgi.ini
 
 # Precompile python files for faster startup
 RUN python -m compileall -q app
@@ -91,4 +86,4 @@ VOLUME /stern/app/static
 STOPSIGNAL SIGQUIT
 ENTRYPOINT ["/sbin/tini", "--"]
 
-CMD ["uwsgi", "--ini", "uwsgi.ini"]
+CMD ["sh", "-c", "gunicorn --bind ${GUNICORN_BIND} --workers ${FRONTEND_WORKERS} --threads ${FRONTEND_THREADS} --worker-class ${GUNICORN_WORKER_CLASS} --max-requests ${GUNICORN_MAX_REQUESTS} --max-requests-jitter ${GUNICORN_MAX_REQUESTS_JITTER} --timeout ${GUNICORN_TIMEOUT} --access-logfile - --error-logfile - app.app:flask"]
