@@ -123,20 +123,6 @@ var isNavigatingAway = false;
 var pageLoaded = false;
 var apiRetries = 0;
 
-if (!window.console) {
-    // Console polyfill for ~IE8 and earlier
-    window.console = {
-        log: function() {},
-        info: function() {},
-        warn: function() {},
-        error: function() {}
-    };
-}
-
-if (!window.FormData) {
-    window.FormData = function(form) {};
-}
-
 function slideDown(elem) {
     // Use jQuery's slideDown for cross-browser compatibility
     elem.style.height = '';
@@ -603,23 +589,6 @@ function renderTimeagoElements() {
     for (var i = 0; i < times.length; i++) {
         times[i].innerText = jQuery.timeago(times[i].getAttribute('datetime'));
     }
-}
-
-function getElementsByClassNamePolyfill(className) {
-    var allElements = document.getElementsByTagName('*');
-    var matchedElements = [];
-    var pattern = new RegExp('(^|\\s)' + className + '(\\s|$)');
-
-    for (var i = 0; i < allElements.length; i++) {
-        if (pattern.test(allElements[i].className)) {
-            matchedElements.push(allElements[i]);
-        }
-    }
-    return matchedElements;
-}
-
-if (!document.getElementsByClassName) {
-    document.getElementsByClassName = getElementsByClassNamePolyfill;
 }
 
 addEvent("DOMContentLoaded", document, function(e) {
