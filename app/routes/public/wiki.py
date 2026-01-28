@@ -1,6 +1,7 @@
 
 from app.common.config import config_instance as config
 from flask import Blueprint, request, abort, redirect
+from babel.dates import format_date
 from datetime import datetime
 from copy import copy
 from app import wiki
@@ -29,7 +30,7 @@ def home_wiki_page(language: str):
             title='Home - Titanic! Wiki',
             site_title='Titanic! Wiki',
             canonical_url=f'/wiki/',
-            current_date=datetime.now(),
+            current_date=format_date(date=datetime.now(), format='EEEE, MMMM d, y', locale=language.lower()).title(),
             source_url=wiki.GITHUB_BASEURL,
             discussion_url=f'{wiki.GITHUB_BASEURL}/pulls',
             history_url=wiki.HISTORY_BASEURL,
