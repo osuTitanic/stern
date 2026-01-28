@@ -30,7 +30,7 @@ def home_wiki_page(language: str):
             title='Home - Titanic! Wiki',
             site_title='Titanic! Wiki',
             canonical_url=f'/wiki/',
-            current_date=format_date(date=datetime.now(), format='EEEE, MMMM d, y', locale=language.lower()).title(),
+            current_date=format_date(date=datetime.now(), format='full', locale=language.lower()).title(),
             source_url=wiki.GITHUB_BASEURL,
             discussion_url=f'{wiki.GITHUB_BASEURL}/pulls',
             history_url=wiki.HISTORY_BASEURL,
