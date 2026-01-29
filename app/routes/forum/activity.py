@@ -35,7 +35,7 @@ def get_active_users(forum_id: int) -> list[int]:
 
 @caching.ttl_cache(ttl=60*5)
 def fetch_average_topic_views() -> int:
-    return int(topics.fetch_average_views()) // 3
+    return int(topics.fetch_average_views())
 
 def update_topic_read_state(topic_id: int) -> None:
     identifier = accounts.resolve_session_identifier()
