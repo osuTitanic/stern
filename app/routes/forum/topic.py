@@ -21,25 +21,6 @@ import app
 
 router = Blueprint("forum-topics", __name__)
 
-def update_views(topic_id: int, session: Session) -> None:
-    ip_address = ip.resolve_ip_address_flask(request)
-    lock = app.session.redis.get(f'forums:viewlock:{topic_id}:{ip_address}')
-
-    if lock:
-        return
-
-    topics.update(
-        topic_id,
-        {'views': DBForumTopic.views + 1},
-        session=session
-    )
-
-    app.session.redis.set(
-        f'forums:viewlock:{topic_id}:{ip_address}',
-        value=1,
-        ex=60
-    )
-
 def broadcast_topic_activity(
     topic: DBForumTopic,
     post: DBForumPost,
@@ -101,10 +82,8 @@ def topic(forum_id: str, id: str):
             session=session
         )
 
-        update_views(
-            topic.id,
-            session=session
-        )
+        forum_activity.update_topic_read_state(topic.id)
+        forum_activity.update_views(topic.id, session=session)
 
         beatmapset = beatmapsets.fetch_by_topic(
             topic.id,

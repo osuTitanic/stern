@@ -1,4 +1,5 @@
 
+from app.routes.forum import activity as forum_activity
 from app.common.constants import OSU_CHAT_LINK_MODERN
 from app.common.database import DBForumTopic, DBForum, DBUser
 from app.common.helpers import activity
@@ -230,23 +231,25 @@ def cached_url(url_path: str) -> str:
 
 @flask.template_filter('get_status_icon')
 def get_status_icon(topic: DBForumTopic) -> str:
+    read = forum_activity.determine_read_status(topic)
+    state = 'read' if read else 'unread'
+
     if topic.pinned or topic.announcement:
         if topic.locked_at:
-            return "/images/icons/topics/announce_read_locked.gif"
+            return f"/images/icons/topics/announce_{state}_locked.gif"
 
-        return "/images/icons/topics/announce_read.gif"
+        return f"/images/icons/topics/announce_{state}.gif"
 
     if topic.locked_at:
-        return "/images/icons/topics/topic_read_locked.gif"
+        return f"/images/icons/topics/topic_{state}_locked.gif"
 
     time = datetime.now() - topic.created_at
-    views = utils.fetch_average_topic_views()
+    views = forum_activity.fetch_average_topic_views()
 
     if (topic.views > views) and (time.days < 7):
-        return "/images/icons/topics/topic_read_hot.gif"
+        return f"/images/icons/topics/topic_{state}_hot.gif"
 
-    # TODO: Read/Unread Logic
-    return "/images/icons/topics/topic_read.gif"
+    return f"/images/icons/topics/topic_{state}.gif"
 
 @flask.template_filter('format_activity')
 def format_activity(entry: common.database.DBActivity) -> str:

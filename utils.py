@@ -10,10 +10,10 @@ from jinja2 import TemplateNotFound
 from sqlalchemy.orm import Session
 from PIL import Image
 
-from app.common.helpers import caching, browsers, permissions
 from app.common.database.repositories import wrapper, users
 from app.common.config import config_instance as config
 from app.common.database import DBUser, DBBeatmapset
+from app.common.helpers import browsers, permissions
 from app.common.helpers.external import location
 from app.common.cache import leaderboards
 from app.common import constants
@@ -249,7 +249,3 @@ def hex_to_rgba(hex_color: str, alpha: float = 1.0) -> tuple[float, float, float
     hex_color = hex_color.lstrip('#')
     r, g, b = tuple(int(hex_color[i:i+2], 16) for i in (0, 2, 4))
     return (r/255.0, g/255.0, b/255.0, alpha)
-
-@caching.ttl_cache(ttl=60*5)
-def fetch_average_topic_views() -> int:
-    return int(topics.fetch_average_views())
