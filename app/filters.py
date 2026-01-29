@@ -246,7 +246,7 @@ def get_status_icon(topic: DBForumTopic) -> str:
     time = datetime.now() - topic.created_at
     views = forum_activity.fetch_average_topic_views()
 
-    if (topic.views > views // 3) and (time.days < 7):
+    if (topic.views > views // 2) and (time.days < 7):
         return f"/images/icons/topics/topic_{state}_hot.gif"
 
     return f"/images/icons/topics/topic_{state}.gif"
