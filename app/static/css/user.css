@@ -112,8 +112,8 @@ body {
 }
 
 .badge img {
-    max-width: 86px;
-    padding: 5px;
+    max-width: 128px;
+    padding: 3px;
 }
 
 #titanic .banned-container {
