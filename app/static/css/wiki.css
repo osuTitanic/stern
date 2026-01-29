@@ -237,6 +237,10 @@
     border: 1px solid #aaa;
 }
 
+.wiki-content pre {
+    margin-bottom: 0;
+}
+
 .wiki-categories table {
     border-collapse: separate;
     margin-bottom: 0;
