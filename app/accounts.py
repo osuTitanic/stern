@@ -2,9 +2,13 @@
 from app.common.config import config_instance as config
 from app.common.constants import TokenSource
 from app.common.database import DBUser
-from flask import Response, redirect, request
+
+from flask import Response, redirect, request, session as flask_session
+from flask_login import current_user
 
 import flask_login
+import secrets
+import hashlib
 import time
 import jwt
 
@@ -92,3 +96,12 @@ def resolve_domain_name() -> str | None:
         return None
 
     return f'.{config.DOMAIN_NAME}'
+
+def resolve_session_identifier() -> str:
+    if current_user.is_authenticated:
+        return hashlib.md5(f'{current_user.id}'.encode()).hexdigest()
+
+    if 'session_id' not in flask_session:
+        flask_session['session_id'] = secrets.token_hex(16)
+
+    return hashlib.md5(flask_session['session_id'].encode()).hexdigest()
