@@ -200,8 +200,13 @@
 }
 
 .wiki-content img {
+    display: block;
     max-width: 600px;
     text-decoration: none;
+}
+
+.wiki-content li:has(img) {
+    list-style-type: none;
 }
 
 .wiki-content table {
