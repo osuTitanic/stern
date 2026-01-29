@@ -112,7 +112,8 @@ body {
 }
 
 .badge img {
-    max-width: 128px;
+    /* Difference from osu!: Larger badge images */
+    max-width: 103px;
     padding: 3px;
 }
 
