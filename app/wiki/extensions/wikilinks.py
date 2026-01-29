@@ -37,6 +37,12 @@ def wikilinks_plugin(
         if not match:
             return False
 
+        # Fix rendering of links, e.g. [[Link]](http://example.com)
+        pos_after_match = match.end()
+
+        if pos_after_match < state.posMax and state.src[pos_after_match] == '(':
+            return False
+
         if not silent:
             link = match.group(1).strip()
             label = match.group(2).strip() if match.group(2) else link
