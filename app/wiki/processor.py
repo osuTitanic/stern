@@ -1,37 +1,20 @@
 
-from app.wiki.extensions import WikiLinks
-from markdown import Markdown
+from mdit_py_plugins.front_matter import front_matter_plugin
+from mdit_py_plugins.tasklists import tasklists_plugin
+from mdit_py_plugins.footnote import footnote_plugin
+from mdit_py_plugins.anchors import anchors_plugin
+from mdit_py_plugins.deflist import deflist_plugin
+from markdown_it import MarkdownIt
 
-MarkdownInstance = Markdown(
-    extensions=[
-        'markdown.extensions.tables',
-        'markdown.extensions.fenced_code',
-        'markdown.extensions.codehilite',
-        'markdown.extensions.toc',
-        'markdown.extensions.abbr',
-        'markdown.extensions.footnotes',
-        'markdown.extensions.meta',
-        'app.wiki.extensions.wikilinks',
-    ],
-    extension_configs={
-        'markdown.extensions.toc': {
-            'title': 'Contents',
-            'marker': '[TOC]',
-        },
-        'markdown.extensions.footnotes': {
-            'PLACE_MARKER': '// Footnotes //',
-            'UNIQUE_IDS': True,
-        },
-        'app.wiki.extensions.wikilinks': {
-            'base_url': '/wiki/',
-            'end_url': '',
-            'html_class': 'wikilink',
-            'build_url': WikiLinks.buildUrl,
-        }
-    }
-)
+md = MarkdownIt('commonmark', {'breaks': True, 'html': True}) \
+    .use(front_matter_plugin) \
+    .use(footnote_plugin) \
+    .use(anchors_plugin, permalink=True, max_level=4, permalinkSymbol="") \
+    .use(deflist_plugin) \
+    .use(tasklists_plugin) \
+    .enable('table') \
+    .enable('strikethrough')
 
 def process_markdown(text: str) -> str:
     """Process markdown text into HTML"""
-    MarkdownInstance.reset()
-    return MarkdownInstance.convert(text)
+    return md.render(text)
