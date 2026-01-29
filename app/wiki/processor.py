@@ -5,6 +5,7 @@ from mdit_py_plugins.footnote import footnote_plugin
 from mdit_py_plugins.anchors import anchors_plugin
 from mdit_py_plugins.deflist import deflist_plugin
 from markdown_it import MarkdownIt
+from app.wiki.extensions import *
 
 md = MarkdownIt('commonmark', {'breaks': True, 'html': True}) \
     .use(front_matter_plugin) \
@@ -12,6 +13,9 @@ md = MarkdownIt('commonmark', {'breaks': True, 'html': True}) \
     .use(anchors_plugin, permalink=True, max_level=4, permalinkSymbol="") \
     .use(deflist_plugin) \
     .use(tasklists_plugin) \
+    .use(highlight_code_plugin) \
+    .use(wikilinks_plugin, base_url='/wiki/', html_class='wikilink') \
+    .use(toc_plugin, marker='[TOC]', title='Contents') \
     .enable('table') \
     .enable('strikethrough')
 
