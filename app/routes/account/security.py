@@ -85,6 +85,7 @@ def edit_account_details():
                 session=session
             )
             current_user.email = new_email
+            session.commit()
 
             mail.send_reactivate_account_email(
                 verification,
@@ -110,6 +111,7 @@ def edit_account_details():
             ).decode()
 
             users.update(current_user.id, {'bcrypt': hashed_password}, session=session)
+            session.commit()
             mail.send_password_changed_email(current_user)
             return get_security_page(info='Your password was updated.')
 
