@@ -159,6 +159,9 @@ def create_post_view(forum_id: str):
         if not (forum := forums.fetch_by_id(forum_id, session=session)):
             return utils.render_error(404, 'forum_not_found')
 
+        if not permissions.has_permission("forum.topics.create", current_user.id):
+            return utils.render_error(403)
+
         return utils.render_template(
             "forum/create.html",
             css='forums.css',
@@ -247,6 +250,9 @@ def create_post_action(forum_id: str):
 
         if forum.hidden:
             return utils.render_error(404, 'forum_not_found')
+
+        if not permissions.has_permission("forum.topics.create", current_user.id):
+            return utils.render_error(403)
 
         if current_user.silence_end:
             return utils.render_error(403, 'user_silenced')
