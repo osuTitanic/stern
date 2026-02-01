@@ -218,7 +218,7 @@ def get_icon_id(forum: DBForum) -> int | None:
 
 def get_topic_options() -> dict:
     can_set_options = permissions.has_permission(
-        "forum.moderation.topics.set_attributes",
+        "forum.moderation.topics.set_options",
         current_user.id
     )
 
