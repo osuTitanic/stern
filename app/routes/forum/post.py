@@ -11,7 +11,7 @@ from flask import (
 )
 from app.common.database import DBUser, DBForumPost, DBForumTopic, DBBeatmapset
 from app.common.constants import NotificationType, BeatmapStatus, UserActivity
-from app.common.helpers import activity
+from app.common.helpers import activity, permissions
 from app.common.database import (
     notifications,
     beatmapsets,
@@ -195,7 +195,12 @@ def update_topic_type(
     topic: DBForumTopic,
     session: Session
 ) -> dict:
-    if not current_user.is_moderator:
+    can_set_options = permissions.has_permission(
+        "forum.moderation.topics.set_options",
+        current_user.id
+    )
+
+    if not can_set_options:
         return {}
 
     initial_post = posts.fetch_initial_post(
@@ -229,15 +234,20 @@ def update_topic_type(
     }
 
 def get_icon_id(topic: DBForumTopic) -> int | None:
-    is_privileged = (
-        current_user.is_bat or
-        current_user.is_moderator
+    can_force_change_icon = permissions.has_permission(
+        "forum.moderation.topics.change_icon",
+        current_user.id
     )
-    
-    if not is_privileged:
-        return -2
+    can_change_icon = (
+        permissions.has_permission("forum.topics.change_icon", current_user.id) and
+        topic.can_change_icon
+    )
 
-    if not topic.can_change_icon:
+    # BATs are able to change icons of topics that allow icon changes
+    # Moderators can change icons regardless of forum settings
+    can_change_icon = can_change_icon or can_force_change_icon
+
+    if not can_change_icon:
         return -2
 
     icon_id = request.form.get(
@@ -387,7 +397,12 @@ def notify_subscribers(post: DBForumPost, topic: DBForumTopic, session: Session)
         # TODO: Send email, based on preferences
 
 def handle_post(topic: DBForumTopic, _: int, session: Session) -> Response:
-    if topic.locked_at and not current_user.is_moderator:
+    can_bypass_lock = permissions.has_permission(
+        "forum.moderation.topics.bypass_lock",
+        current_user.id
+    )
+    
+    if topic.locked_at and not can_bypass_lock:
         return utils.render_error(403, 'topic_locked')
 
     content = request.form.get(
@@ -464,8 +479,13 @@ def handle_post(topic: DBForumTopic, _: int, session: Session) -> Response:
             else topic.icon_id
         )
     }
+    
+    can_create_locks = permissions.has_permission(
+        "forum.moderation.posts.lock",
+        current_user.id
+    )
 
-    if current_user.is_moderator:
+    if can_create_locks:
         locked = request.form.get(
             'locked',
             type=bool,
@@ -478,7 +498,12 @@ def handle_post(topic: DBForumTopic, _: int, session: Session) -> Response:
             else None
         )
 
-    if current_user.is_admin:
+    can_set_status = permissions.has_permission(
+        "forum.moderation.topics.set_status",
+        current_user.id
+    )
+
+    if can_set_status:
         topic_status = request.form.get(
             'topic-status',
             type=str,
@@ -521,21 +546,31 @@ def handle_post(topic: DBForumTopic, _: int, session: Session) -> Response:
     )
 
 def handle_post_edit(topic: DBForumTopic, post_id: int, session: Session) -> Response:
-    if topic.locked_at and not current_user.is_moderator:
+    can_bypass_topic_lock = permissions.has_permission(
+        "forum.moderation.topics.bypass_lock",
+        current_user.id
+    )
+
+    if topic.locked_at and not can_bypass_topic_lock:
         return utils.render_error(403, 'topic_locked')
 
     if not (post := posts.fetch_one(post_id, session=session)):
         return utils.render_error(404, 'post_not_found')
 
-    is_priviliged = (
-        current_user.is_bat or
-        current_user.is_moderator
+    can_bypass_post_lock = permissions.has_permission(
+        "forum.moderation.posts.bypass_lock",
+        current_user.id
     )
 
-    if post.edit_locked and not is_priviliged:
+    if post.edit_locked and not can_bypass_post_lock:
         return utils.render_error(403, 'post_locked')
 
-    if current_user.id != post.user_id and not is_priviliged:
+    can_edit_others = permissions.has_permission(
+        "forum.moderation.posts.edit",
+        current_user.id
+    )
+
+    if current_user.id != post.user_id and not can_edit_others:
         return abort(403)
 
     content = request.form.get(
@@ -665,7 +700,12 @@ def do_post(forum_id: str, topic_id: str):
             type=str
         )
 
-        if len(content) > 2**14 and not current_user.is_moderator:
+        can_bypass_length_check = permissions.has_permission(
+            "forum.moderation.posts.bypass_length",
+            current_user.id
+        )
+
+        if len(content) > 2**14 and not can_bypass_length_check:
             return utils.render_error(400, 'post_too_long')
 
         actions = {
@@ -707,8 +747,13 @@ def do_draft_save(forum_id: str, topic_id: str):
 
         action_id = request.form.get('id', type=int)
         content = request.form.get('bbcode', type=str)
+        
+        can_bypass_length_check = permissions.has_permission(
+            "forum.moderation.posts.bypass_length",
+            current_user.id
+        )
 
-        if len(content) > 2**14 and not current_user.is_moderator:
+        if len(content) > 2**14 and not can_bypass_length_check:
             return utils.render_error(400, 'post_too_long')
 
         return handle_draft_save(
