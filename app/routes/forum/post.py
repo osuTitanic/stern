@@ -635,6 +635,24 @@ def handle_post_edit(topic: DBForumTopic, post_id: int, session: Session) -> Res
         session=session
     )
 
+    initial_post = posts.fetch_initial_post(
+        topic.id,
+        session=session
+    )
+    title_update = request.form.get(
+        'title',
+        type=str,
+        default=''
+    ).strip()
+
+    # Users can update the topic title when editing the initial post
+    if title_update and post.id == initial_post.id:
+        topics.update(
+            topic.id,
+            {'title': title_update},
+            session=session
+        )
+
     app.session.logger.info(
         f'{current_user.name} edited their post ({post.id}).'
     )
