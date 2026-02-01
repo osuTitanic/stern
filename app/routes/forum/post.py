@@ -118,6 +118,9 @@ def post_view(forum_id: str, topic_id: str):
             beatmapset=beatmapset,
             is_subscribed=is_subscribed,
             initial_post=initial_post,
+            editing_initial_post=(
+                action == 'edit' and initial_post.id == action_id
+            ),
             icons=forums.fetch_icons(session),
             topic_type=get_post_type(topic),
             topic_icon=topic.icon_id
