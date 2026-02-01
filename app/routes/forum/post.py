@@ -169,11 +169,13 @@ def fetch_post_text(
 
         # Reformat newlines
         formatted_content = regex.sub(r"(?:\r\n){2,}", "\r\n\r\n", formatted_content, timeout=0.1)
-        formatted_content = formatted_content.strip()
+
+        # Remove separator found in bss posts
+        formatted_content = formatted_content.split("---------------\n")[-1]
 
         return (
             f"[quote={post.user.name.replace('[', '').replace(']', '')}]"
-            f"{formatted_content}"
+            f"{formatted_content.strip()}"
             f"[/quote]"
         )
 
