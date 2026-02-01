@@ -33,6 +33,11 @@
 <form action="/forum/{{ forum.id }}/t/{{ topic.id }}/post"
       method="post">
     <div style="padding-left: 5px; padding-right: 5px;">
+        {% if editing_initial_post %}
+        <p class="post-subject">
+            Subject: <input type="text" name="title" class="nav-search" value="{{ topic.title }}">
+        </p>
+        {% endif %}
         {% if can_edit_icon %}
         <div class="icon-selection">
             <input type="radio" name="icon" value="-1" {% if not topic_icon %} checked {% endif %}>
