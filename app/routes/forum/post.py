@@ -613,7 +613,12 @@ def handle_post_edit(topic: DBForumTopic, post_id: int, session: Session) -> Res
         'content': content
     }
 
-    if is_priviliged:
+    can_create_locks = permissions.has_permission(
+        "forum.moderation.posts.lock",
+        current_user.id
+    )
+
+    if can_create_locks:
         updates['edit_locked'] = request.form.get(
             'edit-locked',
             type=bool,
