@@ -23,9 +23,17 @@ from app.common.database import (
 
 import hashlib
 import utils
+import regex
 import app
 
 router = Blueprint("forum-posts", __name__)
+
+# Patterns for content to be removed when quoting other posts
+quote_patterns = [
+    regex.compile(r"\[quote(?:=[^\]]+)?\].*?\[/quote\]"),
+    regex.compile(r"\[img\].*?\[/img\]"),
+    regex.compile(r"\[(?:video|youtube)\].*?\[/(?:video|youtube)\]")
+]
 
 def broadcast_post_activity(
     topic: DBForumTopic,
@@ -59,7 +67,7 @@ def post_view(forum_id: str, topic_id: str):
     if not topic_id.isdigit():
         return utils.render_error(404, 'topic_not_found')
 
-    with app.session.database.managed_session() as session:
+    with app.session.database.managed_session(autocommit=False) as session:
         if not (topic := topics.fetch_one(topic_id, session=session)):
             return utils.render_error(404, 'topic_not_found')
 
@@ -154,13 +162,18 @@ def fetch_post_text(
         if post.deleted:
             return
 
-        if post.content.strip('\r\n').startswith('[quote'):
-            # Remove the quoted content from the post
-            post.content = post.content.split('[/quote]', 1)[-1].strip('\r\n')
+        formatted_content = post.content
+
+        for pattern in quote_patterns:
+            formatted_content = pattern.sub('', formatted_content, timeout=0.1)
+
+        # Reformat newlines
+        formatted_content = regex.sub(r"(?:\r\n){2,}", "\r\n\r\n", formatted_content, timeout=0.1)
+        formatted_content = formatted_content.strip()
 
         return (
             f"[quote={post.user.name.replace('[', '').replace(']', '')}]"
-            f"{post.content}"
+            f"{formatted_content}"
             f"[/quote]"
         )
 
