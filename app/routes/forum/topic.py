@@ -1,8 +1,8 @@
 
 from app.common.database import DBForumTopic, DBForumPost, DBForum, DBUser
 from app.common.config import config_instance as config
+from app.common.helpers import activity, permissions
 from app.common.constants import UserActivity
-from app.common.helpers import ip, activity
 from app.common.database import (
     beatmapsets,
     forums,
@@ -191,12 +191,20 @@ def update_notifications(
     )
 
 def get_icon_id(forum: DBForum) -> int | None:
-    is_priviliged = (
-        current_user.is_bat or
-        current_user.is_moderator
+    can_force_change_icon = permissions.has_permission(
+        "forum.moderation.topics.change_icon",
+        current_user.id
+    )
+    can_change_icon = (
+        permissions.has_permission("forum.topics.change_icon", current_user.id) and
+        forum.allow_icons
     )
 
-    if not forum.allow_icons and not is_priviliged:
+    # BATs are able to change icons of topics that allow icon changes
+    # Moderators can change icons regardless of forum settings
+    can_change_icon = can_change_icon or can_force_change_icon
+
+    if not can_change_icon:
         return
 
     icon_id = request.form.get(
@@ -209,7 +217,12 @@ def get_icon_id(forum: DBForum) -> int | None:
         return icon_id
 
 def get_topic_options() -> dict:
-    if not current_user.is_moderator:
+    can_set_options = permissions.has_permission(
+        "forum.moderation.topics.set_attributes",
+        current_user.id
+    )
+
+    if not can_set_options:
         return {}
 
     type = request.form.get('type')
