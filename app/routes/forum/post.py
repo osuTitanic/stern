@@ -397,6 +397,9 @@ def notify_subscribers(post: DBForumPost, topic: DBForumTopic, session: Session)
         # TODO: Send email, based on preferences
 
 def handle_post(topic: DBForumTopic, _: int, session: Session) -> Response:
+    if not permissions.has_permission("forum.posts.create", current_user.id):
+        return utils.render_error(403)
+
     can_bypass_lock = permissions.has_permission(
         "forum.moderation.topics.bypass_lock",
         current_user.id
@@ -546,6 +549,14 @@ def handle_post(topic: DBForumTopic, _: int, session: Session) -> Response:
     )
 
 def handle_post_edit(topic: DBForumTopic, post_id: int, session: Session) -> Response:
+    can_edit_posts = permissions.has_permission(
+        "forum.posts.edit",
+        current_user.id
+    )
+
+    if not can_edit_posts:
+        return utils.render_error(403)
+
     can_bypass_topic_lock = permissions.has_permission(
         "forum.moderation.topics.bypass_lock",
         current_user.id
@@ -570,7 +581,15 @@ def handle_post_edit(topic: DBForumTopic, post_id: int, session: Session) -> Res
         current_user.id
     )
 
+    can_edit_own = permissions.has_permission(
+        "forum.posts.edit",
+        current_user.id
+    )
+
     if current_user.id != post.user_id and not can_edit_others:
+        return abort(403)
+
+    if current_user.id == post.user_id and not can_edit_own:
         return abort(403)
 
     content = request.form.get(
@@ -662,6 +681,9 @@ def handle_post_edit(topic: DBForumTopic, post_id: int, session: Session) -> Res
     )
 
 def handle_draft_save(topic: DBForumTopic, _: int, session: Session) -> Response:
+    if not permissions.has_permission("forum.posts.create", current_user.id):
+        return utils.render_error(403)
+
     content = request.form.get(
         'bbcode',
         type=str
@@ -738,7 +760,7 @@ def do_post(forum_id: str, topic_id: str):
         }
 
         if action not in actions:
-            return abort(code=404)
+            return utils.render_error(404)
 
         return actions[action](
             topic,
@@ -767,6 +789,9 @@ def do_draft_save(forum_id: str, topic_id: str):
 
         if current_user.restricted:
             return utils.render_error(403, 'user_restricted')
+
+        if not permissions.has_permission("forum.posts.create", current_user.id):
+            return utils.render_error(403)
 
         action_id = request.form.get('id', type=int)
         content = request.form.get('bbcode', type=str)
