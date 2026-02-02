@@ -7,7 +7,7 @@ from mdit_py_plugins.deflist import deflist_plugin
 from markdown_it import MarkdownIt
 from app.wiki.extensions import *
 
-md = MarkdownIt('commonmark', {'breaks': True, 'html': True}) \
+md = MarkdownIt('commonmark', {'breaks': True, 'html': True, 'linkify': True}) \
     .use(front_matter_plugin) \
     .use(footnote_plugin) \
     .use(anchors_plugin, permalink=True, max_level=4, permalinkSymbol="") \
@@ -17,7 +17,8 @@ md = MarkdownIt('commonmark', {'breaks': True, 'html': True}) \
     .use(wikilinks_plugin, base_url='/wiki/', html_class='wikilink') \
     .use(toc_plugin, marker='[TOC]', title='Contents') \
     .enable('table') \
-    .enable('strikethrough')
+    .enable('strikethrough') \
+    .enable('linkify')
 
 def process_markdown(text: str) -> str:
     """Process markdown text into HTML"""
