@@ -1122,15 +1122,14 @@ function deleteBeatmap(setId) {
         return;
 
     performApiRequest("DELETE", url, null, function(xhr) {
-        window.location.href = "/u/" + currentUser + "#beatmaps";
-        window.location.reload();
+        reloadPageSoon(250, "/u/" + currentUser + "#beatmaps");
     }, function(xhr) {
         try {
             var data = JSON.parse(xhr.responseText);
             alert(data.details);
         } catch (e) {
-            console.error("Failed to revive beatmap:", e);
-            alert("Failed to revive beatmap.");
+            console.error("Failed to delete beatmap:", e);
+            alert("Failed to delete beatmap.");
         }
     });
 }
@@ -1138,8 +1137,7 @@ function deleteBeatmap(setId) {
 function reviveBeatmap(setId) {
     var url = "/users/" + currentUser + "/beatmapsets/" + setId + "/revive";
     performApiRequest("POST", url, null, function(xhr) {
-        window.location.href = "/u/" + currentUser + "#beatmaps";
-        window.location.reload();
+        reloadPageSoon(250, "/u/" + currentUser + "#beatmaps");
     }, function(xhr) {
         try {
             var data = JSON.parse(xhr.responseText);

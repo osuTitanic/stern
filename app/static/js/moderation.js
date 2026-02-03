@@ -228,7 +228,7 @@ function changeEmail(userId, newEmail, onSuccess, onFailure) {
 /* User Interface */
 
 function defaultOnSuccess() {
-    setTimeout(function() { location.reload() }, 250);
+    reloadPageSoon(250);
 }
 
 function defaultOnError(err) {
@@ -269,7 +269,7 @@ function moderationSaveProfile(userId) {
 
     updateUserProfile(userId, data, function(user) {
         document.getElementById('moderation-edit-profile').close();
-        setTimeout(function() { location.reload(); }, 250);
+        reloadPageSoon(250);
     }, function(err) {
         alert('Error: ' + err.details);
     });
@@ -293,7 +293,7 @@ function moderationDeleteBadge(userId, badgeId) {
     removeBadge(userId, badgeId, function() {
         var row = document.querySelector('tr[data-badge-id="' + badgeId + '"]');
         if (row) row.remove();
-        else setTimeout(function() { location.reload(); }, 250);
+        else reloadPageSoon(250);
     }, function(err) {
         alert('Failed to delete badge: ' + err.details);
     });
@@ -308,7 +308,7 @@ function moderationAddBadge(userId) {
 
     addBadge(userId, data, function(badge) {
         // TODO: Insert new row for created badge
-        setTimeout(function() { location.reload(); }, 250);
+        reloadPageSoon(250);
     }, function(err) {
         alert('Failed to add badge: ' + err.details);
     });
@@ -374,7 +374,7 @@ function moderationDeleteInfringement(userId, infringementId, isRestriction) {
         hideSpinner();
         var row = document.querySelector('tr[data-infringement-id="' + infringementId + '"]');
         if (row) row.remove();
-        else setTimeout(function() { location.reload(); }, 250);
+        else reloadPageSoon(250);
     }, function(err){
         hideSpinner();
         alert('Failed to delete infringement: ' + (err && err.details ? err.details : 'Unknown error'));

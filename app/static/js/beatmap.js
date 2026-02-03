@@ -63,7 +63,7 @@ function editBeatmapDescription() {
         var url = "/users/" + currentUser + "/beatmapsets/" + beatmapsetId + "/description";
 
         performApiRequest("PATCH", url, {"bbcode": textarea.value}, function(xhr) {
-            window.location.reload();
+            reloadPageSoon();
         }, function(xhr) {
             showError(xhr, "An error occurred while trying to update the description.");
         });
@@ -111,7 +111,7 @@ function acceptCollaborationRequest(beatmapId, requestId) {
     var url = "/beatmaps/" + beatmapId + "/collaborations/requests/" + requestId + "/accept";
 
     performApiRequest("POST", url, null, function(xhr) {
-        window.location.reload();
+        reloadPageSoon();
     }, function(xhr) {
         showError(xhr, "An error occurred while trying to accept the invite.");
     });
@@ -124,7 +124,7 @@ function rejectCollaborationRequest(beatmapId, requestId) {
     var url = "/beatmaps/" + beatmapId + "/collaborations/requests/" + requestId;
 
     performApiRequest("DELETE", url, null, function(xhr) {
-        window.location.reload();
+        reloadPageSoon();
     }, function(xhr) {
         showError(xhr, "An error occurred while trying to decline the invite.");
     });
@@ -137,7 +137,7 @@ function removeCollaborationRequest(beatmapId, requestId) {
     var url = "/beatmaps/" + beatmapId + "/collaborations/requests/" + requestId;
 
     performApiRequest("DELETE", url, null, function(xhr) {
-        window.location.reload();
+        reloadPageSoon();
     }, function(xhr) {
         showError(xhr, "An error occurred while trying to delete your invite.");
     });
@@ -167,7 +167,7 @@ function createCollaborationRequestFromUserId(userId, beatmapId) {
     var url = "/beatmaps/" + beatmapId + "/collaborations/requests";
 
     performApiRequest("POST", url, { user_id: userId }, function(xhr) {
-        window.location.reload();
+        reloadPageSoon();
     }, function(xhr) {
         showError(xhr, "An error occurred while creating your invite.");
     });
@@ -177,7 +177,7 @@ function editCollaborationRequest(beatmapId, collaborationId, edits) {
     var url = "/beatmaps/" + beatmapId + "/collaborations/" + collaborationId;
 
     performApiRequest("PATCH", url, edits, function(xhr) {
-        window.location.reload();
+        reloadPageSoon();
     }, function(xhr) {
         showError(xhr, "An error occurred while editing the collaboration invite.");
     });
@@ -191,7 +191,7 @@ function removeCollaboration(beatmapId, collaborationId) {
     var url = "/beatmaps/" + beatmapId + "/collaborations/" + collaborationId;
 
     performApiRequest("DELETE", url, null, function(xhr) {
-        window.location.reload();
+        reloadPageSoon();
     }, function(xhr) {
         showError(xhr, "An error occurred while trying to remove the collaborator.");
     });

@@ -8,7 +8,7 @@ function setBeatmapsetStatus(beatmapsetId, status, promptText) {
     }
 
     performApiRequest("PATCH", "/beatmapsets/" + beatmapsetId + "/status?status=" + status, null, function(xhr) {
-        location.reload();
+        reloadPageSoon();
     }, function(xhr) {
         var response = JSON.parse(xhr.responseText);
         alert(response.details);
@@ -22,7 +22,7 @@ function updateBeatmapsetMetadata(event) {
     var url = "/beatmapsets/" + data.beatmapset_id;
 
     performApiRequest("PATCH", url, data, function(xhr) {
-        location.reload();
+        reloadPageSoon();
     }, function(xhr) {
         var response = JSON.parse(xhr.responseText);
         alert(response.details);
@@ -36,7 +36,7 @@ function updateBeatmapStatuses(event) {
     var url = "/beatmapsets/" + data.beatmapset_id + "/status/beatmaps";
 
     performApiRequest("PATCH", url, data, function(xhr) {
-        location.reload();
+        reloadPageSoon();
     }, function(xhr) {
         var response = JSON.parse(xhr.responseText);
         alert(response.details);
@@ -49,7 +49,7 @@ function nukeBeatmapset(beatmapsetId) {
     }
 
     performApiRequest("POST", "/beatmapsets/" + beatmapsetId + "/nuke", null, function(xhr) {
-        location.reload();
+        reloadPageSoon();
     }, function(xhr) {
         var response = JSON.parse(xhr.responseText);
         alert(response.details);
@@ -60,7 +60,7 @@ function addNomination(beatmapsetId) {
     var url = "/beatmapsets/" + beatmapsetId + "/nominations";
 
     performApiRequest("POST", url, null, function(xhr) {
-        location.reload();
+        reloadPageSoon();
     }, function(xhr) {
         var response = JSON.parse(xhr.responseText);
         alert(response.details);
@@ -75,7 +75,7 @@ function resetNominations(beatmapsetId) {
     var url = "/beatmapsets/" + beatmapsetId + "/nominations";
 
     performApiRequest("DELETE", url, null, function(xhr) {
-        location.reload();
+        reloadPageSoon();
     }, function(xhr) {
         var response = JSON.parse(xhr.responseText);
         alert(response.details);
@@ -107,7 +107,7 @@ function uploadResource(endpoint, key, filetypes, promptText) {
 
         // Perform the API request to upload the file
         performApiRequest("PUT", endpoint, formData, function(xhr) {
-            location.reload();
+            reloadPageSoon();
         }, function(xhr) {
             var response = JSON.parse(xhr.responseText);
             alert(response.details);
@@ -128,7 +128,7 @@ function updateBeatmapsetOwner(beatmapsetId) {
     var data = { user_id: newOwner };
 
     performApiRequest("PATCH", url, data, function(xhr) {
-        location.reload();
+        reloadPageSoon();
     }, function(xhr) {
         var response = JSON.parse(xhr.responseText);
         alert(response.details);
