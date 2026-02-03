@@ -239,6 +239,16 @@ function confirmRedirect(url, promptText) {
     return false;
 }
 
+function reloadPageSoon(timeoutMs, href) {
+    timeoutMs = timeoutMs || 250;
+    href = href || window.location.href;
+
+    setTimeout(function() {
+        window.location.href = href;
+        window.location.reload();
+    }, timeoutMs);
+}
+
 function resetOrPlayAudio(element) {
     var audio = document.getElementById(element);
 
