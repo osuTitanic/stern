@@ -250,11 +250,11 @@ def update_topic_type(
 
 def get_icon_id(topic: DBForumTopic) -> int | None:
     can_force_change_icon = permissions.has_permission(
-        "forum.moderation.topics.change_icon",
+        "forum.moderation.topics.edit_icon",
         current_user.id
     )
     can_change_icon = (
-        permissions.has_permission("forum.topics.change_icon", current_user.id) and
+        permissions.has_permission("forum.topics.edit_icon", current_user.id) and
         topic.can_change_icon
     )
 
