@@ -299,3 +299,12 @@ body {
     text-align: center;
     margin-top: 10px;
 }
+
+.search-blurb-box {
+    margin: auto;
+    width: 750px;
+    border-radius: 10px;
+    background-color: white;
+    font-size: 80%;
+    margin-top: 10px;
+}
