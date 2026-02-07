@@ -532,6 +532,11 @@ input[type="url"], input[type="search"] {
     color: #999999;
 }
 
+.info-text {
+    font-size: 70%;
+    color: #5c5b5b;
+}
+
 .bbcode-toolbar {
     margin-bottom: 4px;
     display: flex;

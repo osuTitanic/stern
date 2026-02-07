@@ -2,6 +2,11 @@
 
 {% extends "base.html" %}
 
+{% set is_beatmap_author = (
+    beatmapset.server != 0 and
+    beatmapset.creator_id == current_user.id 
+) %}
+
 {% block content %}
 <h1 class="header-text">
     <a href="/beatmapsets">Beatmap Listing</a> »
@@ -552,6 +557,9 @@
                 {% endif %}
             {% endif %}
         </div>
+        {% if is_beatmap_author %}
+        <p class="info-text" style="margin-left: 8px;">(Double-click to edit description!)</p>
+        {% endif %}
         <div class="beatmap-description">
             <div title="Play Song">
                 <a onclick="resetOrPlayAudio('beatmap-preview')" class="beatmap-preview-link" href="javascript:void(0);">
@@ -882,7 +890,7 @@
 {# TODO: Beatmap Comments #}
 <script>
     var beatmapsetId = {{ beatmapset.id }};
-    var isBeatmapsetOwner = {{ (beatmapset.server != 0 and beatmapset.creator_id == current_user.id)|lower }};
+    var isBeatmapsetOwner = {{ is_beatmap_author|lower }};
     var bbcodeDescription = `{{ beatmapset.description }}`;
 </script>
 <script src="{{ '/js/beatmap.js'|cached_url }}"></script>
