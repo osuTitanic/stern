@@ -333,6 +333,7 @@
     padding-right: 18px;
     padding-left: 18px;
     text-decoration: none;
+    transition: all 0.2s;
 }
 
 .post-buttons-large a,
@@ -344,6 +345,7 @@
     padding-right: 32px;
     padding-left: 32px;
     text-decoration: none;
+    transition: all 0.2s;
 }
 
 .post-buttons a:hover {
@@ -360,6 +362,11 @@
     text-shadow: 2px 1px 8px #b7befd;
     background: -webkit-linear-gradient(rgb(83, 147, 207) 0%, rgb(58, 109, 156) 100%);
     background-image: linear-gradient(rgb(83, 147, 207) 0%, rgb(58, 109, 156) 100%);
+}
+
+.button-blue:disabled {
+    background: -webkit-linear-gradient(rgb(150, 150, 150) 0%, rgb(90, 90, 90) 100%);
+    background-image: linear-gradient(rgb(150, 150, 150) 0%, rgb(90, 90, 90) 100%);
 }
 
 .button-red {

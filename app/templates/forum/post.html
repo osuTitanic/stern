@@ -69,4 +69,23 @@
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     </div>
 </form><br><br>
+<script>
+    addEvent('DOMContentLoaded', document, function(event) {
+        // Focus the bbcode editor on load
+        var bbcodeEditor = document.querySelector('.bbcode-editor');
+        if (bbcodeEditor) bbcodeEditor.focus();
+    });
+
+    addEvent('keydown', document, function(event) {
+        // Submit the form when Ctrl + Enter is pressed
+        if (event.ctrlKey && event.key === 'Enter') {
+            var submitButton = document.querySelector('.post-buttons input[type="submit"]');
+            if (submitButton)
+            {
+                submitButton.click();
+                submitButton.disabled = true;
+            }
+        }
+    });
+</script>
 {% endblock content %}

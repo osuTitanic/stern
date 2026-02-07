@@ -27,7 +27,7 @@
 <form action="/forum/{{ forum.id }}/create"
       method="post" style="padding-left: 5px; padding-right: 5px;">
     <p class="post-subject">
-        Subject: <input type="text" name="title" class="nav-search">
+        Subject: <input type="text" name="title" class="nav-search" id="subject-field">
     </p>
     {% if can_edit_icon %}
     <div class="icon-selection">
@@ -57,4 +57,23 @@
     </div>
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 </form><br>
+<script>
+    addEvent('DOMContentLoaded', document, function(event) {
+        // Focus the subject field on page load
+        const subjectField = document.getElementById('subject-field');
+        if (subjectField) subjectField.focus();
+    });
+
+    addEvent('keydown', document, function(event) {
+        // Submit the form when Ctrl + Enter is pressed
+        if (event.ctrlKey && event.key === 'Enter') {
+            var submitButton = document.querySelector('.post-buttons input[type="submit"]');
+            if (submitButton)
+            {
+                submitButton.click();
+                submitButton.disabled = true;
+            }
+        }
+    });
+</script>
 {% endblock content %}
