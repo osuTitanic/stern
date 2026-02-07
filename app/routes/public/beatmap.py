@@ -1,6 +1,6 @@
 
 from app.common.database import beatmaps, scores, favourites, nominations, relationships, collaborations
-from app.common.constants import BeatmapLanguage, BeatmapGenre, BeatmapStatus, Mods
+from app.common.constants import BeatmapLanguage, BeatmapGenre, BeatmapStatus, GameMode, Mods
 from app.common.config import config_instance as config
 from flask import Blueprint, request, redirect
 from flask_login import current_user
@@ -29,8 +29,14 @@ def get_beatmap(id: int):
             # Beatmap is inactive
             return utils.render_error(404, 'beatmap_not_found')
 
-        if not (mode := request.args.get('mode')):
-            mode = beatmap.mode
+        mode = beatmap.mode
+        mode_query = request.args.get('mode', '')
+
+        if mode_query.isdigit():
+            mode = int(mode_query)
+
+        if mode not in GameMode:
+            return redirect(f'/b/{id}')
 
         if not (mods := request.args.get('mods')):
             mods = ""
@@ -65,7 +71,7 @@ def get_beatmap(id: int):
 
         beatmap_scores = fetch_beatmap_scores(
             beatmap.id,
-            mode=int(mode),
+            mode=mode,
             mods=mods,
             session=session
         )
@@ -75,7 +81,7 @@ def get_beatmap(id: int):
             css='beatmap.css',
             beatmap=beatmap,
             beatmapset=beatmap.beatmapset,
-            mode=int(mode),
+            mode=mode,
             mods=mods,
             title=f"{beatmap.beatmapset.artist} - {beatmap.beatmapset.title}",
             Status=BeatmapStatus,

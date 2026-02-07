@@ -51,6 +51,9 @@ def userpage(query: str):
         if mode_query and mode_query.isdigit():
             mode = int(mode_query)
 
+        if mode not in GameMode:
+            return redirect(f'/u/{query}')
+
         if user.restricted:
             infs = infringements.fetch_all(
                 user.id,
@@ -103,7 +106,7 @@ def userpage(query: str):
             css='user.css',
             title=f"{user.name} - Titanic",
             site_title=f"{user.name} - Player Info",
-            site_description=f"Rank ({GameMode(int(mode)).formatted}): Global: #{pp_rank or '-'} | Country: #{pp_rank_country or '-'}",
+            site_description=f"Rank ({GameMode(mode).formatted}): Global: #{pp_rank or '-'} | Country: #{pp_rank_country or '-'}",
             site_image=f'{config.OSU_BASEURL}{app.filters.avatar_url(user)}',
             site_url=f"{config.OSU_BASEURL}/u/{user.id}",
             canonical_url=f"/u/{user.id}",
