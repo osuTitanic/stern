@@ -61,7 +61,10 @@ def user_loader(user_id: int) -> Optional[DBUser]:
         )
 
         if not user:
-            return
+            return None
+
+        if not user.activated:
+            return None
 
         return user
     except Exception as e:
