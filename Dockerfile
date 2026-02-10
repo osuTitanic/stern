@@ -76,4 +76,4 @@ VOLUME /stern/app/static
 STOPSIGNAL SIGQUIT
 ENTRYPOINT ["/sbin/tini", "--"]
 
-CMD ["/bin/sh", "-c", "granian --host 0.0.0.0 --port 80 --interface wsgi --workers ${FRONTEND_WORKERS} --runtime-threads ${FRONTEND_THREADS} --loop uvloop --http 1 --no-ws --backpressure 128 --respawn-failed-workers --access-log --process-name stern-worker --workers-kill-timeout 5 --workers-lifetime 43200 --workers-max-rss 512 app:flask"]
+CMD ["/bin/sh", "-c", "granian --host 0.0.0.0 --port 80 --interface wsgi --workers ${FRONTEND_WORKERS} --blocking-threads ${FRONTEND_THREADS} --loop uvloop --http 1 --no-ws --backpressure 128 --respawn-failed-workers --access-log --process-name stern-worker --workers-kill-timeout 5 --workers-lifetime 43200 --workers-max-rss 512 app:flask"]
