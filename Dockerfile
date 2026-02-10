@@ -25,10 +25,10 @@ RUN apk add --no-cache \
 WORKDIR /tmp/build
 COPY requirements.txt ./
 
-# Install Python dependencies (including uwsgi) into a relocatable prefix
+# Install Python dependencies into a relocatable prefix
 RUN --mount=type=cache,target=/root/.cache/pip \
     pip install --upgrade pip setuptools wheel && \
-    pip install --no-compile --root /install -r requirements.txt uwsgi
+    pip install --no-compile --root /install -r requirements.txt granian[pname,uvloop]
 
 FROM python:3.14-alpine
 
@@ -55,21 +55,9 @@ RUN apk add --no-cache \
 
 ARG FRONTEND_WORKERS=4
 ARG FRONTEND_THREADS=2
-ARG UWSGI_OFFLOAD_THREADS=4
-ARG UWSGI_STATS=":1717"
-ARG UWSGI_CHEAPER_MIN=0
-ARG UWSGI_CHEAPER_INITIAL=1
-ARG UWSGI_CHEAPER_OVERLOAD=6
-ARG UWSGI_CHEAPER_STEP=1
 
 ENV FRONTEND_WORKERS=${FRONTEND_WORKERS} \
-    FRONTEND_THREADS=${FRONTEND_THREADS} \
-    UWSGI_OFFLOAD_THREADS=${UWSGI_OFFLOAD_THREADS} \
-    UWSGI_STATS=${UWSGI_STATS} \
-    UWSGI_CHEAPER_MIN=${UWSGI_CHEAPER_MIN} \
-    UWSGI_CHEAPER_INITIAL=${UWSGI_CHEAPER_INITIAL} \
-    UWSGI_CHEAPER_OVERLOAD=${UWSGI_CHEAPER_OVERLOAD} \
-    UWSGI_CHEAPER_STEP=${UWSGI_CHEAPER_STEP}
+    FRONTEND_THREADS=${FRONTEND_THREADS}
 
 WORKDIR /stern
 
@@ -78,9 +66,6 @@ COPY --from=builder /install/usr/local /usr/local
 
 # Copy application source
 COPY . .
-
-# Copy tuned uwsgi configuration
-COPY uwsgi.ini ./uwsgi.ini
 
 # Precompile python files for faster startup
 RUN python -m compileall -q app
@@ -91,4 +76,4 @@ VOLUME /stern/app/static
 STOPSIGNAL SIGQUIT
 ENTRYPOINT ["/sbin/tini", "--"]
 
-CMD ["uwsgi", "--ini", "uwsgi.ini"]
+CMD ["/bin/sh", "-c", "granian --host 0.0.0.0 --port 80 --interface wsgi --workers ${FRONTEND_WORKERS} --runtime-threads ${FRONTEND_THREADS} --loop uvloop --http 1 --no-ws --backpressure 128 --respawn-failed-workers --access-log --process-name deck-worker --workers-kill-timeout 5 --workers-lifetime 43200 --workers-max-rss 512 app:flask"]
