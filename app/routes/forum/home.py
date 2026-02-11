@@ -21,11 +21,6 @@ def home():
         all_sub_forums = list(itertools.chain(*forum_dict.values()))
         sub_forum_ids = [forum.id for forum in all_sub_forums]
 
-        forum_counts = forums.fetch_statistics_by_forum_ids(
-            sub_forum_ids,
-            session=session
-        )
-
         forum_last_posts = posts.fetch_last_for_forums(
             sub_forum_ids,
             session=session
@@ -40,10 +35,6 @@ def home():
             site_image=f"{app.config.OSU_BASEURL}/images/logo/main-low.png",
             forums=forum_dict,
             session=session,
-            forum_stats={
-                forum.id: forum_counts.get(forum.id, (0, 0))
-                for forum in all_sub_forums
-            },
             forum_recent={
                 forum.id: forum_last_posts.get(forum.id)
                 for forum in all_sub_forums

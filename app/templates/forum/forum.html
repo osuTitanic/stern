@@ -83,8 +83,8 @@
                         </div>
                     </td>
                     <td style="text-align: center;" class="subforum-stats">
-                        <p class="subforum-topiccount">{{ "{:,}".format(subforum_stats[subforum.id][0]) }}</p>
-                        <p class="subforum-postcount">{{ "{:,}".format(subforum_stats[subforum.id][1]) }}</p>
+                        <p class="subforum-topiccount">{{ "{:,}".format(subforum.topic_count) }}</p>
+                        <p class="subforum-postcount">{{ "{:,}".format(subforum.post_count) }}</p>
                     </td>
                     <td style="text-align: right;" class="subforum-topics">
                         {% set recent = subforum_recent[subforum.id] %}

@@ -1,8 +1,7 @@
 {# templates/forum/topic_preview.html #}
 
-{% set post_count = topic_post_counts.get(topic.id, 0) %}
 {% set posts_per_page = 15 %}
-{% set page_count = (post_count / posts_per_page)|ceil %}
+{% set page_count = (topic.post_count / posts_per_page)|ceil %}
 
 {% if index % 2 %}
     <tr class="light-row">
@@ -57,11 +56,11 @@
         {{ topic.creator|forum_user_link|safe }}
     </td>
     <td width="6%" align="center">
-        <p class="subforum-topiccount">{{ post_count }}</p>
+        <p class="subforum-topiccount">{{ topic.post_count }}</p>
         <p class="subforum-postcount">{{ topic.views }}</p>
     </td>
     <td align="center">
-    {% set last_post = topic_last_posts.get(topic.id) %}
+        {% set last_post = topic_last_posts.get(topic.id) %}
         {% if last_post %}
             <p>
                 {{ last_post.user|forum_user_link|safe }}

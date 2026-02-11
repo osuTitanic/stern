@@ -62,11 +62,6 @@ def forum_view(forum_id: int):
         for topic_collection in (recent_topics, pinned_topics, announcements):
             topic_ids.update(topic.id for topic in topic_collection)
 
-        topic_post_counts = posts.fetch_statistics_by_topic_ids(
-            topic_ids,
-            session=session
-        )
-
         topic_last_posts = posts.fetch_last_for_topics(
             topic_ids,
             session=session
@@ -91,11 +86,6 @@ def forum_view(forum_id: int):
             subforum.id for subforum in sub_forums
         }
 
-        subforum_counts = forums.fetch_statistics_by_forum_ids(
-            subforum_ids,
-            session=session
-        )
-
         subforum_last_posts = posts.fetch_last_for_forums(
             subforum_ids,
             session=session
@@ -116,10 +106,6 @@ def forum_view(forum_id: int):
             canonical_url=request.base_url,
             forum=forum,
             sub_forums=sub_forums,
-            subforum_stats={
-                subforum.id: subforum_counts.get(subforum.id, (0, 0))
-                for subforum in sub_forums
-            },
             subforum_recent={
                 forum.id: subforum_last_posts.get(forum.id)
                 for forum in sub_forums
@@ -128,7 +114,6 @@ def forum_view(forum_id: int):
             has_custom_icons=has_custom_icons,
             announcements=announcements,
             recent_topics=recent_topics,
-            topic_post_counts=topic_post_counts,
             topic_last_posts=topic_last_posts,
             topic_count=topic_count,
             total_pages=topic_count // topics_per_page,

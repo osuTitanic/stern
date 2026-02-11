@@ -24,8 +24,8 @@
                 {# TODO: Subforums #}
             </td>
             <td style="text-align: center;" class="subforum-stats">
-                <p class="subforum-topiccount">{{ "{:,}".format(forum_stats[forum.id][0]) }}</p>
-                <p class="subforum-postcount">{{ "{:,}".format(forum_stats[forum.id][1]) }}</p>
+                <p class="subforum-topiccount">{{ "{:,}".format(forum.topic_count) }}</p>
+                <p class="subforum-postcount">{{ "{:,}".format(forum.post_count) }}</p>
             </td>
             <td style="text-align: right;" class="subforum-topics">
                 {% set recent = forum_recent[forum.id] %}
