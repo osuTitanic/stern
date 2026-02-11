@@ -21,8 +21,7 @@ function displayCategory(category) {
     selectCategory(category);
 }
 
-function selectCategory(category)
-{
+function selectCategory(category) {
     var categoryLinks = document.getElementsByClassName("category");
 
     for (var i = 0; i < categoryLinks.length; i++) {
@@ -36,8 +35,7 @@ function selectCategory(category)
     }
 }
 
-function deselectCategory(category)
-{
+function deselectCategory(category) {
     var categoryLinks = document.getElementsByClassName("category");
     
     for (var i = 0; i < categoryLinks.length; i++) {
@@ -49,8 +47,7 @@ function deselectCategory(category)
     }
 }
 
-function deselectAll()
-{
+function deselectAll() {
     var categoryLinks = document.getElementsByClassName("category");
 
     for (var i = 0; i < categoryLinks.length; i++) {
@@ -59,5 +56,20 @@ function deselectAll()
         for (var j = 0; j < selectedElements.length; j++) {
             selectedElements[j].className = 'category';
         }
+    }
+}
+
+function resolveDirectDownloadLinks() {
+    var downloadLinks = document.getElementsByClassName("download-link");
+
+    for (var i = 0; i < downloadLinks.length; i++) {
+        var link = downloadLinks[i];
+        var href = link.getAttribute("href");
+
+        if (!href.includes("cdn.titanic.sh")) {
+            continue;
+        }
+
+        link.setAttribute("href", href.replace("cdn.titanic.sh", "s3.titanic.sh"));
     }
 }

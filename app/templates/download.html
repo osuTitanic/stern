@@ -75,4 +75,11 @@
     <br>
 </div>
 <script src="{{ '/js/download.js'|cached_url }}"></script>
+{% if is_modern_browser %}
+<script>
+    // Replace current download URLs from cdn.titanic.sh -> s3.titanic.sh
+    // if we are on a modern browser that supports https
+    addEventListener("DOMContentLoaded", resolveDirectDownloadLinks);
+</script>
+{% endif %}
 {% endblock content %}
