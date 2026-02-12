@@ -887,7 +887,27 @@
     {% endif %}
     {% endif %}
 </div>
-{# TODO: Beatmap Comments #}
+{% if beatmapset.server == 0 %}
+<div id="disqus_thread" style="margin-top: 10px; padding-left: 7px; padding-right: 8px"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'osugame';
+    var disqus_identifier = 'beatmapset_{{ beatmapset.id }}';
+    var disqus_title = "{{ beatmapset.full_name|e }}";
+    var disqus_url = 'https://osu.ppy.sh/s/{{ beatmapset.id }}';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+
+    var disqus_config = function () {
+        this.page.remote_auth_s3 = '{{ disqus_auth }}';
+        this.page.api_key = '{{ disqus_public_key }}';
+    }
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+{% endif %}
 <script>
     var beatmapsetId = {{ beatmapset.id }};
     var isBeatmapsetOwner = {{ is_beatmap_author|lower }};
