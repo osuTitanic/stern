@@ -1,0 +1,43 @@
+{# templates/download_timeline.html #}
+
+{% extends "base.html" %}
+
+{% block content %}
+<div class="heading">
+    <h1>Release Timeline</h1>
+    <p>Lorem ipsum type shit, idk what to put here</p>
+</div>
+
+{# Check if we have available data #}
+{% if not timeline_years %}
+<div class="timeline-empty">
+    <p>No release data is available. Please check back later!</p>
+</div>
+{% else %}
+<div class="timeline-overview">
+    {# Display 2008, 2009, 2010, 2011, ... #}
+    <div class="timeline-year-labels">
+        {% for row in timeline_years %}
+        <a class="timeline-year-link {{ 'selected' if row.year == selected_year else '' }}"
+            href="/download/timeline?year={{ row.year }}"
+             title="{{ row.total }} releases in {{ row.year }}">
+            {{ row.year }}
+        </a>
+        {% endfor %}
+    </div>
+
+    {# Display a bar chart of releases per year #}
+    <div class="timeline-bars-container">
+        {% for row in timeline_years %}
+        <a class="timeline-year-bars {{ 'selected' if row.year == selected_year else '' }}"
+           href="/download/timeline?year={{ row.year }}">
+            {% for month in row.months %}
+                <span class="timeline-bar level-{{ month.level }}"></span>
+            {% endfor %}
+        </a>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+{% endblock content %}
