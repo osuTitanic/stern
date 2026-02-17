@@ -1,7 +1,8 @@
 
 from app.common.database import releases
+from flask import Blueprint, request, redirect
+from flask_login import current_user
 from collections import defaultdict
-from flask import Blueprint, request
 
 import utils
 
@@ -26,6 +27,10 @@ def download():
 
 @router.get('/timeline')
 def download_timeline():
+    if not current_user.is_authenticated or not current_user.is_admin:
+        # Disable timeline for non-admins until this is ready
+        return redirect('/download')
+
     # TODO: Make this configurable
     from_year = 2007
     to_year = 2016
