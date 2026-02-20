@@ -170,14 +170,14 @@
                             </div>
                         </a>
                         <div>
-                            {% set user_post_count = repositories.users.fetch_post_count(post.user.id, session=session) %}
+                            {% set user_post_count = user_post_counts.get(post.user.id, 0) %}
                             <div class="post-user-title">
                                 {{ userTitle(post.user, user_post_count) }}
                             </div>
                             <div class="post-user-stats">
                                 {{ "{:,}".format(user_post_count) }} posts
                             </div>
-                            {% set groups = repositories.groups.fetch_user_groups(post.user.id, session=session) %}
+                            {% set groups = user_groups.get(post.user.id, []) %}
                             {# Difference from osu!: Added group icons #}
                             {# Hide the Donator group badge, hardcoded here for now until the donator image is used elsewhere on the site #}
                             {% set visible_groups = groups|rejectattr("id", "equalto", 6)|list %}
@@ -200,7 +200,7 @@
                         <br>
                         {% set excluded_icon_ids = (1, 3, 5) %}
                         {% if beatmapset and post.user_id != beatmapset.creator_id and post.icon_id not in excluded_icon_ids %}
-                            {% set total_kudosu = repositories.modding.total_amount(post.id, session) %}
+                            {% set total_kudosu = kudosu_totals.get(post.id, 0) %}
                             <div class="kudosu-box">
                                 {% set kudosu_status_color = (
                                     'green' if total_kudosu > 0
@@ -219,10 +219,7 @@
                                 </p>
 
                                 {% if can_award_kudosu %}
-                                    {% set kudosu = repositories.modding.fetch_one_by_post(
-                                        post.id,
-                                        session=session
-                                    ) %}
+                                    {% set kudosu = kudosu_latest.get(post.id) %}
                                     {% if beatmapset.status <= 0 %}
                                         {# Beatmap is not ranked #}
                                         {% if kudosu and current_user.is_bat and kudosu.amount > 0 %}

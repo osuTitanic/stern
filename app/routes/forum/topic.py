@@ -5,8 +5,10 @@ from app.common.helpers import activity, permissions
 from app.common.constants import UserActivity
 from app.common.database import (
     beatmapsets,
+    modding,
     forums,
     topics,
+    groups,
     posts,
     users
 )
@@ -76,7 +78,6 @@ def topic(forum_id: str, id: str):
             offset=(page - 1) * 15,
             session=session
         )
-
         post_count = posts.fetch_count(
             topic_id=id,
             session=session
@@ -90,6 +91,43 @@ def topic(forum_id: str, id: str):
             session=session
         )
 
+        post_user_ids = {
+            post.user_id
+            for post in topic_posts
+        }
+        user_post_counts = users.fetch_post_counts(
+            post_user_ids,
+            session=session
+        )
+        user_groups = groups.fetch_by_users(
+            post_user_ids,
+            session=session
+        )
+
+        kudosu_totals = {}
+        kudosu_latest = {}
+
+        if beatmapset:
+            excluded_icon_ids = {1, 3, 5}
+
+            kudosu_post_ids = [
+                post.id
+                for post in topic_posts
+                if (
+                    post.user_id != beatmapset.creator_id and
+                    post.icon_id not in excluded_icon_ids
+                )
+            ]
+
+            kudosu_totals = modding.fetch_total_kudosu_by_posts(
+                kudosu_post_ids,
+                session=session
+            )
+            kudosu_latest = modding.fetch_latest_by_posts(
+                kudosu_post_ids,
+                session=session
+            )
+
         is_subscribed = False
         is_bookmarked = False
 
@@ -99,7 +137,6 @@ def topic(forum_id: str, id: str):
                 current_user.id,
                 session=session
             )
-
             is_bookmarked = topics.is_bookmarked(
                 topic.id,
                 current_user.id,
@@ -142,6 +179,10 @@ def topic(forum_id: str, id: str):
             current_page=page,
             post_count=post_count,
             beatmapset=beatmapset,
+            user_post_counts=user_post_counts,
+            user_groups=user_groups,
+            kudosu_totals=kudosu_totals,
+            kudosu_latest=kudosu_latest,
             active_users=active_users,
             is_bookmarked=is_bookmarked,
             is_subscribed=is_subscribed,
