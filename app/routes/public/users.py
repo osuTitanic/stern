@@ -1,5 +1,8 @@
 
-from app.common.database.repositories import (
+from app.common.config import config_instance as config
+from app.common.cache import status, leaderboards
+from app.common.constants import GameMode
+from app.common.database import (
     collaborations,
     relationships,
     infringements,
@@ -11,18 +14,14 @@ from app.common.database.repositories import (
     stats
 )
 
-from flask import Response, abort, Blueprint, redirect, request
-from app.common.config import config_instance as config
-from app.common.cache import status, leaderboards
-from app.common.database.objects import DBUser
-from app.common.constants import GameMode
+from flask import Response, Blueprint, redirect, request
+from flask_login import current_user
 from sqlalchemy.orm import Session
 
 import utils
 import app
 
 router = Blueprint('users', __name__)
-preload = (DBUser.relationships, DBUser.achievements)
 
 @router.get('/users/<query>')
 def modern_userpage_redirect(query: str) -> Response:
@@ -35,11 +34,9 @@ def userpage(query: str):
     with app.session.database.managed_session() as session:
         if not query.isdigit():
             # Searching for username based on user query
-            return resolve_user_by_name(query, session=session)
+            return resolve_user_by_name(query, session)
 
-        user_id = int(query)
-
-        if not (user := users.fetch_by_id(user_id, *preload, session=session)):
+        if not (user := users.fetch_for_profile(query, session)):
             return utils.render_error(404, 'user_not_found')
 
         if not user.activated:
@@ -99,6 +96,40 @@ def userpage(query: str):
         ppv1_ranking = rankings.get("ppv1", None)
         ppv1_rank = ppv1_ranking["global"] if ppv1_ranking else None
 
+        current_added = False
+        target_added = False
+        is_blocked = False
+
+        if current_user.is_authenticated and current_user.id != user.id:
+            is_blocked = relationships.is_blocked(
+                current_user.id,
+                user.id,
+                session=session
+            )
+
+            if not is_blocked:
+                current_relationships = relationships.fetch_many_by_id(
+                    current_user.id,
+                    session=session
+                )
+
+                current_friends = {
+                    rel.target_id
+                    for rel in current_relationships
+                    if rel.status == 0
+                }
+                target_friends = {
+                    rel.target_id
+                    for rel in user.relationships
+                    if rel.status == 0
+                }
+
+                current_added = user.id in current_friends
+                target_added = (
+                    current_user.id in target_friends or
+                    user.id in config.SUPER_FRIENDLY_USERS
+                )
+
         return utils.render_template(
             template_name='user.html',
             user=user,
@@ -120,6 +151,9 @@ def userpage(query: str):
             current_stats=stats.fetch_by_mode(user.id, int(mode), session=session),
             total_posts=users.fetch_post_count(user.id, session=session),
             groups=groups.fetch_user_groups(user.id, session=session),
+            is_blocked=is_blocked,
+            current_added=current_added,
+            target_added=target_added,
             total_score_rank=total_score_rank,
             score_rank_country=score_rank_country,
             score_rank=score_rank,
