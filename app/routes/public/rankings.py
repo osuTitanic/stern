@@ -110,17 +110,20 @@ def render_rankings_page(
         )
 
         # Fetch all users from leaderboard
-        users_db = users.fetch_many(
-            [user[0] for user in leaderboard],
-            DBUser.stats,
+        users_db = users.fetch_many_for_rankings(
+            [user_id for user_id, score in leaderboard],
             session=session
         )
+        users_by_id = {
+            user.id: user
+            for user in users_db
+        }
 
         # Sort users based on redis leaderboard
         users_with_score = [
-            (next(filter(lambda user: id == user.id, users_db)), score)
-            for id, score in leaderboard
-            if score > 0
+            (users_by_id[user_id], score)
+            for user_id, score in leaderboard
+            if score > 0 and user_id in users_by_id
         ]
         sorted_users = [
             user for user, _ in users_with_score
@@ -231,16 +234,19 @@ def render_kudosu_page(items_per_page: int, page: int, session: Session) -> str:
 
     # Fetch all users from leaderboard
     users_db = users.fetch_many(
-        [user[0] for user in leaderboard],
-        DBUser.stats,
+        [user_id for user_id, score in leaderboard],
         session=session
     )
+    users_by_id = {
+        user.id: user
+        for user in users_db
+    }
 
     # Sort users based on redis leaderboard
     sorted_users = [
-        (next(filter(lambda user: id == user.id, users_db)), score)
-        for id, score in leaderboard
-        if score > 0
+        (users_by_id[user_id], score)
+        for user_id, score in leaderboard
+        if score > 0 and user_id in users_by_id
     ]
 
     friend_ids = (
