@@ -237,51 +237,8 @@ function getBeatmapsets(clear) {
                 commentsLink.href = 'https://osu.ppy.sh/beatmapsets/' + beatmapset.id + '#comments';
             }
 
-            if (!currentUser) {
-                favouriteLink.onclick = function(e) {
-                    preventEventDefault(e || window.event);
-                    showLoginForm();
-                }
-                downloadLink.onclick = function(e) {
-                    preventEventDefault(e || window.event);
-                    showLoginForm();
-                }
-            } else {
-                favouriteLink.onclick = function(e) {
-                    preventEventDefault(e || window.event);
-                    addFavorite(beatmapset.id);
-                }
-            }
-
             var playIcon = document.createElement("i");
             addClasses(playIcon, ["icon-play"]);
-            playIcon.onclick = function(e) {
-                var beatmapPreviewElements = document.querySelectorAll('[id^="beatmap-preview-"]');
-                for (var i = 0; i < beatmapPreviewElements.length; i++) {
-                    element = beatmapPreviewElements[i];
-
-                    // Disable other active audios
-                    if (!element.paused && element.id !== 'beatmap-preview-' + beatmapset.id) {
-                        element.pause();
-                        element.currentTime = 0;
-
-                        var audioPlayIcon = getParentElement(element).querySelector('.beatmap-image i');
-                        removeClass(audioPlayIcon, "icon-pause");
-                        addClass(audioPlayIcon, "icon-play");
-                    }
-                };
-
-                resetOrPlayAudio('beatmap-preview-' + beatmapset.id);
-                var audio = document.getElementById('beatmap-preview-' + beatmapset.id);
-
-                if (audio.paused) {
-                    removeClass(playIcon, "icon-pause");
-                    addClass(playIcon, "icon-play");
-                } else {
-                    removeClass(playIcon, "icon-play");
-                    addClass(playIcon, "icon-pause");
-                }
-            };
 
             var lastUpdate = beatmapset.last_update;
             var lastUpdateTimestamp = Math.floor(Date.parse(lastUpdate) / 1000);
@@ -290,10 +247,56 @@ function getBeatmapsets(clear) {
             beatmapAudio.src = '/mp3/preview/' + beatmapset.id + '?c=' + lastUpdateTimestamp;
             beatmapAudio.id = 'beatmap-preview-' + beatmapset.id;
             beatmapAudio.volume = 0.5;
-            beatmapAudio.onended = function() {
-                removeClass(playIcon, "icon-pause");
-                addClass(playIcon, "icon-play");
-            };
+
+            (function(currentBeatmapsetId, currentPlayIcon, currentFavouriteLink, currentDownloadLink, currentBeatmapAudio) {
+                if (!currentUser) {
+                    currentFavouriteLink.onclick = function(e) {
+                        preventEventDefault(e || window.event);
+                        showLoginForm();
+                    };
+                    currentDownloadLink.onclick = function(e) {
+                        preventEventDefault(e || window.event);
+                        showLoginForm();
+                    };
+                } else {
+                    currentFavouriteLink.onclick = function(e) {
+                        preventEventDefault(e || window.event);
+                        addFavorite(currentBeatmapsetId);
+                    };
+                }
+
+                currentPlayIcon.onclick = function(e) {
+                    var beatmapPreviewElements = document.querySelectorAll('[id^="beatmap-preview-"]');
+                    for (var i = 0; i < beatmapPreviewElements.length; i++) {
+                        var element = beatmapPreviewElements[i];
+
+                        if (!element.paused && element.id !== 'beatmap-preview-' + currentBeatmapsetId) {
+                            element.pause();
+                            element.currentTime = 0;
+
+                            var audioPlayIcon = getParentElement(element).querySelector('.beatmap-image i');
+                            removeClass(audioPlayIcon, "icon-pause");
+                            addClass(audioPlayIcon, "icon-play");
+                        }
+                    }
+
+                    resetOrPlayAudio('beatmap-preview-' + currentBeatmapsetId);
+                    var audio = document.getElementById('beatmap-preview-' + currentBeatmapsetId);
+
+                    if (audio.paused) {
+                        removeClass(currentPlayIcon, "icon-pause");
+                        addClass(currentPlayIcon, "icon-play");
+                    } else {
+                        removeClass(currentPlayIcon, "icon-play");
+                        addClass(currentPlayIcon, "icon-pause");
+                    }
+                };
+
+                currentBeatmapAudio.onended = function() {
+                    removeClass(currentPlayIcon, "icon-pause");
+                    addClass(currentPlayIcon, "icon-play");
+                };
+            })(beatmapset.id, playIcon, favouriteLink, downloadLink, beatmapAudio);
 
             beatmapImage.appendChild(playIcon);
             beatmapsetDiv.appendChild(beatmapImage);
@@ -330,7 +333,6 @@ function getBeatmapsets(clear) {
             if (beatmapset.has_video) {
                 beatmapInfoLeft.appendChild(videoIcon);
             }
-
             if (beatmapset.has_storyboard) {
                 beatmapInfoLeft.appendChild(imageIcon);
             }
