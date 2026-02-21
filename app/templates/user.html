@@ -1000,9 +1000,9 @@
     var superFriendly = {{ (user.id in config.SUPER_FRIENDLY_USERS)|lower }};
 </script>
 <link rel="stylesheet" href="{{ '/lib/nv.d3.min.css'|cached_url }}">
-<script src="{{ '/lib/d3.v3.min.js'|cached_url }}"></script>
-<script src="{{ '/lib/nv.d3.min.js'|cached_url }}"></script>
-<script src="{{ '/js/user.js'|cached_url }}"></script>
+<script src="{{ '/js/user.js'|cached_url }}" defer></script>
+<script src="{{ '/lib/d3.v3.min.js'|cached_url }}" defer></script>
+<script src="{{ '/lib/nv.d3.min.js'|cached_url }}" defer></script>
 {% if current_user.is_moderator %}
 <script src="{{ '/js/moderation.js'|cached_url }}"></script>
 {% endif %}
