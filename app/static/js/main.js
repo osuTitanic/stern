@@ -124,13 +124,11 @@ var pageLoaded = false;
 var apiRetries = 0;
 
 function slideDown(elem) {
-    // Use jQuery's slideDown for cross-browser compatibility
     elem.style.height = '';
     $(elem).stop(true, false).slideDown(500);
 }
 
 function slideUp(elem) {
-    // Use jQuery's slideUp for cross-browser compatibility
     $(elem).stop(true, false).slideUp(500);
     setTimeout(function() { elem.style.height = '0px' }, 500);
 }
@@ -195,7 +193,7 @@ function getCookie(cname) {
     var name = cname + "=";
     var decodedCookie = decodeURIComponent(document.cookie);
     var ca = decodedCookie.split(';');
-    for(var i = 0; i < ca.length; i++) {
+    for (var i = 0; i < ca.length; i++) {
         var c = ca[i];
         while (c.charAt(0) == ' ') {
             c = c.substring(1);
@@ -208,10 +206,10 @@ function getCookie(cname) {
 }
 
 function setCookie(name, value, maxAgeSeconds) {
-    const parts = [
-        `${name}=${encodeURIComponent(String(value))}`,
+    var parts = [
+        name + "=" + encodeURIComponent(String(value)),
         'Path=/',
-        `Max-Age=${maxAgeSeconds}`,
+        'Max-Age=' + maxAgeSeconds,
         'SameSite=Lax'
     ];
 
@@ -222,8 +220,12 @@ function setCookie(name, value, maxAgeSeconds) {
     document.cookie = parts.join('; ');
 }
 
+function trimString(value) {
+    return String(value == null ? '' : value).replace(/^\s+|\s+$/g, '');
+}
+
 function parseBooleanFromString(rawValue) {
-    const v = (rawValue || '').trim().toLowerCase();
+    var v = trimString(rawValue || '').toLowerCase();
     if (v === '' || v === '1' || v === 'true' || v === 'yes' || v === 'on') return true;
     if (v === '0' || v === 'false' || v === 'no' || v === 'off') return false;
     return true;
@@ -293,7 +295,7 @@ function getParentElement(element) {
 }
 
 function beatmapSearch() {
-    var inputValue = document.getElementById("beatmap-search").value.trim();
+    var inputValue = trimString(document.getElementById("beatmap-search").value);
 
     if (inputValue !== '') {
         window.location.href = '/beatmapsets?query=' + encodeURIComponent(inputValue);
@@ -303,7 +305,7 @@ function beatmapSearch() {
 }
 
 function userSearch() {
-    var inputValue = document.getElementById("user-search").value.trim();
+    var inputValue = trimString(document.getElementById("user-search").value);
 
     if (inputValue !== '') {
         window.location.href = '/u/' + encodeURIComponent(inputValue);
@@ -522,9 +524,9 @@ function loadBBCodePreview(element) {
 
     // Remove old previews
     var previews = document.querySelectorAll('.bbcode-preview');
-    Array.prototype.forEach.call(previews, function (element) {
-        element.parentNode.removeChild(element);
-    });
+    for (var i = 0; i < previews.length; i++) {
+        previews[i].parentNode.removeChild(previews[i]);
+    }
 
     performApiRequest("POST", "/forum/bbcode", { "input": bbcodeEditor.value }, function(xhr) {
         var htmlPreview = xhr.responseText;
@@ -568,19 +570,27 @@ function applyCsrfToForms() {
     var inputs = $('input[name="csrf_token"]');
 
     for (var i = 0; i < inputs.length; i++) {
-        inputs[i].attributes.value = csrfToken;
+        inputs[i].value = csrfToken;
+        if (inputs[i].attributes && inputs[i].attributes.value) {
+            inputs[i].attributes.value.value = csrfToken;
+        }
     }
 }
 
 function reloadCsrfBeforeSubmit(formElement) {
     var submitHandler = function(e) {
-        e.preventDefault();
+        e = e || window.event;
+        if (e.preventDefault) {
+            e.preventDefault();
+        } else {
+            e.returnValue = false;
+        }
         reloadCsrfToken(function() {
             HTMLFormElement.prototype.submit.call(formElement);
         });
     };
 
-    formElement.addEventListener('submit', submitHandler, false);
+    addEvent('submit', formElement, submitHandler);
 }
 
 function applyCsrfUpdaterToForms() {
@@ -595,7 +605,13 @@ function applyCsrfUpdaterToForms() {
 }
 
 function renderTimeagoElements() {
-    var times = document.getElementsByClassName('timeago');
+    var times = [];
+    if (document.getElementsByClassName) {
+        times = document.getElementsByClassName('timeago');
+    } else if (document.querySelectorAll) {
+        times = document.querySelectorAll('.timeago');
+    }
+
     for (var i = 0; i < times.length; i++) {
         times[i].innerText = jQuery.timeago(times[i].getAttribute('datetime'));
     }
