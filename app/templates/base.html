@@ -140,8 +140,14 @@
                 {% else %}
                     {% if not disable_login_modal %}
                     <span class="nav-login" id="welcome-text">Welcome, guest!</span>
-                    <a onclick="showLoginForm()" class="nav-login" id="login-text">Login</a>
-                    <a href="/account/register" class="nav-login" id="register-text">I'm new!</a>
+                    <a onclick="showLoginForm()" class="nav-login" id="login-text">
+                        <i class="icon-caret-down"></i>
+                        Login
+                    </a>
+                    <a href="/account/register" class="nav-login" id="register-text">
+                        <i class="icon-magic"></i>
+                        I'm new!
+                    </a>
                     {% endif %}
                 {% endif %}
                 </div>

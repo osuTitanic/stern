@@ -361,7 +361,7 @@ input[type="url"], input[type="search"] {
     -ms-flex-align: center;
 }
 
-.login-container i {
+.login-container .icon-gear, .login-container .icon-power-off, .login-container .icon-bell-alt {
     font-size: 90%;
     margin-left: 8px;
 }
