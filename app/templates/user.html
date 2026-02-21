@@ -114,17 +114,17 @@
         {% if not is_blocked %}
             <div id="friend-status" class="friend-current-{{ current_added|lower }}-target-{{ target_added|lower }}">
                 <a href="#" onclick="return removeFriend()">
-                    <i class="fa3-heart"></i> Mutual Friend
+                    <i class="icon-heart"></i> Mutual Friend
                 </a>
                 <a href="#" onclick="return removeFriend()">
-                    <i class="fa3-star"></i> Friend
+                    <i class="icon-star"></i> Friend
                 </a>
                 {# Difference from osu!: Added "Add as Mutual Friend" state #}
                 <a href="#" onclick="return addFriend()">
-                    <i class="fa3-plus-sign"></i> Add as Mutual Friend
+                    <i class="icon-plus-sign"></i> Add as Mutual Friend
                 </a>
                 <a href="#" onclick="return addFriend()">
-                    <i class="fa3-plus-sign"></i> Add as Friend
+                    <i class="icon-plus-sign"></i> Add as Friend
                 </a>
             </div>
         {% endif %}
@@ -133,7 +133,7 @@
     <div class="profile-details">
         {% if user.location %}
             <div title="Location">
-                <i class="fa3-map-marker"></i>
+                <i class="icon-map-marker"></i>
                 <div>{{ user.location|truncate(30, True) }}</div>
             </div>
         {% endif %}
@@ -143,14 +143,14 @@
         {# TODO: Occupation #}
         {% if false and user.occupation %}
             <div title="Occupation">
-                <i class="fa3-pencil"></i>
+                <i class="icon-pencil"></i>
                 <div>{{ user.occupation|truncate(30, True) }}</div>
             </div>
         {% endif %}
 
         {% if user.interests %}
             <div title="Interests">
-                <i class="fa3-heart-empty"></i>
+                <i class="icon-heart-empty"></i>
                 <div>{{ user.interests|truncate(30, True) }}</div>
             </div>
         {% endif %}
@@ -160,7 +160,7 @@
 
         {% if user.website %}
             <div title="Website">
-                <i class="fa3-globe"></i>
+                <i class="icon-globe"></i>
                 <div>
                     <a href="{{ user.website }}">{{ user.website|truncate(30, True) }}</a>
                 </div>
@@ -169,7 +169,7 @@
 
         {% if user.twitter %}
             <div title="Twitter">
-                <i class="fa3-twitter"></i>
+                <i class="icon-twitter"></i>
                 <div>
                     <a href="{{ user.twitter }}">{{ user.twitter|twitter_handle|truncate(30, True) }}</a>
                 </div>
@@ -179,7 +179,7 @@
         {# Difference from osu!: Added Discord #}
         {% if user.discord %}
             <div title="Discord">
-                <i class="fa-brands fa-discord"></i>
+                <i class="icon-discord"></i>
                 <div>{{ user.discord|truncate(30, True) }}</div>
             </div>
         {% endif %}
@@ -187,7 +187,7 @@
         {# TODO: Last.fm #}
         {% if false and user.last_fm %}
             <div title="last.fm">
-                <i class="fa3-music"></i>
+                <i class="icon-music"></i>
                 <div>
                     <a href="//last.fm/...">{{ user.last_fm|truncate(30, True) }}</a>
                     {# Difference from osu!: This used to show a prompt to connect to last.fm if the user hadn't already, but a faulty check was added that made it never display at some point #}
@@ -202,7 +202,7 @@
         <div></div>
 
         <div title="Arrived">
-            <i class="fa3-signin"></i>
+            <i class="icon-signin"></i>
             <div>
                 {# Difference from osu!: Wrapped "since the beginning" in <time> #}
                 <time
@@ -221,10 +221,10 @@
         <div title="Last Active">
             {# Difference from osu!: Special online variant #}
             {% if is_online %}
-                <i class="fa3-signout online"></i>
+                <i class="icon-signout online"></i>
                 <div>Online</div>
             {% else %}
-                <i class="fa3-signout"></i>
+                <i class="icon-signout"></i>
                 <div>
                     {# Difference from osu!: Wrapped "dead" in <time> #}
                     <time
@@ -244,7 +244,7 @@
         {# Difference from osu!: Added follower count #}
         {% if followers > 0 %}
             <div title="Followers">
-                <i class="fa-solid fa-users"></i>
+                <i class="icon-star"></i>
                 <div>{{ followers|format_number }} follower{{ 's' if followers != 1 }}</div>
             </div>
         {% endif %}
@@ -254,7 +254,7 @@
             {# TODO^ #}
             {# Difference from osu!: Fixed "1 posts" case #}
             <div title="Posts">
-                <i class="fa3-edit"></i>
+                <i class="icon-edit"></i>
                 <div>{{ total_posts|format_number }} post{{ 's' if total_posts != 1 }}</div>
             </div>
         {% endif %}

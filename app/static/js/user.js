@@ -131,7 +131,7 @@ function createScoreElement(score, index, type) {
 
     if (!approvedRewards && score.beatmap.status > 2) {
         // Display heart icon for loved maps
-        ppText.innerHTML = '<i class="fa-regular fa-heart"></i>';
+        ppText.innerHTML = '<i class="icon-heart"></i>';
         ppText.title = score.pp.toFixed(0) + "pp (if ranked)";
         // Reset pp weight text
         ppWeight.innerHTML = (type == "top" ? "weighted <b>0%</b> (0pp)" : "");
@@ -180,14 +180,14 @@ function createScoreElement(score, index, type) {
     replayLink.target = "_blank";
 
     var replayIcon = document.createElement("i");
-    replayIcon.className = "fa-regular fa-download";
+    replayIcon.className = "icon-download-alt";
     replayLink.appendChild(replayIcon);
 
     iconContainer.appendChild(replayLink);
 
     if (currentUser === userId) {
         var pinIcon = document.createElement("i");
-        pinIcon.className = "fa-regular fa-star score-pin-" + score.id;
+        pinIcon.className = "icon-star score-pin-" + score.id;
 
         if (!score.pinned) {
             pinIcon.className += " score-pin-icon";

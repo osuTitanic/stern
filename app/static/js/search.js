@@ -213,21 +213,21 @@ function getBeatmapsets(clear) {
             beatmapSideOptions.style.width = "24px";
 
             var heartIcon = document.createElement("i");
-            addClasses(heartIcon, ["fa-solid", "fa-heart"]);
+            addClasses(heartIcon, ["icon-heart"]);
             var favouriteLink = document.createElement("a");
             favouriteLink.href = "#";
             favouriteLink.appendChild(heartIcon);
             beatmapSideOptions.appendChild(favouriteLink);
 
             var speechBubbleIcon = document.createElement("i");
-            addClasses(speechBubbleIcon, ["fa-regular", "fa-comment-dots"]);
+            addClasses(speechBubbleIcon, ["icon-comment"]);
             var commentsLink = document.createElement("a");
             commentsLink.href = '/forum/t/' + beatmapset.topic_id;
             commentsLink.appendChild(speechBubbleIcon);
             beatmapSideOptions.appendChild(commentsLink);
 
             var downloadIcon = document.createElement("i");
-            addClasses(downloadIcon, ["fa-solid", "fa-download"]);
+            addClasses(downloadIcon, ["icon-download-alt"]);
             var downloadLink = document.createElement("a");
             downloadLink.href = '/d/' + beatmapset.id;
             downloadLink.appendChild(downloadIcon);
@@ -254,7 +254,7 @@ function getBeatmapsets(clear) {
             }
 
             var playIcon = document.createElement("i");
-            addClasses(playIcon, ["fa-solid", "fa-play"]);
+            addClasses(playIcon, ["icon-play"]);
             playIcon.onclick = function(e) {
                 var beatmapPreviewElements = document.querySelectorAll('[id^="beatmap-preview-"]');
                 for (var i = 0; i < beatmapPreviewElements.length; i++) {
@@ -266,8 +266,8 @@ function getBeatmapsets(clear) {
                         element.currentTime = 0;
 
                         var audioPlayIcon = getParentElement(element).querySelector('.beatmap-image i');
-                        removeClass(audioPlayIcon, "fa-pause");
-                        addClass(audioPlayIcon, "fa-play");
+                        removeClass(audioPlayIcon, "icon-pause");
+                        addClass(audioPlayIcon, "icon-play");
                     }
                 };
 
@@ -275,11 +275,11 @@ function getBeatmapsets(clear) {
                 var audio = document.getElementById('beatmap-preview-' + beatmapset.id);
 
                 if (audio.paused) {
-                    removeClass(playIcon, "fa-pause");
-                    addClass(playIcon, "fa-play");
+                    removeClass(playIcon, "icon-pause");
+                    addClass(playIcon, "icon-play");
                 } else {
-                    removeClass(playIcon, "fa-play");
-                    addClass(playIcon, "fa-pause");
+                    removeClass(playIcon, "icon-play");
+                    addClass(playIcon, "icon-pause");
                 }
             };
 
@@ -291,8 +291,8 @@ function getBeatmapsets(clear) {
             beatmapAudio.id = 'beatmap-preview-' + beatmapset.id;
             beatmapAudio.volume = 0.5;
             beatmapAudio.onended = function() {
-                removeClass(playIcon, "fa-pause");
-                addClass(playIcon, "fa-play");
+                removeClass(playIcon, "icon-pause");
+                addClass(playIcon, "icon-play");
             };
 
             beatmapImage.appendChild(playIcon);
@@ -322,10 +322,10 @@ function getBeatmapsets(clear) {
             addClass(beatmapInfoLeft, "beatmap-info");
 
             var videoIcon = document.createElement("i");
-            addClasses(videoIcon, ["fa-solid", "fa-film"]);
+            addClasses(videoIcon, ["icon-film"]);
 
             var imageIcon = document.createElement("i");
-            addClasses(imageIcon, ["fa-regular", "fa-image"]);
+            addClasses(imageIcon, ["icon-image"]);
 
             if (beatmapset.has_video) {
                 beatmapInfoLeft.appendChild(videoIcon);
@@ -428,10 +428,10 @@ function getBeatmapsets(clear) {
             addClass(dateText, "hidden-elements");
 
             var heartIcon = document.createElement("i");
-            addClasses(heartIcon, ["fa-solid", "fa-heart"]);
+            addClasses(heartIcon, ["icon-heart"]);
 
             var playsIcon = document.createElement("i");
-            addClasses(playsIcon, ["fa-solid", "fa-play"]);
+            addClasses(playsIcon, ["icon-play"]);
 
             var totalPlays = 0;
             for (var j = 0; j < beatmapset.beatmaps.length; j++) {
@@ -494,7 +494,7 @@ function addFavorite(beatmapsetId) {
     var url = "/users/" + currentUser + "/favourites";
 
     performApiRequest("POST", url, {"set_id": beatmapsetId}, function(xhr) {
-        var heartIcon = document.querySelector("#beatmapset-" + beatmapsetId + " .fa-heart");
+        var heartIcon = document.querySelector("#beatmapset-" + beatmapsetId + " .icon-heart");
         heartIcon.parentNode.style.color = "red";
         heartIcon.parentNode.onclick = function(e) {
             preventEventDefault(e || window.event);
@@ -502,7 +502,7 @@ function addFavorite(beatmapsetId) {
         }
     }, function(xhr) {
         // Most likely already favorited, so just do the same thing
-        var heartIcon = document.querySelector("#beatmapset-" + beatmapsetId + " .fa-heart");
+        var heartIcon = document.querySelector("#beatmapset-" + beatmapsetId + " .icon-heart");
         heartIcon.parentNode.style.color = "red";
         heartIcon.parentNode.onclick = function(e) {
             preventEventDefault(e || window.event);
@@ -515,7 +515,7 @@ function removeFavorite(beatmapsetId) {
     var url = "/users/" + currentUser + "/favourites/" + beatmapsetId;
 
     performApiRequest("DELETE", url, null, function(xhr) {
-        var heartIcon = document.querySelector("#beatmapset-" + beatmapsetId + " .fa-heart");
+        var heartIcon = document.querySelector("#beatmapset-" + beatmapsetId + " .icon-heart");
         heartIcon.parentNode.style.color = null;
         heartIcon.parentNode.onclick = function(e) {
             preventEventDefault(e || window.event);

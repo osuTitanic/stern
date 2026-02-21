@@ -43,7 +43,7 @@
                         <b>{{ beatmapset.artist }} - {{ beatmapset.title }}</b>
                         <span class="beatmap-version">[{{ beatmap.version }}]</span>
                         <span class="beatmap-stars">
-                            ({{ "%.2f"|format(beatmap.diff) }} <i class="fa-regular fa-star"></i>)
+                            ({{ "%.2f"|format(beatmap.diff) }} <i class="icon-star"></i>)
                         </span>
                     </a>
                     <br>
@@ -139,11 +139,11 @@
                     <span class="label">PP</span>
                     {% if beatmap.status == 4 %}
                     <span class="value" title="{{ "{:,.4f}".format(score.pp) }}pp if ranked">
-                        <i class="fa-regular fa-heart"></i>
+                        <i class="icon-heart"></i>
                     </span>
                     {% elif score.relaxing %}
                     <span class="value" title="PP is not awarded for Relax/Autopilot scores">
-                        <i class="fa-regular fa-xmark"></i>
+                        <i class="icon-xmark"></i>
                     </span>
                     {% else %}
                     <span class="value" title="{{ "{:,.4f}".format(score.pp) }}pp">
@@ -162,11 +162,11 @@
             <div class="score-buttons">
                 {% if score.replay_md5 %}
                 <a href="/scores/{{ score.id }}/download" class="score-button primary">
-                    <i class="fa fa-download"></i> Download Replay
+                    <i class="icon-download-alt"></i> Download Replay
                 </a>
                 {% endif %}
                 <a href="/b/{{ beatmap.id }}" class="score-button secondary">
-                    <i class="fa fa-arrow-left"></i> Return to Beatmap
+                    <i class="icon-arrow-left"></i> Return to Beatmap
                 </a>
             </div>
         </div>
