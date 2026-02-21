@@ -40,7 +40,7 @@ function expandProfileTab(id, forceExpand) {
         }
     } else {
         // Collapse the tab
-        tab.classList.remove("expanded");
+        removeClass(tab, "expanded");
         slideUp(tab);
     }
 
@@ -69,10 +69,12 @@ function createScoreElement(score, index, type) {
     scoreDiv.id = "score-" + type + "-" + index;
     scoreDiv.className = "score";
     scoreDiv.onclick = function(e) {
-        if (e.target.closest('a')) return;
-        if (e.target.closest('.score-pin-icon')) return;
-        if (e.target.closest('.score-pinned-icon')) return;
-        if (e.target.closest('.score-replay')) return;
+        e = e || window.event;
+        var target = getEventTarget(e);
+        if (closest(target, 'a')) return;
+        if (closest(target, '.score-pin-icon')) return;
+        if (closest(target, '.score-pinned-icon')) return;
+        if (closest(target, '.score-replay')) return;
         window.location.href = "/scores/" + score.id;
     };
 
@@ -103,18 +105,7 @@ function createScoreElement(score, index, type) {
     var accuracyText = document.createTextNode("(" + (score.acc * 100).toFixed(2) + "%)");
 
     // Parse date to a format that timeago can understand
-    var scoreDate = new Date(score.submitted_at);
-    var scoreDateString = scoreDate.toLocaleDateString(
-        "en-us", {
-            year: "numeric",
-            month: "numeric",
-            day: "numeric",
-            hour: "numeric",
-            minute: "numeric",
-            second: "numeric",
-            timeZoneName: "short"
-        }
-    );
+    var scoreDateString = formatDateTimeForTitle(score.submitted_at);
 
     var rightColumn = document.createElement("td");
     rightColumn.className = 'score-right';
@@ -202,17 +193,17 @@ function createScoreElement(score, index, type) {
             pinIcon.className += " score-pin-icon";
             pinIcon.title = "Pin Score";
             pinIcon.onclick = function() {
-                var icons = document.querySelectorAll(".score-pin-" + score.id);
+                var icons = queryAll(document, ".score-pin-" + score.id);
                 for (var j = 0; j < icons.length; j++) {
-                    icons[j].classList.remove("score-pin-icon");
-                    icons[j].classList.add("score-pinned-icon");
+                    removeClass(icons[j], "score-pin-icon");
+                    addClass(icons[j], "score-pinned-icon");
                     icons[j].title = "Unpin Score";
                 }
                 pinScore(score.id, userId);
                 pinIcon.onclick = function() {
                     unpinScore(score.id, userId);
-                    pinIcon.classList.remove("score-pinned-icon");
-                    pinIcon.classList.add("score-pin-icon");
+                    removeClass(pinIcon, "score-pinned-icon");
+                    addClass(pinIcon, "score-pin-icon");
                     pinIcon.title = "Pin Score";
                 };
             };
@@ -220,17 +211,17 @@ function createScoreElement(score, index, type) {
             pinIcon.className += " score-pinned-icon";
             pinIcon.title = "Unpin Score";
             pinIcon.onclick = function() {
-                var icons = document.querySelectorAll(".score-pin-" + score.id);
+                var icons = queryAll(document, ".score-pin-" + score.id);
                 for (var j = 0; j < icons.length; j++) {
-                    icons[j].classList.remove("score-pinned-icon");
-                    icons[j].classList.add("score-pin-icon");
+                    removeClass(icons[j], "score-pinned-icon");
+                    addClass(icons[j], "score-pin-icon");
                     icons[j].title = "Pin Score";
                 }
                 unpinScore(score.id, userId);
                 pinIcon.onclick = function() {
                     pinScore(score.id, userId);
-                    pinIcon.classList.remove("score-pin-icon");
-                    pinIcon.classList.add("score-pinned-icon");
+                    removeClass(pinIcon, "score-pin-icon");
+                    addClass(pinIcon, "score-pinned-icon");
                     pinIcon.title = "Unpin Score";
                 };
             };
@@ -262,8 +253,8 @@ function loadPinnedScores(userId, mode) {
         var scores = data.scores;
 
         if (loadingText) {
-            getParentElement(loadingText).classList.remove("score");
-            loadingText.remove();
+            removeClass(getParentElement(loadingText), "score");
+            removeElement(loadingText);
         }
 
         // Reset container
@@ -291,13 +282,13 @@ function loadPinnedScores(userId, mode) {
     }, function(xhr) {
         var errorText = document.createElement("p");
         setText(errorText, "Failed to load pinned scores.");
-        errorText.classList.add("score");
+        addClass(errorText, "score");
         scoreContainer.appendChild(errorText);
 
         var loadingText = document.getElementById("pinned-scores-loading");
         if (loadingText) {
-            getParentElement(loadingText).classList.remove("score");
-            loadingText.remove();
+            removeClass(getParentElement(loadingText), "score");
+            removeElement(loadingText);
         }
     });
 }
@@ -312,8 +303,8 @@ function loadTopPlays(userId, mode, limit, offset) {
         var scores = data.scores;
 
         if (loadingText) {
-            getParentElement(loadingText).classList.remove("score");
-            loadingText.remove();
+            removeClass(getParentElement(loadingText), "score");
+            removeElement(loadingText);
         }
 
         if (data.total <= 0) {
@@ -358,7 +349,7 @@ function loadTopPlays(userId, mode, limit, offset) {
 
                 var showMore = document.getElementById("show-more-top");
                 getParentElement(showMore).appendChild(loadingText);
-                showMore.remove();
+                removeElement(showMore);
 
                 loadTopPlays(userId, modeName, 50, topScoreOffset);
             };
@@ -374,14 +365,14 @@ function loadTopPlays(userId, mode, limit, offset) {
     }, function(xhr) {
         var errorText = document.createElement("p");
         setText(errorText, "Failed to load top plays.");
-        errorText.classList.add("score");
+        addClass(errorText, "score");
         scoreContainer.appendChild(errorText);
 
         var loadingText = document.getElementById("top-scores-loading");
 
         if (loadingText) {
-            getParentElement(loadingText).classList.remove("score");
-            loadingText.remove();
+            removeClass(getParentElement(loadingText), "score");
+            removeElement(loadingText);
         }
     });
 
@@ -398,8 +389,8 @@ function loadLeaderScores(userId, mode, limit, offset) {
         var scores = data.scores;
 
         if (loadingText) {
-            getParentElement(loadingText).classList.remove("score");
-            loadingText.remove();
+            removeClass(getParentElement(loadingText), "score");
+            removeElement(loadingText);
         }
 
         if (data.total <= 0) {
@@ -445,7 +436,7 @@ function loadLeaderScores(userId, mode, limit, offset) {
 
                 var showMore = document.getElementById("show-more-leader");
                 getParentElement(showMore).appendChild(loadingText);
-                showMore.remove();
+                removeElement(showMore);
 
                 loadLeaderScores(userId, modeName, 50, topLeaderOffset);
             };
@@ -461,13 +452,13 @@ function loadLeaderScores(userId, mode, limit, offset) {
     }, function(xhr) {
         var errorText = document.createElement("p");
         setText(errorText, "Failed to load first place ranks.");
-        errorText.classList.add("score");
+        addClass(errorText, "score");
         scoreContainer.appendChild(errorText);
 
         var loadingText = document.getElementById("leader-scores-loading");
         if (loadingText) {
-            getParentElement(loadingText).classList.remove("score");
-            loadingText.remove();
+            removeClass(getParentElement(loadingText), "score");
+            removeElement(loadingText);
         }
     });
 
@@ -510,7 +501,7 @@ function loadMostPlayed(userId, limit, offset) {
         }
     });
 
-    loadingText.remove();
+    removeElement(loadingText);
 }
 
 function loadRecentPlays(userId, mode) {
@@ -536,16 +527,7 @@ function loadRecentPlays(userId, mode) {
             var score = scores[i];
 
             // Parse date to a format that timeago can understand
-            var scoreDate = new Date(score.submitted_at);
-            var scoreDateString = scoreDate.toLocaleDateString("en-us", {
-                year: "numeric",
-                month: "numeric",
-                day: "numeric",
-                hour: "numeric",
-                minute: "numeric",
-                second: "numeric",
-                timeZoneName: "short",
-            });
+            var scoreDateString = formatDateTimeForTitle(score.submitted_at);
 
             var dateText = document.createElement("time");
             dateText.setAttribute("datetime", score.submitted_at);
@@ -1036,7 +1018,7 @@ function loadViewsGraph(userId, mode) {
 
 function updatePlaystyleElement(element) {
     performApiRequest(
-        element.classList.toggle("playstyle-using") ? "POST" : "DELETE",
+        toggleClass(element, "playstyle-using") ? "POST" : "DELETE",
         "/users/" + userId + "/playstyle",
         { playstyle: element.id }
     );
@@ -1088,7 +1070,7 @@ function removeFavourite(setId) {
         container.style.opacity = 0;
 
         setTimeout(function() {
-            container.remove();
+            removeElement(container);
 
             if (favouritesCount && data && data.length != null)
                 setText(favouritesCount, data.length.toString());
@@ -1150,7 +1132,7 @@ function reviveBeatmap(setId) {
 }
 
 function toggleBeatmapContainer(section) {
-    var container = section.querySelector('.profile-beatmaps-container');
+    var container = queryFirst(section, '.profile-beatmaps-container');
     var beatmapsSection = document.getElementById("beatmaps");
 
     if (container.style.display === 'none') {
@@ -1242,11 +1224,11 @@ function loadUserCreatedBeatmapsets(userId) {
                 ' ' + category + ' Beatmaps', items.length,
                 'user-beatmaps-' + category.toLowerCase()
             );
-            var container = section.querySelector('.profile-beatmaps-container');
+            var container = queryFirst(section, '.profile-beatmaps-container');
 
             for (var k = 0; k < items.length; k++) {
                 var set = items[k];
-                var showOwnerControls = (currentUser === userId) && unrankedStatuses.includes(category);
+                var showOwnerControls = (currentUser === userId) && arrayContains(unrankedStatuses, category);
                 var table = createBeatmapsetTable(set, {
                     showOwnerControls: showOwnerControls,
                     showRevive: showOwnerControls && (category === 'Graveyarded')
@@ -1264,7 +1246,7 @@ function loadUserCreatedBeatmapsets(userId) {
             beatmapSections.innerHTML = '';
         }
     }, function(xhr) {
-        if (beatmapLoadingText) beatmapLoadingText.remove();
+        if (beatmapLoadingText) removeElement(beatmapLoadingText);
     });
 }
 
@@ -1309,7 +1291,7 @@ function loadUserFavouriteBeatmapsets(userId) {
             });
 
             if (currentUser === userId) {
-                var leftCell = table.querySelector('td');
+                var leftCell = queryFirst(table, 'td');
                 if (leftCell) {
                     leftCell.appendChild(document.createElement('br'));
                     var deleteWrap = document.createElement('div');
@@ -1352,7 +1334,7 @@ function loadUserNominatedBeatmapsets(userId) {
         var nominations = JSON.parse(xhr.responseText) || [];
 
         if (nominations.length === 0) {
-            nominationsSection.remove();
+            removeElement(nominationsSection);
             return;
         }
 
@@ -1375,7 +1357,7 @@ function loadUserNominatedBeatmapsets(userId) {
         nominationsContainer.appendChild(clear);
     }, function(xhr) {
         if (xhr && xhr.status === 404) {
-            nominationsSection.remove();
+            removeElement(nominationsSection);
             return;
         }
 
@@ -1494,7 +1476,7 @@ function createBeatmapsetTable(beatmapset, options) {
 }
 
 addEvent('DOMContentLoaded', document, function(event) {
-    var beatmapContainers = document.getElementsByClassName('profile-beatmaps-container');
+    var beatmapContainers = getElementsByClassName('profile-beatmaps-container');
     for (var i = 0; i < beatmapContainers.length; i++) {
         beatmapContainers[i].style.display = 'none';
     }

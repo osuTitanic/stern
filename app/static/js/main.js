@@ -204,15 +204,37 @@ function removeClass(element, className) {
 function toggleClass(element, className) {
     if (hasClass(element, className)) {
         removeClass(element, className);
-    } else {
-        addClass(element, className);
+        return false;
     }
+
+    addClass(element, className);
+    return true;
 }
 
 function addClasses(element, classNames) {
     for (var i = 0; i < classNames.length; i++) {
         addClass(element, classNames[i]);
     }
+}
+
+function removeElement(element) {
+    if (element && element.parentNode) {
+        element.parentNode.removeChild(element);
+    }
+}
+
+function arrayContains(arr, value) {
+    if (!arr) {
+        return false;
+    }
+
+    for (var i = 0; i < arr.length; i++) {
+        if (arr[i] === value) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 function formatDateShort(value) {
@@ -223,6 +245,28 @@ function formatDateShort(value) {
 
     var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     return monthNames[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear();
+}
+
+function formatDateTimeForTitle(value) {
+    var date = new Date(value);
+    if (isNaN(date.getTime())) {
+        return value;
+    }
+
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1;
+    var day = date.getDate();
+    var hour = date.getHours();
+    var minute = date.getMinutes();
+    var second = date.getSeconds();
+
+    if (month < 10) month = '0' + month;
+    if (day < 10) day = '0' + day;
+    if (hour < 10) hour = '0' + hour;
+    if (minute < 10) minute = '0' + minute;
+    if (second < 10) second = '0' + second;
+
+    return month + '/' + day + '/' + year + ' ' + hour + ':' + minute + ':' + second;
 }
 
 function getScrollTop() {
@@ -417,6 +461,63 @@ function getElementsByClassName(className) {
         }
     }
     return matches;
+}
+
+function queryAll(root, selector) {
+    if (!root || !selector) {
+        return [];
+    }
+
+    if (root.querySelectorAll) {
+        return root.querySelectorAll(selector);
+    }
+
+    if (selector.charAt(0) === '.') {
+        var className = selector.substring(1);
+        var all = root.getElementsByTagName('*');
+        var byClass = [];
+        for (var i = 0; i < all.length; i++) {
+            if (hasClass(all[i], className)) {
+                byClass.push(all[i]);
+            }
+        }
+        return byClass;
+    }
+
+    return root.getElementsByTagName(selector);
+}
+
+function queryFirst(root, selector) {
+    var results = queryAll(root, selector);
+    return results && results.length > 0 ? results[0] : null;
+}
+
+function closest(element, selector) {
+    if (!element || !selector) {
+        return null;
+    }
+
+    if (element.closest) {
+        return element.closest(selector);
+    }
+
+    var isClassSelector = selector.charAt(0) === '.';
+    var className = isClassSelector ? selector.substring(1) : null;
+    var tagName = isClassSelector ? null : selector.toUpperCase();
+
+    while (element && element.nodeType === 1) {
+        if (isClassSelector) {
+            if (hasClass(element, className)) {
+                return element;
+            }
+        } else if (element.tagName === tagName) {
+            return element;
+        }
+
+        element = getParentElement(element);
+    }
+
+    return null;
 }
 
 function beatmapSearch() {
