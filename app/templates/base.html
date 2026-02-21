@@ -172,11 +172,13 @@
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                 </form>
             </div>
+            <script src="{{ '/lib/minifill.min.js'|cached_url }}"></script>
+            <script src="{{ '/lib/jquery.min.js'|cached_url }}" defer></script>
+            <script src="{{ '/lib/jquery.timeago.js'|cached_url }}" defer></script>
+            <script src="{{ '/lib/jquery.marquee.js'|cached_url }}" defer></script>
             {% if is_ie %}
             <!--[if lte IE 8]>
             <script src="http://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=FormData"></script>
-            <script src="{{ '/lib/minifill.min.js'|cached_url }}"></script>
-            <script src="{{ '/lib/jquery.min.js'|cached_url }}"></script>
             <script src="{{ '/lib/jquery.migrate.min.js'|cached_url }}"></script>
             <script src="{{ '/js/ie.js'|cached_url }}"></script>
             <![endif]-->
@@ -184,9 +186,6 @@
             <script src="http://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=default,FormData"></script>
             <!--<![endif]-->
             {% endif %}
-            <script src="{{ '/lib/jquery.min.js'|cached_url }}" defer></script>
-            <script src="{{ '/lib/jquery.timeago.js'|cached_url }}" defer></script>
-            <script src="{{ '/lib/jquery.marquee.js'|cached_url }}" defer></script>
             <script src="{{ '/js/main.js'|cached_url }}" fetchpriority="high"></script>
             <div class="page">
                 {# Page Content #}

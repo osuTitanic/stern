@@ -15,7 +15,7 @@ var Genres = {
     Jazz: 14,
 
     get: function(value) {
-        var keys = Object.keys(this);
+        var keys = getObjectKeys(this);
         for (var i = 0; i < keys.length; i++) {
             if (this[keys[i]] === value) {
                 return keys[i];
@@ -43,7 +43,7 @@ var Languages = {
     Other: 14,
 
     get: function(value) {
-        var keys = Object.keys(this);
+        var keys = getObjectKeys(this);
         for (var i = 0; i < keys.length; i++) {
             if (this[keys[i]] === value) {
                 return keys[i];
@@ -56,10 +56,6 @@ var Languages = {
 var totalBeatmaps = 0;
 var currentPage = 0;
 var busy = false;
-
-function endsWith(str, suffix) {
-    return str.indexOf(suffix, str.length - suffix.length) !== -1;
-}
 
 function getBeatmapIcon(beatmap) {
     var difficulty = "expert";
@@ -115,7 +111,7 @@ function getSearchInput() {
     json["sort"] = parseInt(element.getAttribute("data-id"));
     json["page"] = currentPage;
 
-    var input = document.getElementById("search-input").value.trim();
+    var input = trimString(document.getElementById("search-input").value);
     if (input.length > 0) {
         json["query"] = input;
     }
@@ -190,9 +186,10 @@ function getBeatmapsets(clear) {
             return;
         }
 
-        beatmapsets.forEach(function(beatmapset) {
+        for (var beatmapsetIndex = 0; beatmapsetIndex < beatmapsets.length; beatmapsetIndex++) {
+            var beatmapset = beatmapsets[beatmapsetIndex];
             var beatmapsetDiv = document.createElement("div");
-            beatmapsetDiv.classList.add("beatmapset");
+            addClass(beatmapsetDiv, "beatmapset");
             beatmapsetDiv.id = "beatmapset-" + beatmapset.id;
 
             var lastUpdate = beatmapset.last_update;
@@ -206,31 +203,31 @@ function getBeatmapsets(clear) {
             }
 
             var beatmapImage = document.createElement("div");
-            beatmapImage.classList.add("beatmap-image");
+            addClass(beatmapImage, "beatmap-image");
             beatmapImage.style.backgroundImage = imageUrl;
 
             var beatmapSideOptions = document.createElement("div");
-            beatmapSideOptions.classList.add("beatmap-side-options");
+            addClass(beatmapSideOptions, "beatmap-side-options");
             beatmapSideOptions.style.display = "none";
             beatmapSideOptions.style.overflow = "hidden";
             beatmapSideOptions.style.width = "24px";
 
             var heartIcon = document.createElement("i");
-            heartIcon.classList.add("fa-solid", "fa-heart");
+            addClasses(heartIcon, ["fa-solid", "fa-heart"]);
             var favouriteLink = document.createElement("a");
             favouriteLink.href = "#";
             favouriteLink.appendChild(heartIcon);
             beatmapSideOptions.appendChild(favouriteLink);
 
             var speechBubbleIcon = document.createElement("i");
-            speechBubbleIcon.classList.add("fa-regular", "fa-comment-dots");
+            addClasses(speechBubbleIcon, ["fa-regular", "fa-comment-dots"]);
             var commentsLink = document.createElement("a");
             commentsLink.href = '/forum/t/' + beatmapset.topic_id;
             commentsLink.appendChild(speechBubbleIcon);
             beatmapSideOptions.appendChild(commentsLink);
 
             var downloadIcon = document.createElement("i");
-            downloadIcon.classList.add("fa-solid", "fa-download");
+            addClasses(downloadIcon, ["fa-solid", "fa-download"]);
             var downloadLink = document.createElement("a");
             downloadLink.href = '/d/' + beatmapset.id;
             downloadLink.appendChild(downloadIcon);
@@ -242,22 +239,22 @@ function getBeatmapsets(clear) {
 
             if (!currentUser) {
                 favouriteLink.onclick = function(e) {
-                    e.preventDefault();
+                    preventEventDefault(e || window.event);
                     showLoginForm();
                 }
                 downloadLink.onclick = function(e) {
-                    e.preventDefault();
+                    preventEventDefault(e || window.event);
                     showLoginForm();
                 }
             } else {
                 favouriteLink.onclick = function(e) {
-                    e.preventDefault();
+                    preventEventDefault(e || window.event);
                     addFavorite(beatmapset.id);
                 }
             }
 
             var playIcon = document.createElement("i");
-            playIcon.classList.add("fa-solid", "fa-play");
+            addClasses(playIcon, ["fa-solid", "fa-play"]);
             playIcon.onclick = function(e) {
                 var beatmapPreviewElements = document.querySelectorAll('[id^="beatmap-preview-"]');
                 for (var i = 0; i < beatmapPreviewElements.length; i++) {
@@ -269,8 +266,8 @@ function getBeatmapsets(clear) {
                         element.currentTime = 0;
 
                         var audioPlayIcon = getParentElement(element).querySelector('.beatmap-image i');
-                        audioPlayIcon.classList.remove("fa-pause");
-                        audioPlayIcon.classList.add("fa-play");
+                        removeClass(audioPlayIcon, "fa-pause");
+                        addClass(audioPlayIcon, "fa-play");
                     }
                 };
 
@@ -278,11 +275,11 @@ function getBeatmapsets(clear) {
                 var audio = document.getElementById('beatmap-preview-' + beatmapset.id);
 
                 if (audio.paused) {
-                    playIcon.classList.remove("fa-pause");
-                    playIcon.classList.add("fa-play");
+                    removeClass(playIcon, "fa-pause");
+                    addClass(playIcon, "fa-play");
                 } else {
-                    playIcon.classList.remove("fa-play");
-                    playIcon.classList.add("fa-pause");
+                    removeClass(playIcon, "fa-play");
+                    addClass(playIcon, "fa-pause");
                 }
             };
 
@@ -294,8 +291,8 @@ function getBeatmapsets(clear) {
             beatmapAudio.id = 'beatmap-preview-' + beatmapset.id;
             beatmapAudio.volume = 0.5;
             beatmapAudio.onended = function() {
-                playIcon.classList.remove("fa-pause");
-                playIcon.classList.add("fa-play");
+                removeClass(playIcon, "fa-pause");
+                addClass(playIcon, "fa-play");
             };
 
             beatmapImage.appendChild(playIcon);
@@ -304,31 +301,31 @@ function getBeatmapsets(clear) {
             beatmapsetDiv.appendChild(beatmapSideOptions);
 
             var beatmapInfoLeft = document.createElement("div");
-            beatmapInfoLeft.classList.add("beatmap-info");
+            addClass(beatmapInfoLeft, "beatmap-info");
 
             var beatmapArtist = document.createElement("span");
             setText(beatmapArtist, beatmapset.artist);
             beatmapArtist.style.color = "#555555";
 
             var beatmapTitle = document.createElement("span");
-            beatmapTitle.classList.add("beatmap-title");
+            addClass(beatmapTitle, "beatmap-title");
             setText(beatmapTitle, beatmapset.title);
 
             var beatmapLink = document.createElement("a");
-            beatmapLink.classList.add("beatmap-link");
+            addClass(beatmapLink, "beatmap-link");
             beatmapLink.href = '/s/' + beatmapset.id;
             beatmapLink.appendChild(beatmapArtist);
             beatmapLink.appendChild(document.createTextNode(" - "));
             beatmapLink.appendChild(beatmapTitle);
 
             var beatmapInfoLeft = document.createElement("div");
-            beatmapInfoLeft.classList.add("beatmap-info");
+            addClass(beatmapInfoLeft, "beatmap-info");
 
             var videoIcon = document.createElement("i");
-            videoIcon.classList.add("fa-solid", "fa-film");
+            addClasses(videoIcon, ["fa-solid", "fa-film"]);
 
             var imageIcon = document.createElement("i");
-            imageIcon.classList.add("fa-regular", "fa-image");
+            addClasses(imageIcon, ["fa-regular", "fa-image"]);
 
             if (beatmapset.has_video) {
                 beatmapInfoLeft.appendChild(videoIcon);
@@ -352,14 +349,14 @@ function getBeatmapsets(clear) {
             var beatmapCreatorDiv = document.createElement("div");
             beatmapCreatorDiv.appendChild(beatmapCreator);
             beatmapCreatorDiv.appendChild(beatmapCreatorLink);
-            beatmapCreatorDiv.classList.add("beatmap-creator");
+            addClass(beatmapCreatorDiv, "beatmap-creator");
 
             var hiddenElementsContainer = document.createElement("div");
-            hiddenElementsContainer.classList.add("hidden-elements");
+            addClass(hiddenElementsContainer, "hidden-elements");
 
             var beatmapSource = document.createElement("div");
             var beatmapSourceContent = document.createElement("span");
-            beatmapSource.classList.add("beatmap-source");
+            addClass(beatmapSource, "beatmap-source");
             hiddenElementsContainer.appendChild(beatmapSource);
 
             if (beatmapset.source) {
@@ -386,7 +383,7 @@ function getBeatmapsets(clear) {
                 var beatmap = beatmapset.beatmaps[i];
                 var beatmapIconLink = document.createElement("a");
                 var beatmapIcon = document.createElement("img");
-                beatmapIcon.classList.add("beatmap-icon");
+                addClass(beatmapIcon, "beatmap-icon");
                 beatmapIcon.src = getBeatmapIcon(beatmap);
                 beatmapIcon.title = beatmap.version;
                 beatmapIcon.alt = beatmap.version;
@@ -398,10 +395,10 @@ function getBeatmapsets(clear) {
             beatmapInfoLeft.appendChild(beatmapLink);
 
             var beatmapInfoRight = document.createElement("div");
-            beatmapInfoRight.classList.add("beatmap-stats");
+            addClass(beatmapInfoRight, "beatmap-stats");
 
             var beatmapTagsDiv = document.createElement("div");
-            beatmapTagsDiv.classList.add("beatmap-tags");
+            addClass(beatmapTagsDiv, "beatmap-tags");
 
             if (beatmapset.language_id > 0) {
                 var languageTag = document.createElement("a");
@@ -417,28 +414,24 @@ function getBeatmapsets(clear) {
 
             var ratingBar = document.createElement("div");
             ratingBar.style.width = (100 - ((beatmapset.rating_average / 10) * 100)) + '%';
-            ratingBar.classList.add("beatmap-rating-bar");
+            addClass(ratingBar, "beatmap-rating-bar");
 
             var beatmapRating = document.createElement("div");
-            beatmapRating.classList.add("beatmap-rating");
+            addClass(beatmapRating, "beatmap-rating");
             beatmapRating.appendChild(ratingBar);
 
             var dateText = document.createElement("span");
             var statusTimestamp = beatmapset.approved_at || beatmapset.last_update;
-            var displayDate = new Date(statusTimestamp).toLocaleDateString("en-US", { 
-                month: "short", 
-                day: "numeric", 
-                year: "numeric" 
-            });
+            var displayDate = formatDateShort(statusTimestamp);
             setText(dateText, displayDate);
             dateText.title = beatmapset.approved_at ? "Approved date" : "Last update";
-            dateText.classList.add("hidden-elements");
+            addClass(dateText, "hidden-elements");
 
             var heartIcon = document.createElement("i");
-            heartIcon.classList.add("fa-solid", "fa-heart");
+            addClasses(heartIcon, ["fa-solid", "fa-heart"]);
 
             var playsIcon = document.createElement("i");
-            playsIcon.classList.add("fa-solid", "fa-play");
+            addClasses(playsIcon, ["fa-solid", "fa-play"]);
 
             var totalPlays = 0;
             for (var j = 0; j < beatmapset.beatmaps.length; j++) {
@@ -446,7 +439,7 @@ function getBeatmapsets(clear) {
             }
 
             var detailsDiv = document.createElement("div");
-            detailsDiv.classList.add("beatmap-details");
+            addClass(detailsDiv, "beatmap-details");
             detailsDiv.appendChild(dateText);
             detailsDiv.appendChild(heartIcon);
             detailsDiv.appendChild(document.createTextNode(beatmapset.favourite_count.toLocaleString()));
@@ -462,7 +455,7 @@ function getBeatmapsets(clear) {
             beatmapsetDiv.appendChild(beatmapInfoRight);
             beatmapsetDiv.appendChild(hiddenElementsContainer);
             beatmapContainer.appendChild(beatmapsetDiv);
-        });
+        }
 
         $(".beatmapset").hover(
             function() {
@@ -504,7 +497,7 @@ function addFavorite(beatmapsetId) {
         var heartIcon = document.querySelector("#beatmapset-" + beatmapsetId + " .fa-heart");
         heartIcon.parentNode.style.color = "red";
         heartIcon.parentNode.onclick = function(e) {
-            e.preventDefault();
+            preventEventDefault(e || window.event);
             removeFavorite(beatmapsetId);
         }
     }, function(xhr) {
@@ -512,7 +505,7 @@ function addFavorite(beatmapsetId) {
         var heartIcon = document.querySelector("#beatmapset-" + beatmapsetId + " .fa-heart");
         heartIcon.parentNode.style.color = "red";
         heartIcon.parentNode.onclick = function(e) {
-            e.preventDefault();
+            preventEventDefault(e || window.event);
             removeFavorite(beatmapsetId);
         }
     });
@@ -525,7 +518,7 @@ function removeFavorite(beatmapsetId) {
         var heartIcon = document.querySelector("#beatmapset-" + beatmapsetId + " .fa-heart");
         heartIcon.parentNode.style.color = null;
         heartIcon.parentNode.onclick = function(e) {
-            e.preventDefault();
+            preventEventDefault(e || window.event);
             addFavorite(beatmapsetId);
         }
     });
@@ -557,26 +550,26 @@ function setElement(element) {
     if (removes) {
         var removeElement = document.querySelector('[data-name="' + removes + '"]');
         if (removeElement) {
-            removeElement.classList.remove("selected");
+            removeClass(removeElement, "selected");
         }
     }
 
     if (!dataName) {
-        element.classList.toggle("selected");
+        toggleClass(element, "selected");
         getBeatmapsets(true);
         return;
     }
 
     for (var i = 0; i < elements.length; i++) {
         if (elements[i] !== element) {
-            elements[i].classList.remove("selected");
+            removeClass(elements[i], "selected");
         }
     }
 
-    element.classList.toggle("selected");
+    toggleClass(element, "selected");
 
     if (!element.parentNode.querySelector(".selected")) {
-        elements[0].classList.add("selected");
+        addClass(elements[0], "selected");
     }
 
     getBeatmapsets(true);
@@ -606,16 +599,18 @@ if (document.querySelectorAll !== undefined) {
     var beatmapOptionsLinks = document.querySelectorAll(".beatmap-options a");
     for (var i = 0; i < beatmapOptionsLinks.length; i++) {
         addEvent("click", beatmapOptionsLinks[i], function(event) {
-            event.preventDefault();
-            setElement(event.target);
+            event = event || window.event;
+            preventEventDefault(event);
+            setElement(getEventTarget(event));
         });
     }
     
     var beatmapOrderSelectLinks = document.querySelectorAll(".beatmap-order-select a");
     for (var i = 0; i < beatmapOrderSelectLinks.length; i++) {
         addEvent("click", beatmapOrderSelectLinks[i], function(event) {
-            event.preventDefault();
-            setOrder(event.target);
+            event = event || window.event;
+            preventEventDefault(event);
+            setOrder(getEventTarget(event));
         });
     }
 }
@@ -628,7 +623,7 @@ addEvent('load', window, function(event) {
 });
 
 addEvent("scroll", window, function(event) {
-    if (window.innerHeight + window.scrollY >= document.body.offsetHeight / 1.4) {
+    if (getWindowHeight() + getScrollTop() >= document.body.offsetHeight / 1.4) {
         getBeatmapsets(false);
     }
 });

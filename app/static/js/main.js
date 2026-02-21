@@ -159,6 +159,100 @@ function setText(elem, text) {
     }
 }
 
+function getObjectKeys(obj) {
+    var keys = [];
+    for (var key in obj) {
+        if (Object.prototype.hasOwnProperty.call(obj, key)) {
+            keys.push(key);
+        }
+    }
+    return keys;
+}
+
+function hasClass(element, className) {
+    if (!element || !className) {
+        return false;
+    }
+
+    var currentClassName = element.className || "";
+    return (" " + currentClassName + " ").indexOf(" " + className + " ") !== -1;
+}
+
+function addClass(element, className) {
+    if (!element || !className || hasClass(element, className)) {
+        return;
+    }
+
+    element.className = element.className ? (element.className + " " + className) : className;
+}
+
+function removeClass(element, className) {
+    if (!element || !className) {
+        return;
+    }
+
+    var classes = (element.className || "").split(/\s+/);
+    var nextClasses = [];
+    for (var i = 0; i < classes.length; i++) {
+        if (classes[i] && classes[i] !== className) {
+            nextClasses.push(classes[i]);
+        }
+    }
+    element.className = nextClasses.join(" ");
+}
+
+function toggleClass(element, className) {
+    if (hasClass(element, className)) {
+        removeClass(element, className);
+    } else {
+        addClass(element, className);
+    }
+}
+
+function addClasses(element, classNames) {
+    for (var i = 0; i < classNames.length; i++) {
+        addClass(element, classNames[i]);
+    }
+}
+
+function preventEventDefault(event) {
+    if (!event) {
+        return;
+    }
+
+    if (event.preventDefault) {
+        event.preventDefault();
+    } else {
+        event.returnValue = false;
+    }
+}
+
+function getEventTarget(event) {
+    return event ? (event.target || event.srcElement) : null;
+}
+
+function formatDateShort(value) {
+    var date = new Date(value);
+    if (isNaN(date.getTime())) {
+        return '';
+    }
+
+    var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    return monthNames[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear();
+}
+
+function getScrollTop() {
+    return window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+}
+
+function getWindowHeight() {
+    return window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight || 0;
+}
+
+function endsWith(str, suffix) {
+    return str.indexOf(suffix, str.length - suffix.length) !== -1;
+}
+
 function isLoggedIn() {
     return currentUser !== null;
 }
