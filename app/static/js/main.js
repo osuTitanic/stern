@@ -215,22 +215,6 @@ function addClasses(element, classNames) {
     }
 }
 
-function preventEventDefault(event) {
-    if (!event) {
-        return;
-    }
-
-    if (event.preventDefault) {
-        event.preventDefault();
-    } else {
-        event.returnValue = false;
-    }
-}
-
-function getEventTarget(event) {
-    return event ? (event.target || event.srcElement) : null;
-}
-
 function formatDateShort(value) {
     var date = new Date(value);
     if (isNaN(date.getTime())) {
@@ -383,9 +367,56 @@ function addEvent(eventName, targetElement, func) {
     targetElement["on"+eventName] = func;
 }
 
+function preventEventDefault(event) {
+    if (!event) {
+        return;
+    }
+
+    if (event.preventDefault) {
+        event.preventDefault();
+    } else {
+        event.returnValue = false;
+    }
+}
+
+function stopEventPropagation(event) {
+    if (!event) {
+        return;
+    }
+
+    if (event.stopPropagation) {
+        event.stopPropagation();
+    } else {
+        event.cancelBubble = true;
+    }
+}
+
+function getEventTarget(event) {
+    return event ? (event.target || event.srcElement) : null;
+}
+
 function getParentElement(element) {
     // IE8 and earlier doesn't support parentElement, so we use parentNode instead.
     return element.parentElement || (element.parentNode && element.parentNode.nodeType === 1 ? element.parentNode : null);
+}
+
+function getElementsByClassName(className) {
+    if (document.getElementsByClassName) {
+        return document.getElementsByClassName(className);
+    }
+
+    if (document.querySelectorAll) {
+        return document.querySelectorAll('.' + className);
+    }
+
+    var elements = document.getElementsByTagName('*');
+    var matches = [];
+    for (var i = 0; i < elements.length; i++) {
+        if ((' ' + elements[i].className + ' ').indexOf(' ' + className + ' ') !== -1) {
+            matches.push(elements[i]);
+        }
+    }
+    return matches;
 }
 
 function beatmapSearch() {
