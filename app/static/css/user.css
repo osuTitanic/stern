@@ -603,12 +603,13 @@ body {
 .score-icon-container {
     float: right;
     margin-left: 2.5px;
+    margin-top: 1px;
+    font-size: 110%;
 }
 
 .score-pin-icon,
 .score-pinned-icon {
     cursor: pointer;
-    font-size: 95%;
 }
 
 .score-pin-icon {
