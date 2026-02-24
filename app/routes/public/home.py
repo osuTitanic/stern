@@ -5,6 +5,7 @@ import re
 
 from app.common.constants import GameMode
 from app.common.database import DBForumPost, DBForumTopic
+from app.common.helpers import caching
 from app.common.database import (
     beatmaps,
     messages,
@@ -84,6 +85,7 @@ def peppy_skill_issue():
 def redirect_page(page: str) -> Response:
     return handle_legacy_redirects(page, request)
 
+@caching.ttl_cache(ttl=60*5)
 def format_announcement(
     announcement: DBForumTopic,
     post: DBForumPost | None = None
