@@ -1,6 +1,8 @@
 
 from __future__ import annotations
 
+import re
+
 from app.common.constants import GameMode
 from app.common.database import DBForumPost, DBForumTopic
 from app.common.database import (
@@ -23,6 +25,13 @@ from flask import (
 import utils
 import app
 
+# Ignored tags for news post on the homepage
+bbcode_ignore_tags = [
+    re.compile(r"\[/?b\]", re.IGNORECASE),
+    re.compile(r"\[/?centre\]", re.IGNORECASE),
+    re.compile(r"\[size(?:=[^\]]+)?\]", re.IGNORECASE),
+    re.compile(r"\[/size\]", re.IGNORECASE)
+]
 router = Blueprint("home", __name__)
 
 @router.get("/")
@@ -104,7 +113,10 @@ def resolve_news_text(announcement: DBForumTopic, post: DBForumPost | None = Non
             continue
 
         content = line.strip()
-        content = content.replace("[centre]", "").replace("[/centre]", "")
+
+        for regex in bbcode_ignore_tags:
+            content = regex.sub("", content)
+
         return content
 
 def handle_legacy_redirects(page: str, request: Request) -> Response | None:
