@@ -149,7 +149,7 @@ function createCollaborationRequest(beatmapId) {
         return;
     }
 
-    var url = "/users/lookup/" + username;
+    var url = "/users/lookup/" + username.trim();
 
     performApiRequest("GET", url, null, function(xhr) {
         user = JSON.parse(xhr.responseText);
