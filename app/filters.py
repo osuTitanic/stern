@@ -1,8 +1,9 @@
 
 from app.routes.forum import activity as forum_activity
-from app.common.constants import OSU_CHAT_LINK_MODERN
+from app.common.constants import OSU_CHAT_LINK_MODERN, MARKDOWN_LINK
 from app.common.database import DBForumTopic, DBForum, DBUser
 from app.common.helpers import activity
+from markupsafe import Markup, escape
 from app.common import bbcode
 
 from datetime import datetime, timedelta
@@ -158,18 +159,23 @@ def render_bbcode_nowrapper(text: str) -> str:
     return bbcode.render_html(text)
 
 @flask.template_filter('markdown_urls')
-def format_markdown_urls(value: str) -> str:
-    links = list(
-        re.compile(r'\[([^\]]+)\]\(([^)]+)\)').findall(value)
-    )
+def format_markdown_urls(value: str) -> Markup:
+    parts: list[str | Markup] = []
+    last_end = 0
 
-    for link in links:
-        value = value.replace(
-            f'[{link[0]}]({link[1]})',
-            f'<a href="{link[1]}">{link[0]}</a>'
-        )
+    for match in MARKDOWN_LINK.finditer(value):
+        start, end = match.span()
+        text, href = match.groups()
 
-    return value
+        escaped_href = escape(href)
+        escaped_text = escape(text)
+
+        parts.append(escape(value[last_end:start]))
+        parts.append(Markup(f'<a href="{escaped_href}">{escaped_text}</a>'))
+        last_end = end
+
+    parts.append(escape(value[last_end:]))
+    return Markup().join(parts)
 
 @flask.template_filter('list_parent_forums')
 def list_parent_forums(forum: DBForum) -> list:
