@@ -540,6 +540,13 @@ function userSearch() {
     return true;
 }
 
+function createLoaderOverlay() {
+    var overlay = document.createElement('div');
+    overlay.className = 'loader-overlay';
+    overlay.innerHTML = '<div class="loader"></div>';
+    return overlay;
+}
+
 function performApiRequest(method, path, data, callbackSuccess, callbackError) {    
     var url = apiBaseurl + path;
     var xhr;

@@ -105,6 +105,10 @@ function uploadResource(endpoint, key, filetypes, promptText) {
         var formData = new FormData();
         formData.append(key, file, file.name);
 
+        // Create loader element to indicate upload in progress
+        var loader = createLoaderOverlay();
+        document.body.appendChild(loader);
+
         // Perform the API request to upload the file
         performApiRequest("PUT", endpoint, formData, function(xhr) {
             reloadPageSoon();
