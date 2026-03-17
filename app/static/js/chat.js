@@ -18,8 +18,7 @@ var pendingTarget = null;
 
 // Compiled regexes for message link parsing
 var osuLinkRegex = /\[((?:https?:\/\/)[^\s\]]+)\s+(.+?)\]/g;
-var urlRegex =
-    /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g;
+var urlRegex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g;
 
 // Disallowed channels to load message histories from
 var disallowedChannels = ["#multi_", "#spec_"];
@@ -60,9 +59,7 @@ function initializeSocket(username, password) {
 
     socket.on("disconnect", function () {
         console.log("Disconnected from IRC backend");
-        updateStatusText(
-            "Disconnected from chat server. Please refresh the page to reconnect!",
-        );
+        updateStatusText("Disconnected from chat server. Please refresh the page to reconnect!");
         disableChatInput();
         connected = false;
     });
@@ -92,9 +89,7 @@ function initializeSocket(username, password) {
     socket.on("network:status", function (data) {
         console.log("Network status:", data);
         if (!data.connected) {
-            updateStatusText(
-                "Disconnected from chat server. Please refresh the page to reconnect!",
-            );
+            updateStatusText("Disconnected from chat server. Please refresh the page to reconnect!");
             disableChatInput();
             connected = false;
         } else {
@@ -187,10 +182,7 @@ function onChannelTopic(data) {
 function onChannelUsers(data) {
     var channel = channels[data.chan];
     if (!channel) {
-        console.error(
-            "Received user listing request for unknown channel:",
-            data.chan,
-        );
+        console.error("Received user listing request for unknown channel:", data.chan);
         return;
     }
     socket.emit("names", { target: channel.id });
@@ -401,9 +393,7 @@ function sendWhoIsMany(usernames) {
 
 function sendChannelMessage(channel, message) {
     if (!channel || !message) {
-        console.error(
-            "Channel and message are required to send a channel message",
-        );
+        console.error("Channel and message are required to send a channel message");
         return;
     }
     sendInput(channel, message);
@@ -411,9 +401,7 @@ function sendChannelMessage(channel, message) {
 
 function sendDirectMessage(username, message) {
     if (!username || !message) {
-        console.error(
-            "Username and message are required to send a direct message",
-        );
+        console.error("Username and message are required to send a direct message");
         return;
     }
     var channel = getChannelByName(username);
@@ -498,13 +486,7 @@ function storeHistoryMessages(key, messages, append) {
     }
 }
 
-function fetchChannelMessageHistory(
-    channel,
-    offset,
-    limit,
-    onSuccess,
-    onFailure,
-) {
+function fetchChannelMessageHistory(channel, offset, limit, onSuccess, onFailure) {
     var url = "/chat/channels/" + encodeURIComponent(channel) + "/messages";
 
     if (offset) {
@@ -534,13 +516,7 @@ function fetchChannelMessageHistory(
     );
 }
 
-function fetchDirectMessageHistory(
-    userId,
-    offset,
-    limit,
-    onSuccess,
-    onFailure,
-) {
+function fetchDirectMessageHistory(userId, offset, limit, onSuccess, onFailure) {
     var url = "/chat/dms/" + userId + "/messages";
 
     if (offset) {
@@ -733,9 +709,7 @@ function markChannelAsUnread(channelId) {
         return;
     }
 
-    var channelElement = channelContainer.querySelector(
-        '[data-channel-id="' + channelId + '"]',
-    );
+    var channelElement = channelContainer.querySelector('[data-channel-id="' + channelId + '"]');
     if (channelElement && !channelElement.classList.contains("active")) {
         channelElement.classList.add("unread");
         channelElement.style.fontWeight = "bold";
@@ -748,9 +722,7 @@ function markDmAsUnread(userId) {
         return;
     }
 
-    var dmElement = dmContainer.querySelector(
-        '[data-user-id="' + userId + '"]',
-    );
+    var dmElement = dmContainer.querySelector('[data-user-id="' + userId + '"]');
     if (dmElement && !dmElement.classList.contains("active")) {
         dmElement.classList.add("unread");
         dmElement.style.fontWeight = "bold";
@@ -763,9 +735,7 @@ function clearChannelUnread(channelId) {
         return;
     }
 
-    var channelElement = channelContainer.querySelector(
-        '[data-channel-id="' + channelId + '"]',
-    );
+    var channelElement = channelContainer.querySelector('[data-channel-id="' + channelId + '"]');
     if (channelElement) {
         channelElement.classList.remove("unread");
         channelElement.style.fontWeight = "normal";
@@ -778,9 +748,7 @@ function clearDMUnread(userId) {
         return;
     }
 
-    var dmElement = dmContainer.querySelector(
-        '[data-user-id="' + userId + '"]',
-    );
+    var dmElement = dmContainer.querySelector('[data-user-id="' + userId + '"]');
     if (dmElement) {
         dmElement.classList.remove("unread");
         dmElement.style.fontWeight = "normal";
@@ -854,9 +822,7 @@ function populateDMs() {
                 dmElement.textContent = dm.user.name;
                 dmElement.dataset.name = dm.user.name;
                 dmElement.dataset.userId = dm.user.id;
-                dmElement.dataset.isOnline = getUserById(dm.user.id)
-                    ? "true"
-                    : "false";
+                dmElement.dataset.isOnline = getUserById(dm.user.id) ? "true" : "false";
                 dmElement.addEventListener("click", function () {
                     switchToDM(parseInt(this.dataset.userId));
                 });
@@ -873,10 +839,7 @@ function populateDMs() {
                 }
 
                 // Mark as unread depending on last message's state
-                if (
-                    dm.last_message.read == false &&
-                    dm.last_message.sender_id == dm.user.id
-                ) {
+                if (dm.last_message.read == false && dm.last_message.sender_id == dm.user.id) {
                     console.log("Unread conversation with", dm.user.name);
                     markDmAsUnread(dm.user.id);
                 }
@@ -896,10 +859,7 @@ function updateActiveChannel() {
         var channelElement = channelContainer.children[i];
         channelElement.classList.remove("active");
 
-        if (
-            activeChannel &&
-            parseInt(channelElement.dataset.channelId) === activeChannel.id
-        ) {
+        if (activeChannel && parseInt(channelElement.dataset.channelId) === activeChannel.id) {
             channelElement.classList.add("active");
         }
     }
@@ -972,8 +932,7 @@ function switchToDM(userId) {
 }
 
 function loadChannelHistory(channel) {
-    if (disallowedChannels.some((prefix) => channel.name.startsWith(prefix)))
-        return;
+    if (disallowedChannels.some((prefix) => channel.name.startsWith(prefix))) return;
 
     var historyKey = getChannelHistoryKey(channel);
 
@@ -1131,9 +1090,7 @@ function createMessageElement(sender, text, highlight, time) {
         messageElement.classList.add("highlighted");
     }
 
-    var timestamp = time
-        ? formatMessageTime(time)
-        : formatMessageTime(new Date());
+    var timestamp = time ? formatMessageTime(time) : formatMessageTime(new Date());
     var senderName = sender.nick || sender.name || "Unknown";
     var userId = sender.id;
 
@@ -1212,12 +1169,7 @@ function displayMessage(sender, text, highlight, time) {
     // each line as a separate message
     var lines = text.split("\n");
     for (var i = 0; i < lines.length; i++) {
-        var messageElement = createMessageElement(
-            sender,
-            lines[i],
-            highlight,
-            time,
-        );
+        var messageElement = createMessageElement(sender, lines[i], highlight, time);
         chatLog.appendChild(messageElement);
     }
 
@@ -1251,17 +1203,13 @@ function parseMessageLinks(text) {
 
     for (var i = 0; i < parts.length; i++) {
         if (parts[i].type === "text") {
-            var urlParts = parseLinksWithRegex(
-                parts[i].content,
-                urlRegex,
-                function (match) {
-                    return {
-                        type: "link",
-                        url: match[0],
-                        text: match[0],
-                    };
-                },
-            );
+            var urlParts = parseLinksWithRegex(parts[i].content, urlRegex, function (match) {
+                return {
+                    type: "link",
+                    url: match[0],
+                    text: match[0],
+                };
+            });
             finalParts = finalParts.concat(urlParts);
         } else {
             finalParts.push(parts[i]);
@@ -1312,12 +1260,7 @@ function parseLinksWithRegex(text, regex, linkFactory) {
 }
 
 function displayHistoricalMessage(msg) {
-    displayMessage(
-        { nick: msg.sender.name, id: msg.sender.id },
-        msg.message,
-        false,
-        new Date(msg.time),
-    );
+    displayMessage({ nick: msg.sender.name, id: msg.sender.id }, msg.message, false, new Date(msg.time));
 }
 
 function displayHistoricalDirectMessage(msg, user) {
@@ -1326,12 +1269,7 @@ function displayHistoricalDirectMessage(msg, user) {
         nickname = user.name;
     }
 
-    displayMessage(
-        { nick: nickname, id: msg.sender_id },
-        msg.message,
-        false,
-        new Date(msg.time),
-    );
+    displayMessage({ nick: nickname, id: msg.sender_id }, msg.message, false, new Date(msg.time));
 }
 
 function formatMessageTime(time) {
@@ -1387,9 +1325,7 @@ function loadMoreChannelMessages(channel) {
 
             // Verify we're still on the same channel
             if (!activeChannel || activeChannel.id !== channel.id) {
-                console.debug(
-                    "Channel changed during loadMore, ignoring results",
-                );
+                console.debug("Channel changed during loadMore, ignoring results");
                 return;
             }
 
@@ -1433,8 +1369,7 @@ function loadMoreChannelMessages(channel) {
             hasMoreMessages[historyKey] = messages.length >= 50;
 
             // Maintain scroll position
-            chatLog.scrollTop =
-                scrollTopBefore + (chatLog.scrollHeight - scrollHeightBefore);
+            chatLog.scrollTop = scrollTopBefore + (chatLog.scrollHeight - scrollHeightBefore);
 
             updateStatusText("Type a message...");
         },
@@ -1476,9 +1411,7 @@ function loadMoreDMMessages(userId) {
 
                     // Verify we're still on the same DM
                     if (activeDM !== userId) {
-                        console.debug(
-                            "DM changed during loadMore, ignoring results",
-                        );
+                        console.debug("DM changed during loadMore, ignoring results");
                         return;
                     }
 
@@ -1516,10 +1449,7 @@ function loadMoreDMMessages(userId) {
                             new Date(msg.time),
                         );
                         if (chatLog.firstChild) {
-                            chatLog.insertBefore(
-                                messageElement,
-                                chatLog.firstChild,
-                            );
+                            chatLog.insertBefore(messageElement, chatLog.firstChild);
                         } else {
                             chatLog.appendChild(messageElement);
                         }
@@ -1529,9 +1459,7 @@ function loadMoreDMMessages(userId) {
                     hasMoreMessages[historyKey] = messages.length >= 50;
 
                     // Maintain scroll position
-                    chatLog.scrollTop =
-                        scrollTopBefore +
-                        (chatLog.scrollHeight - scrollHeightBefore);
+                    chatLog.scrollTop = scrollTopBefore + (chatLog.scrollHeight - scrollHeightBefore);
 
                     updateStatusText("Type a message...");
                 },
@@ -1632,12 +1560,7 @@ function sendCurrentMessage() {
             time: time,
         });
 
-        displayMessage(
-            { nick: currentUsername, id: currentUser },
-            message,
-            false,
-            time,
-        );
+        displayMessage({ nick: currentUsername, id: currentUser }, message, false, time);
         inputField.value = "";
 
         var userObject = getUserById(activeDM);
@@ -1770,9 +1693,7 @@ function handleStartDMByName(username) {
         function (user) {
             // Add user to DM list if not already present
             var dmContainer = document.getElementById("dm-container");
-            var existing = dmContainer.querySelector(
-                `.dm-entry[data-user-id="${user.id}"]`,
-            );
+            var existing = dmContainer.querySelector(`.dm-entry[data-user-id="${user.id}"]`);
             if (!existing) {
                 var dmEntry = document.createElement("div");
                 dmEntry.className = "dm-entry";
@@ -1805,9 +1726,7 @@ function handleStartDMById(userId) {
         function (user) {
             // Add user to DM list if not already present
             var dmContainer = document.getElementById("dm-container");
-            var existing = dmContainer.querySelector(
-                `.dm-entry[data-user-id="${user.id}"]`,
-            );
+            var existing = dmContainer.querySelector(`.dm-entry[data-user-id="${user.id}"]`);
             if (!existing) {
                 var dmEntry = document.createElement("div");
                 dmEntry.className = "dm-entry";

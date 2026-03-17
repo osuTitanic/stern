@@ -1,8 +1,8 @@
 function getSelectionRange(textarea) {
-    if (typeof textarea.selectionStart === 'number' && typeof textarea.selectionEnd === 'number') {
+    if (typeof textarea.selectionStart === "number" && typeof textarea.selectionEnd === "number") {
         return {
             start: textarea.selectionStart,
-            end: textarea.selectionEnd
+            end: textarea.selectionEnd,
         };
     }
 
@@ -11,9 +11,9 @@ function getSelectionRange(textarea) {
         var selectedRange = document.selection.createRange();
         var duplicateRange = selectedRange.duplicate();
         duplicateRange.moveToElementText(textarea);
-        duplicateRange.setEndPoint('EndToEnd', selectedRange);
+        duplicateRange.setEndPoint("EndToEnd", selectedRange);
 
-        var selectedText = selectedRange.text || '';
+        var selectedText = selectedRange.text || "";
         var end = duplicateRange.text.length;
         var start = end - selectedText.length;
 
@@ -26,14 +26,14 @@ function getSelectionRange(textarea) {
 
         return {
             start: start,
-            end: end
+            end: end,
         };
     }
 
     var length = textarea.value.length;
     return {
         start: length,
-        end: length
+        end: length,
     };
 }
 
@@ -46,8 +46,8 @@ function setSelectionRangeCompat(textarea, start, end) {
     if (textarea.createTextRange) {
         var range = textarea.createTextRange();
         range.collapse(true);
-        range.moveStart('character', start);
-        range.moveEnd('character', end - start);
+        range.moveStart("character", start);
+        range.moveEnd("character", end - start);
         range.select();
     }
 }
@@ -57,17 +57,17 @@ function insertBBCode(event) {
     preventEventDefault(event);
     var element = getEventTarget(event);
 
-    if (element.tagName !== 'BUTTON') {
-        element = getParentElement(element) // whyyy
+    if (element.tagName !== "BUTTON") {
+        element = getParentElement(element); // whyyy
     }
 
-    var bbcodeTag = element.getAttribute('data-bbcode-tag');
-    var property = element.getAttribute('data-property');
-    var noClose = element.getAttribute('data-no-close');
+    var bbcodeTag = element.getAttribute("data-bbcode-tag");
+    var property = element.getAttribute("data-property");
+    var noClose = element.getAttribute("data-no-close");
 
     var parent = getParentElement(element);
-    var textAreas = getParentElement(parent).getElementsByTagName('textarea');
-    
+    var textAreas = getParentElement(parent).getElementsByTagName("textarea");
+
     if (textAreas.length === 0) {
         console.warn("No text area found in the parent element.");
         return;
@@ -105,7 +105,7 @@ function insertImageBBCode(textarea, content) {
 
     var selection = getSelectionRange(textarea);
     var start = selection.start;
-    var end   = selection.end;
+    var end = selection.end;
 
     var beforeText = textarea.value.substring(0, start);
     var afterText = textarea.value.substring(end);
@@ -144,13 +144,13 @@ function replaceImageBBCode(textarea, oldContent, newContent) {
     }
 }
 
-var editors = getElementsByClassName('bbcode-editor');
+var editors = getElementsByClassName("bbcode-editor");
 var isUploading = false;
 
 for (var i = 0; i < editors.length; i++) {
     var editor = editors[i];
 
-    addEvent('paste', editor, function(event) {
+    addEvent("paste", editor, function (event) {
         event = event || window.event;
         var editor = getEventTarget(event);
 
@@ -173,7 +173,7 @@ for (var i = 0; i < editors.length; i++) {
         for (var i = 0; i < items.length; i++) {
             var item = items[i];
 
-            if (item.kind !== 'file' || item.type.indexOf('image') !== 0) {
+            if (item.kind !== "file" || item.type.indexOf("image") !== 0) {
                 // Not an image file, skip it.
                 continue;
             }
@@ -192,23 +192,33 @@ for (var i = 0; i < editors.length; i++) {
             insertImageBBCode(editor, uploadPrompt);
 
             var formData = new FormData();
-            formData.append('input', blob);
+            formData.append("input", blob);
 
-            performApiRequest("POST", "/forum/images", formData, function (xhr) {
-                setTimeout(function() { isUploading = false }, 1000);
-                var response = JSON.parse(xhr.responseText);
-                var imageUrl = response.image.image.url;
-                replaceImageBBCode(editor, uploadPrompt, imageUrl);
-            }, function (xhr) {
-                setTimeout(function() { isUploading = false }, 1000);
-            });
+            performApiRequest(
+                "POST",
+                "/forum/images",
+                formData,
+                function (xhr) {
+                    setTimeout(function () {
+                        isUploading = false;
+                    }, 1000);
+                    var response = JSON.parse(xhr.responseText);
+                    var imageUrl = response.image.image.url;
+                    replaceImageBBCode(editor, uploadPrompt, imageUrl);
+                },
+                function (xhr) {
+                    setTimeout(function () {
+                        isUploading = false;
+                    }, 1000);
+                },
+            );
             return;
         }
     });
 }
 
-var toolbars = getElementsByClassName('bbcode-toolbar')
+var toolbars = getElementsByClassName("bbcode-toolbar");
 
 for (var i = 0; i < toolbars.length; i++) {
-    addEvent('click', toolbars[i], insertBBCode);
+    addEvent("click", toolbars[i], insertBBCode);
 }

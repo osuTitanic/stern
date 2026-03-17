@@ -1,23 +1,23 @@
 // Console stub for IE8 and earlier
 if (!window.console) {
     window.console = {
-        log: function() {},
-        info: function() {},
-        warn: function() {},
-        error: function() {}
+        log: function () {},
+        info: function () {},
+        warn: function () {},
+        error: function () {},
     };
 }
 
 // FormData stub for IE9 and earlier
 if (!window.FormData) {
-    window.FormData = function(form) {};
+    window.FormData = function (form) {};
 }
 
 // getElementsByClassName polyfill
 function getElementsByClassNamePolyfill(className) {
-    var allElements = document.getElementsByTagName('*');
+    var allElements = document.getElementsByTagName("*");
     var matchedElements = [];
-    var pattern = new RegExp('(^|\\s)' + className + '(\\s|$)');
+    var pattern = new RegExp("(^|\\s)" + className + "(\\s|$)");
 
     for (var i = 0; i < allElements.length; i++) {
         if (pattern.test(allElements[i].className)) {
@@ -33,10 +33,10 @@ if (!document.getElementsByClassName) {
 
 // Element.getElementsByClassName polyfill
 if (!Element.prototype.getElementsByClassName) {
-    Element.prototype.getElementsByClassName = function(className) {
-        var allElements = this.getElementsByTagName('*');
+    Element.prototype.getElementsByClassName = function (className) {
+        var allElements = this.getElementsByTagName("*");
         var matchedElements = [];
-        var pattern = new RegExp('(^|\\s)' + className + '(\\s|$)');
+        var pattern = new RegExp("(^|\\s)" + className + "(\\s|$)");
 
         for (var i = 0; i < allElements.length; i++) {
             if (pattern.test(allElements[i].className)) {
@@ -49,7 +49,7 @@ if (!Element.prototype.getElementsByClassName) {
 
 // Array.indexOf polyfill
 if (!Array.prototype.indexOf) {
-    Array.prototype.indexOf = function(searchElement, fromIndex) {
+    Array.prototype.indexOf = function (searchElement, fromIndex) {
         var k;
         if (this == null) {
             throw new TypeError('"this" is null or not defined');
@@ -76,14 +76,14 @@ if (!Array.prototype.indexOf) {
 
 // Array.isArray polyfill
 if (!Array.isArray) {
-    Array.isArray = function(arg) {
-        return Object.prototype.toString.call(arg) === '[object Array]';
+    Array.isArray = function (arg) {
+        return Object.prototype.toString.call(arg) === "[object Array]";
     };
 }
 
 // Object.keys polyfill
 if (!Object.keys) {
-    Object.keys = function(obj) {
+    Object.keys = function (obj) {
         var keys = [];
         for (var key in obj) {
             if (Object.prototype.hasOwnProperty.call(obj, key)) {
@@ -96,35 +96,35 @@ if (!Object.keys) {
 
 // String.trim polyfill
 if (!String.prototype.trim) {
-    String.prototype.trim = function() {
-        return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');
+    String.prototype.trim = function () {
+        return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "");
     };
 }
 
 // addEventListener/removeEventListener polyfill
 if (!Element.prototype.addEventListener) {
-    Element.prototype.addEventListener = function(type, listener) {
-        this.attachEvent('on' + type, listener);
+    Element.prototype.addEventListener = function (type, listener) {
+        this.attachEvent("on" + type, listener);
     };
-    Element.prototype.removeEventListener = function(type, listener) {
-        this.detachEvent('on' + type, listener);
+    Element.prototype.removeEventListener = function (type, listener) {
+        this.detachEvent("on" + type, listener);
     };
 }
 
 if (!window.addEventListener) {
-    window.addEventListener = function(type, listener) {
-        window.attachEvent('on' + type, listener);
+    window.addEventListener = function (type, listener) {
+        window.attachEvent("on" + type, listener);
     };
-    window.removeEventListener = function(type, listener) {
-        window.detachEvent('on' + type, listener);
+    window.removeEventListener = function (type, listener) {
+        window.detachEvent("on" + type, listener);
     };
 }
 
 if (!document.addEventListener) {
-    document.addEventListener = function(type, listener) {
-        document.attachEvent('on' + type, listener);
+    document.addEventListener = function (type, listener) {
+        document.attachEvent("on" + type, listener);
     };
-    document.removeEventListener = function(type, listener) {
-        document.detachEvent('on' + type, listener);
+    document.removeEventListener = function (type, listener) {
+        document.detachEvent("on" + type, listener);
     };
 }

@@ -9,8 +9,12 @@ function validateField(element) {
     descriptionField.style.fontWeight = "normal";
 
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/account/register/check?type=' + encodeURIComponent(type) + '&value=' + encodeURIComponent(value), true);
-    xhr.onreadystatechange = function() {
+    xhr.open(
+        "GET",
+        "/account/register/check?type=" + encodeURIComponent(type) + "&value=" + encodeURIComponent(value),
+        true,
+    );
+    xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
             if (xhr.status !== 200) {
                 descriptionField.innerText = "Could not verify this field. Please try something else!";
@@ -43,8 +47,12 @@ function isValid(element) {
     }
 
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/account/register/check?type=' + encodeURIComponent(type) + '&value=' + encodeURIComponent(value), true);
-    xhr.onreadystatechange = function() {
+    xhr.open(
+        "GET",
+        "/account/register/check?type=" + encodeURIComponent(type) + "&value=" + encodeURIComponent(value),
+        true,
+    );
+    xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
             if (xhr.status !== 200) {
                 descriptionField.innerText = "Could not verify this field. Please try something else!";
@@ -76,9 +84,11 @@ function validateAll(event) {
 
     for (var i = 0; i < validationFields.length; i++) {
         (function (field) {
-            promises.push(new Promise(function (resolve) {
-                isValid(field) && resolve(true);
-            }));
+            promises.push(
+                new Promise(function (resolve) {
+                    isValid(field) && resolve(true);
+                }),
+            );
         })(validationFields[i]);
     }
 
@@ -97,15 +107,15 @@ var timeout = null;
 var validationFields = document.querySelectorAll(".validate");
 for (var j = 0; j < validationFields.length; j++) {
     (function (element) {
-        addEvent("keyup", element, function(event) {
+        addEvent("keyup", element, function (event) {
             clearTimeout(timeout);
 
-            timeout = setTimeout(function() {
+            timeout = setTimeout(function () {
                 validateField(element);
             }, 500);
         });
 
-        addEvent("blur", element, function(event) {
+        addEvent("blur", element, function (event) {
             validateField(element);
         });
     })(validationFields[j]);

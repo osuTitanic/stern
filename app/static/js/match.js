@@ -5,20 +5,20 @@ var refreshRate = 6000;
 var ScoringType = {
     0: "Score",
     1: "Accuracy",
-    2: "Combo"
+    2: "Combo",
 };
 
 var TeamType = {
     0: "Head to Head",
     1: "Tag Co-op",
     2: "Team VS",
-    3: "Tag Team VS"
+    3: "Tag Team VS",
 };
 
 var Team = {
     0: "None",
     1: "Blue",
-    2: "Red"
+    2: "Red",
 };
 
 function generateResultsTable(results, matchMods) {
@@ -62,24 +62,18 @@ function generateResultsTable(results, matchMods) {
 
     var tableBody = document.createElement("tbody");
 
-    results.forEach(function(result) {
+    results.forEach(function (result) {
         var row = document.createElement("tr");
 
-        if (result.score.failed)
-            row.classList.add("fail");
+        if (result.score.failed) row.classList.add("fail");
 
-        if (results.indexOf(result) % 2 == 0)
-            row.classList.add("light-row");
-        else
-            row.classList.add("dark-row");
+        if (results.indexOf(result) % 2 == 0) row.classList.add("light-row");
+        else row.classList.add("dark-row");
 
         var place = document.createElement("td");
         place.innerHTML = result.place;
 
-        if (result.player.team != 0)
-            place.classList.add(
-                result.player.team == 1 ? "team-blue" : "team-red"
-            );
+        if (result.player.team != 0) place.classList.add(result.player.team == 1 ? "team-blue" : "team-red");
 
         var playerLink = document.createElement("a");
         playerLink.innerText = result.player.name;
@@ -103,22 +97,22 @@ function generateResultsTable(results, matchMods) {
             score.style.fontWeight = "bold";
             score.appendChild(failed);
         }
-        
+
         var c300 = document.createElement("td");
         c300.innerHTML = result.score.c300.toLocaleString();
-        
+
         var c100 = document.createElement("td");
         c100.innerHTML = result.score.c100.toLocaleString();
-        
+
         var c50 = document.createElement("td");
         c50.innerHTML = result.score.c50.toLocaleString();
-        
+
         var cMiss = document.createElement("td");
         cMiss.innerHTML = result.score.cMiss.toLocaleString();
-        
+
         var accuracy = document.createElement("td");
         accuracy.innerHTML = result.score.accuracy + "%";
-    
+
         var combo = document.createElement("td");
         combo.innerHTML = result.score.max_combo;
 
@@ -158,11 +152,9 @@ function getTeamWinner(results, condition) {
             var blueScore = 0;
             var redScore = 0;
 
-            results.forEach(function(result) {
-                if (result.player.team == 1)
-                    blueScore += result.score.score;
-                else if (result.player.team == 2)
-                    redScore += result.score.score;
+            results.forEach(function (result) {
+                if (result.player.team == 1) blueScore += result.score.score;
+                else if (result.player.team == 2) redScore += result.score.score;
             });
 
             var teamBlue = document.createElement("span");
@@ -205,15 +197,23 @@ function getTeamWinner(results, condition) {
             var blueAccs = [];
             var redAccs = [];
 
-            results.forEach(function(result) {
-                if (result.player.team == 1)
-                    blueAccs.push(result.score.accuracy);
-                else if (result.player.team == 2)
-                    redAccs.push(result.score.accuracy);
+            results.forEach(function (result) {
+                if (result.player.team == 1) blueAccs.push(result.score.accuracy);
+                else if (result.player.team == 2) redAccs.push(result.score.accuracy);
             });
 
-            var blueAcc = blueAccs.length > 0 ? blueAccs.reduce(function(a, b) { return a + b; }, 0) / blueAccs.length : 0;
-            var redAcc = redAccs.length > 0 ? redAccs.reduce(function(a, b) { return a + b; }, 0) / redAccs.length : 0;
+            var blueAcc =
+                blueAccs.length > 0
+                    ? blueAccs.reduce(function (a, b) {
+                          return a + b;
+                      }, 0) / blueAccs.length
+                    : 0;
+            var redAcc =
+                redAccs.length > 0
+                    ? redAccs.reduce(function (a, b) {
+                          return a + b;
+                      }, 0) / redAccs.length
+                    : 0;
 
             var teamBlue = document.createElement("span");
             teamBlue.style.color = "#0000ff";
@@ -255,11 +255,9 @@ function getTeamWinner(results, condition) {
             var blueCombo = 0;
             var redCombo = 0;
 
-            results.forEach(function(result) {
-                if (result.player.team == 1)
-                    blueCombo += result.score.max_combo;
-                else if (result.player.team == 2)
-                    redCombo += result.score.max_combo;
+            results.forEach(function (result) {
+                if (result.player.team == 1) blueCombo += result.score.max_combo;
+                else if (result.player.team == 2) redCombo += result.score.max_combo;
             });
 
             var teamBlue = document.createElement("span");
@@ -304,22 +302,23 @@ function loadMatchEvents(id, after) {
     var container = document.getElementById("match-events");
     var args = "";
 
-    if (after != undefined)
-    {
+    if (after != undefined) {
         args = "?after=" + after;
     }
 
-    performApiRequest("GET", "/multiplayer/" + id + "/events" + args, null,
-        function(xhr) {
+    performApiRequest(
+        "GET",
+        "/multiplayer/" + id + "/events" + args,
+        null,
+        function (xhr) {
             var events = JSON.parse(xhr.responseText);
             statusText.innerHTML = "";
 
-            if (events.length > 0)
-            {
+            if (events.length > 0) {
                 lastEventTime = events[events.length - 1].time;
             }
 
-            events.forEach(function(event) {
+            events.forEach(function (event) {
                 var eventDate = new Date(event.time);
                 var eventElement = document.createElement("div");
                 eventElement.classList.add("event");
@@ -330,8 +329,7 @@ function loadMatchEvents(id, after) {
 
                 switch (event.type) {
                     case 0:
-                        if (!event.data.name)
-                            throw new Error("Invalid api response: " + event.data);
+                        if (!event.data.name) throw new Error("Invalid api response: " + event.data);
 
                         var userElement = document.createElement("a");
                         userElement.innerText = event.data.name;
@@ -345,8 +343,7 @@ function loadMatchEvents(id, after) {
                         break;
 
                     case 1:
-                        if (!event.data.name)
-                            throw new Error("Invalid api response: " + event.data);
+                        if (!event.data.name) throw new Error("Invalid api response: " + event.data);
 
                         var userElement = document.createElement("a");
                         userElement.innerText = event.data.name;
@@ -360,8 +357,7 @@ function loadMatchEvents(id, after) {
                         break;
 
                     case 2:
-                        if (!event.data.name)
-                            throw new Error("Invalid api response: " + event.data);
+                        if (!event.data.name) throw new Error("Invalid api response: " + event.data);
 
                         var userElement = document.createElement("a");
                         userElement.innerText = event.data.name;
@@ -375,8 +371,7 @@ function loadMatchEvents(id, after) {
                         break;
 
                     case 3:
-                        if (!event.data["new"])
-                            throw new Error("Invalid api response: " + event.data);
+                        if (!event.data["new"]) throw new Error("Invalid api response: " + event.data);
 
                         var userElement = document.createElement("a");
                         userElement.innerText = event.data["new"].name;
@@ -407,7 +402,7 @@ function loadMatchEvents(id, after) {
                         var endTime = new Date(event.data.end_time);
                         var duration = endTime - startTime;
                         var durationMinutes = Math.floor(duration / 1000 / 60);
-                        var durationSecondsRemainder = Math.floor(duration / 1000 % 60);
+                        var durationSecondsRemainder = Math.floor((duration / 1000) % 60);
                         var durationString = durationMinutes + "m " + durationSecondsRemainder + "s";
 
                         var teamType = TeamType[event.data.team_mode];
@@ -451,9 +446,7 @@ function loadMatchEvents(id, after) {
                             beatmapLink.innerText = event.data.beatmap_text;
                             beatmapDetails.appendChild(beatmapLink);
                         } else {
-                            beatmapDetails.appendChild(
-                                document.createTextNode(event.data.beatmap_text)
-                            );
+                            beatmapDetails.appendChild(document.createTextNode(event.data.beatmap_text));
                         }
 
                         var beatmapInfo = document.createElement("div");
@@ -487,25 +480,28 @@ function loadMatchEvents(id, after) {
                         descriptionElement.style.color = "#ff0000";
                         eventElement.appendChild(timeElement);
                         eventElement.appendChild(descriptionElement);
-
                 }
 
                 container.appendChild(eventElement);
             });
         },
-        function(xhr) {
-            document.querySelectorAll(".event").forEach(function(element) { element.remove() });
-            document.querySelectorAll(".game").forEach(function(element) { element.remove() });
+        function (xhr) {
+            document.querySelectorAll(".event").forEach(function (element) {
+                element.remove();
+            });
+            document.querySelectorAll(".game").forEach(function (element) {
+                element.remove();
+            });
             statusText.innerHTML = "Failed to load match. Please try again!";
-        });
+        },
+    );
 }
 
 function loadMatchEventsLoop() {
-    setTimeout(function() {
+    setTimeout(function () {
         var events = document.getElementById("match-events").innerHTML;
 
-        if (events.includes("The match was disbanded."))
-            return;
+        if (events.includes("The match was disbanded.")) return;
 
         loadMatchEvents(matchId, lastEventTime);
         loadMatchEventsLoop();
@@ -514,7 +510,7 @@ function loadMatchEventsLoop() {
 
 // TODO: Add option for displaying chat
 
-addEvent("DOMContentLoaded", document, function(event) {
+addEvent("DOMContentLoaded", document, function (event) {
     loadMatchEvents(matchId, undefined);
     loadMatchEventsLoop();
 });

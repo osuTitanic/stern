@@ -5,14 +5,14 @@ var topScoreOffset = 0;
 
 function pinScore(scoreId, userId) {
     var url = "/users/" + currentUser + "/pinned";
-    performApiRequest("POST", url, {"score_id": scoreId}, function() {
+    performApiRequest("POST", url, { score_id: scoreId }, function () {
         loadPinnedScores(userId, modeName);
     });
 }
 
 function unpinScore(scoreId, userId) {
     var url = "/users/" + currentUser + "/pinned";
-    performApiRequest("DELETE", url, {"score_id": scoreId}, function() {
+    performApiRequest("DELETE", url, { score_id: scoreId }, function () {
         loadPinnedScores(userId, modeName);
     });
 }
@@ -32,7 +32,9 @@ function expandProfileTab(id, forceExpand) {
     if (forceExpand || !isExpanded) {
         if (isHidden(tab) || tab.style.height === "0px") {
             slideDown(tab);
-            setTimeout(function() { tab.className += " expanded" }, 500);
+            setTimeout(function () {
+                tab.className += " expanded";
+            }, 500);
         }
 
         if (forceExpand) {
@@ -44,12 +46,12 @@ function expandProfileTab(id, forceExpand) {
         slideUp(tab);
     }
 
-    if (activeTab === 'general') {
+    if (activeTab === "general") {
         loadPerformanceGraph(userId, modeName);
-    } else if (activeTab === 'history') {
+    } else if (activeTab === "history") {
         loadPlaysGraph(userId, modeName);
         loadViewsGraph(userId, modeName);
-    } else if (activeTab === 'beatmaps') {
+    } else if (activeTab === "beatmaps") {
         loadBeatmapsTab(userId);
     }
 }
@@ -68,13 +70,13 @@ function createScoreElement(score, index, type) {
     var scoreDiv = document.createElement("div");
     scoreDiv.id = "score-" + type + "-" + index;
     scoreDiv.className = "score";
-    scoreDiv.onclick = function(e) {
+    scoreDiv.onclick = function (e) {
         e = e || window.event;
         var target = getEventTarget(e);
-        if (closest(target, 'a')) return;
-        if (closest(target, '.score-pin-icon')) return;
-        if (closest(target, '.score-pinned-icon')) return;
-        if (closest(target, '.score-replay')) return;
+        if (closest(target, "a")) return;
+        if (closest(target, ".score-pin-icon")) return;
+        if (closest(target, ".score-pinned-icon")) return;
+        if (closest(target, ".score-replay")) return;
         window.location.href = "/scores/" + score.id;
     };
 
@@ -83,7 +85,7 @@ function createScoreElement(score, index, type) {
     var tableRow = document.createElement("tr");
 
     var leftColumn = document.createElement("td");
-    leftColumn.className = 'score-left';
+    leftColumn.className = "score-left";
 
     var scoreGrade = document.createElement("img");
     scoreGrade.src = "/images/grades/" + score.grade + "_small.png";
@@ -91,7 +93,10 @@ function createScoreElement(score, index, type) {
 
     var beatmapInfo = document.createElement("a");
     beatmapInfo.href = "/b/" + score.beatmap.id + "?mode=" + score.mode;
-    setText(beatmapInfo, score.beatmap.beatmapset.artist + " - " + score.beatmap.beatmapset.title + " [" + score.beatmap.version + "]");
+    setText(
+        beatmapInfo,
+        score.beatmap.beatmapset.artist + " - " + score.beatmap.beatmapset.title + " [" + score.beatmap.version + "]",
+    );
 
     var modsText = document.createElement("b");
     if (score.mods > 0) {
@@ -108,10 +113,10 @@ function createScoreElement(score, index, type) {
     var scoreDateString = formatDateTimeForTitle(score.submitted_at);
 
     var rightColumn = document.createElement("td");
-    rightColumn.className = 'score-right';
+    rightColumn.className = "score-right";
 
     var ppText = document.createElement("b");
-    setText(ppText, (score.pp.toFixed(0) + "pp"));
+    setText(ppText, score.pp.toFixed(0) + "pp");
 
     var ppDisplay = document.createElement("div");
     ppDisplay.className = "pp-display";
@@ -126,7 +131,9 @@ function createScoreElement(score, index, type) {
     if (type == "top") {
         ppWeight.appendChild(document.createTextNode("weighted "));
         ppWeight.appendChild(ppWeightPercent);
-        ppWeight.appendChild(document.createTextNode(" (" + (score.pp * Math.pow(0.95, index + topScoreOffset)).toFixed(0) + "pp)"));
+        ppWeight.appendChild(
+            document.createTextNode(" (" + (score.pp * Math.pow(0.95, index + topScoreOffset)).toFixed(0) + "pp)"),
+        );
     }
 
     if (!approvedRewards && score.beatmap.status > 2) {
@@ -134,7 +141,7 @@ function createScoreElement(score, index, type) {
         ppText.innerHTML = '<i class="icon-heart"></i>';
         ppText.title = score.pp.toFixed(0) + "pp (if ranked)";
         // Reset pp weight text
-        ppWeight.innerHTML = (type == "top" ? "weighted <b>0%</b> (0pp)" : "");
+        ppWeight.innerHTML = type == "top" ? "weighted <b>0%</b> (0pp)" : "";
     }
 
     var iconContainer = document.createElement("div");
@@ -145,8 +152,8 @@ function createScoreElement(score, index, type) {
     scoreInfoDiv.appendChild(scoreInfo);
     scoreInfoDiv.appendChild(accuracyText);
 
-    var scoreBottomDiv = document.createElement('div');
-    scoreBottomDiv.className = 'score-bottom';
+    var scoreBottomDiv = document.createElement("div");
+    scoreBottomDiv.className = "score-bottom";
 
     // Score's Date
     var dateText = document.createElement("time");
@@ -161,19 +168,19 @@ function createScoreElement(score, index, type) {
     versionText = score.client_string ? score.client_string : undefined;
 
     if (versionText != undefined) {
-        var clientText = document.createElement('div');
-        clientText.className = 'score-version';
-        clientText.innerHTML += ' &mdash; on ';
+        var clientText = document.createElement("div");
+        clientText.className = "score-version";
+        clientText.innerHTML += " &mdash; on ";
 
-        var clientTextVersion = document.createElement('span');
-        clientTextVersion.className = 'score-version-number';
+        var clientTextVersion = document.createElement("span");
+        clientTextVersion.className = "score-version-number";
         setText(clientTextVersion, versionText);
 
         clientText.appendChild(clientTextVersion);
         scoreBottomDiv.appendChild(clientText);
     }
 
-    var replayLink = document.createElement('a');
+    var replayLink = document.createElement("a");
     replayLink.href = "/scores/" + score.id + "/download";
     replayLink.className = "score-replay";
     replayLink.title = "Download Replay";
@@ -192,7 +199,7 @@ function createScoreElement(score, index, type) {
         if (!score.pinned) {
             pinIcon.className += " score-pin-icon";
             pinIcon.title = "Pin Score";
-            pinIcon.onclick = function() {
+            pinIcon.onclick = function () {
                 var icons = queryAll(document, ".score-pin-" + score.id);
                 for (var j = 0; j < icons.length; j++) {
                     removeClass(icons[j], "score-pin-icon");
@@ -200,7 +207,7 @@ function createScoreElement(score, index, type) {
                     icons[j].title = "Unpin Score";
                 }
                 pinScore(score.id, userId);
-                pinIcon.onclick = function() {
+                pinIcon.onclick = function () {
                     unpinScore(score.id, userId);
                     removeClass(pinIcon, "score-pinned-icon");
                     addClass(pinIcon, "score-pin-icon");
@@ -210,7 +217,7 @@ function createScoreElement(score, index, type) {
         } else {
             pinIcon.className += " score-pinned-icon";
             pinIcon.title = "Unpin Score";
-            pinIcon.onclick = function() {
+            pinIcon.onclick = function () {
                 var icons = queryAll(document, ".score-pin-" + score.id);
                 for (var j = 0; j < icons.length; j++) {
                     removeClass(icons[j], "score-pinned-icon");
@@ -218,7 +225,7 @@ function createScoreElement(score, index, type) {
                     icons[j].title = "Pin Score";
                 }
                 unpinScore(score.id, userId);
-                pinIcon.onclick = function() {
+                pinIcon.onclick = function () {
                     pinScore(score.id, userId);
                     removeClass(pinIcon, "score-pin-icon");
                     addClass(pinIcon, "score-pinned-icon");
@@ -247,134 +254,144 @@ function loadPinnedScores(userId, mode) {
     var url = "/users/" + userId + "/pinned/" + mode;
     var scoreContainer = document.getElementById("pinned-scores");
 
-    performApiRequest("GET", url, null, function(xhr) {
-        var data = JSON.parse(xhr.responseText);
-        var loadingText = document.getElementById("pinned-scores-loading");
-        var scores = data.scores;
+    performApiRequest(
+        "GET",
+        url,
+        null,
+        function (xhr) {
+            var data = JSON.parse(xhr.responseText);
+            var loadingText = document.getElementById("pinned-scores-loading");
+            var scores = data.scores;
 
-        if (loadingText) {
-            removeClass(getParentElement(loadingText), "score");
-            removeElement(loadingText);
-        }
+            if (loadingText) {
+                removeClass(getParentElement(loadingText), "score");
+                removeElement(loadingText);
+            }
 
-        // Reset container
-        scoreContainer.innerHTML = "<h2>Pinned Scores</h2>";
+            // Reset container
+            scoreContainer.innerHTML = "<h2>Pinned Scores</h2>";
 
-        if (data.total <= 0) {
-            scoreContainer.appendChild(
-                document.createTextNode("This player has not pinned any scores yet :(")
-            );
-            return;
-        }
+            if (data.total <= 0) {
+                scoreContainer.appendChild(document.createTextNode("This player has not pinned any scores yet :("));
+                return;
+            }
 
-        // Update total score count
-        var heading = document.getElementById('pinned-scores').getElementsByTagName('h2')[0];
-        heading.innerHTML = 'Pinned Scores (' + data.total.toLocaleString() + ')'
+            // Update total score count
+            var heading = document.getElementById("pinned-scores").getElementsByTagName("h2")[0];
+            heading.innerHTML = "Pinned Scores (" + data.total.toLocaleString() + ")";
 
-        for (var index = 0; index < scores.length; index++) {
-            var score = scores[index];
-            var scoreDiv = createScoreElement(score, index, "pinned");
-            scoreContainer.appendChild(scoreDiv);
-        }
+            for (var index = 0; index < scores.length; index++) {
+                var score = scores[index];
+                var scoreDiv = createScoreElement(score, index, "pinned");
+                scoreContainer.appendChild(scoreDiv);
+            }
 
-        // Render timeago elements
-        renderTimeagoElements();
-    }, function(xhr) {
-        var errorText = document.createElement("p");
-        setText(errorText, "Failed to load pinned scores.");
-        addClass(errorText, "score");
-        scoreContainer.appendChild(errorText);
+            // Render timeago elements
+            renderTimeagoElements();
+        },
+        function (xhr) {
+            var errorText = document.createElement("p");
+            setText(errorText, "Failed to load pinned scores.");
+            addClass(errorText, "score");
+            scoreContainer.appendChild(errorText);
 
-        var loadingText = document.getElementById("pinned-scores-loading");
-        if (loadingText) {
-            removeClass(getParentElement(loadingText), "score");
-            removeElement(loadingText);
-        }
-    });
+            var loadingText = document.getElementById("pinned-scores-loading");
+            if (loadingText) {
+                removeClass(getParentElement(loadingText), "score");
+                removeElement(loadingText);
+            }
+        },
+    );
 }
 
 function loadTopPlays(userId, mode, limit, offset) {
     var url = "/users/" + userId + "/top/" + mode + "?limit=" + limit + "&offset=" + offset;
     var scoreContainer = document.getElementById("top-scores");
 
-    performApiRequest("GET", url, null, function(xhr) {
-        var data = JSON.parse(xhr.responseText);
-        var loadingText = document.getElementById("top-scores-loading");
-        var scores = data.scores;
+    performApiRequest(
+        "GET",
+        url,
+        null,
+        function (xhr) {
+            var data = JSON.parse(xhr.responseText);
+            var loadingText = document.getElementById("top-scores-loading");
+            var scores = data.scores;
 
-        if (loadingText) {
-            removeClass(getParentElement(loadingText), "score");
-            removeElement(loadingText);
-        }
-
-        if (data.total <= 0) {
-            var noScoresText = document.createElement("p");
-            setText(noScoresText, "No awesome performance records yet :(");
-            scoreContainer.appendChild(noScoresText);
-            return;
-        }
-
-        // Update total score count
-        var heading = document.getElementById('top-scores').getElementsByTagName('h2')[0];
-        heading.innerHTML = 'Best Performance (' + data.total.toLocaleString() + ')';
-
-        for (var index = 0; index < scores.length; index++) {
-            var score = scores[index];
-            if (score.beatmap.status > 2 && !approvedRewards) {
-                continue;
+            if (loadingText) {
+                removeClass(getParentElement(loadingText), "score");
+                removeElement(loadingText);
             }
 
-            var scoreDiv = createScoreElement(score, index, "top");
-            scoreContainer.appendChild(scoreDiv);
-        }
-        topScoreOffset += scores.length;
+            if (data.total <= 0) {
+                var noScoresText = document.createElement("p");
+                setText(noScoresText, "No awesome performance records yet :(");
+                scoreContainer.appendChild(noScoresText);
+                return;
+            }
 
-        // Render timeago elements
-        renderTimeagoElements();
+            // Update total score count
+            var heading = document.getElementById("top-scores").getElementsByTagName("h2")[0];
+            heading.innerHTML = "Best Performance (" + data.total.toLocaleString() + ")";
 
-        if (scores.length >= limit) {
-            // Create show more text
-            var showMoreText = document.createElement("b");
-            setText(showMoreText, "Show me more!");
+            for (var index = 0; index < scores.length; index++) {
+                var score = scores[index];
+                if (score.beatmap.status > 2 && !approvedRewards) {
+                    continue;
+                }
 
-            // Add onclick event
-            var showMoreHref = document.createElement("a");
-            showMoreHref.href = "#score-top-" + scores.length;
-            showMoreHref.id = "show-more-top";
-            showMoreHref.appendChild(showMoreText);
-            showMoreHref.onclick = function() {
-                var loadingText = document.createElement("p");
-                setText(loadingText, "Loading...");
-                loadingText.id = "top-scores-loading";
+                var scoreDiv = createScoreElement(score, index, "top");
+                scoreContainer.appendChild(scoreDiv);
+            }
+            topScoreOffset += scores.length;
 
-                var showMore = document.getElementById("show-more-top");
-                getParentElement(showMore).appendChild(loadingText);
-                removeElement(showMore);
+            // Render timeago elements
+            renderTimeagoElements();
 
-                loadTopPlays(userId, modeName, 50, topScoreOffset);
-            };
+            if (scores.length >= limit) {
+                // Create show more text
+                var showMoreText = document.createElement("b");
+                setText(showMoreText, "Show me more!");
 
-            // Create wrapper that contains styling
-            var showMore = document.createElement("div");
-            showMore.className = "score show-more";
-            showMore.appendChild(showMoreHref);
+                // Add onclick event
+                var showMoreHref = document.createElement("a");
+                showMoreHref.href = "#score-top-" + scores.length;
+                showMoreHref.id = "show-more-top";
+                showMoreHref.appendChild(showMoreText);
+                showMoreHref.onclick = function () {
+                    var loadingText = document.createElement("p");
+                    setText(loadingText, "Loading...");
+                    loadingText.id = "top-scores-loading";
 
-            // Append show more text to container
-            scoreContainer.appendChild(showMore);
-        }
-    }, function(xhr) {
-        var errorText = document.createElement("p");
-        setText(errorText, "Failed to load top plays.");
-        addClass(errorText, "score");
-        scoreContainer.appendChild(errorText);
+                    var showMore = document.getElementById("show-more-top");
+                    getParentElement(showMore).appendChild(loadingText);
+                    removeElement(showMore);
 
-        var loadingText = document.getElementById("top-scores-loading");
+                    loadTopPlays(userId, modeName, 50, topScoreOffset);
+                };
 
-        if (loadingText) {
-            removeClass(getParentElement(loadingText), "score");
-            removeElement(loadingText);
-        }
-    });
+                // Create wrapper that contains styling
+                var showMore = document.createElement("div");
+                showMore.className = "score show-more";
+                showMore.appendChild(showMoreHref);
+
+                // Append show more text to container
+                scoreContainer.appendChild(showMore);
+            }
+        },
+        function (xhr) {
+            var errorText = document.createElement("p");
+            setText(errorText, "Failed to load top plays.");
+            addClass(errorText, "score");
+            scoreContainer.appendChild(errorText);
+
+            var loadingText = document.getElementById("top-scores-loading");
+
+            if (loadingText) {
+                removeClass(getParentElement(loadingText), "score");
+                removeElement(loadingText);
+            }
+        },
+    );
 
     return false;
 }
@@ -383,84 +400,90 @@ function loadLeaderScores(userId, mode, limit, offset) {
     var url = "/users/" + userId + "/first/" + mode + "?limit=" + limit + "&offset=" + offset;
     var scoreContainer = document.getElementById("leader-scores");
 
-    performApiRequest("GET", url, null, function(xhr) {
-        var data = JSON.parse(xhr.responseText);
-        var loadingText = document.getElementById("leader-scores-loading");
-        var scores = data.scores;
+    performApiRequest(
+        "GET",
+        url,
+        null,
+        function (xhr) {
+            var data = JSON.parse(xhr.responseText);
+            var loadingText = document.getElementById("leader-scores-loading");
+            var scores = data.scores;
 
-        if (loadingText) {
-            removeClass(getParentElement(loadingText), "score");
-            removeElement(loadingText);
-        }
+            if (loadingText) {
+                removeClass(getParentElement(loadingText), "score");
+                removeElement(loadingText);
+            }
 
-        if (data.total <= 0) {
-            var noScoresText = document.createElement("p");
-            setText(noScoresText, "No first place records currently :(");
-            scoreContainer.appendChild(noScoresText);
-            return;
-        }
+            if (data.total <= 0) {
+                var noScoresText = document.createElement("p");
+                setText(noScoresText, "No first place records currently :(");
+                scoreContainer.appendChild(noScoresText);
+                return;
+            }
 
-        // Update count & rank
-        var heading = document.getElementById('leader-scores').getElementsByTagName('h2')[0]
-        var leaderScoresText = 'First Place Ranks';
-        var total = ' (' + data.total.toLocaleString() + ')';
-        var rank = ' - #' + firstsRank.toLocaleString();
-        if (data.total <= 0) {
-            rank = '';
-        }
+            // Update count & rank
+            var heading = document.getElementById("leader-scores").getElementsByTagName("h2")[0];
+            var leaderScoresText = "First Place Ranks";
+            var total = " (" + data.total.toLocaleString() + ")";
+            var rank = " - #" + firstsRank.toLocaleString();
+            if (data.total <= 0) {
+                rank = "";
+            }
 
-        setText(heading, leaderScoresText + total + rank);
+            setText(heading, leaderScoresText + total + rank);
 
-        for (var i = 0; i < scores.length; i++) {
-            var scoreDiv = createScoreElement(scores[i], i, "leader");
-            scoreContainer.appendChild(scoreDiv);
-        }
-        topLeaderOffset += scores.length;
+            for (var i = 0; i < scores.length; i++) {
+                var scoreDiv = createScoreElement(scores[i], i, "leader");
+                scoreContainer.appendChild(scoreDiv);
+            }
+            topLeaderOffset += scores.length;
 
-        // Render timeago elements
-        renderTimeagoElements();
+            // Render timeago elements
+            renderTimeagoElements();
 
-        if (scores.length >= limit) {
-            var showMoreText = document.createElement("b");
-            setText(showMoreText, "Show me more!");
+            if (scores.length >= limit) {
+                var showMoreText = document.createElement("b");
+                setText(showMoreText, "Show me more!");
 
-            // Add onclick event
-            var showMoreHref = document.createElement("a");
-            showMoreHref.href = "#score-leader-" + scores.length;
-            showMoreHref.id = "show-more-leader";
-            showMoreHref.appendChild(showMoreText);
-            showMoreHref.onclick = function() {
-                var loadingText = document.createElement("p");
-                setText(loadingText, "Loading...");
-                loadingText.id = "leader-scores-loading";
+                // Add onclick event
+                var showMoreHref = document.createElement("a");
+                showMoreHref.href = "#score-leader-" + scores.length;
+                showMoreHref.id = "show-more-leader";
+                showMoreHref.appendChild(showMoreText);
+                showMoreHref.onclick = function () {
+                    var loadingText = document.createElement("p");
+                    setText(loadingText, "Loading...");
+                    loadingText.id = "leader-scores-loading";
 
-                var showMore = document.getElementById("show-more-leader");
-                getParentElement(showMore).appendChild(loadingText);
-                removeElement(showMore);
+                    var showMore = document.getElementById("show-more-leader");
+                    getParentElement(showMore).appendChild(loadingText);
+                    removeElement(showMore);
 
-                loadLeaderScores(userId, modeName, 50, topLeaderOffset);
-            };
+                    loadLeaderScores(userId, modeName, 50, topLeaderOffset);
+                };
 
-            // Create wrapper that contains styling
-            var showMore = document.createElement("div");
-            showMore.className = "score show-more";
-            showMore.appendChild(showMoreHref);
+                // Create wrapper that contains styling
+                var showMore = document.createElement("div");
+                showMore.className = "score show-more";
+                showMore.appendChild(showMoreHref);
 
-            // Append show more text to container
-            scoreContainer.appendChild(showMore);
-        }
-    }, function(xhr) {
-        var errorText = document.createElement("p");
-        setText(errorText, "Failed to load first place ranks.");
-        addClass(errorText, "score");
-        scoreContainer.appendChild(errorText);
+                // Append show more text to container
+                scoreContainer.appendChild(showMore);
+            }
+        },
+        function (xhr) {
+            var errorText = document.createElement("p");
+            setText(errorText, "Failed to load first place ranks.");
+            addClass(errorText, "score");
+            scoreContainer.appendChild(errorText);
 
-        var loadingText = document.getElementById("leader-scores-loading");
-        if (loadingText) {
-            removeClass(getParentElement(loadingText), "score");
-            removeElement(loadingText);
-        }
-    });
+            var loadingText = document.getElementById("leader-scores-loading");
+            if (loadingText) {
+                removeClass(getParentElement(loadingText), "score");
+                removeElement(loadingText);
+            }
+        },
+    );
 
     return false;
 }
@@ -468,33 +491,36 @@ function loadLeaderScores(userId, mode, limit, offset) {
 function loadMostPlayed(userId, limit, offset) {
     var loadingText = document.getElementById("plays-loading");
 
-    if (!loadingText)
-        return;
+    if (!loadingText) return;
 
     var url = "/users/" + userId + "/plays" + "?limit=" + limit + "&offset=" + offset;
     var playsContainer = document.getElementById("plays-container");
 
-    performApiRequest("GET", url, null, function(xhr) {
+    performApiRequest("GET", url, null, function (xhr) {
         var plays = JSON.parse(xhr.responseText);
         if (plays.length <= 0) {
-            playsContainer.appendChild(
-                document.createTextNode("This player has not played anything yet :(")
-            );
+            playsContainer.appendChild(document.createTextNode("This player has not played anything yet :("));
             return;
         }
 
         for (var index = 0; index < plays.length; index++) {
             var item = plays[index];
             var beatmapLink = document.createElement("a");
-            setText(beatmapLink, item.beatmap.beatmapset.artist + " - " + item.beatmap.beatmapset.title + " [" + item.beatmap.version + "]");
+            setText(
+                beatmapLink,
+                item.beatmap.beatmapset.artist +
+                    " - " +
+                    item.beatmap.beatmapset.title +
+                    " [" +
+                    item.beatmap.version +
+                    "]",
+            );
             beatmapLink.href = "/b/" + item.beatmap.id;
 
             var playsDiv = document.createElement("div");
-            playsDiv.style.fontSize = (180 * Math.pow(0.95, index + 1)) + "%";
+            playsDiv.style.fontSize = 180 * Math.pow(0.95, index + 1) + "%";
             playsDiv.style.margin = "2.5px";
-            playsDiv.appendChild(
-                document.createTextNode(item.count + " plays - ")
-            );
+            playsDiv.appendChild(document.createTextNode(item.count + " plays - "));
             playsDiv.appendChild(beatmapLink);
 
             playsContainer.appendChild(playsDiv);
@@ -507,19 +533,16 @@ function loadMostPlayed(userId, limit, offset) {
 function loadRecentPlays(userId, mode) {
     var loadingText = document.getElementById("recent-loading");
 
-    if (!loadingText)
-        return;
+    if (!loadingText) return;
 
     var url = "/users/" + userId + "/recent/" + mode;
     var playsContainer = document.getElementById("recent-container");
 
-    performApiRequest("GET", url, null, function(xhr) {
+    performApiRequest("GET", url, null, function (xhr) {
         var response = JSON.parse(xhr.responseText);
         var scores = response.scores;
         if (response.total <= 0) {
-            playsContainer.appendChild(
-                document.createTextNode("No recent scores set by this player :(")
-            );
+            playsContainer.appendChild(document.createTextNode("No recent scores set by this player :("));
             return;
         }
 
@@ -536,19 +559,30 @@ function loadRecentPlays(userId, mode) {
             dateText.className += " timeago";
 
             var beatmapLink = document.createElement("a");
-            setText(beatmapLink, score.beatmap.beatmapset.artist + " - " + score.beatmap.beatmapset.title + " [" + score.beatmap.version + "]");
+            setText(
+                beatmapLink,
+                score.beatmap.beatmapset.artist +
+                    " - " +
+                    score.beatmap.beatmapset.title +
+                    " [" +
+                    score.beatmap.version +
+                    "]",
+            );
             beatmapLink.href = "/b/" + score.beatmap.id;
 
             var modsText = "";
 
-            if (score.mods > 0)
-                modsText = "+" + Mods.getString(score.mods);
+            if (score.mods > 0) modsText = "+" + Mods.getString(score.mods);
 
             var scoreDiv = document.createElement("div");
             scoreDiv.appendChild(dateText);
             scoreDiv.appendChild(document.createTextNode(" - "));
             scoreDiv.appendChild(beatmapLink);
-            scoreDiv.appendChild(document.createTextNode(" " + Math.round(score.pp).toLocaleString('en-US') + "pp (" + score.grade + ") " + modsText));
+            scoreDiv.appendChild(
+                document.createTextNode(
+                    " " + Math.round(score.pp).toLocaleString("en-US") + "pp (" + score.grade + ") " + modsText,
+                ),
+            );
             scoreDiv.style.margin = "2.5px";
 
             playsContainer.appendChild(scoreDiv);
@@ -573,10 +607,10 @@ function processRankEntries(entries, rankingType) {
     var bestWasLast = false;
     var best = null;
 
-    for (var i=0; i<entries.length; i++) {
+    for (var i = 0; i < entries.length; i++) {
         var entry = {
             daysAgo: getDaysAgo(new Date(entries[i].time)),
-            value: entries[i][rankingType]
+            value: entries[i][rankingType],
         };
 
         if (i == 0) {
@@ -587,7 +621,7 @@ function processRankEntries(entries, rankingType) {
             }
         } else {
             bestEntryByDate.push(best);
-            bestWasLast = i == (entries.length - 1);
+            bestWasLast = i == entries.length - 1;
 
             if (!bestWasLast) {
                 best = entry;
@@ -599,50 +633,50 @@ function processRankEntries(entries, rankingType) {
         bestEntryByDate.push(entry);
     }
 
-    return bestEntryByDate.map(function(entry) {
-        var daysAgo = entry.daysAgo == 0 ? 0 : (-entry.daysAgo);
+    return bestEntryByDate.map(function (entry) {
+        var daysAgo = entry.daysAgo == 0 ? 0 : -entry.daysAgo;
         return {
             x: daysAgo,
-            y: -entry.value
+            y: -entry.value,
         };
     });
 }
 
 function processRankHistory(entries) {
-    var globalRankValues = processRankEntries(entries, 'global_rank');
-    var scoreRankValues = processRankEntries(entries, 'score_rank');
-    var countryRankValues = processRankEntries(entries, 'country_rank');
-    var ppv1RankValues = processRankEntries(entries, 'ppv1_rank');
+    var globalRankValues = processRankEntries(entries, "global_rank");
+    var scoreRankValues = processRankEntries(entries, "score_rank");
+    var countryRankValues = processRankEntries(entries, "country_rank");
+    var ppv1RankValues = processRankEntries(entries, "ppv1_rank");
 
     if (entries.length > 0) {
         countryRankValues.unshift({
             x: 0,
-            y: -countryRank
+            y: -countryRank,
         });
         globalRankValues.unshift({
             x: 0,
-            y: -globalRank
+            y: -globalRank,
         });
         scoreRankValues.unshift({
             x: 0,
-            y: -scoreRank
+            y: -scoreRank,
         });
         ppv1RankValues.unshift({
             x: 0,
-            y: -ppv1Rank
+            y: -ppv1Rank,
         });
     }
 
-    ppv1RankValues = ppv1RankValues.filter(function(e) {
+    ppv1RankValues = ppv1RankValues.filter(function (e) {
         return e.y != 0;
     });
-    scoreRankValues = scoreRankValues.filter(function(e) {
+    scoreRankValues = scoreRankValues.filter(function (e) {
         return e.y != 0;
     });
-    globalRankValues = globalRankValues.filter(function(e) {
+    globalRankValues = globalRankValues.filter(function (e) {
         return e.y != 0;
     });
-    countryRankValues = countryRankValues.filter(function(e) {
+    countryRankValues = countryRankValues.filter(function (e) {
         return e.y != 0;
     });
 
@@ -651,39 +685,40 @@ function processRankHistory(entries) {
     globalRankValues = globalRankValues.reverse();
     countryRankValues = countryRankValues.reverse();
 
-    return [{
+    return [
+        {
             values: globalRankValues,
-            key: 'Global Rank',
-            color: '#ff7f0e'
+            key: "Global Rank",
+            color: "#ff7f0e",
         },
         {
             values: countryRankValues,
-            key: 'Country Rank',
-            color: '#0ec7ff',
-            disabled: true
+            key: "Country Rank",
+            color: "#0ec7ff",
+            disabled: true,
         },
         {
             values: scoreRankValues,
-            key: 'Score Rank',
-            color: '#d30eff',
-            disabled: true
+            key: "Score Rank",
+            color: "#d30eff",
+            disabled: true,
         },
         {
             values: ppv1RankValues,
-            key: 'PPv1 Rank',
-            color: '#51f542',
-            disabled: true
-        }
+            key: "PPv1 Rank",
+            color: "#51f542",
+            disabled: true,
+        },
     ];
 }
 
 function resetPerformanceGraph() {
-    var $rankGraph = $('#rank-graph svg');
+    var $rankGraph = $("#rank-graph svg");
     if ($rankGraph.length == 0) {
         return;
     }
 
-    $rankGraph[0].innerHTML = '';
+    $rankGraph[0].innerHTML = "";
 }
 
 function getPerformanceGraphRange(backupEntries, backupEntriesKey) {
@@ -691,7 +726,7 @@ function getPerformanceGraphRange(backupEntries, backupEntriesKey) {
     var rankMax = null;
 
     if (backupEntries == undefined) {
-        var legendData = d3.selectAll('.nv-series').data();
+        var legendData = d3.selectAll(".nv-series").data();
         for (var i = 0; i < legendData.length; i++) {
             var legendElement = legendData[i];
             if (legendElement.disabled) {
@@ -718,15 +753,15 @@ function getPerformanceGraphRange(backupEntries, backupEntriesKey) {
 }
 
 function updatePerformanceGraphYAxis(chart, range) {
-    var userDigits = (range[1].toString().length - 1);
+    var userDigits = range[1].toString().length - 1;
 
-    var minRankDigits = '1' + ((userDigits > 0) ? (userDigits) * '0' : '');
-    var relativeMinRank = Math.round(range[0] / (minRankDigits)) * minRankDigits;
+    var minRankDigits = "1" + (userDigits > 0 ? userDigits * "0" : "");
+    var relativeMinRank = Math.round(range[0] / minRankDigits) * minRankDigits;
 
-    var maxRankDigits = '1' + (userDigits * '0');
-    var relativeMaxRank = Math.round(range[1] / (maxRankDigits)) * maxRankDigits;
+    var maxRankDigits = "1" + userDigits * "0";
+    var relativeMaxRank = Math.round(range[1] / maxRankDigits) * maxRankDigits;
 
-    var betweenRank = (relativeMaxRank - relativeMaxRank / 2);
+    var betweenRank = relativeMaxRank - relativeMaxRank / 2;
 
     chart.yScale(d3.scale.linear().domain([-relativeMinRank - 1, -relativeMaxRank]));
 
@@ -740,9 +775,9 @@ function updatePerformanceGraphYAxis(chart, range) {
 
 function loadPerformanceGraph(userId, mode) {
     resetPerformanceGraph();
-    var url = '/users/' + userId + '/history/rank/' + mode;
+    var url = "/users/" + userId + "/history/rank/" + mode;
 
-    performApiRequest("GET", url, null, function(xhr) {
+    performApiRequest("GET", url, null, function (xhr) {
         var entries = JSON.parse(xhr.responseText);
         var rankData = processRankHistory(entries);
 
@@ -752,39 +787,36 @@ function loadPerformanceGraph(userId, mode) {
         }
 
         // Used for initial y-axis calculation
-        var defaultSelectedRankType = 'global_rank';
+        var defaultSelectedRankType = "global_rank";
 
-        nv.addGraph(function() {
-            var chart = nv.models.lineChart()
+        nv.addGraph(function () {
+            var chart = nv.models
+                .lineChart()
                 .margin({
                     left: 80,
                     bottom: 20,
-                    right: 50
+                    right: 50,
                 })
                 .useInteractiveGuideline(true)
                 .transitionDuration(250)
-                .interpolate('linear')
+                .interpolate("linear")
                 .showLegend(true)
                 .showYAxis(true)
                 .showXAxis(true);
 
-            chart.xAxis
-                .axisLabel("Days")
-                .tickFormat(function(days) {
-                    if (days == 0) return "now";
-                    if (days > 0) return (days != 1) ? 'In ' + days + ' days' : 'In ' + days + ' day';
-                    return (days != -1) ? (-days) + ' days ago' : (-days) + ' day ago';
-                });
+            chart.xAxis.axisLabel("Days").tickFormat(function (days) {
+                if (days == 0) return "now";
+                if (days > 0) return days != 1 ? "In " + days + " days" : "In " + days + " day";
+                return days != -1 ? -days + " days ago" : -days + " day ago";
+            });
 
-            chart.yAxis
-                .axisLabel("Rank")
-                .tickFormat(function(rank) {
-                    rank = Math.round(rank);
-                    if (rank >= 0) return "";
-                    return '#' + (-rank);
-                });
+            chart.yAxis.axisLabel("Rank").tickFormat(function (rank) {
+                rank = Math.round(rank);
+                if (rank >= 0) return "";
+                return "#" + -rank;
+            });
 
-            chart.legend.dispatch.on('legendClick', function (state) {
+            chart.legend.dispatch.on("legendClick", function (state) {
                 setTimeout(function () {
                     updatePerformanceGraphYAxis(chart, getPerformanceGraphRange());
                     chart.update();
@@ -797,18 +829,16 @@ function loadPerformanceGraph(userId, mode) {
             // Update the y axis with the calculated range
             updatePerformanceGraphYAxis(chart, range);
 
-            d3.select("#rank-graph svg")
-                .datum(rankData)
-                .call(chart);
+            d3.select("#rank-graph svg").datum(rankData).call(chart);
 
-            nv.utils.windowResize(function() {
+            nv.utils.windowResize(function () {
                 chart.update();
             });
 
             // Reset "dy" value
-            var noDataElements = document.querySelectorAll('.nv-noData');
+            var noDataElements = document.querySelectorAll(".nv-noData");
             for (var i = 0; i < noDataElements.length; i++) {
-                noDataElements[i].setAttribute('dy', 0);
+                noDataElements[i].setAttribute("dy", 0);
             }
 
             return chart;
@@ -821,39 +851,42 @@ function processPlayHistory(entries) {
     var currentYear = currentDate.getFullYear();
     var currentMonth = currentDate.getMonth();
 
-    var values = entries.map(function(entry) {
+    var values = entries.map(function (entry) {
         var elapsedMonths = (currentYear - entry.year) * 12 + (currentMonth - (entry.month - 1));
         return {
             x: -elapsedMonths,
-            y: entry.plays
+            y: entry.plays,
         };
     });
 
-    values.sort(function(a, b) {
+    values.sort(function (a, b) {
         return a.x - b.x;
     });
 
-    return [{
-        values: values,
-        key: 'Plays',
-        color: '#f5f242',
-        area: true
-    }];
+    return [
+        {
+            values: values,
+            key: "Plays",
+            color: "#f5f242",
+            area: true,
+        },
+    ];
 }
 
 function loadPlaysGraph(userId, mode) {
     var url = "/users/" + userId + "/history/plays/" + mode;
 
-    performApiRequest("GET", url, null, function(xhr) {
+    performApiRequest("GET", url, null, function (xhr) {
         var entries = JSON.parse(xhr.responseText);
         var playData = processPlayHistory(entries);
 
-        nv.addGraph(function() {
-            var chart = nv.models.lineChart()
+        nv.addGraph(function () {
+            var chart = nv.models
+                .lineChart()
                 .margin({
                     left: 80,
                     bottom: 20,
-                    right: 50
+                    right: 50,
                 })
                 .useInteractiveGuideline(true)
                 .transitionDuration(250)
@@ -862,22 +895,18 @@ function loadPlaysGraph(userId, mode) {
                 .showYAxis(true)
                 .showXAxis(true);
 
-            chart.xAxis
-                .axisLabel("Months")
-                .tickFormat(function(month) {
-                    if (month % 1 !== 0) return "";
-                    if (month == 0) return "This Month";
-                    if (month > 0) return (month != 1) ? "In " + month + " months" : "In " + month + " month";
-                    return (month != -1) ? (-month) + " months ago" : (-month) + " month ago";
-                });
+            chart.xAxis.axisLabel("Months").tickFormat(function (month) {
+                if (month % 1 !== 0) return "";
+                if (month == 0) return "This Month";
+                if (month > 0) return month != 1 ? "In " + month + " months" : "In " + month + " month";
+                return month != -1 ? -month + " months ago" : -month + " month ago";
+            });
 
-            chart.yAxis
-                .axisLabel("Plays")
-                .tickFormat(function(plays) {
-                    var rounded = Math.round(plays);
-                    if (plays !== rounded) return "";
-                    return rounded.toString();
-                });
+            chart.yAxis.axisLabel("Plays").tickFormat(function (plays) {
+                var rounded = Math.round(plays);
+                if (plays !== rounded) return "";
+                return rounded.toString();
+            });
 
             // Calculate proper Y-axis range
             var playMultiplier = 2;
@@ -891,24 +920,22 @@ function loadPlaysGraph(userId, mode) {
                 }
 
                 // Makes graph look better if user has a single "play" entry
-                playMultiplier = (2 / playData[0].values.length);
+                playMultiplier = 2 / playData[0].values.length;
             }
 
             // Force Y-axis to start at 0 and use nice round numbers
             chart.forceY([0, maxPlays > 0 ? maxPlays * playMultiplier : 10]);
 
-            d3.select("#play-graph svg")
-                .datum(playData)
-                .call(chart);
+            d3.select("#play-graph svg").datum(playData).call(chart);
 
-            nv.utils.windowResize(function() {
+            nv.utils.windowResize(function () {
                 chart.update();
             });
 
             // Reset "dy" value
-            var noDataElements = document.querySelectorAll('.nv-noData');
+            var noDataElements = document.querySelectorAll(".nv-noData");
             for (var i = 0; i < noDataElements.length; i++) {
-                noDataElements[i].setAttribute('dy', 0);
+                noDataElements[i].setAttribute("dy", 0);
             }
 
             return chart;
@@ -921,39 +948,42 @@ function processViewsHistory(entries) {
     var currentYear = currentDate.getFullYear();
     var currentMonth = currentDate.getMonth();
 
-    var values = entries.map(function(entry) {
+    var values = entries.map(function (entry) {
         var elapsedMonths = (currentYear - entry.year) * 12 + (currentMonth - (entry.month - 1));
         return {
             x: -elapsedMonths,
-            y: entry.replay_views
+            y: entry.replay_views,
         };
     });
 
-    values.sort(function(a, b) {
+    values.sort(function (a, b) {
         return a.x - b.x;
     });
 
-    return [{
-        values: values,
-        key: 'Replay Views',
-        color: '#f78e25',
-        area: true
-    }];
+    return [
+        {
+            values: values,
+            key: "Replay Views",
+            color: "#f78e25",
+            area: true,
+        },
+    ];
 }
 
 function loadViewsGraph(userId, mode) {
     var url = "/users/" + userId + "/history/views/" + mode;
 
-    performApiRequest("GET", url, null, function(xhr) {
+    performApiRequest("GET", url, null, function (xhr) {
         var entries = JSON.parse(xhr.responseText);
         var viewsData = processViewsHistory(entries);
 
-        nv.addGraph(function() {
-            var chart = nv.models.lineChart()
+        nv.addGraph(function () {
+            var chart = nv.models
+                .lineChart()
                 .margin({
                     left: 80,
                     bottom: 20,
-                    right: 50
+                    right: 50,
                 })
                 .useInteractiveGuideline(true)
                 .transitionDuration(250)
@@ -962,22 +992,18 @@ function loadViewsGraph(userId, mode) {
                 .showYAxis(true)
                 .showXAxis(true);
 
-            chart.xAxis
-                .axisLabel("Months")
-                .tickFormat(function(month) {
-                    if (month % 1 !== 0) return "";
-                    if (month == 0) return "This Month";
-                    if (month > 0) return (month != 1) ? "In " + month + " months" : "In " + month + " month";
-                    return (month != -1) ? (-month + " months ago") : (-month + " month ago");
-                });
+            chart.xAxis.axisLabel("Months").tickFormat(function (month) {
+                if (month % 1 !== 0) return "";
+                if (month == 0) return "This Month";
+                if (month > 0) return month != 1 ? "In " + month + " months" : "In " + month + " month";
+                return month != -1 ? -month + " months ago" : -month + " month ago";
+            });
 
-            chart.yAxis
-                .axisLabel("Views")
-                .tickFormat(function(views) {
-                    var rounded = Math.round(views);
-                    if (views !== rounded) return "";
-                    return rounded.toString();
-                });
+            chart.yAxis.axisLabel("Views").tickFormat(function (views) {
+                var rounded = Math.round(views);
+                if (views !== rounded) return "";
+                return rounded.toString();
+            });
 
             // Calculate proper Y-axis range
             var viewMultiplier = 2;
@@ -991,24 +1017,22 @@ function loadViewsGraph(userId, mode) {
                 }
 
                 // Makes graph look better if user has a single "view" entry
-                viewMultiplier = (2 / viewsData[0].values.length);
+                viewMultiplier = 2 / viewsData[0].values.length;
             }
 
             // Force Y-axis to start at 0 and use nice round numbers
             chart.forceY([0, maxViews > 0 ? maxViews * viewMultiplier : 10]);
 
-            d3.select("#replay-graph svg")
-                .datum(viewsData)
-                .call(chart);
+            d3.select("#replay-graph svg").datum(viewsData).call(chart);
 
-            nv.utils.windowResize(function() {
+            nv.utils.windowResize(function () {
                 chart.update();
             });
 
             // Reset "dy" value
-            var textElements = document.querySelectorAll('.nv-noData');
+            var textElements = document.querySelectorAll(".nv-noData");
             for (var i = 0; i < textElements.length; i++) {
-                textElements[i].setAttribute('dy', 0);
+                textElements[i].setAttribute("dy", 0);
             }
 
             return chart;
@@ -1017,38 +1041,34 @@ function loadViewsGraph(userId, mode) {
 }
 
 function updatePlaystyleElement(element) {
-    performApiRequest(
-        toggleClass(element, "playstyle-using") ? "POST" : "DELETE",
-        "/users/" + userId + "/playstyle",
-        { playstyle: element.id }
-    );
+    performApiRequest(toggleClass(element, "playstyle-using") ? "POST" : "DELETE", "/users/" + userId + "/playstyle", {
+        playstyle: element.id,
+    });
 }
 
 function addFriend() {
-    if (!isLoggedIn())
-        return;
+    if (!isLoggedIn()) return;
 
-    performApiRequest("POST", "/account/friends?id=" + userId, null, function(xhr) {
+    performApiRequest("POST", "/account/friends?id=" + userId, null, function (xhr) {
         var data = JSON.parse(xhr.responseText);
-        var targetAdded = data.status === 'mutual' || superFriendly;
-        var friendStatus = document.getElementById('friend-status');
+        var targetAdded = data.status === "mutual" || superFriendly;
+        var friendStatus = document.getElementById("friend-status");
 
-        friendStatus.className = 'friend-current-true-target-' + targetAdded;
+        friendStatus.className = "friend-current-true-target-" + targetAdded;
     });
 
     return false;
 }
 
 function removeFriend() {
-    if (!isLoggedIn())
-        return;
+    if (!isLoggedIn()) return;
 
-    performApiRequest("DELETE", "/account/friends?id=" + userId, null, function(xhr) {
+    performApiRequest("DELETE", "/account/friends?id=" + userId, null, function (xhr) {
         var data = JSON.parse(xhr.responseText);
-        var targetAdded = data.status === 'mutual' || superFriendly;
-        var friendStatus = document.getElementById('friend-status');
+        var targetAdded = data.status === "mutual" || superFriendly;
+        var friendStatus = document.getElementById("friend-status");
 
-        friendStatus.className = 'friend-current-false-target-' + targetAdded;
+        friendStatus.className = "friend-current-false-target-" + targetAdded;
     });
 
     return false;
@@ -1057,28 +1077,26 @@ function removeFriend() {
 function removeFavourite(setId) {
     var url = "/users/" + currentUser + "/favourites/" + setId;
 
-    performApiRequest("DELETE", url, null, function(xhr) {
+    performApiRequest("DELETE", url, null, function (xhr) {
         var data = JSON.parse(xhr.responseText);
-        var favouritesCount = document.getElementById('beatmaps-favourites-count');
-        var favouritesListContainer = document.getElementById('beatmaps-favourites-container');
+        var favouritesCount = document.getElementById("beatmaps-favourites-count");
+        var favouritesListContainer = document.getElementById("beatmaps-favourites-container");
         var container = document.getElementById("favourite-" + setId);
         var beatmapsContainer = document.getElementById("beatmaps");
 
-        if (!container)
-            return;
+        if (!container) return;
 
         container.style.opacity = 0;
 
-        setTimeout(function() {
+        setTimeout(function () {
             removeElement(container);
 
-            if (favouritesCount && data && data.length != null)
-                setText(favouritesCount, data.length.toString());
+            if (favouritesCount && data && data.length != null) setText(favouritesCount, data.length.toString());
 
             if (data.length == 0) {
                 // User has no favourite beatmaps anymore
                 if (favouritesListContainer) {
-                    favouritesListContainer.innerHTML = '';
+                    favouritesListContainer.innerHTML = "";
                     var textElement = document.createElement("p");
                     textElement.style.margin = "5px";
                     textElement.innerHTML = "This player has no favourite beatmaps :(";
@@ -1087,9 +1105,11 @@ function removeFavourite(setId) {
             }
         }, 350);
 
-        setTimeout(function() {
+        setTimeout(function () {
             slideUp(beatmapsContainer);
-            setTimeout(function() { slideDown(beatmapsContainer) }, 150);
+            setTimeout(function () {
+                slideDown(beatmapsContainer);
+            }, 150);
         }, 400);
     });
 
@@ -1097,56 +1117,66 @@ function removeFavourite(setId) {
 }
 
 function deleteBeatmap(setId) {
-    var proceed = confirm('Are you sure you want to delete this beatmap?');
+    var proceed = confirm("Are you sure you want to delete this beatmap?");
     var url = "/users/" + currentUser + "/beatmapsets/" + setId;
 
-    if (!proceed)
-        return;
+    if (!proceed) return;
 
-    performApiRequest("DELETE", url, null, function(xhr) {
-        reloadPageSoon(250, "/u/" + currentUser + "#beatmaps");
-    }, function(xhr) {
-        try {
-            var data = JSON.parse(xhr.responseText);
-            alert(data.details);
-        } catch (e) {
-            console.error("Failed to delete beatmap:", e);
-            alert("Failed to delete beatmap.");
-        }
-    });
+    performApiRequest(
+        "DELETE",
+        url,
+        null,
+        function (xhr) {
+            reloadPageSoon(250, "/u/" + currentUser + "#beatmaps");
+        },
+        function (xhr) {
+            try {
+                var data = JSON.parse(xhr.responseText);
+                alert(data.details);
+            } catch (e) {
+                console.error("Failed to delete beatmap:", e);
+                alert("Failed to delete beatmap.");
+            }
+        },
+    );
 }
 
 function reviveBeatmap(setId) {
     var url = "/users/" + currentUser + "/beatmapsets/" + setId + "/revive";
-    performApiRequest("POST", url, null, function(xhr) {
-        reloadPageSoon(250, "/u/" + currentUser + "#beatmaps");
-    }, function(xhr) {
-        try {
-            var data = JSON.parse(xhr.responseText);
-            alert(data.details);
-        } catch (e) {
-            console.error("Failed to revive beatmap:", e);
-            alert("Failed to revive beatmap.");
-        }
-    });
+    performApiRequest(
+        "POST",
+        url,
+        null,
+        function (xhr) {
+            reloadPageSoon(250, "/u/" + currentUser + "#beatmaps");
+        },
+        function (xhr) {
+            try {
+                var data = JSON.parse(xhr.responseText);
+                alert(data.details);
+            } catch (e) {
+                console.error("Failed to revive beatmap:", e);
+                alert("Failed to revive beatmap.");
+            }
+        },
+    );
 }
 
 function toggleBeatmapContainer(section) {
-    var container = queryFirst(section, '.profile-beatmaps-container');
+    var container = queryFirst(section, ".profile-beatmaps-container");
     var beatmapsSection = document.getElementById("beatmaps");
 
-    if (container.style.display === 'none') {
-        container.style.display = 'block';
+    if (container.style.display === "none") {
+        container.style.display = "block";
         slideDown(beatmapsSection);
     } else {
-        container.style.display = 'none';
+        container.style.display = "none";
         beatmapsSection.style.height = getElementHeight(beatmapsSection) + "px";
     }
 }
 
 function loadBeatmapsTab(userId) {
-    if (beatmapsSectionLoaded)
-        return;
+    if (beatmapsSectionLoaded) return;
 
     beatmapsSectionLoaded = true;
     loadUserCreatedBeatmapsets(userId);
@@ -1155,230 +1185,230 @@ function loadBeatmapsTab(userId) {
 }
 
 function loadUserCreatedBeatmapsets(userId) {
-    var url = '/users/' + userId + '/beatmapsets';
-    var beatmapSections = document.getElementById('user-beatmaps-sections');
-    var beatmapLoadingText = document.getElementById('user-beatmaps-loading');
+    var url = "/users/" + userId + "/beatmapsets";
+    var beatmapSections = document.getElementById("user-beatmaps-sections");
+    var beatmapLoadingText = document.getElementById("user-beatmaps-loading");
 
-    if (!beatmapSections)
-        return;
+    if (!beatmapSections) return;
 
-    performApiRequest('GET', url, null, function(xhr) {
-        var beatmapsets = JSON.parse(xhr.responseText) || [];
-        beatmapSections.innerHTML = '';
+    performApiRequest(
+        "GET",
+        url,
+        null,
+        function (xhr) {
+            var beatmapsets = JSON.parse(xhr.responseText) || [];
+            beatmapSections.innerHTML = "";
 
-        var categories = {
-            'Ranked': [],
-            'Loved': [],
-            'Qualified': [],
-            'Pending': [],
-            'WIP': [],
-            'Graveyarded': []
-        };
+            var categories = {
+                Ranked: [],
+                Loved: [],
+                Qualified: [],
+                Pending: [],
+                WIP: [],
+                Graveyarded: [],
+            };
 
-        for (var i = 0; i < beatmapsets.length; i++) {
-            var bm = beatmapsets[i];
+            for (var i = 0; i < beatmapsets.length; i++) {
+                var bm = beatmapsets[i];
 
-            if (!bm)
-                continue;
+                if (!bm) continue;
 
-            if (bm.status === BeatmapStatus.Inactive)
-                continue;
+                if (bm.status === BeatmapStatus.Inactive) continue;
 
-            if (bm.status === BeatmapStatus.Loved) {
-                categories['Loved'].push(bm);
-            } else if (bm.status === BeatmapStatus.Qualified) {
-                categories['Qualified'].push(bm);
-            } else if (bm.status === BeatmapStatus.Ranked || bm.status === BeatmapStatus.Approved) {
-                categories['Ranked'].push(bm);
-            } else if (bm.status === BeatmapStatus.Pending) {
-                categories['Pending'].push(bm);
-            } else if (bm.status === BeatmapStatus.WIP) {
-                categories['WIP'].push(bm);
-            } else {
-                categories['Graveyarded'].push(bm);
-            }
-        }
-
-        var order = [
-            'Ranked',
-            'Loved',
-            'Qualified',
-            'Pending',
-            'WIP',
-            'Graveyarded'
-        ];
-
-        var unrankedStatuses = [
-            'Pending',
-            'WIP',
-            'Graveyarded'
-        ];
-
-        for (var j = 0; j < order.length; j++) {
-            var category = order[j];
-            var items = categories[category] || [];
-            if (items.length === 0)
-                continue;
-
-            var section = createBeatmapsSectionElement(
-                ' ' + category + ' Beatmaps', items.length,
-                'user-beatmaps-' + category.toLowerCase()
-            );
-            var container = queryFirst(section, '.profile-beatmaps-container');
-
-            for (var k = 0; k < items.length; k++) {
-                var set = items[k];
-                var showOwnerControls = (currentUser === userId) && arrayContains(unrankedStatuses, category);
-                var table = createBeatmapsetTable(set, {
-                    showOwnerControls: showOwnerControls,
-                    showRevive: showOwnerControls && (category === 'Graveyarded')
-                });
-                container.appendChild(table);
-            }
-
-            var clear = document.createElement('div');
-            clear.style.clear = 'both';
-            container.appendChild(clear);
-            beatmapSections.appendChild(section);
-        }
-
-        if (beatmapSections.children.length === 0) {
-            beatmapSections.innerHTML = '';
-        }
-    }, function(xhr) {
-        if (beatmapLoadingText) removeElement(beatmapLoadingText);
-    });
-}
-
-function loadUserFavouriteBeatmapsets(userId) {
-    var url = '/users/' + userId + '/favourites';
-    var favouritesCount = document.getElementById('beatmaps-favourites-count');
-    var favouritesContainer = document.getElementById('beatmaps-favourites-container');
-
-    if (!favouritesContainer)
-        return;
-
-    performApiRequest('GET', url, null, function(xhr) {
-        var favourites = JSON.parse(xhr.responseText) || [];
-
-        if (favouritesCount)
-            setText(favouritesCount, favourites.length.toString());
-
-        favouritesContainer.innerHTML = '';
-
-        if (favourites.length === 0) {
-            var empty = document.createElement('p');
-            empty.style.margin = '5px';
-            empty.innerHTML = 'This player has no favourite beatmaps :(';
-            favouritesContainer.appendChild(empty);
-            return;
-        }
-
-        favourites.sort(function(a, b) {
-            var at = new Date(a.created_at).valueOf();
-            var bt = new Date(b.created_at).valueOf();
-            return at - bt;
-        });
-
-        for (var i = 0; i < favourites.length; i++) {
-            var fav = favourites[i];
-            if (!fav || !fav.beatmapset)
-                continue;
-
-            var setId = fav.beatmapset.id;
-            var table = createBeatmapsetTable(fav.beatmapset, {
-                tableId: 'favourite-' + setId
-            });
-
-            if (currentUser === userId) {
-                var leftCell = queryFirst(table, 'td');
-                if (leftCell) {
-                    leftCell.appendChild(document.createElement('br'));
-                    var deleteWrap = document.createElement('div');
-                    deleteWrap.style.cssFloat = 'right';
-                    deleteWrap.style.textAlign = 'right';
-                    deleteWrap.style.paddingRight = '2.5px';
-
-                    var deleteLink = document.createElement('a');
-                    deleteLink.onclick = function() {
-                        return removeFavourite(setId);
-                    };
-                    setText(deleteLink, 'delete');
-                    deleteWrap.appendChild(deleteLink);
-                    leftCell.appendChild(deleteWrap);
+                if (bm.status === BeatmapStatus.Loved) {
+                    categories["Loved"].push(bm);
+                } else if (bm.status === BeatmapStatus.Qualified) {
+                    categories["Qualified"].push(bm);
+                } else if (bm.status === BeatmapStatus.Ranked || bm.status === BeatmapStatus.Approved) {
+                    categories["Ranked"].push(bm);
+                } else if (bm.status === BeatmapStatus.Pending) {
+                    categories["Pending"].push(bm);
+                } else if (bm.status === BeatmapStatus.WIP) {
+                    categories["WIP"].push(bm);
+                } else {
+                    categories["Graveyarded"].push(bm);
                 }
             }
 
-            favouritesContainer.appendChild(table);
-        }
+            var order = ["Ranked", "Loved", "Qualified", "Pending", "WIP", "Graveyarded"];
 
-        var clear = document.createElement('div');
-        clear.style.clear = 'both';
-        favouritesContainer.appendChild(clear);
-    }, function(xhr) {
-        favouritesContainer.innerHTML = '<p style="margin:5px">Failed to load favourite beatmaps.</p>';
-        if (favouritesCount) setText(favouritesCount, '0');
-    });
+            var unrankedStatuses = ["Pending", "WIP", "Graveyarded"];
+
+            for (var j = 0; j < order.length; j++) {
+                var category = order[j];
+                var items = categories[category] || [];
+                if (items.length === 0) continue;
+
+                var section = createBeatmapsSectionElement(
+                    " " + category + " Beatmaps",
+                    items.length,
+                    "user-beatmaps-" + category.toLowerCase(),
+                );
+                var container = queryFirst(section, ".profile-beatmaps-container");
+
+                for (var k = 0; k < items.length; k++) {
+                    var set = items[k];
+                    var showOwnerControls = currentUser === userId && arrayContains(unrankedStatuses, category);
+                    var table = createBeatmapsetTable(set, {
+                        showOwnerControls: showOwnerControls,
+                        showRevive: showOwnerControls && category === "Graveyarded",
+                    });
+                    container.appendChild(table);
+                }
+
+                var clear = document.createElement("div");
+                clear.style.clear = "both";
+                container.appendChild(clear);
+                beatmapSections.appendChild(section);
+            }
+
+            if (beatmapSections.children.length === 0) {
+                beatmapSections.innerHTML = "";
+            }
+        },
+        function (xhr) {
+            if (beatmapLoadingText) removeElement(beatmapLoadingText);
+        },
+    );
+}
+
+function loadUserFavouriteBeatmapsets(userId) {
+    var url = "/users/" + userId + "/favourites";
+    var favouritesCount = document.getElementById("beatmaps-favourites-count");
+    var favouritesContainer = document.getElementById("beatmaps-favourites-container");
+
+    if (!favouritesContainer) return;
+
+    performApiRequest(
+        "GET",
+        url,
+        null,
+        function (xhr) {
+            var favourites = JSON.parse(xhr.responseText) || [];
+
+            if (favouritesCount) setText(favouritesCount, favourites.length.toString());
+
+            favouritesContainer.innerHTML = "";
+
+            if (favourites.length === 0) {
+                var empty = document.createElement("p");
+                empty.style.margin = "5px";
+                empty.innerHTML = "This player has no favourite beatmaps :(";
+                favouritesContainer.appendChild(empty);
+                return;
+            }
+
+            favourites.sort(function (a, b) {
+                var at = new Date(a.created_at).valueOf();
+                var bt = new Date(b.created_at).valueOf();
+                return at - bt;
+            });
+
+            for (var i = 0; i < favourites.length; i++) {
+                var fav = favourites[i];
+                if (!fav || !fav.beatmapset) continue;
+
+                var setId = fav.beatmapset.id;
+                var table = createBeatmapsetTable(fav.beatmapset, {
+                    tableId: "favourite-" + setId,
+                });
+
+                if (currentUser === userId) {
+                    var leftCell = queryFirst(table, "td");
+                    if (leftCell) {
+                        leftCell.appendChild(document.createElement("br"));
+                        var deleteWrap = document.createElement("div");
+                        deleteWrap.style.cssFloat = "right";
+                        deleteWrap.style.textAlign = "right";
+                        deleteWrap.style.paddingRight = "2.5px";
+
+                        var deleteLink = document.createElement("a");
+                        deleteLink.onclick = function () {
+                            return removeFavourite(setId);
+                        };
+                        setText(deleteLink, "delete");
+                        deleteWrap.appendChild(deleteLink);
+                        leftCell.appendChild(deleteWrap);
+                    }
+                }
+
+                favouritesContainer.appendChild(table);
+            }
+
+            var clear = document.createElement("div");
+            clear.style.clear = "both";
+            favouritesContainer.appendChild(clear);
+        },
+        function (xhr) {
+            favouritesContainer.innerHTML = '<p style="margin:5px">Failed to load favourite beatmaps.</p>';
+            if (favouritesCount) setText(favouritesCount, "0");
+        },
+    );
 }
 
 function loadUserNominatedBeatmapsets(userId) {
-    var url = '/users/' + userId + '/nominations';
-    var nominationsCount = document.getElementById('beatmaps-nominations-count');
-    var nominationsSection = document.getElementById('beatmaps-nominations-section');
-    var nominationsContainer = document.getElementById('beatmaps-nominations-container');
+    var url = "/users/" + userId + "/nominations";
+    var nominationsCount = document.getElementById("beatmaps-nominations-count");
+    var nominationsSection = document.getElementById("beatmaps-nominations-section");
+    var nominationsContainer = document.getElementById("beatmaps-nominations-container");
 
-    if (!nominationsContainer || !nominationsSection)
-        return;
+    if (!nominationsContainer || !nominationsSection) return;
 
-    performApiRequest('GET', url, null, function(xhr) {
-        var nominations = JSON.parse(xhr.responseText) || [];
+    performApiRequest(
+        "GET",
+        url,
+        null,
+        function (xhr) {
+            var nominations = JSON.parse(xhr.responseText) || [];
 
-        if (nominations.length === 0) {
-            removeElement(nominationsSection);
-            return;
-        }
+            if (nominations.length === 0) {
+                removeElement(nominationsSection);
+                return;
+            }
 
-        if (nominationsCount)
-            setText(nominationsCount, nominations.length.toString());
+            if (nominationsCount) setText(nominationsCount, nominations.length.toString());
 
-        nominationsContainer.innerHTML = '';
+            nominationsContainer.innerHTML = "";
 
-        for (var i = 0; i < nominations.length; i++) {
-            var nomination = nominations[i];
-            if (!nomination || !nomination.beatmapset)
-                continue;
+            for (var i = 0; i < nominations.length; i++) {
+                var nomination = nominations[i];
+                if (!nomination || !nomination.beatmapset) continue;
 
-            var table = createBeatmapsetTable(nomination.beatmapset, {});
-            nominationsContainer.appendChild(table);
-        }
+                var table = createBeatmapsetTable(nomination.beatmapset, {});
+                nominationsContainer.appendChild(table);
+            }
 
-        var clear = document.createElement('div');
-        clear.style.clear = 'both';
-        nominationsContainer.appendChild(clear);
-    }, function(xhr) {
-        if (xhr && xhr.status === 404) {
-            removeElement(nominationsSection);
-            return;
-        }
+            var clear = document.createElement("div");
+            clear.style.clear = "both";
+            nominationsContainer.appendChild(clear);
+        },
+        function (xhr) {
+            if (xhr && xhr.status === 404) {
+                removeElement(nominationsSection);
+                return;
+            }
 
-        nominationsContainer.innerHTML = '<p style="margin:5px">Failed to load nominated beatmaps.</p>';
-        if (nominationsCount) setText(nominationsCount, '0');
-    });
+            nominationsContainer.innerHTML = '<p style="margin:5px">Failed to load nominated beatmaps.</p>';
+            if (nominationsCount) setText(nominationsCount, "0");
+        },
+    );
 }
 
 function createBeatmapsSectionElement(titleText, count, containerId) {
-    var section = document.createElement('div');
-    var header = document.createElement('h2');
-    header.className = 'profile-stats-header';
+    var section = document.createElement("div");
+    var header = document.createElement("h2");
+    header.className = "profile-stats-header";
 
-    var link = document.createElement('a');
-    link.onclick = function() { toggleBeatmapContainer(section); };
-    link.innerHTML = titleText + ' (<span class="beatmaps-count">' + count + '</span>)';
+    var link = document.createElement("a");
+    link.onclick = function () {
+        toggleBeatmapContainer(section);
+    };
+    link.innerHTML = titleText + ' (<span class="beatmaps-count">' + count + "</span>)";
     header.appendChild(link);
 
-    var container = document.createElement('div');
-    container.className = 'profile-beatmaps-container';
-    container.style.display = 'none';
+    var container = document.createElement("div");
+    container.className = "profile-beatmaps-container";
+    container.style.display = "none";
     container.id = containerId;
 
     section.appendChild(header);
@@ -1389,25 +1419,24 @@ function createBeatmapsSectionElement(titleText, count, containerId) {
 function createBeatmapsetTable(beatmapset, options) {
     options = options || {};
 
-    var table = document.createElement('table');
-    table.className = 'profile-beatmap';
+    var table = document.createElement("table");
+    table.className = "profile-beatmap";
 
-    if (options.tableId)
-        table.id = options.tableId;
+    if (options.tableId) table.id = options.tableId;
 
-    var tbody = document.createElement('tbody');
-    var tr = document.createElement('tr');
-    var tdLeft = document.createElement('td');
+    var tbody = document.createElement("tbody");
+    var tr = document.createElement("tr");
+    var tdLeft = document.createElement("td");
 
-    var descriptionLink = document.createElement('a');
-    descriptionLink.href = '/s/' + beatmapset.id;
-    descriptionLink.className = 'profile-beatmap-description';
+    var descriptionLink = document.createElement("a");
+    descriptionLink.href = "/s/" + beatmapset.id;
+    descriptionLink.className = "profile-beatmap-description";
 
-    var bold = document.createElement('b');
-    setText(bold, (beatmapset.artist || 'Unknown') + ' - ' + (beatmapset.title || 'Unknown'));
+    var bold = document.createElement("b");
+    setText(bold, (beatmapset.artist || "Unknown") + " - " + (beatmapset.title || "Unknown"));
     descriptionLink.appendChild(bold);
     tdLeft.appendChild(descriptionLink);
-    tdLeft.appendChild(document.createElement('br'));
+    tdLeft.appendChild(document.createElement("br"));
 
     var creatorName = beatmapset.creator;
     var creatorId = beatmapset.creator_id;
@@ -1415,42 +1444,46 @@ function createBeatmapsetTable(beatmapset, options) {
 
     if (creatorName) {
         if (server === 0) {
-            var creatorLink = document.createElement('a');
-            creatorLink.href = 'https://osu.ppy.sh/u/' + creatorName;
-            setText(creatorLink, 'mapped by ' + creatorName);
+            var creatorLink = document.createElement("a");
+            creatorLink.href = "https://osu.ppy.sh/u/" + creatorName;
+            setText(creatorLink, "mapped by " + creatorName);
             tdLeft.appendChild(creatorLink);
         } else {
-            var creatorLink = document.createElement('a');
-            creatorLink.href = '/u/' + creatorId;
-            setText(creatorLink, 'mapped by ' + creatorName);
+            var creatorLink = document.createElement("a");
+            creatorLink.href = "/u/" + creatorId;
+            setText(creatorLink, "mapped by " + creatorName);
             tdLeft.appendChild(creatorLink);
         }
     }
 
     if (options.showOwnerControls) {
-        tdLeft.appendChild(document.createElement('br'));
+        tdLeft.appendChild(document.createElement("br"));
 
-        var controls = document.createElement('div');
-        var deleteDiv = document.createElement('div');
-        deleteDiv.style.cssFloat = 'right';
-        deleteDiv.style.textAlign = 'right';
-        deleteDiv.style.paddingRight = '2.5px';
+        var controls = document.createElement("div");
+        var deleteDiv = document.createElement("div");
+        deleteDiv.style.cssFloat = "right";
+        deleteDiv.style.textAlign = "right";
+        deleteDiv.style.paddingRight = "2.5px";
 
-        var deleteLink = document.createElement('a');
-        deleteLink.onclick = function() { return deleteBeatmap(beatmapset.id); };
-        setText(deleteLink, 'delete');
+        var deleteLink = document.createElement("a");
+        deleteLink.onclick = function () {
+            return deleteBeatmap(beatmapset.id);
+        };
+        setText(deleteLink, "delete");
         deleteDiv.appendChild(deleteLink);
         controls.appendChild(deleteDiv);
 
         if (options.showRevive) {
-            var reviveDiv = document.createElement('div');
-            reviveDiv.style.cssFloat = 'right';
-            reviveDiv.style.textAlign = 'right';
-            reviveDiv.style.marginRight = '5px';
+            var reviveDiv = document.createElement("div");
+            reviveDiv.style.cssFloat = "right";
+            reviveDiv.style.textAlign = "right";
+            reviveDiv.style.marginRight = "5px";
 
-            var reviveLink = document.createElement('a');
-            reviveLink.onclick = function() { return reviveBeatmap(beatmapset.id); };
-            setText(reviveLink, 'revive');
+            var reviveLink = document.createElement("a");
+            reviveLink.onclick = function () {
+                return reviveBeatmap(beatmapset.id);
+            };
+            setText(reviveLink, "revive");
             reviveDiv.appendChild(reviveLink);
             controls.appendChild(reviveDiv);
         }
@@ -1458,14 +1491,14 @@ function createBeatmapsetTable(beatmapset, options) {
         tdLeft.appendChild(controls);
     }
 
-    var tdRight = document.createElement('td');
-    tdRight.style.width = '80px';
-    tdRight.style.height = '60px';
+    var tdRight = document.createElement("td");
+    tdRight.style.width = "80px";
+    tdRight.style.height = "60px";
 
-    var image = document.createElement('img');
-    image.src = '/mt/' + beatmapset.id;
-    image.alt = '';
-    image.loading = 'lazy';
+    var image = document.createElement("img");
+    image.src = "/mt/" + beatmapset.id;
+    image.alt = "";
+    image.loading = "lazy";
     tdRight.appendChild(image);
 
     tr.appendChild(tdLeft);
@@ -1475,10 +1508,10 @@ function createBeatmapsetTable(beatmapset, options) {
     return table;
 }
 
-addEvent('DOMContentLoaded', document, function(event) {
-    var beatmapContainers = getElementsByClassName('profile-beatmaps-container');
+addEvent("DOMContentLoaded", document, function (event) {
+    var beatmapContainers = getElementsByClassName("profile-beatmaps-container");
     for (var i = 0; i < beatmapContainers.length; i++) {
-        beatmapContainers[i].style.display = 'none';
+        beatmapContainers[i].style.display = "none";
     }
 
     expandProfileTab(activeTab);

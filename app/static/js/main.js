@@ -31,11 +31,36 @@ var Mods = {
     Key2: 1 << 28,
     ScoreV2: 1 << 29,
     Mirror: 1 << 30,
-    KeyMod: (1 << 15) | (1 << 16) | (1 << 17) | (1 << 18) | (1 << 19) | (1 << 24) | (1 << 25) | (1 << 26) | (1 << 27) | (1 << 28),
-    FreeModAllowed: (1 << 0) | (1 << 1) | (1 << 3) | (1 << 4) | (1 << 5) | (1 << 10) | (1 << 20) | (1 << 7) | (1 << 13) | (1 << 12) | (1 << 15) | (1 << 16) | (1 << 17) | (1 << 18) | (1 << 19),
+    KeyMod:
+        (1 << 15) |
+        (1 << 16) |
+        (1 << 17) |
+        (1 << 18) |
+        (1 << 19) |
+        (1 << 24) |
+        (1 << 25) |
+        (1 << 26) |
+        (1 << 27) |
+        (1 << 28),
+    FreeModAllowed:
+        (1 << 0) |
+        (1 << 1) |
+        (1 << 3) |
+        (1 << 4) |
+        (1 << 5) |
+        (1 << 10) |
+        (1 << 20) |
+        (1 << 7) |
+        (1 << 13) |
+        (1 << 12) |
+        (1 << 15) |
+        (1 << 16) |
+        (1 << 17) |
+        (1 << 18) |
+        (1 << 19),
     SpeedMods: (1 << 6) | (1 << 8) | (1 << 9),
 
-    getMembers: function() {
+    getMembers: function () {
         var memberList = [];
         for (var mod in Mods) {
             if (Object.prototype.hasOwnProperty.call(mod) && Mods[mod] === (Mods[mod] & this[mod])) {
@@ -45,7 +70,7 @@ var Mods = {
         return memberList;
     },
 
-    getString: function(value) {
+    getString: function (value) {
         var modMap = {};
         modMap[Mods.NoMod] = "NM";
         modMap[Mods.NoFail] = "NF";
@@ -84,14 +109,14 @@ var Mods = {
             result[result.length] = modMap[Mods[members[i]]];
         }
         return result.join("");
-    }
+    },
 };
 
 var Mode = {
     0: "osu!",
     1: "Taiko",
     2: "Catch the Beat",
-    3: "osu!Mania"
+    3: "osu!Mania",
 };
 
 var BeatmapStatus = {
@@ -102,20 +127,29 @@ var BeatmapStatus = {
     Ranked: 1,
     Approved: 2,
     Qualified: 3,
-    Loved: 4
+    Loved: 4,
 };
 
-BeatmapStatus.toString = function(status) {
+BeatmapStatus.toString = function (status) {
     switch (status) {
-        case BeatmapStatus.Inactive: return 'Inactive';
-        case BeatmapStatus.Graveyard: return 'Graveyard';
-        case BeatmapStatus.WIP: return 'WIP';
-        case BeatmapStatus.Pending: return 'Pending';
-        case BeatmapStatus.Ranked: return 'Ranked';
-        case BeatmapStatus.Approved: return 'Approved';
-        case BeatmapStatus.Qualified: return 'Qualified';
-        case BeatmapStatus.Loved: return 'Loved';
-        default: return 'Unknown';
+        case BeatmapStatus.Inactive:
+            return "Inactive";
+        case BeatmapStatus.Graveyard:
+            return "Graveyard";
+        case BeatmapStatus.WIP:
+            return "WIP";
+        case BeatmapStatus.Pending:
+            return "Pending";
+        case BeatmapStatus.Ranked:
+            return "Ranked";
+        case BeatmapStatus.Approved:
+            return "Approved";
+        case BeatmapStatus.Qualified:
+            return "Qualified";
+        case BeatmapStatus.Loved:
+            return "Loved";
+        default:
+            return "Unknown";
     }
 };
 
@@ -124,19 +158,22 @@ var pageLoaded = false;
 var apiRetries = 0;
 
 function slideDown(elem) {
-    elem.style.height = '';
+    elem.style.height = "";
     $(elem).stop(true, false).slideDown(500);
 }
 
 function slideUp(elem) {
     $(elem).stop(true, false).slideUp(500);
-    setTimeout(function() { elem.style.height = '0px' }, 500);
+    setTimeout(function () {
+        elem.style.height = "0px";
+    }, 500);
 }
 
 function isHidden(elem) {
     // Cross-browser compatible check for hidden elements
-    return elem.style.display === 'none' || elem.offsetParent === null ||
-           elem.offsetWidth === 0 || elem.offsetHeight === 0;
+    return (
+        elem.style.display === "none" || elem.offsetParent === null || elem.offsetWidth === 0 || elem.offsetHeight === 0
+    );
 }
 
 function getElementHeight(elem) {
@@ -183,7 +220,7 @@ function addClass(element, className) {
         return;
     }
 
-    element.className = element.className ? (element.className + " " + className) : className;
+    element.className = element.className ? element.className + " " + className : className;
 }
 
 function removeClass(element, className) {
@@ -240,7 +277,7 @@ function arrayContains(arr, value) {
 function formatDateShort(value) {
     var date = new Date(value);
     if (isNaN(date.getTime())) {
-        return '';
+        return "";
     }
 
     var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -260,13 +297,13 @@ function formatDateTimeForTitle(value) {
     var minute = date.getMinutes();
     var second = date.getSeconds();
 
-    if (month < 10) month = '0' + month;
-    if (day < 10) day = '0' + day;
-    if (hour < 10) hour = '0' + hour;
-    if (minute < 10) minute = '0' + minute;
-    if (second < 10) second = '0' + second;
+    if (month < 10) month = "0" + month;
+    if (day < 10) day = "0" + day;
+    if (hour < 10) hour = "0" + hour;
+    if (minute < 10) minute = "0" + minute;
+    if (second < 10) second = "0" + second;
 
-    return month + '/' + day + '/' + year + ' ' + hour + ':' + minute + ':' + second;
+    return month + "/" + day + "/" + year + " " + hour + ":" + minute + ":" + second;
 }
 
 function getScrollTop() {
@@ -286,15 +323,15 @@ function isLoggedIn() {
 }
 
 function isArray(obj) {
-    return Object.prototype.toString.call(obj) === '[object Array]';
+    return Object.prototype.toString.call(obj) === "[object Array]";
 }
 
 function show(id) {
-    $('#' + id).show();
+    $("#" + id).show();
 }
 
 function hide(id) {
-    $('#' + id).hide();
+    $("#" + id).hide();
 }
 
 function getViewportWidth() {
@@ -303,7 +340,7 @@ function getViewportWidth() {
 }
 
 function confirmAction(promptText) {
-    if (promptText === undefined) promptText = 'Are you sure?';
+    if (promptText === undefined) promptText = "Are you sure?";
     return confirm(promptText);
 }
 
@@ -314,10 +351,10 @@ function cookieExists(name) {
 function getCookie(cname) {
     var name = cname + "=";
     var decodedCookie = decodeURIComponent(document.cookie);
-    var ca = decodedCookie.split(';');
+    var ca = decodedCookie.split(";");
     for (var i = 0; i < ca.length; i++) {
         var c = ca[i];
-        while (c.charAt(0) == ' ') {
+        while (c.charAt(0) == " ") {
             c = c.substring(1);
         }
         if (c.indexOf(name) == 0) {
@@ -328,36 +365,30 @@ function getCookie(cname) {
 }
 
 function setCookie(name, value, maxAgeSeconds) {
-    var parts = [
-        name + "=" + encodeURIComponent(String(value)),
-        'Path=/',
-        'Max-Age=' + maxAgeSeconds,
-        'SameSite=Lax'
-    ];
+    var parts = [name + "=" + encodeURIComponent(String(value)), "Path=/", "Max-Age=" + maxAgeSeconds, "SameSite=Lax"];
 
-    if (window.location && window.location.protocol === 'https:') {
-        parts.push('Secure');
+    if (window.location && window.location.protocol === "https:") {
+        parts.push("Secure");
     }
 
-    document.cookie = parts.join('; ');
+    document.cookie = parts.join("; ");
 }
 
 function trimString(value) {
-    return String(value == null ? '' : value).replace(/^\s+|\s+$/g, '');
+    return String(value == null ? "" : value).replace(/^\s+|\s+$/g, "");
 }
 
 function parseBooleanFromString(rawValue) {
-    var v = trimString(rawValue || '').toLowerCase();
-    if (v === '' || v === '1' || v === 'true' || v === 'yes' || v === 'on') return true;
-    if (v === '0' || v === 'false' || v === 'no' || v === 'off') return false;
+    var v = trimString(rawValue || "").toLowerCase();
+    if (v === "" || v === "1" || v === "true" || v === "yes" || v === "on") return true;
+    if (v === "0" || v === "false" || v === "no" || v === "off") return false;
     return true;
 }
 
 function confirmRedirect(url, promptText) {
     var do_redirect = confirmAction(promptText);
 
-    if (!do_redirect)
-        return;
+    if (!do_redirect) return;
 
     window.location.href = url;
     return false;
@@ -367,7 +398,7 @@ function reloadPageSoon(timeoutMs, href) {
     timeoutMs = timeoutMs || 250;
     href = href || window.location.href;
 
-    setTimeout(function() {
+    setTimeout(function () {
         window.location.href = href;
         window.location.reload();
     }, timeoutMs);
@@ -392,7 +423,7 @@ function showLoginForm() {
 function toggleSpoiler(root) {
     var spoiler = $(root).closest(".spoiler");
     spoiler.children(".spoiler-body").slideToggle("fast");
-    spoiler.find('img').trigger('unveil');
+    spoiler.find("img").trigger("unveil");
     return false;
 }
 
@@ -403,12 +434,12 @@ function addEvent(eventName, targetElement, func) {
     }
     if (targetElement.attachEvent) {
         // Older IE (IE8 and earlier)
-        return targetElement.attachEvent("on" + eventName, function() {
+        return targetElement.attachEvent("on" + eventName, function () {
             return func.call(targetElement, window.event);
         });
     }
     // Fallback to DOM Level 0 (very old browsers)
-    targetElement["on"+eventName] = func;
+    targetElement["on" + eventName] = func;
 }
 
 function preventEventDefault(event) {
@@ -436,12 +467,14 @@ function stopEventPropagation(event) {
 }
 
 function getEventTarget(event) {
-    return event ? (event.target || event.srcElement) : null;
+    return event ? event.target || event.srcElement : null;
 }
 
 function getParentElement(element) {
     // IE8 and earlier doesn't support parentElement, so we use parentNode instead.
-    return element.parentElement || (element.parentNode && element.parentNode.nodeType === 1 ? element.parentNode : null);
+    return (
+        element.parentElement || (element.parentNode && element.parentNode.nodeType === 1 ? element.parentNode : null)
+    );
 }
 
 function getElementsByClassName(className) {
@@ -450,13 +483,13 @@ function getElementsByClassName(className) {
     }
 
     if (document.querySelectorAll) {
-        return document.querySelectorAll('.' + className);
+        return document.querySelectorAll("." + className);
     }
 
-    var elements = document.getElementsByTagName('*');
+    var elements = document.getElementsByTagName("*");
     var matches = [];
     for (var i = 0; i < elements.length; i++) {
-        if ((' ' + elements[i].className + ' ').indexOf(' ' + className + ' ') !== -1) {
+        if ((" " + elements[i].className + " ").indexOf(" " + className + " ") !== -1) {
             matches.push(elements[i]);
         }
     }
@@ -472,9 +505,9 @@ function queryAll(root, selector) {
         return root.querySelectorAll(selector);
     }
 
-    if (selector.charAt(0) === '.') {
+    if (selector.charAt(0) === ".") {
         var className = selector.substring(1);
-        var all = root.getElementsByTagName('*');
+        var all = root.getElementsByTagName("*");
         var byClass = [];
         for (var i = 0; i < all.length; i++) {
             if (hasClass(all[i], className)) {
@@ -501,7 +534,7 @@ function closest(element, selector) {
         return element.closest(selector);
     }
 
-    var isClassSelector = selector.charAt(0) === '.';
+    var isClassSelector = selector.charAt(0) === ".";
     var className = isClassSelector ? selector.substring(1) : null;
     var tagName = isClassSelector ? null : selector.toUpperCase();
 
@@ -523,8 +556,8 @@ function closest(element, selector) {
 function beatmapSearch() {
     var inputValue = trimString(document.getElementById("beatmap-search").value);
 
-    if (inputValue !== '') {
-        window.location.href = '/beatmapsets?query=' + encodeURIComponent(inputValue);
+    if (inputValue !== "") {
+        window.location.href = "/beatmapsets?query=" + encodeURIComponent(inputValue);
         return false;
     }
     return true;
@@ -533,21 +566,21 @@ function beatmapSearch() {
 function userSearch() {
     var inputValue = trimString(document.getElementById("user-search").value);
 
-    if (inputValue !== '') {
-        window.location.href = '/u/' + encodeURIComponent(inputValue);
+    if (inputValue !== "") {
+        window.location.href = "/u/" + encodeURIComponent(inputValue);
         return false;
     }
     return true;
 }
 
 function createLoaderOverlay() {
-    var overlay = document.createElement('div');
-    overlay.className = 'loader-overlay';
+    var overlay = document.createElement("div");
+    overlay.className = "loader-overlay";
     overlay.innerHTML = '<div class="loader"></div>';
     return overlay;
 }
 
-function performApiRequest(method, path, data, callbackSuccess, callbackError) {    
+function performApiRequest(method, path, data, callbackSuccess, callbackError) {
     var url = apiBaseurl + path;
     var xhr;
 
@@ -577,8 +610,8 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
     }
 
     // Use the current site protocol
-    url = url.replace(/^https?:\/\//, '');
-    url = location.protocol + '//' + url
+    url = url.replace(/^https?:\/\//, "");
+    url = location.protocol + "//" + url;
 
     try {
         // Open the request
@@ -598,34 +631,32 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
     if (data instanceof FormData) {
         contentType = null;
         requestData = data;
-    } else if (typeof data === 'object' && data !== null) {
+    } else if (typeof data === "object" && data !== null) {
         requestData = JSON.stringify(data);
         contentType = "application/json; charset=UTF-8";
-    } else if (typeof data === 'string') {
+    } else if (typeof data === "string") {
         contentType = "text/plain; charset=UTF-8";
     }
 
     try {
         xhr.setRequestHeader("Cache-Control", "no-cache");
         xhr.setRequestHeader("X-CSRF-Token", csrfToken);
-        
-        if (contentType !== null)
-        {
+
+        if (contentType !== null) {
             xhr.setRequestHeader("Content-Type", contentType);
         }
 
-        if (cookieExists('access_token'))
-        {
+        if (cookieExists("access_token")) {
             // Set the Authorization header, if the access_token cookie is accessible via. javascript
             // This will be useful for local development, where the api is located on a different domain
-            xhr.setRequestHeader("Authorization", "Bearer " + getCookie('access_token'));
+            xhr.setRequestHeader("Authorization", "Bearer " + getCookie("access_token"));
         }
     } catch (e) {
         console.warn("This browser does not support setting headers.");
     }
 
     if (xhr.onreadystatechange === undefined) {
-        xhr.onload = function() {
+        xhr.onload = function () {
             apiRetries = 0;
             console.log("Request successful: " + method + " " + path);
             apiRetries = 0;
@@ -638,30 +669,25 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
                     throw e;
                 }
             }
-        }
+        };
 
-        xhr.onerror = function() {
-            var retried = handleApiError(
-                xhr, method, path, data,
-                callbackSuccess, callbackError
-            );
+        xhr.onerror = function () {
+            var retried = handleApiError(xhr, method, path, data, callbackSuccess, callbackError);
 
-            if (retried)
-                return;
+            if (retried) return;
 
             console.error("An error occurred during " + method + " request to " + path);
             if (callbackError) {
                 callbackError(xhr);
             }
-        }
+        };
 
         xhr.send(requestData);
         return xhr;
     }
 
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState !== 4)
-            return;
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState !== 4) return;
 
         if (xhr.status >= 200 && xhr.status < 300) {
             console.log("[" + xhr.status + "] Request successful: " + method + " " + path);
@@ -676,13 +702,9 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
                 }
             }
         } else {
-            var retried = handleApiError(
-                xhr, method, path, data,
-                callbackSuccess, callbackError
-            );
+            var retried = handleApiError(xhr, method, path, data, callbackSuccess, callbackError);
 
-            if (retried)
-                return;
+            if (retried) return;
 
             console.error("[" + xhr.status + "] An error occurred during " + method + " request to " + path);
             if (callbackError && !isNavigatingAway) {
@@ -696,18 +718,15 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
 }
 
 function handleApiError(xhr, method, path, data, callbackSuccess, callbackError) {
-    if (xhr.status !== 403)
-        return false;
+    if (xhr.status !== 403) return false;
 
-    if (apiRetries >= 2)
-        return false;
+    if (apiRetries >= 2) return false;
 
     try {
         var response = JSON.parse(xhr.responseText);
-        if (!response || response.details !== "Invalid CSRF token")
-            return false;
+        if (!response || response.details !== "Invalid CSRF token") return false;
 
-        reloadCsrfToken(function() {
+        reloadCsrfToken(function () {
             apiRetries += 1;
             console.log("Retrying " + method + " request to " + path + " after reloading CSRF token");
             performApiRequest(method, path, data, callbackSuccess, callbackError);
@@ -753,50 +772,60 @@ function convertFormToJson(formElement) {
 function loadBBCodePreview(element) {
     var parentElement = getParentElement(element);
     var bbcodeWrapper = getParentElement(parentElement);
-    var bbcodeEditor = bbcodeWrapper.querySelector('textarea');
+    var bbcodeEditor = bbcodeWrapper.querySelector("textarea");
 
     // Remove old previews
-    var previews = document.querySelectorAll('.bbcode-preview');
+    var previews = document.querySelectorAll(".bbcode-preview");
     for (var i = 0; i < previews.length; i++) {
         previews[i].parentNode.removeChild(previews[i]);
     }
 
-    performApiRequest("POST", "/forum/bbcode", { "input": bbcodeEditor.value }, function(xhr) {
-        var htmlPreview = xhr.responseText;
-        if (!htmlPreview) return;
+    performApiRequest(
+        "POST",
+        "/forum/bbcode",
+        { input: bbcodeEditor.value },
+        function (xhr) {
+            var htmlPreview = xhr.responseText;
+            if (!htmlPreview) return;
 
-        var previewContainer = document.createElement('div');
-        previewContainer.className = 'bbcode-preview bbcode';
-        previewContainer.innerHTML = htmlPreview;
+            var previewContainer = document.createElement("div");
+            previewContainer.className = "bbcode-preview bbcode";
+            previewContainer.innerHTML = htmlPreview;
 
-        bbcodeWrapper.appendChild(previewContainer);
-    }, function(xhr) {
-        var previewContainer = document.createElement('div');
-        previewContainer.className = 'bbcode-preview bbcode';
-        previewContainer.appendChild(
-            document.createTextNode('Failed to load bbcode preview :(')
-        );
-        bbcodeWrapper.appendChild(previewContainer);
-        console.error(xhr.status + ': "' + xhr.statusText + '"');
-    });
+            bbcodeWrapper.appendChild(previewContainer);
+        },
+        function (xhr) {
+            var previewContainer = document.createElement("div");
+            previewContainer.className = "bbcode-preview bbcode";
+            previewContainer.appendChild(document.createTextNode("Failed to load bbcode preview :("));
+            bbcodeWrapper.appendChild(previewContainer);
+            console.error(xhr.status + ': "' + xhr.statusText + '"');
+        },
+    );
     return false;
 }
 
 function reloadCsrfToken(callback) {
-    performApiRequest("GET", "/account/csrf", null, function(xhr) {
-        var response = JSON.parse(xhr.responseText);
-        if (response && response.token) {
-            csrfToken = response.token;
-            applyCsrfToForms();
+    performApiRequest(
+        "GET",
+        "/account/csrf",
+        null,
+        function (xhr) {
+            var response = JSON.parse(xhr.responseText);
+            if (response && response.token) {
+                csrfToken = response.token;
+                applyCsrfToForms();
+                if (callback) callback();
+            } else {
+                console.error("Failed to reload CSRF token: invalid response");
+                if (callback) callback();
+            }
+        },
+        function (xhr) {
+            console.error("Failed to reload CSRF token");
             if (callback) callback();
-        } else {
-            console.error("Failed to reload CSRF token: invalid response");
-            if (callback) callback();
-        }
-    }, function(xhr) {
-        console.error("Failed to reload CSRF token");
-        if (callback) callback();
-    });
+        },
+    );
 }
 
 function applyCsrfToForms() {
@@ -811,23 +840,23 @@ function applyCsrfToForms() {
 }
 
 function reloadCsrfBeforeSubmit(formElement) {
-    var submitHandler = function(e) {
+    var submitHandler = function (e) {
         e = e || window.event;
         if (e.preventDefault) {
             e.preventDefault();
         } else {
             e.returnValue = false;
         }
-        reloadCsrfToken(function() {
+        reloadCsrfToken(function () {
             HTMLFormElement.prototype.submit.call(formElement);
         });
     };
 
-    addEvent('submit', formElement, submitHandler);
+    addEvent("submit", formElement, submitHandler);
 }
 
 function applyCsrfUpdaterToForms() {
-    var forms = document.getElementsByTagName('form');
+    var forms = document.getElementsByTagName("form");
 
     for (var i = 0; i < forms.length; i++) {
         var elements = $(forms[i]).find('input[name="csrf_token"]');
@@ -840,17 +869,17 @@ function applyCsrfUpdaterToForms() {
 function renderTimeagoElements() {
     var times = [];
     if (document.getElementsByClassName) {
-        times = document.getElementsByClassName('timeago');
+        times = document.getElementsByClassName("timeago");
     } else if (document.querySelectorAll) {
-        times = document.querySelectorAll('.timeago');
+        times = document.querySelectorAll(".timeago");
     }
 
     for (var i = 0; i < times.length; i++) {
-        times[i].innerText = jQuery.timeago(times[i].getAttribute('datetime'));
+        times[i].innerText = jQuery.timeago(times[i].getAttribute("datetime"));
     }
 }
 
-addEvent("DOMContentLoaded", document, function(e) {
+addEvent("DOMContentLoaded", document, function (e) {
     pageLoaded = true;
     renderTimeagoElements();
 
@@ -859,17 +888,14 @@ addEvent("DOMContentLoaded", document, function(e) {
     }
 });
 
-addEvent("beforeunload", window, function(e) {
+addEvent("beforeunload", window, function (e) {
     isNavigatingAway = true;
 });
 
-addEvent("visibilitychange", document, function(e) {
-    if (!isLoggedIn())
-        return;
+addEvent("visibilitychange", document, function (e) {
+    if (!isLoggedIn()) return;
 
-    if (!pageLoaded)
-        return;
+    if (!pageLoaded) return;
 
-    if (document.visibilityState === "visible")
-        reloadCsrfToken();
+    if (document.visibilityState === "visible") reloadCsrfToken();
 });
