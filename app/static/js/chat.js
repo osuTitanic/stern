@@ -18,18 +18,19 @@ var pendingTarget = null;
 
 // Compiled regexes for message link parsing
 var osuLinkRegex = /\[((?:https?:\/\/)[^\s\]]+)\s+(.+?)\]/g;
-var urlRegex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g;
+var urlRegex =
+    /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g;
 
 // Disallowed channels to load message histories from
 var disallowedChannels = ["#multi_", "#spec_"];
 
 // Message type handlers, used for "msg" events
 var messageHandlers = {
-    "part": handleUserPart,
-    "quit": handleUserQuit,
-    "whois": handleWhoIsResponse,
-    "message": handleChannelMessage
-}
+    part: handleUserPart,
+    quit: handleUserQuit,
+    whois: handleWhoIsResponse,
+    message: handleChannelMessage,
+};
 
 function getQueryParameter(name) {
     var urlParams = new URLSearchParams(window.location.search);
@@ -42,7 +43,7 @@ function initializeSocket(username, password) {
         return;
     }
 
-    socket = io(loungeBackend, {transports: ['polling']});
+    socket = io(loungeBackend, { transports: ["polling"] });
 
     socket.onAny((event, ...args) => {
         console.debug("Incoming event:", event, args);
@@ -52,58 +53,62 @@ function initializeSocket(username, password) {
         console.debug("Outgoing event:", event, args);
     });
 
-    socket.on('connect', function() {
-        console.log('Connected to IRC backend');
-        updateStatusText('Connected to chat server.');
+    socket.on("connect", function () {
+        console.log("Connected to IRC backend");
+        updateStatusText("Connected to chat server.");
     });
 
-    socket.on('disconnect', function() {
-        console.log('Disconnected from IRC backend');
-        updateStatusText('Disconnected from chat server. Please refresh the page to reconnect!');
+    socket.on("disconnect", function () {
+        console.log("Disconnected from IRC backend");
+        updateStatusText(
+            "Disconnected from chat server. Please refresh the page to reconnect!",
+        );
         disableChatInput();
         connected = false;
     });
 
-    socket.on('init', function() {
+    socket.on("init", function () {
         channels = {};
         users = {};
     });
 
-    socket.on('configuration', function() {
-        socket.emit('network:new', {
+    socket.on("configuration", function () {
+        socket.emit("network:new", {
             nick: username,
             username: username,
             realname: username,
             leaveMessage: "Leaving...",
             join: "#osu",
-            password: password
+            password: password,
         });
     });
 
-    socket.on('msg', function(data) {
+    socket.on("msg", function (data) {
         if (data.msg.type in messageHandlers) {
             messageHandlers[data.msg.type](data);
         }
     });
 
-    socket.on('network:status', function(data) {
+    socket.on("network:status", function (data) {
         console.log("Network status:", data);
         if (!data.connected) {
-            updateStatusText('Disconnected from chat server. Please refresh the page to reconnect!');
+            updateStatusText(
+                "Disconnected from chat server. Please refresh the page to reconnect!",
+            );
             disableChatInput();
             connected = false;
         } else {
-            updateStatusText('Connecting...');
+            updateStatusText("Connecting...");
             connected = true;
         }
     });
 
-    socket.on('network', onNetworkConfiguration);
-    socket.on('join', onChannelJoin);
-    socket.on('part', onChannelPart);
-    socket.on('topic', onChannelTopic);
-    socket.on('users', onChannelUsers);
-    socket.on('names', onChannelNames);
+    socket.on("network", onNetworkConfiguration);
+    socket.on("join", onChannelJoin);
+    socket.on("part", onChannelPart);
+    socket.on("topic", onChannelTopic);
+    socket.on("users", onChannelUsers);
+    socket.on("names", onChannelNames);
 }
 
 function resetConnection() {
@@ -182,7 +187,10 @@ function onChannelTopic(data) {
 function onChannelUsers(data) {
     var channel = channels[data.chan];
     if (!channel) {
-        console.error("Received user listing request for unknown channel:", data.chan);
+        console.error(
+            "Received user listing request for unknown channel:",
+            data.chan,
+        );
         return;
     }
     socket.emit("names", { target: channel.id });
@@ -277,7 +285,7 @@ function handlePendingTarget() {
     joinChannel(target);
 
     // Wait a moment for the join to complete, then try to switch
-    setTimeout(function() {
+    setTimeout(function () {
         var joinedChannel = getChannelByName(target);
         if (joinedChannel) {
             switchToChannel(joinedChannel.id);
@@ -295,9 +303,9 @@ function handleWhoIsResponse(data) {
         return;
     }
 
-    // Parse user ID from ident
+    // Parse user ID from real name
     // "http://osu.titanic.sh/u/12345"
-    var identParts = whois.ident.split("/");
+    var identParts = whois.real_name.split("/");
     var userId = parseInt(identParts[identParts.length - 1]);
     users[userId] = whois;
     users[userId].id = userId;
@@ -350,7 +358,7 @@ function handleChannelMessage(data) {
             sender: sender,
             text: message,
             highlight: highlight,
-            time: time
+            time: time,
         });
     }
 
@@ -393,7 +401,9 @@ function sendWhoIsMany(usernames) {
 
 function sendChannelMessage(channel, message) {
     if (!channel || !message) {
-        console.error("Channel and message are required to send a channel message");
+        console.error(
+            "Channel and message are required to send a channel message",
+        );
         return;
     }
     sendInput(channel, message);
@@ -401,7 +411,9 @@ function sendChannelMessage(channel, message) {
 
 function sendDirectMessage(username, message) {
     if (!username || !message) {
-        console.error("Username and message are required to send a direct message");
+        console.error(
+            "Username and message are required to send a direct message",
+        );
         return;
     }
     var channel = getChannelByName(username);
@@ -458,11 +470,11 @@ function getUserById(userId) {
 }
 
 function getChannelHistoryKey(channel) {
-    return 'channel_' + channel.id;
+    return "channel_" + channel.id;
 }
 
 function getDMHistoryKey(userId) {
-    return 'dm_' + userId;
+    return "dm_" + userId;
 }
 
 function getHistoryMessages(key) {
@@ -486,7 +498,13 @@ function storeHistoryMessages(key, messages, append) {
     }
 }
 
-function fetchChannelMessageHistory(channel, offset, limit, onSuccess, onFailure) {
+function fetchChannelMessageHistory(
+    channel,
+    offset,
+    limit,
+    onSuccess,
+    onFailure,
+) {
     var url = "/chat/channels/" + encodeURIComponent(channel) + "/messages";
 
     if (offset) {
@@ -496,22 +514,34 @@ function fetchChannelMessageHistory(channel, offset, limit, onSuccess, onFailure
         url += (offset ? "&" : "?") + "limit=" + encodeURIComponent(limit);
     }
 
-    return performApiRequest("GET", url, null, function(xhr) {
-        var response = JSON.parse(xhr.responseText);
-        if (!response) {
-            console.error("Invalid response format:", response);
-            onFailure(xhr);
-            return;
-        }
+    return performApiRequest(
+        "GET",
+        url,
+        null,
+        function (xhr) {
+            var response = JSON.parse(xhr.responseText);
+            if (!response) {
+                console.error("Invalid response format:", response);
+                onFailure(xhr);
+                return;
+            }
 
-        onSuccess(response);
-    }, function(xhr) {
-        console.error("Failed to fetch channel message history:", xhr);
-        onFailure(xhr);
-    });
+            onSuccess(response);
+        },
+        function (xhr) {
+            console.error("Failed to fetch channel message history:", xhr);
+            onFailure(xhr);
+        },
+    );
 }
 
-function fetchDirectMessageHistory(userId, offset, limit, onSuccess, onFailure) {
+function fetchDirectMessageHistory(
+    userId,
+    offset,
+    limit,
+    onSuccess,
+    onFailure,
+) {
     var url = "/chat/dms/" + userId + "/messages";
 
     if (offset) {
@@ -521,134 +551,182 @@ function fetchDirectMessageHistory(userId, offset, limit, onSuccess, onFailure) 
         url += (offset ? "&" : "?") + "limit=" + encodeURIComponent(limit);
     }
 
-    return performApiRequest("GET", url, null, function(xhr) {
-        var response = JSON.parse(xhr.responseText);
-        if (!response) {
-            console.error("Invalid response format:", response);
-            onFailure(xhr);
-            return;
-        }
+    return performApiRequest(
+        "GET",
+        url,
+        null,
+        function (xhr) {
+            var response = JSON.parse(xhr.responseText);
+            if (!response) {
+                console.error("Invalid response format:", response);
+                onFailure(xhr);
+                return;
+            }
 
-        onSuccess(response);
-    }, function(xhr) {
-        console.error("Failed to fetch DM message history:", xhr);
-        onFailure(xhr);
-    });
+            onSuccess(response);
+        },
+        function (xhr) {
+            console.error("Failed to fetch DM message history:", xhr);
+            onFailure(xhr);
+        },
+    );
 }
 
 function fetchUserById(userId, onSuccess, onFailure) {
     var url = "/users/" + userId;
-    return performApiRequest("GET", url, null, function(xhr) {
-        var response = JSON.parse(xhr.responseText);
-        if (!response) {
-            console.error("Invalid response format:", response);
+    return performApiRequest(
+        "GET",
+        url,
+        null,
+        function (xhr) {
+            var response = JSON.parse(xhr.responseText);
+            if (!response) {
+                console.error("Invalid response format:", response);
+                onFailure(xhr);
+                return;
+            }
+            onSuccess(response);
+        },
+        function (xhr) {
+            console.error("Failed to fetch user by ID:", xhr);
             onFailure(xhr);
-            return;
-        }
-        onSuccess(response);
-    }, function(xhr) {
-        console.error("Failed to fetch user by ID:", xhr);
-        onFailure(xhr);
-    });
+        },
+    );
 }
 
 function fetchUserByName(username, onSuccess, onFailure) {
     var url = "/users/lookup/" + encodeURIComponent(username);
-    return performApiRequest("GET", url, null, function(xhr) {
-        var response = JSON.parse(xhr.responseText);
-        if (!response) {
-            console.error("Invalid response format:", response);
+    return performApiRequest(
+        "GET",
+        url,
+        null,
+        function (xhr) {
+            var response = JSON.parse(xhr.responseText);
+            if (!response) {
+                console.error("Invalid response format:", response);
+                onFailure(xhr);
+                return;
+            }
+            onSuccess(response);
+        },
+        function (xhr) {
+            console.error("Failed to fetch user by name:", xhr);
             onFailure(xhr);
-            return;
-        }
-        onSuccess(response);
-    }, function(xhr) {
-        console.error("Failed to fetch user by name:", xhr);
-        onFailure(xhr);
-    });
+        },
+    );
 }
 
 function fetchUserStatus(userId, onSuccess, onFailure) {
     var url = "/users/" + userId + "/status";
-    return performApiRequest("GET", url, null, function(xhr) {
-        var response = JSON.parse(xhr.responseText);
-        if (!response) {
-            console.error("Invalid response format:", response);
+    return performApiRequest(
+        "GET",
+        url,
+        null,
+        function (xhr) {
+            var response = JSON.parse(xhr.responseText);
+            if (!response) {
+                console.error("Invalid response format:", response);
+                onFailure(xhr);
+                return;
+            }
+            onSuccess(response);
+        },
+        function (xhr) {
+            console.error("Failed to fetch user status:", xhr);
             onFailure(xhr);
-            return;
-        }
-        onSuccess(response);
-    }, function(xhr) {
-        console.error("Failed to fetch user status:", xhr);
-        onFailure(xhr);
-    });
+        },
+    );
 }
 
 function fetchDirectMessageSelection(onSuccess, onFailure) {
     var url = "/chat/dms";
 
-    return performApiRequest("GET", url, null, function(xhr) {
-        var response = JSON.parse(xhr.responseText);
-        if (!response) {
-            console.error("Invalid response format:", response);
+    return performApiRequest(
+        "GET",
+        url,
+        null,
+        function (xhr) {
+            var response = JSON.parse(xhr.responseText);
+            if (!response) {
+                console.error("Invalid response format:", response);
+                onFailure(xhr);
+                return;
+            }
+            onSuccess(response);
+        },
+        function (xhr) {
+            console.error("Failed to fetch DM selection:", xhr);
             onFailure(xhr);
-            return;
-        }
-        onSuccess(response);
-    }, function(xhr) {
-        console.error("Failed to fetch DM selection:", xhr);
-        onFailure(xhr);
-    });
+        },
+    );
 }
 
 function postDirectMessage(userId, message, onSuccess, onFailure) {
     var url = "/chat/dms/" + userId + "/messages";
     var data = { message: message };
 
-    return performApiRequest("POST", url, data, function(xhr) {
-        var response = JSON.parse(xhr.responseText);
-        if (!response) {
-            console.error("Invalid response format:", response);
+    return performApiRequest(
+        "POST",
+        url,
+        data,
+        function (xhr) {
+            var response = JSON.parse(xhr.responseText);
+            if (!response) {
+                console.error("Invalid response format:", response);
+                onFailure(xhr);
+                return;
+            }
+            onSuccess(response);
+        },
+        function (xhr) {
+            console.error("Failed to post direct message:", xhr);
             onFailure(xhr);
-            return;
-        }
-        onSuccess(response);
-    }, function(xhr) {
-        console.error("Failed to post direct message:", xhr);
-        onFailure(xhr);
-    });
+        },
+    );
 }
 
 function markDmAsRead(targetId, messageId, onSuccess, onFailure) {
     var url = "/chat/dms/" + targetId + "/messages/" + messageId + "/read";
-    return performApiRequest("POST", url, null, function(xhr) {
-        var response = JSON.parse(xhr.responseText);
-        if (!response) {
-            console.error("Invalid response format:", response);
+    return performApiRequest(
+        "POST",
+        url,
+        null,
+        function (xhr) {
+            var response = JSON.parse(xhr.responseText);
+            if (!response) {
+                console.error("Invalid response format:", response);
+                onFailure(xhr);
+                return;
+            }
+            onSuccess(response);
+        },
+        function (xhr) {
+            console.error("Failed to mark DM as read:", xhr);
             onFailure(xhr);
-            return;
-        }
-        onSuccess(response);
-    }, function(xhr) {
-        console.error("Failed to mark DM as read:", xhr);
-        onFailure(xhr);
-    });
+        },
+    );
 }
 
 function markAllDmsAsRead(targetId, onSuccess, onFailure) {
     var url = "/chat/dms/" + targetId + "/messages/read";
-    return performApiRequest("POST", url, null, function(xhr) {
-        var response = JSON.parse(xhr.responseText);
-        if (!response) {
-            console.error("Invalid response format:", response);
+    return performApiRequest(
+        "POST",
+        url,
+        null,
+        function (xhr) {
+            var response = JSON.parse(xhr.responseText);
+            if (!response) {
+                console.error("Invalid response format:", response);
+                onFailure(xhr);
+                return;
+            }
+            onSuccess(response);
+        },
+        function (xhr) {
+            console.error("Failed to mark all DMs as read:", xhr);
             onFailure(xhr);
-            return;
-        }
-        onSuccess(response);
-    }, function(xhr) {
-        console.error("Failed to mark all DMs as read:", xhr);
-        onFailure(xhr);
-    });
+        },
+    );
 }
 
 function markChannelAsUnread(channelId) {
@@ -657,7 +735,9 @@ function markChannelAsUnread(channelId) {
         return;
     }
 
-    var channelElement = channelContainer.querySelector('[data-channel-id="' + channelId + '"]');
+    var channelElement = channelContainer.querySelector(
+        '[data-channel-id="' + channelId + '"]',
+    );
     if (channelElement && !channelElement.classList.contains("active")) {
         channelElement.classList.add("unread");
         channelElement.style.fontWeight = "bold";
@@ -670,7 +750,9 @@ function markDmAsUnread(userId) {
         return;
     }
 
-    var dmElement = dmContainer.querySelector('[data-user-id="' + userId + '"]');
+    var dmElement = dmContainer.querySelector(
+        '[data-user-id="' + userId + '"]',
+    );
     if (dmElement && !dmElement.classList.contains("active")) {
         dmElement.classList.add("unread");
         dmElement.style.fontWeight = "bold";
@@ -683,7 +765,9 @@ function clearChannelUnread(channelId) {
         return;
     }
 
-    var channelElement = channelContainer.querySelector('[data-channel-id="' + channelId + '"]');
+    var channelElement = channelContainer.querySelector(
+        '[data-channel-id="' + channelId + '"]',
+    );
     if (channelElement) {
         channelElement.classList.remove("unread");
         channelElement.style.fontWeight = "normal";
@@ -696,7 +780,9 @@ function clearDMUnread(userId) {
         return;
     }
 
-    var dmElement = dmContainer.querySelector('[data-user-id="' + userId + '"]');
+    var dmElement = dmContainer.querySelector(
+        '[data-user-id="' + userId + '"]',
+    );
     if (dmElement) {
         dmElement.classList.remove("unread");
         dmElement.style.fontWeight = "normal";
@@ -719,22 +805,21 @@ function populateChannels() {
         channelElement.className = "channel-entry";
         channelElement.dataset.channelId = id;
         channelElement.textContent = channel.name;
-        channelElement.onclick = function() {
+        channelElement.onclick = function () {
             switchToChannel(this.dataset.channelId);
         };
 
         var closeButton = document.createElement("span");
         closeButton.className = "close-channel";
         closeButton.textContent = "x";
-        closeButton.onclick = function(e) {
+        closeButton.onclick = function (e) {
             e.stopPropagation();
             var channelId = this.parentElement.dataset.channelId;
             var channel = getChannelById(channelId);
             if (channel) leaveChannel(channel.name);
         };
 
-        if (channel.name !== "#osu")
-        {
+        if (channel.name !== "#osu") {
             // Only add close button for non-forced channels
             channelElement.appendChild(closeButton);
         }
@@ -751,51 +836,59 @@ function populateChannels() {
 function populateDMs() {
     var dmContainer = document.getElementById("dm-container");
 
-    fetchDirectMessageSelection(function(dms) {
-        if (!dms || dms.length === 0) {
-            // No DMs available
-            return;
-        }
-
-        // Nuke everything first
-        while (dmContainer.firstChild) {
-            dmContainer.removeChild(dmContainer.firstChild);
-        }
-
-        for (var i = 0; i < dms.length; i++) {
-            var dm = dms[i];
-            var dmElement = document.createElement("div");
-            dmElement.className = "dm-entry";
-            dmElement.id = "dm-" + dm.user.id;
-            dmElement.textContent = dm.user.name;
-            dmElement.dataset.name = dm.user.name;
-            dmElement.dataset.userId = dm.user.id;
-            dmElement.dataset.isOnline = getUserById(dm.user.id) ? "true" : "false";
-            dmElement.addEventListener("click", function() {
-                switchToDM(parseInt(this.dataset.userId));
-            });
-
-            // Mark active DM
-            if (activeDM && activeDM === dm.user.id) {
-                dmElement.classList.add("active");
+    fetchDirectMessageSelection(
+        function (dms) {
+            if (!dms || dms.length === 0) {
+                // No DMs available
+                return;
             }
 
-            dmContainer.appendChild(dmElement);
-
-            if (!dm.last_message) {
-                continue;
+            // Nuke everything first
+            while (dmContainer.firstChild) {
+                dmContainer.removeChild(dmContainer.firstChild);
             }
 
-            // Mark as unread depending on last message's state
-            if (dm.last_message.read == false && dm.last_message.sender_id == dm.user.id) {
-                console.log("Unread conversation with", dm.user.name);
-                markDmAsUnread(dm.user.id);
+            for (var i = 0; i < dms.length; i++) {
+                var dm = dms[i];
+                var dmElement = document.createElement("div");
+                dmElement.className = "dm-entry";
+                dmElement.id = "dm-" + dm.user.id;
+                dmElement.textContent = dm.user.name;
+                dmElement.dataset.name = dm.user.name;
+                dmElement.dataset.userId = dm.user.id;
+                dmElement.dataset.isOnline = getUserById(dm.user.id)
+                    ? "true"
+                    : "false";
+                dmElement.addEventListener("click", function () {
+                    switchToDM(parseInt(this.dataset.userId));
+                });
+
+                // Mark active DM
+                if (activeDM && activeDM === dm.user.id) {
+                    dmElement.classList.add("active");
+                }
+
+                dmContainer.appendChild(dmElement);
+
+                if (!dm.last_message) {
+                    continue;
+                }
+
+                // Mark as unread depending on last message's state
+                if (
+                    dm.last_message.read == false &&
+                    dm.last_message.sender_id == dm.user.id
+                ) {
+                    console.log("Unread conversation with", dm.user.name);
+                    markDmAsUnread(dm.user.id);
+                }
             }
-        }
-    }, function(xhr) {
-        updateStatusText("Failed to load DMs.");
-        disableChatInput();
-    });
+        },
+        function (xhr) {
+            updateStatusText("Failed to load DMs.");
+            disableChatInput();
+        },
+    );
 }
 
 function updateActiveChannel() {
@@ -805,7 +898,10 @@ function updateActiveChannel() {
         var channelElement = channelContainer.children[i];
         channelElement.classList.remove("active");
 
-        if (activeChannel && parseInt(channelElement.dataset.channelId) === activeChannel.id) {
+        if (
+            activeChannel &&
+            parseInt(channelElement.dataset.channelId) === activeChannel.id
+        ) {
             channelElement.classList.add("active");
         }
     }
@@ -859,26 +955,30 @@ function switchToDM(userId) {
     updateActiveChannel();
     updateActiveDM();
 
-    fetchUserById(userId, function(user) {
-        updateChatTitle("Direct Message with " + user.name);
+    fetchUserById(
+        userId,
+        function (user) {
+            updateChatTitle("Direct Message with " + user.name);
 
-        // Clear and reload chat log
-        clearChatLog();
-        loadDMHistory(user);
-        enableChatInput();
-        markAllDmsAsRead(userId);
-    }, function(xhr) {
-        console.error("Failed to fetch user for DM:", xhr);
-        updateStatusText("Failed to load DM");
-    });
+            // Clear and reload chat log
+            clearChatLog();
+            loadDMHistory(user);
+            enableChatInput();
+            markAllDmsAsRead(userId);
+        },
+        function (xhr) {
+            console.error("Failed to fetch user for DM:", xhr);
+            updateStatusText("Failed to load DM");
+        },
+    );
 }
 
 function loadChannelHistory(channel) {
-    if (disallowedChannels.some(prefix => channel.name.startsWith(prefix)))
+    if (disallowedChannels.some((prefix) => channel.name.startsWith(prefix)))
         return;
 
     var historyKey = getChannelHistoryKey(channel);
-    
+
     // Check if we have cached messages
     if (hasHistoryCache(historyKey)) {
         console.debug("Loading messages from cache for", channel.name);
@@ -900,46 +1000,52 @@ function loadChannelHistory(channel) {
     isLoadingHistory = true;
     loadingHistoryFor = historyKey;
 
-    fetchChannelMessageHistory(channel.name, 0, 50, function(messages) {
-        isLoadingHistory = false;
-        
-        // Check if we're still viewing this channel
-        if (loadingHistoryFor !== historyKey) {
-            console.debug("Channel changed during load, ignoring results");
-            return;
-        }
-        loadingHistoryFor = null;
+    fetchChannelMessageHistory(
+        channel.name,
+        0,
+        50,
+        function (messages) {
+            isLoadingHistory = false;
 
-        if (!messages || messages.length === 0) {
-            updateStatusText("No messages in this channel yet.");
-            hasMoreMessages[historyKey] = false;
-            return;
-        }
+            // Check if we're still viewing this channel
+            if (loadingHistoryFor !== historyKey) {
+                console.debug("Channel changed during load, ignoring results");
+                return;
+            }
+            loadingHistoryFor = null;
 
-        // Store messages in cache
-        var historicalMessages = [];
-        for (var i = messages.length - 1; i >= 0; i--) {
-            var msg = messages[i];
-            historicalMessages.push({
-                sender: { nick: msg.sender.name, id: msg.sender.id },
-                text: msg.message,
-                highlight: false,
-                time: new Date(msg.time)
-            });
-            displayHistoricalMessage(msg);
-        }
-        
-        storeHistoryMessages(historyKey, historicalMessages, false);
-        hasMoreMessages[historyKey] = messages.length >= 50;
+            if (!messages || messages.length === 0) {
+                updateStatusText("No messages in this channel yet.");
+                hasMoreMessages[historyKey] = false;
+                return;
+            }
 
-        updateStatusText("Type a message...");
-        scrollChatToBottom();
-    }, function(xhr) {
-        isLoadingHistory = false;
-        loadingHistoryFor = null;
-        console.error("Failed to load channel history:", xhr);
-        updateStatusText("Failed to load message history.");
-    });
+            // Store messages in cache
+            var historicalMessages = [];
+            for (var i = messages.length - 1; i >= 0; i--) {
+                var msg = messages[i];
+                historicalMessages.push({
+                    sender: { nick: msg.sender.name, id: msg.sender.id },
+                    text: msg.message,
+                    highlight: false,
+                    time: new Date(msg.time),
+                });
+                displayHistoricalMessage(msg);
+            }
+
+            storeHistoryMessages(historyKey, historicalMessages, false);
+            hasMoreMessages[historyKey] = messages.length >= 50;
+
+            updateStatusText("Type a message...");
+            scrollChatToBottom();
+        },
+        function (xhr) {
+            isLoadingHistory = false;
+            loadingHistoryFor = null;
+            console.error("Failed to load channel history:", xhr);
+            updateStatusText("Failed to load message history.");
+        },
+    );
 }
 
 function loadDMHistory(user) {
@@ -966,51 +1072,57 @@ function loadDMHistory(user) {
     isLoadingHistory = true;
     loadingHistoryFor = historyKey;
 
-    fetchDirectMessageHistory(user.id, 0, 50, function(messages) {
-        isLoadingHistory = false;
+    fetchDirectMessageHistory(
+        user.id,
+        0,
+        50,
+        function (messages) {
+            isLoadingHistory = false;
 
-        // Check if we're still viewing this DM
-        if (loadingHistoryFor !== historyKey) {
-            console.debug("DM changed during load, ignoring results");
-            return;
-        }
-        loadingHistoryFor = null;
-
-        if (!messages || messages.length === 0) {
-            updateStatusText("No messages yet. Start a conversation!");
-            hasMoreMessages[historyKey] = false;
-            return;
-        }
-
-        // Store messages in cache
-        var historicalMessages = [];
-        for (var i = messages.length - 1; i >= 0; i--) {
-            var msg = messages[i];
-            var nickname = currentUsername;
-            if (msg.sender_id === user.id) {
-                nickname = user.name;
+            // Check if we're still viewing this DM
+            if (loadingHistoryFor !== historyKey) {
+                console.debug("DM changed during load, ignoring results");
+                return;
             }
-            
-            historicalMessages.push({
-                sender: { nick: nickname, id: msg.sender_id },
-                text: msg.message,
-                highlight: false,
-                time: new Date(msg.time)
-            });
-            displayHistoricalDirectMessage(msg, user);
-        }
+            loadingHistoryFor = null;
 
-        storeHistoryMessages(historyKey, historicalMessages, false);
-        hasMoreMessages[historyKey] = messages.length >= 50;
+            if (!messages || messages.length === 0) {
+                updateStatusText("No messages yet. Start a conversation!");
+                hasMoreMessages[historyKey] = false;
+                return;
+            }
 
-        updateStatusText("Type a message...");
-        scrollChatToBottom();
-    }, function(xhr) {
-        isLoadingHistory = false;
-        loadingHistoryFor = null;
-        console.error("Failed to load DM history:", xhr);
-        updateStatusText("Failed to load message history.");
-    });
+            // Store messages in cache
+            var historicalMessages = [];
+            for (var i = messages.length - 1; i >= 0; i--) {
+                var msg = messages[i];
+                var nickname = currentUsername;
+                if (msg.sender_id === user.id) {
+                    nickname = user.name;
+                }
+
+                historicalMessages.push({
+                    sender: { nick: nickname, id: msg.sender_id },
+                    text: msg.message,
+                    highlight: false,
+                    time: new Date(msg.time),
+                });
+                displayHistoricalDirectMessage(msg, user);
+            }
+
+            storeHistoryMessages(historyKey, historicalMessages, false);
+            hasMoreMessages[historyKey] = messages.length >= 50;
+
+            updateStatusText("Type a message...");
+            scrollChatToBottom();
+        },
+        function (xhr) {
+            isLoadingHistory = false;
+            loadingHistoryFor = null;
+            console.error("Failed to load DM history:", xhr);
+            updateStatusText("Failed to load message history.");
+        },
+    );
 }
 
 function createMessageElement(sender, text, highlight, time) {
@@ -1021,7 +1133,9 @@ function createMessageElement(sender, text, highlight, time) {
         messageElement.classList.add("highlighted");
     }
 
-    var timestamp = time ? formatMessageTime(time) : formatMessageTime(new Date());
+    var timestamp = time
+        ? formatMessageTime(time)
+        : formatMessageTime(new Date());
     var senderName = sender.nick || sender.name || "Unknown";
     var userId = sender.id;
 
@@ -1057,7 +1171,7 @@ function createMessageElement(sender, text, highlight, time) {
 
     for (var i = 0; i < parsedParts.length; i++) {
         var part = parsedParts[i];
-        if (part.type === 'link') {
+        if (part.type === "link") {
             var linkElement = document.createElement("a");
             linkElement.href = part.url;
             linkElement.textContent = part.text;
@@ -1098,9 +1212,14 @@ function displayMessage(sender, text, highlight, time) {
 
     // Split message by newlines and display
     // each line as a separate message
-    var lines = text.split('\n');
+    var lines = text.split("\n");
     for (var i = 0; i < lines.length; i++) {
-        var messageElement = createMessageElement(sender, lines[i], highlight, time);
+        var messageElement = createMessageElement(
+            sender,
+            lines[i],
+            highlight,
+            time,
+        );
         chatLog.appendChild(messageElement);
     }
 
@@ -1121,11 +1240,11 @@ function hashCode(str) {
 
 function parseMessageLinks(text) {
     // First parse osu! links [<url> <text>]
-    var parts = parseLinksWithRegex(text, osuLinkRegex, function(match) {
+    var parts = parseLinksWithRegex(text, osuLinkRegex, function (match) {
         return {
-            type: 'link',
+            type: "link",
             url: match[1],
-            text: match[2]
+            text: match[2],
         };
     });
 
@@ -1133,14 +1252,18 @@ function parseMessageLinks(text) {
     var finalParts = [];
 
     for (var i = 0; i < parts.length; i++) {
-        if (parts[i].type === 'text') {
-            var urlParts = parseLinksWithRegex(parts[i].content, urlRegex, function(match) {
-                return {
-                    type: 'link',
-                    url: match[0],
-                    text: match[0]
-                };
-            });
+        if (parts[i].type === "text") {
+            var urlParts = parseLinksWithRegex(
+                parts[i].content,
+                urlRegex,
+                function (match) {
+                    return {
+                        type: "link",
+                        url: match[0],
+                        text: match[0],
+                    };
+                },
+            );
             finalParts = finalParts.concat(urlParts);
         } else {
             finalParts.push(parts[i]);
@@ -1161,8 +1284,8 @@ function parseLinksWithRegex(text, regex, linkFactory) {
         // Add text before the match
         if (match.index > lastIndex) {
             parts.push({
-                type: 'text',
-                content: text.substring(lastIndex, match.index)
+                type: "text",
+                content: text.substring(lastIndex, match.index),
             });
         }
 
@@ -1174,16 +1297,16 @@ function parseLinksWithRegex(text, regex, linkFactory) {
     // Add remaining text
     if (lastIndex < text.length) {
         parts.push({
-            type: 'text',
-            content: text.substring(lastIndex)
+            type: "text",
+            content: text.substring(lastIndex),
         });
     }
 
     // If no matches, return original text
     if (parts.length === 0) {
         parts.push({
-            type: 'text',
-            content: text
+            type: "text",
+            content: text,
         });
     }
 
@@ -1193,7 +1316,9 @@ function parseLinksWithRegex(text, regex, linkFactory) {
 function displayHistoricalMessage(msg) {
     displayMessage(
         { nick: msg.sender.name, id: msg.sender.id },
-        msg.message, false, new Date(msg.time)
+        msg.message,
+        false,
+        new Date(msg.time),
     );
 }
 
@@ -1205,14 +1330,16 @@ function displayHistoricalDirectMessage(msg, user) {
 
     displayMessage(
         { nick: nickname, id: msg.sender_id },
-        msg.message, false, new Date(msg.time)
+        msg.message,
+        false,
+        new Date(msg.time),
     );
 }
 
 function formatMessageTime(time) {
     var date = time instanceof Date ? time : new Date(time);
-    var hours = date.getHours().toString().padStart(2, '0');
-    var minutes = date.getMinutes().toString().padStart(2, '0');
+    var hours = date.getHours().toString().padStart(2, "0");
+    var minutes = date.getMinutes().toString().padStart(2, "0");
     return hours + ":" + minutes;
 }
 
@@ -1252,91 +1379,19 @@ function loadMoreChannelMessages(channel) {
 
     isLoadingHistory = true;
     updateStatusText("Loading more messages...");
-    
-    fetchChannelMessageHistory(channel.name, offset, 50, function(messages) {
-        isLoadingHistory = false;
-        
-        // Verify we're still on the same channel
-        if (!activeChannel || activeChannel.id !== channel.id) {
-            console.debug("Channel changed during loadMore, ignoring results");
-            return;
-        }
 
-        if (!messages || messages.length === 0) {
-            hasMoreMessages[historyKey] = false;
-            updateStatusText("Type a message...");
-            return;
-        }
-
-        var chatLog = document.querySelector(".chat-log");
-        var scrollHeightBefore = chatLog.scrollHeight;
-        var scrollTopBefore = chatLog.scrollTop;
-
-        // Store and display older messages
-        var olderMessages = [];
-
-        for (var i = messages.length - 1; i >= 0; i--) {
-            var msg = messages[i];
-            olderMessages.push({
-                sender: { nick: msg.sender.name, id: msg.sender.id },
-                text: msg.message,
-                highlight: false,
-                time: new Date(msg.time)
-            });
-
-            // Insert at the beginning of the chat log
-            var messageElement = createMessageElement(
-                { nick: msg.sender.name, id: msg.sender.id },
-                msg.message,
-                false,
-                new Date(msg.time)
-            );
-            if (chatLog.firstChild) {
-                chatLog.insertBefore(messageElement, chatLog.firstChild);
-            } else {
-                chatLog.appendChild(messageElement);
-            }
-        }
-
-        storeHistoryMessages(historyKey, olderMessages, true);
-        hasMoreMessages[historyKey] = messages.length >= 50;
-
-        // Maintain scroll position
-        chatLog.scrollTop = scrollTopBefore + (chatLog.scrollHeight - scrollHeightBefore);
-
-        updateStatusText("Type a message...");
-    }, function(xhr) {
-        isLoadingHistory = false;
-        console.error("Failed to load more channel messages:", xhr);
-        updateStatusText("Failed to load more messages.");
-    });
-}
-
-function loadMoreDMMessages(userId) {
-    if (isLoadingHistory) {
-        console.debug("Already loading history, ignoring request");
-        return;
-    }
-    
-    var historyKey = getDMHistoryKey(userId);
-    if (hasMoreMessages[historyKey] === false) {
-        console.debug("No more messages to load for DM");
-        return;
-    }
-    
-    var currentMessages = getHistoryMessages(historyKey);
-    var offset = currentMessages.length;
-    
-    isLoadingHistory = true;
-    updateStatusText("Loading more messages...");
-    
-    fetchUserById(userId, function(user) {
-        fetchDirectMessageHistory(userId, offset, 50, function(messages) {
+    fetchChannelMessageHistory(
+        channel.name,
+        offset,
+        50,
+        function (messages) {
             isLoadingHistory = false;
 
-            // Verify we're still on the same DM
-            if (activeDM !== userId) {
-                console.debug("DM changed during loadMore, ignoring results");
+            // Verify we're still on the same channel
+            if (!activeChannel || activeChannel.id !== channel.id) {
+                console.debug(
+                    "Channel changed during loadMore, ignoring results",
+                );
                 return;
             }
 
@@ -1352,26 +1407,22 @@ function loadMoreDMMessages(userId) {
 
             // Store and display older messages
             var olderMessages = [];
+
             for (var i = messages.length - 1; i >= 0; i--) {
                 var msg = messages[i];
-                var nickname = currentUsername;
-                if (msg.sender_id === user.id) {
-                    nickname = user.name;
-                }
-
                 olderMessages.push({
-                    sender: { nick: nickname, id: msg.sender_id },
+                    sender: { nick: msg.sender.name, id: msg.sender.id },
                     text: msg.message,
                     highlight: false,
-                    time: new Date(msg.time)
+                    time: new Date(msg.time),
                 });
 
                 // Insert at the beginning of the chat log
                 var messageElement = createMessageElement(
-                    { nick: nickname, id: msg.sender_id },
+                    { nick: msg.sender.name, id: msg.sender.id },
                     msg.message,
                     false,
-                    new Date(msg.time)
+                    new Date(msg.time),
                 );
                 if (chatLog.firstChild) {
                     chatLog.insertBefore(messageElement, chatLog.firstChild);
@@ -1384,18 +1435,120 @@ function loadMoreDMMessages(userId) {
             hasMoreMessages[historyKey] = messages.length >= 50;
 
             // Maintain scroll position
-            chatLog.scrollTop = scrollTopBefore + (chatLog.scrollHeight - scrollHeightBefore);
+            chatLog.scrollTop =
+                scrollTopBefore + (chatLog.scrollHeight - scrollHeightBefore);
 
             updateStatusText("Type a message...");
-        }, function(xhr) {
+        },
+        function (xhr) {
             isLoadingHistory = false;
-            console.error("Failed to load more DM messages:", xhr);
+            console.error("Failed to load more channel messages:", xhr);
             updateStatusText("Failed to load more messages.");
-        });
-    }, function(xhr) {
-        isLoadingHistory = false;
-        console.error("Failed to fetch user for DM:", xhr);
-    });
+        },
+    );
+}
+
+function loadMoreDMMessages(userId) {
+    if (isLoadingHistory) {
+        console.debug("Already loading history, ignoring request");
+        return;
+    }
+
+    var historyKey = getDMHistoryKey(userId);
+    if (hasMoreMessages[historyKey] === false) {
+        console.debug("No more messages to load for DM");
+        return;
+    }
+
+    var currentMessages = getHistoryMessages(historyKey);
+    var offset = currentMessages.length;
+
+    isLoadingHistory = true;
+    updateStatusText("Loading more messages...");
+
+    fetchUserById(
+        userId,
+        function (user) {
+            fetchDirectMessageHistory(
+                userId,
+                offset,
+                50,
+                function (messages) {
+                    isLoadingHistory = false;
+
+                    // Verify we're still on the same DM
+                    if (activeDM !== userId) {
+                        console.debug(
+                            "DM changed during loadMore, ignoring results",
+                        );
+                        return;
+                    }
+
+                    if (!messages || messages.length === 0) {
+                        hasMoreMessages[historyKey] = false;
+                        updateStatusText("Type a message...");
+                        return;
+                    }
+
+                    var chatLog = document.querySelector(".chat-log");
+                    var scrollHeightBefore = chatLog.scrollHeight;
+                    var scrollTopBefore = chatLog.scrollTop;
+
+                    // Store and display older messages
+                    var olderMessages = [];
+                    for (var i = messages.length - 1; i >= 0; i--) {
+                        var msg = messages[i];
+                        var nickname = currentUsername;
+                        if (msg.sender_id === user.id) {
+                            nickname = user.name;
+                        }
+
+                        olderMessages.push({
+                            sender: { nick: nickname, id: msg.sender_id },
+                            text: msg.message,
+                            highlight: false,
+                            time: new Date(msg.time),
+                        });
+
+                        // Insert at the beginning of the chat log
+                        var messageElement = createMessageElement(
+                            { nick: nickname, id: msg.sender_id },
+                            msg.message,
+                            false,
+                            new Date(msg.time),
+                        );
+                        if (chatLog.firstChild) {
+                            chatLog.insertBefore(
+                                messageElement,
+                                chatLog.firstChild,
+                            );
+                        } else {
+                            chatLog.appendChild(messageElement);
+                        }
+                    }
+
+                    storeHistoryMessages(historyKey, olderMessages, true);
+                    hasMoreMessages[historyKey] = messages.length >= 50;
+
+                    // Maintain scroll position
+                    chatLog.scrollTop =
+                        scrollTopBefore +
+                        (chatLog.scrollHeight - scrollHeightBefore);
+
+                    updateStatusText("Type a message...");
+                },
+                function (xhr) {
+                    isLoadingHistory = false;
+                    console.error("Failed to load more DM messages:", xhr);
+                    updateStatusText("Failed to load more messages.");
+                },
+            );
+        },
+        function (xhr) {
+            isLoadingHistory = false;
+            console.error("Failed to fetch user for DM:", xhr);
+        },
+    );
 }
 
 function scrollChatToBottom() {
@@ -1420,8 +1573,7 @@ function updateStatusText(text) {
 }
 
 function enableChatInput() {
-    if (!connected)
-        return;
+    if (!connected) return;
 
     var inputField = document.querySelector(".chat-input .chat-message");
     var sendButton = document.querySelector(".chat-input .chat-send");
@@ -1439,11 +1591,11 @@ function enableChatInput() {
 function disableChatInput() {
     var inputField = document.querySelector(".chat-input .chat-message");
     var sendButton = document.querySelector(".chat-input .chat-send");
-    
+
     if (inputField) {
         inputField.disabled = true;
     }
-    
+
     if (sendButton) {
         sendButton.disabled = true;
     }
@@ -1479,24 +1631,31 @@ function sendCurrentMessage() {
             sender: { nick: currentUsername, id: currentUser },
             text: message,
             highlight: false,
-            time: time
+            time: time,
         });
 
         displayMessage(
             { nick: currentUsername, id: currentUser },
-            message, false, time
+            message,
+            false,
+            time,
         );
         inputField.value = "";
 
         var userObject = getUserById(activeDM);
         if (!userObject) {
             // User is most likely offline
-            postDirectMessage(activeDM, message, function(response) {
-                console.log("DM sent successfully:", response);
-            }, function(xhr) {
-                console.error("Failed to send DM:", xhr);
-                updateStatusText("Failed to send message");
-            });
+            postDirectMessage(
+                activeDM,
+                message,
+                function (response) {
+                    console.log("DM sent successfully:", response);
+                },
+                function (xhr) {
+                    console.error("Failed to send DM:", xhr);
+                    updateStatusText("Failed to send message");
+                },
+            );
             return;
         }
 
@@ -1523,7 +1682,7 @@ function initializeChatHandlers() {
     }
 
     if (chatInput) {
-        chatInput.addEventListener("keypress", function(event) {
+        chatInput.addEventListener("keypress", function (event) {
             if (event.key === "Enter") {
                 sendCurrentMessage();
             }
@@ -1541,7 +1700,7 @@ function initializeChatHandlers() {
     // Add listener for enter key on channel join input
     var channelJoinInput = document.getElementById("channel-join-input");
     if (channelJoinInput) {
-        channelJoinInput.addEventListener("keyup", function(event) {
+        channelJoinInput.addEventListener("keyup", function (event) {
             if (event.key === "Enter") {
                 handleJoinChannel();
             }
@@ -1551,7 +1710,7 @@ function initializeChatHandlers() {
     // Add listener for enter key on dm join input
     var dmJoinInput = document.getElementById("dm-join-input");
     if (dmJoinInput) {
-        dmJoinInput.addEventListener("keyup", function(event) {
+        dmJoinInput.addEventListener("keyup", function (event) {
             if (event.key === "Enter") {
                 handleStartDMFromInput();
             }
@@ -1560,7 +1719,7 @@ function initializeChatHandlers() {
 
     // Add scroll listener for infinite scroll
     if (chatLog) {
-        chatLog.addEventListener("scroll", function() {
+        chatLog.addEventListener("scroll", function () {
             // Check if scrolled to near the top (within 50px)
             if (chatLog.scrollTop < 50 && !isLoadingHistory) {
                 if (activeChannel) {
@@ -1608,17 +1767,20 @@ function handleStartDMByName(username) {
         return;
     }
 
-    fetchUserByName(username,
-        function(user) {
+    fetchUserByName(
+        username,
+        function (user) {
             // Add user to DM list if not already present
             var dmContainer = document.getElementById("dm-container");
-            var existing = dmContainer.querySelector(`.dm-entry[data-user-id="${user.id}"]`);
+            var existing = dmContainer.querySelector(
+                `.dm-entry[data-user-id="${user.id}"]`,
+            );
             if (!existing) {
                 var dmEntry = document.createElement("div");
                 dmEntry.className = "dm-entry";
                 dmEntry.setAttribute("data-user-id", user.id);
                 dmEntry.textContent = user.name;
-                dmEntry.onclick = function() {
+                dmEntry.onclick = function () {
                     switchToDM(user.id);
                 };
                 dmContainer.appendChild(dmEntry);
@@ -1627,10 +1789,10 @@ function handleStartDMByName(username) {
             // User found, switch to DM
             switchToDM(user.id);
         },
-        function(xhr) {
+        function (xhr) {
             console.error("User '" + username + "' was not found.");
             alert("User '" + username + "' was not found.");
-        }
+        },
     );
 }
 
@@ -1640,17 +1802,20 @@ function handleStartDMById(userId) {
         return;
     }
 
-    fetchUserById(userId,
-        function(user) {
+    fetchUserById(
+        userId,
+        function (user) {
             // Add user to DM list if not already present
             var dmContainer = document.getElementById("dm-container");
-            var existing = dmContainer.querySelector(`.dm-entry[data-user-id="${user.id}"]`);
+            var existing = dmContainer.querySelector(
+                `.dm-entry[data-user-id="${user.id}"]`,
+            );
             if (!existing) {
                 var dmEntry = document.createElement("div");
                 dmEntry.className = "dm-entry";
                 dmEntry.setAttribute("data-user-id", user.id);
                 dmEntry.textContent = user.name;
-                dmEntry.onclick = function() {
+                dmEntry.onclick = function () {
                     switchToDM(user.id);
                 };
                 dmContainer.appendChild(dmEntry);
@@ -1659,10 +1824,10 @@ function handleStartDMById(userId) {
             // User found, switch to DM
             switchToDM(user.id);
         },
-        function(xhr) {
+        function (xhr) {
             console.error("User '" + userId + "' was not found.");
             alert("User '" + userId + "' was not found.");
-        }
+        },
     );
 }
 
@@ -1679,8 +1844,7 @@ function handleStartDMFromInput() {
 
 function onIrcTokenResponse(xhr) {
     var response = JSON.parse(xhr.responseText);
-    if (!response || !response.token)
-    {
+    if (!response || !response.token) {
         console.error("Invalid response format or missing token:", response);
         alert("Failed to retrieve your IRC password. Please try again later!");
         return;
@@ -1693,9 +1857,8 @@ function onIrcTokenFailure(xhr) {
     alert("Failed to retrieve your IRC password. Please try again later!");
 }
 
-addEvent("DOMContentLoaded", document, function() {
-    if (!isLoggedIn())
-        return;
+addEvent("DOMContentLoaded", document, function () {
+    if (!isLoggedIn()) return;
 
     // Replace " " with "_" for IRC compatibility
     currentUsername = currentUsername.replace(/ /g, "_");
