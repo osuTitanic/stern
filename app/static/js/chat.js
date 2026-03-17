@@ -525,8 +525,7 @@ function fetchChannelMessageHistory(
                 onFailure(xhr);
                 return;
             }
-
-            onSuccess(response);
+            if (onSuccess) onSuccess(response);
         },
         function (xhr) {
             console.error("Failed to fetch channel message history:", xhr);
@@ -562,8 +561,7 @@ function fetchDirectMessageHistory(
                 onFailure(xhr);
                 return;
             }
-
-            onSuccess(response);
+            if (onSuccess) onSuccess(response);
         },
         function (xhr) {
             console.error("Failed to fetch DM message history:", xhr);
@@ -585,7 +583,7 @@ function fetchUserById(userId, onSuccess, onFailure) {
                 onFailure(xhr);
                 return;
             }
-            onSuccess(response);
+            if (onSuccess) onSuccess(response);
         },
         function (xhr) {
             console.error("Failed to fetch user by ID:", xhr);
@@ -607,7 +605,7 @@ function fetchUserByName(username, onSuccess, onFailure) {
                 onFailure(xhr);
                 return;
             }
-            onSuccess(response);
+            if (onSuccess) onSuccess(response);
         },
         function (xhr) {
             console.error("Failed to fetch user by name:", xhr);
@@ -629,7 +627,7 @@ function fetchUserStatus(userId, onSuccess, onFailure) {
                 onFailure(xhr);
                 return;
             }
-            onSuccess(response);
+            if (onSuccess) onSuccess(response);
         },
         function (xhr) {
             console.error("Failed to fetch user status:", xhr);
@@ -652,7 +650,7 @@ function fetchDirectMessageSelection(onSuccess, onFailure) {
                 onFailure(xhr);
                 return;
             }
-            onSuccess(response);
+            if (onSuccess) onSuccess(response);
         },
         function (xhr) {
             console.error("Failed to fetch DM selection:", xhr);
@@ -676,7 +674,7 @@ function postDirectMessage(userId, message, onSuccess, onFailure) {
                 onFailure(xhr);
                 return;
             }
-            onSuccess(response);
+            if (onSuccess) onSuccess(response);
         },
         function (xhr) {
             console.error("Failed to post direct message:", xhr);
@@ -698,7 +696,7 @@ function markDmAsRead(targetId, messageId, onSuccess, onFailure) {
                 onFailure(xhr);
                 return;
             }
-            onSuccess(response);
+            if (onSuccess) onSuccess(response);
         },
         function (xhr) {
             console.error("Failed to mark DM as read:", xhr);
@@ -720,7 +718,7 @@ function markAllDmsAsRead(targetId, onSuccess, onFailure) {
                 onFailure(xhr);
                 return;
             }
-            onSuccess(response);
+            if (onSuccess) onSuccess(response);
         },
         function (xhr) {
             console.error("Failed to mark all DMs as read:", xhr);
