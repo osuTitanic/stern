@@ -55,7 +55,7 @@
 .beatmap-stats td {
     border-bottom: 1px solid #cfc1ef;
     vertical-align: middle;
-    padding: 8px
+    padding: 8px;
 }
 
 .beatmap-stats td.beatmap-stats-info {
@@ -65,14 +65,14 @@
 
 .starfield {
     height: 14px;
-    background: url('/images/beatmap/starn.png');
+    background: url("/images/beatmap/starn.png");
     background-repeat: repeat-x;
     overflow: hidden;
 }
 
 .starfield-selected {
     height: 14px;
-    background: url('/images/beatmap/star.png');
+    background: url("/images/beatmap/star.png");
     background-repeat: repeat-x;
     overflow: hidden;
 }
@@ -271,22 +271,22 @@
     margin-right: 5px;
 }
 
-.collaboration-management {
+.beatmap-settings {
     border-bottom: 1px solid #cfc1ef;
     padding: 10px;
 }
 
-.collaboration-management thead h2 {
+.beatmap-settings thead h2 {
     padding-bottom: 5px;
 }
 
-.collaboration-management td {
+.beatmap-settings td {
     border: none;
     padding: 5px;
     padding-top: 0;
 }
 
-.collaboration-management button {
+.beatmap-settings button {
     padding: 1px;
     padding-right: 4px;
     padding-left: 4px;
@@ -314,27 +314,19 @@
     margin: 0 auto;
 }
 
-.bat-controls {
-    margin: 5px;
-}
-
-.bat-controls details {
-    padding: 5px;
-}
-
-.bat-controls dt {
+.beatmap-settings dt {
     float: left;
     clear: left;
     width: 35%;
 }
 
-.bat-controls dd {
+.beatmap-settings dd {
     color: #536482;
     margin-bottom: 5px;
     line-height: 25px;
 }
 
-.bat-controls dd textarea {
+.beatmap-settings dd textarea {
     max-width: 190px;
     max-height: 600px;
 }

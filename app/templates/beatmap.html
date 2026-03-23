@@ -4,7 +4,7 @@
 
 {% set is_beatmap_author = (
     beatmapset.server != 0 and
-    beatmapset.creator_id == current_user.id 
+    beatmapset.creator_id == current_user.id
 ) %}
 
 {% block content %}
@@ -272,15 +272,40 @@
                 </div>
                 {% endif %}
             {% else %}
-                <div class="collaboration-management">
-                    <details {% if bat_error or bat_info %}open{% endif %}>
-                        <summary>Collaboration</summary>
+                <div class="beatmap-settings">
+                    <details>
+                        <summary>Settings</summary>
                         <table>
                             <thead>
+                                <th><h2>Metadata</h2></th>
                                 <th><h2>Collaborators for "{{ beatmap.version }}"</h2></th>
-                                <th><h2>Pending Invites</h2></th>
+                                <th><h2>Pending Collaboration Invites</h2></th>
                             </thead>
                             <tbody>
+                                <td style="min-width: 28%">
+                                    <form method="post" onsubmit="updateBeatmapsetMetadata(event)">
+                                        <dl>
+                                            <dt>Genre:</dt>
+                                            <dd>
+                                                <select name="genre">
+                                                    {% for genre in constants.BeatmapGenre.values() %}
+                                                    <option value="{{ genre }}" {% if beatmapset.genre_id == genre %}selected{% endif %}>{{ constants.BeatmapGenre(genre).name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </dd>
+                                            <dt>Language:</dt>
+                                            <dd>
+                                                <select name="language">
+                                                    {% for language in constants.BeatmapLanguage.values() %}
+                                                    <option value="{{ language }}" {% if beatmapset.language_id == language %}selected{% endif %}>{{ constants.BeatmapLanguage(language).name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </dd>
+                                        </dl>
+                                        <input type="submit" value="Save">
+                                        <input type="hidden" name="beatmapset_id" value="{{ beatmapset.id }}">
+                                    </form>
+                                </td>
                                 <td>
                                     {% if not collaborations %}
                                     <p>
@@ -326,7 +351,7 @@
                                     {% endfor %}
                                     </table>
                                 </td>
-                                <td style="min-width: 40%">
+                                <td style="min-width: 28%">
                                     {% if not collaboration_requests %}
                                     <p>
                                         No pending invites.
@@ -353,7 +378,7 @@
             {% endif %}
         {% endif %}
         {% if current_user.is_bat %}
-        <div class="bat-controls">
+        <div class="beatmap-settings">
             <details {% if bat_error or bat_info %}open{% endif %}>
                 <summary>BAT Controls</summary>
                 {% if bat_error %}

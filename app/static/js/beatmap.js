@@ -44,6 +44,26 @@ function copySetId(element) {
     }, 1500);
 }
 
+function updateBeatmapsetMetadata(event) {
+    event.preventDefault();
+
+    var data = convertFormToJson(event.target);
+    var url = "/beatmapsets/" + data.beatmapset_id;
+
+    performApiRequest(
+        "PATCH",
+        url,
+        data,
+        function (xhr) {
+            reloadPageSoon();
+        },
+        function (xhr) {
+            var response = JSON.parse(xhr.responseText);
+            alert(response.details);
+        },
+    );
+}
+
 function editBeatmapDescription() {
     // TODO: Move this endpoint to the new API
     var description = document.querySelector(".beatmap-description .bbcode");

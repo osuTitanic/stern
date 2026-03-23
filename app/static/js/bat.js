@@ -21,26 +21,6 @@ function setBeatmapsetStatus(beatmapsetId, status, promptText) {
     );
 }
 
-function updateBeatmapsetMetadata(event) {
-    event.preventDefault();
-
-    var data = convertFormToJson(event.target);
-    var url = "/beatmapsets/" + data.beatmapset_id;
-
-    performApiRequest(
-        "PATCH",
-        url,
-        data,
-        function (xhr) {
-            reloadPageSoon();
-        },
-        function (xhr) {
-            var response = JSON.parse(xhr.responseText);
-            alert(response.details);
-        },
-    );
-}
-
 function updateBeatmapStatuses(event) {
     event.preventDefault();
 
