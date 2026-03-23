@@ -289,7 +289,9 @@
                                             <dd>
                                                 <select name="genre">
                                                     {% for genre in constants.BeatmapGenre.values() %}
+                                                    {% if genre != 0 %} {# Skip "Any" genre #}
                                                     <option value="{{ genre }}" {% if beatmapset.genre_id == genre %}selected{% endif %}>{{ constants.BeatmapGenre(genre).name }}</option>
+                                                    {% endif %}
                                                     {% endfor %}
                                                 </select>
                                             </dd>
@@ -297,7 +299,9 @@
                                             <dd>
                                                 <select name="language">
                                                     {% for language in constants.BeatmapLanguage.values() %}
+                                                    {% if language != 0 %} {# Skip "Any" language #}
                                                     <option value="{{ language }}" {% if beatmapset.language_id == language %}selected{% endif %}>{{ constants.BeatmapLanguage(language).name }}</option>
+                                                    {% endif %}
                                                     {% endfor %}
                                                 </select>
                                             </dd>
