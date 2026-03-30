@@ -21,7 +21,7 @@ sqlalchemy==2.0.48
 timeago==1.0.16
 rosu-pp-py==3.1.0
 markdown-it-py[plugins,linkify]==4.0.0
-pygments==2.19.2
+pygments==2.20.0
 pyjwt==2.12.1
 regex
 pydantic-settings==2.13.1
