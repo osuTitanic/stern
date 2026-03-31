@@ -3,8 +3,19 @@ var fl = null;
 var modToggle = null;
 var timer;
 
+var aprilFools = {
+    month: 3,
+    date: 1
+}
+
+function isAprilFools() {
+    var now = new Date();
+    return (now.getMonth() == aprilFools.month && now.getDate() == aprilFools.date);
+}
+
 $("document").ready(function () {
-    var random = 1;
+    if (!isAprilFools())
+        return;
 
     switch (Math.floor(Math.random() * 10)) {
         case 0:
