@@ -3,19 +3,19 @@ function expandBeatmapPack(id) {
     var element = document.getElementById("pack-" + id);
 
     if (element.className.indexOf("expanded") !== -1) {
-        element.classList.remove("expanded");
+        $(element).removeClass("expanded");
         $(element).slideUp(500);
         return;
     }
 
     if (element.className.indexOf("loaded") !== -1) {
-        element.classList.add("expanded");
+        $(element).addClass("expanded");
         $(element).slideDown(500);
         return;
     }
 
     element.innerHTML = "<center>Loading...</center>";
-    element.classList.add("expanded");
+    $(element).addClass("expanded");
     element.style.height = "";
     $(element).hide().slideDown(100);
     loadBeatmapPackInfo(id, function () {
@@ -77,7 +77,7 @@ function loadBeatmapPackInfo(id, callback) {
                 beatmapList.appendChild(beatmapItem);
             }
 
-            element.classList.add("loaded");
+            $(element).addClass("loaded");
             element.innerHTML = "";
             element.appendChild(heading);
             element.appendChild(uploadedInfo);

@@ -107,12 +107,12 @@ function convertBanchoSpoilerBoxes() {
     // osu.ppy.sh spoilerbox conversion
     var spoilerBoxes = document.querySelectorAll(".bbcode-spoilerbox");
     for (var i = 0; i < spoilerBoxes.length; i++) {
-        spoilerBoxes[i].classList.add("spoiler");
+        $(spoilerBoxes[i]).addClass("spoiler");
     }
 
     var spoilerBoxContents = document.querySelectorAll(".bbcode-spoilerbox__body");
     for (var i = 0; i < spoilerBoxContents.length; i++) {
-        spoilerBoxContents[i].classList.add("spoiler-body");
+        $(spoilerBoxContents[i]).addClass("spoiler-body");
     }
 
     var spoilerBoxHeads = document.querySelectorAll(".bbcode-spoilerbox__link");
