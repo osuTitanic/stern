@@ -32,7 +32,7 @@ if (!document.getElementsByClassName) {
 }
 
 // Element.getElementsByClassName polyfill
-if (!Element.prototype.getElementsByClassName) {
+if (typeof Element !== "undefined" && Element.prototype && !Element.prototype.getElementsByClassName) {
     Element.prototype.getElementsByClassName = function (className) {
         var allElements = this.getElementsByTagName("*");
         var matchedElements = [];
