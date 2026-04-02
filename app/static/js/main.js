@@ -348,16 +348,17 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
     // Use XMLHttpRequest or XDomainRequest if available
     // otherwise, try ActiveX for older IE versions
     try {
-        if (window.XDomainRequest) {
-            // IE8 and IE9
-            xhr = new XDomainRequest();
-        } else if (window.XMLHttpRequest) {
+        if (window.XMLHttpRequest && "withCredentials" in new XMLHttpRequest()) {
             // Modern browsers
             xhr = new XMLHttpRequest();
-        } else {
-            // IE6 and IE7
-            xhr = new ActiveXObject("Microsoft.XMLHTTP");
+        } else if (window.XMLHttpRequest) {
+            // IE8 and IE9 (or IE7)
+            xhr = new XMLHttpRequest();
             // Rewrite url to use /api as fallback, due to cors limitations
+            url = osuBaseurl + "/api" + path;
+        } else {
+            // IE6
+            xhr = new ActiveXObject("Microsoft.XMLHTTP");
             url = osuBaseurl + "/api" + path;
         }
     } catch (e) {

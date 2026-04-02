@@ -32,8 +32,8 @@ if (!document.getElementsByClassName) {
 }
 
 // Element.getElementsByClassName polyfill
-if (typeof Element !== "undefined" && Element.prototype && !Element.prototype.getElementsByClassName) {
-    Element.prototype.getElementsByClassName = function (className) {
+if (window.Element && window.Element.prototype && !window.Element.prototype.getElementsByClassName) {
+    window.Element.prototype.getElementsByClassName = function (className) {
         var allElements = this.getElementsByTagName("*");
         var matchedElements = [];
         var pattern = new RegExp("(^|\\s)" + className + "(\\s|$)");
@@ -102,11 +102,11 @@ if (!String.prototype.trim) {
 }
 
 // addEventListener/removeEventListener polyfill
-if (typeof Element !== "undefined" && Element.prototype && !Element.prototype.addEventListener) {
-    Element.prototype.addEventListener = function (type, listener) {
+if (window.Element && window.Element.prototype && !window.Element.prototype.addEventListener) {
+    window.Element.prototype.addEventListener = function (type, listener) {
         this.attachEvent("on" + type, listener);
     };
-    Element.prototype.removeEventListener = function (type, listener) {
+    window.Element.prototype.removeEventListener = function (type, listener) {
         this.detachEvent("on" + type, listener);
     };
 }
