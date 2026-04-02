@@ -102,7 +102,7 @@ if (!String.prototype.trim) {
 }
 
 // addEventListener/removeEventListener polyfill
-if (!Element.prototype.addEventListener) {
+if (typeof Element !== "undefined" && Element.prototype && !Element.prototype.addEventListener) {
     Element.prototype.addEventListener = function (type, listener) {
         this.attachEvent("on" + type, listener);
     };
