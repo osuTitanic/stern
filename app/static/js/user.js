@@ -719,7 +719,7 @@ function resetPerformanceGraph() {
         return;
     }
 
-    $rankGraph[0].innerHTML = "";
+    while ($rankGraph[0].firstChild) $rankGraph[0].removeChild($rankGraph[0].firstChild);
 }
 
 function getPerformanceGraphRange(backupEntries, backupEntriesKey) {
@@ -775,6 +775,8 @@ function updatePerformanceGraphYAxis(chart, range) {
 }
 
 function loadPerformanceGraph(userId, mode) {
+    if (typeof nv === "undefined" || !nv.addGraph) return;
+
     resetPerformanceGraph();
     var url = "/users/" + userId + "/history/rank/" + mode;
 
@@ -875,6 +877,8 @@ function processPlayHistory(entries) {
 }
 
 function loadPlaysGraph(userId, mode) {
+    if (typeof nv === "undefined" || !nv.addGraph) return;
+
     var url = "/users/" + userId + "/history/plays/" + mode;
 
     performApiRequest("GET", url, null, function (xhr) {
@@ -972,6 +976,8 @@ function processViewsHistory(entries) {
 }
 
 function loadViewsGraph(userId, mode) {
+    if (typeof nv === "undefined" || !nv.addGraph) return;
+
     var url = "/users/" + userId + "/history/views/" + mode;
 
     performApiRequest("GET", url, null, function (xhr) {
