@@ -17,7 +17,7 @@ function setBeatmapsetStatus(beatmapsetId, status, promptText) {
         function (xhr) {
             var response = JSON.parse(xhr.responseText);
             alert(response.details);
-        },
+        }
     );
 }
 
@@ -37,7 +37,7 @@ function updateBeatmapStatuses(event) {
         function (xhr) {
             var response = JSON.parse(xhr.responseText);
             alert(response.details);
-        },
+        }
     );
 }
 
@@ -56,7 +56,7 @@ function nukeBeatmapset(beatmapsetId) {
         function (xhr) {
             var response = JSON.parse(xhr.responseText);
             alert(response.details);
-        },
+        }
     );
 }
 
@@ -73,7 +73,7 @@ function addNomination(beatmapsetId) {
         function (xhr) {
             var response = JSON.parse(xhr.responseText);
             alert(response.details);
-        },
+        }
     );
 }
 
@@ -94,7 +94,7 @@ function resetNominations(beatmapsetId) {
         function (xhr) {
             var response = JSON.parse(xhr.responseText);
             alert(response.details);
-        },
+        }
     );
 }
 
@@ -136,7 +136,7 @@ function uploadResource(endpoint, key, filetypes, promptText) {
             function (xhr) {
                 var response = JSON.parse(xhr.responseText);
                 alert(response.details);
-            },
+            }
         );
     };
 
@@ -162,6 +162,6 @@ function updateBeatmapsetOwner(beatmapsetId) {
         function (xhr) {
             var response = JSON.parse(xhr.responseText);
             alert(response.details);
-        },
+        }
     );
 }

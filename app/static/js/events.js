@@ -35,12 +35,12 @@ var EventTypes = {
     UserMatchCreated: 34,
     UserMatchJoined: 35,
     UserMatchLeft: 36,
-    BeatmapNuked: 37,
+    BeatmapNuked: 37
 };
 
 var LoginClient = {
     osu: "osu!",
-    irc: "IRC",
+    irc: "IRC"
 };
 
 var EventRenderers = {
@@ -50,13 +50,13 @@ var EventRenderers = {
             ` has gained ${event.data.ranks_gained} rank${event.data.ranks_gained !== 1 ? "s" : ""},`,
             ` now placed `,
             renderBoldElement(`#${event.data.rank}`),
-            ` in ${event.data.mode}`,
+            ` in ${event.data.mode}`
         ];
     },
     [EventTypes.NumberOne]: (event) => {
         return [
             renderProfileWithMode(event.data.username, event.user_id, event.mode),
-            ` has taken the lead as the top-ranked ${event.data.mode} player!`,
+            ` has taken the lead as the top-ranked ${event.data.mode} player!`
         ];
     },
     [EventTypes.BeatmapLeaderboardRank]: (event) => {
@@ -70,7 +70,7 @@ var EventRenderers = {
             renderBeatmap(event.data.beatmap, event.data.beatmap_id),
             modsText,
             modeText,
-            ppText,
+            ppText
         ];
     },
     [EventTypes.LostFirstPlace]: (event) => {
@@ -78,7 +78,7 @@ var EventRenderers = {
             renderProfileWithMode(event.data.username, event.user_id, event.mode),
             ` has lost first place on `,
             renderBeatmap(event.data.beatmap, event.data.beatmap_id),
-            ` <${event.data.mode}>`,
+            ` <${event.data.mode}>`
         ];
     },
     [EventTypes.PPRecord]: (event) => {
@@ -86,7 +86,7 @@ var EventRenderers = {
             renderProfileWithMode(event.data.username, event.user_id, event.mode),
             ` has set the new pp record on `,
             renderBeatmap(event.data.beatmap, event.data.beatmap_id),
-            ` with ${event.data.pp}pp <${event.data.mode}>`,
+            ` with ${event.data.pp}pp <${event.data.mode}>`
         ];
     },
     [EventTypes.TopPlay]: (event) => {
@@ -94,14 +94,14 @@ var EventRenderers = {
             renderProfileWithMode(event.data.username, event.user_id, event.mode),
             ` achieved a new top play on `,
             renderBeatmap(event.data.beatmap, event.data.beatmap_id),
-            ` with ${event.data.pp}pp <${event.data.mode}>`,
+            ` with ${event.data.pp}pp <${event.data.mode}>`
         ];
     },
     [EventTypes.AchievementUnlocked]: (event) => {
         return [
             renderProfile(event.data.username, event.user_id),
             " unlocked an achievement: ",
-            renderBoldElement(event.data.achievement),
+            renderBoldElement(event.data.achievement)
         ];
     },
     [EventTypes.ScoreSubmitted]: (event) => {
@@ -115,42 +115,42 @@ var EventRenderers = {
             renderBeatmap(event.data.beatmap, event.data.beatmap_id),
             modsText,
             modeText,
-            ppText,
+            ppText
         ];
     },
     [EventTypes.BeatmapUploaded]: (event) => {
         return [
             renderProfileWithMode(event.data.username, event.user_id, event.mode),
             " uploaded a new beatmap: ",
-            renderBeatmapset(event.data.beatmapset_name, event.data.beatmapset_id),
+            renderBeatmapset(event.data.beatmapset_name, event.data.beatmapset_id)
         ];
     },
     [EventTypes.BeatmapUpdated]: (event) => {
         return [
             renderProfileWithMode(event.data.username, event.user_id, event.mode),
             " updated a beatmap: ",
-            renderBeatmapset(event.data.beatmapset_name, event.data.beatmapset_id),
+            renderBeatmapset(event.data.beatmapset_name, event.data.beatmapset_id)
         ];
     },
     [EventTypes.BeatmapRevived]: (event) => {
         return [
             renderBeatmapset(event.data.beatmapset_name, event.data.beatmapset_id),
             " has been revived from eternal slumber by ",
-            renderProfileWithMode(event.data.username, event.user_id, event.mode),
+            renderProfileWithMode(event.data.username, event.user_id, event.mode)
         ];
     },
     [EventTypes.BeatmapFavouriteAdded]: (event) => {
         return [
             renderProfile(event.data.username, event.user_id),
             " added a beatmap to their favourites: ",
-            renderBeatmapset(event.data.beatmapset_name, event.data.beatmapset_id),
+            renderBeatmapset(event.data.beatmapset_name, event.data.beatmapset_id)
         ];
     },
     [EventTypes.BeatmapFavouriteRemoved]: (event) => {
         return [
             renderProfile(event.data.username, event.user_id),
             " removed a beatmap from their favourites: ",
-            renderBeatmapset(event.data.beatmapset_name, event.data.beatmapset_id),
+            renderBeatmapset(event.data.beatmapset_name, event.data.beatmapset_id)
         ];
     },
     [EventTypes.BeatmapRated]: (event) => {
@@ -159,14 +159,14 @@ var EventRenderers = {
             ` rated a beatmap with ${event.data.rating}/10 `,
             "(",
             renderBeatmap(event.data.beatmap_name, event.data.beatmap_id),
-            ")",
+            ")"
         ];
     },
     [EventTypes.BeatmapCommented]: (event) => {
         return [
             renderProfile(event.data.username, event.user_id),
             " commented on a beatmap: ",
-            renderBeatmap(event.data.beatmap_name, event.data.beatmap_id),
+            renderBeatmap(event.data.beatmap_name, event.data.beatmap_id)
         ];
     },
     [EventTypes.BeatmapStatusUpdated]: (event) => {
@@ -175,7 +175,7 @@ var EventRenderers = {
             " updated the status of a beatmap to ",
             renderBoldElement(BeatmapStatus.toString(event.data.status)),
             ": ",
-            renderBeatmapset(event.data.beatmapset_name, event.data.beatmapset_id),
+            renderBeatmapset(event.data.beatmapset_name, event.data.beatmapset_id)
         ];
     },
     [EventTypes.BeatmapNominated]: (event) => {
@@ -190,49 +190,49 @@ var EventRenderers = {
         return [
             renderProfile(event.data.username, event.user_id),
             " nuked a beatmap: ",
-            renderBeatmapset(event.data.beatmapset_name, event.data.beatmapset_id),
+            renderBeatmapset(event.data.beatmapset_name, event.data.beatmapset_id)
         ];
     },
     [EventTypes.ForumTopicCreated]: (event) => {
         return [
             renderProfile(event.data.username, event.user_id),
             " created a new topic: ",
-            renderTopic(event.data.topic_name, event.data.topic_id),
+            renderTopic(event.data.topic_name, event.data.topic_id)
         ];
     },
     [EventTypes.ForumPostCreated]: (event) => {
         return [
             renderProfile(event.data.username, event.user_id),
             " posted in a topic: ",
-            renderPost(event.data.topic_name, event.data.post_id),
+            renderPost(event.data.topic_name, event.data.post_id)
         ];
     },
     [EventTypes.ForumSubscribed]: (event) => {
         return [
             renderProfile(event.data.username, event.user_id),
             " subscribed to a topic: ",
-            renderTopic(event.data.topic_name, event.data.topic_id),
+            renderTopic(event.data.topic_name, event.data.topic_id)
         ];
     },
     [EventTypes.ForumUnsubscribed]: (event) => {
         return [
             renderProfile(event.data.username, event.user_id),
             " unsubscribed from a topic: ",
-            renderTopic(event.data.topic_name, event.data.topic_id),
+            renderTopic(event.data.topic_name, event.data.topic_id)
         ];
     },
     [EventTypes.ForumBookmarked]: (event) => {
         return [
             renderProfile(event.data.username, event.user_id),
             " bookmarked a topic: ",
-            renderTopic(event.data.topic_name, event.data.topic_id),
+            renderTopic(event.data.topic_name, event.data.topic_id)
         ];
     },
     [EventTypes.ForumUnbookmarked]: (event) => {
         return [
             renderProfile(event.data.username, event.user_id),
             " removed a topic from their bookmarks: ",
-            renderTopic(event.data.topic_name, event.data.topic_id),
+            renderTopic(event.data.topic_name, event.data.topic_id)
         ];
     },
     [EventTypes.OsuCoinsReceived]: (event) => {
@@ -241,28 +241,28 @@ var EventRenderers = {
         return [
             renderProfile(event.data.username, event.user_id),
             ` received ${event.data.amount} osu!coin${event.data.amount !== 1 ? "s" : ""},`,
-            ` now standing on ${event.data.coins} coins in total`,
+            ` now standing on ${event.data.coins} coins in total`
         ];
     },
     [EventTypes.OsuCoinsUsed]: (event) => {
         return [
             renderProfile(event.data.username, event.user_id),
             ` used ${event.data.amount} osu!coin${event.data.amount !== 1 ? "s" : ""},`,
-            ` now standing on ${event.data.coins} coins in total`,
+            ` now standing on ${event.data.coins} coins in total`
         ];
     },
     [EventTypes.FriendAdded]: (event) => {
         return [
             renderProfile(event.data.username, event.user_id),
             " is now following ",
-            renderProfile(event.data.target_username, event.data.target_id),
+            renderProfile(event.data.target_username, event.data.target_id)
         ];
     },
     [EventTypes.FriendRemoved]: (event) => {
         return [
             renderProfile(event.data.username, event.user_id),
             " is no longer following ",
-            renderProfile(event.data.target_username, event.data.target_id),
+            renderProfile(event.data.target_username, event.data.target_id)
         ];
     },
     [EventTypes.ReplayWatched]: (event) => {
@@ -272,7 +272,7 @@ var EventRenderers = {
             renderBeatmap(event.data.beatmap_name, event.data.beatmap_id),
             " (",
             renderScoreLink("download", event.data.score_id),
-            ")",
+            ")"
         ];
     },
     [EventTypes.ScreenshotUploaded]: (event) => {
@@ -300,23 +300,23 @@ var EventRenderers = {
         return [
             renderProfile(event.data.username, event.user_id),
             " created a new match: ",
-            renderMatchLink(event.data.match_name, event.data.match_id),
+            renderMatchLink(event.data.match_name, event.data.match_id)
         ];
     },
     [EventTypes.UserMatchJoined]: (event) => {
         return [
             renderProfile(event.data.username, event.user_id),
             " joined the match: ",
-            renderMatchLink(event.data.match_name, event.data.match_id),
+            renderMatchLink(event.data.match_name, event.data.match_id)
         ];
     },
     [EventTypes.UserMatchLeft]: (event) => {
         return [
             renderProfile(event.data.username, event.user_id),
             " left the match: ",
-            renderMatchLink(event.data.match_name, event.data.match_id),
+            renderMatchLink(event.data.match_name, event.data.match_id)
         ];
-    },
+    }
 };
 
 function webSocketApiResolver() {
@@ -546,7 +546,7 @@ function renderItalicElement(text) {
     return italicElement;
 }
 
-addEvent("DOMContentLoaded", document, function () {
+$(document).ready(function () {
     var activityContainer = document.getElementById("activity-feed-container");
     var statusText = document.getElementById("status-text");
 

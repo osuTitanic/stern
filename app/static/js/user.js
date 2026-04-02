@@ -30,7 +30,7 @@ function expandProfileTab(id, forceExpand) {
 
     // If forceExpand is true, always expand; otherwise toggle
     if (forceExpand || !isExpanded) {
-        if (isHidden(tab) || tab.style.height === "0px") {
+        if ($(tab).is(":hidden") || tab.style.height === "0px") {
             slideDown(tab);
             setTimeout(function () {
                 tab.className += " expanded";
@@ -42,7 +42,7 @@ function expandProfileTab(id, forceExpand) {
         }
     } else {
         // Collapse the tab
-        removeClass(tab, "expanded");
+        $(tab).removeClass("expanded");
         slideUp(tab);
     }
 
@@ -63,7 +63,7 @@ function expandRecentActivity() {
 
     $(recentPreview).hide();
     $(recentFull).show();
-    slideDown(general);
+    $(tab).slideDown(500);
 }
 
 function createScoreElement(score, index, type) {
@@ -72,11 +72,11 @@ function createScoreElement(score, index, type) {
     scoreDiv.className = "score";
     scoreDiv.onclick = function (e) {
         e = e || window.event;
-        var target = getEventTarget(e);
-        if (closest(target, "a")) return;
-        if (closest(target, ".score-pin-icon")) return;
-        if (closest(target, ".score-pinned-icon")) return;
-        if (closest(target, ".score-replay")) return;
+        var target = e.target || e.srcElement;
+        if ($(target).closest("a")[0]) return;
+        if ($(target).closest(".score-pin-icon")[0]) return;
+        if ($(target).closest(".score-pinned-icon")[0]) return;
+        if ($(target).closest(".score-replay")[0]) return;
         window.location.href = "/scores/" + score.id;
     };
 
@@ -93,14 +93,13 @@ function createScoreElement(score, index, type) {
 
     var beatmapInfo = document.createElement("a");
     beatmapInfo.href = "/b/" + score.beatmap.id + "?mode=" + score.mode;
-    setText(
-        beatmapInfo,
-        score.beatmap.beatmapset.artist + " - " + score.beatmap.beatmapset.title + " [" + score.beatmap.version + "]",
+    $(beatmapInfo).text(
+        score.beatmap.beatmapset.artist + " - " + score.beatmap.beatmapset.title + " [" + score.beatmap.version + "]"
     );
 
     var modsText = document.createElement("b");
     if (score.mods > 0) {
-        setText(modsText, "+" + Mods.getString(score.mods));
+        $(modsText).text("+" + Mods.getString(score.mods));
     }
 
     var scoreInfo = document.createElement("b");
@@ -116,14 +115,14 @@ function createScoreElement(score, index, type) {
     rightColumn.className = "score-right";
 
     var ppText = document.createElement("b");
-    setText(ppText, score.pp.toFixed(0) + "pp");
+    $(ppText).text(score.pp.toFixed(0) + "pp");
 
     var ppDisplay = document.createElement("div");
     ppDisplay.className = "pp-display";
     ppDisplay.appendChild(ppText);
 
     var ppWeightPercent = document.createElement("b");
-    setText(ppWeightPercent, (Math.pow(0.95, index + topScoreOffset) * 100).toFixed(0) + "%");
+    $(ppWeightPercent).text((Math.pow(0.95, index + topScoreOffset) * 100).toFixed(0) + "%");
 
     var ppWeight = document.createElement("div");
     ppWeight.className = "pp-display-weight";
@@ -132,7 +131,7 @@ function createScoreElement(score, index, type) {
         ppWeight.appendChild(document.createTextNode("weighted "));
         ppWeight.appendChild(ppWeightPercent);
         ppWeight.appendChild(
-            document.createTextNode(" (" + (score.pp * Math.pow(0.95, index + topScoreOffset)).toFixed(0) + "pp)"),
+            document.createTextNode(" (" + (score.pp * Math.pow(0.95, index + topScoreOffset)).toFixed(0) + "pp)")
         );
     }
 
@@ -158,7 +157,7 @@ function createScoreElement(score, index, type) {
     // Score's Date
     var dateText = document.createElement("time");
     dateText.setAttribute("datetime", score.submitted_at);
-    setText(dateText, score.submitted_at);
+    $(dateText).text(score.submitted_at);
     dateText.title = scoreDateString;
     dateText.className = "timeago";
 
@@ -174,7 +173,7 @@ function createScoreElement(score, index, type) {
 
         var clientTextVersion = document.createElement("span");
         clientTextVersion.className = "score-version-number";
-        setText(clientTextVersion, versionText);
+        $(clientTextVersion).text(versionText);
 
         clientText.appendChild(clientTextVersion);
         scoreBottomDiv.appendChild(clientText);
@@ -200,17 +199,19 @@ function createScoreElement(score, index, type) {
             pinIcon.className += " score-pin-icon";
             pinIcon.title = "Pin Score";
             pinIcon.onclick = function () {
-                var icons = queryAll(document, ".score-pin-" + score.id);
+                var icons = $(document)
+                    .find(".score-pin-" + score.id)
+                    .toArray();
                 for (var j = 0; j < icons.length; j++) {
-                    removeClass(icons[j], "score-pin-icon");
-                    addClass(icons[j], "score-pinned-icon");
+                    $(icons[j]).removeClass("score-pin-icon");
+                    $(icons[j]).addClass("score-pinned-icon");
                     icons[j].title = "Unpin Score";
                 }
                 pinScore(score.id, userId);
                 pinIcon.onclick = function () {
                     unpinScore(score.id, userId);
-                    removeClass(pinIcon, "score-pinned-icon");
-                    addClass(pinIcon, "score-pin-icon");
+                    $(pinIcon).removeClass("score-pinned-icon");
+                    $(pinIcon).addClass("score-pin-icon");
                     pinIcon.title = "Pin Score";
                 };
             };
@@ -218,17 +219,19 @@ function createScoreElement(score, index, type) {
             pinIcon.className += " score-pinned-icon";
             pinIcon.title = "Unpin Score";
             pinIcon.onclick = function () {
-                var icons = queryAll(document, ".score-pin-" + score.id);
+                var icons = $(document)
+                    .find(".score-pin-" + score.id)
+                    .toArray();
                 for (var j = 0; j < icons.length; j++) {
-                    removeClass(icons[j], "score-pinned-icon");
-                    addClass(icons[j], "score-pin-icon");
+                    $(icons[j]).removeClass("score-pinned-icon");
+                    $(icons[j]).addClass("score-pin-icon");
                     icons[j].title = "Pin Score";
                 }
                 unpinScore(score.id, userId);
                 pinIcon.onclick = function () {
                     pinScore(score.id, userId);
-                    removeClass(pinIcon, "score-pin-icon");
-                    addClass(pinIcon, "score-pinned-icon");
+                    $(pinIcon).removeClass("score-pin-icon");
+                    $(pinIcon).addClass("score-pinned-icon");
                     pinIcon.title = "Unpin Score";
                 };
             };
@@ -264,8 +267,8 @@ function loadPinnedScores(userId, mode) {
             var scores = data.scores;
 
             if (loadingText) {
-                removeClass(getParentElement(loadingText), "score");
-                removeElement(loadingText);
+                $($(loadingText).parent()[0]).removeClass("score");
+                $(loadingText).remove();
             }
 
             // Reset container
@@ -291,16 +294,16 @@ function loadPinnedScores(userId, mode) {
         },
         function (xhr) {
             var errorText = document.createElement("p");
-            setText(errorText, "Failed to load pinned scores.");
-            addClass(errorText, "score");
+            $(errorText).text("Failed to load pinned scores.");
+            $(errorText).addClass("score");
             scoreContainer.appendChild(errorText);
 
             var loadingText = document.getElementById("pinned-scores-loading");
             if (loadingText) {
-                removeClass(getParentElement(loadingText), "score");
-                removeElement(loadingText);
+                $($(loadingText).parent()[0]).removeClass("score");
+                $(loadingText).remove();
             }
-        },
+        }
     );
 }
 
@@ -318,13 +321,13 @@ function loadTopPlays(userId, mode, limit, offset) {
             var scores = data.scores;
 
             if (loadingText) {
-                removeClass(getParentElement(loadingText), "score");
-                removeElement(loadingText);
+                $($(loadingText).parent()[0]).removeClass("score");
+                $(loadingText).remove();
             }
 
             if (data.total <= 0) {
                 var noScoresText = document.createElement("p");
-                setText(noScoresText, "No awesome performance records yet :(");
+                $(noScoresText).text("No awesome performance records yet :(");
                 scoreContainer.appendChild(noScoresText);
                 return;
             }
@@ -350,7 +353,7 @@ function loadTopPlays(userId, mode, limit, offset) {
             if (scores.length >= limit) {
                 // Create show more text
                 var showMoreText = document.createElement("b");
-                setText(showMoreText, "Show me more!");
+                $(showMoreText).text("Show me more!");
 
                 // Add onclick event
                 var showMoreHref = document.createElement("a");
@@ -359,12 +362,12 @@ function loadTopPlays(userId, mode, limit, offset) {
                 showMoreHref.appendChild(showMoreText);
                 showMoreHref.onclick = function () {
                     var loadingText = document.createElement("p");
-                    setText(loadingText, "Loading...");
+                    $(loadingText).text("Loading...");
                     loadingText.id = "top-scores-loading";
 
                     var showMore = document.getElementById("show-more-top");
-                    getParentElement(showMore).appendChild(loadingText);
-                    removeElement(showMore);
+                    $(showMore).parent()[0].appendChild(loadingText);
+                    $(showMore).remove();
 
                     loadTopPlays(userId, modeName, 50, topScoreOffset);
                 };
@@ -380,17 +383,17 @@ function loadTopPlays(userId, mode, limit, offset) {
         },
         function (xhr) {
             var errorText = document.createElement("p");
-            setText(errorText, "Failed to load top plays.");
-            addClass(errorText, "score");
+            $(errorText).text("Failed to load top plays.");
+            $(errorText).addClass("score");
             scoreContainer.appendChild(errorText);
 
             var loadingText = document.getElementById("top-scores-loading");
 
             if (loadingText) {
-                removeClass(getParentElement(loadingText), "score");
-                removeElement(loadingText);
+                $($(loadingText).parent()[0]).removeClass("score");
+                $(loadingText).remove();
             }
-        },
+        }
     );
 
     return false;
@@ -410,13 +413,13 @@ function loadLeaderScores(userId, mode, limit, offset) {
             var scores = data.scores;
 
             if (loadingText) {
-                removeClass(getParentElement(loadingText), "score");
-                removeElement(loadingText);
+                $($(loadingText).parent()[0]).removeClass("score");
+                $(loadingText).remove();
             }
 
             if (data.total <= 0) {
                 var noScoresText = document.createElement("p");
-                setText(noScoresText, "No first place records currently :(");
+                $(noScoresText).text("No first place records currently :(");
                 scoreContainer.appendChild(noScoresText);
                 return;
             }
@@ -430,7 +433,7 @@ function loadLeaderScores(userId, mode, limit, offset) {
                 rank = "";
             }
 
-            setText(heading, leaderScoresText + total + rank);
+            $(heading).text(leaderScoresText + total + rank);
 
             for (var i = 0; i < scores.length; i++) {
                 var scoreDiv = createScoreElement(scores[i], i, "leader");
@@ -443,7 +446,7 @@ function loadLeaderScores(userId, mode, limit, offset) {
 
             if (scores.length >= limit) {
                 var showMoreText = document.createElement("b");
-                setText(showMoreText, "Show me more!");
+                $(showMoreText).text("Show me more!");
 
                 // Add onclick event
                 var showMoreHref = document.createElement("a");
@@ -452,12 +455,12 @@ function loadLeaderScores(userId, mode, limit, offset) {
                 showMoreHref.appendChild(showMoreText);
                 showMoreHref.onclick = function () {
                     var loadingText = document.createElement("p");
-                    setText(loadingText, "Loading...");
+                    $(loadingText).text("Loading...");
                     loadingText.id = "leader-scores-loading";
 
                     var showMore = document.getElementById("show-more-leader");
-                    getParentElement(showMore).appendChild(loadingText);
-                    removeElement(showMore);
+                    $(showMore).parent()[0].appendChild(loadingText);
+                    $(showMore).remove();
 
                     loadLeaderScores(userId, modeName, 50, topLeaderOffset);
                 };
@@ -473,16 +476,16 @@ function loadLeaderScores(userId, mode, limit, offset) {
         },
         function (xhr) {
             var errorText = document.createElement("p");
-            setText(errorText, "Failed to load first place ranks.");
-            addClass(errorText, "score");
+            $(errorText).text("Failed to load first place ranks.");
+            $(errorText).addClass("score");
             scoreContainer.appendChild(errorText);
 
             var loadingText = document.getElementById("leader-scores-loading");
             if (loadingText) {
-                removeClass(getParentElement(loadingText), "score");
-                removeElement(loadingText);
+                $($(loadingText).parent()[0]).removeClass("score");
+                $(loadingText).remove();
             }
-        },
+        }
     );
 
     return false;
@@ -506,14 +509,13 @@ function loadMostPlayed(userId, limit, offset) {
         for (var index = 0; index < plays.length; index++) {
             var item = plays[index];
             var beatmapLink = document.createElement("a");
-            setText(
-                beatmapLink,
+            $(beatmapLink).text(
                 item.beatmap.beatmapset.artist +
                     " - " +
                     item.beatmap.beatmapset.title +
                     " [" +
                     item.beatmap.version +
-                    "]",
+                    "]"
             );
             beatmapLink.href = "/b/" + item.beatmap.id;
 
@@ -527,7 +529,7 @@ function loadMostPlayed(userId, limit, offset) {
         }
     });
 
-    removeElement(loadingText);
+    $(loadingText).remove();
 }
 
 function loadRecentPlays(userId, mode) {
@@ -554,19 +556,18 @@ function loadRecentPlays(userId, mode) {
 
             var dateText = document.createElement("time");
             dateText.setAttribute("datetime", score.submitted_at);
-            setText(dateText, score.submitted_at);
+            $(dateText).text(score.submitted_at);
             dateText.title = scoreDateString;
             dateText.className += " timeago";
 
             var beatmapLink = document.createElement("a");
-            setText(
-                beatmapLink,
+            $(beatmapLink).text(
                 score.beatmap.beatmapset.artist +
                     " - " +
                     score.beatmap.beatmapset.title +
                     " [" +
                     score.beatmap.version +
-                    "]",
+                    "]"
             );
             beatmapLink.href = "/b/" + score.beatmap.id;
 
@@ -580,8 +581,8 @@ function loadRecentPlays(userId, mode) {
             scoreDiv.appendChild(beatmapLink);
             scoreDiv.appendChild(
                 document.createTextNode(
-                    " " + Math.round(score.pp).toLocaleString("en-US") + "pp (" + score.grade + ") " + modsText,
-                ),
+                    " " + Math.round(score.pp).toLocaleString("en-US") + "pp (" + score.grade + ") " + modsText
+                )
             );
             scoreDiv.style.margin = "2.5px";
 
@@ -610,7 +611,7 @@ function processRankEntries(entries, rankingType) {
     for (var i = 0; i < entries.length; i++) {
         var entry = {
             daysAgo: getDaysAgo(new Date(entries[i].time)),
-            value: entries[i][rankingType],
+            value: entries[i][rankingType]
         };
 
         if (i == 0) {
@@ -633,11 +634,11 @@ function processRankEntries(entries, rankingType) {
         bestEntryByDate.push(entry);
     }
 
-    return bestEntryByDate.map(function (entry) {
+    return $.map(bestEntryByDate, function (entry, i) {
         var daysAgo = entry.daysAgo == 0 ? 0 : -entry.daysAgo;
         return {
             x: daysAgo,
-            y: -entry.value,
+            y: -entry.value
         };
     });
 }
@@ -651,32 +652,32 @@ function processRankHistory(entries) {
     if (entries.length > 0) {
         countryRankValues.unshift({
             x: 0,
-            y: -countryRank,
+            y: -countryRank
         });
         globalRankValues.unshift({
             x: 0,
-            y: -globalRank,
+            y: -globalRank
         });
         scoreRankValues.unshift({
             x: 0,
-            y: -scoreRank,
+            y: -scoreRank
         });
         ppv1RankValues.unshift({
             x: 0,
-            y: -ppv1Rank,
+            y: -ppv1Rank
         });
     }
 
-    ppv1RankValues = ppv1RankValues.filter(function (e) {
+    ppv1RankValues = $.grep(ppv1RankValues, function (e, i) {
         return e.y != 0;
     });
-    scoreRankValues = scoreRankValues.filter(function (e) {
+    scoreRankValues = $.grep(scoreRankValues, function (e, i) {
         return e.y != 0;
     });
-    globalRankValues = globalRankValues.filter(function (e) {
+    globalRankValues = $.grep(globalRankValues, function (e, i) {
         return e.y != 0;
     });
-    countryRankValues = countryRankValues.filter(function (e) {
+    countryRankValues = $.grep(countryRankValues, function (e, i) {
         return e.y != 0;
     });
 
@@ -689,26 +690,26 @@ function processRankHistory(entries) {
         {
             values: globalRankValues,
             key: "Global Rank",
-            color: "#ff7f0e",
+            color: "#ff7f0e"
         },
         {
             values: countryRankValues,
             key: "Country Rank",
             color: "#0ec7ff",
-            disabled: true,
+            disabled: true
         },
         {
             values: scoreRankValues,
             key: "Score Rank",
             color: "#d30eff",
-            disabled: true,
+            disabled: true
         },
         {
             values: ppv1RankValues,
             key: "PPv1 Rank",
             color: "#51f542",
-            disabled: true,
-        },
+            disabled: true
+        }
     ];
 }
 
@@ -795,7 +796,7 @@ function loadPerformanceGraph(userId, mode) {
                 .margin({
                     left: 80,
                     bottom: 20,
-                    right: 50,
+                    right: 50
                 })
                 .useInteractiveGuideline(true)
                 .transitionDuration(250)
@@ -851,11 +852,11 @@ function processPlayHistory(entries) {
     var currentYear = currentDate.getFullYear();
     var currentMonth = currentDate.getMonth();
 
-    var values = entries.map(function (entry) {
+    var values = $.map(entries, function (entry, i) {
         var elapsedMonths = (currentYear - entry.year) * 12 + (currentMonth - (entry.month - 1));
         return {
             x: -elapsedMonths,
-            y: entry.plays,
+            y: entry.plays
         };
     });
 
@@ -868,8 +869,8 @@ function processPlayHistory(entries) {
             values: values,
             key: "Plays",
             color: "#f5f242",
-            area: true,
-        },
+            area: true
+        }
     ];
 }
 
@@ -886,7 +887,7 @@ function loadPlaysGraph(userId, mode) {
                 .margin({
                     left: 80,
                     bottom: 20,
-                    right: 50,
+                    right: 50
                 })
                 .useInteractiveGuideline(true)
                 .transitionDuration(250)
@@ -948,11 +949,11 @@ function processViewsHistory(entries) {
     var currentYear = currentDate.getFullYear();
     var currentMonth = currentDate.getMonth();
 
-    var values = entries.map(function (entry) {
+    var values = $.map(entries, function (entry, i) {
         var elapsedMonths = (currentYear - entry.year) * 12 + (currentMonth - (entry.month - 1));
         return {
             x: -elapsedMonths,
-            y: entry.replay_views,
+            y: entry.replay_views
         };
     });
 
@@ -965,8 +966,8 @@ function processViewsHistory(entries) {
             values: values,
             key: "Replay Views",
             color: "#f78e25",
-            area: true,
-        },
+            area: true
+        }
     ];
 }
 
@@ -983,7 +984,7 @@ function loadViewsGraph(userId, mode) {
                 .margin({
                     left: 80,
                     bottom: 20,
-                    right: 50,
+                    right: 50
                 })
                 .useInteractiveGuideline(true)
                 .transitionDuration(250)
@@ -1041,9 +1042,13 @@ function loadViewsGraph(userId, mode) {
 }
 
 function updatePlaystyleElement(element) {
-    performApiRequest(toggleClass(element, "playstyle-using") ? "POST" : "DELETE", "/users/" + userId + "/playstyle", {
-        playstyle: element.id,
-    });
+    performApiRequest(
+        $(element).toggleClass("playstyle-using") ? "POST" : "DELETE",
+        "/users/" + userId + "/playstyle",
+        {
+            playstyle: element.id
+        }
+    );
 }
 
 function addFriend() {
@@ -1089,9 +1094,9 @@ function removeFavourite(setId) {
         container.style.opacity = 0;
 
         setTimeout(function () {
-            removeElement(container);
+            $(container).remove();
 
-            if (favouritesCount && data && data.length != null) setText(favouritesCount, data.length.toString());
+            if (favouritesCount && data && data.length != null) $(favouritesCount).text(data.length.toString());
 
             if (data.length == 0) {
                 // User has no favourite beatmaps anymore
@@ -1137,7 +1142,7 @@ function deleteBeatmap(setId) {
                 console.error("Failed to delete beatmap:", e);
                 alert("Failed to delete beatmap.");
             }
-        },
+        }
     );
 }
 
@@ -1158,20 +1163,20 @@ function reviveBeatmap(setId) {
                 console.error("Failed to revive beatmap:", e);
                 alert("Failed to revive beatmap.");
             }
-        },
+        }
     );
 }
 
 function toggleBeatmapContainer(section) {
-    var container = queryFirst(section, ".profile-beatmaps-container");
+    var container = $(section).find(".profile-beatmaps-container").first()[0];
     var beatmapsSection = document.getElementById("beatmaps");
 
     if (container.style.display === "none") {
         container.style.display = "block";
-        slideDown(beatmapsSection);
+        $(beatmapsSection).slideDown(500);
     } else {
         container.style.display = "none";
-        beatmapsSection.style.height = getElementHeight(beatmapsSection) + "px";
+        $(beatmapsSection).css("height", "auto");
     }
 }
 
@@ -1205,7 +1210,7 @@ function loadUserCreatedBeatmapsets(userId) {
                 Qualified: [],
                 Pending: [],
                 WIP: [],
-                Graveyarded: [],
+                Graveyarded: []
             };
 
             for (var i = 0; i < beatmapsets.length; i++) {
@@ -1242,16 +1247,16 @@ function loadUserCreatedBeatmapsets(userId) {
                 var section = createBeatmapsSectionElement(
                     " " + category + " Beatmaps",
                     items.length,
-                    "user-beatmaps-" + category.toLowerCase(),
+                    "user-beatmaps-" + category.toLowerCase()
                 );
-                var container = queryFirst(section, ".profile-beatmaps-container");
+                var container = $(section).find(".profile-beatmaps-container").first()[0];
 
                 for (var k = 0; k < items.length; k++) {
                     var set = items[k];
-                    var showOwnerControls = currentUser === userId && arrayContains(unrankedStatuses, category);
+                    var showOwnerControls = currentUser === userId && $.inArray(category, unrankedStatuses) !== -1;
                     var table = createBeatmapsetTable(set, {
                         showOwnerControls: showOwnerControls,
-                        showRevive: showOwnerControls && category === "Graveyarded",
+                        showRevive: showOwnerControls && category === "Graveyarded"
                     });
                     container.appendChild(table);
                 }
@@ -1267,8 +1272,8 @@ function loadUserCreatedBeatmapsets(userId) {
             }
         },
         function (xhr) {
-            if (beatmapLoadingText) removeElement(beatmapLoadingText);
-        },
+            if (beatmapLoadingText) $(beatmapLoadingText).remove();
+        }
     );
 }
 
@@ -1286,7 +1291,7 @@ function loadUserFavouriteBeatmapsets(userId) {
         function (xhr) {
             var favourites = JSON.parse(xhr.responseText) || [];
 
-            if (favouritesCount) setText(favouritesCount, favourites.length.toString());
+            if (favouritesCount) $(favouritesCount).text(favourites.length.toString());
 
             favouritesContainer.innerHTML = "";
 
@@ -1310,11 +1315,11 @@ function loadUserFavouriteBeatmapsets(userId) {
 
                 var setId = fav.beatmapset.id;
                 var table = createBeatmapsetTable(fav.beatmapset, {
-                    tableId: "favourite-" + setId,
+                    tableId: "favourite-" + setId
                 });
 
                 if (currentUser === userId) {
-                    var leftCell = queryFirst(table, "td");
+                    var leftCell = $(table).find("td").first()[0];
                     if (leftCell) {
                         leftCell.appendChild(document.createElement("br"));
                         var deleteWrap = document.createElement("div");
@@ -1326,7 +1331,7 @@ function loadUserFavouriteBeatmapsets(userId) {
                         deleteLink.onclick = function () {
                             return removeFavourite(setId);
                         };
-                        setText(deleteLink, "delete");
+                        $(deleteLink).text("delete");
                         deleteWrap.appendChild(deleteLink);
                         leftCell.appendChild(deleteWrap);
                     }
@@ -1341,8 +1346,8 @@ function loadUserFavouriteBeatmapsets(userId) {
         },
         function (xhr) {
             favouritesContainer.innerHTML = '<p style="margin:5px">Failed to load favourite beatmaps.</p>';
-            if (favouritesCount) setText(favouritesCount, "0");
-        },
+            if (favouritesCount) $(favouritesCount).text("0");
+        }
     );
 }
 
@@ -1362,11 +1367,11 @@ function loadUserNominatedBeatmapsets(userId) {
             var nominations = JSON.parse(xhr.responseText) || [];
 
             if (nominations.length === 0) {
-                removeElement(nominationsSection);
+                $(nominationsSection).remove();
                 return;
             }
 
-            if (nominationsCount) setText(nominationsCount, nominations.length.toString());
+            if (nominationsCount) $(nominationsCount).text(nominations.length.toString());
 
             nominationsContainer.innerHTML = "";
 
@@ -1384,13 +1389,13 @@ function loadUserNominatedBeatmapsets(userId) {
         },
         function (xhr) {
             if (xhr && xhr.status === 404) {
-                removeElement(nominationsSection);
+                $(nominationsSection).remove();
                 return;
             }
 
             nominationsContainer.innerHTML = '<p style="margin:5px">Failed to load nominated beatmaps.</p>';
-            if (nominationsCount) setText(nominationsCount, "0");
-        },
+            if (nominationsCount) $(nominationsCount).text("0");
+        }
     );
 }
 
@@ -1433,7 +1438,7 @@ function createBeatmapsetTable(beatmapset, options) {
     descriptionLink.className = "profile-beatmap-description";
 
     var bold = document.createElement("b");
-    setText(bold, (beatmapset.artist || "Unknown") + " - " + (beatmapset.title || "Unknown"));
+    $(bold).text((beatmapset.artist || "Unknown") + " - " + (beatmapset.title || "Unknown"));
     descriptionLink.appendChild(bold);
     tdLeft.appendChild(descriptionLink);
     tdLeft.appendChild(document.createElement("br"));
@@ -1446,12 +1451,12 @@ function createBeatmapsetTable(beatmapset, options) {
         if (server === 0) {
             var creatorLink = document.createElement("a");
             creatorLink.href = "https://osu.ppy.sh/u/" + creatorName;
-            setText(creatorLink, "mapped by " + creatorName);
+            $(creatorLink).text("mapped by " + creatorName);
             tdLeft.appendChild(creatorLink);
         } else {
             var creatorLink = document.createElement("a");
             creatorLink.href = "/u/" + creatorId;
-            setText(creatorLink, "mapped by " + creatorName);
+            $(creatorLink).text("mapped by " + creatorName);
             tdLeft.appendChild(creatorLink);
         }
     }
@@ -1469,7 +1474,7 @@ function createBeatmapsetTable(beatmapset, options) {
         deleteLink.onclick = function () {
             return deleteBeatmap(beatmapset.id);
         };
-        setText(deleteLink, "delete");
+        $(deleteLink).text("delete");
         deleteDiv.appendChild(deleteLink);
         controls.appendChild(deleteDiv);
 
@@ -1483,7 +1488,7 @@ function createBeatmapsetTable(beatmapset, options) {
             reviveLink.onclick = function () {
                 return reviveBeatmap(beatmapset.id);
             };
-            setText(reviveLink, "revive");
+            $(reviveLink).text("revive");
             reviveDiv.appendChild(reviveLink);
             controls.appendChild(reviveDiv);
         }
@@ -1508,8 +1513,8 @@ function createBeatmapsetTable(beatmapset, options) {
     return table;
 }
 
-addEvent("DOMContentLoaded", document, function (event) {
-    var beatmapContainers = getElementsByClassName("profile-beatmaps-container");
+$(document).ready(function (event) {
+    var beatmapContainers = $(".profile-beatmaps-container");
     for (var i = 0; i < beatmapContainers.length; i++) {
         beatmapContainers[i].style.display = "none";
     }

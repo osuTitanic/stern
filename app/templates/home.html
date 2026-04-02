@@ -159,7 +159,7 @@
         featuredVideo.appendChild(iframe);
     }
 
-    addEvent('DOMContentLoaded', window, function(e) {
+    $(document).on('DOMContentLoaded', window, function(e) {
         loadYoutubeIframe();
     });
 </script>

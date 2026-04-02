@@ -5,20 +5,20 @@ var refreshRate = 6000;
 var ScoringType = {
     0: "Score",
     1: "Accuracy",
-    2: "Combo",
+    2: "Combo"
 };
 
 var TeamType = {
     0: "Head to Head",
     1: "Tag Co-op",
     2: "Team VS",
-    3: "Tag Team VS",
+    3: "Tag Team VS"
 };
 
 var Team = {
     0: "None",
     1: "Blue",
-    2: "Red",
+    2: "Red"
 };
 
 function generateResultsTable(results, matchMods) {
@@ -493,7 +493,7 @@ function loadMatchEvents(id, after) {
                 element.remove();
             });
             statusText.innerHTML = "Failed to load match. Please try again!";
-        },
+        }
     );
 }
 
@@ -510,7 +510,7 @@ function loadMatchEventsLoop() {
 
 // TODO: Add option for displaying chat
 
-addEvent("DOMContentLoaded", document, function (event) {
+$(document).ready(function (event) {
     loadMatchEvents(matchId, undefined);
     loadMatchEventsLoop();
 });

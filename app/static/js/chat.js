@@ -28,7 +28,7 @@ var messageHandlers = {
     part: handleUserPart,
     quit: handleUserQuit,
     whois: handleWhoIsResponse,
-    message: handleChannelMessage,
+    message: handleChannelMessage
 };
 
 function getQueryParameter(name) {
@@ -76,7 +76,7 @@ function initializeSocket(username, password) {
             realname: username,
             leaveMessage: "Leaving...",
             join: "#osu",
-            password: password,
+            password: password
         });
     });
 
@@ -350,7 +350,7 @@ function handleChannelMessage(data) {
             sender: sender,
             text: message,
             highlight: highlight,
-            time: time,
+            time: time
         });
     }
 
@@ -512,7 +512,7 @@ function fetchChannelMessageHistory(channel, offset, limit, onSuccess, onFailure
         function (xhr) {
             console.error("Failed to fetch channel message history:", xhr);
             onFailure(xhr);
-        },
+        }
     );
 }
 
@@ -542,7 +542,7 @@ function fetchDirectMessageHistory(userId, offset, limit, onSuccess, onFailure) 
         function (xhr) {
             console.error("Failed to fetch DM message history:", xhr);
             onFailure(xhr);
-        },
+        }
     );
 }
 
@@ -564,7 +564,7 @@ function fetchUserById(userId, onSuccess, onFailure) {
         function (xhr) {
             console.error("Failed to fetch user by ID:", xhr);
             onFailure(xhr);
-        },
+        }
     );
 }
 
@@ -586,7 +586,7 @@ function fetchUserByName(username, onSuccess, onFailure) {
         function (xhr) {
             console.error("Failed to fetch user by name:", xhr);
             onFailure(xhr);
-        },
+        }
     );
 }
 
@@ -608,7 +608,7 @@ function fetchUserStatus(userId, onSuccess, onFailure) {
         function (xhr) {
             console.error("Failed to fetch user status:", xhr);
             onFailure(xhr);
-        },
+        }
     );
 }
 
@@ -631,7 +631,7 @@ function fetchDirectMessageSelection(onSuccess, onFailure) {
         function (xhr) {
             console.error("Failed to fetch DM selection:", xhr);
             onFailure(xhr);
-        },
+        }
     );
 }
 
@@ -655,7 +655,7 @@ function postDirectMessage(userId, message, onSuccess, onFailure) {
         function (xhr) {
             console.error("Failed to post direct message:", xhr);
             onFailure(xhr);
-        },
+        }
     );
 }
 
@@ -677,7 +677,7 @@ function markDmAsRead(targetId, messageId, onSuccess, onFailure) {
         function (xhr) {
             console.error("Failed to mark DM as read:", xhr);
             onFailure(xhr);
-        },
+        }
     );
 }
 
@@ -699,7 +699,7 @@ function markAllDmsAsRead(targetId, onSuccess, onFailure) {
         function (xhr) {
             console.error("Failed to mark all DMs as read:", xhr);
             onFailure(xhr);
-        },
+        }
     );
 }
 
@@ -848,7 +848,7 @@ function populateDMs() {
         function (xhr) {
             updateStatusText("Failed to load DMs.");
             disableChatInput();
-        },
+        }
     );
 }
 
@@ -927,7 +927,7 @@ function switchToDM(userId) {
         function (xhr) {
             console.error("Failed to fetch user for DM:", xhr);
             updateStatusText("Failed to load DM");
-        },
+        }
     );
 }
 
@@ -985,7 +985,7 @@ function loadChannelHistory(channel) {
                     sender: { nick: msg.sender.name, id: msg.sender.id },
                     text: msg.message,
                     highlight: false,
-                    time: new Date(msg.time),
+                    time: new Date(msg.time)
                 });
                 displayHistoricalMessage(msg);
             }
@@ -1001,7 +1001,7 @@ function loadChannelHistory(channel) {
             loadingHistoryFor = null;
             console.error("Failed to load channel history:", xhr);
             updateStatusText("Failed to load message history.");
-        },
+        }
     );
 }
 
@@ -1062,7 +1062,7 @@ function loadDMHistory(user) {
                     sender: { nick: nickname, id: msg.sender_id },
                     text: msg.message,
                     highlight: false,
-                    time: new Date(msg.time),
+                    time: new Date(msg.time)
                 });
                 displayHistoricalDirectMessage(msg, user);
             }
@@ -1078,7 +1078,7 @@ function loadDMHistory(user) {
             loadingHistoryFor = null;
             console.error("Failed to load DM history:", xhr);
             updateStatusText("Failed to load message history.");
-        },
+        }
     );
 }
 
@@ -1194,7 +1194,7 @@ function parseMessageLinks(text) {
         return {
             type: "link",
             url: match[1],
-            text: match[2],
+            text: match[2]
         };
     });
 
@@ -1207,7 +1207,7 @@ function parseMessageLinks(text) {
                 return {
                     type: "link",
                     url: match[0],
-                    text: match[0],
+                    text: match[0]
                 };
             });
             finalParts = finalParts.concat(urlParts);
@@ -1231,7 +1231,7 @@ function parseLinksWithRegex(text, regex, linkFactory) {
         if (match.index > lastIndex) {
             parts.push({
                 type: "text",
-                content: text.substring(lastIndex, match.index),
+                content: text.substring(lastIndex, match.index)
             });
         }
 
@@ -1244,7 +1244,7 @@ function parseLinksWithRegex(text, regex, linkFactory) {
     if (lastIndex < text.length) {
         parts.push({
             type: "text",
-            content: text.substring(lastIndex),
+            content: text.substring(lastIndex)
         });
     }
 
@@ -1252,7 +1252,7 @@ function parseLinksWithRegex(text, regex, linkFactory) {
     if (parts.length === 0) {
         parts.push({
             type: "text",
-            content: text,
+            content: text
         });
     }
 
@@ -1348,7 +1348,7 @@ function loadMoreChannelMessages(channel) {
                     sender: { nick: msg.sender.name, id: msg.sender.id },
                     text: msg.message,
                     highlight: false,
-                    time: new Date(msg.time),
+                    time: new Date(msg.time)
                 });
 
                 // Insert at the beginning of the chat log
@@ -1356,7 +1356,7 @@ function loadMoreChannelMessages(channel) {
                     { nick: msg.sender.name, id: msg.sender.id },
                     msg.message,
                     false,
-                    new Date(msg.time),
+                    new Date(msg.time)
                 );
                 if (chatLog.firstChild) {
                     chatLog.insertBefore(messageElement, chatLog.firstChild);
@@ -1377,7 +1377,7 @@ function loadMoreChannelMessages(channel) {
             isLoadingHistory = false;
             console.error("Failed to load more channel messages:", xhr);
             updateStatusText("Failed to load more messages.");
-        },
+        }
     );
 }
 
@@ -1438,7 +1438,7 @@ function loadMoreDMMessages(userId) {
                             sender: { nick: nickname, id: msg.sender_id },
                             text: msg.message,
                             highlight: false,
-                            time: new Date(msg.time),
+                            time: new Date(msg.time)
                         });
 
                         // Insert at the beginning of the chat log
@@ -1446,7 +1446,7 @@ function loadMoreDMMessages(userId) {
                             { nick: nickname, id: msg.sender_id },
                             msg.message,
                             false,
-                            new Date(msg.time),
+                            new Date(msg.time)
                         );
                         if (chatLog.firstChild) {
                             chatLog.insertBefore(messageElement, chatLog.firstChild);
@@ -1467,13 +1467,13 @@ function loadMoreDMMessages(userId) {
                     isLoadingHistory = false;
                     console.error("Failed to load more DM messages:", xhr);
                     updateStatusText("Failed to load more messages.");
-                },
+                }
             );
         },
         function (xhr) {
             isLoadingHistory = false;
             console.error("Failed to fetch user for DM:", xhr);
-        },
+        }
     );
 }
 
@@ -1557,7 +1557,7 @@ function sendCurrentMessage() {
             sender: { nick: currentUsername, id: currentUser },
             text: message,
             highlight: false,
-            time: time,
+            time: time
         });
 
         displayMessage({ nick: currentUsername, id: currentUser }, message, false, time);
@@ -1575,7 +1575,7 @@ function sendCurrentMessage() {
                 function (xhr) {
                     console.error("Failed to send DM:", xhr);
                     updateStatusText("Failed to send message");
-                },
+                }
             );
             return;
         }
@@ -1711,7 +1711,7 @@ function handleStartDMByName(username) {
         function (xhr) {
             console.error("User '" + username + "' was not found.");
             alert("User '" + username + "' was not found.");
-        },
+        }
     );
 }
 
@@ -1744,7 +1744,7 @@ function handleStartDMById(userId) {
         function (xhr) {
             console.error("User '" + userId + "' was not found.");
             alert("User '" + userId + "' was not found.");
-        },
+        }
     );
 }
 
@@ -1774,7 +1774,7 @@ function onIrcTokenFailure(xhr) {
     alert("Failed to retrieve your IRC password. Please try again later!");
 }
 
-addEvent("DOMContentLoaded", document, function () {
+$(document).ready(function () {
     if (!isLoggedIn()) return;
 
     // Replace " " with "_" for IRC compatibility

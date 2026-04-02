@@ -66,7 +66,7 @@ function createSnowflake() {
         size: Math.random() * 20 + 10,
         speed: Math.random() * 1.5 + 1,
         opacity: 1,
-        character: snowflakeCharacters[Math.floor(Math.random() * snowflakeCharacters.length)],
+        character: snowflakeCharacters[Math.floor(Math.random() * snowflakeCharacters.length)]
     };
     snowflakes.push(snowflake);
 }
@@ -244,7 +244,7 @@ function saveSnowState() {
         snowflakeCounter: snowflakeCounter,
         canvasWidth: snowBuildUpCanvas.width,
         isMelting: isMelting,
-        timestamp: Date.now(),
+        timestamp: Date.now()
     };
     sessionStorage.setItem("snowState", JSON.stringify(state));
 }

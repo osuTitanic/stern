@@ -100,8 +100,8 @@ var Mods = {
             }
         }
 
-        if (members.indexOf("DT") !== -1 && members.indexOf("NC") !== -1) {
-            members.splice(members.indexOf("DT"), 1);
+        if ($.inArray("DT", members) !== -1 && $.inArray("NC", members) !== -1) {
+            members.splice($.inArray("DT", members), 1);
         }
 
         var result = [];
@@ -109,14 +109,14 @@ var Mods = {
             result[result.length] = modMap[Mods[members[i]]];
         }
         return result.join("");
-    },
+    }
 };
 
 var Mode = {
     0: "osu!",
     1: "Taiko",
     2: "Catch the Beat",
-    3: "osu!Mania",
+    3: "osu!Mania"
 };
 
 var BeatmapStatus = {
@@ -127,7 +127,7 @@ var BeatmapStatus = {
     Ranked: 1,
     Approved: 2,
     Qualified: 3,
-    Loved: 4,
+    Loved: 4
 };
 
 BeatmapStatus.toString = function (status) {
@@ -167,111 +167,6 @@ function slideUp(elem) {
     setTimeout(function () {
         elem.style.height = "0px";
     }, 500);
-}
-
-function isHidden(elem) {
-    // Cross-browser compatible check for hidden elements
-    return (
-        elem.style.display === "none" || elem.offsetParent === null || elem.offsetWidth === 0 || elem.offsetHeight === 0
-    );
-}
-
-function getElementHeight(elem) {
-    var totalHeight = 0;
-    for (var i = 0; i < elem.children.length; i++) {
-        totalHeight += elem.children[i].offsetHeight + 10;
-    }
-    return totalHeight;
-}
-
-function getText(elem) {
-    return elem.textContent || elem.innerText;
-}
-
-function setText(elem, text) {
-    if (elem.textContent !== undefined) {
-        elem.textContent = text;
-    } else {
-        elem.innerText = text;
-    }
-}
-
-function getObjectKeys(obj) {
-    var keys = [];
-    for (var key in obj) {
-        if (Object.prototype.hasOwnProperty.call(obj, key)) {
-            keys.push(key);
-        }
-    }
-    return keys;
-}
-
-function hasClass(element, className) {
-    if (!element || !className) {
-        return false;
-    }
-
-    var currentClassName = element.className || "";
-    return (" " + currentClassName + " ").indexOf(" " + className + " ") !== -1;
-}
-
-function addClass(element, className) {
-    if (!element || !className || hasClass(element, className)) {
-        return;
-    }
-
-    element.className = element.className ? element.className + " " + className : className;
-}
-
-function removeClass(element, className) {
-    if (!element || !className) {
-        return;
-    }
-
-    var classes = (element.className || "").split(/\s+/);
-    var nextClasses = [];
-    for (var i = 0; i < classes.length; i++) {
-        if (classes[i] && classes[i] !== className) {
-            nextClasses.push(classes[i]);
-        }
-    }
-    element.className = nextClasses.join(" ");
-}
-
-function toggleClass(element, className) {
-    if (hasClass(element, className)) {
-        removeClass(element, className);
-        return false;
-    }
-
-    addClass(element, className);
-    return true;
-}
-
-function addClasses(element, classNames) {
-    for (var i = 0; i < classNames.length; i++) {
-        addClass(element, classNames[i]);
-    }
-}
-
-function removeElement(element) {
-    if (element && element.parentNode) {
-        element.parentNode.removeChild(element);
-    }
-}
-
-function arrayContains(arr, value) {
-    if (!arr) {
-        return false;
-    }
-
-    for (var i = 0; i < arr.length; i++) {
-        if (arr[i] === value) {
-            return true;
-        }
-    }
-
-    return false;
 }
 
 function formatDateShort(value) {
@@ -324,14 +219,6 @@ function isLoggedIn() {
 
 function isArray(obj) {
     return Object.prototype.toString.call(obj) === "[object Array]";
-}
-
-function show(id) {
-    $("#" + id).show();
-}
-
-function hide(id) {
-    $("#" + id).hide();
 }
 
 function getViewportWidth() {
@@ -425,132 +312,6 @@ function toggleSpoiler(root) {
     spoiler.children(".spoiler-body").slideToggle("fast");
     spoiler.find("img").trigger("unveil");
     return false;
-}
-
-function addEvent(eventName, targetElement, func) {
-    if (targetElement.addEventListener) {
-        // DOM Level 2 (modern browsers)
-        return targetElement.addEventListener(eventName, func, false);
-    }
-    if (targetElement.attachEvent) {
-        // Older IE (IE8 and earlier)
-        return targetElement.attachEvent("on" + eventName, function () {
-            return func.call(targetElement, window.event);
-        });
-    }
-    // Fallback to DOM Level 0 (very old browsers)
-    targetElement["on" + eventName] = func;
-}
-
-function preventEventDefault(event) {
-    if (!event) {
-        return;
-    }
-
-    if (event.preventDefault) {
-        event.preventDefault();
-    } else {
-        event.returnValue = false;
-    }
-}
-
-function stopEventPropagation(event) {
-    if (!event) {
-        return;
-    }
-
-    if (event.stopPropagation) {
-        event.stopPropagation();
-    } else {
-        event.cancelBubble = true;
-    }
-}
-
-function getEventTarget(event) {
-    return event ? event.target || event.srcElement : null;
-}
-
-function getParentElement(element) {
-    // IE8 and earlier doesn't support parentElement, so we use parentNode instead.
-    return (
-        element.parentElement || (element.parentNode && element.parentNode.nodeType === 1 ? element.parentNode : null)
-    );
-}
-
-function getElementsByClassName(className) {
-    if (document.getElementsByClassName) {
-        return document.getElementsByClassName(className);
-    }
-
-    if (document.querySelectorAll) {
-        return document.querySelectorAll("." + className);
-    }
-
-    var elements = document.getElementsByTagName("*");
-    var matches = [];
-    for (var i = 0; i < elements.length; i++) {
-        if ((" " + elements[i].className + " ").indexOf(" " + className + " ") !== -1) {
-            matches.push(elements[i]);
-        }
-    }
-    return matches;
-}
-
-function queryAll(root, selector) {
-    if (!root || !selector) {
-        return [];
-    }
-
-    if (root.querySelectorAll) {
-        return root.querySelectorAll(selector);
-    }
-
-    if (selector.charAt(0) === ".") {
-        var className = selector.substring(1);
-        var all = root.getElementsByTagName("*");
-        var byClass = [];
-        for (var i = 0; i < all.length; i++) {
-            if (hasClass(all[i], className)) {
-                byClass.push(all[i]);
-            }
-        }
-        return byClass;
-    }
-
-    return root.getElementsByTagName(selector);
-}
-
-function queryFirst(root, selector) {
-    var results = queryAll(root, selector);
-    return results && results.length > 0 ? results[0] : null;
-}
-
-function closest(element, selector) {
-    if (!element || !selector) {
-        return null;
-    }
-
-    if (element.closest) {
-        return element.closest(selector);
-    }
-
-    var isClassSelector = selector.charAt(0) === ".";
-    var className = isClassSelector ? selector.substring(1) : null;
-    var tagName = isClassSelector ? null : selector.toUpperCase();
-
-    while (element && element.nodeType === 1) {
-        if (isClassSelector) {
-            if (hasClass(element, className)) {
-                return element;
-            }
-        } else if (element.tagName === tagName) {
-            return element;
-        }
-
-        element = getParentElement(element);
-    }
-
-    return null;
 }
 
 function beatmapSearch() {
@@ -770,8 +531,8 @@ function convertFormToJson(formElement) {
 }
 
 function loadBBCodePreview(element) {
-    var parentElement = getParentElement(element);
-    var bbcodeWrapper = getParentElement(parentElement);
+    var parentElement = $(element).parent()[0];
+    var bbcodeWrapper = $(parentElement).parent()[0];
     var bbcodeEditor = bbcodeWrapper.querySelector("textarea");
 
     // Remove old previews
@@ -800,7 +561,7 @@ function loadBBCodePreview(element) {
             previewContainer.appendChild(document.createTextNode("Failed to load bbcode preview :("));
             bbcodeWrapper.appendChild(previewContainer);
             console.error(xhr.status + ': "' + xhr.statusText + '"');
-        },
+        }
     );
     return false;
 }
@@ -824,7 +585,7 @@ function reloadCsrfToken(callback) {
         function (xhr) {
             console.error("Failed to reload CSRF token");
             if (callback) callback();
-        },
+        }
     );
 }
 
@@ -852,7 +613,7 @@ function reloadCsrfBeforeSubmit(formElement) {
         });
     };
 
-    addEvent("submit", formElement, submitHandler);
+    $(formElement).on("submit", submitHandler);
 }
 
 function applyCsrfUpdaterToForms() {
@@ -879,7 +640,7 @@ function renderTimeagoElements() {
     }
 }
 
-addEvent("DOMContentLoaded", document, function (e) {
+$(document).ready(function (e) {
     pageLoaded = true;
     renderTimeagoElements();
 
@@ -888,11 +649,11 @@ addEvent("DOMContentLoaded", document, function (e) {
     }
 });
 
-addEvent("beforeunload", window, function (e) {
+$(window).on("beforeunload", function (e) {
     isNavigatingAway = true;
 });
 
-addEvent("visibilitychange", document, function (e) {
+$(document).on("visibilitychange", function (e) {
     if (!isLoggedIn()) return;
 
     if (!pageLoaded) return;

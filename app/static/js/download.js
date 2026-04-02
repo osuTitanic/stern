@@ -27,7 +27,7 @@ function selectCategory(category) {
     for (var i = 0; i < categoryLinks.length; i++) {
         var categoryLink = categoryLinks[i];
 
-        if (getText(categoryLink) == category) {
+        if ($(categoryLink).text() == category) {
             categoryLink.className = "category selected";
         } else {
             categoryLink.className = "category";
@@ -41,7 +41,7 @@ function deselectCategory(category) {
     for (var i = 0; i < categoryLinks.length; i++) {
         var categoryLink = categoryLinks[i];
 
-        if (getText(categoryLink) == category) {
+        if ($(categoryLink).text() == category) {
             categoryLink.className = "category";
         }
     }

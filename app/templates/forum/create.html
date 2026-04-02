@@ -58,13 +58,13 @@
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 </form><br>
 <script>
-    addEvent('DOMContentLoaded', document, function(event) {
+    $(document).on('DOMContentLoaded', document, function(event) {
         // Focus the subject field on page load
         const subjectField = document.getElementById('subject-field');
         if (subjectField) subjectField.focus();
     });
 
-    addEvent('keydown', document, function(event) {
+    $(document).on('keydown', document, function(event) {
         // Submit the form when Ctrl + Enter is pressed
         if (event.ctrlKey && event.key === 'Enter') {
             var submitButton = document.querySelector('.post-buttons input[type="submit"]');

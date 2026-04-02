@@ -2,7 +2,7 @@ function getSelectionRange(textarea) {
     if (typeof textarea.selectionStart === "number" && typeof textarea.selectionEnd === "number") {
         return {
             start: textarea.selectionStart,
-            end: textarea.selectionEnd,
+            end: textarea.selectionEnd
         };
     }
 
@@ -26,14 +26,14 @@ function getSelectionRange(textarea) {
 
         return {
             start: start,
-            end: end,
+            end: end
         };
     }
 
     var length = textarea.value.length;
     return {
         start: length,
-        end: length,
+        end: length
     };
 }
 
@@ -54,19 +54,19 @@ function setSelectionRangeCompat(textarea, start, end) {
 
 function insertBBCode(event) {
     event = event || window.event;
-    preventEventDefault(event);
-    var element = getEventTarget(event);
+    event.preventDefault();
+    var element = event.target || event.srcElement;
 
     if (element.tagName !== "BUTTON") {
-        element = getParentElement(element); // whyyy
+        element = $(element).parent()[0]; // whyyy
     }
 
     var bbcodeTag = element.getAttribute("data-bbcode-tag");
     var property = element.getAttribute("data-property");
     var noClose = element.getAttribute("data-no-close");
 
-    var parent = getParentElement(element);
-    var textAreas = getParentElement(parent).getElementsByTagName("textarea");
+    var parent = $(element).parent()[0];
+    var textAreas = $(parent).parent()[0].getElementsByTagName("textarea");
 
     if (textAreas.length === 0) {
         console.warn("No text area found in the parent element.");
@@ -144,15 +144,15 @@ function replaceImageBBCode(textarea, oldContent, newContent) {
     }
 }
 
-var editors = getElementsByClassName("bbcode-editor");
+var editors = $(".bbcode-editor");
 var isUploading = false;
 
 for (var i = 0; i < editors.length; i++) {
     var editor = editors[i];
 
-    addEvent("paste", editor, function (event) {
+    $(editor).on("paste", function (event) {
         event = event || window.event;
-        var editor = getEventTarget(event);
+        var editor = event.target || event.srcElement;
 
         if (!event.clipboardData) {
             return;
@@ -180,8 +180,8 @@ for (var i = 0; i < editors.length; i++) {
 
             // We’ve found an image in the clipboard.
             // Prevent the default “pasting” of the image
-            preventEventDefault(event);
-            stopEventPropagation(event);
+            event.preventDefault();
+            event.stopPropagation();
 
             var blob = item.getAsFile();
             if (!blob) {
@@ -210,15 +210,15 @@ for (var i = 0; i < editors.length; i++) {
                     setTimeout(function () {
                         isUploading = false;
                     }, 1000);
-                },
+                }
             );
             return;
         }
     });
 }
 
-var toolbars = getElementsByClassName("bbcode-toolbar");
+var toolbars = $(".bbcode-toolbar");
 
 for (var i = 0; i < toolbars.length; i++) {
-    addEvent("click", toolbars[i], insertBBCode);
+    $(toolbars[i]).on("click", insertBBCode);
 }

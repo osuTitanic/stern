@@ -1,6 +1,6 @@
 var defaultError = {
     error: 500,
-    details: "An internal server error occurred.",
+    details: "An internal server error occurred."
 };
 
 function handleApiErrorCallback(xhr, handlerFunction) {
@@ -28,7 +28,7 @@ function getUser(userId, onSuccess, onFailure) {
         },
         function (xhr) {
             return handleApiErrorCallback(xhr, onFailure);
-        },
+        }
     );
 }
 
@@ -50,7 +50,7 @@ function updateUserProfile(userId, data, onSuccess, onFailure) {
                 discord: user.discord,
                 twitter: user.twitter,
                 location: user.location,
-                interests: user.interests,
+                interests: user.interests
             };
 
             // Update fields provided in "data"
@@ -80,12 +80,12 @@ function updateUserProfile(userId, data, onSuccess, onFailure) {
                     if (onFailure) {
                         onFailure(error);
                     }
-                },
+                }
             );
         },
         function (error) {
             return onFailure(error);
-        },
+        }
     );
 }
 
@@ -105,7 +105,7 @@ function removeUserAvatar(userId, onSuccess, onFailure) {
         },
         function (xhr) {
             return handleApiErrorCallback(xhr, onFailure);
-        },
+        }
     );
 }
 
@@ -122,7 +122,7 @@ function addBadge(userId, badgeData, onSuccess, onFailure) {
         },
         function (xhr) {
             return handleApiErrorCallback(xhr, onFailure);
-        },
+        }
     );
 }
 
@@ -139,7 +139,7 @@ function updateBadge(userId, badgeId, badgeData, onSuccess, onFailure) {
         },
         function (xhr) {
             return handleApiErrorCallback(xhr, onFailure);
-        },
+        }
     );
 }
 
@@ -155,7 +155,7 @@ function removeBadge(userId, badgeId, onSuccess, onFailure) {
         },
         function (xhr) {
             return handleApiErrorCallback(xhr, onFailure);
-        },
+        }
     );
 }
 
@@ -172,7 +172,7 @@ function getUserInfringements(userId, onSuccess, onFailure) {
         },
         function (xhr) {
             return handleApiErrorCallback(xhr, onFailure);
-        },
+        }
     );
 }
 
@@ -193,7 +193,7 @@ function createUserInfringement(userId, infringementData, onSuccess, onFailure) 
         },
         function (xhr) {
             return handleApiErrorCallback(xhr, onFailure);
-        },
+        }
     );
 }
 
@@ -210,7 +210,7 @@ function updateUserInfringement(userId, infringementId, infringementData, onSucc
         },
         function (xhr) {
             return handleApiErrorCallback(xhr, onFailure);
-        },
+        }
     );
 }
 
@@ -235,7 +235,7 @@ function deleteUserInfringement(userId, infringementId, restoreScores, onSuccess
         },
         function (xhr) {
             return handleApiErrorCallback(xhr, onFailure);
-        },
+        }
     );
 }
 
@@ -258,7 +258,7 @@ function wipeUserScores(userId, onSuccess, onFailure) {
         },
         function (xhr) {
             return handleApiErrorCallback(xhr, onFailure);
-        },
+        }
     );
 }
 
@@ -278,7 +278,7 @@ function restoreUserScores(userId, onSuccess, onFailure) {
         },
         function (xhr) {
             return handleApiErrorCallback(xhr, onFailure);
-        },
+        }
     );
 }
 
@@ -303,7 +303,7 @@ function clearUserProfile(userId, onSuccess, onFailure) {
         discord: null,
         twitter: null,
         location: null,
-        interests: null,
+        interests: null
     };
     updateUserProfile(userId, data, onSuccess, onFailure);
 }
@@ -384,7 +384,7 @@ function moderationSaveProfile(userId) {
         },
         function (err) {
             alert("Error: " + err.details);
-        },
+        }
     );
 }
 
@@ -392,7 +392,7 @@ function moderationUpdateBadge(userId, badgeId) {
     var data = {
         badge_url: document.getElementById("badge-url-" + badgeId).value || null,
         icon_url: document.getElementById("badge-icon-" + badgeId).value || null,
-        description: document.getElementById("badge-desc-" + badgeId).value || null,
+        description: document.getElementById("badge-desc-" + badgeId).value || null
     };
 
     updateBadge(
@@ -404,7 +404,7 @@ function moderationUpdateBadge(userId, badgeId) {
         },
         function (err) {
             alert("Failed to update badge: " + err.details);
-        },
+        }
     );
 }
 
@@ -419,7 +419,7 @@ function moderationDeleteBadge(userId, badgeId) {
         },
         function (err) {
             alert("Failed to delete badge: " + err.details);
-        },
+        }
     );
 }
 
@@ -427,7 +427,7 @@ function moderationAddBadge(userId) {
     var data = {
         badge_url: document.getElementById("badge-new-url").value || null,
         icon_url: document.getElementById("badge-new-icon").value || null,
-        description: document.getElementById("badge-new-desc").value || null,
+        description: document.getElementById("badge-new-desc").value || null
     };
 
     addBadge(
@@ -439,7 +439,7 @@ function moderationAddBadge(userId) {
         },
         function (err) {
             alert("Failed to add badge: " + err.details);
-        },
+        }
     );
 }
 
@@ -452,7 +452,7 @@ function moderationOpenInfringements(userId) {
 
     // Remove existing rows except the new-row
     var rows = Array.from(body.querySelectorAll("tr"));
-    rows.forEach(function (r) {
+    $.each(rows, function (i, r) {
         if (r.id !== "infringement-new-row") r.remove();
     });
 
@@ -463,10 +463,10 @@ function moderationOpenInfringements(userId) {
                 return new Date(b.time) - new Date(a.time);
             });
 
-            infringements.forEach(function (inf) {
+            $.each(infringements, function (i, inf) {
                 body.insertBefore(
                     createInfringementElement(inf, userId),
-                    document.getElementById("infringement-new-row"),
+                    document.getElementById("infringement-new-row")
                 );
             });
             hideSpinner();
@@ -474,7 +474,7 @@ function moderationOpenInfringements(userId) {
         function (err) {
             hideSpinner();
             alert("Failed to load infringements: " + (err && err.details ? err.details : "Unknown error"));
-        },
+        }
     );
 }
 
@@ -485,7 +485,7 @@ function moderationUpdateInfringement(userId, infringementId) {
     var data = {
         duration: (parseInt(row.elements.duration.value, 10) || 0) * 60,
         description: row.elements.description.value || null,
-        is_permanent: !!row.elements.isPermanent.checked,
+        is_permanent: !!row.elements.isPermanent.checked
     };
     showSpinner();
 
@@ -500,7 +500,7 @@ function moderationUpdateInfringement(userId, infringementId) {
         function (err) {
             hideSpinner();
             alert("Failed to update infringement: " + (err && err.details ? err.details : "Unknown error"));
-        },
+        }
     );
 }
 
@@ -521,7 +521,7 @@ function moderationDeleteInfringement(userId, infringementId, isRestriction) {
         function (err) {
             hideSpinner();
             alert("Failed to delete infringement: " + (err && err.details ? err.details : "Unknown error"));
-        },
+        }
     );
 }
 
@@ -535,7 +535,7 @@ function moderationAddInfringement(userId) {
         duration: duration * 60,
         action: action,
         description: description,
-        is_permanent: is_permanent,
+        is_permanent: is_permanent
     };
     showSpinner();
 
@@ -549,7 +549,7 @@ function moderationAddInfringement(userId) {
         function (err) {
             hideSpinner();
             alert("Failed to add infringement: " + (err && err.details ? err.details : "Unknown error"));
-        },
+        }
     );
 }
 
@@ -635,7 +635,7 @@ function createInfringementElement(inf, userId) {
         action: moderationSelect,
         duration: durationInput,
         isPermanent: isPermanentCheckbox,
-        description: descriptionInput,
+        description: descriptionInput
     };
 
     return infringementRow;

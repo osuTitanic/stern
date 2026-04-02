@@ -4,7 +4,7 @@ if (!window.console) {
         log: function () {},
         info: function () {},
         warn: function () {},
-        error: function () {},
+        error: function () {}
     };
 }
 

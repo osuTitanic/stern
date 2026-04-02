@@ -1,7 +1,7 @@
 function validateField(element) {
     var type = element.getAttribute("name");
     var value = element.value;
-    var descriptionField = getParentElement(element).querySelector(".input-description");
+    var descriptionField = $(element).parent()[0].querySelector(".input-description");
 
     if (!value) return;
 
@@ -12,7 +12,7 @@ function validateField(element) {
     xhr.open(
         "GET",
         "/account/register/check?type=" + encodeURIComponent(type) + "&value=" + encodeURIComponent(value),
-        true,
+        true
     );
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
@@ -36,7 +36,7 @@ function validateField(element) {
 }
 
 function isValid(element) {
-    var descriptionField = getParentElement(element).querySelector(".input-description");
+    var descriptionField = $(element).parent()[0].querySelector(".input-description");
     var type = element.getAttribute("name");
     var value = element.value;
 
@@ -50,7 +50,7 @@ function isValid(element) {
     xhr.open(
         "GET",
         "/account/register/check?type=" + encodeURIComponent(type) + "&value=" + encodeURIComponent(value),
-        true,
+        true
     );
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
@@ -87,15 +87,13 @@ function validateAll(event) {
             promises.push(
                 new Promise(function (resolve) {
                     isValid(field) && resolve(true);
-                }),
+                })
             );
         })(validationFields[i]);
     }
 
     Promise.all(promises).then(function (results) {
-        var allValid = results.every(function (valid) {
-            return valid;
-        });
+        var allValid = $.inArray(false, results) === -1;
         if (allValid) {
             event.target.submit();
         }
@@ -107,7 +105,7 @@ var timeout = null;
 var validationFields = document.querySelectorAll(".validate");
 for (var j = 0; j < validationFields.length; j++) {
     (function (element) {
-        addEvent("keyup", element, function (event) {
+        $(element).on("keyup", function (event) {
             clearTimeout(timeout);
 
             timeout = setTimeout(function () {
@@ -115,7 +113,7 @@ for (var j = 0; j < validationFields.length; j++) {
             }, 500);
         });
 
-        addEvent("blur", element, function (event) {
+        $(element).on("blur", function (event) {
             validateField(element);
         });
     })(validationFields[j]);

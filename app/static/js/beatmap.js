@@ -35,7 +35,7 @@ function copySetId(element) {
         function () {
             element.innerHTML = "Failed to copy!";
             element.style.color = "red";
-        },
+        }
     );
 
     setTimeout(function () {
@@ -60,7 +60,7 @@ function updateBeatmapsetMetadata(event) {
         function (xhr) {
             var response = JSON.parse(xhr.responseText);
             alert(response.details);
-        },
+        }
     );
 }
 
@@ -96,7 +96,7 @@ function editBeatmapDescription() {
             },
             function (xhr) {
                 showError(xhr, "An error occurred while trying to update the description.");
-            },
+            }
         );
     };
 
@@ -150,7 +150,7 @@ function acceptCollaborationRequest(beatmapId, requestId) {
         },
         function (xhr) {
             showError(xhr, "An error occurred while trying to accept the invite.");
-        },
+        }
     );
 }
 
@@ -168,7 +168,7 @@ function rejectCollaborationRequest(beatmapId, requestId) {
         },
         function (xhr) {
             showError(xhr, "An error occurred while trying to decline the invite.");
-        },
+        }
     );
 }
 
@@ -186,7 +186,7 @@ function removeCollaborationRequest(beatmapId, requestId) {
         },
         function (xhr) {
             showError(xhr, "An error occurred while trying to delete your invite.");
-        },
+        }
     );
 }
 
@@ -212,7 +212,7 @@ function createCollaborationRequest(beatmapId) {
             } else {
                 alert("An error occurred while looking up the user.");
             }
-        },
+        }
     );
 }
 
@@ -228,7 +228,7 @@ function createCollaborationRequestFromUserId(userId, beatmapId) {
         },
         function (xhr) {
             showError(xhr, "An error occurred while creating your invite.");
-        },
+        }
     );
 }
 
@@ -244,7 +244,7 @@ function editCollaborationRequest(beatmapId, collaborationId, edits) {
         },
         function (xhr) {
             showError(xhr, "An error occurred while editing the collaboration invite.");
-        },
+        }
     );
 }
 
@@ -264,35 +264,35 @@ function removeCollaboration(beatmapId, collaborationId) {
         },
         function (xhr) {
             showError(xhr, "An error occurred while trying to remove the collaborator.");
-        },
+        }
     );
 }
 
 function collaborationMakeAuthor(beatmapId, collaborationId) {
     return editCollaborationRequest(beatmapId, collaborationId, {
         allow_resource_updates: canUpdateResources(collaborationId),
-        is_beatmap_author: true,
+        is_beatmap_author: true
     });
 }
 
 function collaborationRemoveAuthor(beatmapId, collaborationId) {
     return editCollaborationRequest(beatmapId, collaborationId, {
         allow_resource_updates: canUpdateResources(collaborationId),
-        is_beatmap_author: false,
+        is_beatmap_author: false
     });
 }
 
 function collaborationAllowResourceUpdates(beatmapId, collaborationId) {
     return editCollaborationRequest(beatmapId, collaborationId, {
         allow_resource_updates: true,
-        is_beatmap_author: isBeatmapAuthor(collaborationId),
+        is_beatmap_author: isBeatmapAuthor(collaborationId)
     });
 }
 
 function collaborationDisallowResourceUpdates(beatmapId, collaborationId) {
     return editCollaborationRequest(beatmapId, collaborationId, {
         allow_resource_updates: false,
-        is_beatmap_author: isBeatmapAuthor(collaborationId),
+        is_beatmap_author: isBeatmapAuthor(collaborationId)
     });
 }
 
@@ -319,14 +319,14 @@ function showError(xhr, defaultMessage) {
 
 var scores = document.querySelectorAll(".scores tbody tr");
 for (var i = 0; i < scores.length; i++) {
-    addEvent("click", scores[i], function (e) {
-        if (e.target.closest("a")) return;
+    $(scores[i]).on("click", function (e) {
+        if ($(e.target).closest("a").length) return;
 
-        window.location.href = `/scores/${this.id}`;
+        window.location.href = "/scores/" + this.id;
     });
 }
 
-addEvent("DOMContentLoaded", document, function () {
+$(document).ready(function () {
     var url = window.location.pathname;
     if (!url.startsWith("/b/") && !url.startsWith("/s/")) {
         return;
@@ -342,7 +342,7 @@ addEvent("DOMContentLoaded", document, function () {
     var descriptionElements = document.querySelectorAll(".beatmap-description, .beatmap-description *");
 
     for (var i = 0; i < descriptionElements.length; i++) {
-        addEvent("dblclick", descriptionElements[i], function (event) {
+        $(descriptionElements[i]).on("dblclick", function (event) {
             editBeatmapDescription();
         });
     }

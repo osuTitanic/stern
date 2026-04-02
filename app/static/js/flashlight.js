@@ -28,7 +28,7 @@ $("document").ready(function () {
         }
         settings = {
             flEnabled: true,
-            hdEnabled: true,
+            hdEnabled: true
         };
         localStorage.setItem("aprilFoolsSettings", JSON.stringify(settings));
     }
