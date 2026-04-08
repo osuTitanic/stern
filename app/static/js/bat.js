@@ -183,3 +183,20 @@ function linkBeatmapsetToTopic(beatmapsetId, topicId) {
         }
     );
 }
+
+function unlinkBeatmapsetFromTopic(beatmapsetId) {
+    var url = "/beatmapsets/" + beatmapsetId + "/link";
+
+    performApiRequest(
+        "DELETE",
+        url,
+        null,
+        function (xhr) {
+            reloadPageSoon();
+        },
+        function (xhr) {
+            var response = JSON.parse(xhr.responseText);
+            alert(response.details);
+        }
+    );
+}

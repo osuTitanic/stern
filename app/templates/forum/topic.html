@@ -5,6 +5,8 @@
 {% set posts_per_page = 15 %}
 {% set page_count = (post_count / posts_per_page)|ceil %}
 
+{% set in_map_requests_forum = (forum.id == 11) %}
+
 {% set is_privileged = (
     current_user.is_moderator or
     current_user.is_admin
@@ -139,6 +141,18 @@
             <a onclick="addBookmark({{ topic.id }})" id="bookmark-button">
                 Bookmark topic
             </a>
+            {% endif %}
+            {% if current_user.is_bat and in_map_requests_forum %}
+                |
+                {% if not beatmapset %}
+                <a onclick="linkTopicToBeatmap()">
+                    Link to Beatmapset
+                </a>
+                {% else %}
+                <a onclick="unlinkTopicFromBeatmap()">
+                    Unlink Beatmapset
+                </a>
+                {% endif %}
             {% endif %}
         {% endif %}
         </td>
@@ -330,6 +344,26 @@
     </div>
     <br>
 </div>
+{% if in_map_requests_forum and current_user.is_bat %}
+<script src="{{ '/js/bat.js'|cached_url }}" defer></script>
+<script>
+    function linkTopicToBeatmap() {
+        var beatmapsetId = prompt("Enter the beatmapset ID to link this topic to:");
+        if (beatmapsetId === null || isNaN(beatmapsetId))
+            return;
+
+        linkBeatmapsetToTopic(beatmapsetId, {{ topic.id }});
+    }
+    {% if beatmapset %}
+    function unlinkTopicFromBeatmap() {
+        if (!confirm("Are you sure you want to unlink the beatmapset from this topic?"))
+            return;
+
+        unlinkBeatmapsetFromTopic({{ beatmapset.id }});
+    }
+    {% endif %}
+</script>
+{% endif %}
 <script>
     function addSubscription(topicId) {
         performApiRequest("POST", "/forum/subscriptions", {"topic_id": topicId}, function(xhr) {
