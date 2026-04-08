@@ -14,7 +14,13 @@
     {{' - ' if beatmapset.artist and beatmapset.title}}
     {{beatmapset.title if beatmapset.title}}
     {% if beatmapset.server == 0 %}
-    <p>View on <a href="https://osu.ppy.sh/b/{{ beatmap.id }}">osu.ppy.sh</a></p>
+        <p>
+            View on <a href="https://osu.ppy.sh/b/{{ beatmap.id }}">osu.ppy.sh</a>
+            {# Show map request as well, if it has been linked #}
+            {% if beatmapset.topic_id %}
+            / <a href="/forum/t/{{ beatmapset.topic_id }}">forums</a>
+            {% endif %}
+        </p>
     {% else %}
         {% if beatmapset.topic_id %}
         <p>View on <a href="/forum/t/{{ beatmapset.topic_id }}">forums</a></p>
