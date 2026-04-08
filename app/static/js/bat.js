@@ -165,3 +165,21 @@ function updateBeatmapsetOwner(beatmapsetId) {
         }
     );
 }
+
+function linkBeatmapsetToTopic(beatmapsetId, topicId) {
+    var url = "/beatmapsets/" + beatmapsetId + "/link";
+    var data = { topic_id: topicId };
+
+    performApiRequest(
+        "PATCH",
+        url,
+        data,
+        function (xhr) {
+            reloadPageSoon();
+        },
+        function (xhr) {
+            var response = JSON.parse(xhr.responseText);
+            alert(response.details);
+        }
+    );
+}
