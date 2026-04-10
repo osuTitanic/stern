@@ -8,6 +8,7 @@ from flask_wtf.csrf import generate_csrf
 from flask_login import current_user
 from jinja2 import TemplateNotFound
 from sqlalchemy.orm import Session
+from urllib.parse import urlsplit
 from PIL import Image
 
 from app.common.database.repositories import wrapper, users
@@ -249,3 +250,30 @@ def hex_to_rgba(hex_color: str, alpha: float = 1.0) -> tuple[float, float, float
     hex_color = hex_color.lstrip('#')
     r, g, b = tuple(int(hex_color[i:i+2], 16) for i in (0, 2, 4))
     return (r/255.0, g/255.0, b/255.0, alpha)
+
+def sanitize_local_redirect(target: str | None, fallback: str = '/') -> str:
+    if not target:
+        return fallback
+
+    candidate = target.strip()
+
+    if not candidate:
+        return fallback
+
+    # Prevent header splitting and only allow local absolute paths
+    if '\r' in candidate or '\n' in candidate:
+        return fallback
+
+    parsed = urlsplit(candidate)
+
+    if parsed.scheme or parsed.netloc:
+        return fallback
+
+    if not candidate.startswith('/'):
+        return fallback
+
+    # Block protocol-relative and backslash-prefixed paths
+    if candidate.startswith('//') or candidate.startswith('/\\'):
+        return fallback
+
+    return candidate

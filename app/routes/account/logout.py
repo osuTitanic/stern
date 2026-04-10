@@ -12,5 +12,5 @@ def logout():
     if flask_login.current_user.is_anonymous:
         return redirect('/')
 
-    redirect_url = request.form.get('redirect', '/')
+    redirect_url = utils.sanitize_local_redirect(request.form.get('redirect'))
     return accounts.perform_logout(redirect(redirect_url))

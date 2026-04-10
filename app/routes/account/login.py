@@ -22,22 +22,31 @@ def login_page():
         # User has already logged in
         return redirect(f'/u/{current_user.id}')
 
-    return render_login_page(redirect=request.args.get('redirect', None))
+    redirect_url = utils.sanitize_local_redirect(
+        request.args.get('redirect'),
+        fallback=''
+    )
+    return render_login_page(redirect=redirect_url)
 
 @router.post('/login')
 def login():
     form = request.form.to_dict()
     username = form.get('username')
     password = form.get('password')
-    redirect_url = form.get('redirect')
     remember = bool(form.get('remember'))
+    redirect_url = utils.sanitize_local_redirect(
+        form.get('redirect'),
+        fallback=''
+    )
 
     ip = helpers.ip.resolve_ip_address_flask(request)
     login_attempts = app.session.redis.get(f'logins:{ip}') or 0
 
     if int(login_attempts) > 30:
         # Tell user to slow down
-        officer.call(f'Too many login requests from ip! ({ip})')
+        officer.call(
+            f'Too many login requests from ip! ({ip})'
+        )
         return render_login_page(
             error="Too many login attempts. Please wait a minute and try again!",
             redirect=redirect_url
