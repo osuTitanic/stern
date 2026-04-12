@@ -32,6 +32,18 @@
             </div>
         </div>
 
+        <div class="home-actions home-actions-mobile">
+            <a href="/download">
+                <img height="55" width="356" src="{{ '/images/buttons/download-button.png'|cached_url }}" alt="Download" loading="lazy"/>
+            </a>
+            <a href="https://github.com/osuTitanic/">
+                <img height="55" width="356" src="{{ '/images/buttons/contribute-button.png'|cached_url }}" alt="Contribute" loading="lazy"/>
+            </a>
+            <a href="https://ko-fi.com/lekuru">
+                <img height="55" width="356" src="{{ '/images/buttons/support-button.png'|cached_url }}" alt="Support" loading="lazy"/>
+            </a>
+        </div>
+
         <div class="news-wrapper">
             <h2 class="headers">News</h2>
             {% if not news %}
@@ -56,10 +68,15 @@
                     </div>
                 </div>
             {% endfor %}
-            {# Add more spacing between news and bottom stats if needed #}
-            <div style="margin-bottom: 350px"></div>
             {% endif %}
         </div>
+
+        <div class="featured featured-mobile">
+            <h2 class="headers">Featured Video</h2>
+            <!-- YouTube iframe will be lazy loaded in here -->
+        </div>
+
+        <div class="bottom-stats-spacer"></div>
 
         <div class="bottom-stats">
             <div class="stats-wrapper">
@@ -90,19 +107,23 @@
     </div>
 
     <div class="right-side">
-        <a href="/download">
-            <img height="55" width="356" src="{{ '/images/buttons/download-button.png'|cached_url }}" alt="Download" loading="lazy"/>
-        </a>
-        <a href="https://github.com/osuTitanic/">
-            <img height="55" width="356" src="{{ '/images/buttons/contribute-button.png'|cached_url }}" alt="Contribute" loading="lazy"/>
-        </a>
-        <a href="https://ko-fi.com/lekuru">
-            <img height="55" width="356" src="{{ '/images/buttons/support-button.png'|cached_url }}" alt="Support" loading="lazy"/>
-        </a>
-        <div class="featured">
+        <div class="home-actions home-actions-desktop">
+            <a href="/download">
+                <img height="55" width="356" src="{{ '/images/buttons/download-button.png'|cached_url }}" alt="Download" loading="lazy"/>
+            </a>
+            <a href="https://github.com/osuTitanic/">
+                <img height="55" width="356" src="{{ '/images/buttons/contribute-button.png'|cached_url }}" alt="Contribute" loading="lazy"/>
+            </a>
+            <a href="https://ko-fi.com/lekuru">
+                <img height="55" width="356" src="{{ '/images/buttons/support-button.png'|cached_url }}" alt="Support" loading="lazy"/>
+            </a>
+        </div>
+
+        <div class="featured featured-desktop">
             <h2 class="headers">Featured Video</h2>
             <!-- YouTube iframe will be lazy loaded in here -->
         </div>
+
         <div class="most-played">
             <h2 class="headers">
                 Most Played Beatmaps
@@ -144,19 +165,32 @@
 </div>
 <script>
     function loadYoutubeIframe() {
-        var featuredVideo = document.querySelector('.featured');
-        var iframe = document.createElement('iframe');
-        iframe.title = "Featured";
-        iframe.width = "356";
-        iframe.height = "278";
-        iframe.type = "text/html";
-        iframe.style.border = "0";
-        iframe.src = "https://www.youtube-nocookie.com/embed?listType=playlist&list=UUir7A_JJa1Vhg_84ejh6Ung&mute=1&autoplay=1&controls=0&rel=0";
-        iframe.allow = "autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share";
-        iframe.referrerPolicy = 'strict-origin-when-cross-origin';
-        iframe.loading = "lazy";
-        iframe.allowFullscreen = true;
-        featuredVideo.appendChild(iframe);
+        var featuredVideos = document.querySelectorAll('.featured');
+
+        for (var i = 0; i < featuredVideos.length; i++) {
+            var featuredVideo = featuredVideos[i];
+
+            if (window.getComputedStyle(featuredVideo).display === "none") {
+                continue;
+            }
+
+            if (featuredVideo.querySelector('iframe')) {
+                continue;
+            }
+
+            var iframe = document.createElement('iframe');
+            iframe.title = "Featured";
+            iframe.width = "356";
+            iframe.height = "278";
+            iframe.type = "text/html";
+            iframe.style.border = "0";
+            iframe.src = "https://www.youtube-nocookie.com/embed?listType=playlist&list=UUir7A_JJa1Vhg_84ejh6Ung&mute=1&autoplay=1&controls=0&rel=0";
+            iframe.allow = "autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share";
+            iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+            iframe.loading = "lazy";
+            iframe.allowFullscreen = true;
+            featuredVideo.appendChild(iframe);
+        }
     }
 
     $(document).on('DOMContentLoaded', window, function(e) {

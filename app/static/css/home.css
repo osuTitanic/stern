@@ -50,8 +50,34 @@
     border-radius: 10px;
 }
 
+.home-actions {
+    margin-bottom: 16px;
+}
+
+.home-actions-mobile,
+.featured-mobile {
+    display: none;
+}
+
+.home-actions a {
+    display: block;
+    margin-bottom: 8px;
+}
+
+.home-actions a img {
+    display: block;
+}
+
 .news-wrapper {
-    margin-bottom: 380px;
+    margin-bottom: 16px;
+}
+
+.featured {
+    margin-bottom: 16px;
+}
+
+.bottom-stats-spacer {
+    margin-bottom: 350px;
 }
 
 .news-wrapper h2 {
@@ -209,4 +235,122 @@
 
 .chat-wrapper {
     width: 100%;
+}
+
+@media screen and (max-width: 900px) {
+    .home-actions-mobile,
+    .featured-mobile {
+        display: block;
+    }
+
+    .home-actions-desktop,
+    .featured-desktop {
+        display: none;
+    }
+
+    .content-wrapper {
+        overflow: visible;
+    }
+
+    .left-side,
+    .right-side {
+        float: none;
+        width: auto;
+        min-height: 0;
+        height: auto;
+    }
+
+    .right-side {
+        margin-right: 0;
+        margin-top: 20px;
+    }
+
+    .home-actions {
+        margin-bottom: 12px;
+    }
+
+    .home-actions a img {
+        width: 100%;
+        height: auto;
+    }
+
+    .headers {
+        margin-top: 16px;
+    }
+
+    .news-wrapper {
+        margin-bottom: 0;
+    }
+
+    .bottom-stats-spacer {
+        display: none;
+    }
+
+    .bottom-stats,
+    .most-played {
+        position: static;
+        bottom: auto;
+        width: auto;
+    }
+
+    .bottom-stats {
+        margin-top: 0;
+    }
+
+    .most-played {
+        margin-top: 16px;
+    }
+
+    .right-side > a {
+        display: block;
+        margin-bottom: 8px;
+    }
+
+    .right-side > a img {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+
+    .stats-wrapper img {
+        width: 100%;
+        height: auto;
+    }
+
+    .featured iframe {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 356 / 278;
+    }
+
+    .styled-table {
+        font-size: 8pt;
+    }
+
+    .styled-table td,
+    .styled-table th {
+        padding: 4px;
+    }
+
+    .styled-table img {
+        width: 64px;
+        height: 48px;
+    }
+
+    .chat-time {
+        width: 56px;
+        padding-right: 6px;
+    }
+
+    .chat-message {
+        max-width: none;
+        display: block;
+        white-space: normal;
+        overflow: visible;
+        text-overflow: clip;
+    }
+
+    .chat-message a {
+        white-space: normal;
+    }
 }
