@@ -255,16 +255,23 @@
                     </td>
                     <td class="post-content-wrapper">
                         <div style="background-color: #ebe8ff;">
-                            <div class="post-time">
-                                <a href="#post-{{ post.id }}" title="{{ post.created_at }}" style="line-height: 18px">
-                                    {{ post.created_at|timeago }}
-                                </a>
-                                {% if post.icon %}
-                                    <img src="{{ post.icon.location }}"
-                                        alt="{{ post.icon.name }}"
-                                        style="float: right; margin-left: 4px"
-                                        width="15">
-                                {% endif %}
+                            <div class="post-meta-row">
+                                <div class="post-mobile-header">
+                                    <a class="post-mobile-username" href="/u/{{ post.user.id }}" style="color: {{ post.user|user_color or '#000' }}">
+                                        {{ post.user.name }}
+                                    </a>
+                                </div>
+                                <div class="post-time">
+                                    <a href="#post-{{ post.id }}" title="{{ post.created_at }}" style="line-height: 18px">
+                                        {{ post.created_at|timeago }}
+                                    </a>
+                                    {% if post.icon %}
+                                        <img src="{{ post.icon.location }}"
+                                            alt="{{ post.icon.name }}"
+                                            style="float: right; margin-left: 4px"
+                                            width="15">
+                                    {% endif %}
+                                </div>
                             </div>
                             <div class="post-content" id="post-{{ post.id }}">
                                 {% if post.deleted %}

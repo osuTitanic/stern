@@ -278,6 +278,10 @@
     font-size: 90%;
 }
 
+.post-mobile-header {
+    display: none;
+}
+
 .post-content {
     overflow: auto;
     overflow-wrap: break-word;
@@ -453,4 +457,127 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+@media screen and (max-width: 900px) {
+    .header-text {
+        font-size: 110%;
+        margin-left: 6px;
+        margin-right: 6px;
+        white-space: nowrap;
+        overflow-x: auto;
+    }
+
+    .post-table {
+        table-layout: fixed;
+    }
+
+    .post-profile {
+        width: 73px;
+        min-width: 73px;
+        max-width: 73px;
+        padding: 4px 1px;
+        vertical-align: top;
+    }
+
+    .post-profile .post-username,
+    .post-user-title,
+    .post-user-stats {
+        display: none;
+    }
+
+    .post-profile > div {
+        padding: 2px;
+    }
+
+    .post-avatar {
+        width: 48px;
+        height: 48px;
+        margin: 2px auto 4px;
+    }
+
+    .post-avatar img {
+        width: 48px;
+        height: 48px;
+    }
+
+    .post-profile .flag {
+        margin-top: 4px;
+    }
+
+    .post-profile .donator {
+        width: 58px;
+        height: 10px;
+    }
+
+    .groups {
+        gap: 2px;
+        margin-top: 4px;
+    }
+
+    .group {
+        font-size: 58%;
+        padding: 1px 2px;
+    }
+
+    .kudosu-box {
+        margin: 4px 0 0;
+        padding: 3px 2px;
+        font-size: 70%;
+    }
+
+    .post-meta-row {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 8px;
+    }
+
+    .post-mobile-header {
+        display: block;
+        padding: 6px 0 0 6px;
+        min-width: 0;
+    }
+
+    .post-mobile-username {
+        font-size: 103%;
+        font-weight: bold;
+        line-height: 1.15;
+        overflow-wrap: anywhere;
+    }
+
+    .post-time {
+        margin: 6px 6px 0 auto;
+        font-size: 80%;
+        white-space: nowrap;
+    }
+
+    .post-content {
+        min-height: 0;
+        padding: 6px;
+    }
+
+    .post-signature {
+        width: auto;
+        display: block;
+        max-height: none;
+    }
+
+    .post-buttons {
+        flex-wrap: wrap;
+        gap: 4px;
+    }
+
+    .post-buttons a,
+    .post-buttons a:visited,
+    .post-buttons input,
+    .post-buttons button {
+        margin-right: 0;
+        padding-right: 12px;
+        padding-left: 12px;
+    }
+
+    .quick-reply textarea {
+        width: calc(100% - 12px);
+    }
 }
