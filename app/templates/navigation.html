@@ -1,6 +1,22 @@
 {# templates/navigation.html #}
 
-<ul class="nav-list">
+{# Mobile-specific Navigation #}
+<div class="nav-mobile-header">
+    <a href="/" class="nav-mobile-brand" aria-label="Home">
+        <img src="{{ '/images/logo/main-transparent-vector.svg'|cached_url }}" loading="eager" fetchpriority="high" class="nav-mobile-logo" width="48" height="48" alt="">
+    </a>
+    <div class="nav-mobile-stats">
+        <span><b>{{ "{:,}".format(total_users) }}</b> users, <b>{{ "{:,}".format(online_users) }}</b> online now.</span>
+        <span>A total of <b>{{ "{:,}".format(total_scores) }}</b> plays!</span>
+    </div>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-navigation">
+        <span class="nav-toggle-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Toggle navigation</span>
+    </button>
+</div>
+
+{# Desktop/Mobile Navigation #}
+<ul class="nav-list" id="site-navigation">
     <li class="nav-element">
         <a href="/">Home</a>
     </li>

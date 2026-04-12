@@ -307,6 +307,48 @@ function showLoginForm() {
     $("#username-field").select();
 }
 
+function setNavigationMenuExpanded(isExpanded) {
+    var nav = $(".nav");
+    var toggle = $(".nav-toggle");
+
+    if (!nav.length || !toggle.length) {
+        return;
+    }
+
+    nav.toggleClass("nav-open", isExpanded);
+    toggle.attr("aria-expanded", isExpanded ? "true" : "false");
+}
+
+function bindNavigationMenu() {
+    $(".nav").addClass("nav-interactive");
+
+    $(".nav-toggle").on("click", function () {
+        setNavigationMenuExpanded(!$(".nav").hasClass("nav-open"));
+    });
+
+    $(".nav-list a").on("click", function () {
+        if (getViewportWidth() <= 900) {
+            setNavigationMenuExpanded(false);
+        }
+    });
+
+    $(document).on("click", function (e) {
+        if (getViewportWidth() > 900) {
+            return;
+        }
+
+        if ($(e.target).closest(".nav").length === 0) {
+            setNavigationMenuExpanded(false);
+        }
+    });
+
+    $(window).on("resize", function () {
+        if (getViewportWidth() > 900) {
+            setNavigationMenuExpanded(false);
+        }
+    });
+}
+
 function toggleSpoiler(root) {
     var spoiler = $(root).closest(".spoiler");
     spoiler.children(".spoiler-body").slideToggle("fast");
@@ -643,6 +685,7 @@ function renderTimeagoElements() {
 
 $(document).ready(function (e) {
     pageLoaded = true;
+    bindNavigationMenu();
     renderTimeagoElements();
 
     if (isLoggedIn()) {
