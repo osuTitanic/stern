@@ -99,10 +99,7 @@ function insertBBCode(event) {
     }
 }
 
-function insertImageBBCode(textarea, content) {
-    var bbcodeTagStart = "[img]";
-    var bbcodeTagEnd = "[/img]";
-
+function insertTextAtSelection(textarea, content) {
     var selection = getSelectionRange(textarea);
     var start = selection.start;
     var end = selection.end;
@@ -110,110 +107,139 @@ function insertImageBBCode(textarea, content) {
     var beforeText = textarea.value.substring(0, start);
     var afterText = textarea.value.substring(end);
 
-    var fullTag = bbcodeTagStart + content + bbcodeTagEnd;
-    textarea.value = beforeText + fullTag + afterText;
+    textarea.value = beforeText + content + afterText;
 
-    // Move the caret to just after the inserted tag:
-    var newCaretPos = beforeText.length + fullTag.length;
+    // Move the caret to just after the inserted text
+    var newCaretPos = beforeText.length + content.length;
     textarea.focus();
     setSelectionRangeCompat(textarea, newCaretPos, newCaretPos);
 }
 
-function replaceImageBBCode(textarea, oldContent, newContent) {
-    var bbcodeTagStart = "[img]";
-    var bbcodeTagEnd = "[/img]";
-    var oldTag = bbcodeTagStart + oldContent + bbcodeTagEnd;
-    var newTag = bbcodeTagStart + newContent + bbcodeTagEnd;
-
+function replaceFirstOccurrence(textarea, oldContent, newContent) {
     var value = textarea.value;
-    var replaced = false;
+    var index = value.indexOf(oldContent);
+    var isActiveEditor = document.activeElement === textarea;
+    var selection = isActiveEditor ? getSelectionRange(textarea) : null;
 
-    // Replace all occurrences of oldTag with newTag
-    var newValue = value.split(oldTag).join(newTag);
-    replaced = newValue !== value;
+    if (index === -1) {
+        return false;
+    }
+
+    var newValue = value.substring(0, index) + newContent + value.substring(index + oldContent.length);
     textarea.value = newValue;
 
-    if (replaced) {
-        // Move caret to just after the last replaced tag
-        var lastIndex = newValue.lastIndexOf(newTag);
-        if (lastIndex !== -1) {
-            var newCaretPos = lastIndex + newTag.length;
-            textarea.focus();
-            setSelectionRangeCompat(textarea, newCaretPos, newCaretPos);
+    if (isActiveEditor && selection) {
+        var delta = newContent.length - oldContent.length;
+        var replacementEnd = index + oldContent.length;
+        var selectionStart = selection.start;
+        var selectionEnd = selection.end;
+
+        if (selectionStart > replacementEnd) {
+            selectionStart += delta;
+        } else if (selectionStart >= index) {
+            selectionStart = index + newContent.length;
+        }
+
+        if (selectionEnd > replacementEnd) {
+            selectionEnd += delta;
+        } else if (selectionEnd >= index) {
+            selectionEnd = index + newContent.length;
+        }
+
+        setSelectionRangeCompat(textarea, selectionStart, selectionEnd);
+    }
+
+    return true;
+}
+
+function createImageBBCode(content) {
+    return "[img]" + content + "[/img]";
+}
+
+var imageUploadCounter = 0;
+
+function createImageUploadPlaceholder(blob) {
+    imageUploadCounter += 1;
+    var imageName = blob && blob.name ? blob.name : "pasted-image-" + imageUploadCounter;
+    return "Uploading " + imageName + "...";
+}
+
+function getClipboardDataFromEvent(event) {
+    var nativeEvent = event && event.originalEvent ? event.originalEvent : event;
+    return nativeEvent && nativeEvent.clipboardData ? nativeEvent.clipboardData : null;
+}
+
+function getClipboardImageFile(clipboardData) {
+    if (!clipboardData) {
+        return null;
+    }
+
+    var items = clipboardData.items;
+    if (items) {
+        for (var i = 0; i < items.length; i++) {
+            var item = items[i];
+
+            if (item.kind !== "file" || !item.type || item.type.indexOf("image/") !== 0) {
+                continue;
+            }
+
+            var blob = item.getAsFile();
+            if (blob) {
+                return blob;
+            }
         }
     }
+
+    var files = clipboardData.files;
+    if (files) {
+        for (var j = 0; j < files.length; j++) {
+            if (files[j].type && files[j].type.indexOf("image/") === 0) {
+                return files[j];
+            }
+        }
+    }
+
+    return null;
 }
 
 var editors = $(".bbcode-editor");
-var isUploading = false;
 
 for (var i = 0; i < editors.length; i++) {
     var editor = editors[i];
 
     $(editor).on("paste", function (event) {
         event = event || window.event;
-        var editor = event.target || event.srcElement;
+        var editor = event.currentTarget || event.target || event.srcElement;
 
-        if (!event.clipboardData) {
+        var clipboardData = getClipboardDataFromEvent(event);
+        var blob = getClipboardImageFile(clipboardData);
+
+        if (!blob) {
             return;
         }
 
-        var items = event.clipboardData.items;
-        if (!items) {
-            return;
-        }
+        event.preventDefault();
+        event.stopPropagation();
 
-        if (isUploading) {
-            return;
-        }
+        var uploadPrompt = createImageUploadPlaceholder(blob);
+        insertTextAtSelection(editor, uploadPrompt);
 
-        isUploading = true;
+        var formData = new FormData();
+        formData.append("input", blob);
 
-        // Find the first “image/*” item in the clipboard items:
-        for (var i = 0; i < items.length; i++) {
-            var item = items[i];
-
-            if (item.kind !== "file" || item.type.indexOf("image") !== 0) {
-                // Not an image file, skip it.
-                continue;
+        performApiRequest(
+            "POST",
+            "/forum/images",
+            formData,
+            function (xhr) {
+                var response = JSON.parse(xhr.responseText);
+                var imageUrl = response.image.image.url;
+                replaceFirstOccurrence(editor, uploadPrompt, createImageBBCode(imageUrl));
+            },
+            function () {
+                replaceFirstOccurrence(editor, uploadPrompt, "");
             }
-
-            // We’ve found an image in the clipboard.
-            // Prevent the default “pasting” of the image
-            event.preventDefault();
-            event.stopPropagation();
-
-            var blob = item.getAsFile();
-            if (!blob) {
-                continue;
-            }
-
-            var uploadPrompt = "Uploading " + blob.name + "...";
-            insertImageBBCode(editor, uploadPrompt);
-
-            var formData = new FormData();
-            formData.append("input", blob);
-
-            performApiRequest(
-                "POST",
-                "/forum/images",
-                formData,
-                function (xhr) {
-                    setTimeout(function () {
-                        isUploading = false;
-                    }, 1000);
-                    var response = JSON.parse(xhr.responseText);
-                    var imageUrl = response.image.image.url;
-                    replaceImageBBCode(editor, uploadPrompt, imageUrl);
-                },
-                function (xhr) {
-                    setTimeout(function () {
-                        isUploading = false;
-                    }, 1000);
-                }
-            );
-            return;
-        }
+        );
     });
 }
 
