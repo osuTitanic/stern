@@ -20,12 +20,17 @@ def request_loader(request: Request):
     if not session_id:
         return None
 
-    data = accounts.validate_website_session(session_id)
+    data = accounts.validate_session(session_id)
 
     if not data:
         return None
 
-    return user_loader(data['user_id'])
+    user = user_loader(data['user_id'])
+
+    if user and accounts.should_refresh_session(data):
+        accounts.queue_session_refresh(data)
+
+    return user
 
 @app.login_manager.user_loader
 def user_loader(user_id: int) -> Optional[DBUser]:
@@ -115,3 +120,7 @@ def caching_rules(response: Response) -> Response:
 
     response.headers['Cache-Control'] = f'public, max-age={ 60*60*24*14 }'
     return response
+
+@app.flask.after_request
+def refresh_website_session(response: Response) -> Response:
+    return accounts.refresh_session(response)
