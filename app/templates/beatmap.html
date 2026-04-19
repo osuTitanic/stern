@@ -256,9 +256,7 @@
                         {% endif %}
                     {% endif %}
                     <p><a setid="{{ beatmapset.id }}" onclick="copySetId(this)">Copy Beatmapset ID</a></p>
-                    {% if current_user.is_bat %}
                     <p><a href="/web/maps/{{ beatmap.filename }}">Grab latest .osu file</a></p>
-                    {% endif %}
                     {% if current_user.is_authenticated and permissions.has_permission('beatmaps.moderation.owner', current_user.id) %}
                     <p><a href="#" onclick="updateBeatmapsetOwner({{ beatmapset.id }})">Change Owner</a></p>
                     {% endif %}
