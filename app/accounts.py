@@ -61,14 +61,14 @@ def create_website_session(
 ) -> dict[str, int | str]:
     now = now or round(time.time())
     ttl = ttl or config.FRONTEND_REFRESH_EXPIRY
-    session_id = secrets.token_hex(16)
+    session_id = secrets.token_hex(32)
+
     payload = {
         'id': session_id,
         'user_id': user_id,
         'created_at': now,
         'expires_at': now + ttl
     }
-
     app_session.redis.set(
         f'authentication:website:{session_id}',
         json.dumps(payload),
