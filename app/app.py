@@ -25,4 +25,7 @@ login_manager.init_app(flask)
 
 flask.register_blueprint(routes.router)
 flask.secret_key = session.config.FRONTEND_SECRET_KEY
+flask.config['SESSION_COOKIE_NAME'] = 'session'
+flask.config['SESSION_COOKIE_SECURE'] = not session.config.ALLOW_INSECURE_COOKIES
+flask.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 flask.config['FLASK_PYDANTIC_VALIDATION_ERROR_RAISE'] = True

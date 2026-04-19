@@ -4,7 +4,6 @@ from app.common.database.repositories import users
 from app.common.database import DBUser
 
 from flask import Request, Response, redirect, request
-from flask_login import current_user
 from typing import Tuple, Optional
 from werkzeug.exceptions import *
 
@@ -16,41 +15,17 @@ import utils
 
 @app.login_manager.request_loader
 def request_loader(request: Request):
-    token = (
-        request.cookies.get('access_token') or
-        request.cookies.get('refresh_token')
-    )
+    session_id = request.cookies.get(accounts.WEBSITE_SESSION_COOKIE_NAME)
 
-    if not token:
+    if not session_id:
         return None
 
-    data = accounts.validate_token(token)
+    data = accounts.validate_website_session(session_id)
 
     if not data:
         return None
 
-    return user_loader(data['id'])
-
-@app.flask.after_request
-def refresh_access_token(response: Response) -> Response:
-    if not current_user.is_authenticated:
-        return response
-        
-    if request.cookies.get('access_token'):
-        return response
-
-    if not (refresh_token := request.cookies.get('refresh_token')):
-        return response
-
-    data = accounts.validate_token(refresh_token)
-
-    if not data:
-        return response
-
-    return accounts.perform_login(
-        current_user,
-        response=response
-    )
+    return user_loader(data['user_id'])
 
 @app.login_manager.user_loader
 def user_loader(user_id: int) -> Optional[DBUser]:
