@@ -407,6 +407,12 @@ function performApiRequest(method, path, data, callbackSuccess, callbackError) {
         if (contentType !== null) {
             xhr.setRequestHeader("Content-Type", contentType);
         }
+
+        if (cookieExists("titanic_session")) {
+            // For local development, we can't pass in cookies to another subdomain (e.g. api.localhost)
+            // So we have to find another solution, in this case, a custom header
+            xhr.setRequestHeader("X-Session-ID", getCookie("titanic_session"));
+        }
     } catch (e) {
         console.warn("This browser does not support setting headers.");
     }

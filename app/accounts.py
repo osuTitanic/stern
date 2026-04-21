@@ -169,12 +169,16 @@ def set_session_cookie(
     domain = resolve_domain_name()
     use_ssl = use_secure_cookies()
 
+    # On localhost we can't use http-only cookies on other subdomains
+    # We'll make the cookie visible to javascript, which can pass in the cookie as a header instead
+    http_only = domain != None
+
     response.set_cookie(
         WEBSITE_SESSION_COOKIE_NAME,
         session_id,
         domain=domain,
         secure=use_ssl,
-        httponly=True,
+        httponly=http_only,
         samesite='Lax',
         max_age=ttl if remember else None
     )
