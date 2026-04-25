@@ -99,11 +99,79 @@
             <dd>{{ current_user.name.replace(' ', '_') }}</dd>
             <dt>Server Password</dt>
             <dd id="irc-token-container">
-                <a href="#irc" onclick="showIrcTokenInSettings('view')">View</a> / 
+                <a href="#irc" onclick="showIrcTokenInSettings('view')">View</a> /
                 <a href="#irc" onclick="showIrcTokenInSettings('generate')">Regenerate</a>
             </dd>
         </dl>
     </div>
-    <script src="{{ '/js/irc.js'|cached_url }}"></script>
+    <div id="data-export">
+        <h2>Data Export</h2>
+        <dl class="section">
+            <dt>
+                You can request an export of all data related to your account by clicking the button below.
+                Please keep in mind that you can only request a data export once every 24 hours.
+            </dt>
+            <dt style="margin-top: 5px">
+                <input id="data-export-password" type="password" placeholder="Current Password" required>
+                <input id="data-export-button" class="submit-button" type="submit" name="submit" value="Export" onclick="dataExport()">
+                <input type="hidden" id="recaptcha-response" name="recaptcha_response" value="">
+            </dt>
+        </dl>
+    </div>
 </div>
+<script src="{{ '/js/irc.js'|cached_url }}"></script>
+{% if config.RECAPTCHA_SITE_KEY %}
+<script src="https://www.google.com/recaptcha/api.js?render={{ config.RECAPTCHA_SITE_KEY }}"></script>
+<script>
+    grecaptcha.ready(function () {
+        grecaptcha.execute('{{ config.RECAPTCHA_SITE_KEY }}', { action: 'export' }).then(function (token) {
+            var recaptchaResponse = document.getElementById('recaptcha-response');
+            recaptchaResponse.value = token;
+        });
+    });
+</script>
+{% endif %}
+<script>
+    function dataExport() {
+        var passwordValidation = document.getElementById('data-export-password');
+        var password = passwordValidation.value;
+        if (!password) {
+            alert('Please enter your current password to confirm the data export.');
+            return;
+        }
+        var data = { password: password };
+
+        var recaptchaResponse = document.getElementById('recaptcha-response');
+        if (recaptchaResponse && recaptchaResponse.value) {
+            data['recaptcha_response'] = recaptchaResponse.value;
+        }
+
+        var exportButton = document.getElementById('data-export-button');
+        exportButton.disabled = true;
+        exportButton.value = 'Exporting...';
+
+        performApiRequest("POST", "/account/export", data, function(xhr) {
+            var blob = new Blob([xhr.responseText], { type: 'application/json' });
+            var url = URL.createObjectURL(blob);
+
+            // Invoke download prompt with json response data
+            var a = document.createElement('a');
+            a.download = "data_export.json";
+            a.href = url;
+            a.click();
+
+            exportButton.value = 'Exported!';
+        }, function(xhr) {
+            var response = JSON.parse(xhr.responseText);
+            if (!response.details) {
+                alert('An error occurred while exporting your data. Please try again later.');
+            } else {
+                alert(response.details);
+            }
+
+            exportButton.disabled = false;
+            exportButton.value = 'Export';
+        });
+    }
+</script>
 {% endblock content %}
