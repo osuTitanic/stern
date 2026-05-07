@@ -4,7 +4,6 @@ from .common.database import Postgres
 from .common.storage import Storage
 from .common.config import Config
 
-from concurrent.futures import ThreadPoolExecutor
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 from requests import Session
@@ -27,11 +26,9 @@ events = EventQueue(
 )
 
 logger = logging.getLogger('stern')
-last_rank_sync = time.time()
 startup_time = time.time()
 
 requests = Session()
-executor = ThreadPoolExecutor(max_workers=2)
 requests.headers = {'User-Agent': f'osuTitanic/stern ({config.DOMAIN_NAME})'}
 
 retries = Retry(

@@ -154,46 +154,7 @@ def update_csrf_token(user_id: int) -> None:
             exc_info=e
         )
 
-def on_sync_ranks_fail(e: Exception) -> None:
-    app.session.logger.error(
-        f'Failed to update user rank: {e}',
-        exc_info=e
-    )
-
-@wrapper.exception_wrapper(on_sync_ranks_fail)
-@wrapper.session_wrapper
-def sync_ranks(user: DBUser, mode: int, session: Session = ...) -> None:
-    """Sync cached rank with database"""
-    user.stats.sort(key=lambda s:s.mode)
-    user_stats = user.stats[mode]
-
-    if user_stats.playcount <= 0:
-        return
-
-    global_rank = leaderboards.global_rank(
-        user.id,
-        user_stats.mode
-    )
-
-    if user_stats.rank != global_rank:
-        # Database rank desynced from redis
-        stats.update(
-            user.id,
-            user_stats.mode,
-            {'rank': global_rank},
-            session=session
-        )
-        user_stats.rank = global_rank
-
-        if not config.FROZEN_RANK_UPDATES:
-            # Update rank history
-            histories.update_rank(
-                user_stats,
-                user.country,
-                session=session
-            )
-
-def required_nominations(beatmapset: DBBeatmapset) -> bool:
+def required_nominations(beatmapset: DBBeatmapset) -> int:
     beatmap_modes = len(
         set(
             beatmap.mode

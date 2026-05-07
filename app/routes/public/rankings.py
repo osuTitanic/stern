@@ -75,7 +75,7 @@ def rankings(mode: str, order_type: str):
 
 def render_rankings_page(
     order_type: str,
-    country: str,
+    country: str | None,
     mode: GameMode,
     page: int,
     items_per_page: int,
@@ -126,16 +126,11 @@ def render_rankings_page(
             if score > 0 and user_id in users_by_id
         ]
         sorted_users = [
-            user for user, _ in users_with_score
+            user for user, score in users_with_score
         ]
 
         # Ensure all users have stats & they are sorted
         ensure_user_stats(sorted_users, session)
-
-        if (time.time() - app.session.last_rank_sync) > 30:
-            # Sync ranks from cache to database in background once in a while
-            app.session.executor.submit(sync_ranks, sorted_users, mode)
-            app.session.last_rank_sync = time.time()
 
         player_count = leaderboards.player_count(mode.value, order_type, country)
         total_pages = max(1, min(10000, math.ceil(player_count / items_per_page)))
@@ -195,7 +190,7 @@ def render_country_page(
 
     country_count = len(leaderboard)
     total_pages = max(1, min(10000, math.ceil(country_count / items_per_page)))
-    
+
     leaderboard = leaderboard[(page - 1)*items_per_page:(page - 1)*items_per_page + items_per_page]
 
     # Get min/max pages to display for pagination
@@ -276,11 +271,6 @@ def ensure_user_stats(users: List[DBUser], session: Session) -> None:
     for user in users:
         user.stats = user.stats or create_user_stats(user, session)
         user.stats.sort(key=lambda s:s.mode)
-
-def sync_ranks(users: List[DBUser], mode: GameMode) -> None:
-    with app.session.database.managed_session() as session:
-        for user in users:
-            utils.sync_ranks(user, mode.value, session)
 
 def create_user_stats(user: DBUser, session) -> List[DBStats]:
     return [
