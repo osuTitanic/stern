@@ -20,7 +20,7 @@ sendgrid==6.12.5
 sqlalchemy==2.0.49
 timeago==1.0.16
 rosu-pp-py==4.0.2
-markdown-it-py[plugins,linkify]==4.0.0
+markdown-it-py[plugins,linkify]==4.2.0
 pygments==2.20.0
 pyjwt==2.12.1
 regex
