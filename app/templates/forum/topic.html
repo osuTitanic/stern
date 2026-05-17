@@ -308,6 +308,9 @@
           class="quick-reply">
         <textarea name="bbcode"
                   placeholder="Quick Reply: Type your message here and hit Ctrl+Enter to send!"></textarea>
+        {% if topic.icon_id %}
+        <input type="hidden" name="icon" value="{{ topic.icon_id }}">
+        {% endif %}
         <input type="hidden" name="user_id" value="{{ current_user.id }}">
         <input type="hidden" name="action" value="post">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>

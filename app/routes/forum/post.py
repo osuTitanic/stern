@@ -419,7 +419,7 @@ def handle_post(topic: DBForumTopic, _: int, session: Session) -> Response:
         "forum.moderation.topics.bypass_lock",
         current_user.id
     )
-    
+
     if topic.locked_at and not can_bypass_lock:
         return utils.render_error(403, 'topic_locked')
 
@@ -497,7 +497,7 @@ def handle_post(topic: DBForumTopic, _: int, session: Session) -> Response:
             else topic.icon_id
         )
     }
-    
+
     can_create_locks = permissions.has_permission(
         "forum.moderation.posts.lock",
         current_user.id
@@ -810,7 +810,7 @@ def do_draft_save(forum_id: str, topic_id: str):
 
         action_id = request.form.get('id', type=int)
         content = request.form.get('bbcode', type=str)
-        
+
         can_bypass_length_check = permissions.has_permission(
             "forum.moderation.posts.bypass_length",
             current_user.id
