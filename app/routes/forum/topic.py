@@ -22,6 +22,7 @@ import utils
 import app
 
 router = Blueprint("forum-topics", __name__)
+beatmap_forums = {8, 9, 10, 12, 13}
 
 def broadcast_topic_activity(
     topic: DBForumTopic,
@@ -284,7 +285,7 @@ def get_topic_options() -> dict:
 def create_post_action(forum_id: str):
     if not forum_id.isdigit():
         return utils.render_error(404, 'forum_not_found')
-    
+
     with app.session.database.managed_session() as session:
         if not (forum := forums.fetch_by_id(forum_id, session=session)):
             return utils.render_error(404, 'forum_not_found')
@@ -300,6 +301,14 @@ def create_post_action(forum_id: str):
 
         if current_user.restricted:
             return utils.render_error(403, 'user_restricted')
+
+        can_create_beatmap_topic = permissions.has_permission(
+            "beatmaps.create_beatmap_topic",
+            current_user.id
+        )
+
+        if forum.id in beatmap_forums and not can_create_beatmap_topic:
+            return utils.render_error(403)
 
         title = request.form.get('title')
         content = request.form.get('bbcode')

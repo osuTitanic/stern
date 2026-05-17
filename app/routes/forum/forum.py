@@ -12,6 +12,7 @@ import utils
 import app
 
 router = Blueprint("forum", __name__)
+beatmap_forums = {8, 9, 10, 12, 13}
 
 @router.get('/<forum_id>')
 def forum_view(forum_id: int):
@@ -118,5 +119,6 @@ def forum_view(forum_id: int):
             topic_count=topic_count,
             total_pages=topic_count // topics_per_page,
             current_page=page - 1,
+            is_beatmap_forum=forum.id in beatmap_forums,
             session=session
         )
