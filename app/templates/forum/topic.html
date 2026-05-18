@@ -62,13 +62,16 @@
     permissions.has_permission("forum.kudosu.reset", current_user.id)
 ) %}
 
+{% set can_force_reward_kudosu = (
+    current_user.is_authenticated and
+    permissions.has_permission("forum.kudosu.force_reward", current_user.id)
+) %}
+
 {% set can_award_kudosu = (
     beatmapset and
-    can_reward_kudosu and
     (
-        current_user.id == beatmapset.creator_id or
-        can_revoke_kudosu or
-        can_reset_kudosu
+        (can_force_reward_kudosu) or
+        (can_reward_kudosu and current_user.id == beatmapset.creator_id)
     )
 ) %}
 
@@ -288,8 +291,8 @@
 
                                 {% if can_award_kudosu %}
                                     {% set kudosu = kudosu_latest.get(post.id) %}
-                                    {% if beatmapset.status <= 0 %}
-                                        {# Beatmap is not ranked #}
+                                    {% if beatmapset.status <= 0 or can_force_reward_kudosu %}
+                                        {# Either beatmap is not ranked or user is allowed to update kudosu anytime #}
                                         {% if kudosu and can_revoke_kudosu and kudosu.amount > 0 %}
                                             {# BATs can revoke existing kudosu #}
                                             <a onclick="revokeKudos({{ post.id }}, {{ beatmapset.id }})">Deny Kudos</a>
