@@ -75,6 +75,12 @@
     )
 ) %}
 
+{% set kudosu_actions_available = (
+    can_award_kudosu or
+    can_reset_kudosu or
+    can_revoke_kudosu
+) %}
+
 {% macro userTitle(user, user_post_count) %}
     {% if user.title %}
         {{ user.title }}
@@ -289,7 +295,7 @@
                                     {% endif %}
                                 </p>
 
-                                {% if can_award_kudosu %}
+                                {% if kudosu_actions_available %}
                                     {% set kudosu = kudosu_latest.get(post.id) %}
                                     {% if beatmapset.status <= 0 or can_force_reward_kudosu %}
                                         {# Either beatmap is not ranked or user is allowed to update kudosu anytime #}
