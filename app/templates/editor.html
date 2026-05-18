@@ -1,5 +1,29 @@
 {# templates/editor.html #}
 
+{% set can_set_topic_status = (
+    current_user.is_authenticated and
+    permissions.has_permission("forum.moderation.topics.set_status", current_user.id)
+) %}
+{% set can_lock_topic = (
+    current_user.is_authenticated and
+    permissions.has_permission("forum.moderation.topics.lock", current_user.id)
+) %}
+{% set can_lock_post = (
+    current_user.is_authenticated and
+    permissions.has_permission("forum.moderation.posts.lock", current_user.id)
+) %}
+{% set can_set_topic_options = (
+    current_user.is_authenticated and
+    permissions.has_permission("forum.moderation.topics.set_options", current_user.id)
+) %}
+{% set can_edit_topic_icon = (
+    current_user.is_authenticated and
+    (
+        permissions.has_permission("forum.moderation.topics.edit_icon", current_user.id) or
+        permissions.has_permission("forum.topics.edit_icon", current_user.id)
+    )
+) %}
+
 <div id="editor-wrapper">
     <div class="bbcode-toolbar">
         <button data-bbcode-tag="b"><b>B</b></button>
@@ -37,7 +61,7 @@
 
 {% if context['forum-controls'] %}
 <div style="margin: 12px; float: right; text-align: right; font-size: 90%">
-    {% if current_user.is_admin and action != 'edit' and topic %}
+    {% if topic and can_set_topic_status and action != 'edit' %}
     <div style="margin-bottom: 8px">
         Status:
         <input type="text"
@@ -59,8 +83,9 @@
         Notify me when a reply is posted
     </label>
 
-    {% if topic and current_user.is_moderator %}
+    {% if topic %}
         {% if action != 'edit' %}
+            {% if can_lock_topic %}
             <div style="margin-top: 5px">
                 <input type="checkbox"
                     class="radio"
@@ -73,7 +98,9 @@
                     Lock this topic
                 </label>
             </div>
+            {% endif %}
         {% else %}
+            {% if can_lock_post %}
             {% set post = repositories.posts.fetch_one(action_id) %}
             <div style="margin-top: 5px">
                 <input type="checkbox"
@@ -87,10 +114,11 @@
                     Lock this post
                 </label>
             </div>
+            {% endif %}
         {% endif %}
     {% endif %}
 
-    {% if current_user.is_moderator and context['topic-controls'] %}
+    {% if context['topic-controls'] and can_set_topic_options %}
         <div style="margin-bottom: 10px; margin-top: 10px">
             Post topic as:
             <input type="radio" name="type" value="global" id="global" {% if topic_type == 'global' %} checked {% endif %}>
@@ -105,17 +133,17 @@
 {% endif %}
 
 {% if beatmapset and beatmapset.creator_id != current_user.id and beatmapset.status < 1 %}
-<div style="font-size: 90%; padding: 5px; margin-top: 6px">
-    You will gain <b>{{ 1 if datetime.now() - topic.last_post_at < timedelta(days=7) else 2 }} kudosu</b>
-    for this post if it is deemed as helpful by the map's creator.
-</div>
-{% if current_user.is_bat %}
-<div style="font-size: 90%; padding: 5px;">
-    Please note that changing the icon <i><b>won't</b></i> affect the status of the map.
-    Instead, please do so in the <a href="/s/{{ beatmapset.id }}">BAT Controls</a> panel.
-    The icon will automatically update.
-</div>
-{% endif %}
+    <div style="font-size: 90%; padding: 5px; margin-top: 6px">
+        You will gain <b>{{ 1 if datetime.now() - topic.last_post_at < timedelta(days=7) else 2 }} kudosu</b>
+        for this post if it is deemed as helpful by the map's creator.
+    </div>
+    {% if can_edit_topic_icon %}
+    <div style="font-size: 90%; padding: 5px;">
+        Please note that changing the icon <i><b>won't</b></i> affect the status of the map.
+        Instead, please do so in the <a href="/s/{{ beatmapset.id }}">BAT Controls</a> panel.
+        The icon will automatically update.
+    </div>
+    {% endif %}
 {% endif %}
 
 <input type="hidden" name="user_id" value="{{ context['user-id'] }}">
