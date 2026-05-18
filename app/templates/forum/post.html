@@ -2,16 +2,16 @@
 
 {% extends "base.html" %}
 
-{% set is_privileged = (
-    current_user.is_bat or
-    current_user.is_moderator
-) %}
-
+{# Either the user is a moderator and can set icons free-will, or icons are enabled for the topic #}
 {% set can_edit_icon = (
+    current_user.is_authenticated and
     action != "edit" and
     (
-        is_privileged and
-        topic.can_change_icon
+        permissions.has_permission("forum.moderation.topics.edit_icon", current_user.id) or
+        (
+            topic.can_change_icon and
+            permissions.has_permission("forum.topics.edit_icon", current_user.id)
+        )
     )
 ) %}
 
