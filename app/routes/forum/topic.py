@@ -204,6 +204,14 @@ def create_post_view(forum_id: str):
         if not permissions.has_permission("forum.topics.create", current_user.id):
             return utils.render_error(403)
 
+        can_create_beatmap_topic = permissions.has_permission(
+            "forum.topics.create_beatmap",
+            current_user.id
+        )
+
+        if forum.id in beatmap_forums and not can_create_beatmap_topic:
+            return utils.render_error(403)
+
         return utils.render_template(
             "forum/create.html",
             css='forums.css',
@@ -303,7 +311,7 @@ def create_post_action(forum_id: str):
             return utils.render_error(403, 'user_restricted')
 
         can_create_beatmap_topic = permissions.has_permission(
-            "beatmaps.create_beatmap_topic",
+            "forum.topics.create_beatmap",
             current_user.id
         )
 

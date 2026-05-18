@@ -499,7 +499,7 @@ def handle_post(topic: DBForumTopic, _: int, session: Session) -> Response:
     }
 
     can_create_locks = permissions.has_permission(
-        "forum.moderation.posts.lock",
+        "forum.moderation.topics.lock",
         current_user.id
     )
 
