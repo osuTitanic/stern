@@ -7,15 +7,69 @@
 
 {% set in_map_requests_forum = (forum.id == 11) %}
 
-{% set is_privileged = (
-    current_user.is_moderator or
-    current_user.is_admin
+{% set can_create_posts = (
+    current_user.is_authenticated and
+    permissions.has_permission("forum.posts.create", current_user.id)
+) %}
+
+{% set can_edit_own_posts = (
+    current_user.is_authenticated and
+    permissions.has_permission("forum.posts.edit", current_user.id)
+) %}
+
+{% set can_delete_own_posts = (
+    current_user.is_authenticated and
+    permissions.has_permission("forum.posts.delete", current_user.id)
+) %}
+
+{% set can_edit_others_posts = (
+    current_user.is_authenticated and
+    permissions.has_permission("forum.moderation.posts.edit", current_user.id)
+) %}
+
+{% set can_delete_others_posts = (
+    current_user.is_authenticated and
+    permissions.has_permission("forum.moderation.posts.delete", current_user.id)
+) %}
+
+{% set can_bypass_topic_lock = (
+    current_user.is_authenticated and
+    permissions.has_permission("forum.moderation.topics.bypass_lock", current_user.id)
+) %}
+
+{% set can_bypass_post_lock = (
+    current_user.is_authenticated and
+    permissions.has_permission("forum.moderation.posts.bypass_lock", current_user.id)
+) %}
+
+{% set can_link_beatmapset = (
+    current_user.is_authenticated and
+    permissions.has_permission("forum.topics.link_beatmapset", current_user.id)
+) %}
+
+{% set can_reward_kudosu = (
+    current_user.is_authenticated and
+    permissions.has_permission("forum.kudosu.reward", current_user.id)
+) %}
+
+{% set can_revoke_kudosu = (
+    current_user.is_authenticated and
+    permissions.has_permission("forum.kudosu.revoke", current_user.id)
+) %}
+
+{% set can_reset_kudosu = (
+    current_user.is_authenticated and
+    permissions.has_permission("forum.kudosu.reset", current_user.id)
 ) %}
 
 {% set can_award_kudosu = (
-    current_user.is_authenticated and
-    current_user.id == beatmapset.creator_id or
-    current_user.is_bat
+    beatmapset and
+    can_reward_kudosu and
+    (
+        current_user.id == beatmapset.creator_id or
+        can_revoke_kudosu or
+        can_reset_kudosu
+    )
 ) %}
 
 {% macro userTitle(user, user_post_count) %}
@@ -142,7 +196,7 @@
                 Bookmark topic
             </a>
             {% endif %}
-            {% if current_user.is_bat and in_map_requests_forum %}
+            {% if can_link_beatmapset and in_map_requests_forum %}
                 |
                 {% if not beatmapset %}
                 <a onclick="linkTopicToBeatmap()">
@@ -236,16 +290,16 @@
                                     {% set kudosu = kudosu_latest.get(post.id) %}
                                     {% if beatmapset.status <= 0 %}
                                         {# Beatmap is not ranked #}
-                                        {% if kudosu and current_user.is_bat and kudosu.amount > 0 %}
+                                        {% if kudosu and can_revoke_kudosu and kudosu.amount > 0 %}
                                             {# BATs can revoke existing kudosu #}
                                             <a onclick="revokeKudos({{ post.id }}, {{ beatmapset.id }})">Deny Kudos</a>
-                                        {% elif kudosu and current_user.is_bat %}
+                                        {% elif kudosu and can_reset_kudosu %}
                                             {# Kudosu was revoked -> BATs have the option to reset it #}
                                             <a onclick="resetKudos({{ post.id }}, {{ beatmapset.id }})">Reset Kudos</a>
                                         {% elif not kudosu %}
                                             <a onclick="giveKudos({{ post.id }}, {{ beatmapset.id }})">Give Kudos</a>
                                         {% endif %}
-                                    {% elif kudosu and current_user.is_bat %}
+                                    {% elif kudosu and can_reset_kudosu %}
                                         {# Beatmap got ranked -> BATs can reset kudosu now #}
                                         <a onclick="resetKudos({{ post.id }}, {{ beatmapset.id }})">Reset Kudos</a>
                                     {% endif %}
@@ -279,15 +333,25 @@
                                 {{ post.edit_time|timeago }}, edited {{ post.edit_count }} time{{ 's' if post.edit_count != 1 }} in total.
                             </div>
                             {% endif %}
-                            {% if (current_user.is_authenticated) and (not topic.locked_at or is_privileged) %}
+                            {% if current_user.is_authenticated and (not topic.locked_at or can_bypass_topic_lock) %}
                             <div class="post-buttons hover-button">
-                                {% if (current_user.id == post.user.id or is_privileged) and (not post.edit_locked or is_privileged) %}
-                                    {% if not post.deleted %}
+                                {% if not post.deleted and (not post.edit_locked or can_bypass_post_lock) %}
+                                    {% if (
+                                        (current_user.id == post.user.id and can_delete_own_posts) or
+                                        (current_user.id != post.user.id and can_delete_others_posts)
+                                    ) %}
                                         <a class="button-red" onclick="deletePost({{ post.id }})">Delete</a>
+                                    {% endif %}
+                                    {% if (
+                                        (current_user.id == post.user.id and can_edit_own_posts) or
+                                        (current_user.id != post.user.id and can_edit_others_posts)
+                                    ) %}
                                         <a class="button-blue" href="./post?action=edit&id={{ post.id }}">Edit</a>
                                     {% endif %}
                                 {% endif %}
+                                {% if can_create_posts %}
                                 <a class="button-blue" href="./post?action=quote&id={{ post.id }}">Quote</a>
+                                {% endif %}
                             </div>
                             {% endif %}
                         </div>
@@ -302,7 +366,7 @@
         {% endfor %}
     {% endif %}
     <br>
-    {% if current_user.is_authenticated %}
+    {% if can_create_posts and (not topic.locked_at or can_bypass_topic_lock) %}
     <form action="/forum/{{ forum.id }}/t/{{ topic.id }}/post"
           method="post"
           class="quick-reply">
@@ -322,13 +386,14 @@
         <td align="left" style="float: left">
             <div class="post-buttons-large" id="post-bottom">
                 {% if not topic.locked_at %}
-                <a href="/forum/{{ forum.id }}/t/{{ topic.id }}/post?action=post" class="button-blue"><i class="fa icon-comment"></i> Reply</a>
+                    {% if can_create_posts %}
+                    <a href="/forum/{{ forum.id }}/t/{{ topic.id }}/post?action=post" class="button-blue"><i class="fa icon-comment"></i> Reply</a>
+                    {% endif %}
                 {% else %}
-                    {% if current_user.is_moderator %}
-                    {# Allow moderators to reply to locked thread #}
+                    {% if can_create_posts and can_bypass_topic_lock %}
                     <a href="/forum/{{ forum.id }}/t/{{ topic.id }}/post?action=post" class="button-grey"><i class="fa icon-comment"></i> Reply (Locked)</a>
                     {% else %}
-                    <a href="#post-bottom" class="button-grey" title="This topic is locked, only moderators can reply to it.">Locked</a>
+                    <a href="#post-bottom" class="button-grey" title="This topic is locked.">Locked</a>
                     {% endif %}
                 {% endif %}
             </div>
@@ -347,7 +412,7 @@
     </div>
     <br>
 </div>
-{% if in_map_requests_forum and current_user.is_bat %}
+{% if in_map_requests_forum and can_link_beatmapset %}
 <script src="{{ '/js/bat.js'|cached_url }}" defer></script>
 <script>
     function linkTopicToBeatmap() {
