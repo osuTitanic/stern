@@ -2,14 +2,15 @@
 
 {% extends "base.html" %}
 
-{% set is_privileged = (
-    current_user.is_bat or
-    current_user.is_moderator
-) %}
-
 {% set can_edit_icon = (
-    forum.allow_icons and
-    is_privileged
+    current_user.is_authenticated and
+    (
+        permissions.has_permission("forum.moderation.topics.edit_icon", current_user.id) or
+        (
+            forum.allow_icons and
+            permissions.has_permission("forum.topics.edit_icon", current_user.id)
+        )
+    )
 ) %}
 
 {% block content %}
