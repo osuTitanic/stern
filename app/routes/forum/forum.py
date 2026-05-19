@@ -12,7 +12,7 @@ import utils
 import app
 
 router = Blueprint("forum", __name__)
-beatmap_forums = {8, 9, 10, 12, 13}
+beatmap_forums = {8, 9, 10, 12}
 
 @router.get('/<forum_id>')
 def forum_view(forum_id: int):
