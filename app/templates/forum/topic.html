@@ -301,16 +301,16 @@
                                         {# Either beatmap is not ranked or user is allowed to update kudosu anytime #}
                                         {% if kudosu and can_revoke_kudosu and kudosu.amount > 0 %}
                                             {# BATs can revoke existing kudosu #}
-                                            <a onclick="revokeKudos({{ post.id }}, {{ beatmapset.id }})">Deny Kudos</a>
+                                            <a onclick="disableAndExecute(this, revokeKudos({{ post.id }}, {{ beatmapset.id }}))">Deny Kudos</a>
                                         {% elif kudosu and can_reset_kudosu %}
                                             {# Kudosu was revoked -> BATs have the option to reset it #}
-                                            <a onclick="resetKudos({{ post.id }}, {{ beatmapset.id }})">Reset Kudos</a>
+                                            <a onclick="disableAndExecute(this, resetKudos({{ post.id }}, {{ beatmapset.id }}))">Reset Kudos</a>
                                         {% elif not kudosu %}
-                                            <a onclick="giveKudos({{ post.id }}, {{ beatmapset.id }})">Give Kudos</a>
+                                            <a onclick="disableAndExecute(this, giveKudos({{ post.id }}, {{ beatmapset.id }}))">Give Kudos</a>
                                         {% endif %}
                                     {% elif kudosu and can_reset_kudosu %}
                                         {# Beatmap got ranked -> BATs can reset kudosu now #}
-                                        <a onclick="resetKudos({{ post.id }}, {{ beatmapset.id }})">Reset Kudos</a>
+                                        <a onclick="disableAndExecute(this, resetKudos({{ post.id }}, {{ beatmapset.id }}))">Reset Kudos</a>
                                     {% endif %}
                                 {% endif %}
                             </div>

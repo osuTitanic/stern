@@ -334,6 +334,21 @@ function userSearch() {
     return true;
 }
 
+function disableAndExecute(element, func) {
+    if (el.dataset.loading) return;
+    el.dataset.loading = "1";
+    el.classList.add("disabled");
+    el.style.pointerEvents = "none";
+
+    try {
+        func();
+    } finally {
+        el.dataset.loading = "";
+        el.classList.remove("disabled");
+        el.style.pointerEvents = "";
+    }
+}
+
 function createLoaderOverlay() {
     var overlay = document.createElement("div");
     overlay.className = "loader-overlay";
