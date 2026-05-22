@@ -7,6 +7,16 @@
     beatmapset.creator_id == current_user.id
 ) %}
 
+{% set can_force_nominate = permissions.has_permission(
+    "beatmaps.moderation.force_nominate",
+    current_user.id
+) %}
+
+{% set can_manage_resources = permissions.has_permission(
+    'beatmaps.moderation.resources',
+    current_user.id
+) %}
+
 {% block content %}
 <h1 class="header-text">
     <a href="/beatmapsets">Beatmap Listing</a> »
@@ -403,7 +413,7 @@
                     <thead>
                         <th><h2>General</h2></th>
                         <th><h2>Ranking</h2></th>
-                        {% if beatmapset.status <= 0 or current_user.is_admin %}
+                        {% if beatmapset.status <= 0 or can_manage_resources %}
                         <th><h2>Files</h2></th>
                         {% endif %}
                     </thead>
@@ -539,7 +549,7 @@
                                 </form>
                             </details>
                         </td>
-                        {% if beatmapset.status <= 0 or permissions.has_permission('beatmaps.moderation.resources', current_user.id) %}
+                        {% if beatmapset.status <= 0 or can_manage_resources %}
                         <td>
                             <p>
                                 Please make sure you know what you are doing before replacing any files! <br><br>
