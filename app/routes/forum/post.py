@@ -549,6 +549,9 @@ def handle_post(topic: DBForumTopic, _: int, session: Session) -> Response:
             session=session
         )
 
+    # Refresh topic to potentially update outdated icons
+    session.refresh(topic)
+
     broadcast_post_activity(
         topic, post,
         current_user,
