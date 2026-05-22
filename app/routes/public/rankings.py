@@ -171,7 +171,7 @@ def render_rankings_page(
             session=session,
             jumpto=jumpto,
             total_beatmaps=(
-                beatmaps.fetch_count_with_leaderboards(mode, session)
+                beatmap_count_cached(mode.value)
                 if order_type == 'clears' else 0
             ),
             site_title=(
@@ -283,3 +283,7 @@ def create_user_stats(user: DBUser, session) -> List[DBStats]:
 @caching.ttl_cache(ttl=60*15)
 def top_countries_cached(mode: int) -> List[dict]:
     return leaderboards.top_countries(mode)
+
+@caching.ttl_cache(ttl=60*5)
+def beatmap_count_cached(mode: int) -> int:
+    return beatmaps.fetch_count_with_leaderboards(mode)
