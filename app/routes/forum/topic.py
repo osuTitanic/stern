@@ -149,9 +149,12 @@ def topic(forum_id: str, id: str):
                 topic.forum_id
             )
 
-        initial_post = posts.fetch_initial_post(
-            topic.id,
-            session=session
+        initial_post = (
+            # Use the first post if we are on page 1
+            topic_posts[0]
+            if page == 1 and topic_posts else
+            # Otherwise fetch the initial post separately
+            posts.fetch_initial_post(topic.id, session=session)
         )
 
         if not initial_post:
