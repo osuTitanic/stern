@@ -77,6 +77,9 @@ def forum_view(forum_id: int):
             key=lambda topic: pinned_timestamp if topic.pinned else topic.last_post_at,
             reverse=True
         )
+        activity.preload_topic_read_statuses(
+            announcements + recent_topics
+        )
 
         has_custom_icons = any(
             topic.icon_id
