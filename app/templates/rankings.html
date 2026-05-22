@@ -170,7 +170,7 @@
                         player.stats[mode].b_count,
                         player.stats[mode].c_count,
                         player.stats[mode].d_count
-                        ]|sum) }} / {{ total_beatmaps }}
+                        ]|sum) }} / {{ "{:,}".format(total_beatmaps) }}
                     {% else %}
                         {{ "{:,}".format(score|int) }}
                     {% endif %}
