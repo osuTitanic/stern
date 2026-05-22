@@ -552,6 +552,18 @@
                                     <input type="hidden" name="beatmapset_id" value="{{ beatmapset.id }}">
                                 </form>
                             </details>
+                            {% if can_force_nominate %}
+                            <br>
+                            <div>
+                                <a href="#" onclick="addForceNomination({{ beatmapset.id }})" style="color: green;">
+                                    Add nominator
+                                </a>
+                                <br>
+                                <a href="#" onclick="removeForceNomination({{ beatmapset.id }})" style="color: red;">
+                                    Remove nominator
+                                </a>
+                            </div>
+                            {% endif %}
                         </td>
                         {% if beatmapset.status <= 0 or can_manage_resources %}
                         <td>
