@@ -27,6 +27,7 @@ import regex
 import app
 
 router = Blueprint("forum-posts", __name__)
+unchanged_icon = -2
 
 # Patterns for content to be removed when quoting other posts
 quote_patterns = [
@@ -105,6 +106,10 @@ def post_view(forum_id: str, topic_id: str):
             topic.id,
             session=session
         )
+        latest_post = posts.fetch_last(
+            topic.id,
+            session=session
+        )
 
         beatmapset = beatmapsets.fetch_by_topic(
             topic.id,
@@ -127,7 +132,14 @@ def post_view(forum_id: str, topic_id: str):
             is_subscribed=is_subscribed,
             initial_post=initial_post,
             editing_initial_post=(
-                action == 'edit' and initial_post.id == action_id
+                action == 'edit' and
+                initial_post is not None and
+                initial_post.id == action_id
+            ),
+            editing_latest_post=(
+                action == 'edit' and
+                latest_post is not None and
+                latest_post.id == action_id
             ),
             icons=forums.fetch_icons(session),
             topic_type=get_post_type(topic),
@@ -248,7 +260,7 @@ def update_topic_type(
         'announcement': False
     }
 
-def get_icon_id(topic: DBForumTopic) -> int | None:
+def can_change_icon(topic: DBForumTopic) -> bool:
     can_force_change_icon = permissions.has_permission(
         "forum.moderation.topics.edit_icon",
         current_user.id
@@ -260,10 +272,11 @@ def get_icon_id(topic: DBForumTopic) -> int | None:
 
     # BATs are able to change icons of topics that allow icon changes
     # Moderators can change icons regardless of forum settings
-    can_change_icon = can_change_icon or can_force_change_icon
+    return can_change_icon or can_force_change_icon
 
-    if not can_change_icon:
-        return -2
+def get_icon_id(topic: DBForumTopic) -> int | None:
+    if not can_change_icon(topic):
+        return unchanged_icon
 
     icon_id = request.form.get(
         'icon',
@@ -272,7 +285,7 @@ def get_icon_id(topic: DBForumTopic) -> int | None:
     )
 
     if topic.icon_id == icon_id:
-        return -2
+        return unchanged_icon
 
     if icon_id != -1:
         return icon_id
@@ -464,7 +477,7 @@ def handle_post(topic: DBForumTopic, _: int, session: Session) -> Response:
         content,
         icon_id=(
             new_icon
-            if new_icon != -2
+            if new_icon != unchanged_icon
             else None
         ),
         session=session
@@ -493,7 +506,7 @@ def handle_post(topic: DBForumTopic, _: int, session: Session) -> Response:
         'last_post_at': datetime.now(),
         'icon_id': (
             new_icon
-            if new_icon != -2
+            if new_icon != unchanged_icon
             else topic.icon_id
         )
     }
@@ -649,6 +662,24 @@ def handle_post_edit(topic: DBForumTopic, post_id: int, session: Session) -> Res
     updates = {
         'content': content
     }
+
+    latest_post = posts.fetch_last(
+        topic.id,
+        session=session
+    )
+    new_icon = (
+        get_icon_id(topic)
+        if latest_post and post.id == latest_post.id
+        else unchanged_icon
+    )
+
+    if new_icon != unchanged_icon:
+        updates['icon_id'] = new_icon
+        topics.update(
+            topic.id,
+            {'icon_id': new_icon},
+            session=session
+        )
 
     can_create_locks = permissions.has_permission(
         "forum.moderation.posts.lock",
