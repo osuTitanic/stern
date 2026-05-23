@@ -171,3 +171,117 @@ $(document).on("keydown", document, function (event) {
         form.submit();
     }
 });
+
+function updateTopic(topicId, updates, successCallback, errorCallback) {
+    performApiRequest("PATCH", "/forum/0/topics/" + topicId, updates, successCallback, errorCallback);
+}
+
+function moveTopic(topicId) {
+    var targetForumId = prompt("Enter the ID of the forum to move this topic to:");
+    if (!targetForumId || isNaN(targetForumId)) {
+        return false;
+    }
+
+    updateTopic(
+        topicId,
+        { forum_id: targetForumId },
+        function (xhr) {
+            reloadPageSoon();
+        },
+        function (xhr) {
+            var data = JSON.parse(xhr.responseText);
+            alert(data.details || "Failed to move topic. (" + data.error + ")");
+        }
+    );
+    return false;
+}
+
+function lockTopic(topicId) {
+    updateTopic(
+        topicId,
+        { lock_topic: true },
+        function (xhr) {
+            reloadPageSoon();
+        },
+        function (xhr) {
+            var data = JSON.parse(xhr.responseText);
+            alert(data.details || "Failed to lock topic. (" + data.error + ")");
+        }
+    );
+    return false;
+}
+
+function unlockTopic(topicId) {
+    updateTopic(
+        topicId,
+        { lock_topic: false },
+        function (xhr) {
+            reloadPageSoon();
+        },
+        function (xhr) {
+            var data = JSON.parse(xhr.responseText);
+            alert(data.details || "Failed to unlock topic. (" + data.error + ")");
+        }
+    );
+    return false;
+}
+
+function setTopicType(topicId, type) {
+    updateTopic(
+        topicId,
+        { type: type },
+        function (xhr) {
+            reloadPageSoon();
+        },
+        function (xhr) {
+            var data = JSON.parse(xhr.responseText);
+            alert(data.details || "Failed to set topic type. (" + data.error + ")");
+        }
+    );
+    return false;
+}
+
+function setTopicStatus(topicId, status) {
+    updateTopic(
+        topicId,
+        { status_text: status },
+        function (xhr) {
+            reloadPageSoon();
+        },
+        function (xhr) {
+            var data = JSON.parse(xhr.responseText);
+            alert(data.details || "Failed to set topic status. (" + data.error + ")");
+        }
+    );
+    return false;
+}
+
+function setTopicIcon(topicId, iconId) {
+    updateTopic(
+        topicId,
+        { icon_id: iconId },
+        function (xhr) {
+            reloadPageSoon();
+        },
+        function (xhr) {
+            var data = JSON.parse(xhr.responseText);
+            alert(data.details || "Failed to set topic icon. (" + data.error + ")");
+        }
+    );
+    return false;
+}
+
+function setTopicTitle(topicId, title) {
+    updateTopic(
+        topicId,
+        { title: title },
+        function (xhr) {
+            reloadPageSoon();
+        },
+        function (xhr) {
+            var data = JSON.parse(xhr.responseText);
+            alert(data.details || "Failed to set topic title. (" + data.error + ")");
+        }
+    );
+    return false;
+}
