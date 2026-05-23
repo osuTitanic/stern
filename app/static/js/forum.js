@@ -176,12 +176,7 @@ function updateTopic(topicId, updates, successCallback, errorCallback) {
     performApiRequest("PATCH", "/forum/0/topics/" + topicId, updates, successCallback, errorCallback);
 }
 
-function moveTopic(topicId) {
-    var targetForumId = prompt("Enter the ID of the forum to move this topic to:");
-    if (!targetForumId || isNaN(targetForumId)) {
-        return false;
-    }
-
+function moveTopic(topicId, targetForumId) {
     updateTopic(
         topicId,
         { forum_id: targetForumId },
