@@ -274,7 +274,6 @@ function parseBooleanFromString(rawValue) {
 
 function confirmRedirect(url, promptText) {
     var do_redirect = confirmAction(promptText);
-
     if (!do_redirect) return;
 
     window.location.href = url;
@@ -347,6 +346,21 @@ function disableAndExecute(el, func) {
         el.classList.remove("disabled");
         el.style.pointerEvents = "";
     }
+}
+
+function executeWithPrompt(promptText, func) {
+    var userInput = prompt(promptText);
+    if (userInput !== null) {
+        func(userInput);
+    }
+    return false;
+}
+
+function executeWithConfirmation(promptText, func) {
+    if (confirmAction(promptText)) {
+        func();
+    }
+    return false;
 }
 
 function createLoaderOverlay() {
