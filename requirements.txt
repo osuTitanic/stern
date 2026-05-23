@@ -22,7 +22,7 @@ timeago==1.0.16
 rosu-pp-py==4.0.2
 markdown-it-py[plugins,linkify]==4.2.0
 pygments==2.20.0
-pyjwt==2.12.1
+pyjwt==2.13.0
 regex
 pydantic-settings==2.14.1
 packaging<25
