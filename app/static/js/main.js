@@ -334,7 +334,7 @@ function userSearch() {
     return true;
 }
 
-function disableAndExecute(element, func) {
+function disableAndExecute(el, func) {
     if (el.dataset.loading) return;
     el.dataset.loading = "1";
     el.classList.add("disabled");
