@@ -37,7 +37,7 @@ def get_beatmapset(id: int):
         if available_beatmaps:
            beatmap = available_beatmaps[0]
 
-        return redirect(f'/b/{beatmap.id}{mode}')
+        return redirect(f'/b/{beatmap.id}{mode}', code=301)
 
 @router.get('/beatmapsets/')
 def beatmap_search():
