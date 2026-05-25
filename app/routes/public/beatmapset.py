@@ -44,8 +44,8 @@ def beatmap_search():
     return utils.render_template(
         'search.html',
         css='search.css',
-        title="Beatmap Listing - Titanic",
-        site_title="Beatmap Listing",
+        title="Beatmap Listing",
+        site_title="Beatmap Listing - Titanic!",
         site_description="Search for beatmaps",
         site_image=f"{app.config.OSU_BASEURL}/images/logo/main-low.png",
         canonical_url=request.base_url,

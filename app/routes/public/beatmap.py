@@ -99,7 +99,7 @@ def get_beatmap(id: int):
                 favourites.fetch_one(current_user.id, beatmap.set_id, session=session)
                 if current_user.is_authenticated else None
             ),
-            site_title=f"{beatmap.full_name} - Beatmap Info",
+            site_title=f"{beatmap.full_name} - Beatmap Info - Titanic!",
             site_description=f"Titanic » Beatmaps » {beatmap.full_name}",
             site_image=f"{config.OSU_BASEURL}/mt/{beatmap.set_id}l.jpg",
             personal_best=personal_best,

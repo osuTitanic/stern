@@ -119,8 +119,8 @@ def post_view(forum_id: str, topic_id: str):
         return utils.render_template(
             "forum/post.html",
             css='forums.css',
-            title="Create a Post - Titanic",
-            site_title=f"Titanic » Forums » {topic.forum.name} » {topic.title} » Post",
+            title="Create a Post - Forum",
+            site_title="Create a Post - Titanic!",
             site_description="Discuss and share your thoughts with the community.",
             current_text=text,
             forum=topic.forum,

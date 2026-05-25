@@ -27,6 +27,8 @@ def get_group(id: str):
             group=group,
             users=users,
             session=session,
-            site_title=group.name,
+            title=f"{group.name} - Group Info",
+            site_title=f"{group.name} - Titanic!",
             site_description=group.description,
+            site_image=f"{app.config.OSU_BASEURL}/images/logo/main-low.png",
         )

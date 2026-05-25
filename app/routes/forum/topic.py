@@ -172,8 +172,8 @@ def topic(forum_id: str, id: str):
         return utils.render_template(
             "forum/topic.html",
             css='forums.css',
-            title=f"{topic.title} - Titanic",
-            site_title=f"Titanic » Forums » {topic.forum.name} » {topic.title}",
+            title=f"{topic.title} - Forum",
+            site_title=f"{topic.title} - Titanic!",
             site_description=initial_post.content.split('\n')[0],
             site_image=f'{config.OSU_BASEURL}{app.filters.avatar_url(initial_post.user)}',
             canonical_url=request.base_url,
@@ -218,8 +218,8 @@ def create_post_view(forum_id: str):
         return utils.render_template(
             "forum/create.html",
             css='forums.css',
-            title="Create a Topic - Titanic",
-            site_title=f"Titanic » Forums » {forum.name} » Create",
+            title="Create a Topic - Forum",
+            site_title="Create a Topic - Titanic!",
             site_description="Discuss and share your thoughts with the community.",
             session=session,
             forum=forum,

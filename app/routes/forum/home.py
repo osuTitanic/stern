@@ -29,8 +29,8 @@ def home():
         return utils.render_template(
             "forum/home.html",
             css='forums.css',
-            title="Forums - Titanic",
-            site_title="Titanic » Forums » Home",
+            title="Forum",
+            site_title="Forums - Titanic!",
             site_description="Discuss and share your thoughts with the community.",
             site_image=f"{app.config.OSU_BASEURL}/images/logo/main-low.png",
             forums=forum_dict,

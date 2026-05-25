@@ -27,7 +27,9 @@ def return_to_reset_page(error: Optional[str] = None) -> str:
         'reset.html',
         css='account.css',
         error=error,
-        title='Password Reset - Titanic!'
+        title='Password Reset',
+        site_title='Password Reset - Titanic!',
+        site_description='Reset the password to your Titanic account.'
     )
 
 @router.get('/reset')
@@ -39,7 +41,9 @@ def reset():
     return utils.render_template(
         'reset.html',
         css='account.css',
-        title='Password Reset - Titanic!'
+        title='Password Reset',
+        site_title='Password Reset - Titanic!',
+        site_description='Reset the password to your Titanic account.'
     )
 
 @router.post('/reset')
@@ -58,7 +62,9 @@ def password_reset_request():
                 css='verification.css',
                 verification=verification,
                 error="The passwords don't match. Please try again!",
-                title="Verification - Titanic!",
+                title="Verification",
+                site_title="Verification - Titanic!",
+                site_description="Complete your Titanic account verification.",
                 reset=True
             )
 
@@ -80,7 +86,9 @@ def password_reset_request():
             css='verification.css',
             verification=verification,
             success=True,
-            title="Verification - Titanic!"
+            title="Verification",
+            site_title="Verification - Titanic!",
+            site_description="Complete your Titanic account verification."
         )
 
     if not config.EMAILS_ENABLED:

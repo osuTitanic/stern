@@ -69,7 +69,9 @@ def on_http_exception(error: HTTPException) -> Tuple[str, int]:
         content=error.description,
         code=error.code,
         css='error.css',
-        title=f'{error.name} - Titanic!'
+        title=error.name,
+        site_title=f'{error.name} - Titanic!',
+        site_description=error.description
     ), error.code
 
 @app.flask.errorhandler(Exception)

@@ -204,8 +204,8 @@ def render_register_page(error: Optional[str] = None) -> str:
     return utils.render_template(
         'register.html',
         css='account.css',
-        title='Register - Titanic!',
-        site_title='Register',
+        title='Create Account',
+        site_title='Create an Account - Titanic!',
         site_description='Create your account and start playing today!',
         site_image=f"{app.config.OSU_BASEURL}/images/logo/main-low.png",
         error=error

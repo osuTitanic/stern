@@ -143,8 +143,8 @@ def render_login_page(
         error=error,
         redirect=redirect,
         disable_login_modal=True,
-        title='Login - Titanic!',
-        site_title='Login',
-        site_description='Log in to your account and start playing today!',
+        title='Login',
+        site_title='Login - Titanic!',
+        site_description='Log in to your Titanic! account.',
         site_image=f"{app.config.OSU_BASEURL}/images/logo/main-low.png"
     )

@@ -154,7 +154,7 @@ def render_rankings_page(
         return utils.render_template(
             'rankings.html',
             css='rankings.css',
-            title=f'{order_name} Rankings - Titanic',
+            title=f'{order_name} Rankings',
             mode=mode.value,
             page=page,
             country=country,
@@ -175,8 +175,12 @@ def render_rankings_page(
                 if order_type == 'clears' else 0
             ),
             site_title=(
-                f'{order_name} Ranking for '
-                f'{f"{COUNTRIES[country.upper()]}" if country else "All Locations"}'
+                f'{order_name} Rankings for '
+                f'{COUNTRIES[country.upper()] if country else "All Locations"} - Titanic!'
+            ),
+            site_description=(
+                f'View Titanic! {order_name.lower()} rankings for '
+                f'{COUNTRIES[country.upper()] if country else "all locations"}.'
             )
         )
 
@@ -200,7 +204,7 @@ def render_country_page(
     return utils.render_template(
         'country.html',
         css='country.css',
-        title='Country Rankings - Titanic',
+        title='Country Rankings',
         mode=mode.value,
         page=page,
         total_pages=total_pages,
@@ -208,7 +212,8 @@ def render_country_page(
         max_page_display=max_page_display,
         min_page_display=min_page_display,
         items_per_page=items_per_page,
-        site_title='Country Rankings'
+        site_title='Country Rankings - Titanic!',
+        site_description='Compare Titanic! player rankings by country.'
     )
 
 def render_kudosu_page(items_per_page: int, page: int, session: Session) -> str:
@@ -255,8 +260,8 @@ def render_kudosu_page(items_per_page: int, page: int, session: Session) -> str:
     return utils.render_template(
         'kudosu.html',
         css='rankings.css',
-        title='Kudosu Rankings - Titanic',
-        site_title='Kudosu Rankings',
+        title='Kudosu Rankings',
+        site_title='Kudosu Rankings - Titanic!',
         site_description='Discover who has contributed the most to beatmap modding on Titanic.',
         page=page,
         total_pages=total_pages,

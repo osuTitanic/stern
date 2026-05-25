@@ -40,7 +40,7 @@ def get_score(id: int):
         beatmapset = beatmap.beatmapset
 
         site_title = (
-            f"Titanic » {beatmapset.artist} - {beatmapset.title} » {user.name}'s Score"
+            f"{user.name}'s score on {beatmapset.artist} - {beatmapset.title} - Titanic!"
         )
         site_description = (
             f"{user.name} achieved #{score_rank if score_rank else 'N/A'} with "

@@ -11,7 +11,8 @@ def events_page():
     return utils.render_template(
         'events.html',
         css='events.css',
-        site_title="Activity Feed",
+        title="Activity Feed",
+        site_title="Activity Feed - Titanic!",
         site_description="Keep up with what's going on in Titanic!",
         site_image=f"{config.OSU_BASEURL}/images/logo/main-low.png",
         websocket_endpoint=config.EVENTS_WEBSOCKET

@@ -103,8 +103,8 @@ def forum_view(forum_id: int):
         return utils.render_template(
             "forum/forum.html",
             css='forums.css',
-            title=f"{forum.name} - Titanic",
-            site_title=f"Titanic » Forums » {forum.name}",
+            title=f"{forum.name} - Forum",
+            site_title=f"{forum.name} - Titanic!",
             site_description=forum.description,
             site_image=f"{app.config.OSU_BASEURL}/images/logo/main-low.png",
             canonical_url=request.base_url,

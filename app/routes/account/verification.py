@@ -49,7 +49,9 @@ def verification():
                 'verification.html',
                 css='verification.css',
                 verification=verification,
-                title="Verification - Titanic!"
+                title="Verification",
+                site_title="Verification - Titanic!",
+                site_description="Complete your Titanic account verification."
             )
 
         if verification_token != verification.token:
@@ -74,7 +76,9 @@ def verification():
                 'verification.html',
                 css='verification.css',
                 verification=verification,
-                title="Verification - Titanic!",
+                title="Verification",
+                site_title="Verification - Titanic!",
+                site_description="Complete your Titanic account verification.",
                 reset=True
             )
 
@@ -91,7 +95,9 @@ def verification():
         return utils.render_template(
             'verification.html',
             css='verification.css',
-            title="Verification - Titanic!",
+            title="Verification",
+            site_title="Verification - Titanic!",
+            site_description="Complete your Titanic account verification.",
             verification=verification,
             success=True
         )
@@ -124,7 +130,9 @@ def resend_verification():
                     css='verification.css',
                     verification=verification,
                     error='Please wait a few minutes, until you resend the email!',
-                    title="Verification - Titanic!"
+                    title="Verification",
+                    site_title="Verification - Titanic!",
+                    site_description="Complete your Titanic account verification."
                 )
         except ValueError:
             return abort(404)

@@ -105,7 +105,7 @@ def render_error(
     content = render_template(
         template_name,
         css='error.css',
-        title=f'{description or code} - Titanic!',
+        title=f'{description or code}',
         site_title=f'{description or code} - Titanic!',
         site_description='An error has occurred.',
         status_code=code

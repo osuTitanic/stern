@@ -5,6 +5,7 @@ from flask_login import current_user
 from collections import defaultdict
 
 import utils
+import app
 
 router = Blueprint('download', __name__)
 
@@ -19,8 +20,9 @@ def download():
     return utils.render_template(
         'download.html',
         css='download.css',
-        title="Download - Titanic",
-        site_title="Download",
+        title="Download",
+        site_title="Download - Titanic!",
+        site_image=f"{app.config.OSU_BASEURL}/images/logo/main-low.png",
         site_description="Let's get you started! Choose and download your preferred version of osu!.",
         releases=sorted_releases
     )
@@ -62,9 +64,10 @@ def download_timeline():
     return utils.render_template(
         'download_timeline.html',
         css='download.css',
-        title="Download Timeline - Titanic",
-        site_title="Download Timeline",
+        title="Download Timeline",
+        site_title="Download Timeline - Titanic!",
         site_description="A timeline of all osu! releases, presented in a wayback-machine-like format",
+        site_image=f"{app.config.OSU_BASEURL}/images/logo/main-low.png",
         heatmap=daily_heatmap,
         monthly_heatmap=monthly_heatmap,
         timeline_years=timeline_years,
