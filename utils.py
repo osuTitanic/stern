@@ -34,6 +34,12 @@ import re
 
 def render_template(template_name: str, **context) -> str:
     """This will automatically append the required data to the context for rendering pages"""
+    if canonical_url := context.get('canonical_url'):
+        context['canonical_url'] = absolute_site_url(canonical_url)
+
+    if site_url := context.get('site_url'):
+        context['site_url'] = absolute_site_url(site_url)
+
     context.update(
         is_modern_browser=browsers.is_modern_browser(request.user_agent.string),
         is_ie=browsers.is_internet_explorer(request.user_agent.string),
@@ -70,6 +76,16 @@ def render_template(template_name: str, **context) -> str:
         template_name,
         **context
     )
+
+def absolute_site_url(url: str) -> str:
+    """Return an absolute URL for local paths."""
+    parsed = urlsplit(url)
+
+    if parsed.scheme and parsed.netloc:
+        return url
+
+    path = url if url.startswith('/') else f'/{url}'
+    return f'{config.OSU_BASEURL.rstrip("/")}{path}'
 
 def render_error(
     code: int,
