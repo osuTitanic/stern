@@ -13,7 +13,7 @@ router = Blueprint('wiki', __name__)
 
 @router.get('/')
 def wiki_home_redirect():
-    return redirect('/wiki/en/')
+    return redirect('/wiki/en/', code=301)
 
 @router.get('/<language>/')
 def home_wiki_page(language: str):
@@ -29,7 +29,7 @@ def home_wiki_page(language: str):
             css='wiki.css',
             title='Home - Titanic! Wiki',
             site_title='Titanic! Wiki',
-            canonical_url=f'/wiki/',
+            canonical_url=f'/wiki/{language.lower()}/',
             current_date=format_date(date=datetime.now(), format='full', locale=language.lower()).title(),
             source_url=wiki.GITHUB_BASEURL,
             discussion_url=f'{wiki.GITHUB_BASEURL}/pulls',
@@ -56,7 +56,7 @@ def wiki_search_page(language: str):
         css='wiki.css',
         title=f'{query or "Search"} - Titanic! Wiki',
         site_title='Titanic! Wiki',
-        canonical_url=f'/wiki/en/search',
+        canonical_url=f'/wiki/{language.lower()}/search/',
         requested_language=language,
         language=language,
         search_query=query
@@ -78,7 +78,7 @@ def wiki_page(path: str, language: str = config.WIKI_DEFAULT_LANGUAGE):
         formatted_path = wiki.format_path(path, page.name)
 
         if formatted_path != path:
-            return redirect(f'/wiki/{language}/{formatted_path}')
+            return redirect(f'/wiki/{language}/{formatted_path}', code=301)
 
         return utils.render_template(
             f'wiki/content/{language}.html',
@@ -86,8 +86,8 @@ def wiki_page(path: str, language: str = config.WIKI_DEFAULT_LANGUAGE):
             content=wiki.process_markdown(entry.content),
             title=f'{entry.title} - Titanic! Wiki',
             site_title=f'{entry.title} - Titanic! Wiki',
-            site_url=f'/wiki/en/{path}',
-            canonical_url=f'/wiki/en/{path}',
+            site_url=f'/wiki/{entry.language}/{path}',
+            canonical_url=f'/wiki/{entry.language}/{path}',
             requested_language=language,
             language=entry.language,
             translation_url=f'{wiki.CREATE_BASEURL}/{github_path}',
