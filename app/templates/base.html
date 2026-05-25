@@ -22,6 +22,9 @@
     <meta name="description" content="{{ description or site_description }}">
     {% endif %}
     <meta name="keywords" content="titanic, osu, old osu, osu!, private server" />
+    {% if robots %}
+    <meta name="robots" content="{{ robots }}">
+    {% endif %}
     <meta property="og:site_name" content="Titanic!">
     <meta property="og:type" content="website">
     {% if site_title %}<meta property="og:title" content="{{ site_title }}">{% endif %}
