@@ -67,7 +67,7 @@ def userpage(query: str):
             user.id,
             session=session
         )
-        
+
         rankings = leaderboards.player_rankings(
             user.id, mode, user.country,
             leaderboards=(
@@ -136,7 +136,7 @@ def userpage(query: str):
             mode=mode,
             css='user.css',
             title=f"{user.name} - Player Info",
-            site_title=f"{user.name} Player Info - Titanic!",
+            site_title=f"{user.name} - Player Info - Titanic!",
             site_description=f"Rank ({GameMode(mode).formatted}): Global: #{pp_rank or '-'} | Country: #{pp_rank_country or '-'}",
             site_image=f'{config.OSU_BASEURL}{app.filters.avatar_url(user)}',
             site_url=f"{config.OSU_BASEURL}/u/{user.id}",
