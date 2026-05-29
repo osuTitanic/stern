@@ -67,10 +67,6 @@ def topic(forum_id: str, id: str):
                 f"/forum/{topic.forum_id}/t/{id}/"
             )
 
-        if current_user.is_authenticated:
-            # Used for "Current users browsing this forum"
-            forum_activity.mark_user_active(current_user.id, topic.forum_id)
-
         page = max(1, request.args.get('page', 1, type=int))
 
         topic_posts = posts.fetch_range_by_topic(
@@ -144,6 +140,7 @@ def topic(forum_id: str, id: str):
                 session=session
             )
 
+            # Used for "Current users browsing this forum"
             forum_activity.mark_user_active(
                 current_user.id,
                 topic.forum_id
