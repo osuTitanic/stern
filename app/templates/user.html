@@ -656,6 +656,17 @@
                             <h4 class="profile-stats-element" title="The total number of times this user's replays have been watched.">
                                 <b>Replays Watched by Others</b>: {{ current_stats.replay_views }} time{{ 's' if current_stats.replay_views != 1 }}
                             </h4>
+                            {% if user.stamps %}
+                            <br>
+                            <h4 class="profile-stats-element" title="Participate in events to receive stamps!">
+                                <b>Stamps</b>:
+                                {% for stamp in user.stamps %}
+                                <a href="{{ stamp.url or '#' }}" title="{{ stamp.description }}">
+                                    <img src="{{ stamp.icon }}">
+                                </a>
+                                {% endfor %}
+                            </h4>
+                            {% endif %}
                             <br>
                             <h4 class="profile-stats-element"><b>Ranks</b></h4>
                             <table class="profile-ranks">
