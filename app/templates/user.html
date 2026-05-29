@@ -422,6 +422,63 @@
             </form>
         </dialog>
 
+        <button onclick="document.getElementById('moderation-stamps').showModal()">
+            Edit stamps
+        </button>
+        <dialog id="moderation-stamps" class="popup">
+            <form method="dialog" onsubmit="return false">
+                <table id="moderation-stamps-table" style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr>
+                            <th style="text-align: left; width: 20%">Icon URL</th>
+                            <th style="text-align: left; width: 20%">Redirect URL</th>
+                            <th style="text-align: left; width: 55%">Description</th>
+                            <th style="text-align: right; width: 5%">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for stamp in user.stamps %}
+                        <tr data-stamp-id="{{ stamp.id }}">
+                            <td>
+                                <input type="text" id="stamp-icon-{{ stamp.id }}" value="{{ (stamp.icon or '')|e }}" style="width:100%" />
+                            </td>
+                            <td>
+                                <input type="text" id="stamp-url-{{ stamp.id }}" value="{{ (stamp.url or '')|e }}" style="width:100%" />
+                            </td>
+                            <td>
+                                <input type="text" id="stamp-desc-{{ stamp.id }}" value="{{ (stamp.description or '')|e }}" style="width:100%" />
+                            </td>
+                            <td style="text-align:right">
+                                <button type="button" onclick="moderationUpdateStamp({{ user.id }}, {{ stamp.id }})">Update</button>
+                                <button type="button" onclick="if(confirm('Delete this stamp?')) moderationDeleteStamp({{ user.id }}, {{ stamp.id }})" style="color: #c00">Delete</button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        <tr id="stamp-new-row">
+                            <td>
+                                <input type="text" id="stamp-new-icon" placeholder="/images/stamps/example.png" style="width:100%" />
+                            </td>
+                            <td>
+                                <input type="text" id="stamp-new-url" placeholder="https://... (optional)" style="width:100%" />
+                            </td>
+                            <td>
+                                <input type="text" id="stamp-new-desc" placeholder="Description (optional)" style="width:100%" />
+                            </td>
+                            <td style="text-align:right">
+                                <button type="button" class="confirm-button" onclick="moderationAddStamp({{ user.id }})">Add</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="form-actions" style="margin-top: 12px; justify-content: flex-start;">
+                    <button type="button" class="grey-button" onclick="document.getElementById('moderation-stamps').close()">
+                        Close
+                    </button>
+                </div>
+            </form>
+        </dialog>
+
         <button onclick="moderationOpenInfringements({{ user.id }})">
             Edit infringements
         </button>

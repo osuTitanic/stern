@@ -159,6 +159,56 @@ function removeBadge(userId, badgeId, onSuccess, onFailure) {
     );
 }
 
+function addStamp(userId, stampData, onSuccess, onFailure) {
+    performApiRequest(
+        "POST",
+        "/moderation/users/" + userId + "/stamps",
+        stampData,
+        function (xhr) {
+            var stamp = JSON.parse(xhr.responseText);
+            if (onSuccess) {
+                onSuccess(stamp);
+            }
+        },
+        function (xhr) {
+            return handleApiErrorCallback(xhr, onFailure);
+        }
+    );
+}
+
+function updateStamp(userId, stampId, stampData, onSuccess, onFailure) {
+    performApiRequest(
+        "PATCH",
+        "/moderation/users/" + userId + "/stamps/" + stampId,
+        stampData,
+        function (xhr) {
+            var stamp = JSON.parse(xhr.responseText);
+            if (onSuccess) {
+                onSuccess(stamp);
+            }
+        },
+        function (xhr) {
+            return handleApiErrorCallback(xhr, onFailure);
+        }
+    );
+}
+
+function removeStamp(userId, stampId, onSuccess, onFailure) {
+    performApiRequest(
+        "DELETE",
+        "/moderation/users/" + userId + "/stamps/" + stampId,
+        null,
+        function (xhr) {
+            if (onSuccess) {
+                onSuccess();
+            }
+        },
+        function (xhr) {
+            return handleApiErrorCallback(xhr, onFailure);
+        }
+    );
+}
+
 function getUserInfringements(userId, onSuccess, onFailure) {
     performApiRequest(
         "GET",
@@ -439,6 +489,61 @@ function moderationAddBadge(userId) {
         },
         function (err) {
             alert("Failed to add badge: " + err.details);
+        }
+    );
+}
+
+function moderationUpdateStamp(userId, stampId) {
+    var data = {
+        stamp_url: document.getElementById("stamp-url-" + stampId).value || null,
+        icon_url: document.getElementById("stamp-icon-" + stampId).value || null,
+        description: document.getElementById("stamp-desc-" + stampId).value || null
+    };
+
+    updateStamp(
+        userId,
+        stampId,
+        data,
+        function (stamp) {
+            alert("Stamp updated successfully!");
+        },
+        function (err) {
+            alert("Failed to update stamp: " + err.details);
+        }
+    );
+}
+
+function moderationDeleteStamp(userId, stampId) {
+    removeStamp(
+        userId,
+        stampId,
+        function () {
+            var row = document.querySelector('tr[data-stamp-id="' + stampId + '"]');
+            if (row) row.remove();
+            else reloadPageSoon(250);
+        },
+        function (err) {
+            alert("Failed to delete stamp: " + err.details);
+        }
+    );
+}
+
+function moderationAddStamp(userId) {
+    var data = {
+        stamp_url: document.getElementById("stamp-new-url").value || null,
+        icon_url: document.getElementById("stamp-new-icon").value || null,
+        description: document.getElementById("stamp-new-desc").value || null
+    };
+
+    addStamp(
+        userId,
+        data,
+        function (stamp) {
+            // TODO: Insert new row for created stamp
+            reloadPageSoon(250);
+        },
+        function (err) {
+            alert("Failed to add stamp: " + err.details);
         }
     );
 }

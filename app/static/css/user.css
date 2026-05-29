@@ -824,7 +824,8 @@ body {
     color: #222;
 }
 
-#moderation-badges {
+#moderation-badges,
+#moderation-stamps {
     width: 1200px;
     max-width: calc(100% - 40px);
     padding: 14px;
@@ -834,13 +835,15 @@ body {
     color: #222;
 }
 
-#moderation-badges h2 {
+#moderation-badges h2,
+#moderation-stamps h2 {
     margin: 0 0 10px 0;
     font-size: 115%;
     color: #40347a;
 }
 
-#moderation-badges table {
+#moderation-badges table,
+#moderation-stamps table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 8px;
@@ -848,14 +851,18 @@ body {
 }
 
 #moderation-badges th,
-#moderation-badges td {
+#moderation-badges td,
+#moderation-stamps th,
+#moderation-stamps td {
     padding: 8px;
     border-bottom: 1px solid #efecff;
     vertical-align: middle;
 }
 
 #moderation-badges input[type="text"],
-#moderation-badges textarea {
+#moderation-badges textarea,
+#moderation-stamps input[type="text"],
+#moderation-stamps textarea {
     width: 100%;
     padding: 6px 8px;
     border: 1px solid #cfc9f6;
