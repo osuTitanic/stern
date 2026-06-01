@@ -692,7 +692,7 @@ function createInfringementElement(inf, userId) {
     durationInput.value = Math.max(0, length);
 
     var isPermanentTd = document.createElement("td");
-    isPermanentTd.style.textAlign = "center";
+    isPermanentTd.className = "moderation-checkbox-cell";
     var isPermanentCheckbox = document.createElement("input");
     isPermanentCheckbox.type = "checkbox";
     isPermanentCheckbox.checked = !!inf.is_permanent;
@@ -704,7 +704,7 @@ function createInfringementElement(inf, userId) {
     descriptionInput.value = inf.description || "";
 
     var actionsTd = document.createElement("td");
-    actionsTd.style.textAlign = "right";
+    actionsTd.className = "moderation-actions-cell";
 
     var updBtn = document.createElement("button");
     updBtn.type = "button";
@@ -716,7 +716,7 @@ function createInfringementElement(inf, userId) {
     var delBtn = document.createElement("button");
     delBtn.type = "button";
     delBtn.textContent = "Delete";
-    delBtn.style.color = "#c00";
+    delBtn.className = "danger-button";
     delBtn.onclick = function () {
         if (confirm("Delete this infringement?")) moderationDeleteInfringement(userId, inf.id, inf.action === 0);
     };
