@@ -7,6 +7,7 @@ from flask import Response, g, redirect, request
 from flask_login import current_user
 
 from . import session as app_session
+from . import cookies
 
 import flask_login
 import hashlib
@@ -157,9 +158,6 @@ def resolve_domain_name() -> str | None:
 
     return f'.{config.DOMAIN_NAME}'
 
-def use_secure_cookies() -> bool:
-    return request.is_secure or not config.ALLOW_INSECURE_COOKIES
-
 def set_session_cookie(
     response: Response,
     session_id: str,
@@ -167,7 +165,8 @@ def set_session_cookie(
     ttl: int
 ) -> None:
     domain = resolve_domain_name()
-    use_ssl = use_secure_cookies()
+    is_secure = cookies.determine_secure()
+    is_samesite = cookies.determine_samesite()
 
     # On localhost we can't use http-only cookies on other subdomains
     # We'll make the cookie visible to javascript, which can pass in the cookie as a header instead
@@ -177,9 +176,9 @@ def set_session_cookie(
         WEBSITE_SESSION_COOKIE_NAME,
         session_id,
         domain=domain,
-        secure=use_ssl,
+        secure=is_secure,
+        samesite=is_samesite,
         httponly=http_only,
-        samesite='Lax',
         max_age=ttl if remember else None
     )
 
