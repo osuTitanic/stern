@@ -502,11 +502,29 @@ body {
     text-align: right;
 }
 
-.profile-ranks {
+.profile-centered-space {
     text-align: center;
     margin: 0 auto;
     width: 60%;
     margin-top: 15px;
+}
+
+.stamp {
+    animation: stamp-glow 3s infinite ease-in-out;
+    transition: transform 0.1s ease-in-out;
+}
+
+.stamp:hover {
+    filter: drop-shadow(0 0 22px rgba(255, 245, 190, 0.9));
+    transform: scale(0.9);
+    cursor: pointer;
+    animation: none;
+}
+
+@keyframes stamp-glow {
+    0% { filter: drop-shadow(0 0 7px rgba(150, 150, 150, 0.5)); }
+    50% { filter: drop-shadow(0 0 7px rgba(150, 170, 150, 0.6)); }
+    100% { filter: drop-shadow(0 0 7px rgba(150, 150, 150, 0.5)); }
 }
 
 #top-scores, #leader-scores, #pinned-scores {
@@ -880,22 +898,4 @@ body {
     border-radius: 6px;
     box-shadow: 0 8px 22px rgba(0,0,0,0.18);
     color: #222;
-}
-
-.stamp {
-    animation: stamp-glow 3s infinite ease-in-out;
-    transition: transform 0.1s ease-in-out;
-}
-
-@keyframes stamp-glow {
-    0% { filter: drop-shadow(0 0 7px rgba(150, 150, 150, 0.5)); }
-    50% { filter: drop-shadow(0 0 7px rgba(150, 170, 150, 0.6)); }
-    100% { filter: drop-shadow(0 0 7px rgba(150, 150, 150, 0.5)); }
-}
-
-.stamp:hover {
-    filter: drop-shadow(0 0 22px rgba(255, 245, 190, 0.9));
-    transform: scale(0.9);
-    cursor: pointer;
-    animation: none;
 }
