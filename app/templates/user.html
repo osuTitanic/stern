@@ -715,14 +715,18 @@
                             </h4>
                             {% if user.stamps %}
                             <br>
-                            <h4 class="profile-stats-element" title="Participate in events to receive stamps!">
-                                <b>Stamps</b>:
+                            <h4 class="profile-stats-element" title="Participate in events to receive stamps!"><b>Stamps</b></h4>
+                            <table class="profile-ranks">
+                                <tbody>
                                 {% for stamp in user.stamps %}
-                                <a href="{{ stamp.url or '#' }}" title="{{ stamp.description }}">
-                                    <img src="{{ stamp.icon }}">
-                                </a>
+                                    <td>
+                                        <a href="{{ stamp.url or '#' }}" title="{{ stamp.description }}">
+                                            <img src="{{ stamp.icon }}" style="height: 64px;" alt="Stamp" class="stamp">
+                                        </a>
+                                    </td>
                                 {% endfor %}
-                            </h4>
+                                </tbody>
+                            </table>
                             {% endif %}
                             <br>
                             <h4 class="profile-stats-element"><b>Ranks</b></h4>
