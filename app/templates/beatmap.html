@@ -277,325 +277,8 @@
                 </td>
             </tr>
         </table>
-        {% if beatmapset.server != 0 and beatmapset.status <= 0 %}
-            {% if current_user.id != beatmapset.creator_id %}
-                {% set invite = collaboration_requests|selectattr("target_id", "eq", current_user.id)|first %}
-                {% if invite %}
-                <div class="collaboration-request">
-                    <a href="/u/{{ invite.user.id }}">{{ invite.user.name }}</a> invited you to collaborate on this beatmap! &nbsp;
-                    <button style="color: green" onclick="acceptCollaborationRequest({{ beatmap.id }}, {{ invite.id }})">Accept</button>
-                    <button style="color: red" onclick="rejectCollaborationRequest({{ beatmap.id }}, {{ invite.id }})">Decline</button>
-                    {# TODO #}
-                    {# <button>Block</button> #}
-                </div>
-                {% endif %}
-            {% else %}
-                <div class="beatmap-settings">
-                    <details>
-                        <summary>Settings</summary>
-                        <table>
-                            <thead>
-                                <th><h2>Metadata</h2></th>
-                                <th><h2>Collaborators for "{{ beatmap.version }}"</h2></th>
-                                <th><h2>Pending Collaboration Invites</h2></th>
-                            </thead>
-                            <tbody>
-                                <td style="min-width: 28%">
-                                    <form method="post" onsubmit="updateBeatmapsetMetadata(event)">
-                                        <dl>
-                                            <dt>Genre:</dt>
-                                            <dd>
-                                                <select name="genre">
-                                                    {% for genre in constants.BeatmapGenre.values() %}
-                                                    {% if genre != 0 %} {# Skip "Any" genre #}
-                                                    <option value="{{ genre }}" {% if beatmapset.genre_id == genre %}selected{% endif %}>{{ constants.BeatmapGenre(genre).name }}</option>
-                                                    {% endif %}
-                                                    {% endfor %}
-                                                </select>
-                                            </dd>
-                                            <dt>Language:</dt>
-                                            <dd>
-                                                <select name="language">
-                                                    {% for language in constants.BeatmapLanguage.values() %}
-                                                    {% if language != 0 %} {# Skip "Any" language #}
-                                                    <option value="{{ language }}" {% if beatmapset.language_id == language %}selected{% endif %}>{{ constants.BeatmapLanguage(language).name }}</option>
-                                                    {% endif %}
-                                                    {% endfor %}
-                                                </select>
-                                            </dd>
-                                        </dl>
-                                        <input type="submit" value="Save">
-                                        <input type="hidden" name="beatmapset_id" value="{{ beatmapset.id }}">
-                                    </form>
-                                </td>
-                                <td>
-                                    {% if not collaborations %}
-                                    <p>
-                                        No collaborators yet.
-                                        {% if not collaboration_requests %}
-                                        Why not invite one?
-                                        {% else %}
-                                        Please wait for an invite to be accepted.
-                                        {% endif %}
-                                    </p>
-                                    {% endif %}
-                                    <table>
-                                    {% for collaboration in collaborations %}
-                                    <tr>
-                                        <td>
-                                            <a href="/u/{{ collaboration.user.id }}">{{ collaboration.user.name }}</a>
-                                            {% if collaboration.is_beatmap_author %} (Author) {% endif %}
-                                        </td>
-                                        <td class="collaborator" id="collaborator-{{ collaboration.user_id }}">
-                                            <button onclick="removeCollaboration({{ beatmap.id }}, {{ collaboration.user_id }})" style="color: red">Remove</button>
-                                            {% if collaborations|length == 1 %}
-                                                {% if not collaboration.is_beatmap_author %}
-                                                <button onclick="collaborationMakeAuthor({{ beatmap.id }}, {{ collaboration.user_id }})" title="This will make the user show up as the creator of the beatmap">
-                                                    Make Author
-                                                </button>
-                                                {% else %}
-                                                <button onclick="collaborationRemoveAuthor({{ beatmap.id }}, {{ collaboration.user_id }})">
-                                                    Remove Author Status
-                                                </button>
-                                                {% endif %}
-                                            {% endif %}
-                                            {% if not collaboration.allow_resource_updates %}
-                                            <button onclick="collaborationAllowResourceUpdates({{ beatmap.id }}, {{ collaboration.user_id }})" title="This will allow the user to upload images, storyboards, and other resources to your beatmapset">
-                                                Allow Resource Updates
-                                            </button>
-                                            {% else %}
-                                            <button onclick="collaborationDisallowResourceUpdates({{ beatmap.id }}, {{ collaboration.user_id }})">
-                                                Disallow Resource Updates
-                                            </button>
-                                            {% endif %}
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                                    </table>
-                                </td>
-                                <td style="min-width: 28%">
-                                    {% if not collaboration_requests %}
-                                    <p>
-                                        No pending invites.
-                                        <a href="#" onclick="createCollaborationRequest({{ beatmap.id }})">Invite someone!</a>
-                                    </p>
-                                    {% else %}
-                                    <div class="invite-container">
-                                        {% for invite in collaboration_requests %}
-                                        <div class="invite">
-                                            <a href="/u/{{ invite.target.id }}">{{ invite.target.name }}</a>
-                                            <button onclick="removeCollaborationRequest({{ beatmap.id }}, {{ invite.id }})" style="color: red">Remove</button>
-                                        </div>
-                                        {% endfor %}
-                                    </div><br>
-                                    <button class="invite-button" onclick="createCollaborationRequest({{ beatmap.id }})">
-                                        Invite
-                                    </button>
-                                    {% endif %}
-                                </td>
-                            </tbody>
-                        </table>
-                    </details>
-                </div>
-            {% endif %}
-        {% endif %}
-        {% if current_user.is_bat %}
-        <div class="beatmap-settings">
-            <details {% if bat_error or bat_info %}open{% endif %}>
-                <summary>BAT Controls</summary>
-                {% if bat_error %}
-                <div id="error">
-                    {{ bat_error }}
-                </div>
-                {% endif %}
-                {% if bat_info %}
-                <div id="info">
-                    {{ bat_info }}
-                </div>
-                {% endif %}
-                <table>
-                    <thead>
-                        <th><h2>General</h2></th>
-                        <th><h2>Ranking</h2></th>
-                        {% if beatmapset.status <= 0 or can_manage_resources %}
-                        <th><h2>Files</h2></th>
-                        {% endif %}
-                    </thead>
-                    <tbody>
-                        <td style="min-width: 38%">
-                            <form method="post" onsubmit="updateBeatmapsetMetadata(event)">
-                                <dl>
-                                    <dt>Offset:</dt>
-                                    <dd>
-                                        <input type="text" name="offset" value="{{ beatmapset.offset }}" size="6">
-                                    </dd>
-                                    {% if beatmapset.server == 0 %}
-                                    <dt>Enhanced:</dt>
-                                    <dd>
-                                        <input type="checkbox" name="enhanced" {% if beatmapset.enhanced %}checked{% endif %}>
-                                    </dd>
-                                    <dt>Download Server:</dt>
-                                    <dd>
-                                        <select name="download_server">
-                                            <option value="0" {% if beatmapset.download_server == 0 %}selected{% endif %}>Bancho</option>
-                                            <option value="1" {% if beatmapset.download_server == 1 %}selected{% endif %}>Titanic</option>
-                                        </select>
-                                    </dd>
-                                    {% endif %}
-                                    <dt>Display Title:</dt>
-                                    <dd>
-                                        <textarea name="display_title">{{ beatmapset.display_title }}</textarea>
-                                    </dd>
-                                    <dt>Genre:</dt>
-                                    <dd>
-                                        <select name="genre">
-                                            {% for genre in constants.BeatmapGenre.values() %}
-                                            <option value="{{ genre }}" {% if beatmapset.genre_id == genre %}selected{% endif %}>{{ constants.BeatmapGenre(genre).name }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </dd>
-                                    <dt>Language:</dt>
-                                    <dd>
-                                        <select name="language">
-                                            {% for language in constants.BeatmapLanguage.values() %}
-                                            <option value="{{ language }}" {% if beatmapset.language_id == language %}selected{% endif %}>{{ constants.BeatmapLanguage(language).name }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </dd>
-                                    <dt>Tags:</dt>
-                                    <dd>
-                                        <textarea name="tags">{{ beatmapset.tags or '' }}</textarea>
-                                    </dd>
-                                </dl>
-                                <input type="submit" value="Save">
-                                <input type="hidden" name="beatmapset_id" value="{{ beatmapset.id }}">
-                            </form>
-                        </td>
-                        <td style="min-width: 30%">
-                            <p>
-                                The current status of this beatmap is "{{ constants.BeatmapStatus(beatmapset.status).name }}".
-                                {% if nominations|length >= beatmapset|required_nominations and beatmapset.status <= 0 %}
-                                This beatmap has enough nominations to be qualified!
-                                {% elif beatmapset.status == 3 %}
-                                This beatmap will be ranked {{ (beatmapset.approved_at + timedelta(days=7))|timeago }}.
-                                {% endif %}
-                            </p><br>
-                            {% if beatmapset.status <= 0 %}
-                            {# Beatmap is not ranked #}
-                            <div>
-                                {% if not bat_nomination %}
-                                <a href="#" onclick="addNomination({{ beatmapset.id }})" style="color: green;">
-                                    Nominate this beatmap
-                                    (Bubble)
-                                </a><br>
-                                {% else %}
-                                <p style="color: green;">
-                                    You have nominated this beatmap
-                                    (Bubbled)
-                                </p>
-                                {% endif %}
-                                <a href="#" onclick="resetNominations({{ beatmapset.id }})" style="color: red;">
-                                    Remove all nominations from this beatmap
-                                    (Pop Bubble)
-                                </a>
-                            </div><br>
-                            <div>
-                                <a onclick="setBeatmapsetStatus({{ beatmapset.id }}, 3, 'Are you sure you want to update the status to Qualified?')">
-                                    Update status to "Qualified"
-                                </a><br>
-                                <a onclick="setBeatmapsetStatus({{ beatmapset.id }}, 4, 'Are you sure you want to update the status to Loved?')">
-                                    Update status to "Loved"
-                                </a><br>
-                                {% if beatmapset.server != 0 %}
-                                <a onclick="nukeBeatmapset({{ beatmapset.id }})" style="color: red">
-                                    Nuke this beatmap
-                                </a><br>
-                                {% endif %}
-                            </div><br>
-                            {% elif beatmapset.status in (1, 2) %}
-                            <div>
-                                <a onclick="setBeatmapsetStatus({{ beatmapset.id }}, 0)" style="color: red;">
-                                    Unrank this beatmap
-                                </a>
-                            </div>
-                            {% elif beatmapset.status == 3 %}
-                            <div>
-                                <a onclick="setBeatmapsetStatus({{ beatmapset.id }}, 0)" style="color: red;">
-                                    Disqualify this beatmap
-                                </a>
-                            </div>
-                            {% elif beatmapset.status == 4 %}
-                            <div>
-                                <a onclick="setBeatmapsetStatus({{ beatmapset.id }}, 0)" style="color: red;">
-                                    Remove from "Loved" category
-                                </a>
-                            </div>
-                            {% endif %}
-                            <details>
-                                <summary>Difficulty Status Updates</summary><br>
-                                <form method="post" onsubmit="updateBeatmapStatuses(event)">
-                                    <div class="bat-diffs">
-                                        {% for beatmap in beatmapset.beatmaps %}
-                                        <div>
-                                            <dt>{{ beatmap.version }}</dt>
-                                            <dd>
-                                                <select name="{{ beatmap.id }}">
-                                                    {% for status in constants.BeatmapStatus.values() %}
-                                                    <option value="{{ status }}" {% if beatmap.status == status %}selected{% endif %}>{{ constants.BeatmapStatus(status).name }}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </dd>
-                                        </div>
-                                        {% endfor %}
-                                    </div>
-                                    <input type="submit" value="Update">
-                                    <input type="hidden" name="beatmapset_id" value="{{ beatmapset.id }}">
-                                </form>
-                            </details>
-                            {% if can_force_nominate %}
-                            <br>
-                            <div>
-                                <a href="#" onclick="addForceNomination({{ beatmapset.id }})" style="color: green;">
-                                    Add nominator
-                                </a>
-                                <br>
-                                <a href="#" onclick="removeForceNomination({{ beatmapset.id }})" style="color: red;">
-                                    Remove nominator
-                                </a>
-                            </div>
-                            {% endif %}
-                        </td>
-                        {% if beatmapset.status <= 0 or can_manage_resources %}
-                        <td>
-                            <p>
-                                Please make sure you know what you are doing before replacing any files! <br><br>
-                            </p>
-                            {% if beatmapset.download_server == 0 %}
-                            <p>
-                                If the download server is set to "Titanic", your changes will take effect. <br>
-                                Once you change the download server, make sure all resources have been uploaded.
-                            </p><br>
-                            {% endif %}
-                            <a href="#" onclick="uploadResource('/resources/osz/{{ beatmapset.id }}', 'osz', '.osz,.zip');">
-                                Replace osz file
-                            </a><br>
-                            <a href="#" onclick="uploadResource('/resources/osu/{{ beatmap.id }}', 'osu', '.osu,.txt', 'This will replace the beatmap file for {{ beatmap.version|url_quote }}. Are you sure?');">
-                                Replace beatmap file
-                            </a><br>
-                            <a href="#" onclick="uploadResource('/resources/mt/{{ beatmapset.id }}', 'mt', '.jpeg,.jpg', 'Please make sure this image is 160x120 pixels large! Are you sure you want to upload?');">
-                                Replace background file (large)
-                            </a><br>
-                            <a href="#" onclick="uploadResource('/resources/mp3/{{ beatmapset.id }}', 'mp3', '.mp3');">
-                                Replace audio preview file
-                            </a>
-                        </td>
-                        {% endif %}
-                    </tr>
-                    </tbody>
-                </table>
-            </details>
-        </div>
-        {% endif %}
+        {% include "beatmap_settings.html" %}
+        {% include "beatmap_bat.html" %}
     </div>
     <div class="padding">
         <div class="beatmap-download">
@@ -946,6 +629,8 @@
     {% endif %}
     {% endif %}
 </div>
+
+{# Disqus Comments #}
 {% if beatmapset.server == 0 %}
 <div id="disqus_thread" style="margin-top: 10px; padding-left: 7px; padding-right: 8px"></div>
 <script type="text/javascript">
@@ -967,13 +652,17 @@
 </script>
 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 {% endif %}
+{# TODO: Disqus-like frontend, but 1st party instead of relying on Disqus itself #}
+
 <script>
     var beatmapsetId = {{ beatmapset.id }};
     var isBeatmapsetOwner = {{ is_beatmap_author|lower }};
     var bbcodeDescription = `{{ beatmapset.description }}`;
 </script>
-<script src="{{ '/js/beatmap.js'|cached_url }}"></script>
+
+<script src="{{ '/js/beatmap.js'|cached_url }}" defer></script>
 {% if current_user.is_bat %}
-<script src="{{ '/js/bat.js'|cached_url }}"></script>
+<script src="{{ '/js/bat.js'|cached_url }}" defer></script>
 {% endif %}
+
 {% endblock content %}

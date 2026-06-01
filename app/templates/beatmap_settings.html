@@ -1,0 +1,122 @@
+{# templates/beatmap_collaboration.html #}
+
+{% if beatmapset.server != 0 and beatmapset.status <= 0 %}
+    {% if current_user.id != beatmapset.creator_id %}
+        {% set invite = collaboration_requests|selectattr("target_id", "eq", current_user.id)|first %}
+        {% if invite %}
+        <div class="collaboration-request">
+            <a href="/u/{{ invite.user.id }}">{{ invite.user.name }}</a> invited you to collaborate on this beatmap! &nbsp;
+            <button style="color: green" onclick="acceptCollaborationRequest({{ beatmap.id }}, {{ invite.id }})">Accept</button>
+            <button style="color: red" onclick="rejectCollaborationRequest({{ beatmap.id }}, {{ invite.id }})">Decline</button>
+        </div>
+        {% endif %}
+    {% else %}
+        <div class="beatmap-settings">
+            <details>
+                <summary>Settings</summary>
+                <table>
+                    <thead>
+                        <th><h2>Metadata</h2></th>
+                        <th><h2>Collaborators for "{{ beatmap.version }}"</h2></th>
+                        <th><h2>Pending Collaboration Invites</h2></th>
+                    </thead>
+                    <tbody>
+                        <td style="min-width: 28%">
+                            <form method="post" onsubmit="updateBeatmapsetMetadata(event)">
+                                <dl>
+                                    <dt>Genre:</dt>
+                                    <dd>
+                                        <select name="genre">
+                                            {% for genre in constants.BeatmapGenre.values() %}
+                                            {% if genre != 0 %} {# Skip "Any" genre #}
+                                            <option value="{{ genre }}" {% if beatmapset.genre_id == genre %}selected{% endif %}>{{ constants.BeatmapGenre(genre).name }}</option>
+                                            {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </dd>
+                                    <dt>Language:</dt>
+                                    <dd>
+                                        <select name="language">
+                                            {% for language in constants.BeatmapLanguage.values() %}
+                                            {% if language != 0 %} {# Skip "Any" language #}
+                                            <option value="{{ language }}" {% if beatmapset.language_id == language %}selected{% endif %}>{{ constants.BeatmapLanguage(language).name }}</option>
+                                            {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </dd>
+                                </dl>
+                                <input type="submit" value="Save">
+                                <input type="hidden" name="beatmapset_id" value="{{ beatmapset.id }}">
+                            </form>
+                        </td>
+                        <td>
+                            {% if not collaborations %}
+                            <p>
+                                No collaborators yet.
+                                {% if not collaboration_requests %}
+                                Why not invite one?
+                                {% else %}
+                                Please wait for an invite to be accepted.
+                                {% endif %}
+                            </p>
+                            {% endif %}
+                            <table>
+                            {% for collaboration in collaborations %}
+                            <tr>
+                                <td>
+                                    <a href="/u/{{ collaboration.user.id }}">{{ collaboration.user.name }}</a>
+                                    {% if collaboration.is_beatmap_author %} (Author) {% endif %}
+                                </td>
+                                <td class="collaborator" id="collaborator-{{ collaboration.user_id }}">
+                                    <button onclick="removeCollaboration({{ beatmap.id }}, {{ collaboration.user_id }})" style="color: red">Remove</button>
+                                    {% if collaborations|length == 1 %}
+                                        {% if not collaboration.is_beatmap_author %}
+                                        <button onclick="collaborationMakeAuthor({{ beatmap.id }}, {{ collaboration.user_id }})" title="This will make the user show up as the creator of the beatmap">
+                                            Make Author
+                                        </button>
+                                        {% else %}
+                                        <button onclick="collaborationRemoveAuthor({{ beatmap.id }}, {{ collaboration.user_id }})">
+                                            Remove Author Status
+                                        </button>
+                                        {% endif %}
+                                    {% endif %}
+                                    {% if not collaboration.allow_resource_updates %}
+                                    <button onclick="collaborationAllowResourceUpdates({{ beatmap.id }}, {{ collaboration.user_id }})" title="This will allow the user to upload images, storyboards, and other resources to your beatmapset">
+                                        Allow Resource Updates
+                                    </button>
+                                    {% else %}
+                                    <button onclick="collaborationDisallowResourceUpdates({{ beatmap.id }}, {{ collaboration.user_id }})">
+                                        Disallow Resource Updates
+                                    </button>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            </table>
+                        </td>
+                        <td style="min-width: 28%">
+                            {% if not collaboration_requests %}
+                            <p>
+                                No pending invites.
+                                <a href="#" onclick="createCollaborationRequest({{ beatmap.id }})">Invite someone!</a>
+                            </p>
+                            {% else %}
+                            <div class="invite-container">
+                                {% for invite in collaboration_requests %}
+                                <div class="invite">
+                                    <a href="/u/{{ invite.target.id }}">{{ invite.target.name }}</a>
+                                    <button onclick="removeCollaborationRequest({{ beatmap.id }}, {{ invite.id }})" style="color: red">Remove</button>
+                                </div>
+                                {% endfor %}
+                            </div><br>
+                            <button class="invite-button" onclick="createCollaborationRequest({{ beatmap.id }})">
+                                Invite
+                            </button>
+                            {% endif %}
+                        </td>
+                    </tbody>
+                </table>
+            </details>
+        </div>
+    {% endif %}
+{% endif %}
