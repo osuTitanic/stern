@@ -1,6 +1,9 @@
 
 from app.common.constants import BeatmapSortBy, BeatmapOrder
 from app.common.database.repositories import beatmapsets
+from app.common.database.objects import DBBeatmapset
+
+from requests import Response as HttpResponse
 from flask import Response, Blueprint, abort, redirect, request
 from flask_login import current_user
 from . import packs
@@ -85,10 +88,10 @@ def download_beatmapset(id: str):
     if current_user.is_anonymous:
         return abort(code=404)
 
-    if not (set := beatmapsets.fetch_one(id)):
+    if not (beatmapset := beatmapsets.fetch_one(id)):
         return abort(code=404)
 
-    if not set.available:
+    if not beatmapset.available:
         return abort(code=451)
 
     no_video = request.args.get(
@@ -99,11 +102,11 @@ def download_beatmapset(id: str):
 
     # no_video can only be true if the beatmapset has videos
     no_video = (
-        no_video and set.has_video
+        no_video and beatmapset.has_video
     )
 
     response = app.session.storage.api.osz(
-        set.id,
+        beatmapset.id,
         no_video
     )
 
@@ -111,13 +114,17 @@ def download_beatmapset(id: str):
         return abort(code=404)
 
     estimated_size = (
-        set.osz_filesize_novideo if no_video else
-        set.osz_filesize
+        beatmapset.osz_filesize_novideo if no_video else
+        beatmapset.osz_filesize
     )
 
-    osz_filename = utils.secure_filename(f'{set.id} {set.artist} - {set.title}')
+    osz_filename = utils.secure_filename(f'{beatmapset.id} {beatmapset.artist} - {beatmapset.title}')
     osz_filename += ' (no video)' if no_video else ''
     osz_filename += '.osz'
+
+    # There's a chance we have missing osz filesizes inside the database
+    # We can use the response content length to populate the missing data
+    populate_osz_sizes(response, beatmapset, no_video)
 
     return Response(
         response.iter_content(65536),
@@ -125,6 +132,30 @@ def download_beatmapset(id: str):
         headers={
             'Content-Disposition': f'attachment; filename="{osz_filename}";',
             'Content-Length': response.headers.get('Content-Length', f"{estimated_size}"),
-            'Last-Modified': set.last_update.strftime('%a, %d %b %Y %H:%M:%S GMT')
+            'Last-Modified': beatmapset.last_update.strftime('%a, %d %b %Y %H:%M:%S GMT')
         }
+    )
+
+def populate_osz_sizes(response: HttpResponse, beatmapset: DBBeatmapset, no_video: bool) -> None:
+    target_column = 'osz_filesize_novideo' if no_video else 'osz_filesize'
+    current_value = getattr(beatmapset, target_column)
+
+    if current_value > 0:
+        # Filesize was already populated
+        return
+
+    content_length = response.headers.get('Content-Length')
+
+    if not content_length or not content_length.isdigit():
+        # Most likely not in the response data
+        return
+
+    # Update the database with the new filesize
+    setattr(
+        beatmapset, target_column,
+        int(content_length)
+    )
+    beatmapsets.update(
+        beatmapset.id,
+        {target_column: int(content_length)}
     )
