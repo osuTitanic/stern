@@ -45,7 +45,7 @@ function removeBookmark(topicId) {
 function deletePost(postId) {
     if (!confirm("Are you sure you want to delete this post?")) return;
 
-    var url = "/forum/{{ forum.id }}/topics/{{ topic.id }}/posts/" + postId;
+    var url = "/forum/0/topics/0/posts/" + postId;
 
     performApiRequest(
         "DELETE",
