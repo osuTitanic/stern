@@ -69,8 +69,8 @@ COPY --from=builder /install/usr/local /usr/local
 # Copy application source
 COPY . .
 
-# Precompile python files for faster startup
-RUN python -m compileall -q app
+# Precompile python modules for faster startup
+RUN python -m compileall -q /usr/local/lib/python3.14/site-packages app
 
 # Setup volume for app/static
 VOLUME /stern/app/static
