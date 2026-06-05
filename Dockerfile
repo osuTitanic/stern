@@ -75,7 +75,7 @@ RUN python -m compileall -q /usr/local/lib/python3.14/site-packages app
 # Setup volume for app/static
 VOLUME /stern/app/static
 
-STOPSIGNAL SIGQUIT
+STOPSIGNAL SIGINT
 ENTRYPOINT ["/sbin/tini", "--"]
 
 CMD ["/bin/sh", "-c", "granian --host 0.0.0.0 --port 80 --interface wsgi --workers ${FRONTEND_WORKERS} --runtime-threads ${FRONTEND_THREADS_RUNTIME} --blocking-threads ${FRONTEND_THREADS_BLOCKING} --loop uvloop --http 1 --no-ws --backpressure 128 --respawn-failed-workers --access-log --process-name stern-worker --workers-kill-timeout 5 --workers-lifetime 43200 --workers-max-rss 512 app:flask"]
