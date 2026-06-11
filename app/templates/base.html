@@ -1,7 +1,11 @@
 {# templates/base.html #}
 
 <!DOCTYPE html>
-<html lang="en">
+<!--[if IE 6]><html class="ie ie6" lang="en"><![endif]-->
+<!--[if IE 7]><html class="ie ie7" lang="en"><![endif]-->
+<!--[if IE 8]><html class="ie ie8" lang="en"><![endif]-->
+<!--[if IE 9]><html class="ie ie9" lang="en"><![endif]-->
+<!--[if gt IE 9]><!--><html lang="en"><!--<![endif]-->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=1080, user-scalable=yes"/>
@@ -56,26 +60,6 @@
     {% if is_modern_browser %}
     <script src="{{ '/lib/instant.page.js'|cached_url }}" type="module" defer></script>
     {% endif %}
-    <!-- CSS fixes for Internet Explorer -->
-    <!--[if IE 6]>
-    <style>
-        .nav-element a,
-        .nav-element a:visited {
-            width: 35px;
-        }
-        .nav-list {
-            margin-left: 85px;
-        }
-        .bancho-stats {
-            width: 220px;
-            top: -17px;
-            right: -1px;
-        }
-    </style>
-    <![endif]-->
-    <!--[if IE 7]>
-    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome-ie7.min.css">
-    <![endif]-->
 </head>
 <body id="titanic">
     {% if current_user.restricted %}
