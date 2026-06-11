@@ -8,41 +8,41 @@
     <p>Please fill in the details below to register your account on Titanic!</p>
     <p>By registering, you agree to Titanic!'s <a href="/wiki/en/Rules">Rules</a> and <a href="/wiki/en/Legal/Privacy">Privacy Policy</a>.</p>
 </div>
-<form class="register-form" method="post" onsubmit="return validateAll(event)">
-    <div>
-        <input id="username" type="text" name="username" autocomplete="off" autocapitalize="none" placeholder="Username" class="validate" required>
+<form class="account-form register-form" method="post" onsubmit="return validateAll(event)">
+    <div class="account-form-section account-form-field">
+        <input id="username" class="account-form-control validate" type="text" name="username" autocomplete="off" autocapitalize="none" placeholder="Username" required>
         <div class="input-description">
             Others will recognise you by this name. Make sure you are happy with it!
         </div>
     </div>
-    <div>
-        <input type="email" name="email" autocomplete="off" autocapitalize="none" placeholder="Email Address" class="validate" required>
+    <div class="account-form-section account-form-field">
+        <input class="account-form-control validate" type="email" name="email" autocomplete="off" autocapitalize="none" placeholder="Email Address" required>
         <div class="input-description">
             Will be used for account verification and in the case you forget your password. No spam, ever.
         </div>
     </div>
-    <div>
-        <input type="password" name="password" autocomplete="off" autocapitalize="none" placeholder="Password" required>
+    <div class="account-form-section account-form-field">
+        <input class="account-form-control" type="password" name="password" autocomplete="off" autocapitalize="none" placeholder="Password" required>
         <div class="input-description">
             At least 8 characters long. Choose something long but also something you will remember, like a line from your favourite song.
         </div>
     </div>
-    <div class="register-submit" style="justify-content: center;">
-        <input class="register-button" type="submit" name="login" value="Register">
+    <div class="account-form-section account-form-actions register-submit">
+        <input class="account-form-button register-button" type="submit" name="login" value="Register">
     </div>
     {% if error %}
-        <div style="background-color: #eab9d6;">
+        <div class="account-form-section account-form-error">
             {{ error }}
         </div>
     {% endif %}
-    <div style="text-align: center; display: grid; justify-items: center;">
+    <div class="account-form-section account-form-panel">
         <img src="/images/signup-multi.png" alt="" height="90px">
-        <div class="input-description" style="width: 100%; margin-top: 15px;">
+        <div class="input-description">
             Titanic! has a policy of <strong>one account per person</strong>!
             Please be aware that creating more than one account per person may result in <strong>permanent deactivation of all accounts</strong>.
         </div>
     </div>
-    <div style="display: block; line-height: 18px; text-align: center">
+    <div class="account-form-section account-form-info">
         We <b>strongly</b> recommend to choose a different password than the one you are using for <a href="https://osu.ppy.sh">osu.ppy.sh</a>, due to the
         unencrypted traffic on older clients and our responsibility to protect your data in the event of a breach.
         <br><br>

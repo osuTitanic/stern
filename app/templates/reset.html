@@ -6,22 +6,22 @@
 <div class="heading">
     <h1>Forgot your password?</h1>
 </div>
-<form class="reset-form" method="post">
-    <div>
-        <input type="email" name="email" autocomplete="off" autocapitalize="none" placeholder="Email Address" class="validate">
+<form class="account-form reset-form" method="post">
+    <div class="account-form-section account-form-field">
+        <input class="account-form-control validate" type="email" name="email" autocomplete="off" autocapitalize="none" placeholder="Email Address">
         <div class="input-description">
             Enter any details you remember about your account. We will do our best to track it down for you!
         </div>
     </div>
-    <div class="reset-submit" style="justify-content: center;">
-        <input class="reset-button" type="submit" name="login" value="Continue">
+    <div class="account-form-section account-form-actions reset-submit">
+        <input class="account-form-button reset-button" type="submit" name="login" value="Continue">
     </div>
     {% if error %}
-        <div style="background-color: #eab9d6;">
+        <div class="account-form-section account-form-error">
             {{ error }}
         </div>
     {% endif %}
-    <div style="display: block;">
+    <div class="account-form-section account-form-info">
         Need further assistance? Contact us on our <a href="https://discord.gg/qupv72e7YH">discord</a> or via <a href="mailto:{{ config.EMAIL_SENDER }}">email</a>.
     </div>
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
