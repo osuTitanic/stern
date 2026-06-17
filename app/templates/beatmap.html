@@ -150,9 +150,11 @@
                     </div>
                 </td>
                 <td>Length:</td>
-                <td class="beatmap-stats-info">
-                    {% set minutes = beatmap.total_length // 60 %}
-                    {% set seconds = beatmap.total_length % 60 %}
+                {% set minutes = beatmap.total_length // 60 %}
+                {% set seconds = beatmap.total_length % 60 %}
+                {% set minutes_drain = beatmap.drain_length // 60 %}
+                {% set seconds_drain = beatmap.drain_length % 60 %}
+                <td class="beatmap-stats-info" title="Drain length: {{ minutes_drain }}:{{ "%02d"|format(seconds_drain) }}">
                     {{ minutes }}:{{ "%02d"|format(seconds) }}
                 </td>
             </tr>
