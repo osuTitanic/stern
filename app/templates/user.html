@@ -8,12 +8,12 @@
         {% if user.avatar_hash %}
             {% if current_user.id == user.id %}
                 <a href="/account/profile#edit">
-                    <div class="avatar">
+                    <div class="avatar avatar-frame">
                         <img src="{{ user|avatar_url }}" alt="" width="128" height="128" fetchpriority="high" />
                     </div>
                 </a>
             {% else %}
-                <div class="avatar">
+                <div class="avatar avatar-frame">
                     <img src="{{ user|avatar_url }}" alt="" width="128" height="128" fetchpriority="high" />
                 </div>
             {% endif %}

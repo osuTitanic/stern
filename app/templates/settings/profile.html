@@ -15,7 +15,7 @@
     <div id="edit">
         <h2>Edit Profile</h2>
         <form class="section" action="/account/profile/avatar" method="post" enctype="multipart/form-data">
-            <div class="avatar-box">
+            <div class="avatar-box avatar-frame">
                 <img src="{{ current_user|avatar_url }}" alt="">
             </div>
             <input type="file" id="avatar" name="avatar" /><br>

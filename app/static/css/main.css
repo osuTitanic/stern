@@ -902,11 +902,17 @@ input[type="url"], input[type="search"] {
     margin-left: 6px;
 }
 
+/* Shared white avatar frame */
+.avatar-frame {
+    background-color: white;
+    border: 1px solid #ddd;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
 .user .avatar {
     height: 120px;
     width: 120px;
     margin: 5px auto;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.10);
 }
 
 .user .avatar img {
