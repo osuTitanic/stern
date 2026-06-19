@@ -538,7 +538,6 @@ body {
 }
 
 #leader h2 {
-    text-shadow: #efcfe1 0px 0px 10px;
     font-weight: normal;
     font-size: 130%;
     color: #cc2e8a;
@@ -726,7 +725,6 @@ body {
     color: #5a539a;
     font-size: 120%;
     font-weight: normal;
-    text-shadow: #efcfe1 0px 0px 10px;
 }
 
 .moderation-container {

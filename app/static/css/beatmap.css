@@ -8,7 +8,6 @@
     margin-left: 10px;
     margin-bottom: 22px;
     color: #e15fac;
-    text-shadow: #efcfe1 0px 0px 10px;
 }
 
 .header-text p {
@@ -19,11 +18,9 @@
 
 .header-text a {
     color: #3843a6;
-    text-shadow: #efcfe1 0px 0px 10px;
 }
 
 .page h2 {
-    text-shadow: #efcfe1 0px 0px 10px;
     color: #cc2e8a;
     font-weight: normal;
     font-size: 110%;
