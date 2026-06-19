@@ -128,31 +128,26 @@
     font-weight: bold;
 }
 
-.light-row {
-    background-color: #edebfa;
+.row-light,
+.row-dark {
     font-size: 90%;
 }
 
-.light-row td {
+.row-light td {
     padding: 2px;
     border: 1px solid #e2dffa;
     border-radius: 2px;
     vertical-align: middle;
 }
 
-.dark-row {
-    background-color: #e3e1fa;
-    font-size: 90%;
-}
-
-.dark-row td {
+.row-dark td {
     padding: 2px;
     border: 1px solid rgb(206, 215, 250);
     border-radius: 2px;
     vertical-align: middle;
 }
 
-.light-row img, .dark-row img {
+.row-light img, .row-dark img {
     vertical-align: middle;
 }
 

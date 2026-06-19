@@ -706,6 +706,14 @@ input[type="url"], input[type="search"] {
     background-color: #dad7fb;
 }
 
+.row-light.row-soft {
+    background-color: #edebfa;
+}
+
+.row-dark.row-soft {
+    background-color: #e3e1fa;
+}
+
 .row-self {
     background-color: #dcfcb9;
 }

@@ -67,8 +67,8 @@ function generateResultsTable(results, matchMods) {
 
         if (result.score.failed) row.classList.add("fail");
 
-        if (results.indexOf(result) % 2 == 0) row.classList.add("light-row");
-        else row.classList.add("dark-row");
+        if (results.indexOf(result) % 2 == 0) row.classList.add("row-light");
+        else row.classList.add("row-dark");
 
         var place = document.createElement("td");
         place.innerHTML = result.place;

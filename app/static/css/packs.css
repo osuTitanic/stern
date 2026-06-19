@@ -76,14 +76,6 @@
     padding-top: 1px;
 }
 
-.dark-row {
-    background-color: #e3e1fa;
-}
-
-.light-row {
-    background-color: #edebfa;
-}
-
 .pack-listing [id^="pack-"] {
     overflow: hidden;
     z-index: 0;

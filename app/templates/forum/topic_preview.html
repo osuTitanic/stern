@@ -4,9 +4,9 @@
 {% set page_count = (topic.post_count / posts_per_page)|ceil %}
 
 {% if index % 2 %}
-    <tr class="light-row">
+    <tr class="row-light row-soft">
 {% else %}
-    <tr class="dark-row">
+    <tr class="row-dark row-soft">
 {% endif %}
     <td align="center" width="4%">
         <a href="/forum/{{ forum.id }}/t/{{ topic.id }}/">

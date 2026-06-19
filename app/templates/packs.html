@@ -51,9 +51,9 @@
         <tbody>
             {% for pack in beatmap_packs %}
                 {% if loop.index0 % 2 %}
-                <tr class="dark-row" onclick="expandBeatmapPack({{ pack.id }})">
+                <tr class="row-dark row-soft" onclick="expandBeatmapPack({{ pack.id }})">
                 {% else %}
-                <tr class="light-row" onclick="expandBeatmapPack({{ pack.id }})">
+                <tr class="row-light row-soft" onclick="expandBeatmapPack({{ pack.id }})">
                 {% endif %}
                     <td style="width: 60%">
                         <a>{{ pack.name }}</a>
