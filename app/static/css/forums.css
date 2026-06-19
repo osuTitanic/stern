@@ -47,9 +47,6 @@
     line-height: 35px;
     font-weight: normal;
     border-radius: 5px;
-    background: rgb(91, 83, 153);
-    background: -webkit-linear-gradient(rgb(123, 114, 207) 0%, rgb(91, 83, 153) 100%);
-    background-image: linear-gradient(rgb(123, 114, 207) 0%, rgb(91, 83, 153) 100%);
 }
 
 .subforum-table {
@@ -156,8 +153,6 @@
 
 .bar td {
     height: 15px;
-    background: -webkit-linear-gradient(rgb(123, 114, 207) 0%, rgb(91, 83, 153) 100%);
-    background-image: linear-gradient(rgb(123, 114, 207) 0%, rgb(91, 83, 153) 100%);
     color: white;
     padding-left: 2.5px;
     padding-bottom: 2px;

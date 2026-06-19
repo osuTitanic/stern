@@ -150,7 +150,10 @@ input[type="url"], input[type="search"] {
 }
 
 /* Gradient buttons, shared by forum post buttons, score buttons, ... */
-.button-blue {
+/* The blue fill is also reused by the forum category header and ranking bars. */
+.button-blue,
+.mainforum-head h4,
+.bar td {
     background-color: #5b5399;
     background: -webkit-linear-gradient(rgb(123, 114, 207) 0%, rgb(91, 83, 153) 100%);
     background-image: linear-gradient(rgb(123, 114, 207) 0%, rgb(91, 83, 153) 100%);
