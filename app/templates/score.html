@@ -161,11 +161,11 @@
 
             <div class="score-buttons">
                 {% if score.replay_md5 %}
-                <a href="/scores/{{ score.id }}/download" class="score-button primary">
+                <a href="/scores/{{ score.id }}/download" class="score-button button-blue">
                     <i class="icon-download-alt"></i> Download Replay
                 </a>
                 {% endif %}
-                <a href="/b/{{ beatmap.id }}" class="score-button secondary">
+                <a href="/b/{{ beatmap.id }}" class="score-button button-grey">
                     <i class="icon-arrow-left"></i> Return to Beatmap
                 </a>
             </div>
