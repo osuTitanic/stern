@@ -101,7 +101,7 @@ def format_announcement(
 def resolve_news_text(announcement: DBForumTopic, post: DBForumPost | None = None) -> str:
     if post is None:
         return ""
-    
+
     if not post.content:
         return ""
 
@@ -118,6 +118,9 @@ def resolve_news_text(announcement: DBForumTopic, post: DBForumPost | None = Non
 
         for regex in bbcode_ignore_tags:
             content = regex.sub("", content)
+
+        if not content.strip():
+            continue
 
         return content
 
