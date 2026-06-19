@@ -28,12 +28,12 @@
     </b>
     {% else %}
     <br>
-    <div class="pack-categories">
+    <div class="tab-list">
         <ul>
             {% for entry in categories %}
-            <li class="category-item">
+            <li class="tab-item">
                 <a href="/beatmapsets/packs/?category={{ entry }}"
-                   class="{{ 'active' if entry == category }}">
+                   class="tab-link {{ 'active' if entry == category }}">
                     {{ entry }}
                 </a>
             </li>
