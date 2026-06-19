@@ -1,7 +1,10 @@
 
+from app.common.database.objects import DBScore, DBBeatmap
 from app.common.database import beatmaps, scores, favourites, nominations, relationships, collaborations
 from app.common.constants import BeatmapLanguage, BeatmapGenre, BeatmapStatus, GameMode, Mods
 from app.common.config import config_instance as config
+from app import cookies
+
 from flask import Blueprint, request, redirect
 from flask_login import current_user
 from sqlalchemy.orm import Session
@@ -17,7 +20,7 @@ def redirect_to_map(id: int):
     return redirect(f'/b/{id}')
 
 @router.get('/b/<id>')
-def get_beatmap(id: int):
+def get_beatmap(id: str):
     if not id.isdigit():
         return utils.render_error(404, 'beatmap_not_found')
 
@@ -28,6 +31,14 @@ def get_beatmap(id: int):
         if beatmap.status <= -3:
             # Beatmap is inactive
             return utils.render_error(404, 'beatmap_not_found')
+
+        if beatmap.beatmapset.explicit and not has_accepted_explicit():
+            if request.args.get('explicit') != '1':
+                # Beatmap is explicit & user hasn't accepted the warning
+                return render_explicit_warning(beatmap)
+
+            # User accepted the warning, remember it & redirect to a regular url
+            return accept_explicit(beatmap.id)
 
         mode = beatmap.mode
         mode_query = request.args.get('mode', '')
@@ -116,10 +127,10 @@ def get_beatmap(id: int):
 
 def fetch_beatmap_scores(
     beatmap_id: int,
-    mode: int | None,
+    mode: int,
     mods: str,
     session: Session
-) -> None:
+) -> list[DBScore]:
     mods = mods.strip().removeprefix("+")
 
     with suppress(ValueError):
@@ -147,3 +158,36 @@ def fetch_beatmap_scores(
         limit=config.SCORE_RESPONSE_LIMIT,
         session=session
     )
+
+def has_accepted_explicit() -> bool:
+    return request.cookies.get('explicit') == '1'
+
+def render_explicit_warning(beatmap: DBBeatmap):
+    mode = request.args.get('mode', '')
+    mode_query = f'&mode={mode}' if mode.isdigit() else ''
+
+    return utils.render_template(
+        'beatmap_explicit.html',
+        css='forums.css', # TODO: refactor css
+        beatmap=beatmap,
+        beatmapset=beatmap.beatmapset,
+        title=f"{beatmap.beatmapset.artist} - {beatmap.beatmapset.title}",
+        site_title=f"{beatmap.full_name} - Beatmap Info - Titanic!",
+        robots='noindex',
+        continue_url=f'/b/{beatmap.id}?explicit=1{mode_query}'
+    )
+
+def accept_explicit(beatmap_id: int):
+    mode = request.args.get('mode', '')
+    redirect_target = f'/b/{beatmap_id}'
+    redirect_target += f'?mode={mode}' if mode.isdigit() else ''
+
+    response = redirect(redirect_target)
+    response.set_cookie(
+        'explicit',
+        '1',
+        # NOTE: this is cleared when the browser is closed
+        secure=cookies.determine_secure(),
+        samesite=cookies.determine_samesite()
+    )
+    return response
