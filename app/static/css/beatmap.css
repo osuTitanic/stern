@@ -8,7 +8,6 @@
     margin-left: 10px;
     margin-bottom: 22px;
     color: #e15fac;
-    text-shadow: #efcfe1 0px 0px 10px;
 }
 
 .header-text p {
@@ -19,11 +18,9 @@
 
 .header-text a {
     color: #3843a6;
-    text-shadow: #efcfe1 0px 0px 10px;
 }
 
 .page h2 {
-    text-shadow: #efcfe1 0px 0px 10px;
     color: #cc2e8a;
     font-weight: normal;
     font-size: 110%;
@@ -213,15 +210,12 @@
 
 .scores {
     font-size: 73.5%;
-    width: 100%;
     margin-bottom: 35px;
     text-align: left;
     vertical-align: text-bottom;
-    border-spacing: 0;
 }
 
 .scores th {
-    border-bottom: 1px solid #a79ef3;
     padding: 1px 0;
 }
 

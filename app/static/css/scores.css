@@ -34,9 +34,7 @@
 .player-avatar {
     width: 80px;
     height: 80px;
-    border: solid 1px #dad7fb;
     border-radius: 3px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
 }
 
 .player-info {
@@ -371,31 +369,15 @@
     transform: translateY(1px);
 }
 
-.score-button.primary {
-    background-color: #5b5399;
-    background: -webkit-linear-gradient(rgb(123, 114, 207) 0%, rgb(91, 83, 153) 100%);
-    background-image: linear-gradient(rgb(123, 114, 207) 0%, rgb(91, 83, 153) 100%);
-}
-
-.score-button.primary:hover {
-    text-shadow: 2px 1px 8px #b7befd;
-    background-image: linear-gradient(rgb(83, 147, 207) 0%, rgb(58, 109, 156) 100%);
+/* score-button comes in addition to button-blue / button-grey styling */
+.score-button:hover {
     text-decoration: none;
-    color: rgb(236, 236, 236);
 }
 
-.score-button.secondary {
-    background-color: #666;
-    background: -webkit-linear-gradient(rgb(170, 170, 170) 0%, rgb(100, 100, 100) 100%);
-    background-image: linear-gradient(rgb(170, 170, 170) 0%, rgb(100, 100, 100) 100%);
-}
-
-.score-button.secondary:hover {
-    text-shadow: 2px 1px 8px #b7befd;
+/* score buttons use a slightly brighter grey hover than the default button-grey */
+.score-button.button-grey:hover {
     background: -webkit-linear-gradient(rgb(190, 190, 190) 0%, rgb(120, 120, 120) 100%);
     background-image: linear-gradient(rgb(190, 190, 190) 0%, rgb(120, 120, 120) 100%);
-    text-decoration: none;
-    color: rgb(236, 236, 236);
 }
 
 /* ie fixes for the grid / flex layout */

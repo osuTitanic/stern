@@ -140,7 +140,6 @@
     text-align: center;
     padding: 2.5px;
     display: block;
-    text-shadow: #efcfe1 0px 0px 10px;
     font-size: 1.2em;
 }
 
@@ -168,7 +167,6 @@
     margin-bottom: 0.5em;
     color: #cc2e8a;
     font-weight: normal;
-    text-shadow: #efcfe1 0px 0px 10px;
 }
 
 .wiki-content h2 {

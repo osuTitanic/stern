@@ -28,19 +28,19 @@
     </b>
     {% else %}
     <br>
-    <div class="pack-categories">
+    <div class="tab-list">
         <ul>
             {% for entry in categories %}
-            <li class="category-item">
+            <li class="tab-item">
                 <a href="/beatmapsets/packs/?category={{ entry }}"
-                   class="{{ 'active' if entry == category }}">
+                   class="tab-link {{ 'active' if entry == category }}">
                     {{ entry }}
                 </a>
             </li>
             {% endfor %}
         </ul>
     </div>
-    <table class="pack-listing" cellspacing="0">
+    <table class="listing pack-listing">
         <thead>
             <tr>
                 <th>Pack</th>
@@ -51,9 +51,9 @@
         <tbody>
             {% for pack in beatmap_packs %}
                 {% if loop.index0 % 2 %}
-                <tr class="dark-row" onclick="expandBeatmapPack({{ pack.id }})">
+                <tr class="row-dark row-soft" onclick="expandBeatmapPack({{ pack.id }})">
                 {% else %}
-                <tr class="light-row" onclick="expandBeatmapPack({{ pack.id }})">
+                <tr class="row-light row-soft" onclick="expandBeatmapPack({{ pack.id }})">
                 {% endif %}
                     <td style="width: 60%">
                         <a>{{ pack.name }}</a>
