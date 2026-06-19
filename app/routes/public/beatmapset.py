@@ -15,7 +15,7 @@ router = Blueprint('beatmapset', __name__)
 router.register_blueprint(packs.router, url_prefix='/beatmapsets/packs')
 
 @router.get('/s/<id>')
-def get_beatmapset(id: int):
+def get_beatmapset(id: str):
     if not id.isdigit():
         return utils.render_error(404, 'beatmap_not_found')
 
