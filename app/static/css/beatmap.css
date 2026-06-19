@@ -213,15 +213,12 @@
 
 .scores {
     font-size: 73.5%;
-    width: 100%;
     margin-bottom: 35px;
     text-align: left;
     vertical-align: text-bottom;
-    border-spacing: 0;
 }
 
 .scores th {
-    border-bottom: 1px solid #a79ef3;
     padding: 1px 0;
 }
 
