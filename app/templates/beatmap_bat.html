@@ -30,6 +30,10 @@
                             <dd>
                                 <input type="text" name="offset" value="{{ beatmapset.offset }}" size="6">
                             </dd>
+                            <dt>Explicit:</dt>
+                            <dd>
+                                <input type="checkbox" name="explicit" {% if beatmapset.explicit %}checked{% endif %}>
+                            </dd>
                             {% if beatmapset.server == 0 %}
                             <dt>Enhanced:</dt>
                             <dd>
