@@ -104,7 +104,7 @@ def download_beatmapset(id: str):
         no_video and beatmapset.has_video
     )
 
-    response = app.session.beatmaps.osz(
+    response, size = app.session.beatmaps.osz(
         beatmapset.id,
         no_video
     )
@@ -120,7 +120,8 @@ def download_beatmapset(id: str):
         response,
         mimetype='application/octet-stream',
         headers={
-            'Last-Modified': beatmapset.last_update.strftime('%a, %d %b %Y %H:%M:%S GMT'),
-            'Content-Disposition': f'attachment; filename="{osz_filename}";'
+            'Content-Length': str(size),
+            'Content-Disposition': f'attachment; filename="{osz_filename}";',
+            'Last-Modified': beatmapset.last_update.strftime('%a, %d %b %Y %H:%M:%S GMT')
         }
     )
