@@ -1,4 +1,5 @@
 
+from .common.helpers.beatmaps import BeatmapResources
 from .common.cache.events import EventQueue
 from .common.database import Postgres
 from .common.storage import Storage
@@ -24,6 +25,7 @@ events = EventQueue(
     name='bancho:events',
     connection=redis
 )
+beatmaps = BeatmapResources(storage, redis)
 
 logger = logging.getLogger('stern')
 startup_time = time.time()
