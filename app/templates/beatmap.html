@@ -286,11 +286,11 @@
         <div class="beatmap-download">
             {% if beatmapset.available %}
                 {% if current_user.is_authenticated %}
-                    <a href="/beatmapsets/download/{{ beatmapset.id }}" target="_blank">
+                    <a href="/d/{{ beatmapset.id }}" target="_blank">
                         <img src="/images/beatmap/osu-download-beatmap.png" alt="Download">
                     </a>
                     {% if beatmapset.has_video %}
-                        <a href="/beatmapsets/download/{{ beatmapset.id }}?novideo=True" target="_blank">
+                        <a href="/d/{{ beatmapset.id }}n" target="_blank">
                             <img src="/images/beatmap/osu-download-beatmap-novid.png" alt="Download without Video">
                         </a>
                     {% endif %}
