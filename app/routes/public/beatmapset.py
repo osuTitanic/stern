@@ -104,24 +104,4 @@ def download_beatmapset(id: str):
         no_video and beatmapset.has_video
     )
 
-    response, size = app.session.beatmaps.osz(
-        beatmapset.id,
-        no_video
-    )
-
-    if not response:
-        return abort(code=404)
-
-    osz_filename = utils.secure_filename(f'{beatmapset.id} {beatmapset.artist} - {beatmapset.title}')
-    osz_filename += ' (no video)' if no_video else ''
-    osz_filename += '.osz'
-
-    return Response(
-        response,
-        mimetype='application/octet-stream',
-        headers={
-            'Content-Length': str(size),
-            'Content-Disposition': f'attachment; filename="{osz_filename}";',
-            'Last-Modified': beatmapset.last_update.strftime('%a, %d %b %Y %H:%M:%S GMT')
-        }
-    )
+    return redirect(f"/d/{id}{'n' if no_video else ''}", code=302)
