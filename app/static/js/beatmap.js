@@ -72,6 +72,7 @@ function editBeatmapDescription() {
     }
 
     var form = document.createElement("form");
+    form.style.fontSize = "85%";
     var textarea = document.createElement("textarea");
     textarea.className = "description-editor bbcode-editor";
     textarea.innerHTML = bbcodeDescription;

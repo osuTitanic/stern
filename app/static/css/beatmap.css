@@ -109,14 +109,9 @@
 }
 
 .description-editor {
-    width: 462.5px;
+    width: 455px;
     height: 88px;
-    max-width: 462.5px;
-    max-height: 88px;
-    min-width: 462.5px;
-    min-height: 15px;
-    font-size: 90%;
-    margin: 0 0 4px 0;
+    resize: none;
 }
 
 .beatmap-preview-link {
