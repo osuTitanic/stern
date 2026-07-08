@@ -65,7 +65,6 @@ function updateBeatmapsetMetadata(event) {
 }
 
 function editBeatmapDescription() {
-    // TODO: Move this endpoint to the new API
     var description = document.querySelector(".beatmap-description .bbcode");
     if (!description) {
         return;
