@@ -65,13 +65,13 @@ function updateBeatmapsetMetadata(event) {
 }
 
 function editBeatmapDescription() {
-    // TODO: Move this endpoint to the new API
     var description = document.querySelector(".beatmap-description .bbcode");
     if (!description) {
         return;
     }
 
     var form = document.createElement("form");
+    form.style.fontSize = "85%";
     var textarea = document.createElement("textarea");
     textarea.className = "description-editor bbcode-editor";
     textarea.innerHTML = bbcodeDescription;
